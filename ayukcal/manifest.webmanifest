@@ -1,0 +1,15 @@
+{
+  "name":"AyuKcal",
+  "short_name":"AyuKcal",
+  "description":"Registra comidas, calorías, agua, actividad, ayuno y peso.",
+  "start_url":"./",
+  "scope":"./",
+  "display":"standalone",
+  "display_override":["window-controls-overlay","standalone"],
+  "background_color":"#0f1714",
+  "theme_color":"#0f1714",
+  "icons":[
+    {"src":"assets/ayukcal-avocado.svg","sizes":"192x192","type":"image/svg+xml","purpose":"any maskable"},
+    {"src":"assets/ayukcal-avocado.svg","sizes":"512x512","type":"image/svg+xml","purpose":"any maskable"}
+  ]
+}
