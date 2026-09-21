@@ -144,8 +144,7 @@ allMenuLinks.forEach((a) => {
 });
 
 // ===== Link activo =====
-// ¡AQUÍ ESTÁ LA MAGIA ARREGLADA! Agregamos "tecnologias" y "microcms" a la lista
-const sections = ["inicio", "sistemas", "servicios", "planes", "gestion", "portafolio", "recursos", "proceso", "faq", "contacto"]
+const sections = ["inicio", "servicios", "planes", "gestion", "portafolio", "recursos", "faq", "contacto"]
   .map((id) => document.getElementById(id))
   .filter(Boolean);
 
@@ -154,18 +153,41 @@ const setActive = (id) => {
     const href = a.getAttribute("href") || "";
     a.classList.toggle("active", href === "#" + id);
   });
+
+  // También mantiene visible la zona activa en el menú móvil.
+  document.querySelectorAll("#mobilePanel a").forEach((a) => {
+    const href = a.getAttribute("href") || "";
+    a.classList.toggle("active", href === "#" + id);
+  });
 };
 
-const observer = new IntersectionObserver(
-  (entries) => {
-    entries.forEach((entry) => {
-      if (entry.isIntersecting) setActive(entry.target.id);
-    });
-  },
-  { rootMargin: "-40% 0px -55% 0px", threshold: 0.02 }
-);
+// Scroll-spy estable: en lugar de depender de intersecciones que pueden
+// dejar la barra sin activo entre secciones, toma la última sección cuyo
+// inicio ya pasó la línea de navegación.
+let scrollSpyTick = false;
 
-sections.forEach((s) => observer.observe(s));
+const updateActiveSection = () => {
+  const marker = window.scrollY + getNavOffset() + 40;
+  let current = sections[0]?.id || "inicio";
+
+  sections.forEach((section) => {
+    if (section.offsetTop <= marker) current = section.id;
+  });
+
+  setActive(current);
+  scrollSpyTick = false;
+};
+
+window.addEventListener("scroll", () => {
+  if (!scrollSpyTick) {
+    window.requestAnimationFrame(updateActiveSection);
+    scrollSpyTick = true;
+  }
+}, { passive: true });
+
+window.addEventListener("resize", updateActiveSection);
+window.addEventListener("load", updateActiveSection);
+updateActiveSection();
 
 // ===== Corrige entrada con hash =====
 window.addEventListener("load", () => {
