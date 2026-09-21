@@ -39,8 +39,8 @@
 </div></div></section>
 <aside class="col-lg-5"><div class="result"><div class="result-head"><span><i class="fa-solid fa-bolt"></i> Resultado</span><small id="profile">Cliente normal</small></div><div class="recommended">Mensualidad sugerida</div><div id="monthly" class="big">$0</div><div class="usd">USD / mes</div><div id="explain" class="explain"></div><div class="annual-box"><div><span>Si paga mensual</span><strong id="monthlyTotal">$0/año</strong></div><div><span>Si paga anual</span><strong id="annualTotal">$0</strong><small>10 pagos · 12 meses</small></div></div><div class="included"><strong><i class="fa-solid fa-check-circle"></i> Incluye en el cálculo</strong><ul id="includedList"></ul></div><div id="warning" class="warning d-none"></div><button id="copy" class="btn btn-gold w-100 mt-3"><i class="fa-regular fa-copy"></i> Copiar cotización</button></div><div class="mini-note"><i class="fa-solid fa-circle-info"></i><span><b>Regla anual:</b><br>12 meses de servicio = 10 pagos. El cálculo ya contempla ese descuento.</span></div></aside></div><footer>Avila Mora Soluciones · Herramienta interna</footer></main></div>
 <script>
-const UH="d9f8d8c2d6a4c1d0e0a2d6b1e4a5a7d8b4f3d9a2c7e5b1a9f0d3c8e6b2a1f4";
-const PH="c6b2c1b0f4d8a3a8c8c8f3f8d8a4f6f4b3e0d1f5c5b1a5d4c8f8b5e4a3d9a7";
+const UH="40e8d8fc6587f23492589938715563ff0563cc8d0f960aea338fe2c2ea4a1305";
+const PH="ade9437d34d13f61298a2fe4479c08d085a1265fc8905d0457ad836ed245adad";
 async function h(v){const x=await crypto.subtle.digest("SHA-256",new TextEncoder().encode(v));return Array.from(new Uint8Array(x)).map(b=>b.toString(16).padStart(2,"0")).join("")}
 document.getElementById("loginForm").onsubmit=async e=>{e.preventDefault();const u=await h(loginUser.value),p=await h(loginPass.value);if(u===UH&&p===PH){sessionStorage.amsCalc="1";loginScreen.classList.add("d-none");app.classList.remove("d-none")}else loginError.classList.remove("d-none")};
 if(sessionStorage.amsCalc==="1"){loginScreen.classList.add("d-none");app.classList.remove("d-none")}
