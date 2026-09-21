@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <title>Tabú 🤐</title>
+  <meta name="theme-color" content="#4f46e5" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Juegos Avila Mora" />
+  <link rel="icon" href="icon-192.svg" type="image/svg+xml" />
+  <link rel="manifest" href="manifest.webmanifest" />
+  <link rel="apple-touch-icon" href="icon-192.svg" />
+  <link rel="stylesheet" href="styles.css?v=20260921" />
+  <style>
+    .team-card { padding: 12px; border-radius: 12px; background: var(--player-bg); border: 1px solid var(--border-light); margin-bottom: 10px;}
+    .team-name { font-weight: 900; color: var(--primary); margin-bottom: 6px; font-size: 1.1rem; }
+    .team-members { color: var(--text); font-weight: 800; font-size: 0.95rem;}
+    .tabu-controls { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 15px;}
+    .tabu-controls .btn-full { grid-column: span 2; }
+  </style>
+</head>
+<body class="theme-tabu">
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a class="brand brand-link" href="index.html">
+        <span class="logo">🤐</span>
+        <span class="txt"><span class="name">Avila Mora</span><small>Tabú</small></span>
+      </a>
+      <div class="topbar-actions"><button id="navToggle" type="button" class="icon-btn">☰</button></div>
+    </div>
+    <nav id="siteNav" class="site-nav" hidden>
+      <div class="site-nav-inner">
+        <a class="nav-item" href="index.html">🏠 Menú</a>
+      </div>
+    </nav>
+  </header>
+
+  <main id="mainContent">
+    <div class="wrap">
+      <section class="section active">
+        <div class="stack">
+          <div class="box narrow stack center">
+            <h1 class="game-title">Tabú 🤐</h1>
+            <p class="game-sub">Haz que tu equipo adivine la palabra sin decir las prohibidas. El equipo contrario te vigila.</p>
+          </div>
+
+          <div class="box narrow shell">
+            <div class="stack">
+              <!-- LOBBY -->
+              <div id="t-scr-lobby" class="im-screen active">
+                <div class="box stack">
+                  <div class="inline-input-group">
+                    <input type="text" id="t-inpName" placeholder="Añadir jugador..." autocomplete="off" maxlength="18" />
+                    <button type="button" class="btn btn-inline-square" id="t-btnAddPlayer">➕</button>
+                  </div>
+                  <div class="player-list" id="t-uiPlayerList"></div>
+                </div>
+
+                <div class="config-grid">
+                  <div class="box stack compact">
+                    <span class="label-muted">Equipos</span>
+                    <select id="t-selTeams">
+                      <option value="2" selected>2 Equipos</option>
+                      <option value="3">3 Equipos</option>
+                      <option value="4">4 Equipos</option>
+                    </select>
+                  </div>
+                  <div class="box stack compact">
+                    <span class="label-muted">Tiempo por turno</span>
+                    <select id="t-selTime">
+                      <option value="30">30 Segundos</option>
+                      <option value="60" selected>60 Segundos</option>
+                      <option value="90">90 Segundos</option>
+                    </select>
+                  </div>
+                  <div class="box stack compact">
+                    <span class="label-muted">Rondas</span>
+                    <select id="t-selRounds">
+                      <option value="2">2 Rondas</option>
+                      <option value="3" selected>3 Rondas</option>
+                      <option value="5">5 Rondas</option>
+                    </select>
+                  </div>
+                  <div class="box stack compact">
+                    <span class="label-muted">Palabras</span>
+                    <select id="t-selLimit">
+                      <option value="50">50 Palabras</option>
+                      <option value="all" selected>Todas</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <button type="button" class="btn danger" id="t-btnClearPlayers">🧹 Limpiar</button>
+                  <button type="button" class="btn primary" id="t-btnStart">🎮 Empezar</button>
+                </div>
+              </div>
+
+              <!-- EQUIPOS REVELADOS -->
+              <div id="t-scr-teams" class="im-screen center">
+                <div class="box stack">
+                  <h2 class="game-title">Equipos Formados</h2>
+                  <p class="muted">El juego ha distribuido los equipos al azar.</p>
+                  <div id="t-uiTeamsList" class="stack compact" style="text-align: left;"></div>
+                </div>
+                <button type="button" class="btn primary btn-xl" id="t-btnConfirmTeams">¡Todo Listo!</button>
+              </div>
+
+              <!-- PRE-TURNO -->
+              <div id="t-scr-preturn" class="im-screen center">
+                <div class="box stack">
+                  <span class="label-muted color-accent" id="t-txtTurnRound">Ronda 1</span>
+                  <h2 class="big-player-name" id="t-txtActiveTeam">-</h2>
+                  <p class="muted strong-copy">Habla: <span id="t-txtSpeaker" class="color-primary"></span></p>
+                  <div class="box panel-soft">
+                    <p class="muted"><strong>Atención:</strong> Un jugador del <span id="t-txtWatcher" class="color-danger"></span> debe mirar la pantalla para vigilar que no diga palabras prohibidas.</p>
+                  </div>
+                </div>
+                <button type="button" class="btn primary btn-xl" id="t-btnStartTurn">▶️ Iniciar Temporizador</button>
+              </div>
+
+              <!-- JUEGO ACTIVO -->
+              <div id="t-scr-game" class="im-screen center">
+                <div class="box stack compact">
+                  <div class="timer-text" id="t-uiTimer">01:00</div>
+                  
+                  <!-- ESTADÍSTICAS EN VIVO -->
+                  <div class="row row-tight" style="margin-bottom: 8px;">
+                    <div class="mini-stat compact-surface"><span>Aciertos</span><strong class="color-green" id="t-liveCorrect">0</strong></div>
+                    <div class="mini-stat compact-surface"><span>Tabús</span><strong class="color-danger" id="t-liveTaboo">0</strong></div>
+                    <div class="mini-stat compact-surface"><span>Saltos</span><strong class="muted" id="t-liveSkip">0</strong></div>
+                  </div>
+
+                  <div class="card-word stack compact">
+                    <div class="badge badge-cyan" id="t-catBadge">-</div>
+                    <div class="tabu-main-word" id="t-txtMainWord">-</div>
+                  </div>
+                  <div class="forbidden-box stack compact">
+                    <span class="label-muted color-danger">Palabras Prohibidas</span>
+                    <ul class="forbidden-list" id="t-uiForbiddenList"></ul>
+                  </div>
+                </div>
+                <div class="tabu-controls">
+                  <button type="button" class="btn success" id="t-btnCorrect">✔️ Acierto</button>
+                  <button type="button" class="btn danger" id="t-btnTaboo">❌ Tabú</button>
+                  <button type="button" class="btn ghost btn-full" id="t-btnSkip">⏭️ Saltar</button>
+                </div>
+              </div>
+
+              <!-- RESUMEN DE TURNO -->
+              <div id="t-scr-turn-summary" class="im-screen center">
+                <div class="box stack">
+                  <h2 class="game-title">¡Tiempo! ⏳</h2>
+                  <p class="muted" id="t-txtSummaryTeam">-</p>
+                  <div class="turn-mini-stats">
+                    <div class="mini-stat"><span>Aciertos</span><strong class="color-green" id="t-statCorrect">0</strong></div>
+                    <div class="mini-stat"><span>Tabús</span><strong class="color-danger" id="t-statTaboo">0</strong></div>
+                    <div class="mini-stat"><span>Total</span><strong class="color-primary" id="t-statPoints">0</strong></div>
+                  </div>
+                </div>
+                <button type="button" class="btn primary btn-xl" id="t-btnNextTurn">Siguiente Turno</button>
+              </div>
+
+              <!-- RESULTADO FINAL -->
+              <div id="t-scr-result" class="im-screen center">
+                <h1 class="game-title winner-title">¡Partida Terminada! 🎉</h1>
+                <div class="box result-area stack" id="t-uiFinalResults" style="text-align: left;"></div>
+                <div class="row" style="margin-top: 15px;">
+                  <button type="button" id="t-btnRestart" class="btn primary">🔄 Nueva partida</button>
+                  <a href="index.html" class="btn ghost">🏠 Menú</a>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+  <script src="datos.js"></script>
+  <script src="scripts.js"></script>
+  <script src="tabu.js"></script>
+</body>
+</html>

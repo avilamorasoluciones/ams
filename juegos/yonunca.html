@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <title>Yo Nunca 🙊</title>
+  <meta name="theme-color" content="#22c55e" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Juegos Avila Mora" />
+  <link rel="icon" href="icon-192.svg" type="image/svg+xml" />
+  <link rel="manifest" href="manifest.webmanifest" />
+  <link rel="apple-touch-icon" href="icon-192.svg" />
+  <link rel="stylesheet" href="styles.css?v=20260921" />
+</head>
+<body class="theme-yonunca">
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a class="brand brand-link" href="index.html">
+        <span class="logo">🙊</span>
+        <span class="txt"><span class="name">Avila Mora</span><small>Yo Nunca</small></span>
+      </a>
+      <div class="topbar-actions"><button id="navToggle" type="button" class="icon-btn">☰</button></div>
+    </div>
+    <nav id="siteNav" class="site-nav" hidden>
+      <div class="site-nav-inner">
+        <a class="nav-item" href="index.html">🏠 Menú</a>
+      </div>
+    </nav>
+  </header>
+
+  <main id="mainContent">
+    <div class="wrap">
+      <section class="section active">
+        <div class="stack">
+          <div class="box narrow stack center">
+            <h1 class="game-title">Yo Nunca 🙊</h1>
+            <p class="game-sub">Lee la frase en voz alta para todos. Quien lo haya hecho, pierde un punto o bebe. ¡Pásalo al que sigue!</p>
+          </div>
+
+          <div class="box narrow shell">
+            <div class="stack">
+              <!-- LOBBY -->
+              <div id="yn-scr-lobby" class="im-screen active">
+                <div class="box stack compact">
+                  <span class="label-muted">Límite de frases</span>
+                  <select id="yn-selLimit">
+                    <option value="20">20 Frases</option>
+                    <option value="50">50 Frases</option>
+                    <option value="all" selected>Todas</option>
+                  </select>
+                </div>
+                <button type="button" class="btn primary btn-xl" id="yn-btnStart">🗣️ Empezar</button>
+              </div>
+
+              <!-- JUEGO -->
+              <div id="yn-scr-game" class="im-screen center">
+                <div class="box stack">
+                  <div class="badge badge-green">Yo nunca...</div>
+                  <h2 id="yn-txtPrompt" class="prompt-main" style="color: var(--text)">-</h2>
+                </div>
+                <button type="button" class="btn primary btn-xl" id="yn-btnNext">Siguiente Frase ➡️</button>
+                <button type="button" class="btn ghost mt-2" id="yn-btnEnd">🏠 Terminar</button>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+  <script src="datos.js"></script>
+  <script src="scripts.js"></script>
+  <script src="yonunca.js"></script>
+</body>
+</html>

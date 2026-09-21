@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <title>Verdad o Reto 🌶️</title>
+  <meta name="theme-color" content="#ec4899" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Juegos Avila Mora" />
+  <link rel="icon" href="icon-192.svg" type="image/svg+xml" />
+  <link rel="manifest" href="manifest.webmanifest" />
+  <link rel="apple-touch-icon" href="icon-192.svg" />
+  <link rel="stylesheet" href="styles.css?v=20260921" />
+</head>
+<body class="theme-verdadreto">
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a class="brand brand-link" href="index.html">
+        <span class="logo">🌶️</span>
+        <span class="txt"><span class="name">Avila Mora</span><small>Verdad o Reto</small></span>
+      </a>
+      <div class="topbar-actions"><button id="navToggle" type="button" class="icon-btn">☰</button></div>
+    </div>
+    <nav id="siteNav" class="site-nav" hidden>
+      <div class="site-nav-inner">
+        <a class="nav-item" href="index.html">🏠 Menú</a>
+      </div>
+    </nav>
+  </header>
+
+  <main id="mainContent">
+    <div class="wrap">
+      <section class="section active">
+        <div class="stack">
+          <div class="box narrow stack center">
+            <h1 class="game-title">Verdad o Reto 🌶️</h1>
+            <p class="game-sub">En tu turno, elige sabiamente. Confiesa o paga las consecuencias.</p>
+          </div>
+
+          <div class="box narrow shell">
+            <div class="stack">
+              <!-- LOBBY -->
+              <div id="vr-scr-lobby" class="im-screen active">
+                <div class="box stack">
+                  <div class="inline-input-group">
+                    <input type="text" id="vr-inpName" placeholder="Añadir víctima..." autocomplete="off" maxlength="18" />
+                    <button type="button" class="btn btn-inline-square" id="vr-btnAddPlayer">➕</button>
+                  </div>
+                  <div class="player-list" id="vr-uiPlayerList"></div>
+                </div>
+
+                <div class="box stack compact">
+                  <span class="label-muted">Límite de turnos</span>
+                  <select id="vr-selLimit">
+                    <option value="20">20 Turnos</option>
+                    <option value="50">50 Turnos</option>
+                    <option value="all" selected>Ilimitado</option>
+                  </select>
+                </div>
+
+                <div class="row">
+                  <button type="button" class="btn danger" id="vr-btnClearPlayers">🧹 Limpiar</button>
+                  <button type="button" class="btn primary" id="vr-btnStart">🎮 Empezar</button>
+                </div>
+              </div>
+
+              <!-- ELEGIR -->
+              <div id="vr-scr-choose" class="im-screen center">
+                <div class="box stack compact">
+                  <div class="emoji-display">🤔</div>
+                  <span class="label-muted">Es el turno de:</span>
+                  <h2 id="vr-txtCurrentPlayer" class="pass-name">-</h2>
+                  <p class="muted strong-copy">¿Qué vas a elegir?</p>
+                </div>
+                <div class="row">
+                  <button type="button" id="vr-btnVerdad" class="btn primary btn-xl">🤫 Verdad</button>
+                  <button type="button" id="vr-btnReto" class="btn danger btn-xl">🔥 Reto</button>
+                </div>
+                <button type="button" class="btn ghost mt-2" id="vr-btnEndChoose">🏠 Terminar</button>
+              </div>
+
+              <!-- ACCIÓN -->
+              <div id="vr-scr-action" class="im-screen center">
+                <div class="box stack">
+                  <div class="badge badge-pink" id="vr-catBadge">-</div>
+                  <h2 id="vr-txtAction" class="prompt-main">-</h2>
+                </div>
+                <button type="button" class="btn primary btn-xl" id="vr-btnNextTurn">Siguiente Turno</button>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+  <script src="datos.js"></script>
+  <script src="scripts.js"></script>
+  <script src="verdadreto.js"></script>
+</body>
+</html>
