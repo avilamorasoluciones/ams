@@ -1,0 +1,73 @@
+{
+  "name": "Juegos Avila Mora",
+  "short_name": "Juegos",
+  "description": "Colección de juegos para familia y amigos, directa, divertida y sin registro.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "display_override": [
+    "window-controls-overlay",
+    "standalone"
+  ],
+  "orientation": "portrait-primary",
+  "background_color": "#070A12",
+  "theme_color": "#070A12",
+  "lang": "es",
+  "categories": [
+    "games",
+    "entertainment"
+  ],
+  "prefer_related_applications": false,
+  "icons": [
+    {
+      "src": "icon-192.svg",
+      "sizes": "192x192",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icon-512.svg",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "El Impostor",
+      "short_name": "Impostor",
+      "url": "./impostor.html",
+      "icons": [
+        {
+          "src": "icon-192.svg",
+          "sizes": "192x192",
+          "type": "image/svg+xml"
+        }
+      ]
+    },
+    {
+      "name": "La Bomba",
+      "short_name": "Bomba",
+      "url": "./bomba.html",
+      "icons": [
+        {
+          "src": "icon-192.svg",
+          "sizes": "192x192",
+          "type": "image/svg+xml"
+        }
+      ]
+    },
+    {
+      "name": "Tabú",
+      "short_name": "Tabú",
+      "url": "./tabu.html",
+      "icons": [
+        {
+          "src": "icon-192.svg",
+          "sizes": "192x192",
+          "type": "image/svg+xml"
+        }
+      ]
+    }
+  ]
+}
