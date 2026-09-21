@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <title>La Bomba 💣</title>
+  <meta name="theme-color" content="#ef4444" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Juegos Avila Mora" />
+ <link rel="icon" href="icon-192.svg" type="image/svg+xml" />
+  <link rel="manifest" href="manifest.webmanifest" />
+  <link rel="apple-touch-icon" href="icon-192.svg" />
+  <link rel="stylesheet" href="styles.css?v=20260921" />
+</head>
+<body class="theme-bomba">
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a class="brand brand-link" href="index.html">
+        <span class="logo">💣</span>
+        <span class="txt"><span class="name">Avila Mora</span><small>La Bomba</small></span>
+      </a>
+      <div class="topbar-actions"><button id="navToggle" type="button" class="icon-btn">☰</button></div>
+    </div>
+    <nav id="siteNav" class="site-nav" hidden>
+      <div class="site-nav-inner">
+        <a class="nav-item" href="index.html">🏠 Menú</a>
+      </div>
+    </nav>
+  </header>
+
+  <main id="mainContent">
+    <div class="wrap">
+      <section class="section active">
+        <div class="stack">
+          <div class="box narrow stack center">
+            <h1 class="game-title">La Bomba 💣</h1>
+            <p class="game-sub">Lee la categoría, di una palabra que encaje y pasa el celular rápido. Quien lo tenga cuando explote, pierde.</p>
+          </div>
+
+          <div class="box narrow shell">
+            <div class="stack">
+              <!-- CONFIGURACIÓN -->
+              <div id="b-scr-lobby" class="im-screen active">
+                <div class="box stack compact">
+                  <span class="label-muted">Límite de categorías</span>
+                  <select id="b-selLimit">
+                    <option value="20">20 Categorías</option>
+                    <option value="50">50 Categorías</option>
+                    <option value="all" selected>Todas</option>
+                  </select>
+                </div>
+                <button type="button" class="btn primary btn-xl" id="b-btnStart">🔥 Iniciar</button>
+              </div>
+
+              <!-- JUEGO -->
+              <div id="b-scr-game" class="im-screen center">
+                <div class="box stack">
+                  <span class="cat-text">Digan palabras de:</span>
+                  <h2 id="b-txtWord" class="prompt-main" style="color: var(--text)">-</h2>
+                  <div id="b-bombEmoji" class="emoji-display giant-emoji">💣</div>
+                </div>
+                
+                <div class="row">
+                  <button type="button" class="btn ghost" id="b-btnStop">⏹️ Parar</button>
+                  <button type="button" class="btn danger" id="b-btnSkip">⏭️ Cambiar</button>
+                </div>
+              </div>
+
+              <!-- EXPLOSIÓN -->
+              <div id="b-scr-boom" class="im-screen center">
+                <div class="box stack">
+                  <h1 class="game-title" style="color: var(--danger)">¡BOOM! 💥</h1>
+                  <p class="muted strong-copy">Explotó. El que tiene el celular, ¡pierde!</p>
+                </div>
+                <button type="button" class="btn primary btn-xl" id="b-btnNext">Siguiente Ronda</button>
+                <a href="index.html" class="btn ghost">🏠 Menú</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+  <script src="datos.js"></script>
+  <script src="scripts.js"></script>
+  <script src="bomba.js"></script>
+</body>
+</html>

@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <title>El Impostor 🕵️</title>
+  <meta name="theme-color" content="#070A12" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Juegos Avila Mora" />
+  <link rel="icon" href="icon-192.svg" type="image/svg+xml" />
+  <link rel="manifest" href="manifest.webmanifest" />
+  <link rel="apple-touch-icon" href="icon-192.svg" />
+  <link rel="stylesheet" href="styles.css?v=20260921" />
+  <style>
+    .impostor-page .wrap { gap: 24px; }
+    .impostor-hero { margin-bottom: 8px; }
+    .impostor-secret-card { min-height: 300px; }
+    .impostor-vote-grid { display: grid; grid-template-columns: 1fr; gap: 10px; }
+    @media (min-width: 700px) { .impostor-vote-grid { grid-template-columns: 1fr 1fr; } }
+  </style>
+</head>
+<body class="theme-impostor impostor-page">
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a class="brand brand-link" href="index.html">
+        <span class="logo">🕵️</span>
+        <span class="txt"><span class="name">Avila Mora</span><small>El Impostor</small></span>
+      </a>
+      <div class="topbar-actions">
+        <button id="navToggle" type="button" class="icon-btn">☰</button>
+      </div>
+    </div>
+    <nav id="siteNav" class="site-nav" hidden>
+      <div class="site-nav-inner">
+        <a class="nav-item" href="index.html">🏠 Menú</a>
+      </div>
+    </nav>
+  </header>
+
+  <main id="mainContent">
+    <div class="wrap">
+      <section class="section active">
+        <div class="stack">
+          <div class="box narrow stack center impostor-hero">
+            <h1 class="game-title">El Impostor 🕵️</h1>
+            <p class="game-sub">Encuentren al infiltrado antes de que sea tarde.</p>
+          </div>
+
+          <div class="box narrow shell">
+            <div class="stack">
+              <div id="i-scr-lobby" class="im-screen active">
+                <div class="box stack">
+                  <div class="inline-input-group">
+                    <input type="text" id="i-inpName" placeholder="Nombre del jugador..." autocomplete="off" maxlength="18" />
+                    <button type="button" class="btn btn-inline-square" id="i-btnAddPlayer">➕</button>
+                  </div>
+                  <div class="player-list" id="i-uiPlayerList"></div>
+                </div>
+
+                <div class="config-grid">
+                  <div class="box stack compact">
+                    <span class="label-muted">Impostores</span>
+                    <select id="i-selImposters">
+                      <option value="1" selected>1 impostor</option>
+                      <option value="2">2 impostores</option>
+                    </select>
+                  </div>
+                  <div class="box stack compact">
+                    <span class="label-muted">Tiempo</span>
+                    <select id="i-selTime">
+                      <option value="120">2 min</option>
+                      <option value="300" selected>5 min</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <button type="button" class="btn danger" id="i-btnClearPlayers">🧹 Limpiar</button>
+                  <button type="button" class="btn primary" id="i-btnStartGame">🎮 Empezar</button>
+                </div>
+              </div>
+
+              <div id="i-scr-pass" class="im-screen">
+                <div class="box center pass-box stack compact">
+                  <div class="emoji-display">📱</div>
+                  <p class="label-muted">Pasa el celular a:</p>
+                  <h2 id="i-txtPassName" class="pass-name">-</h2>
+                  <p class="muted">Nadie más puede mirar la pantalla.</p>
+                </div>
+                <button type="button" id="i-btnReveal" class="btn primary btn-xxl">👀 Ver mi rol</button>
+              </div>
+
+              <div id="i-scr-reveal" class="im-screen">
+                <div class="box center reveal-box stack impostor-secret-card">
+                  <h3 id="i-txtRevealPlayer" class="muted reveal-player-name">-</h3>
+                  <div id="i-uiSecretArea" class="stack center"></div>
+                </div>
+                <button type="button" id="i-btnHide" class="btn danger">🙈 Ocultar y Pasar</button>
+              </div>
+
+              <div id="i-scr-game" class="im-screen center">
+                <div class="box stack compact">
+                  <span class="label-muted color-primary">Empieza hablando</span>
+                  <h2 id="i-txtSpeaker" class="big-player-name">-</h2>
+                  <p class="muted">Digan una sola palabra relacionada con la palabra secreta.</p>
+                </div>
+                <div class="box stack center">
+                  <div class="timer-text" id="i-uiTimer">05:00</div>
+                  <div class="row">
+                    <button id="i-btnPause" type="button" class="btn">⏸ Pausar</button>
+                    <button type="button" id="i-btnVoteNow" class="btn danger">🗳️ Votar</button>
+                  </div>
+                </div>
+              </div>
+
+              <div id="i-scr-vote" class="im-screen center">
+                <div class="box stack">
+                  <div class="label-muted">¿Quién es el Impostor?</div>
+                  <div class="impostor-vote-grid" id="i-uiVoteList"></div>
+                </div>
+              </div>
+
+              <div id="i-scr-result" class="im-screen center">
+                <h1 id="i-txtResultTitle" class="game-title result-title-lg">-</h1>
+                <div class="box result-area stack center" id="i-uiResultArea"></div>
+                <div class="row">
+                  <button type="button" id="i-btnRestart" class="btn primary">🔄 Nueva ronda</button>
+                  <a href="index.html" class="btn ghost">🏠 Menú</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+  
+  <script src="datos.js"></script>
+  <script src="scripts.js"></script>
+  <script src="impostor.js"></script>
+</body>
+</html>
