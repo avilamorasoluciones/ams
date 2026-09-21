@@ -339,6 +339,41 @@ section.section { padding: 92px 0; }
 .service .micro { margin-top: 14px; display: flex; gap: 10px; flex-wrap: wrap; align-items: flex-end; justify-content: flex-start; flex: 0 0 auto; }
 .tag { font-size: 12px; font-weight: 900; padding: 6px 10px; border-radius: 999px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.12); color: rgba(248,250,252,0.92); max-width: 100%; }
 
+/* ===== Alineación de beneficios en planes ===== */
+.plan-card .bullets {
+  margin: 18px 0 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 14px;
+}
+.plan-card .bullets li {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  color: rgba(226,232,240,0.95);
+  font-weight: 500;
+  line-height: 1.5;
+}
+.plan-card .bullets li::marker { content: none; }
+.plan-card .bullets i {
+  display: inline-grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  margin-top: 2px;
+  flex: 0 0 22px;
+  font-size: 14px;
+  border-radius: 7px;
+  background: rgba(236,72,153,0.10);
+  border: 1px solid rgba(236,72,153,0.16);
+  color: var(--secondary);
+}
+body.light-theme .plan-card .bullets li { color: var(--muted); }
+
 /* ===== Portafolio ===== */
 .block { margin-top: 34px; }
 .block-title { text-align: center; font-weight: 900; margin: 0 0 14px; letter-spacing: -0.4px; font-size: 1.25rem; color: rgba(248,250,252,0.95); }
