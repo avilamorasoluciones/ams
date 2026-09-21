@@ -145,7 +145,7 @@ allMenuLinks.forEach((a) => {
 
 // ===== Link activo =====
 // ¡AQUÍ ESTÁ LA MAGIA ARREGLADA! Agregamos "tecnologias" y "microcms" a la lista
-const sections = ["inicio", "sistemas", "servicios", "tecnologias", "microcms", "portafolio", "proceso", "faq", "juegos", "contacto"]
+const sections = ["inicio", "sistemas", "servicios", "planes", "gestion", "portafolio", "recursos", "proceso", "faq", "contacto"]
   .map((id) => document.getElementById(id))
   .filter(Boolean);
 
