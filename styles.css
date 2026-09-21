@@ -377,6 +377,7 @@ details p { margin: 10px 0 0; color: rgba(203,213,225,0.95); font-weight: 500; }
 .faq-card { border-radius: 26px; border: 1px solid rgba(255,255,255,0.12); background: linear-gradient(180deg, rgba(255,255,255,0.05), rgba(255,255,255,0.03)); padding: 20px; box-shadow: 0 14px 40px rgba(0,0,0,0.22); position: sticky; top: 110px; }
 .faq-card h4 { margin: 0 0 10px; font-weight: 900; letter-spacing: -0.3px; }
 .faq-card p { margin: 0 0 14px; color: rgba(203,213,225,0.95); font-weight: 500; }
+.faq-card .btn-wide { margin-top: 14px; }
 .mini { display: grid; gap: 10px; margin: 0; padding: 0; list-style: none; }
 .mini li { display: flex; gap: 10px; align-items: flex-start; padding: 12px 12px; border-radius: 16px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.09); font-weight: 700; color: rgba(226,232,240,0.95); }
 .mini i { margin-top: 2px; color: var(--gold); flex: 0 0 auto; }
@@ -785,3 +786,20 @@ body.light-theme .section-inverted .section-sub {
 /* Asegurar que el botón se vea bien en ambos modos */
 .btn-res { color: white !important; }
 .light-theme .btn-res { color: white !important; }
+
+/* ===== Navegación activa móvil ===== */
+.mobile-panel a { position: relative; }
+.mobile-panel a::after {
+  content: "";
+  position: absolute;
+  left: 12px;
+  right: 12px;
+  bottom: 5px;
+  height: 2px;
+  border-radius: 999px;
+  background: var(--gradient);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform .25s ease;
+}
+.mobile-panel a.active::after { transform: scaleX(1); }
