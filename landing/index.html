@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    
+    <title>BurgerX | Las Mejores Hamburguesas Artesanales en Bogotá</title>
+    <meta name="description" content="Descubre BurgerX. Hamburguesas 100% Angus asadas a la parrilla, ingredientes frescos y el verdadero sabor urbano. Pide a domicilio o visítanos.">
+    <meta name="keywords" content="hamburguesas, burger, comida rápida, restaurante bogotá, angus, comida urbana, a domicilio">
+    <meta name="author" content="AMTECH">
+    
+    <meta property="og:title" content="BurgerX | El verdadero sabor Urbano">
+    <meta property="og:description" content="Carne 100% Angus asada a la parrilla. Conoce nuestro menú y pide ahora.">
+    <meta property="og:image" content="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=1500&q=80">
+    <meta property="og:type" content="website">
+    <meta name="theme-color" content="#0a0b0d">
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --primary: #ff4757;
+            --primary-dark: #ff2a3d;
+            --dark: #0f1115;
+            --darker: #0a0b0d;
+            --light: #f1f2f6;
+            --gray: #8b92a5;
+            --glass: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.08);
+        }
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; scroll-behavior: smooth; }
+        
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: var(--darker); }
+        ::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 10px; }
+
+        body { background-color: var(--dark); color: var(--light); font-size: 15px; overflow-x: hidden; line-height: 1.6; }
+        
+        /* 1. PRELOADER (Pantalla de carga) */
+        #preloader {
+            position: fixed;
+            inset: 0;
+            background: var(--darker);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.6s ease, visibility 0.6s ease;
+        }
+        .loader-icon {
+            font-size: 4rem;
+            color: var(--primary);
+            animation: bounce 1s infinite alternate cubic-bezier(0.5, 0.05, 1, 0.5);
+            margin-bottom: 20px;
+        }
+        .loader-text {
+            font-size: 1.5rem;
+            font-weight: 800;
+            letter-spacing: 2px;
+            color: var(--light);
+            text-transform: uppercase;
+        }
+        .loader-text span { color: var(--primary); }
+        @keyframes bounce {
+            0% { transform: translateY(0); text-shadow: 0 10px 20px rgba(0,0,0,0.5); }
+            100% { transform: translateY(-20px); text-shadow: 0 30px 20px rgba(0,0,0,0.2); }
+        }
+
+        /* 2. NAVEGACIÓN Y MENÚ MÓVIL (Estilo App) */
+        nav { position: fixed; width: 100%; padding: 20px 50px; display: flex; justify-content: space-between; align-items: center; background: rgba(10, 11, 13, 0.8); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); z-index: 1000; border-bottom: 1px solid var(--glass-border); transition: all 0.4s ease; }
+        nav.scrolled { padding: 15px 50px; background: rgba(10, 11, 13, 0.98); box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        
+        .logo { font-size: 2rem; font-weight: 800; color: var(--light); text-decoration: none; letter-spacing: -1px; display: flex; align-items: center; gap: 10px; }
+        .logo span { color: var(--primary); }
+        
+        .nav-links { display: flex; gap: 35px; list-style: none; }
+        .nav-links a { color: var(--light); text-decoration: none; font-weight: 600; font-size: 0.95rem; transition: 0.3s; position: relative; }
+        .nav-links a::after { content: ''; position: absolute; bottom: -5px; left: 0; width: 0%; height: 2px; background: var(--primary); transition: 0.3s; }
+        .nav-links a:hover::after { width: 100%; }
+        
+        .menu-btn { display: none; font-size: 1.8rem; color: white; cursor: pointer; z-index: 1002; }
+        .menu-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.7); backdrop-filter: blur(5px); z-index: 999; opacity: 0; visibility: hidden; transition: 0.3s; }
+        .menu-overlay.active { opacity: 1; visibility: visible; }
+
+        /* 3. BOTONES GLOBALES Y FLOTANTES */
+        .btn { display: inline-flex; align-items: center; gap: 10px; padding: 15px 35px; background: var(--primary); color: white; text-decoration: none; font-weight: 800; border-radius: 8px; font-size: 1.1rem; transition: 0.3s; border: none; cursor: pointer; position: relative; overflow: hidden; }
+        .btn::before { content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: rgba(255,255,255,0.2); transition: 0.4s; transform: skewX(-15deg); }
+        .btn:hover::before { left: 100%; }
+        .btn:hover { background: var(--primary-dark); transform: translateY(-3px); box-shadow: 0 10px 20px rgba(255, 71, 87, 0.4); }
+        
+        .btn-outline { background: rgba(255, 71, 87, 0.1); border: 2px solid var(--primary); color: white; }
+        .btn-outline:hover { background: var(--primary); color: white; }
+
+        .floating-wa { position: fixed; bottom: 30px; right: 30px; background: #25d366; color: white; width: 60px; height: 60px; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 2rem; text-decoration: none; box-shadow: 0 10px 20px rgba(37, 211, 102, 0.3); z-index: 990; transition: 0.3s; animation: pulse-wa 2s infinite; }
+        .floating-wa:hover { transform: scale(1.1) translateY(-5px); }
+        @keyframes pulse-wa { 0% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.5); } 70% { box-shadow: 0 0 0 15px rgba(37, 211, 102, 0); } 100% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0); } }
+
+        /* 4. ANIMACIONES REVEAL */
+        .reveal { opacity: 0; transform: translateY(40px); transition: all 0.8s cubic-bezier(0.5, 0, 0, 1); }
+        .reveal.active { opacity: 1; transform: translateY(0); }
+
+        /* 5. HEADER / HERO */
+        header { min-height: 100vh; min-height: 100dvh; display: flex; align-items: center; justify-content: center; text-align: center; background: linear-gradient(to bottom, rgba(10, 11, 13, 0.7), rgba(10, 11, 13, 1)), url('https://images.unsplash.com/photo-1550547660-d9450f859349?auto=format&fit=crop&w=1920&q=80') center/cover fixed; padding: 100px 20px 20px; position: relative; }
+        .hero-content { max-width: 900px; z-index: 2; }
+        .hero-content h1 { font-size: 5.5rem; text-transform: uppercase; margin-bottom: 20px; line-height: 1.1; font-weight: 800; text-shadow: 2px 2px 10px rgba(0,0,0,0.5); }
+        .hero-content h1 span { color: var(--primary); }
+        .hero-content p { font-size: 1.3rem; color: var(--gray); margin-bottom: 40px; font-weight: 400; max-width: 700px; margin-left: auto; margin-right: auto; }
+        .hero-buttons { display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; }
+
+        /* SECCIONES GENERALES */
+        .section { padding: 100px 20px; max-width: 1300px; margin: 0 auto; }
+        .section-header { text-align: center; margin-bottom: 60px; }
+        .section-header h2 { font-size: 3rem; color: var(--light); text-transform: uppercase; font-weight: 800; }
+        .section-header p { color: var(--primary); font-weight: 600; font-size: 1.2rem; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 10px; }
+
+        /* NOSOTROS */
+        .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; }
+        .about-text p { color: var(--gray); margin-bottom: 20px; font-size: 1.1rem; }
+        .about-image { position: relative; padding-right: 20px; padding-bottom: 20px; }
+        .about-image img { width: 100%; border-radius: 20px; box-shadow: 0 20px 40px rgba(0,0,0,0.5); position: relative; z-index: 2; }
+        .about-image::before { content: ''; position: absolute; top: 20px; left: 20px; width: 100%; height: 100%; border: 3px solid var(--primary); border-radius: 20px; z-index: 1; }
+        .badge { position: absolute; bottom: 0px; right: 0px; background: var(--primary); padding: 25px; border-radius: 50%; font-weight: 800; font-size: 1.2rem; text-align: center; border: 8px solid var(--dark); z-index: 3; box-shadow: 0 10px 20px rgba(0,0,0,0.3); }
+
+        /* MENÚ */
+        .menu-bg { background: var(--darker); border-radius: 40px; margin-top: 50px; margin-bottom: 50px; padding: 100px 40px; box-shadow: 0 10px 50px rgba(0,0,0,0.3); border: 1px solid var(--glass-border); }
+        .menu-category { margin-bottom: 60px; }
+        .menu-category h3 { font-size: 2rem; border-bottom: 2px solid var(--glass-border); padding-bottom: 15px; margin-bottom: 30px; display: inline-block; color: var(--light); }
+        .menu-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 30px; }
+        
+        .menu-item { display: flex; gap: 20px; background: var(--glass); padding: 20px; border-radius: 20px; border: 1px solid var(--glass-border); transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); cursor: pointer; }
+        .menu-item:hover { border-color: var(--primary); background: rgba(255, 71, 87, 0.05); transform: translateY(-10px) scale(1.02); box-shadow: 0 15px 30px rgba(0,0,0,0.4); }
+        .menu-item img { width: 110px; height: 110px; border-radius: 15px; object-fit: cover; box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
+        .menu-info { flex: 1; display: flex; flex-direction: column; justify-content: center; }
+        .menu-info-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px; gap: 10px; }
+        .menu-info h4 { font-size: 1.2rem; font-weight: 600; line-height: 1.2; }
+        .menu-price { color: var(--primary); font-weight: 800; font-size: 1.3rem; }
+        .menu-info p { color: var(--gray); font-size: 0.9rem; line-height: 1.4; }
+
+        /* TESTIMONIOS */
+        .testimonials-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 30px; }
+        .testimonial-card { background: var(--glass); border: 1px solid var(--glass-border); padding: 40px; border-radius: 20px; position: relative; transition: 0.3s; }
+        .testimonial-card:hover { transform: translateY(-5px); background: rgba(255,255,255,0.05); }
+        .fa-quote-left { font-size: 3rem; color: rgba(255, 71, 87, 0.2); position: absolute; top: 20px; right: 30px; }
+        .stars { color: #ffd700; margin-bottom: 20px; font-size: 1.1rem; }
+        .testimonial-text { font-size: 1.1rem; font-style: italic; margin-bottom: 25px; color: var(--light); line-height: 1.7; }
+        .customer-info { display: flex; align-items: center; gap: 15px; }
+        .customer-info img { width: 50px; height: 50px; border-radius: 50%; object-fit: cover; border: 2px solid var(--primary); }
+        .customer-info h4 { font-weight: 600; font-size: 1.1rem; }
+        .customer-info span { color: var(--primary); font-size: 0.85rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; }
+
+        /* FAQ */
+        .faq-bg { background: var(--darker); position: relative; padding-bottom: 150px; }
+        .faq-container { max-width: 800px; margin: 0 auto; }
+        .faq-item { margin-bottom: 15px; border: 1px solid var(--glass-border); border-radius: 12px; overflow: hidden; background: var(--glass); }
+        .faq-question { width: 100%; text-align: left; padding: 25px; background: transparent; color: var(--light); font-size: 1.1rem; font-weight: 600; border: none; cursor: pointer; display: flex; justify-content: space-between; align-items: center; transition: 0.3s; }
+        .faq-question:hover, .faq-question.active { color: var(--primary); }
+        .faq-question i { transition: transform 0.4s ease; background: rgba(255,255,255,0.05); padding: 10px; border-radius: 50%; }
+        .faq-question.active i { transform: rotate(180deg); background: var(--primary); color: white; }
+        .faq-answer { padding: 0 25px; max-height: 0; overflow: hidden; transition: max-height 0.4s cubic-bezier(0.5, 0, 0, 1); color: var(--gray); }
+        .faq-answer p { padding-bottom: 25px; line-height: 1.7; }
+
+        /* FOOTER & CONTACTO */
+        footer { background: #050608; border-top: 1px solid var(--glass-border); padding: 80px 20px 30px; position: relative; margin-top: -50px; border-radius: 40px 40px 0 0; z-index: 10; }
+        .footer-grid { max-width: 1300px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 50px; margin-bottom: 60px; }
+        .footer-col h3 { font-size: 1.5rem; margin-bottom: 25px; color: var(--light); position: relative; padding-bottom: 10px; }
+        .footer-col h3::after { content: ''; position: absolute; bottom: 0; left: 0; width: 40px; height: 3px; background: var(--primary); border-radius: 10px; }
+        .footer-col p { color: var(--gray); margin-bottom: 15px; display: flex; align-items: flex-start; gap: 15px; }
+        .footer-col p i { color: var(--primary); font-size: 1.2rem; margin-top: 5px; }
+        .social-links { display: flex; gap: 15px; margin-top: 25px; }
+        .social-links a { width: 45px; height: 45px; background: var(--glass); display: flex; align-items: center; justify-content: center; border-radius: 50%; color: var(--light); text-decoration: none; transition: 0.3s; font-size: 1.2rem; border: 1px solid var(--glass-border); }
+        .social-links a:hover { background: var(--primary); border-color: var(--primary); transform: translateY(-5px); box-shadow: 0 10px 20px rgba(255, 71, 87, 0.3); }
+        
+        .footer-bottom { text-align: center; padding-top: 40px; border-top: 1px solid var(--glass-border); color: var(--gray); display: flex; flex-direction: column; align-items: center; gap: 20px; }
+        
+        /* Badge AMTECH Premium */
+        .amtech-badge { 
+            background: rgba(10, 11, 13, 0.8); 
+            padding: 12px 25px; 
+            border-radius: 50px; 
+            font-size: 0.9rem; 
+            border: 1px solid rgba(99, 102, 241, 0.3); 
+            backdrop-filter: blur(5px);
+            box-shadow: 0 0 20px rgba(99, 102, 241, 0.1);
+            transition: 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .amtech-badge:hover {
+            border-color: #6366f1;
+            box-shadow: 0 0 30px rgba(99, 102, 241, 0.3);
+            transform: translateY(-2px);
+        }
+        .amtech-badge span { 
+            color: #6366f1; 
+            font-weight: 800; 
+            text-shadow: 0 0 10px rgba(99, 102, 241, 0.5);
+        }
+
+        /* MEDIA QUERIES (Responsividad Total) */
+        @media (max-width: 992px) {
+            .about-grid { grid-template-columns: 1fr; text-align: center; gap: 40px; }
+            .about-image::before { display: none; }
+            .badge { right: 50%; transform: translateX(50%); bottom: -20px; }
+            .hero-content h1 { font-size: 4rem; }
+            .menu-bg { padding: 60px 20px; border-radius: 20px; }
+        }
+        
+        @media (max-width: 768px) {
+            nav { padding: 15px 25px; }
+            nav.scrolled { padding: 15px 25px; }
+            .menu-btn { display: block; }
+            
+            /* Menú estilo App Drawer */
+            .nav-links { display: flex; flex-direction: column; justify-content: center; position: fixed; top: 0; right: -100%; width: 75%; height: 100dvh; background: var(--darker); padding: 50px; text-align: left; transition: right 0.4s cubic-bezier(0.77, 0, 0.175, 1); border-left: 1px solid var(--glass-border); z-index: 1001; box-shadow: -10px 0 30px rgba(0,0,0,0.5); }
+            .nav-links.active { right: 0; }
+            .nav-links a { font-size: 1.5rem; border-bottom: 1px solid var(--glass-border); padding-bottom: 15px; width: 100%; display: block; }
+            .nav-links a::after { display: none; }
+            
+            .hero-content h1 { font-size: 3rem; }
+            .section { padding: 70px 20px; }
+            .section-header h2 { font-size: 2.2rem; }
+            
+            .menu-item { flex-direction: column; text-align: center; padding: 25px 15px; }
+            .menu-item img { width: 100%; height: 200px; margin-bottom: 10px; }
+            .menu-info-header { flex-direction: column; gap: 5px; align-items: center; }
+            
+            .floating-wa { bottom: max(20px, env(safe-area-inset-bottom)); right: 20px; width: 55px; height: 55px; font-size: 1.8rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Pantalla de Carga -->
+    <div id="preloader">
+        <i class="fa-solid fa-burger loader-icon"></i>
+        <div class="loader-text">Burger<span>X</span></div>
+    </div>
+
+    <!-- Capa oscura para menú móvil -->
+    <div class="menu-overlay" id="menuOverlay"></div>
+
+    <nav id="navbar">
+        <a href="#" class="logo"><i class="fa-solid fa-fire" style="color: var(--primary);"></i> Burger<span>X</span></a>
+        <div class="menu-btn"><i class="fa-solid fa-bars-staggered"></i></div>
+        <ul class="nav-links">
+            <li><a href="#inicio">Inicio</a></li>
+            <li><a href="#nosotros">Nosotros</a></li>
+            <li><a href="#menu">Menú</a></li>
+            <li><a href="#testimonios">Testimonios</a></li>
+            <li><a href="#faq">FAQ</a></li>
+            <li><a href="#contacto">Contacto</a></li>
+        </ul>
+    </nav>
+
+    <!-- Botón Flotante WhatsApp -->
+    <a href="https://wa.me/573000000000?text=Hola,%20vengo%20de%20la%20App%20Web%20y%20quiero%20hacer%20un%20pedido" target="_blank" class="floating-wa">
+        <i class="fa-brands fa-whatsapp"></i>
+    </a>
+
+    <header id="inicio">
+        <div class="hero-content">
+            <h1 class="reveal">Cero Reglas.<br><span>Puro Sabor.</span></h1>
+            <p class="reveal" style="transition-delay: 0.1s;">Carne 100% Angus asada a la parrilla, pan brioche artesanal horneado a diario y vegetales frescos. No hacemos comida rápida, hacemos buenas hamburguesas lo más rápido posible.</p>
+            <div class="hero-buttons reveal" style="transition-delay: 0.2s;">
+                <a href="#menu" class="btn"><i class="fa-solid fa-burger"></i> Ver Menú</a>
+                <a href="https://wa.me/573000000000?text=Hola,%20quiero%20hacer%20un%20pedido" target="_blank" class="btn btn-outline"><i class="fa-brands fa-whatsapp"></i> Pedir Domicilio</a>
+            </div>
+        </div>
+    </header>
+
+    <section id="nosotros" class="section">
+        <div class="about-grid">
+            <div class="about-image reveal">
+                <img src="https://images.unsplash.com/photo-1586816001966-79b736744398?auto=format&fit=crop&w=800&q=80" alt="Parrilla BurgerX">
+                <div class="badge">Desde<br>2018</div>
+            </div>
+            <div class="about-text reveal" style="transition-delay: 0.2s;">
+                <div class="section-header" style="text-align: left; margin-bottom: 20px;">
+                    <p>La Experiencia X</p>
+                    <h2 style="font-size: 2.5rem; text-transform: none;">Artesanos de la Parrilla</h2>
+                </div>
+                <p>Todo empezó en un pequeño garaje en Bogotá con una misión simple: rescatar el verdadero sabor de la hamburguesa clásica americana, pero con el toque urbano de nuestra ciudad.</p>
+                <p>Nuestra carne nunca se congela. Molemos nuestros propios cortes de res Angus todos los días para garantizar la máxima jugosidad. Nuestras salsas son recetas secretas de la casa y nuestro pan brioche se sella con mantequilla de ajo antes de cada orden.</p>
+                <ul style="list-style: none; margin-top: 30px;">
+                    <li style="margin-bottom: 15px; font-size: 1.1rem; display: flex; align-items: center; gap: 15px;"><i class="fa-solid fa-fire" style="color: var(--primary); background: rgba(255,71,87,0.1); padding: 10px; border-radius: 50%;"></i> Parrilla de leña y carbón</li>
+                    <li style="margin-bottom: 15px; font-size: 1.1rem; display: flex; align-items: center; gap: 15px;"><i class="fa-solid fa-leaf" style="color: var(--primary); background: rgba(255,71,87,0.1); padding: 10px; border-radius: 50%;"></i> Vegetales de huertos locales</li>
+                    <li style="margin-bottom: 15px; font-size: 1.1rem; display: flex; align-items: center; gap: 15px;"><i class="fa-solid fa-truck-fast" style="color: var(--primary); background: rgba(255,71,87,0.1); padding: 10px; border-radius: 50%;"></i> Empaques eco-amigables</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <div class="section" style="padding-top: 0; padding-bottom: 0;">
+        <section id="menu" class="menu-bg reveal">
+            <div class="section-header">
+                <p>Descubre tu favorita</p>
+                <h2>Menú Principal</h2>
+            </div>
+
+            <div class="menu-category">
+                <h3>Hamburguesas Premium</h3>
+                <div class="menu-grid">
+                    <div class="menu-item">
+                        <img src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=300&q=80" alt="Classic X">
+                        <div class="menu-info">
+                            <div class="menu-info-header">
+                                <h4>Classic X</h4>
+                                <span class="menu-price">$18.000</span>
+                            </div>
+                            <p>Carne Angus 150g, queso cheddar americano, lechuga romana, tomate fresco y salsa X.</p>
+                        </div>
+                    </div>
+                    <div class="menu-item">
+                        <img src="https://images.unsplash.com/photo-1586190848861-99aa4a171e90?auto=format&fit=crop&w=300&q=80" alt="Bacon Beast">
+                        <div class="menu-info">
+                            <div class="menu-info-header">
+                                <h4>La Bestia Ahumada</h4>
+                                <span class="menu-price">$25.000</span>
+                            </div>
+                            <p>Doble carne Angus, triple tocino ahumado en madera de manzano, cebolla caramelizada y BBQ.</p>
+                        </div>
+                    </div>
+                    <div class="menu-item">
+                        <img src="https://images.unsplash.com/photo-1550547660-d9450f859349?auto=format&fit=crop&w=300&q=80" alt="Crispy Chicken">
+                        <div class="menu-info">
+                            <div class="menu-info-header">
+                                <h4>Chicken Crispy</h4>
+                                <span class="menu-price">$21.000</span>
+                            </div>
+                            <p>Pechuga marinada y frita al estilo sureño, pepinillos dulces y mayonesa de ajo asado.</p>
+                        </div>
+                    </div>
+                    <div class="menu-item">
+                        <img src="https://images.unsplash.com/photo-1572802419224-296b0aeee0d9?auto=format&fit=crop&w=300&q=80" alt="Truffle Mushroom">
+                        <div class="menu-info">
+                            <div class="menu-info-header">
+                                <h4>Truffle Mushroom</h4>
+                                <span class="menu-price">$28.000</span>
+                            </div>
+                            <p>Carne Angus, queso suizo fundido, champiñones salteados y mayonesa de trufa negra.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="menu-category" style="margin-bottom: 0;">
+                <h3>Acompañamientos</h3>
+                <div class="menu-grid">
+                    <div class="menu-item">
+                        <img src="https://images.unsplash.com/photo-1576107232684-1279f3908581?auto=format&fit=crop&w=300&q=80" alt="Papas">
+                        <div class="menu-info">
+                            <div class="menu-info-header">
+                                <h4>Papas Rústicas</h4>
+                                <span class="menu-price">$8.000</span>
+                            </div>
+                            <p>Papas cortadas a mano, fritas con piel y sazonadas con paprika y sal marina.</p>
+                        </div>
+                    </div>
+                    <div class="menu-item">
+                        <img src="https://images.unsplash.com/photo-1628840042765-356cda07504e?auto=format&fit=crop&w=300&q=80" alt="Onion Rings">
+                        <div class="menu-info">
+                            <div class="menu-info-header">
+                                <h4>Aros de Cebolla</h4>
+                                <span class="menu-price">$10.000</span>
+                            </div>
+                            <p>Aros crujientes empanizados en cerveza artesanal. Incluye salsa ranch.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <section id="testimonios" class="section">
+        <div class="section-header reveal">
+            <p>La Voz del Barrio</p>
+            <h2>¿Qué dicen nuestros clientes?</h2>
+        </div>
+        <div class="testimonials-grid">
+            <div class="testimonial-card reveal">
+                <i class="fa-solid fa-quote-left"></i>
+                <div class="stars">
+                    <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+                </div>
+                <p class="testimonial-text">"La mejor hamburguesa que me he comido en Bogotá. La carne es súper jugosa y el pan no se deshace. El domicilio llegó rápido y caliente."</p>
+                <div class="customer-info">
+                    <img src="https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?auto=format&fit=crop&w=100&q=80" alt="User">
+                    <div>
+                        <h4>Carlos Rodríguez</h4>
+                        <span>Cliente Frecuente</span>
+                    </div>
+                </div>
+            </div>
+            <div class="testimonial-card reveal" style="transition-delay: 0.1s;">
+                <i class="fa-solid fa-quote-left"></i>
+                <div class="stars">
+                    <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+                </div>
+                <p class="testimonial-text">"Tienen que probar La Bestia Ahumada. Es una locura el sabor del tocino. El local tiene un ambiente excelente y la música está 10/10."</p>
+                <div class="customer-info">
+                    <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=100&q=80" alt="User">
+                    <div>
+                        <h4>Andrea Gómez</h4>
+                        <span>Local Guide</span>
+                    </div>
+                </div>
+            </div>
+            <div class="testimonial-card reveal" style="transition-delay: 0.2s;">
+                <i class="fa-solid fa-quote-left"></i>
+                <div class="stars">
+                    <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star-half-stroke"></i>
+                </div>
+                <p class="testimonial-text">"Excelente calidad-precio. Las papas rústicas son obligatorias. Fui el fin de semana y estaba lleno, pero la atención fue rapidísima."</p>
+                <div class="customer-info">
+                    <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=100&q=80" alt="User">
+                    <div>
+                        <h4>Felipe Martínez</h4>
+                        <span>Food Blogger</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="faq" class="section faq-bg">
+        <div class="section-header reveal">
+            <p>Resolvemos tus dudas</p>
+            <h2>Preguntas Frecuentes</h2>
+        </div>
+        <div class="faq-container">
+            <div class="faq-item reveal">
+                <button class="faq-question">
+                    ¿Cuál es el área de cobertura para domicilios?
+                    <i class="fa-solid fa-chevron-down"></i>
+                </button>
+                <div class="faq-answer">
+                    <p>Actualmente cubrimos el norte y centro de Bogotá (desde la Calle 26 hasta la Calle 170). Si estás fuera de nuestra zona, puedes pedir a través de plataformas aliadas como Rappi o Didi Food.</p>
+                </div>
+            </div>
+            <div class="faq-item reveal" style="transition-delay: 0.1s;">
+                <button class="faq-question">
+                    ¿Tienen opciones vegetarianas o veganas?
+                    <i class="fa-solid fa-chevron-down"></i>
+                </button>
+                <div class="faq-answer">
+                    <p>¡Sí! Tenemos la 'Veggie X', hecha con un medallón a base de proteína de arveja, lentejas y especias, acompañada de queso vegano fundido y pan brioche artesanal sin lácteos.</p>
+                </div>
+            </div>
+            <div class="faq-item reveal" style="transition-delay: 0.2s;">
+                <button class="faq-question">
+                    ¿Aceptan reservas para grupos grandes?
+                    <i class="fa-solid fa-chevron-down"></i>
+                </button>
+                <div class="faq-answer">
+                    <p>Aceptamos reservas para grupos de más de 8 personas de lunes a jueves. Los fines de semana y festivos atendemos estrictamente por orden de llegada para mantener un flujo rápido de mesas.</p>
+                </div>
+            </div>
+            <div class="faq-item reveal" style="transition-delay: 0.3s;">
+                <button class="faq-question">
+                    ¿Son Pet Friendly?
+                    <i class="fa-solid fa-chevron-down"></i>
+                </button>
+                <div class="faq-answer">
+                    <p>¡Totalmente! Amamos a los peludos. Tenemos una terraza al aire libre muy amplia donde tu mascota será bienvenida e incluso le ofreceremos un bowl con agua fresca de la casa.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer id="contacto">
+        <div class="footer-grid reveal">
+            <div class="footer-col">
+                <a href="#" class="logo" style="display: flex; margin-bottom: 20px;"><i class="fa-solid fa-fire" style="color: var(--primary);"></i> Burger<span>X</span></a>
+                <p style="color: var(--gray);">No es comida rápida, es buena comida hecha rápidamente. El verdadero sabor urbano está aquí.</p>
+                <div class="social-links">
+                    <a href="#"><i class="fa-brands fa-instagram"></i></a>
+                    <a href="#"><i class="fa-brands fa-tiktok"></i></a>
+                    <a href="#"><i class="fa-brands fa-facebook-f"></i></a>
+                </div>
+            </div>
+            <div class="footer-col">
+                <h3>Contacto</h3>
+                <p><i class="fa-solid fa-location-dot"></i> Calle 85 #11-53, Bogotá, Colombia</p>
+                <p><i class="fa-brands fa-whatsapp"></i> +57 300 000 0000</p>
+                <p><i class="fa-solid fa-envelope"></i> pedidos@burgerx.co</p>
+            </div>
+            <div class="footer-col">
+                <h3>Horarios</h3>
+                <p><i class="fa-regular fa-clock"></i> Lunes - Miércoles:<br> 12:00 PM - 10:00 PM</p>
+                <p><i class="fa-regular fa-clock"></i> Jueves - Sábado:<br> 12:00 PM - 12:00 AM</p>
+                <p><i class="fa-regular fa-clock"></i> Domingos y Festivos:<br> 12:00 PM - 9:00 PM</p>
+            </div>
+        </div>
+        <div class="footer-bottom reveal">
+            <p>&copy; 2026 BurgerX Oficial. Todos los derechos reservados.</p>
+            <div class="amtech-badge">
+                <i class="fa-solid fa-code"></i> Desarrollado por <span>Avila Mora Soluciones</span>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // 1. Quitar Preloader (Pantalla de Carga)
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                const preloader = document.getElementById('preloader');
+                preloader.style.opacity = '0';
+                preloader.style.visibility = 'hidden';
+                document.body.style.overflow = 'auto'; // Restaurar scroll
+            }, 1200); // 1.2 segundos para mostrar la animación
+        });
+        document.body.style.overflow = 'hidden'; // Evitar scroll durante carga
+
+        // 2. Efecto Glass Navbar al hacer Scroll
+        window.addEventListener('scroll', () => {
+            const nav = document.getElementById('navbar');
+            if(window.scrollY > 50){
+                nav.classList.add('scrolled');
+            } else {
+                nav.classList.remove('scrolled');
+            }
+        });
+
+        // 3. Menú Móvil estilo Cajón (App Drawer)
+        const menuBtn = document.querySelector('.menu-btn');
+        const navLinks = document.querySelector('.nav-links');
+        const links = document.querySelectorAll('.nav-links a');
+        const overlay = document.getElementById('menuOverlay');
+
+        function toggleMenu() {
+            navLinks.classList.toggle('active');
+            overlay.classList.toggle('active');
+            const icon = menuBtn.querySelector('i');
+            if(navLinks.classList.contains('active')){
+                icon.classList.remove('fa-bars-staggered');
+                icon.classList.add('fa-xmark');
+            } else {
+                icon.classList.remove('fa-xmark');
+                icon.classList.add('fa-bars-staggered');
+            }
+        }
+
+        menuBtn.addEventListener('click', toggleMenu);
+        overlay.addEventListener('click', toggleMenu);
+
+        links.forEach(link => {
+            link.addEventListener('click', () => {
+                if(window.innerWidth <= 768) {
+                    toggleMenu();
+                }
+            });
+        });
+
+        // 4. Animaciones al Scrollear (Scroll Reveal)
+        const revealElements = document.querySelectorAll('.reveal');
+        const revealObserver = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if(entry.isIntersecting){
+                    entry.target.classList.add('active');
+                    observer.unobserve(entry.target); 
+                }
+            });
+        }, {
+            threshold: 0.1,
+            rootMargin: "0px 0px -50px 0px"
+        });
+        revealElements.forEach(el => revealObserver.observe(el));
+
+        // 5. Acordeón FAQ Interactivo
+        const faqQuestions = document.querySelectorAll('.faq-question');
+        
+        faqQuestions.forEach(question => {
+            question.addEventListener('click', () => {
+                const answer = question.nextElementSibling;
+                
+                // Cerrar otras respuestas abiertas
+                faqQuestions.forEach(otherQuestion => {
+                    if (otherQuestion !== question) {
+                        otherQuestion.classList.remove('active');
+                        otherQuestion.nextElementSibling.style.maxHeight = null;
+                    }
+                });
+
+                // Toggle la actual
+                question.classList.toggle('active');
+                if (question.classList.contains('active')) {
+                    answer.style.maxHeight = answer.scrollHeight + "px";
+                } else {
+                    answer.style.maxHeight = null;
+                }
+            });
+        });
+    </script>
+</body>
+</html>
