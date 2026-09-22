@@ -1,0 +1,34 @@
+{
+  "name": "Aura Studio",
+  "short_name": "Aura Studio",
+  "description": "Demo multipágina de diseño y patronaje premium.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "display_override": [
+    "window-controls-overlay",
+    "standalone"
+  ],
+  "background_color": "#050505",
+  "theme_color": "#050505",
+  "lang": "es",
+  "categories": [
+    "lifestyle",
+    "design"
+  ],
+  "prefer_related_applications": false,
+  "icons": [
+    {
+      "src": "icon-192.svg",
+      "sizes": "192x192",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icon-512.svg",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
