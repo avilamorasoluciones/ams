@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Servicios y Proceso | Aura Studio</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Poppins:wght@300;400;500;600&display=swap');
+
+        :root {
+            --bg-color: #050505; --surface-color: #121212; --primary-color: #d4af37;
+            --text-color: #b3b3b3; --text-light: #ffffff; --glass-bg: rgba(18, 18, 18, 0.85); --glass-border: rgba(212, 175, 55, 0.15);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background-color: var(--bg-color); color: var(--text-color); font-family: 'Poppins', sans-serif; overflow-x: hidden; line-height: 1.7; }
+        h1, h2, h3, h4 { font-family: 'Playfair Display', serif; color: var(--text-light); }
+        
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 40px; }
+        .section-padding { padding: 100px 0; }
+        .text-center { text-align: center; }
+        .golden-text { color: var(--primary-color); font-style: italic; }
+
+        #loader { position: fixed; inset: 0; background: var(--bg-color); display: flex; justify-content: center; align-items: center; z-index: 9999; transition: 0.6s ease; }
+        .spinner { width: 50px; height: 50px; border: 2px solid var(--surface-color); border-top: 2px solid var(--primary-color); border-radius: 50%; animation: spin 1s linear infinite; }
+        @keyframes spin { 100% { transform: rotate(360deg); } }
+        .fade-out { opacity: 0; visibility: hidden; }
+
+        header { position: fixed; top: 0; width: 100%; padding: 20px 60px; display: flex; justify-content: space-between; align-items: center; background: var(--glass-bg); backdrop-filter: blur(15px); border-bottom: 1px solid var(--glass-border); z-index: 1000; }
+        .logo { color: var(--primary-color); font-size: 28px; text-decoration: none; font-family: 'Playfair Display', serif; letter-spacing: 2px; }
+        .nav-links { display: flex; gap: 40px; list-style: none; }
+        .nav-links a { color: var(--text-light); text-decoration: none; font-size: 14px; text-transform: uppercase; letter-spacing: 1px; transition: 0.3s; }
+        .nav-links a:hover, .nav-links a.active { color: var(--primary-color); }
+        .menu-btn { display: none; color: var(--primary-color); font-size: 24px; cursor: pointer; }
+
+        /* Page Banner */
+        .page-banner { padding: 180px 0 80px; background: linear-gradient(rgba(5,5,5,0.8), rgba(5,5,5,1)), url('https://images.unsplash.com/photo-1573812195420-fc2b60451cfb?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80') center/cover; text-align: center; border-bottom: 1px solid var(--glass-border); }
+        .page-banner h1 { font-size: 4rem; margin-bottom: 10px; }
+
+        /* Detailed Services */
+        .service-list { display: flex; flex-direction: column; gap: 80px; margin-top: 50px; }
+        .service-row { display: grid; grid-template-columns: 1fr 1fr; gap: 50px; align-items: center; }
+        .service-row:nth-child(even) .service-img { order: 2; }
+        .service-img img { width: 100%; height: 400px; object-fit: cover; border-radius: 5px; border: 1px solid var(--glass-border); }
+        .service-info i { font-size: 40px; color: var(--primary-color); margin-bottom: 20px; }
+        .service-info h3 { font-size: 2.5rem; margin-bottom: 15px; }
+        .service-info p { margin-bottom: 15px; }
+        .service-info ul { list-style: none; margin-top: 20px; }
+        .service-info ul li { margin-bottom: 10px; padding-left: 25px; position: relative; }
+        .service-info ul li::before { content: '✓'; position: absolute; left: 0; color: var(--primary-color); font-weight: bold; }
+
+        /* Work Process Steps */
+        .process-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px; margin-top: 60px; }
+        .process-card { background: var(--surface-color); padding: 40px 30px; border-radius: 5px; border-top: 3px solid var(--primary-color); position: relative; }
+        .process-num { position: absolute; top: -20px; right: 20px; font-size: 4rem; font-weight: bold; color: rgba(212, 175, 55, 0.1); font-family: 'Playfair Display', serif; }
+        .process-card h4 { font-size: 1.5rem; margin-bottom: 15px; color: var(--primary-color); }
+
+        footer { background: var(--surface-color); text-align: center; padding: 50px 20px 30px; border-top: 1px solid var(--glass-border); margin-top: 50px; }
+        .amtech-badge { display: inline-block; margin-top: 40px; font-size: 0.85rem; padding: 10px 20px; border-radius: 30px; background: rgba(212, 175, 55, 0.05); border: 1px solid rgba(212, 175, 55, 0.2); }
+        .amtech-badge strong { color: #66fcf1; }
+
+        .hidden { opacity: 0; transform: translateY(40px); transition: all 1s cubic-bezier(0.5, 0, 0, 1); }
+        .show { opacity: 1; transform: translateY(0); }
+
+        @media (max-width: 900px) {
+            .service-row, .service-row:nth-child(even) .service-img { grid-template-columns: 1fr; order: 0; }
+            .service-img img { height: 300px; }
+        }
+        @media (max-width: 768px) {
+            header { padding: 20px; }
+            .menu-btn { display: block; }
+            .nav-links { position: fixed; top: 75px; right: -100%; flex-direction: column; background: var(--glass-bg); backdrop-filter: blur(20px); width: 100%; height: 100vh; text-align: center; padding: 60px 0; transition: 0.5s; }
+            .nav-links.active { right: 0; }
+            .page-banner h1 { font-size: 2.5rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="loader"><div class="spinner"></div></div>
+
+    <header>
+        <a href="index.html" class="logo">AURA STUDIO</a>
+        <div class="menu-btn" id="menu-btn"><i class="fas fa-bars"></i></div>
+        <ul class="nav-links" id="nav-links">
+            <li><a href="index.html">Inicio</a></li>
+            <li><a href="servicios.html" class="active">Servicios</a></li>
+            <li><a href="contacto.html">Contacto</a></li>
+        </ul>
+    </header>
+
+    <div class="page-banner">
+        <div class="container">
+            <h1 class="hidden">Expertise <span class="golden-text">Técnico</span></h1>
+            <p class="hidden">Descubre nuestras soluciones integrales para la industria de la moda.</p>
+        </div>
+    </div>
+
+    <section class="section-padding container">
+        <div class="service-list">
+            <!-- Servicio 1 -->
+            <div class="service-row hidden">
+                <div class="service-info">
+                    <i class="fas fa-pencil-ruler"></i>
+                    <h3>Patronaje Físico y Digital</h3>
+                    <p>Desarrollamos la moldería base de tus bocetos. Evaluamos la caída de las telas, la tensión y los cortes para asegurar que el fit sea exacto y cómodo para el usuario final.</p>
+                    <ul>
+                        <li>Moldes en cartón industrial o formato digital (.DXF).</li>
+                        <li>Corrección de aplomos y proporciones.</li>
+                        <li>Creación de ficha técnica de medidas.</li>
+                    </ul>
+                </div>
+                <div class="service-img">
+                    <img src="https://images.unsplash.com/photo-1612423284934-2850a4ea6b0f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" alt="Patronaje">
+                </div>
+            </div>
+
+            <!-- Servicio 2 -->
+            <div class="service-row hidden">
+                <div class="service-img">
+                    <img src="https://images.unsplash.com/photo-1620799140408-edc6dcb6d633?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" alt="Corte y Confección">
+                </div>
+                <div class="service-info">
+                    <i class="fas fa-layer-group"></i>
+                    <h3>Escalado y Trazado Automático</h3>
+                    <p>Llevamos tu talla base a todo el abanico de medidas de tus clientes (S, M, L, XL, etc.) sin perder la proporción original del diseño. Maximizamos el uso de tu tela.</p>
+                    <ul>
+                        <li>Escalado milimétrico según normativas internacionales.</li>
+                        <li>Trazo optimizado para plotters industriales.</li>
+                        <li>Ahorro comprobado de hasta un 15% en consumo textil.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section-padding" style="background-color: var(--surface-color);">
+        <div class="container">
+            <div class="text-center hidden">
+                <h4 class="golden-text">Metodología</h4>
+                <h2>Nuestro Proceso de Trabajo</h2>
+            </div>
+            
+            <div class="process-grid">
+                <div class="process-card hidden">
+                    <div class="process-num">01</div>
+                    <h4>Brief y Boceto</h4>
+                    <p>Analizamos tus figurines, referencias y fichas de diseño para entender la estructura de la prenda y los textiles que usarás.</p>
+                </div>
+                <div class="process-card hidden">
+                    <div class="process-num">02</div>
+                    <h4>Moldería Base</h4>
+                    <p>Construimos el primer prototipo en papel o digital. Ajustamos pinzas, vuelos y holguras de acuerdo al diseño técnico.</p>
+                </div>
+                <div class="process-card hidden">
+                    <div class="process-num">03</div>
+                    <h4>Prototipo / Toile</h4>
+                    <p>Confeccionamos una muestra en lienzo crudo para hacer pruebas de calce sobre maniquí o modelo de prueba.</p>
+                </div>
+                <div class="process-card hidden">
+                    <div class="process-num">04</div>
+                    <h4>Escalado Final</h4>
+                    <p>Una vez aprobado el calce, procedemos a realizar la progresión de tallas para entregar los archivos listos para producción.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container footer-content">
+            <p>&copy; 2026 Aura Studio. Elevando marcas a través del diseño estructurado.</p>
+            <div class="amtech-badge">Desarrollado por <strong>Avila Mora Soluciones</strong> 🚀</div>
+        </div>
+    </footer>
+
+    <script>
+        window.addEventListener('load', () => {
+            const loader = document.getElementById('loader');
+            setTimeout(() => { loader.classList.add('fade-out'); setTimeout(() => { loader.style.display = 'none'; }, 600); }, 500);
+        });
+
+        const menuBtn = document.getElementById('menu-btn');
+        const navLinks = document.getElementById('nav-links');
+        menuBtn.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+            menuBtn.innerHTML = navLinks.classList.contains('active') ? '<i class="fas fa-times"></i>' : '<i class="fas fa-bars"></i>';
+        });
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('show'); });
+        }, { threshold: 0.1 });
+        document.querySelectorAll('.hidden').forEach(el => observer.observe(el));
+    </script>
+</body>
+</html>
