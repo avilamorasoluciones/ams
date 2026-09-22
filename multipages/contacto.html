@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contacto y FAQ | Aura Studio</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Poppins:wght@300;400;500;600&display=swap');
+
+        :root {
+            --bg-color: #050505; --surface-color: #121212; --primary-color: #d4af37;
+            --text-color: #b3b3b3; --text-light: #ffffff; --glass-bg: rgba(18, 18, 18, 0.85); --glass-border: rgba(212, 175, 55, 0.15);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background-color: var(--bg-color); color: var(--text-color); font-family: 'Poppins', sans-serif; overflow-x: hidden; line-height: 1.7; }
+        h1, h2, h3, h4 { font-family: 'Playfair Display', serif; color: var(--text-light); }
+        
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 40px; }
+        .section-padding { padding: 100px 0; }
+        .golden-text { color: var(--primary-color); font-style: italic; }
+
+        #loader { position: fixed; inset: 0; background: var(--bg-color); display: flex; justify-content: center; align-items: center; z-index: 9999; transition: 0.6s ease; }
+        .spinner { width: 50px; height: 50px; border: 2px solid var(--surface-color); border-top: 2px solid var(--primary-color); border-radius: 50%; animation: spin 1s linear infinite; }
+        @keyframes spin { 100% { transform: rotate(360deg); } }
+        .fade-out { opacity: 0; visibility: hidden; }
+
+        header { position: fixed; top: 0; width: 100%; padding: 20px 60px; display: flex; justify-content: space-between; align-items: center; background: var(--glass-bg); backdrop-filter: blur(15px); border-bottom: 1px solid var(--glass-border); z-index: 1000; }
+        .logo { color: var(--primary-color); font-size: 28px; text-decoration: none; font-family: 'Playfair Display', serif; letter-spacing: 2px; }
+        .nav-links { display: flex; gap: 40px; list-style: none; }
+        .nav-links a { color: var(--text-light); text-decoration: none; font-size: 14px; text-transform: uppercase; letter-spacing: 1px; transition: 0.3s; }
+        .nav-links a:hover, .nav-links a.active { color: var(--primary-color); }
+        .menu-btn { display: none; color: var(--primary-color); font-size: 24px; cursor: pointer; }
+
+        .page-banner { padding: 150px 0 60px; text-align: center; border-bottom: 1px solid var(--glass-border); background: var(--surface-color); }
+        .page-banner h1 { font-size: 3.5rem; }
+
+        /* Contenedor Contacto */
+        .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; margin-top: 50px; }
+        .contact-info-box { background: var(--surface-color); padding: 40px; border-radius: 5px; border-left: 3px solid var(--primary-color); }
+        .contact-info-box h3 { font-size: 2rem; margin-bottom: 20px; }
+        .info-item { display: flex; align-items: center; margin-bottom: 25px; }
+        .info-item i { font-size: 24px; color: var(--primary-color); margin-right: 20px; width: 30px; }
+        .info-item p { color: var(--text-light); font-size: 1.1rem; }
+
+        /* Formulario Estilizado */
+        .contact-form { padding: 20px 0; }
+        .input-row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 25px; }
+        .input-group { position: relative; }
+        .input-group input, .input-group textarea { width: 100%; padding: 15px 0; background: transparent; border: none; border-bottom: 1px solid #444; color: var(--text-light); font-size: 1rem; outline: none; transition: 0.3s; font-family: 'Poppins', sans-serif; }
+        .input-group textarea { resize: none; height: 120px; margin-bottom: 25px;}
+        .input-group input:focus, .input-group textarea:focus { border-bottom-color: var(--primary-color); }
+        .input-group label { position: absolute; top: 15px; left: 0; color: #666; pointer-events: none; transition: 0.3s; }
+        .input-group input:focus ~ label, .input-group input:valid ~ label, .input-group textarea:focus ~ label, .input-group textarea:valid ~ label { top: -20px; font-size: 0.8rem; color: var(--primary-color); }
+        .btn-submit { padding: 16px 40px; background: var(--primary-color); color: var(--bg-color); border: none; font-size: 14px; font-weight: 600; text-transform: uppercase; letter-spacing: 2px; cursor: pointer; transition: 0.3s; width: 100%; border-radius: 3px;}
+        .btn-submit:hover { background: #b8962e; box-shadow: 0 10px 20px rgba(212, 175, 55, 0.2); }
+
+        /* FAQ (Acordeón) */
+        .faq-section { margin-top: 80px; }
+        .faq-section h2 { text-align: center; font-size: 2.5rem; margin-bottom: 40px; }
+        .faq-item { background: var(--surface-color); margin-bottom: 15px; border-radius: 5px; overflow: hidden; border: 1px solid #222; }
+        .faq-question { padding: 20px 30px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; color: var(--text-light); font-weight: 500; font-family: 'Playfair Display', serif; font-size: 1.2rem; transition: 0.3s; }
+        .faq-question:hover { color: var(--primary-color); }
+        .faq-answer { padding: 0 30px; max-height: 0; overflow: hidden; transition: max-height 0.4s ease, padding 0.4s ease; background: var(--bg-color); }
+        .faq-item.active .faq-answer { padding: 20px 30px; max-height: 200px; }
+        .faq-item.active .faq-question i { transform: rotate(180deg); color: var(--primary-color); }
+        .faq-question i { transition: 0.4s; }
+
+        footer { background: var(--surface-color); text-align: center; padding: 50px 20px 30px; border-top: 1px solid var(--glass-border); margin-top: 50px; }
+        .amtech-badge { display: inline-block; margin-top: 40px; font-size: 0.85rem; padding: 10px 20px; border-radius: 30px; background: rgba(212, 175, 55, 0.05); border: 1px solid rgba(212, 175, 55, 0.2); }
+        .amtech-badge strong { color: #66fcf1; }
+
+        .hidden { opacity: 0; transform: translateY(40px); transition: all 1s cubic-bezier(0.5, 0, 0, 1); }
+        .show { opacity: 1; transform: translateY(0); }
+
+        @media (max-width: 900px) {
+            .contact-grid { grid-template-columns: 1fr; }
+            .input-row { grid-template-columns: 1fr; gap: 0; }
+        }
+        @media (max-width: 768px) {
+            header { padding: 20px; }
+            .menu-btn { display: block; }
+            .nav-links { position: fixed; top: 75px; right: -100%; flex-direction: column; background: var(--glass-bg); backdrop-filter: blur(20px); width: 100%; height: 100vh; padding: 60px 0; transition: 0.5s; text-align: center; }
+            .nav-links.active { right: 0; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="loader"><div class="spinner"></div></div>
+
+    <header>
+        <a href="index.html" class="logo">AURA STUDIO</a>
+        <div class="menu-btn" id="menu-btn"><i class="fas fa-bars"></i></div>
+        <ul class="nav-links" id="nav-links">
+            <li><a href="index.html">Inicio</a></li>
+            <li><a href="servicios.html">Servicios</a></li>
+            <li><a href="contacto.html" class="active">Contacto</a></li>
+        </ul>
+    </header>
+
+    <div class="page-banner">
+        <div class="container">
+            <h1 class="hidden">Inicia tu <span class="golden-text">Colección</span></h1>
+        </div>
+    </div>
+
+    <section class="section-padding container">
+        <div class="contact-grid">
+            <!-- Info Lateral -->
+            <div class="contact-info-box hidden">
+                <h3>Studio Central</h3>
+                <p style="margin-bottom: 30px;">Estamos listos para materializar tu próxima colección. Agenda una asesoría presencial o virtual.</p>
+                
+                <div class="info-item">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <p>Av. Principal Moda, Edificio Textura, Piso 4. Bogotá.</p>
+                </div>
+                <div class="info-item">
+                    <i class="fas fa-phone-alt"></i>
+                    <p>+57 300 123 4567</p>
+                </div>
+                <div class="info-item">
+                    <i class="fas fa-envelope"></i>
+                    <p>hola@aurastudio.com</p>
+                </div>
+                <div class="info-item">
+                    <i class="fas fa-clock"></i>
+                    <p>Lunes - Viernes: 9:00 AM - 6:00 PM</p>
+                </div>
+            </div>
+
+            <!-- Formulario -->
+            <div class="contact-form hidden">
+                <form action="#" method="POST">
+                    <div class="input-row">
+                        <div class="input-group">
+                            <input type="text" required>
+                            <label>Nombre Completo</label>
+                        </div>
+                        <div class="input-group">
+                            <input type="text" required>
+                            <label>Marca / Empresa</label>
+                        </div>
+                    </div>
+                    <div class="input-group" style="margin-bottom: 25px;">
+                        <input type="email" required>
+                        <label>Correo Electrónico</label>
+                    </div>
+                    <div class="input-group">
+                        <textarea required></textarea>
+                        <label>Cuéntanos sobre los requerimientos técnicos de tu proyecto...</label>
+                    </div>
+                    <button type="submit" class="btn-submit">Solicitar Cotización</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Preguntas Frecuentes -->
+        <div class="faq-section hidden">
+            <h2>Preguntas Frecuentes</h2>
+            
+            <div class="faq-item">
+                <div class="faq-question">¿En qué formato entregan los moldes? <i class="fas fa-chevron-down"></i></div>
+                <div class="faq-answer"><p>Entregamos los moldes físicamente en cartulina kraff industrial de 300g, o de forma digital en formatos universales como DXF o PDF, listos para plotter.</p></div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">¿Incluyen la confección de la muestra inicial? <i class="fas fa-chevron-down"></i></div>
+                <div class="faq-answer"><p>Sí, desarrollamos un "Toile" (muestra en lienzo crudo) para revisar el calce exacto sobre maniquí antes de pasar al tejido final y al escalado.</p></div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">¿Cuánto tiempo toma desarrollar una colección base de 10 prendas? <i class="fas fa-chevron-down"></i></div>
+                <div class="faq-answer"><p>Dependiendo de la complejidad de los cortes, un desarrollo completo de 10 referencias toma aproximadamente de 3 a 4 semanas hábiles, incluyendo las correcciones de calce.</p></div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container footer-content">
+            <p>&copy; 2026 Aura Studio. Todos los derechos reservados.</p>
+            <div class="amtech-badge">Desarrollado por <strong>Avila Mora Soluciones</strong> 🚀</div>
+        </div>
+    </footer>
+
+    <script>
+        // Loader
+        window.addEventListener('load', () => {
+            const loader = document.getElementById('loader');
+            setTimeout(() => { loader.classList.add('fade-out'); setTimeout(() => { loader.style.display = 'none'; }, 600); }, 500);
+        });
+
+        // Mobile Menu
+        const menuBtn = document.getElementById('menu-btn');
+        const navLinks = document.getElementById('nav-links');
+        menuBtn.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+            menuBtn.innerHTML = navLinks.classList.contains('active') ? '<i class="fas fa-times"></i>' : '<i class="fas fa-bars"></i>';
+        });
+
+        // FAQ Acordeón Interactividad
+        const faqItems = document.querySelectorAll('.faq-item');
+        faqItems.forEach(item => {
+            const question = item.querySelector('.faq-question');
+            question.addEventListener('click', () => {
+                // Cerrar otros
+                faqItems.forEach(el => {
+                    if(el !== item) el.classList.remove('active');
+                });
+                // Abrir el actual
+                item.classList.toggle('active');
+            });
+        });
+
+        // Scroll Reveal
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('show'); });
+        }, { threshold: 0.1 });
+        document.querySelectorAll('.hidden').forEach(el => observer.observe(el));
+    </script>
+</body>
+</html>
