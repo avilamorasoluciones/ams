@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    
+    <title>KICKS | Cultura Sneaker y Streetwear</title>
+    <meta name="description" content="KICKS es tu destino para el mejor streetwear y sneakers exclusivos. Compra online la nueva colección 2026.">
+    <meta name="theme-color" content="#000000">
+    
+    <link href="https://fonts.googleapis.com/css2?family=Syncopate:wght@400;700&family=Syne:wght@400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --bg: #050505;
+            --text: #ffffff;
+            --accent: #bbf7d0; 
+            --accent-dark: #22c55e;
+            --surface: rgba(255, 255, 255, 0.03);
+            --border: rgba(255, 255, 255, 0.08);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body { 
+            font-family: 'Syne', sans-serif; 
+            background: var(--bg); 
+            color: var(--text); 
+            overflow-x: hidden; 
+            font-size: 15px;
+        }
+
+        /* 1. PRELOADER */
+        #preloader {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100vh; height: 100dvh;
+            background: var(--bg);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.8s ease, visibility 0.8s ease;
+        }
+        .loader-text {
+            font-family: 'Syncopate', sans-serif;
+            font-size: 3rem;
+            font-weight: 700;
+            letter-spacing: 5px;
+            position: relative;
+            color: rgba(255,255,255,0.1);
+        }
+        .loader-text::before {
+            content: "KICKS";
+            position: absolute;
+            top: 0; left: 0;
+            color: var(--text);
+            width: 0%;
+            overflow: hidden;
+            animation: fillText 2s ease-in-out infinite alternate;
+        }
+        @keyframes fillText {
+            0% { width: 0%; }
+            100% { width: 100%; }
+        }
+
+        /* 2. NAVEGACIÓN Y MENÚ MÓVIL */
+        nav {
+            position: fixed; width: 100%; padding: 20px 50px;
+            display: flex; justify-content: space-between; align-items: center;
+            background: rgba(5, 5, 5, 0.8);
+            backdrop-filter: blur(15px);
+            z-index: 1000; border-bottom: 1px solid var(--border);
+            transition: all 0.4s ease;
+        }
+        .logo { font-family: 'Syncopate', sans-serif; font-size: 1.5rem; font-weight: 700; color: var(--text); text-decoration: none; }
+        .logo span { color: var(--accent); }
+        
+        .nav-links { display: flex; gap: 40px; list-style: none; }
+        .nav-links a { color: var(--text); text-decoration: none; font-weight: 600; font-size: 1rem; text-transform: uppercase; transition: 0.3s; position: relative; }
+        .nav-links a::after { content: ''; position: absolute; bottom: -5px; left: 0; width: 0%; height: 2px; background: var(--accent); transition: 0.3s; }
+        .nav-links a:hover::after { width: 100%; }
+        
+        .cart-icon { font-size: 1.5rem; cursor: pointer; transition: 0.3s; position: relative; }
+        .cart-icon:hover { color: var(--accent); }
+        .cart-badge { position: absolute; top: -8px; right: -10px; background: var(--accent); color: var(--bg); font-size: 0.7rem; font-weight: 800; width: 18px; height: 18px; border-radius: 50%; display: flex; justify-content: center; align-items: center; }
+        
+        .menu-btn { display: none; font-size: 1.8rem; cursor: pointer; }
+
+        /* 3. HERO SECTION */
+        header {
+            min-height: 100vh;
+            min-height: 100dvh;
+            display: flex; align-items: center; justify-content: center;
+            padding: 100px 20px 20px; position: relative;
+            overflow: hidden;
+        }
+        .hero-bg {
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            width: 600px; height: 600px;
+            background: radial-gradient(circle, rgba(187, 247, 208, 0.15) 0%, rgba(5,5,5,0) 70%);
+            z-index: -1;
+        }
+        .hero-content { text-align: center; max-width: 1000px; }
+        .hero-title { font-family: 'Syncopate', sans-serif; font-size: 6vw; line-height: 1; margin-bottom: 20px; text-transform: uppercase; }
+        .hero-subtitle { font-size: 1.5rem; color: #a1a1aa; margin-bottom: 40px; font-weight: 400; }
+        
+        .btn { display: inline-flex; align-items: center; gap: 10px; padding: 18px 40px; background: var(--text); color: var(--bg); font-weight: 800; font-size: 1.1rem; text-decoration: none; border-radius: 50px; transition: 0.4s; text-transform: uppercase; overflow: hidden; position: relative; border: none; cursor: pointer; }
+        .btn::before { content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: var(--accent); transition: 0.4s; z-index: 1; }
+        .btn:hover::before { left: 0; }
+        .btn span { position: relative; z-index: 2; }
+        .btn:hover span { color: var(--bg); }
+
+        .floating-shoe {
+            margin-top: 50px;
+            width: 100%; max-width: 700px;
+            animation: float 6s ease-in-out infinite;
+            filter: drop-shadow(0 30px 30px rgba(0,0,0,0.8));
+        }
+        @keyframes float {
+            0% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(2deg); }
+            100% { transform: translateY(0px) rotate(0deg); }
+        }
+
+        /* 4. MARQUEE INFINITO */
+        .marquee-wrapper { width: 100%; overflow: hidden; background: var(--accent); padding: 15px 0; transform: rotate(-2deg); margin: 50px 0 100px; }
+        .marquee { display: flex; white-space: nowrap; animation: scrollMarquee 20s linear infinite; }
+        .marquee span { font-family: 'Syncopate', sans-serif; font-size: 1.5rem; font-weight: 700; color: var(--bg); text-transform: uppercase; margin: 0 30px; }
+        @keyframes scrollMarquee { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+
+        /* 5. CATÁLOGO / PRODUCTOS */
+        .section { padding: 80px 20px; max-width: 1400px; margin: 0 auto; }
+        .section-header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 50px; flex-wrap: wrap; gap: 20px; }
+        .section-title { font-family: 'Syncopate', sans-serif; font-size: 3rem; }
+        
+        .filters { display: flex; gap: 15px; flex-wrap: wrap; }
+        .filter-btn { background: transparent; border: 1px solid var(--border); color: var(--text); padding: 10px 25px; border-radius: 50px; font-weight: 600; cursor: pointer; transition: 0.3s; }
+        .filter-btn.active, .filter-btn:hover { background: var(--text); color: var(--bg); }
+
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 40px; }
+        
+        .product-card { background: var(--surface); border: 1px solid var(--border); border-radius: 20px; padding: 20px; transition: 0.4s; position: relative; overflow: hidden; }
+        .product-card:hover { border-color: var(--accent); transform: translateY(-10px); }
+        
+        .product-img { width: 100%; height: 300px; background: #111; border-radius: 15px; display: flex; align-items: center; justify-content: center; margin-bottom: 20px; overflow: hidden; position: relative; }
+        .product-img img { width: 90%; height: 90%; object-fit: contain; transition: 0.5s ease; }
+        .product-card:hover .product-img img { transform: scale(1.1) rotate(-5deg); }
+        
+        .tag { position: absolute; top: 15px; left: 15px; background: var(--accent); color: var(--bg); padding: 5px 12px; border-radius: 50px; font-weight: 800; font-size: 0.8rem; z-index: 10; text-transform: uppercase; }
+        
+        .product-info h3 { font-size: 1.3rem; margin-bottom: 5px; }
+        .price { font-family: 'Syncopate', sans-serif; font-size: 1.5rem; font-weight: 700; color: var(--text); display: block; margin-bottom: 20px; }
+        
+        .buy-btn { width: 100%; padding: 15px; background: var(--text); color: var(--bg); border: none; border-radius: 10px; font-weight: 800; font-size: 1rem; cursor: pointer; display: flex; justify-content: center; align-items: center; gap: 10px; text-decoration: none; transition: 0.3s; }
+        .buy-btn:hover { background: #25d366; color: white; }
+
+        /* 6. ANIMACIONES REVEAL */
+        .reveal { opacity: 0; transform: translateY(50px); transition: all 0.8s ease-out; }
+        .reveal.active { opacity: 1; transform: translateY(0); }
+
+        /* 7. CARRITO LATERAL (DRAWER) */
+        .cart-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; 
+            height: 100vh; height: 100dvh;
+            background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(5px);
+            z-index: 1001; opacity: 0; visibility: hidden; transition: 0.4s ease;
+        }
+        .cart-overlay.active { opacity: 1; visibility: visible; }
+        
+        .cart-drawer {
+            position: fixed; top: 0; right: -100%; width: 100%; max-width: 450px; 
+            height: 100vh; height: 100dvh; /* Uso de dvh para dispositivos móviles */
+            background: #0a0a0a; z-index: 1002; display: flex; flex-direction: column;
+            transition: right 0.4s cubic-bezier(0.77, 0, 0.175, 1);
+            border-left: 1px solid var(--border); box-shadow: -10px 0 30px rgba(0,0,0,0.5);
+        }
+        .cart-drawer.active { right: 0; }
+        
+        .cart-header { padding: 30px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
+        .cart-header h3 { font-family: 'Syncopate', sans-serif; font-size: 1.5rem; text-transform: uppercase; }
+        .close-cart { background: transparent; border: none; color: var(--text); font-size: 1.5rem; cursor: pointer; transition: 0.3s; }
+        .close-cart:hover { color: var(--accent); transform: rotate(90deg); }
+        
+        .cart-items { flex: 1; overflow-y: auto; padding: 30px; display: flex; flex-direction: column; gap: 20px; }
+        .cart-item { display: flex; gap: 15px; background: rgba(255,255,255,0.02); padding: 15px; border-radius: 15px; border: 1px solid var(--border); }
+        .cart-item img { width: 80px; height: 80px; border-radius: 10px; object-fit: cover; background: #111; }
+        .cart-item-info { flex: 1; display: flex; flex-direction: column; justify-content: center; }
+        .cart-item-info h4 { font-size: 1.1rem; margin-bottom: 5px; }
+        .cart-item-info p { color: #a1a1aa; font-size: 0.9rem; margin-bottom: 5px; }
+        .cart-item-info .item-price { color: var(--accent); font-weight: 700; font-size: 1.1rem; }
+        .remove-item { background: transparent; border: none; color: #ef4444; cursor: pointer; text-align: left; font-size: 0.8rem; margin-top: 5px; text-decoration: underline; }
+        
+        .cart-footer { 
+            padding: 25px; 
+            /* Se añade env(safe-area-inset-bottom) para proteger el botón en móviles con barras de gestos */
+            padding-bottom: calc(25px + env(safe-area-inset-bottom)); 
+            border-top: 1px solid var(--border); 
+            background: #050505; 
+        }
+        .cart-total { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; font-size: 1.2rem; font-weight: 700; }
+        .cart-total span:last-child { color: var(--accent); font-size: 1.5rem; font-family: 'Syncopate', sans-serif; }
+        .checkout-btn { width: 100%; padding: 18px; background: #25d366; color: white; border: none; border-radius: 50px; font-weight: 800; font-size: 1.1rem; cursor: pointer; display: flex; justify-content: center; align-items: center; gap: 10px; text-decoration: none; transition: 0.3s; text-transform: uppercase; }
+        .checkout-btn:hover { background: #1ebc5a; transform: translateY(-3px); box-shadow: 0 10px 20px rgba(37, 211, 102, 0.2); }
+
+        /* 8. FOOTER */
+        footer { border-top: 1px solid var(--border); padding: 80px 20px 30px; margin-top: 100px; background: #020202; }
+        .footer-content { max-width: 1400px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 50px; margin-bottom: 60px; }
+        .footer-col h4 { font-family: 'Syncopate', sans-serif; font-size: 1.2rem; margin-bottom: 20px; }
+        .footer-col p, .footer-col a { color: #a1a1aa; text-decoration: none; display: block; margin-bottom: 10px; transition: 0.3s; }
+        .footer-col a:hover { color: var(--accent); }
+        .socials { display: flex; gap: 15px; margin-top: 20px; }
+        .socials a { width: 45px; height: 45px; border: 1px solid var(--border); border-radius: 50%; display: flex; justify-content: center; align-items: center; color: var(--text); transition: 0.3s; font-size: 1.2rem; }
+        .socials a:hover { background: var(--accent); color: var(--bg); border-color: var(--accent); }
+        
+        .footer-bottom { text-align: center; border-top: 1px solid var(--border); padding-top: 30px; display: flex; flex-direction: column; align-items: center; gap: 15px; }
+        .amtech-badge { border: 1px solid var(--border); padding: 12px 25px; border-radius: 50px; font-size: 0.9rem; background: rgba(255,255,255,0.02); }
+        .amtech-badge span { color: #6366f1; font-weight: 800; font-family: 'Syncopate', sans-serif; letter-spacing: 1px; }
+
+        /* MÓVILES */
+        @media (max-width: 768px) {
+            nav { padding: 15px 25px; }
+            .menu-btn { display: block; }
+            .nav-links { position: absolute; top: 100%; left: -100%; width: 100%; background: rgba(5,5,5,0.98); flex-direction: column; padding: 40px 0; text-align: center; transition: 0.4s; border-bottom: 1px solid var(--border); }
+            .nav-links.active { left: 0; }
+            .hero-title { font-size: 3rem; }
+            .section-title { font-size: 2rem; }
+            .marquee span { font-size: 1.2rem; }
+            .floating-shoe { margin-top: 20px; }
+            
+            /* Ajustes estrictos de carrito para que no se corte en ningún modelo */
+            .cart-drawer { max-width: 100%; }
+            .cart-header { padding: 20px; }
+            .cart-items { padding: 20px; }
+            .cart-footer { 
+                padding: 20px; 
+                padding-bottom: calc(30px + env(safe-area-inset-bottom)); /* Extra aire abajo por si acaso */
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="preloader">
+        <div class="loader-text">KICKS</div>
+    </div>
+
+    <div class="cart-overlay" id="cartOverlay"></div>
+    <div class="cart-drawer" id="cartDrawer">
+        <div class="cart-header">
+            <h3>Tu Bolsa</h3>
+            <button class="close-cart" id="closeCartBtn"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        <div class="cart-items">
+            <div class="cart-item">
+                <img src="https://images.unsplash.com/photo-1552346154-21d32810aba3?auto=format&fit=crop&w=300&q=80" alt="Sneaker">
+                <div class="cart-item-info">
+                    <h4>Air Urban Phantom X</h4>
+                    <p>Talla: 42</p>
+                    <span class="item-price">$350.000</span>
+                    <button class="remove-item">Eliminar</button>
+                </div>
+            </div>
+            <div class="cart-item">
+                <img src="https://images.unsplash.com/photo-1556821840-3a63f95609a7?auto=format&fit=crop&w=300&q=80" alt="Hoodie">
+                <div class="cart-item-info">
+                    <h4>Heavyweight Hoodie</h4>
+                    <p>Talla: L</p>
+                    <span class="item-price">$180.000</span>
+                    <button class="remove-item">Eliminar</button>
+                </div>
+            </div>
+        </div>
+        <div class="cart-footer">
+            <div class="cart-total">
+                <span>Total Estimado</span>
+                <span>$530.000</span>
+            </div>
+            <a href="https://wa.me/573000000000?text=Hola,%20vengo%20de%20la%20web%20y%20quiero%20confirmar%20mi%20carrito%20con%202%20productos%20por%20$530.000." target="_blank" class="checkout-btn">
+                <i class="fa-brands fa-whatsapp"></i> Finalizar Pedido
+            </a>
+        </div>
+    </div>
+
+    <nav id="navbar">
+        <a href="#" class="logo">KI<span>C</span>KS</a>
+        <div class="nav-links">
+            <a href="#inicio">Colección</a>
+            <a href="#catalogo">Catálogo</a>
+            <a href="#nosotros">Nosotros</a>
+        </div>
+        <div style="display: flex; align-items: center; gap: 25px;">
+            <div class="cart-icon" id="openCartBtn">
+                <i class="fa-solid fa-bag-shopping"></i>
+                <span class="cart-badge">2</span>
+            </div>
+            <div class="menu-btn"><i class="fa-solid fa-bars"></i></div>
+        </div>
+    </nav>
+
+    <header id="inicio">
+        <div class="hero-bg"></div>
+        <div class="hero-content">
+            <h1 class="hero-title reveal">LA NUEVA ERA<br>DEL STREETWEAR</h1>
+            <p class="hero-subtitle reveal">Rompe las reglas. Colección exclusiva 2026 ya disponible.</p>
+            <a href="#catalogo" class="btn reveal"><span>Explorar Colección</span></a>
+            
+            <div class="reveal" style="transition-delay: 0.3s;">
+                <img src="https://images.unsplash.com/photo-1608231387042-66d1773070a5?auto=format&fit=crop&w=800&q=80" alt="Exclusive Sneakers" class="floating-shoe" style="border-radius: 20px;">
+            </div>
+        </div>
+    </header>
+
+    <div class="marquee-wrapper">
+        <div class="marquee">
+            <span>Envío Gratis a todo el país</span>
+            <span><i class="fa-solid fa-bolt"></i></span>
+            <span>Nuevos Drops cada semana</span>
+            <span><i class="fa-solid fa-bolt"></i></span>
+            <span>Calidad Premium</span>
+            <span><i class="fa-solid fa-bolt"></i></span>
+            <span>Envío Gratis a todo el país</span>
+            <span><i class="fa-solid fa-bolt"></i></span>
+            <span>Nuevos Drops cada semana</span>
+            <span><i class="fa-solid fa-bolt"></i></span>
+            <span>Calidad Premium</span>
+        </div>
+    </div>
+
+    <section id="catalogo" class="section">
+        <div class="section-header reveal">
+            <h2 class="section-title">LOS<br>MÁS BUSCADOS</h2>
+            <div class="filters">
+                <button class="filter-btn active" data-filter="all">Todo</button>
+                <button class="filter-btn" data-filter="sneakers">Sneakers</button>
+                <button class="filter-btn" data-filter="apparel">Ropa</button>
+            </div>
+        </div>
+
+        <div class="grid">
+            <div class="product-card reveal item-box sneakers">
+                <div class="tag">Nuevo</div>
+                <div class="product-img">
+                    <img src="https://images.unsplash.com/photo-1552346154-21d32810aba3?auto=format&fit=crop&w=600&q=80" alt="Sneaker 1">
+                </div>
+                <div class="product-info">
+                    <h3>Air Urban Phantom X</h3>
+                    <span class="price">$350.000</span>
+                    <button class="buy-btn trigger-cart">
+                        <i class="fa-solid fa-bag-shopping"></i> Añadir a la Bolsa
+                    </button>
+                </div>
+            </div>
+
+            <div class="product-card reveal item-box apparel" style="transition-delay: 0.1s;">
+                <div class="product-img">
+                    <img src="https://images.unsplash.com/photo-1556821840-3a63f95609a7?auto=format&fit=crop&w=600&q=80" alt="Hoodie">
+                </div>
+                <div class="product-info">
+                    <h3>Heavyweight Hoodie Black</h3>
+                    <span class="price">$180.000</span>
+                    <button class="buy-btn trigger-cart">
+                        <i class="fa-solid fa-bag-shopping"></i> Añadir a la Bolsa
+                    </button>
+                </div>
+            </div>
+
+            <div class="product-card reveal item-box sneakers" style="transition-delay: 0.2s;">
+                <div class="tag" style="background: #ef4444;">Hot</div>
+                <div class="product-img">
+                    <img src="https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?auto=format&fit=crop&w=600&q=80" alt="Sneaker 2">
+                </div>
+                <div class="product-info">
+                    <h3>Kicks Retro '98</h3>
+                    <span class="price">$290.000</span>
+                    <button class="buy-btn trigger-cart">
+                        <i class="fa-solid fa-bag-shopping"></i> Añadir a la Bolsa
+                    </button>
+                </div>
+            </div>
+
+            <div class="product-card reveal item-box apparel" style="transition-delay: 0.3s;">
+                <div class="product-img">
+                    <img src="https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?auto=format&fit=crop&w=600&q=80" alt="T-Shirt">
+                </div>
+                <div class="product-info">
+                    <h3>Oversized Tee Logo</h3>
+                    <span class="price">$95.000</span>
+                    <button class="buy-btn trigger-cart">
+                        <i class="fa-solid fa-bag-shopping"></i> Añadir a la Bolsa
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer id="nosotros">
+        <div class="footer-content reveal">
+            <div class="footer-col">
+                <a href="#" class="logo" style="display: block; margin-bottom: 20px;">KI<span>C</span>KS</a>
+                <p>Curadores de cultura sneaker y streetwear en Colombia. Si no es exclusivo, no lo vendemos.</p>
+                <div class="socials">
+                    <a href="#"><i class="fa-brands fa-instagram"></i></a>
+                    <a href="#"><i class="fa-brands fa-tiktok"></i></a>
+                </div>
+            </div>
+            <div class="footer-col">
+                <h4>Soporte</h4>
+                <a href="#">Envíos y Entregas</a>
+                <a href="#">Cambios y Devoluciones</a>
+                <a href="#">Guía de Tallas</a>
+                <a href="#">Preguntas Frecuentes</a>
+            </div>
+            <div class="footer-col">
+                <h4>Contacto</h4>
+                <p><i class="fa-solid fa-location-dot"></i> Calle 123 #45-67, Bogotá</p>
+                <p><i class="fa-brands fa-whatsapp"></i> +57 300 000 0000</p>
+                <p><i class="fa-solid fa-envelope"></i> hello@kicks.co</p>
+            </div>
+        </div>
+        
+        <div class="footer-bottom">
+            <p style="color: #555;">&copy; 2026 KICKS Oficial.</p>
+            <div class="amtech-badge">
+                Desarrollado por <span>Avila Mora Soluciones</span>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // 1. Quitar Preloader al cargar
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                const preloader = document.getElementById('preloader');
+                preloader.style.opacity = '0';
+                preloader.style.visibility = 'hidden';
+            }, 1000); 
+        });
+
+        // 2. Menú Móvil
+        const menuBtn = document.querySelector('.menu-btn');
+        const navLinks = document.querySelector('.nav-links');
+        
+        menuBtn.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+            const icon = menuBtn.querySelector('i');
+            if(navLinks.classList.contains('active')){
+                icon.className = 'fa-solid fa-xmark';
+            } else {
+                icon.className = 'fa-solid fa-bars';
+            }
+        });
+
+        // 3. Scroll Reveal Animaciones
+        const revealElements = document.querySelectorAll('.reveal');
+        const revealObserver = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if(entry.isIntersecting){
+                    entry.target.classList.add('active');
+                    observer.unobserve(entry.target); 
+                }
+            });
+        }, {
+            threshold: 0.1,
+            rootMargin: "0px 0px -50px 0px"
+        });
+        revealElements.forEach(el => revealObserver.observe(el));
+
+        // 4. Lógica de Filtros del Catálogo
+        const filterBtns = document.querySelectorAll('.filter-btn');
+        const items = document.querySelectorAll('.item-box');
+
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                filterBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                
+                const filterValue = btn.getAttribute('data-filter');
+                
+                items.forEach(item => {
+                    if(filterValue === 'all' || item.classList.contains(filterValue)){
+                        item.style.display = 'block';
+                        setTimeout(() => {
+                            item.style.opacity = '1';
+                            item.style.transform = 'scale(1)';
+                        }, 50);
+                    } else {
+                        item.style.opacity = '0';
+                        item.style.transform = 'scale(0.8)';
+                        setTimeout(() => {
+                            item.style.display = 'none';
+                        }, 300);
+                    }
+                });
+            });
+        });
+
+        // 5. Navbar efecto Glass al scrollear
+        window.addEventListener('scroll', () => {
+            const nav = document.getElementById('navbar');
+            if(window.scrollY > 50){
+                nav.style.padding = '15px 50px';
+                nav.style.background = 'rgba(5, 5, 5, 0.95)';
+            } else {
+                nav.style.padding = '20px 50px';
+                nav.style.background = 'rgba(5, 5, 5, 0.8)';
+            }
+        });
+
+        // 6. Lógica del Carrito Lateral (Drawer)
+        const openCartBtn = document.getElementById('openCartBtn');
+        const closeCartBtn = document.getElementById('closeCartBtn');
+        const cartDrawer = document.getElementById('cartDrawer');
+        const cartOverlay = document.getElementById('cartOverlay');
+        const addToCartBtns = document.querySelectorAll('.trigger-cart');
+
+        function openCart() {
+            cartDrawer.classList.add('active');
+            cartOverlay.classList.add('active');
+            // Cierra el menú móvil si está abierto para no sobreponer
+            if(navLinks.classList.contains('active')){
+                navLinks.classList.remove('active');
+                menuBtn.querySelector('i').className = 'fa-solid fa-bars';
+            }
+        }
+
+        function closeCart() {
+            cartDrawer.classList.remove('active');
+            cartOverlay.classList.remove('active');
+        }
+
+        openCartBtn.addEventListener('click', openCart);
+        closeCartBtn.addEventListener('click', closeCart);
+        cartOverlay.addEventListener('click', closeCart);
+
+        // Hacer que los botones de compra abran el carrito de demostración
+        addToCartBtns.forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.preventDefault(); 
+                
+                // Efecto visual de haber agregado algo
+                btn.innerHTML = '<i class="fa-solid fa-check"></i> Agregado';
+                btn.style.background = '#25d366';
+                btn.style.color = '#fff';
+                
+                setTimeout(() => {
+                    openCart();
+                    // Restaurar botón después de abrir el carrito
+                    setTimeout(() => {
+                        btn.innerHTML = '<i class="fa-solid fa-bag-shopping"></i> Añadir a la Bolsa';
+                        btn.style.background = 'var(--text)';
+                        btn.style.color = 'var(--bg)';
+                    }, 500);
+                }, 300);
+            });
+        });
+    </script>
+</body>
+</html>
