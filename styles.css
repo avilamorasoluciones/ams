@@ -207,34 +207,52 @@ section, header, nav, footer {
   display:flex;
   align-items:center;
   justify-content:center;
-  gap:clamp(16px,3vw,30px);
+  gap:clamp(22px,3.5vw,38px);
   line-height:.82;
   filter:drop-shadow(0 0 22px rgba(99,102,241,.32));
 }
 .ams-letter{
   display:block;
   font-size:clamp(8rem,23vw,14rem);
-  font-weight:900;
-  letter-spacing:-.11em;
-  font-family:Montserrat,sans-serif;
-  background:linear-gradient(135deg,#fbfdff 0%,var(--primary) 34%,var(--secondary) 72%,#fff 100%);
+  font-weight:500;
+  letter-spacing:-.075em;
+  font-family:"Bodoni Moda","Didot","Baskerville","Times New Roman",serif;
+  line-height:.72;
+  font-variation-settings:"opsz" 60;
   -webkit-background-clip:text;
   background-clip:text;
   color:transparent;
   position:relative;
-  text-shadow:0 0 30px rgba(99,102,241,.25);
+  text-shadow:0 0 28px rgba(99,102,241,.20);
+  transform-origin:center bottom;
+}
+.ams-a{
+  background:linear-gradient(160deg,#10164f 0%,#1f2d91 26%,#6366f1 64%,#8b7cf8 100%);
+  -webkit-background-clip:text;
+  background-clip:text;
+  animation:ams-letter-a 1.45s cubic-bezier(.16,1,.3,1) .55s both;
+}
+.ams-m{
+  background:linear-gradient(160deg,#6266ef 0%,#7566ee 38%,#c45ce6 72%,#ed63cf 100%);
+  -webkit-background-clip:text;
+  background-clip:text;
+  animation:ams-letter-m 1.45s cubic-bezier(.16,1,.3,1) .72s both;
 }
 .ams-letter::after{
-  content:attr(data-letter);
+  content:"";
   position:absolute;
-  inset:0;
-  color:transparent;
+  left:8%;
+  right:8%;
+  bottom:-4%;
+  height:14%;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.18),transparent);
+  filter:blur(7px);
+  opacity:.55;
+  pointer-events:none;
 }
-.ams-a{ animation:ams-letter-a 1.45s cubic-bezier(.16,1,.3,1) .55s both; }
-.ams-m{ animation:ams-letter-m 1.45s cubic-bezier(.16,1,.3,1) .72s both; }
 .ams-divider{
-  width:2px;
-  height:clamp(95px,17vw,160px);
+  width:1.5px;
+  height:clamp(110px,18vw,175px);
   background:linear-gradient(180deg,transparent,var(--primary),var(--secondary),transparent);
   box-shadow:0 0 16px rgba(99,102,241,.6),0 0 28px rgba(236,72,153,.25);
   transform:scaleY(0);
@@ -245,11 +263,12 @@ section, header, nav, footer {
   display:flex;
   gap:.08em;
   margin-top:clamp(13px,2.2vw,22px);
-  font-size:clamp(.98rem,2.25vw,1.55rem);
-  font-weight:800;
-  letter-spacing:.43em;
+  font-family:Montserrat,sans-serif;
+  font-size:clamp(.82rem,1.8vw,1.22rem);
+  font-weight:500;
+  letter-spacing:.55em;
   padding-left:.43em;
-  background:linear-gradient(90deg,var(--primary),#a78bfa,var(--secondary),var(--tertiary));
+  background:linear-gradient(90deg,#1e3a8a 0%,#6366f1 32%,#a855f7 66%,#ec63d2 100%);
   -webkit-background-clip:text;
   background-clip:text;
   color:transparent;
@@ -1059,10 +1078,10 @@ body.light-theme .section-inverted .section-sub {
 
 @media (max-width: 640px){
   .ams-boot{min-height:390px;height:70vh;}
-  .ams-mark{gap:13px;}
+  .ams-mark{gap:17px;}
   .ams-letter{font-size:clamp(7rem,32vw,10rem);}
-  .ams-divider{height:112px;}
-  .ams-word{letter-spacing:.28em;padding-left:.28em;font-size:.72rem;}
+  .ams-divider{height:122px;}
+  .ams-word{letter-spacing:.32em;padding-left:.32em;font-size:.68rem;}
   .ams-loader-sub{letter-spacing:.22em;padding-left:.22em;font-size:.52rem;}
   .ams-orbit-a{width:min(84vw,360px);}
   .ams-orbit-b{width:min(94vw,420px);}
