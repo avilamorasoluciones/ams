@@ -12,18 +12,25 @@ if (window.visualViewport) {
   window.visualViewport.addEventListener("resize", setAppHeight);
 }
 
-// ===== Loader Futurista =====
-window.addEventListener("load", () => {
-  const loader = document.getElementById("loader");
-  
-  setTimeout(() => {
-    loader.classList.add("hidden");
-    setTimeout(() => {
-      if (loader) loader.remove();
-    }, 850);
-  }, 2500); 
-});
+// ===== Intro AM · Boot sequence =====
+(() => {
+  const startedAt = performance.now();
 
+  window.addEventListener("load", () => {
+    const loader = document.getElementById("loader");
+    if (!loader) return;
+
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const minimumTime = reduced ? 550 : 2350;
+    const elapsed = performance.now() - startedAt;
+    const wait = Math.max(0, minimumTime - elapsed);
+
+    window.setTimeout(() => {
+      loader.classList.add("hidden");
+      window.setTimeout(() => loader.remove(), 900);
+    }, wait);
+  });
+})();
 // ===== AOS =====
 const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
