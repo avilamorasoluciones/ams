@@ -1,48 +1,79 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512" role="img" aria-labelledby="title desc">
+  <title id="title">Avila Mora Soluciones — Isotipo</title>
+  <desc id="desc">Símbolo geométrico AM entrelazado en degradados azul, violeta y magenta.</desc>
   <defs>
     <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
-      <stop stop-color="#02040b"/><stop offset=".58" stop-color="#07132d"/><stop offset="1" stop-color="#12051b"/>
+      <stop stop-color="#02040b"/>
+      <stop offset=".52" stop-color="#07132d"/>
+      <stop offset="1" stop-color="#12051b"/>
     </linearGradient>
-    <linearGradient id="sym" x1="0" y1="0.1" x2="1" y2=".9">
-      <stop stop-color="#55e8ff"/><stop offset=".28" stop-color="#2469ff"/><stop offset=".58" stop-color="#7957ff"/><stop offset=".82" stop-color="#ef43dd"/><stop offset="1" stop-color="#ff84cf"/>
+    <linearGradient id="left" x1="0" y1=".1" x2=".95" y2=".9">
+      <stop stop-color="#4ee9ff"/>
+      <stop offset=".30" stop-color="#1768ff"/>
+      <stop offset=".66" stop-color="#6b57ff"/>
+      <stop offset="1" stop-color="#d54add"/>
     </linearGradient>
-    <linearGradient id="edge" x1="0" y1="0" x2="1" y2="0">
-      <stop stop-color="#2ddcff"/><stop offset=".45" stop-color="#6a6cff"/><stop offset=".73" stop-color="#f149e8"/><stop offset="1" stop-color="#30e0c3"/>
+    <linearGradient id="right" x1=".1" y1=".1" x2="1" y2=".9">
+      <stop stop-color="#c9d0ff"/>
+      <stop offset=".34" stop-color="#7163ff"/>
+      <stop offset=".68" stop-color="#c84fe8"/>
+      <stop offset="1" stop-color="#ff67c7"/>
     </linearGradient>
-    <filter id="softGlow" x="-45%" y="-45%" width="190%" height="190%">
-      <feGaussianBlur stdDeviation="7" result="b"/>
-      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
-    </filter>
-    <filter id="tinyGlow" x="-80%" y="-80%" width="260%" height="260%">
-      <feGaussianBlur stdDeviation="2.5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    <linearGradient id="bridge" x1="0" y1=".5" x2="1" y2=".5">
+      <stop stop-color="#32dbff"/>
+      <stop offset=".48" stop-color="#8d64ff"/>
+      <stop offset=".74" stop-color="#ef4fe2"/>
+      <stop offset="1" stop-color="#37e0c3"/>
+    </linearGradient>
+    <linearGradient id="ring" x1="0" y1=".1" x2="1" y2=".9">
+      <stop stop-color="#28d9ff"/>
+      <stop offset=".33" stop-color="#5f6cff"/>
+      <stop offset=".66" stop-color="#e44df0"/>
+      <stop offset="1" stop-color="#ff58b6"/>
+    </linearGradient>
+    <filter id="glow" x="-40%" y="-40%" width="180%" height="180%">
+      <feGaussianBlur stdDeviation="6" result="b"/>
+      <feMerge>
+        <feMergeNode in="b"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
     </filter>
   </defs>
 
-  <rect x="7" y="7" width="498" height="498" rx="112" fill="url(#bg)"/>
+  <rect x="8" y="8" width="496" height="496" rx="110" fill="url(#bg)"/>
 
-  <!-- Orbital identity -->
-  <circle cx="256" cy="256" r="186" fill="none" stroke="url(#edge)" stroke-width="2" opacity=".18"/>
-  <circle cx="256" cy="256" r="214" fill="none" stroke="url(#edge)" stroke-width="1.2" opacity=".11"/>
-  <path d="M86 300 A190 190 0 0 1 424 243" fill="none" stroke="url(#edge)" stroke-width="3" opacity=".55"/>
-  <path d="M98 190 A188 188 0 0 0 420 338" fill="none" stroke="url(#edge)" stroke-width="1.5" opacity=".25"/>
+  <!-- Minimal orbital identity -->
+  <circle cx="256" cy="256" r="194" fill="none" stroke="url(#ring)" stroke-width="2" opacity=".18"/>
+  <circle cx="256" cy="256" r="216" fill="none" stroke="url(#ring)" stroke-width="1.2" opacity=".09"/>
+  <path d="M91 323 A194 194 0 0 1 421 215" fill="none" stroke="url(#ring)" stroke-width="3" opacity=".38"/>
 
-  <!-- Abstract symbol: three flowing planes form a single recognizable tech mark,
-       with no letters or text. -->
-  <g filter="url(#softGlow)">
-    <path d="M116 356 L214 156 Q220 144 232 144 L260 144 L191 304 L147 383 Q141 395 126 395 L111 395 Z"
-          fill="url(#sym)"/>
-    <path d="M232 144 L395 144 L342 224 L274 224 L232 188 Z" fill="url(#sym)" opacity=".96"/>
-    <path d="M196 302 Q256 267 318 258 Q371 250 427 292 L405 325 Q346 293 299 306 Q247 319 197 351 L150 382 Q143 388 134 382 Z"
-          fill="url(#edge)"/>
-    <path d="M300 306 Q359 292 427 328 L399 370 Q347 337 300 341 L246 350 Q218 355 194 370 L170 348 Q228 311 300 306 Z"
-          fill="url(#sym)" opacity=".93"/>
+  <!-- One fused AM symbol: the diagonal left ribbon, central join, and right double-peak
+       read as one continuous mark rather than a standalone letter. -->
+  <g filter="url(#glow)">
+    <path d="M105 359 L192 163 Q198 150 211 150 H242 L181 291 L149 360 Q143 373 128 373 H107 Z"
+          fill="url(#left)"/>
+    <path d="M211 150 L264 150 L318 251 L368 170 Q375 158 387 158 H413 L355 258 Q348 270 338 270 H309 Q299 270 293 260 Z"
+          fill="url(#right)"/>
+    <path d="M198 292 C247 259 293 249 335 254 C367 258 393 271 422 294
+             L402 328 C375 308 350 299 323 299
+             C281 299 244 311 201 341 L162 368
+             Q150 376 140 369 Z"
+          fill="url(#bridge)"/>
+    <path d="M270 252 L307 176 Q313 163 325 163 H347 L314 232 L294 275 Z"
+          fill="url(#right)" opacity=".95"/>
+    <path d="M225 341 C254 321 283 311 314 309 C346 307 371 316 398 336
+             L379 370 C360 355 343 350 320 350 C289 350 261 361 232 377 L201 393 L183 367 Z"
+          fill="url(#left)" opacity=".92"/>
   </g>
 
-  <!-- Small orbital nodes -->
-  <g filter="url(#tinyGlow)">
-    <circle cx="77" cy="157" r="5.5" fill="#2ddcff"/>
-    <circle cx="432" cy="160" r="5.5" fill="#ff4cc1"/>
-    <circle cx="111" cy="409" r="3.8" fill="#7269ff"/>
-    <circle cx="406" cy="399" r="3.8" fill="#30e0c3"/>
+  <!-- Fine highlight to emphasize the continuous ribbon -->
+  <path d="M110 354 C149 328 180 302 206 282 C256 243 306 239 354 255 C379 263 402 276 422 294"
+        fill="none" stroke="#ffffff" stroke-opacity=".22" stroke-width="3.5" stroke-linecap="round"/>
+
+  <g filter="url(#glow)">
+    <circle cx="82" cy="150" r="5" fill="#2ddcff"/>
+    <circle cx="430" cy="165" r="5" fill="#ff4fc1"/>
+    <circle cx="112" cy="408" r="3.5" fill="#7869ff"/>
+    <circle cx="405" cy="399" r="3.5" fill="#31e0c2"/>
   </g>
 </svg>
