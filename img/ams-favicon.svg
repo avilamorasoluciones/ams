@@ -1,20 +1,30 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-<defs>
-  <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#02040b"/><stop offset=".55" stop-color="#080b1d"/><stop offset="1" stop-color="#05030d"/></linearGradient>
-  <linearGradient id="blue" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#1646ff"/><stop offset=".52" stop-color="#675cff"/><stop offset="1" stop-color="#e84db6"/></linearGradient>
-  <linearGradient id="violet" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#dfe4ff"/><stop offset=".45" stop-color="#6f64ff"/><stop offset="1" stop-color="#ef55c4"/></linearGradient>
-  <linearGradient id="ring" x1="0" y1="0" x2="1" y2="0"><stop stop-color="#2dd7ff"/><stop offset=".35" stop-color="#6567ff"/><stop offset=".7" stop-color="#e44df3"/><stop offset="1" stop-color="#ff50b1"/></linearGradient>
-  <filter id="g"><feGaussianBlur stdDeviation="7" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
-</defs>
-<rect x="8" y="8" width="496" height="496" rx="112" fill="url(#bg)"/>
-<circle cx="256" cy="256" r="187" fill="none" stroke="url(#ring)" stroke-width="2" opacity=".26"/>
-<circle cx="256" cy="256" r="218" fill="none" stroke="url(#ring)" stroke-width="1.2" opacity=".12"/>
-<g filter="url(#g)">
-  <text x="170" y="327" text-anchor="middle" font-family="Montserrat,Arial,sans-serif" font-size="205" font-weight="900" letter-spacing="-20" fill="url(#blue)">A</text>
-  <rect x="255" y="143" width="3" height="185" rx="2" fill="url(#ring)"/>
-  <text x="356" y="327" text-anchor="middle" font-family="Montserrat,Arial,sans-serif" font-size="205" font-weight="900" letter-spacing="-20" fill="url(#violet)">M</text>
-</g>
-<text x="256" y="381" text-anchor="middle" font-family="Montserrat,Arial,sans-serif" font-size="27" font-weight="600" letter-spacing="10" fill="url(#ring)">SOLUCIONES</text>
-<circle cx="91" cy="154" r="5" fill="#31d9ff"/><circle cx="421" cy="183" r="5" fill="#ff4fc2"/>
-<circle cx="114" cy="398" r="3" fill="#7c6dff"/><circle cx="402" cy="374" r="3" fill="#20e1bd"/>
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512" role="img" aria-labelledby="title desc">
+  <title id="title">Ávila Mora Soluciones</title>
+  <desc id="desc">Monograma A y M centrado con línea central, degradado azul, violeta y magenta y anillos neón.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#02040b"/><stop offset=".56" stop-color="#080b1d"/><stop offset="1" stop-color="#05030d"/></linearGradient>
+    <linearGradient id="aGrad" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#28d7ff"/><stop offset=".43" stop-color="#5966ff"/><stop offset="1" stop-color="#e84db6"/></linearGradient>
+    <linearGradient id="mGrad" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#e5e9ff"/><stop offset=".42" stop-color="#6d66ff"/><stop offset="1" stop-color="#ec55c2"/></linearGradient>
+    <linearGradient id="ring" x1="0" y1="0" x2="1" y2="0"><stop stop-color="#2dd7ff"/><stop offset=".34" stop-color="#6567ff"/><stop offset=".69" stop-color="#e44df3"/><stop offset="1" stop-color="#ff50b1"/></linearGradient>
+    <filter id="glow" x="-40%" y="-40%" width="180%" height="180%">
+      <feGaussianBlur stdDeviation="6" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+  <rect x="7" y="7" width="498" height="498" rx="112" fill="url(#bg)"/>
+  <circle cx="256" cy="255" r="198" fill="none" stroke="url(#ring)" stroke-width="2" opacity=".20"/>
+  <circle cx="256" cy="255" r="220" fill="none" stroke="url(#ring)" stroke-width="1.2" opacity=".10"/>
+  <ellipse cx="256" cy="375" rx="190" ry="46" fill="none" stroke="url(#ring)" stroke-width="2.2" opacity=".18" filter="url(#glow)"/>
+  <g filter="url(#glow)">
+    <path d="M90 339 L160 166 H194 L264 339 H227 L213 301 H140 L126 339 Z M151 270 H202 L177 205 Z" fill="url(#aGrad)"/>
+    <rect x="253.5" y="150" width="4" height="191" rx="2" fill="url(#ring)"/>
+    <path d="M278 339 V166 H315 L356 239 L398 166 H435 V339 H399 V230 L374 286 H339 L314 230 V339 Z" fill="url(#mGrad)"/>
+  </g>
+  <text x="256" y="391" text-anchor="middle" font-family="Montserrat,Arial,sans-serif" font-size="25" font-weight="600" letter-spacing="9" fill="url(#ring)">SOLUCIONES</text>
+  <g filter="url(#glow)">
+    <circle cx="84" cy="142" r="5.5" fill="#2fd8ff"/>
+    <circle cx="428" cy="155" r="5.5" fill="#ff4fc1"/>
+    <circle cx="118" cy="404" r="3.6" fill="#7c6dff"/>
+    <circle cx="398" cy="405" r="3.6" fill="#20dfbf"/>
+  </g>
 </svg>
