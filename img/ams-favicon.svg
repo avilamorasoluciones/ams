@@ -10,9 +10,9 @@
 <circle cx="256" cy="256" r="187" fill="none" stroke="url(#ring)" stroke-width="2" opacity=".26"/>
 <circle cx="256" cy="256" r="218" fill="none" stroke="url(#ring)" stroke-width="1.2" opacity=".12"/>
 <g filter="url(#g)">
-  <text x="175" y="327" text-anchor="middle" font-family="Montserrat,Arial,sans-serif" font-size="205" font-weight="900" letter-spacing="-20" fill="url(#blue)">A</text>
+  <text x="170" y="327" text-anchor="middle" font-family="Montserrat,Arial,sans-serif" font-size="205" font-weight="900" letter-spacing="-20" fill="url(#blue)">A</text>
   <rect x="255" y="143" width="3" height="185" rx="2" fill="url(#ring)"/>
-  <text x="351" y="327" text-anchor="middle" font-family="Montserrat,Arial,sans-serif" font-size="205" font-weight="900" letter-spacing="-20" fill="url(#violet)">M</text>
+  <text x="356" y="327" text-anchor="middle" font-family="Montserrat,Arial,sans-serif" font-size="205" font-weight="900" letter-spacing="-20" fill="url(#violet)">M</text>
 </g>
 <text x="256" y="381" text-anchor="middle" font-family="Montserrat,Arial,sans-serif" font-size="27" font-weight="600" letter-spacing="10" fill="url(#ring)">SOLUCIONES</text>
 <circle cx="91" cy="154" r="5" fill="#31d9ff"/><circle cx="421" cy="183" r="5" fill="#ff4fc2"/>
