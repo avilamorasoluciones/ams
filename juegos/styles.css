@@ -1167,7 +1167,7 @@ footer {
   --game-glow-strong: color-mix(in srgb, var(--primary) 34%, transparent);
 }
 
-body[class*="theme-"] {
+body[class*="game-"] {
   background:
     radial-gradient(720px 420px at 8% 4%, var(--game-glow-strong), transparent 62%),
     radial-gradient(680px 420px at 92% 20%, color-mix(in srgb, var(--accent) 12%, transparent), transparent 64%),
@@ -1175,55 +1175,55 @@ body[class*="theme-"] {
     var(--bg);
 }
 
-body[class*="theme-"] .topbar {
+body[class*="game-"] .topbar {
   border-bottom-color: color-mix(in srgb, var(--primary) 28%, var(--border) 72%);
   box-shadow: 0 8px 32px color-mix(in srgb, var(--primary) 8%, transparent);
 }
 
-body[class*="theme-"] .brand .logo {
+body[class*="game-"] .brand .logo {
   background: linear-gradient(135deg, color-mix(in srgb, var(--primary) 90%, #fff 10%), color-mix(in srgb, var(--accent) 80%, #000 20%));
   box-shadow: 0 10px 26px color-mix(in srgb, var(--primary) 24%, transparent);
 }
 
-body[class*="theme-"] .box {
+body[class*="game-"] .box {
   border-color: color-mix(in srgb, var(--primary) 18%, var(--border) 82%);
   background:
     linear-gradient(145deg, color-mix(in srgb, var(--primary) 6%, var(--card) 94%), var(--card2));
 }
 
-body[class*="theme-"] .btn.primary {
+body[class*="game-"] .btn.primary {
   background: linear-gradient(135deg, var(--gradA), var(--gradB));
   box-shadow: 0 14px 34px color-mix(in srgb, var(--primary) 20%, transparent);
 }
 
-body[class*="theme-"] .btn.ghost:hover,
-body[class*="theme-"] .option-btn:hover,
-body[class*="theme-"] .vote-btn:hover {
+body[class*="game-"] .btn.ghost:hover,
+body[class*="game-"] .option-btn:hover,
+body[class*="game-"] .vote-btn:hover {
   border-color: color-mix(in srgb, var(--primary) 62%, var(--border-light) 38%);
   box-shadow: 0 8px 24px color-mix(in srgb, var(--primary) 10%, transparent);
 }
 
-body[class*="theme-"] .game-title,
-body[class*="theme-"] .section-heading,
-body[class*="theme-"] .pass-name {
+body[class*="game-"] .game-title,
+body[class*="game-"] .section-heading,
+body[class*="game-"] .pass-name {
   text-shadow: 0 0 24px color-mix(in srgb, var(--primary) 18%, transparent);
 }
 
-body[class*="theme-"] .im-screen.active,
-body[class*="theme-"] .sub-screen.active {
+body[class*="game-"] .im-screen.active,
+body[class*="game-"] .sub-screen.active {
   animation: gameScreenEnter .34s ease both;
 }
 
-body[class*="theme-"] .pass-box,
-body[class*="theme-"] .reveal-box,
-body[class*="theme-"] .result-area {
+body[class*="game-"] .pass-box,
+body[class*="game-"] .reveal-box,
+body[class*="game-"] .result-area {
   position: relative;
   overflow: hidden;
 }
 
-body[class*="theme-"] .pass-box::before,
-body[class*="theme-"] .reveal-box::before,
-body[class*="theme-"] .result-area::before {
+body[class*="game-"] .pass-box::before,
+body[class*="game-"] .reveal-box::before,
+body[class*="game-"] .result-area::before {
   content: "";
   position: absolute;
   width: 180px;
@@ -1237,21 +1237,13 @@ body[class*="theme-"] .result-area::before {
   animation: gameOrb 5s ease-in-out infinite;
 }
 
-body[class*="theme-"] .current-player-line,
-body[class*="theme-"] .top-turn-player {
+body[class*="game-"] .current-player-line,
+body[class*="game-"] .top-turn-player {
   text-shadow: 0 0 18px color-mix(in srgb, var(--primary) 24%, transparent);
 }
 
-.modal-icon-art,
-.appearance-choice-icon {
-  display: grid;
-  place-items: center;
-}
-.modal-icon-art .ui-icon,
-.appearance-choice-icon .ui-icon {
-  width: 1.7em;
-  height: 1.7em;
-}
+.modal-icon-art { display: grid; place-items: center; }
+.modal-icon-art .ui-icon { width: 1.7em; height: 1.7em; }
 
 @keyframes gameScreenEnter {
   from { opacity: 0; transform: translateY(8px) scale(.992); }
@@ -1263,20 +1255,20 @@ body[class*="theme-"] .top-turn-player {
 }
 
 @media (max-width: 700px) {
-  body[class*="theme-"] .box {
+  body[class*="game-"] .box {
     border-radius: 20px;
   }
-  body[class*="theme-"] .btn {
+  body[class*="game-"] .btn {
     min-height: 50px;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  body[class*="theme-"] .im-screen.active,
-  body[class*="theme-"] .sub-screen.active,
-  body[class*="theme-"] .pass-box::before,
-  body[class*="theme-"] .reveal-box::before,
-  body[class*="theme-"] .result-area::before {
+  body[class*="game-"] .im-screen.active,
+  body[class*="game-"] .sub-screen.active,
+  body[class*="game-"] .pass-box::before,
+  body[class*="game-"] .reveal-box::before,
+  body[class*="game-"] .result-area::before {
     animation: none;
   }
 }
@@ -1430,5 +1422,5 @@ body.game-yonunca .game-page-hero-icon { animation: gameGreenFloat 3.4s ease-in-
   50% { transform: translateY(-5px); }
 }
 @media (prefers-reduced-motion: reduce) {
-  body[class*="theme-"] .game-page-hero-icon { animation: none; }
+  body[class*="game-"] .game-page-hero-icon { animation: none; }
 }
