@@ -112,11 +112,11 @@
 
     <nav id="siteNav" class="site-nav" hidden aria-label="Navegación de juegos">
       <div class="site-nav-inner">
-        <a class="nav-item" href="impostor.html"><img src="game-impostor.svg" alt=""> El Impostor</a>
-        <a class="nav-item" href="bomba.html"><img src="game-bomba.svg" alt=""> La Bomba</a>
-        <a class="nav-item" href="nosconocemos.html"><img src="game-nosconocemos.svg" alt=""> ¿Nos Conocemos?</a>
+        <a class="nav-item" data-mobile-only="true" href="impostor.html"><img src="game-impostor.svg" alt=""> El Impostor</a>
+        <a class="nav-item" data-mobile-only="true" href="bomba.html"><img src="game-bomba.svg" alt=""> La Bomba</a>
+        <a class="nav-item" data-mobile-only="true" href="nosconocemos.html"><img src="game-nosconocemos.svg" alt=""> ¿Nos Conocemos?</a>
         <a class="nav-item" href="rompehielo.html"><img src="game-rompehielo.svg" alt=""> Rompehielo</a>
-        <a class="nav-item" href="tabu.html"><img src="game-tabu.svg" alt=""> Tabú</a>
+        <a class="nav-item" data-mobile-only="true" href="tabu.html"><img src="game-tabu.svg" alt=""> Tabú</a>
         <a class="nav-item" href="verdadreto.html"><img src="game-verdadreto.svg" alt=""> Verdad o Reto</a>
         <a class="nav-item" href="yonunca.html"><img src="game-yonunca.svg" alt=""> Yo Nunca</a>
       </div>
@@ -149,6 +149,21 @@
               </button>
             </div>
           </div>
+
+          <section class="desktop-games-note" aria-label="Juegos disponibles en computador">
+            <div class="desktop-games-note-icon" aria-hidden="true">📱</div>
+            <div>
+              <span class="section-kicker">EXPERIENCIA EN PANTALLA GRANDE</span>
+              <h2>¿Estás en computador?</h2>
+              <p>Disfruta <strong>más juegos desde el celular</strong>. Algunas experiencias están diseñadas para pasar el teléfono de mano en mano y por eso aparecen únicamente en dispositivos móviles.</p>
+              <div class="desktop-games-available">
+                <span>Disponibles aquí:</span>
+                <strong>Rompehielo</strong>
+                <strong>Verdad o Reto</strong>
+                <strong>Yo Nunca</strong>
+              </div>
+            </div>
+          </section>
 
           <section id="globalPlayersSection" class="box global-players-panel" aria-labelledby="global-players-title">
             <div class="global-players-head">
@@ -187,7 +202,7 @@
               <button class="carousel-arrow carousel-prev" type="button" id="gamePrev" aria-label="Juego anterior">‹</button>
               <div class="game-carousel" id="gameCarousel" tabindex="0" aria-label="Carrusel de juegos">
 
-                <article class="game-slide theme-impostor" data-search="impostor detective secreto debate sospecha" data-game="impostor">
+                <article class="game-slide theme-impostor" data-mobile-only="true" data-search="impostor detective secreto debate sospecha" data-game="impostor">
                   <div class="game-slide-glow"></div>
                   <div class="game-slide-top">
                     <span class="game-slide-index">01 / 07</span>
@@ -204,7 +219,7 @@
                   </div>
                 </article>
 
-                <article class="game-slide theme-bomba" data-search="bomba palabras velocidad presion caos" data-game="bomba">
+                <article class="game-slide theme-bomba" data-mobile-only="true" data-search="bomba palabras velocidad presion caos" data-game="bomba">
                   <div class="game-slide-glow"></div>
                   <div class="game-slide-top">
                     <span class="game-slide-index">02 / 07</span>
@@ -221,7 +236,7 @@
                   </div>
                 </article>
 
-                <article class="game-slide theme-nosconocemos" data-search="nos conocemos preguntas adivinar social grupo parejas" data-game="nosconocemos">
+                <article class="game-slide theme-nosconocemos" data-mobile-only="true" data-search="nos conocemos preguntas adivinar social grupo parejas" data-game="nosconocemos">
                   <div class="game-slide-glow"></div>
                   <div class="game-slide-top">
                     <span class="game-slide-index">03 / 07</span>
@@ -255,7 +270,7 @@
                   </div>
                 </article>
 
-                <article class="game-slide theme-tabu" data-search="tabu equipos palabras prohibidas puntos voceria" data-game="tabu">
+                <article class="game-slide theme-tabu" data-mobile-only="true" data-search="tabu equipos palabras prohibidas puntos voceria" data-game="tabu">
                   <div class="game-slide-glow"></div>
                   <div class="game-slide-top">
                     <span class="game-slide-index">05 / 07</span>
