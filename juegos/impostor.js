@@ -15,6 +15,12 @@ const ImpostorGame = (() => {
   let timerRunning = false;
   let initialized = false;
 
+  let lastVoteIndex = null;
+
+  function saveSession(screen = document.querySelector(".im-screen.active")?.id || "i-scr-lobby") {
+    window.GameSession?.save("impostor", { players, usedWords, roles, selectedCard, currentIndex, starterIndex, secondsLeft, timerRunning, lastVoteIndex, screen });
+  }
+
   function $(id) {
     return document.getElementById(id);
   }
