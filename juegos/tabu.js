@@ -231,12 +231,12 @@ const TabuGame = (() => {
       <div class="team-card" style="${i === 0 ? 'border-color:var(--warning); background: rgba(245,158,11,0.1);' : ''}">
         <div style="display:flex; justify-content:space-between; align-items:center;">
           <h2 class="team-name" style="${i===0 ? 'color:var(--warning); font-size:1.5rem;' : ''}">
-            ${i===0 ? '👑 ' : ''}${t.name}
+            ${i===0 ? window.uiIcon("crown") + " " : ""}${t.name}
           </h2>
           <div class="giant-score" style="font-size:2rem; margin-top:0;">${t.stats.score} pts</div>
         </div>
         <p class="muted" style="font-size:0.9rem; margin-top:4px;">
-          ${window.uiIcon("check")} Aciertos: ${t.stats.correct} | ${window.uiIcon("close")} Tabús: ${t.stats.taboo} | ⏭️ Saltos: ${t.stats.skip}
+          ${window.uiIcon("check")} Aciertos: ${t.stats.correct} | ${window.uiIcon("close")} Tabús: ${t.stats.taboo} |  Saltos: ${t.stats.skip}
         </p>
       </div>
     `).join("");
