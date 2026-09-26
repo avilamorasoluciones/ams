@@ -103,7 +103,7 @@ const PWA = (() => {
   let deferredPrompt = null;
   let banner = null;
   let installButton = null;
-  const DISMISS_KEY = "avila_mora_pwa_install_dismissed_v2";
+  const DISMISS_KEY = "avila_mora_pwa_install_dismissed_v3";
 
   function isStandalone() {
     return window.matchMedia("(display-mode: standalone)").matches ||
@@ -234,7 +234,7 @@ const PWA = (() => {
     } else {
       setTimeout(() => {
         if (!deferredPrompt) showBanner("manual");
-      }, 2800);
+      }, 1800);
     }
 
     if ("serviceWorker" in navigator && (location.protocol === "https:" || location.hostname === "localhost" || location.hostname === "127.0.0.1")) {
