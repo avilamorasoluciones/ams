@@ -4173,3 +4173,61 @@ html:focus-within {
 
 
 .game-audio-tip{display:flex;align-items:center;justify-content:center;gap:9px;margin-top:12px;padding:10px 13px;border:1px solid rgba(245,158,11,.28);border-radius:12px;background:rgba(245,158,11,.07);color:var(--text-muted,#cbd5e1);font-size:.82rem;line-height:1.4;text-align:center}.game-audio-tip .ui-icon{width:18px;height:18px;flex:0 0 18px;color:#f59e0b}.game-audio-tip strong{color:var(--text,#fff)}.game-bomba .game-audio-tip{border-color:rgba(239,68,68,.4);background:rgba(239,68,68,.09)}.game-bomba .game-audio-tip .ui-icon{color:#ef4444}.game-bomba .game-audio-tip strong{color:#fff}
+
+/* Ajustes de interfaz móvil: controles legibles y cabecera de cada juego proporcionada. */
+.game-page-hero-icon {
+  width: 76px;
+  height: 76px;
+  display: grid;
+  place-items: center;
+  margin: 2px auto 4px;
+}
+.game-page-hero-icon img,
+.game-page-hero-icon svg {
+  width: 100%;
+  height: 100%;
+  max-width: 76px;
+  max-height: 76px;
+  object-fit: contain;
+}
+.impostor-hero {
+  padding: 18px 16px;
+}
+.impostor-hero .game-title {
+  font-size: clamp(1.7rem, 7vw, 2.15rem);
+}
+.tool-modal-card > .btn-xl {
+  min-height: 54px;
+  width: min(100%, 360px);
+}
+body.light-theme .btn.primary {
+  background: linear-gradient(135deg, #7c3aed, #ec4899) !important;
+  color: #fff !important;
+  border-color: transparent !important;
+}
+body.light-theme .btn.danger {
+  background: #fff !important;
+  color: #be123c !important;
+}
+@media (max-width: 700px) {
+  .game-page-hero-icon {
+    width: 68px;
+    height: 68px;
+    margin-top: 0;
+  }
+  .game-page-hero-icon img,
+  .game-page-hero-icon svg {
+    max-width: 68px;
+    max-height: 68px;
+  }
+  .impostor-hero {
+    padding: 16px 14px;
+    gap: 8px;
+  }
+  .impostor-hero .game-title {
+    font-size: 1.8rem;
+  }
+  .impostor-hero .game-sub {
+    font-size: .92rem;
+  }
+}
