@@ -95,21 +95,31 @@ window.emitSound = emitSound;
  ********************/
 const PWA = (() => {
   let deferredPrompt = null;
+  let banner = null;
   let installButton = null;
-  let modal = null;
+  const DISMISS_KEY = "avila_mora_pwa_install_dismissed_v1";
 
   function isStandalone() {
     return window.matchMedia("(display-mode: standalone)").matches ||
-      window.navigator.standalone === true;
+      window.navigator.standalone === true ||
+      document.referrer.startsWith("android-app://");
   }
 
   function isIOS() {
-    return /iphone|ipad|ipod/i.test(window.navigator.userAgent) ||
+    return /iphone|ipad|ipod/i.test(navigator.userAgent) ||
       (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
   }
 
+  function wasDismissed() {
+    try { return sessionStorage.getItem(DISMISS_KEY) === "1"; } catch { return false; }
+  }
+
+  function markDismissed() {
+    try { sessionStorage.setItem(DISMISS_KEY, "1"); } catch {}
+  }
+
   function createUI() {
-    if (document.getElementById("pwa-install-btn")) return;
+    if (document.getElementById("pwa-install-banner")) return;
 
     const dock = document.createElement("div");
     dock.className = "pwa-dock";
@@ -117,110 +127,85 @@ const PWA = (() => {
     dock.innerHTML = `
       <button id="appearance-fab" class="pwa-fab" type="button" aria-label="Cambiar apariencia" title="Cambiar apariencia">🎨</button>
       ${hasThemeControl ? "" : '<button id="pwa-theme-fab" class="pwa-fab" type="button" aria-label="Cambiar modo claro u oscuro" title="Modo claro u oscuro">🌓</button>'}
-      <button id="pwa-install-btn" class="pwa-fab install-fab" type="button" aria-label="Instalar Juegos Avila Mora" title="Instalar Juegos" hidden>📲</button>
     `;
     document.body.appendChild(dock);
 
-    installButton = document.getElementById("pwa-install-btn");
     document.getElementById("appearance-fab")?.addEventListener("click", () => Appearance.open());
     document.getElementById("pwa-theme-fab")?.addEventListener("click", () => Theme.toggle());
 
-    modal = document.createElement("div");
-    modal.id = "pwa-install-modal";
-    modal.className = "tool-overlay";
-    modal.innerHTML = `
-      <div class="box narrow stack center tool-modal-card pwa-install-card" role="dialog" aria-modal="true" aria-labelledby="pwa-install-title">
-        <button type="button" class="btn ghost modal-close-btn" id="pwa-install-close" aria-label="Cerrar instalación">❌</button>
-        <div class="emoji-display">📲</div>
-        <h2 id="pwa-install-title" class="modal-title color-accent">Lleva los juegos contigo</h2>
-        <p class="muted modal-copy" id="pwa-install-copy"></p>
-        <div class="pwa-install-steps" id="pwa-install-steps"></div>
-        <button type="button" class="btn primary btn-xl" id="pwa-install-action">Instalar</button>
+    banner = document.createElement("div");
+    banner.id = "pwa-install-banner";
+    banner.className = "pwa-install-banner";
+    banner.setAttribute("role", "dialog");
+    banner.setAttribute("aria-label", "Instalar Juegos Avila Mora");
+    banner.hidden = true;
+    banner.innerHTML = `
+      <div class="pwa-install-banner-card">
+        <div class="pwa-install-banner-icon" aria-hidden="true">
+          <img src="icon-192.svg" alt="">
+        </div>
+        <div class="pwa-install-banner-copy">
+          <strong>Instala Juegos Avila Mora</strong>
+          <span id="pwa-install-copy">Ten tus juegos siempre a mano.</span>
+        </div>
+        <div class="pwa-install-banner-actions">
+          <button id="pwa-install-btn" class="pwa-install-banner-btn" type="button">Instalar</button>
+          <button id="pwa-install-close" class="pwa-install-banner-close" type="button" aria-label="Cerrar">×</button>
+        </div>
       </div>
     `;
-    document.body.appendChild(modal);
+    document.body.appendChild(banner);
 
-    document.getElementById("pwa-install-close")?.addEventListener("click", closeInstallModal);
-    modal.addEventListener("click", event => {
-      if (event.target === modal) closeInstallModal();
-    });
+    installButton = document.getElementById("pwa-install-btn");
     installButton.addEventListener("click", handleInstallClick);
+    document.getElementById("pwa-install-close")?.addEventListener("click", () => {
+      markDismissed();
+      hideBanner();
+    });
   }
 
-  function showButton() {
-    if (installButton && !isStandalone()) installButton.hidden = false;
-  }
-
-  function hideButton() {
-    if (installButton) installButton.hidden = true;
-  }
-
-  function openInstallModal() {
-    if (!modal) return;
+  function showBanner(mode = "install") {
+    if (!banner || isStandalone() || wasDismissed()) return;
     const copy = document.getElementById("pwa-install-copy");
-    const steps = document.getElementById("pwa-install-steps");
-    const action = document.getElementById("pwa-install-action");
-
-    if (isIOS()) {
-      copy.textContent = "En iPhone o iPad la instalación se hace desde el menú de compartir de Safari.";
-      steps.innerHTML = `
-        <ol>
-          <li>Abre este sitio en <strong>Safari</strong>.</li>
-          <li>Toca <strong>Compartir</strong> ⬆️.</li>
-          <li>Elige <strong>Añadir a pantalla de inicio</strong>.</li>
-          <li>Confirma con <strong>Añadir</strong>.</li>
-        </ol>
-      `;
-      action.textContent = "Entendido";
-      action.onclick = closeInstallModal;
+    if (mode === "ios") {
+      copy.textContent = "En Safari: Compartir → Añadir a pantalla de inicio.";
+      installButton.textContent = "Cómo instalar";
     } else {
-      copy.textContent = "Instálalo como una aplicación para abrir tus juegos desde el celular o computador sin buscar la web cada vez.";
-      steps.innerHTML = `
-        <ul>
-          <li>Se creará un acceso directo con el icono de Juegos Avila Mora.</li>
-          <li>La aplicación abrirá en modo independiente.</li>
-          <li>Los recursos principales quedarán disponibles incluso sin conexión después de la primera carga.</li>
-        </ul>
-      `;
-      action.textContent = "Instalar ahora";
-      action.onclick = triggerInstall;
+      copy.textContent = "Ten tus juegos siempre a mano.";
+      installButton.textContent = "Instalar";
     }
-
-    modal.classList.add("active");
-    modal.setAttribute("aria-hidden", "false");
-    document.body.classList.add("appearance-picker-open");
-    document.body.style.overflow = "hidden";
+    banner.hidden = false;
+    requestAnimationFrame(() => banner.classList.add("is-visible"));
   }
 
-  function closeInstallModal() {
-    if (!modal) return;
-    modal.classList.remove("active");
-    document.body.style.overflow = "";
+  function hideBanner() {
+    if (!banner) return;
+    banner.classList.remove("is-visible");
+    setTimeout(() => { if (banner) banner.hidden = true; }, 260);
   }
 
   async function triggerInstall() {
     if (!deferredPrompt) {
-      openInstallModal();
+      if (isIOS()) showBanner("ios");
       return;
     }
-
     const promptEvent = deferredPrompt;
     deferredPrompt = null;
-    hideButton();
-
     try {
       await promptEvent.prompt();
-    } catch (error) {
-      showButton();
+      const choice = await promptEvent.userChoice;
+      if (choice?.outcome === "accepted") {
+        hideBanner();
+      } else {
+        showBanner();
+      }
+    } catch {
+      showBanner();
     }
   }
 
-  async function handleInstallClick() {
-    if (deferredPrompt) {
-      await triggerInstall();
-      return;
-    }
-    openInstallModal();
+  function handleInstallClick() {
+    triggerInstall();
   }
 
   function init() {
@@ -229,19 +214,18 @@ const PWA = (() => {
     window.addEventListener("beforeinstallprompt", event => {
       event.preventDefault();
       deferredPrompt = event;
-      showButton();
+      showBanner("install");
     });
 
     window.addEventListener("appinstalled", () => {
       deferredPrompt = null;
-      hideButton();
-      closeInstallModal();
+      hideBanner();
     });
 
     if (isStandalone()) {
-      hideButton();
+      hideBanner();
     } else if (isIOS()) {
-      showButton();
+      setTimeout(() => showBanner("ios"), 1500);
     }
 
     if ("serviceWorker" in navigator && (location.protocol === "https:" || location.hostname === "localhost" || location.hostname === "127.0.0.1")) {
@@ -249,8 +233,8 @@ const PWA = (() => {
     }
   }
 
-  return { init, openInstallModal, triggerInstall };
-})();
+  return { init, triggerInstall };
+})();;
 window.PWA = PWA;
 
 /********************
