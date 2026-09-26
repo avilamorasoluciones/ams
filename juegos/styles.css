@@ -4170,3 +4170,6 @@ html:focus-within {
 .dice-cube.dice-settled {
   transform: rotateX(0deg) rotateY(0deg) !important;
 }
+
+
+.game-audio-tip{display:flex;align-items:center;justify-content:center;gap:9px;margin-top:12px;padding:10px 13px;border:1px solid rgba(245,158,11,.28);border-radius:12px;background:rgba(245,158,11,.07);color:var(--text-muted,#cbd5e1);font-size:.82rem;line-height:1.4;text-align:center}.game-audio-tip .ui-icon{width:18px;height:18px;flex:0 0 18px;color:#f59e0b}.game-audio-tip strong{color:var(--text,#fff)}.game-bomba .game-audio-tip{border-color:rgba(239,68,68,.4);background:rgba(239,68,68,.09)}.game-bomba .game-audio-tip .ui-icon{color:#ef4444}.game-bomba .game-audio-tip strong{color:#fff}
