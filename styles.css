@@ -1069,6 +1069,26 @@ body.light-theme .section-inverted .section-sub {
 }
 
 
+/* ===== Menú móvil AMS · capa limpia sobre controles flotantes ===== */
+body.menu-open .fab,
+body.menu-open .to-top {
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+  transform: translateY(8px) scale(.96) !important;
+}
+
+@media (max-width: 1250px) {
+  .mobile-panel {
+    z-index: 2150 !important;
+  }
+
+  .menu-btn {
+    position: relative;
+    z-index: 2300;
+  }
+}
+
 /* ===== Menú móvil AMS · ajuste responsive ===== */
 @media (max-width: 1250px) {
   .mobile-panel {
