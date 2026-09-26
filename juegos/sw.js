@@ -1,4 +1,4 @@
-const CACHE_NAME = "juegos-avila-mora-v22";
+const CACHE_NAME = "juegos-avila-mora-v23";
 const APP_SHELL = [
   "./",
   "./index.html",
