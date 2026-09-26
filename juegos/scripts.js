@@ -802,6 +802,28 @@ window.GamesMenu = GamesMenu;
 /********************
  * APP GLOBAL
  ********************/
+const MobileInputGuard = (() => {
+  function init() {
+    const inputs = document.querySelectorAll("input[type=text], input[type=search]");
+    inputs.forEach(input => {
+      input.addEventListener("focus", () => {
+        // Una sola corrección después de que Android haya terminado de
+        // redimensionar el viewport por el teclado.
+        window.setTimeout(() => {
+          if (document.activeElement !== input) return;
+          const rect = input.getBoundingClientRect();
+          const topSafe = 92;
+          const bottomSafe = Math.max(topSafe + 40, window.innerHeight - 150);
+          if (rect.bottom > bottomSafe || rect.top < topSafe) {
+            input.scrollIntoView({ block: "center", behavior: "smooth" });
+          }
+        }, 180);
+      });
+    });
+  }
+  return { init };
+})();
+
 const App = (() => {
   function initExternalLinks() {
     document.querySelectorAll('a[target="_blank"]').forEach((link) => {
@@ -816,6 +838,7 @@ const App = (() => {
     Theme.init();
 Nav.init();
     Tools.init();
+    MobileInputGuard.init();
     GamesMenu.init();
     initExternalLinks();
   }
