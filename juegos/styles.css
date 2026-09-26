@@ -3518,3 +3518,29 @@ footer {
     padding: 5px 8px;
   }
 }
+
+/* ===== Footer compacto + controles flotantes discretos al final ===== */
+footer {
+  min-height: 0;
+  padding: 14px 10px calc(14px + var(--safe-bottom));
+}
+
+@media (max-width: 700px) {
+  footer {
+    min-height: 0;
+    padding: 14px 82px calc(14px + var(--safe-bottom)) 10px;
+  }
+
+  body.page-end-mobile .fab-right-container {
+    opacity: .18;
+    filter: saturate(.68);
+    transform: translateY(6px) scale(.94);
+  }
+
+  body.page-end-mobile .fab-right-container .fab-btn:active,
+  body.page-end-mobile .fab-right-container .fab-btn:focus-visible {
+    opacity: 1;
+    filter: none;
+    transform: translateY(0) scale(1);
+  }
+}
