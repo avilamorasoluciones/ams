@@ -33,7 +33,7 @@ const VerdadRetoGame = (() => {
       return;
     }
     list.innerHTML = players.map((p, i) => `
-      <div class="player-tag">👤 ${window.Utils.escapeHTML(p)} <button type="button" class="delete-btn" data-remove="${i}" aria-label="Eliminar ${window.Utils.escapeHTML(p)}">×</button></div>
+      <div class="player-tag">${window.uiIcon("user")} ${window.Utils.escapeHTML(p)} <button type="button" class="delete-btn" data-remove="${i}" aria-label="Eliminar ${window.Utils.escapeHTML(p)}">×</button></div>
     `).join("");
   }
 
@@ -89,12 +89,12 @@ const VerdadRetoGame = (() => {
     if (type === "verdad") {
       if (poolVerdad.length === 0) return alert("¡Ya no quedan verdades!");
       text = poolVerdad.pop();
-      badge = "🤫 Verdad";
+      badge = "${window.uiIcon("question")} Verdad";
       colorClass = "color-primary";
     } else {
       if (poolReto.length === 0) return alert("¡Ya no quedan retos!");
       text = poolReto.pop();
-      badge = "🔥 Reto";
+      badge = "${window.uiIcon("flame")} Reto";
       colorClass = "color-danger";
     }
 
