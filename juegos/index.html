@@ -89,10 +89,10 @@
   <header class="topbar">
     <div class="topbar-inner">
       <a class="brand brand-link" href="index.html" aria-label="Ir al menú principal">
-        <span class="logo" aria-hidden="true">📱</span>
+        <span class="logo brand-logo-svg" aria-hidden="true"><img src="icon-games.svg" alt=""></span>
         <span class="txt">
-          <span class="name">Avila Mora</span>
-          <small>Familia</small>
+          <span class="name">Avila Mora Soluciones</span>
+          <small>Juegos</small>
         </span>
       </a>
 
@@ -112,13 +112,13 @@
 
     <nav id="siteNav" class="site-nav" hidden aria-label="Navegación de juegos">
       <div class="site-nav-inner">
-        <a class="nav-item" href="impostor.html">🕵️ El Impostor</a>
-        <a class="nav-item" href="bomba.html">💣 La Bomba</a>
-        <a class="nav-item" href="nosconocemos.html">🎭 ¿Nos Conocemos?</a>
-        <a class="nav-item" href="rompehielo.html">🧊 Rompehielo</a>
-        <a class="nav-item" href="tabu.html">🤐 Tabú</a>
-        <a class="nav-item" href="verdadreto.html">🌶️ Verdad o Reto</a>
-        <a class="nav-item" href="yonunca.html">🙊 Yo Nunca</a>
+        <a class="nav-item" href="impostor.html"><img src="game-impostor.svg" alt=""> El Impostor</a>
+        <a class="nav-item" href="bomba.html"><img src="game-bomba.svg" alt=""> La Bomba</a>
+        <a class="nav-item" href="nosconocemos.html"><img src="game-nosconocemos.svg" alt=""> ¿Nos Conocemos?</a>
+        <a class="nav-item" href="rompehielo.html"><img src="game-rompehielo.svg" alt=""> Rompehielo</a>
+        <a class="nav-item" href="tabu.html"><img src="game-tabu.svg" alt=""> Tabú</a>
+        <a class="nav-item" href="verdadreto.html"><img src="game-verdadreto.svg" alt=""> Verdad o Reto</a>
+        <a class="nav-item" href="yonunca.html"><img src="game-yonunca.svg" alt=""> Yo Nunca</a>
       </div>
     </nav>
   </header>
@@ -127,134 +127,194 @@
     <div class="wrap">
       <section class="section active" aria-labelledby="menu-title">
         <div class="stack">
-          <div class="hero-card box center">
-            <h1 id="menu-title" class="game-title">Juegos Avila Mora 🎮</h1>
+          <div class="hero-card box center games-hero">
+            <div class="games-hero-kicker">AVILA MORA SOLUCIONES · FAMILIA</div>
+            <h1 id="menu-title" class="game-title">Juegos Avila Mora</h1>
             <p class="game-sub max-center">
-              Una colección de juegos para familia y amigos, pensada para jugar desde un solo celular,
-              compartir risas y conectar rápido. Elige un juego y entra directo.
+              Elige una experiencia, prepara a tu grupo y empieza a jugar desde un solo celular.
+              Sin registros y sin vueltas.
             </p>
+            <div class="hero-actions">
+              <button id="musicToggle" type="button" class="hero-action" aria-pressed="false">
+                <img src="tool-music.svg" alt="">
+                <span><strong>Música</strong><small>Ambiente</small></span>
+              </button>
+              <button type="button" class="hero-action" onclick="Tools.openModal('dice')">
+                <img src="tool-dice.svg" alt="">
+                <span><strong>Dado</strong><small>Azar rápido</small></span>
+              </button>
+              <button type="button" class="hero-action" onclick="Tools.openModal('cards')">
+                <img src="tool-cards.svg" alt="">
+                <span><strong>Cartas</strong><small>Comodín</small></span>
+              </button>
+            </div>
           </div>
 
-          <section class="box quick-tools-guide" aria-labelledby="quick-tools-title">
-            <div class="quick-tools-heading">
-              <span class="quick-tools-icon" aria-hidden="true">🎲</span>
+          <section id="globalPlayersSection" class="box global-players-panel" aria-labelledby="global-players-title">
+            <div class="global-players-head">
               <div>
-                <h2 id="quick-tools-title">Comodines para cualquier juego</h2>
-                <p class="muted">No son juegos aparte: son herramientas para resolver decisiones al instante.</p>
+                <div class="section-kicker">NUEVA PARTIDA</div>
+                <h2 id="global-players-title">👥 Jugadores de la partida</h2>
+                <p class="muted">Opcional. Si guardas jugadores aquí, los juegos compatibles los cargarán automáticamente.</p>
               </div>
+              <strong id="globalPlayersCount" class="global-players-count">0 jugadores</strong>
             </div>
-
-            <div class="quick-tools-grid">
-              <article class="quick-tool">
-                <span class="quick-tool-symbol">🎲</span>
-                <div>
-                  <strong>Dado</strong>
-                  <p>Úsalo para decidir quién empieza, ordenar turnos, elegir equipo, desempatar o dejar una decisión al azar.</p>
-                </div>
-              </article>
-
-              <article class="quick-tool">
-                <span class="quick-tool-symbol">🃏</span>
-                <div>
-                  <strong>Cartas</strong>
-                  <p>Saca una carta cuando quieras una elección aleatoria. Por ejemplo: la carta más alta empieza, o rojo/negro define equipos.</p>
-                </div>
-              </article>
-
-              <article class="quick-tool">
-                <span class="quick-tool-symbol">🌓</span>
-                <div>
-                  <strong>Tema</strong>
-                  <p>Cambia entre modo claro y oscuro. No cambia las reglas ni el progreso de ningún juego.</p>
-                </div>
-              </article>
+            <div class="global-player-form">
+              <input id="globalPlayerInput" type="text" maxlength="18" autocomplete="off" placeholder="Nombre del jugador">
+              <button id="globalPlayerAdd" type="button" class="btn primary">Añadir</button>
+              <button id="globalPlayersClear" type="button" class="btn ghost">Limpiar</button>
             </div>
-
-            <p class="quick-tools-tip">
-              <strong>💡 Consejo:</strong> si un juego necesita decidir algo y no quieren discutirlo, usa el dado o una carta y sigan jugando.
-            </p>
+            <div id="globalPlayersEmpty" class="global-players-empty">Aún no hay jugadores. También puedes entrar a cualquier juego y añadirlos solo allí.</div>
+            <div id="globalPlayersList" class="global-players-list" aria-live="polite"></div>
           </section>
 
-          <div class="grid cards-grid">
-            <article class="box stack theme-impostor card-item">
-              <div class="badge badge-cyan">🕵️ El Impostor</div>
-              <div class="muted card-copy">
-                Todos ven una palabra… menos el impostor. Hablen, sospechen y descubran quién está fingiendo.
+          <section class="game-selector box" aria-labelledby="game-selector-title">
+            <div class="game-selector-head">
+              <div>
+                <div class="section-kicker">ELIGE TU JUEGO</div>
+                <h2 id="game-selector-title">¿A qué jugamos?</h2>
               </div>
-              <div class="card-tags">
-                <span>Secreto</span><span>Debate</span><span>Sospecha</span>
-              </div>
-              <a class="btn primary" href="impostor.html">Jugar</a>
-            </article>
+              <span class="game-selector-count" id="gameSelectorCount">7 juegos</span>
+            </div>
 
-            <article class="box stack theme-bomba card-item">
-              <div class="badge badge-red">💣 La Bomba</div>
-              <div class="muted card-copy">
-                Di una palabra válida y pasa el celular antes de que explote. Fácil de entender, brutal para reír.
-              </div>
-              <div class="card-tags">
-                <span>Caos</span><span>Velocidad</span><span>Presión</span>
-              </div>
-              <a class="btn primary" href="bomba.html">Jugar</a>
-            </article>
+            <label class="game-search">
+              <span aria-hidden="true">⌕</span>
+              <input id="gameSearch" type="search" autocomplete="off" placeholder="Buscar juego..." aria-label="Buscar juego">
+              <button id="gameSearchClear" type="button" aria-label="Limpiar búsqueda">×</button>
+            </label>
 
-            <article class="box stack theme-nosconocemos card-item">
-              <div class="badge badge-amber">🎭 ¿Nos Conocemos?</div>
-              <div class="muted card-copy">
-                Uno responde en secreto y los demás intentan adivinar qué eligió. Ideal para grupos y parejas.
-              </div>
-              <div class="card-tags">
-                <span>Social</span><span>Adivinar</span><span>Grupo</span>
-              </div>
-              <a class="btn primary" href="nosconocemos.html">Jugar</a>
-            </article>
+            <div class="game-carousel-wrap">
+              <button class="carousel-arrow carousel-prev" type="button" id="gamePrev" aria-label="Juego anterior">‹</button>
+              <div class="game-carousel" id="gameCarousel" tabindex="0" aria-label="Carrusel de juegos">
 
-            <article class="box stack theme-rompehielo card-item">
-              <div class="badge">🧊 Rompehielo</div>
-              <div class="muted card-copy">
-                Preguntas por turnos para conversar, soltar tensión y arrancar cualquier reunión o parche.
-              </div>
-              <div class="card-tags">
-                <span>Conversación</span><span>Amigos</span><span>Ambiente</span>
-              </div>
-              <a class="btn primary" href="rompehielo.html">Jugar</a>
-            </article>
+                <article class="game-slide theme-impostor" data-search="impostor detective secreto debate sospecha" data-game="impostor">
+                  <div class="game-slide-glow"></div>
+                  <div class="game-slide-top">
+                    <span class="game-slide-index">01 / 07</span>
+                    <img class="game-slide-icon" src="game-impostor.svg" alt="El Impostor">
+                  </div>
+                  <div class="game-slide-copy">
+                    <span class="badge badge-cyan">Secreto · Debate · Sospecha</span>
+                    <h3>El Impostor</h3>
+                    <p>Todos reciben una palabra… menos una persona. Hablen, sospechen y descubran quién está fingiendo.</p>
+                  </div>
+                  <div class="game-slide-actions">
+                    <span class="slide-hint">👥 Usa jugadores globales o agrégalos dentro del juego.</span>
+                    <a class="btn primary" data-game-link data-needs-players="true" href="impostor.html">Jugar ahora</a>
+                  </div>
+                </article>
 
-            <article class="box stack theme-tabu card-item">
-              <div class="badge badge-indigo">🤐 Tabú</div>
-              <div class="muted card-copy">
-                Haz que tu equipo adivine la palabra sin decir las prohibidas. Versión simplificada y directa.
-              </div>
-              <div class="card-tags">
-                <span>Equipos</span><span>Vocería</span><span>Puntaje</span>
-              </div>
-              <a class="btn primary" href="tabu.html">Jugar</a>
-            </article>
+                <article class="game-slide theme-bomba" data-search="bomba palabras velocidad presion caos" data-game="bomba">
+                  <div class="game-slide-glow"></div>
+                  <div class="game-slide-top">
+                    <span class="game-slide-index">02 / 07</span>
+                    <img class="game-slide-icon" src="game-bomba.svg" alt="">
+                  </div>
+                  <div class="game-slide-copy">
+                    <span class="badge badge-red">Caos · Velocidad · Presión</span>
+                    <h3>La Bomba</h3>
+                    <p>Di una palabra válida y pasa el celular antes de que explote. Cada ronda aprieta un poco más.</p>
+                  </div>
+                  <div class="game-slide-actions">
+                    <span class="slide-hint">🔥 Ideal para partidas rápidas.</span>
+                    <a class="btn primary" data-game-link data-needs-players="false" href="bomba.html">Jugar ahora</a>
+                  </div>
+                </article>
 
-            <article class="box stack theme-verdadreto card-item">
-              <div class="badge badge-pink">🌶️ Verdad o Reto</div>
-              <div class="muted card-copy">
-                Preguntas incómodas o retos divertidos. Perfecto para prender el ambiente.
-              </div>
-              <div class="card-tags">
-                <span>Fiesta</span><span>Turnos</span><span>Locura</span>
-              </div>
-              <a class="btn primary" href="verdadreto.html">Jugar</a>
-            </article>
+                <article class="game-slide theme-nosconocemos" data-search="nos conocemos preguntas adivinar social grupo parejas" data-game="nosconocemos">
+                  <div class="game-slide-glow"></div>
+                  <div class="game-slide-top">
+                    <span class="game-slide-index">03 / 07</span>
+                    <img class="game-slide-icon" src="game-nosconocemos.svg" alt="">
+                  </div>
+                  <div class="game-slide-copy">
+                    <span class="badge badge-amber">Social · Adivinar · Grupo</span>
+                    <h3>¿Nos Conocemos?</h3>
+                    <p>Una persona responde en secreto y los demás intentan adivinar qué eligió.</p>
+                  </div>
+                  <div class="game-slide-actions">
+                    <span class="slide-hint">👥 Perfecto con jugadores definidos.</span>
+                    <a class="btn primary" data-game-link data-needs-players="true" href="nosconocemos.html">Jugar ahora</a>
+                  </div>
+                </article>
 
-            <article class="box stack theme-yonunca card-item">
-              <div class="badge badge-green">🙊 Yo Nunca</div>
-              <div class="muted card-copy">
-                Lean la frase y descubran quién tiene más historias. Simple, rápido y siempre funciona.
+                <article class="game-slide theme-rompehielo" data-search="rompehielo preguntas conversar amigos charla ambiente" data-game="rompehielo">
+                  <div class="game-slide-glow"></div>
+                  <div class="game-slide-top">
+                    <span class="game-slide-index">04 / 07</span>
+                    <img class="game-slide-icon" src="game-rompehielo.svg" alt="">
+                  </div>
+                  <div class="game-slide-copy">
+                    <span class="badge">Conversación · Amigos · Ambiente</span>
+                    <h3>Rompehielo</h3>
+                    <p>Preguntas para arrancar una reunión, soltar la tensión y hacer que la conversación fluya.</p>
+                  </div>
+                  <div class="game-slide-actions">
+                    <span class="slide-hint">💬 No necesitas registrar jugadores.</span>
+                    <a class="btn primary" data-game-link data-needs-players="false" href="rompehielo.html">Jugar ahora</a>
+                  </div>
+                </article>
+
+                <article class="game-slide theme-tabu" data-search="tabu equipos palabras prohibidas puntos voceria" data-game="tabu">
+                  <div class="game-slide-glow"></div>
+                  <div class="game-slide-top">
+                    <span class="game-slide-index">05 / 07</span>
+                    <img class="game-slide-icon" src="game-tabu.svg" alt="">
+                  </div>
+                  <div class="game-slide-copy">
+                    <span class="badge badge-indigo">Equipos · Vocería · Puntaje</span>
+                    <h3>Tabú</h3>
+                    <p>Haz que tu equipo adivine la palabra sin decir las palabras prohibidas. Tiempo, presión y puntos.</p>
+                  </div>
+                  <div class="game-slide-actions">
+                    <span class="slide-hint">👥 La lista global acelera la preparación.</span>
+                    <a class="btn primary" data-game-link data-needs-players="true" href="tabu.html">Jugar ahora</a>
+                  </div>
+                </article>
+
+                <article class="game-slide theme-verdadreto" data-search="verdad reto fiesta preguntas retos turnos" data-game="verdadreto">
+                  <div class="game-slide-glow"></div>
+                  <div class="game-slide-top">
+                    <span class="game-slide-index">06 / 07</span>
+                    <img class="game-slide-icon" src="game-verdadreto.svg" alt="">
+                  </div>
+                  <div class="game-slide-copy">
+                    <span class="badge badge-pink">Fiesta · Turnos · Locura</span>
+                    <h3>Verdad o Reto</h3>
+                    <p>Elige entre una pregunta incómoda o un reto divertido y deja que el turno haga el resto.</p>
+                  </div>
+                  <div class="game-slide-actions">
+                    <span class="slide-hint">👥 Funciona mejor con turnos de jugadores.</span>
+                    <a class="btn primary" data-game-link data-needs-players="true" href="verdadreto.html">Jugar ahora</a>
+                  </div>
+                </article>
+
+                <article class="game-slide theme-yonunca" data-search="yo nunca historias confesiones grupo frases" data-game="yonunca">
+                  <div class="game-slide-glow"></div>
+                  <div class="game-slide-top">
+                    <span class="game-slide-index">07 / 07</span>
+                    <img class="game-slide-icon" src="game-yonunca.svg" alt="">
+                  </div>
+                  <div class="game-slide-copy">
+                    <span class="badge badge-green">Historias · Confesiones · Grupo</span>
+                    <h3>Yo Nunca</h3>
+                    <p>Lee la frase, descubre quién tiene una historia detrás y deja que aparezcan las confesiones.</p>
+                  </div>
+                  <div class="game-slide-actions">
+                    <span class="slide-hint">🗣️ Puedes jugar sin registrar nombres.</span>
+                    <a class="btn primary" data-game-link data-needs-players="false" href="yonunca.html">Jugar ahora</a>
+                  </div>
+                </article>
+
               </div>
-              <div class="card-tags">
-                <span>Historias</span><span>Confesiones</span><span>Grupo</span>
-              </div>
-              <a class="btn primary" href="yonunca.html">Jugar</a>
-            </article>
-          </div>
-        </div>
-      </section>
+              <button class="carousel-arrow carousel-next" type="button" id="gameNext" aria-label="Siguiente juego">›</button>
+            </div>
+
+            <div class="game-carousel-footer">
+              <div class="game-dots" id="gameDots" aria-label="Seleccionar juego"></div>
+              <span class="swipe-hint">Desliza · usa ← → · toca una tarjeta</span>
+            </div>
+          </section>
     </div>
   </main>
 
@@ -291,7 +351,7 @@
       title="Cambiar tema"
       aria-label="Cambiar tema"
     >
-      🌓
+      <img src="tool-theme.svg" alt="">
     </button>
     <button
       type="button"
@@ -300,7 +360,7 @@
       title="Lanzar dado"
       aria-label="Lanzar dado"
     >
-      🎲
+      <img src="tool-dice.svg" alt="">
     </button>
     <button
       type="button"
@@ -309,7 +369,7 @@
       title="Sacar carta"
       aria-label="Sacar carta"
     >
-      🃏
+      <img src="tool-cards.svg" alt="">
     </button>
   </div>
 
@@ -321,7 +381,7 @@
         onclick="Tools.closeModal('dice')"
         aria-label="Cerrar modal de dado"
       >
-        ❌
+        ×
       </button>
 
       <h2 id="dice-modal-title" class="modal-title color-accent">Lanzar Dado 🎲</h2>
@@ -335,7 +395,7 @@
         <div><strong>⚖️ Desempate:</strong> si hay empate, vuelvan a lanzar solo los empatados.</div>
       </div>
 
-      <div id="dice-result" class="emoji-display giant-emoji">🎲</div>
+      <div id="dice-result" class="emoji-display giant-emoji"><img src="tool-dice.svg" alt="Dado"></div>
 
       <button type="button" class="btn primary btn-xl" onclick="Tools.rollDice()">¡Lanzar!</button>
     </div>
@@ -363,7 +423,7 @@
         <div><strong>⚖️ Empate:</strong> si dos personas sacan el mismo valor, solo ellas vuelven a sacar.</div>
       </div>
 
-      <div id="card-result" class="card-result-box">🎴</div>
+      <div id="card-result" class="card-result-box"><img src="tool-cards.svg" alt="Carta"></div>
 
       <button type="button" class="btn danger btn-xl" onclick="Tools.drawCard()">¡Sacar Carta!</button>
     </div>
@@ -417,5 +477,6 @@
   </script>
 
   <script src="scripts.js"></script>
+  <script src="players.js"></script>
 </body>
 </html>
