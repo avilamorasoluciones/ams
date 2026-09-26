@@ -1254,70 +1254,142 @@
         // ========================================================
         // HERRAMIENTAS AMS — utilidades adicionales
         // ========================================================
-        const $ = id => document.getElementById(id);
-        const toast = (message, type='ok') => {
-            let el=$('ams-toast');
+        function ams$(id){ return document.getElementById(id); }
+        function amsCopy(value){
+            if(!value) return;
+            if(navigator.clipboard && navigator.clipboard.writeText){
+                navigator.clipboard.writeText(value).then(function(){ amsToast('Copiado al portapapeles'); }).catch(function(){ amsToast('No se pudo copiar','error'); });
+            } else { amsToast('Tu navegador no permite copiar automáticamente','error'); }
+        }
+        function amsToast(message,type){
+            var el=ams$('ams-toast');
             if(!el){ el=document.createElement('div'); el.id='ams-toast'; el.className='ams-toast'; document.body.appendChild(el); }
-            el.textContent=message; el.className='ams-toast show '+type;
-            clearTimeout(window.__amsToast); window.__amsToast=setTimeout(()=>el.className='ams-toast',2600);
-        };
-        const copyText = async value => {
-            try { await navigator.clipboard.writeText(value); toast('Copiado al portapapeles'); }
-            catch { toast('No se pudo copiar automáticamente','error'); }
-        };
-        const escapeHtml = s => String(s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]));
+            el.textContent=message; el.className='ams-toast show '+(type||'ok');
+            clearTimeout(window.__amsToast);
+            window.__amsToast=setTimeout(function(){el.className='ams-toast';},2600);
+        }
 
-        // Redimensionador
-        let resizeFile=null, resizeImg=null;
-        $('inp-resize')?.addEventListener('change', e => {
-            resizeFile=e.target.files[0]; if(!resizeFile)return;
+        var resizeFile=null, resizeImg=null;
+        ams$('inp-resize')?.addEventListener('change',function(e){
+            resizeFile=e.target.files[0];
+            if(!resizeFile)return;
             resizeImg=new Image();
-            resizeImg.onload=()=>{ $('resize-w').value=resizeImg.naturalWidth; $('resize-h').value=resizeImg.naturalHeight; $('resize-workspace').style.display='block'; };
+            resizeImg.onload=function(){
+                ams$('resize-w').value=resizeImg.naturalWidth;
+                ams$('resize-h').value=resizeImg.naturalHeight;
+                ams$('resize-workspace').style.display='block';
+            };
             resizeImg.src=URL.createObjectURL(resizeFile);
         });
-        $('resize-w')?.addEventListener('input',()=>{if($('resize-lock').checked&&resizeImg){$('resize-h').value=Math.round($('resize-w').value*resizeImg.naturalHeight/resizeImg.naturalWidth)}});
-        $('resize-h')?.addEventListener('input',()=>{if($('resize-lock').checked&&resizeImg){$('resize-w').value=Math.round($('resize-h').value*resizeImg.naturalWidth/resizeImg.naturalHeight)}});
-        $('btn-resize')?.addEventListener('click',()=>{
+        ams$('resize-w')?.addEventListener('input',function(){
+            if(ams$('resize-lock').checked && resizeImg) ams$('resize-h').value=Math.round(Number(ams$('resize-w').value)*resizeImg.naturalHeight/resizeImg.naturalWidth);
+        });
+        ams$('resize-h')?.addEventListener('input',function(){
+            if(ams$('resize-lock').checked && resizeImg) ams$('resize-w').value=Math.round(Number(ams$('resize-h').value)*resizeImg.naturalWidth/resizeImg.naturalHeight);
+        });
+        ams$('btn-resize')?.addEventListener('click',function(){
             if(!resizeImg)return;
-            const w=Math.max(1,Number($('resize-w').value)),h=Math.max(1,Number($('resize-h').value)),canvas=document.createElement('canvas');
-            canvas.width=w;canvas.height=h;canvas.getContext('2d').drawImage(resizeImg,0,0,w,h);
-            const mime=$('resize-format').value, ext=mime==='image/png'?'.png':mime==='image/jpeg'?'.jpg':'.webp';
-            canvas.toBlob(b=>{if(b)downloadFile(b,(resizeFile.name.replace(/\.[^.]+$/,'')+'_AMS'+ext),mime);else toast('Formato no soportado','error')},mime,.9);
+            var w=Math.max(1,Number(ams$('resize-w').value)), h=Math.max(1,Number(ams$('resize-h').value));
+            var canvas=document.createElement('canvas'); canvas.width=w; canvas.height=h;
+            canvas.getContext('2d').drawImage(resizeImg,0,0,w,h);
+            var mime=ams$('resize-format').value;
+            var ext=mime==='image/png'?'.png':mime==='image/jpeg'?'.jpg':'.webp';
+            canvas.toBlob(function(blob){
+                if(blob) downloadFile(blob,resizeFile.name.replace(/\.[^.]+$/,'')+'_AMS'+ext,mime);
+                else amsToast('Formato no soportado','error');
+            },mime,.9);
         });
 
-        // Base64 Unicode-safe
-        $('btn-b64-encode')?.addEventListener('click',()=>{try{$('base64-output').value=btoa(unescape(encodeURIComponent($('base64-input').value)))}catch{toast('No se pudo codificar','error')}});
-        $('btn-b64-decode')?.addEventListener('click',()=>{try{$('base64-output').value=decodeURIComponent(escape(atob($('base64-input').value.trim())))}catch{toast('Base64 inválido','error')}});
-        $('btn-b64-copy')?.addEventListener('click',()=>copyText($('base64-output').value));
+        ams$('btn-b64-encode')?.addEventListener('click',function(){
+            try{ ams$('base64-output').value=btoa(unescape(encodeURIComponent(ams$('base64-input').value))); }
+            catch(e){ amsToast('No se pudo codificar','error'); }
+        });
+        ams$('btn-b64-decode')?.addEventListener('click',function(){
+            try{ ams$('base64-output').value=decodeURIComponent(escape(atob(ams$('base64-input').value.trim()))); }
+            catch(e){ amsToast('Base64 inválido','error'); }
+        });
+        ams$('btn-b64-copy')?.addEventListener('click',function(){amsCopy(ams$('base64-output').value);});
 
-        // UUID
-        $('btn-uuid')?.addEventListener('click',()=>{$('uuid-output').textContent=crypto.randomUUID?crypto.randomUUID():([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g,c=>(c^crypto.getRandomValues(new Uint8Array(1))[0]&15>>c/4).toString(16))});
-        $('btn-uuid-copy')?.addEventListener('click',()=>copyText($('uuid-output').textContent));
+        ams$('btn-uuid')?.addEventListener('click',function(){
+            var value=window.crypto && window.crypto.randomUUID ? window.crypto.randomUUID() : 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g,function(c){
+                var r=new Uint8Array(1); window.crypto.getRandomValues(r); var n=r[0]%16; return (c==='x'?n:(n&3)|8).toString(16);
+            });
+            ams$('uuid-output').textContent=value;
+        });
+        ams$('btn-uuid-copy')?.addEventListener('click',function(){amsCopy(ams$('uuid-output').textContent);});
 
-        // Timestamp
-        const updateTimestampNow=()=>{const d=new Date();$('timestamp-input').value=d.toISOString().slice(0,16).replace('T',' ');$('timestamp-output').innerHTML='<strong>Unix:</strong> '+Math.floor(d.getTime()/1000)+'<br><strong>ISO:</strong> '+d.toISOString()};
-        $('btn-ts-now')?.addEventListener('click',updateTimestampNow);
-        $('btn-ts-date')?.addEventListener('click',()=>{const raw=$('timestamp-input').value.trim(), n=Number(raw),d=Number.isFinite(n)&&raw!==''?new Date(raw.length<=10?n*1000:n):new Date(raw);if(isNaN(d.getTime())){toast('Fecha inválida','error');return}$('timestamp-output').innerHTML='<strong>Unix:</strong> '+Math.floor(d.getTime()/1000)+'<br><strong>ISO:</strong> '+d.toISOString()});
+        ams$('btn-ts-now')?.addEventListener('click',function(){
+            var d=new Date();
+            ams$('timestamp-input').value=d.toISOString().slice(0,16).replace('T',' ');
+            ams$('timestamp-output').textContent='Unix: '+Math.floor(d.getTime()/1000)+' · ISO: '+d.toISOString();
+        });
+        ams$('btn-ts-date')?.addEventListener('click',function(){
+            var raw=ams$('timestamp-input').value.trim();
+            var d=/^\d+$/.test(raw) ? new Date(Number(raw)*(raw.length<=10?1000:1)) : new Date(raw);
+            if(isNaN(d.getTime())){amsToast('Fecha inválida','error');return;}
+            ams$('timestamp-output').textContent='Unix: '+Math.floor(d.getTime()/1000)+' · ISO: '+d.toISOString();
+        });
 
-        // Colores
-        const colorInfo=hex=>{hex=hex.replace('#','');if(hex.length!==6)return null;const r=parseInt(hex.slice(0,2),16),g=parseInt(hex.slice(2,4),16),b=parseInt(hex.slice(4,6),16);const max=Math.max(r,g,b)/255,min=Math.min(r,g,b)/255,l=(max+min)/2,d=max-min;let h=0,s=0;if(d){s=l>.5?d/(2-max-min):d/(max+min);switch(max){case r/255:h=((g-b)/255/d)%6;break;case g/255:h=(b/255-r/255)/d+2;break;default:h=(r/255-g/255)/d+4}h=Math.round(h*60);if(h<0)h+=360}s=Math.round(s*100);l=Math.round(l*100)}return {r,g,b,h,s,l}};
-        const refreshColor=()=>{let h=$('color-hex').value.trim();if(!/^#[0-9a-f]{6}$/i.test(h))return;const x=colorInfo(h);$('color-picker').value=h;$('color-values').innerHTML='RGB: '+x.r+', '+x.g+', '+x.b+'<br>HSL: '+x.h+'°, '+x.s+'%, '+x.l+'%'};
-        $('color-picker')?.addEventListener('input',e=>{$('color-hex').value=e.target.value.toUpperCase();refreshColor()});$('color-hex')?.addEventListener('input',refreshColor);$('btn-copy-color')?.addEventListener('click',()=>copyText($('color-hex').value));refreshColor();
+        function amsColorInfo(hex){
+            var h=hex.replace('#',''); if(h.length!==6)return null;
+            var r=parseInt(h.slice(0,2),16), g=parseInt(h.slice(2,4),16), b=parseInt(h.slice(4,6),16);
+            var max=Math.max(r,g,b)/255, min=Math.min(r,g,b)/255, l=(max+min)/2, d=max-min, hue=0, sat=0;
+            if(d){
+                sat=l>.5?d/(2-max-min):d/(max+min);
+                if(max===r/255) hue=((g-b)/255/d)%6;
+                else if(max===g/255) hue=(b/255-r/255)/d+2;
+                else hue=(r/255-g/255)/d+4;
+                hue=Math.round(hue*60); if(hue<0)hue+=360;
+            }
+            return {r:r,g:g,b:b,h:Math.round(hue),s:Math.round(sat*100),l:Math.round(l*100)};
+        }
+        function refreshAmsColor(){
+            var value=ams$('color-hex').value.trim();
+            if(!/^#[0-9a-f]{6}$/i.test(value))return;
+            var x=amsColorInfo(value);
+            ams$('color-picker').value=value;
+            ams$('color-values').textContent='RGB: '+x.r+', '+x.g+', '+x.b+' · HSL: '+x.h+'°, '+x.s+'%, '+x.l+'%';
+        }
+        ams$('color-picker')?.addEventListener('input',function(e){ams$('color-hex').value=e.target.value.toUpperCase();refreshAmsColor();});
+        ams$('color-hex')?.addEventListener('input',refreshAmsColor);
+        ams$('btn-copy-color')?.addEventListener('click',function(){amsCopy(ams$('color-hex').value);});
+        refreshAmsColor();
 
-        // Unidades
-        const unitCalc=()=>{const v=Number($('unit-value').value),t=$('unit-type').value;const map={'km-mi':v*.621371,'mi-km':v*1.609344,'kg-lb':v*2.2046226218,'lb-kg':v*.45359237,'c-f':v*9/5+32,'f-c':(v-32)*5/9};$('unit-output').textContent=Number.isFinite(v)?map[t].toLocaleString('es-CO',{maximumFractionDigits:6}):'—'};$('unit-value')?.addEventListener('input',unitCalc);$('unit-type')?.addEventListener('change',unitCalc);unitCalc();
+        function calculateAmsUnit(){
+            var v=Number(ams$('unit-value').value), t=ams$('unit-type').value, result;
+            if(!isFinite(v)){ams$('unit-output').textContent='—';return;}
+            if(t==='km-mi')result=v*0.621371;
+            else if(t==='mi-km')result=v*1.609344;
+            else if(t==='kg-lb')result=v*2.2046226218;
+            else if(t==='lb-kg')result=v*0.45359237;
+            else if(t==='c-f')result=v*9/5+32;
+            else result=(v-32)*5/9;
+            ams$('unit-output').textContent=result.toLocaleString('es-CO',{maximumFractionDigits:6});
+        }
+        ams$('unit-value')?.addEventListener('input',calculateAmsUnit);
+        ams$('unit-type')?.addEventListener('change',calculateAmsUnit);
+        calculateAmsUnit();
 
-        // Contador
-        $('text-counter-input')?.addEventListener('input',e=>{const v=e.target.value;const words=v.trim()?v.trim().split(/\s+/).length:0;const lines=v?v.split(/\r?\n/).length:0;$('text-counter-output').textContent=v.length+' caracteres · '+words+' palabras · '+lines+' líneas · '+new Blob([v]).size+' bytes'});
+        ams$('text-counter-input')?.addEventListener('input',function(e){
+            var v=e.target.value, words=v.trim()?v.trim().split(/\s+/).length:0, lines=v?v.split(/\r?\n/).length:0;
+            ams$('text-counter-output').textContent=v.length+' caracteres · '+words+' palabras · '+lines+' líneas · '+new Blob([v]).size+' bytes';
+        });
 
-        // Regex
-        const testRegex=()=>{const p=$('regex-pattern').value,t=$('regex-text').value;if(!p){$('regex-output').textContent='Escribe una expresión.';return}try{const r=new RegExp(p,'g'),matches=[...t.matchAll(r)];$('regex-output').innerHTML=matches.length?'<strong>'+matches.length+' coincidencia(s)</strong><br>'+matches.slice(0,20).map(m=>'<code>'+escapeHtml(m[0])+'</code>').join(' · '):'Sin coincidencias.'}catch(e){$('regex-output').textContent='Regex inválida: '+e.message}};$('regex-pattern')?.addEventListener('input',testRegex);$('regex-text')?.addEventListener('input',testRegex);
+        function testAmsRegex(){
+            var pattern=ams$('regex-pattern').value, text=ams$('regex-text').value;
+            if(!pattern){ams$('regex-output').textContent='Escribe una expresión.';return;}
+            try{
+                var re=new RegExp(pattern,'g'), matches=text.match(re)||[];
+                ams$('regex-output').textContent=matches.length+' coincidencia(s): '+matches.slice(0,20).join(' · ');
+            }catch(e){ams$('regex-output').textContent='Regex inválida: '+e.message;}
+        }
+        ams$('regex-pattern')?.addEventListener('input',testAmsRegex);
+        ams$('regex-text')?.addEventListener('input',testAmsRegex);
 
-        // Meta tags
-        $('btn-meta')?.addEventListener('click',()=>{
-            const title=$('meta-title').value.trim(), desc=$('meta-desc').value.trim(), url=$('meta-url').value.trim();
-            const esc=v=>v.replace(/"/g,'&quot;');
-            $('meta-output').value=[
+        ams$('btn-meta')?.addEventListener('click',function(){
+            var title=ams$('meta-title').value.trim(), desc=ams$('meta-desc').value.trim(), url=ams$('meta-url').value.trim();
+            function esc(v){return v.replace(/"/g,'&quot;');}
+            ams$('meta-output').value=[
                 '<title>'+title+'</title>',
                 '<meta name="description" content="'+esc(desc)+'">',
                 '<meta property="og:title" content="'+esc(title)+'">',
@@ -1325,14 +1397,49 @@
                 '<meta property="og:url" content="'+esc(url)+'">'
             ].join('\n');
         });
-        $('btn-meta-copy')?.addEventListener('click',()=>copyText($('meta-output').value));
+        ams$('btn-meta-copy')?.addEventListener('click',function(){amsCopy(ams$('meta-output').value);});
 
-        // Favicon
-        let faviconFile=null,faviconImg=null;$('inp-favicon')?.addEventListener('change',e=>{faviconFile=e.target.files[0];if(!faviconFile)return;faviconImg=new Image();faviconImg.onload=()=>{$('favicon-preview').style.display='block';$('favicon-preview').innerHTML='<img src="'+faviconImg.src+'" alt="Vista previa" style="width:72px;height:72px;object-fit:cover;border-radius:14px">';$('btn-favicon').disabled=false};faviconImg.src=URL.createObjectURL(faviconFile)});$('btn-favicon')?.addEventListener('click',()=>{if(!faviconImg)return;const canvas=document.createElement('canvas');canvas.width=512;canvas.height=512;canvas.getContext('2d').drawImage(faviconImg,0,0,512,512);canvas.toBlob(b=>downloadFile(b,'AMS_Favicon_512.png','image/png'),'image/png')});
+        var faviconImg=null, faviconFile=null;
+        ams$('inp-favicon')?.addEventListener('change',function(e){
+            faviconFile=e.target.files[0]; if(!faviconFile)return;
+            faviconImg=new Image();
+            faviconImg.onload=function(){
+                ams$('favicon-preview').style.display='block';
+                ams$('favicon-preview').innerHTML='<img src="'+faviconImg.src+'" alt="Vista previa" style="width:72px;height:72px;object-fit:cover;border-radius:14px">';
+                ams$('btn-favicon').disabled=false;
+            };
+            faviconImg.src=URL.createObjectURL(faviconFile);
+        });
+        ams$('btn-favicon')?.addEventListener('click',function(){
+            if(!faviconImg)return;
+            var canvas=document.createElement('canvas'); canvas.width=512; canvas.height=512;
+            canvas.getContext('2d').drawImage(faviconImg,0,0,512,512);
+            canvas.toBlob(function(blob){if(blob)downloadFile(blob,'AMS_Favicon_512.png','image/png');},'image/png');
+        });
 
-        // CSV simple con comillas básicas
-        const parseCSVLine=line=>{const out=[];let cur='',quoted=false;for(let i=0;i<line.length;i++){const ch=line[i];if(ch==='"'&&line[i+1]==='"'){cur+='"';i++}else if(ch==='"'){quoted=!quoted}else if(ch===','&&!quoted){out.push(cur);cur=''}else cur+=ch}out.push(cur);return out};
-        $('btn-csv')?.addEventListener('click',()=>{const lines=$('csv-input').value.trim().split(/\r?\n/).filter(Boolean);if(lines.length<2){toast('Necesitas encabezados y al menos una fila','error');return}const headers=parseCSVLine(lines[0]);const data=lines.slice(1).map(line=>{const cells=parseCSVLine(line);return Object.fromEntries(headers.map((h,i)=>[h.trim(),(cells[i]??'').trim()]))});$('csv-output').value=JSON.stringify(data,null,2)});$('btn-csv-copy')?.addEventListener('click',()=>copyText($('csv-output').value));
+        function parseAmsCsvLine(line){
+            var out=[], current='', quoted=false;
+            for(var i=0;i<line.length;i++){
+                var ch=line[i];
+                if(ch==='"' && line[i+1]==='"'){current+='"';i++;}
+                else if(ch==='"'){quoted=!quoted;}
+                else if(ch===',' && !quoted){out.push(current);current='';}
+                else current+=ch;
+            }
+            out.push(current); return out;
+        }
+        ams$('btn-csv')?.addEventListener('click',function(){
+            var raw=ams$('csv-input').value.trim(), lines=raw?raw.split(/\r?\n/).filter(Boolean):[];
+            if(lines.length<2){amsToast('Necesitas encabezados y al menos una fila','error');return;}
+            var headers=parseAmsCsvLine(lines[0]);
+            var data=lines.slice(1).map(function(line){
+                var cells=parseAmsCsvLine(line), row={};
+                headers.forEach(function(header,i){row[header.trim()]=(cells[i]||'').trim();});
+                return row;
+            });
+            ams$('csv-output').value=JSON.stringify(data,null,2);
+        });
+        ams$('btn-csv-copy')?.addEventListener('click',function(){amsCopy(ams$('csv-output').value);});
 
         // Estados globales de botones
         document.querySelectorAll('button').forEach(btn=>btn.addEventListener('click',()=>{if(btn.id.startsWith('btn-')&&!btn.disabled){btn.classList.add('button-pulse');setTimeout(()=>btn.classList.remove('button-pulse'),350)}}));
