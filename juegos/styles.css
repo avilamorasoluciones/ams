@@ -2976,91 +2976,6 @@ body.light-theme.appearance-luxe {
   font-weight: 800;
 }
 
-.global-players-panel {
-  display: grid;
-  gap: 14px;
-  background:
-    linear-gradient(145deg, rgba(34,211,238,.045), rgba(124,58,237,.055)),
-    var(--card);
-}
-.global-players-head {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 14px;
-}
-.global-players-head h2 {
-  margin: 4px 0 4px;
-  font-size: clamp(1.05rem, 3.5vw, 1.35rem);
-}
-.global-players-head p {
-  margin: 0;
-  max-width: 720px;
-  font-size: .86rem;
-  line-height: 1.45;
-}
-.global-players-count {
-  flex: 0 0 auto;
-  padding: 7px 10px;
-  border-radius: 999px;
-  background: rgba(34,211,238,.08);
-  color: var(--accent);
-  border: 1px solid rgba(34,211,238,.18);
-  font-size: .75rem;
-}
-.global-player-form {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto auto;
-  gap: 8px;
-}
-.global-player-form input {
-  min-width: 0;
-}
-.global-players-empty {
-  padding: 11px 13px;
-  border: 1px dashed var(--border);
-  border-radius: 12px;
-  color: var(--muted);
-  font-size: .82rem;
-  font-weight: 700;
-}
-.global-players-list {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-}
-.player-chip {
-  appearance: none;
-  border: 1px solid rgba(34,211,238,.20);
-  background: rgba(34,211,238,.06);
-  color: var(--text);
-  border-radius: 999px;
-  padding: 5px 9px 5px 5px;
-  display: inline-flex;
-  align-items: center;
-  gap: 7px;
-  cursor: pointer;
-  font-weight: 850;
-}
-.player-chip:hover {
-  border-color: rgba(244,114,182,.55);
-}
-.player-chip-avatar {
-  width: 27px;
-  height: 27px;
-  border-radius: 50%;
-  display: grid;
-  place-items: center;
-  background: linear-gradient(135deg, #7c3aed, #22d3ee);
-  color: #fff;
-  font-size: .72rem;
-}
-.player-chip-x {
-  color: var(--muted);
-  font-size: 1rem;
-  line-height: 1;
-}
-
 .game-selector {
   display: grid;
   gap: 16px;
@@ -3333,22 +3248,6 @@ body.light-theme.appearance-luxe {
   height: 112px;
 }
 
-.global-players-loaded {
-  display: grid;
-  gap: 2px;
-  margin-bottom: 12px;
-  padding: 11px 13px;
-  border-radius: 13px;
-  border: 1px solid rgba(34,211,238,.22);
-  background: rgba(34,211,238,.06);
-  color: var(--text);
-}
-.global-players-loaded span {
-  color: var(--muted);
-  font-size: .78rem;
-  font-weight: 750;
-}
-
 @media (max-width: 700px) {
   .hero-actions {
     grid-template-columns: 1fr;
@@ -3356,15 +3255,6 @@ body.light-theme.appearance-luxe {
   .hero-action {
     justify-content: flex-start;
     padding-inline: 14px;
-  }
-  .global-players-head {
-    display: grid;
-  }
-  .global-player-form {
-    grid-template-columns: 1fr auto;
-  }
-  .global-player-form .btn.ghost {
-    grid-column: 1 / -1;
   }
   .game-carousel {
     padding-inline: 18px;
@@ -3414,12 +3304,6 @@ body.light-theme.appearance-luxe {
   }
   .game-carousel {
     padding-inline: 10px;
-  }
-  .global-player-form {
-    grid-template-columns: 1fr;
-  }
-  .global-player-form .btn.ghost {
-    grid-column: auto;
   }
 }
 
@@ -4102,8 +3986,7 @@ body.light-theme .game-slide-index {
 }
 body.light-theme .hero-action,
 body.light-theme .quick-tool,
-body.light-theme .tool-help-list > div,
-body.light-theme .global-players-empty {
+body.light-theme .tool-help-list > div {
   background: rgba(248,250,252,.92);
   color: var(--text);
 }
@@ -4248,17 +4131,6 @@ body.light-theme[class*="theme-"] .label-muted {
 }
 
 
-/* Android: los campos de texto no deben provocar desplazamientos artificiales.
-   El navegador solo desplaza la página cuando realmente necesita hacer visible
-   el teclado. */
-.global-player-form input,
-.inline-input-group input,
-input[type="text"],
-input[type="search"] {
-  scroll-margin: 0 !important;
-  -webkit-tap-highlight-color: transparent;
-}
-
 /* PWA banner must remain above game/tool modals so it is actually visible. */
 .pwa-install-banner {
   z-index: 5000 !important;
@@ -4286,14 +4158,6 @@ html:focus-within {
 /* Keep the install prompt above every game/tool overlay. */
 .pwa-install-banner { z-index: 5000 !important; }
 
-/* Android name entry: do not ask the browser for any extra scroll margin. */
-#globalPlayerInput {
-  scroll-margin: 0 !important;
-  -webkit-user-select: text;
-  user-select: text;
-  touch-action: manipulation;
-}
-
 
 /* v31: el aviso manual de instalación debe ser visible también en Chrome Custom Tab. */
 .pwa-install-banner[hidden] {
@@ -4301,13 +4165,6 @@ html:focus-within {
 }
 .pwa-install-banner.is-visible {
   display: block !important;
-}
-
-/* Evita cualquier desplazamiento suave programado al tocar el campo global. */
-#globalPlayerInput {
-  scroll-margin: 0 !important;
-  scroll-snap-align: none !important;
-  touch-action: manipulation;
 }
 
 /* El resultado del dado se fija de frente al terminar. */
