@@ -238,7 +238,26 @@ const PWA = (() => {
     }
 
     if ("serviceWorker" in navigator && (location.protocol === "https:" || location.hostname === "localhost" || location.hostname === "127.0.0.1")) {
-      navigator.serviceWorker.register("./sw.js", { scope: "./", updateViaCache: "none" }).catch(() => {});
+      const hadController = Boolean(navigator.serviceWorker.controller);
+      navigator.serviceWorker.addEventListener("controllerchange", () => {
+        // El nuevo worker ya tomó el control. Recargamos una sola vez para
+        // que la página actual use también el HTML/JS/CSS recién publicados.
+        if (!hadController) return;
+        try {
+          if (sessionStorage.getItem("ams_sw_reloaded_v27") === "1") return;
+          sessionStorage.setItem("ams_sw_reloaded_v27", "1");
+        } catch {}
+        window.location.reload();
+      }, { once: true });
+
+      navigator.serviceWorker.register("./sw.js?v=20260926-27", {
+        scope: "./",
+        updateViaCache: "none"
+      }).then(registration => {
+        // Fuerza una comprobación de actualización en cada entrada,
+        // sin depender de cuándo Chrome decida revisar el worker.
+        return registration.update();
+      }).catch(() => {});
     }
   }
 
