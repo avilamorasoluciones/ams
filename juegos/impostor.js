@@ -432,7 +432,7 @@ const ImpostorGame = (() => {
     }
 
     if (pauseBtn) {
-      pauseBtn.textContent = "⏸ Pausar";
+      pauseBtn.innerHTML = `${window.uiIcon("pause")}<span>Pausar</span>`;
     }
 
     updateTimer();
@@ -480,7 +480,7 @@ const ImpostorGame = (() => {
       timerRunning = false;
 
       if (btn) {
-        btn.textContent = "▶️ Reanudar";
+        btn.innerHTML = `${window.uiIcon("play")}<span>Reanudar</span>`;
       }
 
       safeSound(380, 0.08, "triangle");
@@ -488,7 +488,7 @@ const ImpostorGame = (() => {
     }
 
     if (btn) {
-      btn.textContent = "⏸ Pausar";
+      btn.innerHTML = `${window.uiIcon("pause")}<span>Pausar</span>`;
     }
 
     safeSound(620, 0.08, "triangle");
