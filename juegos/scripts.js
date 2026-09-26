@@ -136,7 +136,7 @@ const PWA = (() => {
     banner.innerHTML = `
       <div class="pwa-install-banner-card">
         <div class="pwa-install-banner-icon" aria-hidden="true">
-          <img src="icon-192.svg" alt="">
+          <img src="pwa-icon-192.svg" alt="">
         </div>
         <div class="pwa-install-banner-copy">
           <strong>Instala Juegos Avila Mora</strong>
