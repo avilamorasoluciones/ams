@@ -441,6 +441,122 @@
         color:#172033;
     }
 
+    /* ===== Ajustes responsive AMS: navbar, footer y formularios ===== */
+    @media (max-width: 991.98px) {
+        .navbar > .container {
+            flex-wrap: nowrap !important;
+            min-width: 0;
+            width: 100%;
+        }
+        .navbar-brand {
+            min-width: 0;
+            flex: 1 1 auto;
+            overflow: hidden;
+        }
+        .brand-logo {
+            min-width: 0;
+            max-width: 100%;
+        }
+        .brand-logo > span {
+            min-width: 0;
+            overflow: hidden;
+        }
+        .brand-text-main,
+        .brand-text-sub {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .ams-theme-switch {
+            flex: 0 0 auto;
+            margin-left: 8px !important;
+            margin-right: 0 !important;
+        }
+        .navbar-toggler {
+            flex: 0 0 auto;
+            margin-left: 7px;
+            display: inline-flex !important;
+            align-items: center;
+            justify-content: center;
+        }
+    }
+
+    /* Placeholders legibles en modo oscuro */
+    body:not(.light-theme) input::placeholder,
+    body:not(.light-theme) textarea::placeholder,
+    body:not(.light-theme) .form-control::placeholder,
+    body:not(.light-theme) .tool-search input::placeholder {
+        color: #aebbd0 !important;
+        opacity: 1 !important;
+    }
+    body:not(.light-theme) .form-control,
+    body:not(.light-theme) .form-select,
+    body:not(.light-theme) textarea {
+        color: #f8fafc;
+    }
+
+    /* Footer limpio: sin contenedores visuales innecesarios */
+    .footer-ams {
+        margin-top: 42px !important;
+        padding: 0 !important;
+        background: transparent !important;
+        border-top: 1px solid rgba(255,255,255,.07);
+        color: #64748b;
+    }
+    .footer-promo {
+        padding: 38px 20px 32px;
+        background: transparent !important;
+        border: 0 !important;
+    }
+    .footer-promo h4 {
+        color: #94a3b8;
+        font-family: 'Space Grotesk', sans-serif;
+        font-size: 1.2rem;
+    }
+    .footer-country {
+        margin-top: 18px;
+        display: flex;
+        justify-content: center;
+    }
+    .footer-country img {
+        display: block;
+        width: 30px;
+        height: 20px;
+        object-fit: cover;
+        border-radius: 3px;
+    }
+    .footer-copy {
+        padding: 18px 20px calc(20px + env(safe-area-inset-bottom, 0px));
+        background: rgba(2,4,8,.72) !important;
+        border-top: 1px solid rgba(255,255,255,.045);
+    }
+    .footer-copy strong {
+        color: #c7d2fe;
+    }
+    @media (max-width:575px) {
+        .footer-promo {
+            padding: 34px 16px 28px;
+        }
+        .footer-promo .btn {
+            max-width: 100%;
+        }
+        .footer-copy {
+            line-height: 1.6;
+        }
+    }
+
+    /* Tema claro del footer */
+    body.light-theme .footer-ams {
+        border-top-color: rgba(15,23,42,.09);
+    }
+    body.light-theme .footer-promo h4 {
+        color: #475569;
+    }
+    body.light-theme .footer-copy {
+        background: rgba(241,245,249,.82) !important;
+        border-top-color: rgba(15,23,42,.08);
+    }
+
     </style>
   <link rel="canonical" href="https://avilamorasoluciones.com/herramientas/" />
   <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
@@ -1079,19 +1195,20 @@
 
     </main>
 
-    <!-- FOOTER PROMOCIONAL & COPYRIGHT -->
+    <!-- FOOTER AMS -->
     <footer class="footer-ams mt-auto w-100">
-        <div class="py-4 text-center" style="background: rgba(5,8,16,0.9); border-top: 1px solid var(--border-glass);">
-            <div class="container">
-                <h4 class="fw-bold mb-1" style="font-family: 'Space Grotesk', sans-serif; font-size: 1.2rem;">Arquitectura Digital a Medida</h4>
-                <p class="text-muted mb-3 small">¿Necesitas automatizar procesos complejos para tu empresa?</p>
-                <a href="../" class="btn btn-outline-light rounded-pill px-4 btn-sm">
-                    Conoce nuestros servicios <i class="fa-solid fa-arrow-right ms-2"></i>
-                </a>\n                <img src="../img/colombia-flag.svg" alt="Colombia" width="30" height="20" style="display:inline-block;vertical-align:middle;margin-left:8px;width:30px;height:20px;object-fit:cover;border-radius:3px;" />
+        <div class="footer-promo text-center">
+            <h4 class="fw-bold mb-1">Arquitectura Digital a Medida</h4>
+            <p class="text-muted mb-3 small">¿Necesitas automatizar procesos complejos para tu empresa?</p>
+            <a href="../" class="btn btn-outline-light rounded-pill px-4 btn-sm">
+                Conoce nuestros servicios <i class="fa-solid fa-arrow-right ms-2"></i>
+            </a>
+            <div class="footer-country">
+                <img src="../img/colombia-flag.svg" alt="Colombia" width="30" height="20" />
             </div>
         </div>
-        <div class="text-center py-3" style="background: #020408; border-top: 1px solid rgba(255,255,255,0.02);">
-            <div class="container text-muted small" style="font-size: 0.75rem;">
+        <div class="footer-copy text-center">
+            <div class="text-muted small">
                 &copy; <span id="current-year"></span> <strong>Avila Mora Soluciones</strong> · Herramientas que respetan tus archivos.
             </div>
         </div>
