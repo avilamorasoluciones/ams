@@ -4192,11 +4192,6 @@ body.light-theme .fab-btn {
   }
 }
 
-/* La música ambiental se retiró; no debe quedar ningún control fantasma. */
-#musicToggle {
-  display: none !important;
-}
-
 
 /* El modo claro manda también sobre las personalidades visuales de cada juego. */
 body.light-theme[class*="theme-"] {
