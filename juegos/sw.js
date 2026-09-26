@@ -34,7 +34,6 @@ const APP_SHELL = [
   "./game-yonunca.svg",
   "./tool-dice.svg",
   "./tool-cards.svg",
-  "./tool-theme.svg",
   "./tool-music.svg",
   "./ui-icons.svg"
 ];
