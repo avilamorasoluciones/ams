@@ -2133,7 +2133,16 @@ function toggleAuthPassword(){
 async function submitAuth(e){
   e.preventDefault();
   if(CLOUD_USER) return;
-  if(!window.ayukcalSupabase){ $("authMsg").textContent="Aún falta conectar Supabase."; return; }
+  if(!window.ayukcalSupabase){
+    setAuthBusy(true, "Conectando…");
+    try { await bootCloud(); } catch {}
+    if(!window.ayukcalSupabase){
+      $("authMsg").textContent="⚠️ No se pudo conectar con el servicio de cuenta. Revisa tu conexión e inténtalo de nuevo.";
+      setAuthBusy(false, "");
+      return;
+    }
+    if(CLOUD_USER) return;
+  }
 
   const email=$("authEmail").value.trim().toLowerCase(), password=$("authPassword").value;
   if(!email || !email.includes("@")){ $("authMsg").textContent="Escribe un correo válido."; return; }
