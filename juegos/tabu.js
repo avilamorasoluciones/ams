@@ -214,7 +214,7 @@ const TabuGame = (() => {
     $("t-statPoints").textContent = pointsEarned > 0 ? `+${pointsEarned}` : pointsEarned;
 
     const isLastTurn = (currentRound === maxRounds && activeTeamIndex === teams.length - 1);
-    $("t-btnNextTurn").textContent = isLastTurn ? window.uiIcon("crown") + " Ver Resultados" : "Siguiente Turno " + window.uiIcon("next");
+    $("t-btnNextTurn").innerHTML = isLastTurn ? window.uiIcon("crown") + " Ver Resultados" : "Siguiente Turno " + window.uiIcon("next");
 
     changeScreen("t-scr-turn-summary");
   }
