@@ -522,6 +522,7 @@ const ImpostorGame = (() => {
 
   function finishGame(index) {
     lastVoteIndex = index;
+    lastVoteIndex = index;
     const votedPlayer = players[index];
     const votedRole = roles[index];
 
