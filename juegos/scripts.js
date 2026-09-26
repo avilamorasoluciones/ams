@@ -322,7 +322,7 @@ const Theme = (() => {
 
   function init() {
     let saved = "dark";
-    try { saved = localStorage.getItem(KEY) || "dark"; } catch {}
+    try { saved = localStorage.getItem(KEY) || localStorage.getItem("avila_mora_theme_v2") || "dark"; } catch {}
     apply(saved === "light" ? "light" : "dark", false);
     document.querySelectorAll("[data-theme-toggle]").forEach(btn => {
       btn.addEventListener("click", toggle);
