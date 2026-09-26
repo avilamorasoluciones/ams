@@ -1067,3 +1067,98 @@ body.light-theme .section-inverted .section-sub {
   .ams-orbit-a{width:min(84vw,360px);}
   .ams-orbit-b{width:min(94vw,420px);}
 }
+
+
+/* ===== Menú móvil AMS · ajuste responsive ===== */
+@media (max-width: 1024px) {
+  .mobile-panel {
+    top: calc(var(--navH) + var(--safe-top) + 8px);
+    max-height: calc(100dvh - var(--navH) - var(--safe-top) - 24px);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
+    padding: 10px;
+    scrollbar-width: thin;
+  }
+
+  .mobile-panel > a:not(.mobile-shortcut) {
+    min-height: 50px;
+    height: 50px;
+    padding: 10px 12px;
+    margin: 2px 0;
+    line-height: 1.1;
+    flex: 0 0 50px;
+  }
+
+  .mobile-panel > a:not(.mobile-shortcut) i {
+    flex: 0 0 auto;
+    font-size: 1.05rem;
+  }
+
+  .mobile-shortcuts {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 8px;
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid rgba(255,255,255,.10);
+  }
+
+  .mobile-shortcut {
+    min-width: 0;
+    min-height: 54px;
+    height: 54px;
+    padding: 8px 6px !important;
+    margin: 0 !important;
+    justify-content: center !important;
+    gap: 7px;
+    border: 1px solid rgba(255,255,255,.10);
+    background: rgba(255,255,255,.035);
+    font-size: clamp(.72rem, 2.6vw, .9rem);
+    line-height: 1;
+    white-space: nowrap;
+    overflow: hidden;
+  }
+
+  .mobile-shortcut span {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .mobile-shortcut i {
+    flex: 0 0 auto;
+  }
+
+  .mobile-shortcut::after {
+    display: none;
+  }
+
+  .mobile-panel a.active {
+    background: rgba(255,255,255,.045);
+  }
+}
+
+@media (max-width: 390px) {
+  .mobile-panel {
+    left: max(10px, var(--safe-left));
+    right: max(10px, var(--safe-right));
+    max-width: calc(100vw - 20px);
+  }
+
+  .mobile-shortcuts {
+    gap: 6px;
+  }
+
+  .mobile-shortcut {
+    gap: 5px;
+    padding-left: 4px !important;
+    padding-right: 4px !important;
+    font-size: .72rem;
+  }
+}
+
+body.light-theme .mobile-shortcut {
+  border-color: rgba(15,23,42,.10);
+  background: rgba(15,23,42,.035);
+}
