@@ -228,6 +228,10 @@
     "author":{"@type":"Organization","name":"Avila Mora Soluciones","url":"https://avilamorasoluciones.com/"}
   }
   </script>
+
+<style id="ams-loader-style">
+.ams-loader{position:fixed;inset:0;z-index:10000;display:none;align-items:center;justify-content:center;background:rgba(4,7,18,.72);backdrop-filter:blur(9px);-webkit-backdrop-filter:blur(9px);padding:20px}.ams-loader.active{display:flex;animation:amsLoaderIn .18s ease-out}.ams-loader-card{width:min(390px,100%);padding:30px 26px 24px;text-align:center;border:1px solid rgba(255,255,255,.12);border-radius:24px;background:linear-gradient(145deg,rgba(15,23,42,.97),rgba(10,15,30,.98));box-shadow:0 30px 90px rgba(0,0,0,.48),0 0 55px rgba(99,102,241,.12)}.ams-loader-orbit{width:76px;height:76px;margin:0 auto 20px;position:relative;display:grid;place-items:center}.ams-loader-orbit:before,.ams-loader-orbit:after{content:"";position:absolute;border-radius:50%;border:2px solid transparent}.ams-loader-orbit:before{inset:3px;border-top-color:#22d3ee;border-right-color:#6366f1;animation:amsSpin 1s linear infinite}.ams-loader-orbit:after{inset:12px;border-bottom-color:#ec4899;border-left-color:#22d3ee;animation:amsSpinReverse .75s linear infinite}.ams-loader-core{width:25px;height:25px;border-radius:9px;background:var(--ams-gradient-tech);box-shadow:0 0 28px rgba(34,211,238,.45);animation:amsPulse 1.1s ease-in-out infinite}.ams-loader-title{font-family:'Space Grotesk',sans-serif;font-size:1.15rem;font-weight:700;color:#f8fafc;margin-bottom:5px}.ams-loader-message{font-size:.82rem;color:#94a3b8;margin-bottom:18px}.ams-loader-bar{height:5px;overflow:hidden;border-radius:999px;background:rgba(255,255,255,.08)}.ams-loader-bar span{display:block;width:42%;height:100%;border-radius:inherit;background:var(--ams-gradient-tech);box-shadow:0 0 16px rgba(99,102,241,.4);animation:amsBar 1.15s ease-in-out infinite}.ams-loader-hint{margin-top:13px;font-size:.68rem;color:#64748b}@keyframes amsSpin{to{transform:rotate(360deg)}}@keyframes amsSpinReverse{to{transform:rotate(-360deg)}}@keyframes amsPulse{0%,100%{transform:scale(.82);opacity:.75}50%{transform:scale(1);opacity:1}}@keyframes amsBar{0%{transform:translateX(-125%)}100%{transform:translateX(265%)}}@keyframes amsLoaderIn{from{opacity:0}to{opacity:1}}@media (prefers-reduced-motion:reduce){.ams-loader-orbit:before,.ams-loader-orbit:after,.ams-loader-core,.ams-loader-bar span{animation:none}.ams-loader-bar span{width:100%}}
+</style>
 </head>
 <body class="d-flex flex-column min-vh-100">
     <div class="ams-loader" id="ams-loader" aria-hidden="true" role="status" aria-live="polite">
@@ -1451,7 +1455,36 @@
         });
         ams$('btn-csv-copy')?.addEventListener('click',function(){amsCopy(ams$('csv-output').value);});
 
-        // Loader global AMS para operaciones de procesamiento\n        (function(){\n            const loader=document.getElementById('ams-loader');\n            const title=document.getElementById('ams-loader-title');\n            const message=document.getElementById('ams-loader-message');\n            window.amsLoading=function(show,msg,titleText){\n                if(!loader)return;\n                if(show){ title.textContent=titleText||'Procesando'; message.textContent=msg||'Estamos trabajando localmente en tu archivo…'; loader.classList.add('active'); loader.setAttribute('aria-hidden','false'); document.body.style.overflow='hidden'; }\n                else { loader.classList.remove('active'); loader.setAttribute('aria-hidden','true'); document.body.style.overflow=''; }\n            };\n        })();\n\n        // Estados globales de botones
+        // Loader global AMS para operaciones de procesamiento\n        (function(){\n            const loader=document.getElementById('ams-loader');\n            const title=document.getElementById('ams-loader-title');\n            const message=document.getElementById('ams-loader-message');\n            window.amsLoading=function(show,msg,titleText){\n                if(!loader)return;\n                if(show){ title.textContent=titleText||'Procesando'; message.textContent=msg||'Estamos trabajando localmente en tu archivo…'; loader.classList.add('active'); loader.setAttribute('aria-hidden','false'); document.body.style.overflow='hidden'; }\n                else { loader.classList.remove('active'); loader.setAttribute('aria-hidden','true'); document.body.style.overflow=''; }\n            };\n        })();\n\n
+        // Loader visual AMS para operaciones que requieren procesamiento
+        (function(){
+            const loader=document.getElementById('ams-loader');
+            const title=document.getElementById('ams-loader-title');
+            const message=document.getElementById('ams-loader-message');
+            window.amsLoading=function(show,msg,titleText){
+                if(!loader)return;
+                if(show){title.textContent=titleText||'Procesando';message.textContent=msg||'Estamos trabajando localmente en tu archivo…';loader.classList.add('active');loader.setAttribute('aria-hidden','false');document.body.style.overflow='hidden';}
+                else{loader.classList.remove('active');loader.setAttribute('aria-hidden','true');document.body.style.overflow='';}
+            };
+            const originalDownload=window.downloadFile;
+            if(typeof originalDownload==='function'){
+                window.downloadFile=function(){const result=originalDownload.apply(this,arguments);window.amsLoading(false);return result;};
+            }
+            const ignored=/copy|copiar|uuid-copy|b64-copy|meta-copy|csv-copy|dl-qr|copy-pass|copy-json/i;
+            document.addEventListener('click',function(e){
+                const btn=e.target.closest('button');
+                if(!btn||btn.disabled||ignored.test(btn.id||''))return;
+                const id=btn.id||'', label=(btn.textContent||'').trim().toLowerCase();
+                const isProcess=id.startsWith('btn-') && !/format-json|minify-json|gen-qr|gen-pass|ts-now|ts-date|copy|meta|csv|uuid|b64/i.test(id);
+                const looksHeavy=/procesar|convertir|comprimir|unir|separar|eliminar|recortar|redimensionar|descargar|generar|sellar|minificar/i.test(label);
+                if(isProcess||looksHeavy){
+                    window.amsLoading(true,'Procesando localmente…','Un momento');
+                    clearTimeout(window.__amsLoaderFallback);
+                    window.__amsLoaderFallback=setTimeout(()=>window.amsLoading(false),15000);
+                }
+            },true);
+        })();
+\n        // Estados globales de botones
         document.querySelectorAll('button').forEach(btn=>btn.addEventListener('click',()=>{if(btn.id.startsWith('btn-')&&!btn.disabled){btn.classList.add('button-pulse');setTimeout(()=>btn.classList.remove('button-pulse'),350)}}));
 
     </script>
