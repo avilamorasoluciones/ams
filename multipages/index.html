@@ -201,5 +201,6 @@
         }, { threshold: 0.1 });
         document.querySelectorAll('.hidden').forEach(el => observer.observe(el));
     </script>
+<script>if("serviceWorker" in navigator){window.addEventListener("load",()=>navigator.serviceWorker.register("./sw.js").catch(()=>{}));}</script>
 </body>
 </html>
