@@ -3623,3 +3623,144 @@ footer {
     display: none !important;
   }
 }
+
+/* =========================================================
+   SISTEMA VISUAL INTERNO DE CADA JUEGO
+   Misma familia visual que el menú, con identidad propia.
+   ========================================================= */
+.ui-icon {
+  width: 1.12em;
+  height: 1.12em;
+  flex: 0 0 auto;
+  display: inline-block;
+  vertical-align: -0.16em;
+  fill: none;
+  stroke: currentColor;
+  color: currentColor;
+}
+.ui-icon-lg { width: 1.3em; height: 1.3em; }
+
+.theme-impostor,
+.theme-bomba,
+.theme-nosconocemos,
+.theme-rompehielo,
+.theme-tabu,
+.theme-verdadreto,
+.theme-yonunca {
+  --game-glow: color-mix(in srgb, var(--primary) 20%, transparent);
+  --game-glow-strong: color-mix(in srgb, var(--primary) 34%, transparent);
+}
+
+body[class*="theme-"] {
+  background:
+    radial-gradient(720px 420px at 8% 4%, var(--game-glow-strong), transparent 62%),
+    radial-gradient(680px 420px at 92% 20%, color-mix(in srgb, var(--accent) 12%, transparent), transparent 64%),
+    radial-gradient(800px 480px at 50% 105%, color-mix(in srgb, var(--primary) 10%, transparent), transparent 65%),
+    var(--bg);
+}
+
+body[class*="theme-"] .topbar {
+  border-bottom-color: color-mix(in srgb, var(--primary) 28%, var(--border) 72%);
+  box-shadow: 0 8px 32px color-mix(in srgb, var(--primary) 8%, transparent);
+}
+
+body[class*="theme-"] .brand .logo {
+  background: linear-gradient(135deg, color-mix(in srgb, var(--primary) 90%, #fff 10%), color-mix(in srgb, var(--accent) 80%, #000 20%));
+  box-shadow: 0 10px 26px color-mix(in srgb, var(--primary) 24%, transparent);
+}
+
+body[class*="theme-"] .box {
+  border-color: color-mix(in srgb, var(--primary) 18%, var(--border) 82%);
+  background:
+    linear-gradient(145deg, color-mix(in srgb, var(--primary) 6%, var(--card) 94%), var(--card2));
+}
+
+body[class*="theme-"] .btn.primary {
+  background: linear-gradient(135deg, var(--gradA), var(--gradB));
+  box-shadow: 0 14px 34px color-mix(in srgb, var(--primary) 20%, transparent);
+}
+
+body[class*="theme-"] .btn.ghost:hover,
+body[class*="theme-"] .option-btn:hover,
+body[class*="theme-"] .vote-btn:hover {
+  border-color: color-mix(in srgb, var(--primary) 62%, var(--border-light) 38%);
+  box-shadow: 0 8px 24px color-mix(in srgb, var(--primary) 10%, transparent);
+}
+
+body[class*="theme-"] .game-title,
+body[class*="theme-"] .section-heading,
+body[class*="theme-"] .pass-name {
+  text-shadow: 0 0 24px color-mix(in srgb, var(--primary) 18%, transparent);
+}
+
+body[class*="theme-"] .im-screen.active,
+body[class*="theme-"] .sub-screen.active {
+  animation: gameScreenEnter .34s ease both;
+}
+
+body[class*="theme-"] .pass-box,
+body[class*="theme-"] .reveal-box,
+body[class*="theme-"] .result-area {
+  position: relative;
+  overflow: hidden;
+}
+
+body[class*="theme-"] .pass-box::before,
+body[class*="theme-"] .reveal-box::before,
+body[class*="theme-"] .result-area::before {
+  content: "";
+  position: absolute;
+  width: 180px;
+  height: 180px;
+  right: -90px;
+  top: -90px;
+  border-radius: 50%;
+  border: 1px solid color-mix(in srgb, var(--primary) 25%, transparent);
+  box-shadow: 0 0 60px color-mix(in srgb, var(--primary) 12%, transparent);
+  pointer-events: none;
+  animation: gameOrb 5s ease-in-out infinite;
+}
+
+body[class*="theme-"] .current-player-line,
+body[class*="theme-"] .top-turn-player {
+  text-shadow: 0 0 18px color-mix(in srgb, var(--primary) 24%, transparent);
+}
+
+.modal-icon-art,
+.appearance-choice-icon {
+  display: grid;
+  place-items: center;
+}
+.modal-icon-art .ui-icon,
+.appearance-choice-icon .ui-icon {
+  width: 1.7em;
+  height: 1.7em;
+}
+
+@keyframes gameScreenEnter {
+  from { opacity: 0; transform: translateY(8px) scale(.992); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+@keyframes gameOrb {
+  0%,100% { transform: translate3d(0,0,0); opacity: .55; }
+  50% { transform: translate3d(-8px,8px,0); opacity: .95; }
+}
+
+@media (max-width: 700px) {
+  body[class*="theme-"] .box {
+    border-radius: 20px;
+  }
+  body[class*="theme-"] .btn {
+    min-height: 50px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body[class*="theme-"] .im-screen.active,
+  body[class*="theme-"] .sub-screen.active,
+  body[class*="theme-"] .pass-box::before,
+  body[class*="theme-"] .reveal-box::before,
+  body[class*="theme-"] .result-area::before {
+    animation: none;
+  }
+}
