@@ -1,18 +1,17 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">
-<defs>
-  <linearGradient id="suit" x1="38" y1="20" x2="91" y2="108" gradientUnits="userSpaceOnUse">
-    <stop stop-color="#8b5cf6"/><stop offset="1" stop-color="#4f46e5"/>
-  </linearGradient>
-  <linearGradient id="visor" x1="45" y1="37" x2="83" y2="61" gradientUnits="userSpaceOnUse">
-    <stop stop-color="#e0f2fe"/><stop offset=".45" stop-color="#67e8f9"/><stop offset="1" stop-color="#22d3ee"/>
-  </linearGradient>
-</defs>
-<circle cx="64" cy="64" r="59" fill="#0b1224" stroke="#22d3ee" stroke-width="5"/>
-<path d="M39 57c0-23 12-38 29-38 17 0 27 12 27 32v10h-13V51c0-9-5-15-14-15-10 0-16 8-16 21v14H39z" fill="url(#suit)"/>
-<path d="M34 62c0-9 7-16 16-16h27c10 0 18 8 18 18v12c0 9-7 16-16 16H50c-9 0-16-7-16-16z" fill="url(#suit)"/>
-<path d="M45 53h28c8 0 14 6 14 14v7H57c-7 0-12-5-12-12z" fill="url(#visor)" stroke="#0ea5e9" stroke-width="3"/>
-<path d="M41 91h46" stroke="#22d3ee" stroke-width="8" stroke-linecap="round"/>
-<circle cx="78" cy="56" r="5" fill="#fff" opacity=".9"/>
-<path d="M27 39l15-9" stroke="#22d3ee" stroke-width="6" stroke-linecap="round"/>
-<path d="M96 86l8 6" stroke="#ec4899" stroke-width="5" stroke-linecap="round"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-labelledby="title desc">
+  <title id="title">Detective</title>
+  <desc id="desc">Lupa minimalista para representar investigación y búsqueda.</desc>
+  <defs>
+    <linearGradient id="glass" x1="30" y1="24" x2="82" y2="82" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#67e8f9"/>
+      <stop offset=".5" stop-color="#22d3ee"/>
+      <stop offset="1" stop-color="#8b5cf6"/>
+    </linearGradient>
+  </defs>
+  <circle cx="56" cy="54" r="31" fill="#0b1224" stroke="url(#glass)" stroke-width="7"/>
+  <circle cx="56" cy="54" r="20" fill="none" stroke="#c4f5ff" stroke-width="3" opacity=".72"/>
+  <path d="M78 77 L105 104" fill="none" stroke="#8b5cf6" stroke-width="10" stroke-linecap="round"/>
+  <path d="M82 81 L104 103" fill="none" stroke="#22d3ee" stroke-width="3" stroke-linecap="round" opacity=".9"/>
+  <path d="M40 38 C46 31 57 28 67 32" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round" opacity=".8"/>
+  <circle cx="56" cy="54" r="4" fill="#fff" opacity=".9"/>
 </svg>
