@@ -735,8 +735,16 @@ const GamesMenu = (() => {
   let slides = [];
   let activeIndex = 0;
 
+  function isMobileLayout() {
+    return window.matchMedia("(max-width: 700px)").matches;
+  }
+
+  function isAvailableOnCurrentDevice(slide) {
+    return isMobileLayout() || slide.dataset.mobileOnly !== "true";
+  }
+
   function visibleSlides() {
-    return slides.filter(slide => !slide.hidden);
+    return slides.filter(slide => !slide.hidden && isAvailableOnCurrentDevice(slide));
   }
 
   function updateDots(list) {
@@ -797,7 +805,8 @@ const GamesMenu = (() => {
     const query = (input?.value || "").trim().toLowerCase();
     slides.forEach(slide => {
       const haystack = ((slide.dataset.search || "") + " " + (slide.querySelector("h3")?.textContent || "")).toLowerCase();
-      slide.hidden = Boolean(query && !haystack.includes(query));
+      const unavailable = !isAvailableOnCurrentDevice(slide);
+      slide.hidden = unavailable || Boolean(query && !haystack.includes(query));
     });
     activeIndex = 0;
     const list = visibleSlides();
