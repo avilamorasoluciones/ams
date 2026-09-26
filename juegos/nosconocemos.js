@@ -203,6 +203,7 @@ const NosConocemosGame = (() => {
     $("nc-btnEndSecret").onclick = endFn;
     
     renderPlayers();
+    window.GameSession?.register(saveSession);
     const saved = window.GameSession?.load("nosconocemos");
     if (saved && saved.screen !== "nc-scr-lobby" && saved.currentQuestion) {
       players = Array.isArray(saved.players) ? saved.players : players;
