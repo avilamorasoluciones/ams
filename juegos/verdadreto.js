@@ -20,10 +20,15 @@ const VerdadRetoGame = (() => {
     try { localStorage.setItem(STORAGE_KEY, JSON.stringify(players)); } catch(e) {}
   }
 
+  function saveSession(screen = document.querySelector(".im-screen.active")?.id || "vr-scr-lobby") {
+    window.GameSession?.save("verdadreto", { players, poolVerdad, poolReto, currentPlayerIndex, turnsPlayed, maxTurns, screen, actionText: $("vr-txtAction")?.textContent || "", actionBadge: $("vr-catBadge")?.textContent || "" });
+  }
+
   function changeScreen(id) {
     document.querySelectorAll(".im-screen").forEach(s => s.classList.remove("active"));
     $(id).classList.add("active");
     document.body.classList.toggle("playing", id !== "vr-scr-lobby");
+    saveSession(id);
   }
 
   function renderPlayers() {
@@ -100,6 +105,7 @@ const VerdadRetoGame = (() => {
 
     $("vr-catBadge").textContent = badge;
     $("vr-txtAction").textContent = text;
+    saveSession("vr-scr-action");
     $("vr-txtAction").className = `prompt-main ${colorClass}`;
     
     window.emitSound(800, 0.1, "triangle");
@@ -121,7 +127,7 @@ const VerdadRetoGame = (() => {
     };
 
     $("vr-btnStart").onclick = startGame;
-    $("vr-btnEndChoose").onclick = () => changeScreen("vr-scr-lobby");
+    $("vr-btnEndChoose").onclick = () => { window.GameSession?.clear("verdadreto"); changeScreen("vr-scr-lobby"); };
     
     $("vr-btnVerdad").onclick = () => pickAction("verdad");
     $("vr-btnReto").onclick = () => pickAction("reto");
@@ -133,6 +139,26 @@ const VerdadRetoGame = (() => {
     };
 
     renderPlayers();
+    const saved = window.GameSession?.load("verdadreto");
+    if (saved && saved.screen !== "vr-scr-lobby") {
+      players = Array.isArray(saved.players) ? saved.players : players;
+      poolVerdad = Array.isArray(saved.poolVerdad) ? saved.poolVerdad : [];
+      poolReto = Array.isArray(saved.poolReto) ? saved.poolReto : [];
+      currentPlayerIndex = Number(saved.currentPlayerIndex || 0);
+      turnsPlayed = Number(saved.turnsPlayed || 0);
+      maxTurns = Number(saved.maxTurns || 0);
+      renderPlayers();
+      if (saved.screen === "vr-scr-action") {
+        $("vr-txtCurrentPlayer").textContent = players[currentPlayerIndex] || "";
+        $("vr-catBadge").textContent = saved.actionBadge || "";
+        $("vr-txtAction").textContent = saved.actionText || "";
+      } else {
+        $("vr-txtCurrentPlayer").textContent = players[currentPlayerIndex] || "";
+      }
+      changeScreen(saved.screen);
+    } else {
+      changeScreen("vr-scr-lobby");
+    }
   }
 
   return { init };
