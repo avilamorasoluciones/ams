@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="theme-color" content="#050810">
+    <meta name="theme-color" content="#070b18">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="Herramientas">
-    <link rel="icon" href="icon-192.svg" type="image/svg+xml">
-    <link rel="apple-touch-icon" href="icon-192.svg">
+    <meta name="apple-mobile-web-app-title" content="AMS Herramientas">
+    <link rel="icon" href="../img/ams-favicon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="../img/ams-favicon.svg">
     <link rel="manifest" href="manifest.webmanifest">    <!-- Bootstrap 5 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- FontAwesome Icons -->
@@ -35,16 +35,21 @@
            VARIABLES ESTÉTICA FUTURISTA AMS
            ========================================= */
         :root {
-            --bg-deep: #050810;
-            --bg-card: #0d111c;
-            --text-main: #F8FAFC;
-            --text-muted: #94A3B8;
-            --cyan: #00F0FF;
-            --cyan-glow: rgba(0, 240, 255, 0.4);
-            --purple: #8A2BE2;
-            --purple-glow: rgba(138, 43, 226, 0.4);
-            --border-glass: rgba(255, 255, 255, 0.05);
-            --border-hover: rgba(0, 240, 255, 0.3);
+            --bg-deep: #070b18;
+            --bg-card: #0f172a;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --cyan: #22d3ee;
+            --cyan-glow: rgba(34, 211, 238, 0.28);
+            --purple: #6366f1;
+            --purple-glow: rgba(99, 102, 241, 0.28);
+            --magenta: #ec4899;
+            --green: #10b981;
+            --gold: #f59e0b;
+            --border-glass: rgba(255, 255, 255, 0.09);
+            --border-hover: rgba(99, 102, 241, 0.55);
+            --ams-gradient: linear-gradient(135deg, #6366f1, #ec4899);
+            --ams-gradient-tech: linear-gradient(135deg, #22d3ee, #6366f1 52%, #ec4899);
         }
 
         html { scroll-behavior: smooth; }
@@ -152,6 +157,53 @@
         /* CROPPER JS */
         .cropper-view-box, .cropper-face { border-radius: 50%; }
         .cropper-container { margin-bottom: 10px; }
+    
+    /* AMS DESIGN SYSTEM */
+    body {
+        background:
+          radial-gradient(circle at 8% 10%, rgba(99,102,241,.11), transparent 28%),
+          radial-gradient(circle at 92% 8%, rgba(236,72,153,.08), transparent 25%),
+          linear-gradient(180deg,#070b18 0%,#0a1020 48%,#070b18 100%);
+    }
+    .navbar {
+        background: rgba(7,11,24,.86);
+        border-bottom: 1px solid rgba(255,255,255,.09);
+        box-shadow: 0 12px 40px rgba(0,0,0,.22);
+    }
+    .brand-logo {
+        padding: 0; background: transparent; color: white !important;
+        display:flex; align-items:center; gap:9px; letter-spacing:0;
+        text-transform:none; font-size:.9rem;
+    }
+    .brand-logo img { width:34px; height:34px; border-radius:9px; box-shadow:0 0 22px rgba(99,102,241,.25); }
+    .brand-text-main { font-weight:900; letter-spacing:-.3px; }
+    .brand-text-sub { color:#94a3b8; font-size:.72rem; font-weight:500; }
+    .hero-section { padding:58px 15px 30px; }
+    .hero-section h1 { font-size:clamp(2rem,5vw,3.35rem); letter-spacing:-1.5px; }
+    .text-gradient { background:var(--ams-gradient-tech); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent; text-shadow:none; }
+    .badge-core { background:rgba(99,102,241,.10); color:#c7d2fe; border:1px solid rgba(99,102,241,.32); box-shadow:0 8px 30px rgba(99,102,241,.08); }
+    .tool-search { max-width:720px; margin:24px auto 0; position:relative; }
+    .tool-search i { position:absolute; left:16px; top:50%; transform:translateY(-50%); color:#94a3b8; pointer-events:none; }
+    .tool-search input { width:100%; padding:14px 46px; border-radius:16px; background:rgba(15,23,42,.78); border:1px solid rgba(255,255,255,.10); color:#f8fafc; outline:none; box-shadow:0 12px 35px rgba(0,0,0,.16); }
+    .tool-search input:focus { border-color:rgba(99,102,241,.6); box-shadow:0 0 0 4px rgba(99,102,241,.10); }
+    .search-count { margin-top:8px; color:#64748b; font-size:.76rem; }
+    .tool-card { background:linear-gradient(180deg,rgba(15,23,42,.92),rgba(9,14,28,.94)); border:1px solid rgba(255,255,255,.08); border-radius:18px; box-shadow:0 16px 45px rgba(0,0,0,.18); }
+    .tool-card:hover { transform:translateY(-4px); border-color:rgba(99,102,241,.48); box-shadow:0 22px 55px rgba(0,0,0,.25),0 0 28px rgba(99,102,241,.07); }
+    .icon-box { border-radius:13px; background:linear-gradient(145deg,rgba(99,102,241,.10),rgba(236,72,153,.06)); }
+    .section-header { margin-top:50px; }
+    .section-header h2 { letter-spacing:.3px; }
+    .section-header i { color:#a5b4fc; }
+    .btn-ams { background:var(--ams-gradient); color:#fff !important; border-radius:10px; box-shadow:0 10px 24px rgba(99,102,241,.18); }
+    .btn-ams:hover { filter:brightness(1.08); transform:translateY(-1px); }
+    .menu-link:hover { border-color:rgba(99,102,241,.25); }
+    .drop-zone:hover,.drop-zone.dragover { border-color:#818cf8; background:rgba(99,102,241,.07); }
+    .form-control:focus,.form-select:focus { border-color:#818cf8; outline:1px solid #818cf8; }
+    .result-box b,.size-estimated { color:#67e8f9; }
+    .footer-ams { margin-top:auto; border-top:1px solid rgba(255,255,255,.07); background:rgba(7,11,24,.72); padding:28px 15px; color:#64748b; text-align:center; font-size:.78rem; }
+    .footer-ams strong { color:#c7d2fe; }
+    .no-results { display:none; text-align:center; padding:35px 15px; color:#94a3b8; border:1px dashed rgba(255,255,255,.10); border-radius:16px; margin:10px 0 30px; }
+    @media (max-width:575px) { .hero-section { padding-top:42px; } .hero-section h1 { font-size:2.05rem; } .tool-card { border-radius:16px; } .section-header { margin-top:38px; } }
+
     </style>
   <link rel="canonical" href="https://avilamorasoluciones.com/herramientas/" />
   <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
@@ -181,9 +233,14 @@
     <!-- NAVEGACIÓN -->
     <nav class="navbar navbar-dark navbar-expand-lg sticky-top">
         <div class="container">
-            <a class="navbar-brand d-flex align-items-center gap-2 m-0" href="https://avilamorasoluciones.github.io/ams" target="_blank">
-                <span class="brand-logo">AMS Tools</span> 
-                <span class="fw-bold d-none d-sm-inline text-white" style="font-family: 'Space Grotesk', sans-serif;">Avila Mora Soluciones</span>
+            <a class="navbar-brand d-flex align-items-center gap-2 m-0" href="../">
+                <span class="brand-logo">
+                    <img src="../img/ams-favicon.svg" alt="AMS">
+                    <span>
+                        <span class="brand-text-main d-block">Avila Mora Soluciones</span>
+                        <span class="brand-text-sub d-block">Herramientas digitales</span>
+                    </span>
+                </span>
             </a>
             
             <button class="navbar-toggler shadow-none border-0 p-1" type="button" data-bs-toggle="offcanvas" data-bs-target="#menuHerramientas" aria-controls="menuHerramientas">
@@ -232,10 +289,16 @@
     <!-- CONTENIDO PRINCIPAL -->
     <main class="flex-grow-1 w-100">
         <section class="container hero-section">
-            <div class="badge-core"><i class="fa-solid fa-shield-halved me-1"></i> Rápido, Seguro y 100% Local</div>
-            <h1 class="fw-bold mb-2">Simplifica tus <span class="text-gradient">Archivos</span></h1>
+            <div class="badge-core"><i class="fa-solid fa-wand-magic-sparkles me-1"></i> Herramientas de Avila Mora Soluciones</div>
+            <h1 class="fw-bold mb-2">Trabaja mejor con tus <span class="text-gradient">Archivos</span></h1>
             <p class="text-muted mx-auto mb-0" style="max-width: 600px;">
-                Ecosistema de herramientas optimizadas. Todo funciona exclusivamente en tu navegador, sin servidores.
+                Herramientas prácticas para documentos, imágenes y utilidades de desarrollo. Tus archivos se procesan localmente en el navegador, sin subirlos a un servidor.
+            </p>
+            <div class="tool-search">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <input id="tool-search" type="search" autocomplete="off" placeholder="Buscar una herramienta…" aria-label="Buscar una herramienta">
+                <div id="search-count" class="search-count">15 herramientas disponibles</div>
+            </div>
             </p>
         </section>
 
@@ -996,9 +1059,18 @@
         const passOut = document.getElementById('pass-output'), btnGenPass = document.getElementById('btn-gen-pass'), btnCopyPass = document.getElementById('btn-copy-pass');
         passLen.addEventListener('input', (e) => passLenVal.textContent = e.target.value);
         function generatePass() {
+            const secureRandomIndex = (max) => {
+                if (window.crypto?.getRandomValues) {
+                    const array = new Uint32Array(1);
+                    const limit = Math.floor(0x100000000 / max) * max;
+                    do { window.crypto.getRandomValues(array); } while (array[0] >= limit);
+                    return array[0] % max;
+                }
+                return Math.floor(Math.random() * max);
+            };
             const lower = 'abcdefghijklmnopqrstuvwxyz', upper = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', numbers = '0123456789', symbols = '!@#$%^&*()_+~`|}{[]:;?><,./-=';
             let chars = lower; if(passUp.checked) chars += upper; if(passNum.checked) chars += numbers; if(passSym.checked) chars += symbols;
-            let pass = ''; for(let i = 0; i < passLen.value; i++) pass += chars.charAt(Math.floor(Math.random() * chars.length)); passOut.textContent = pass;
+            let pass = ''; for(let i = 0; i < Number(passLen.value); i++) pass += chars.charAt(secureRandomIndex(chars.length)); passOut.textContent = pass;
         }
         btnGenPass.addEventListener('click', generatePass);
         btnCopyPass.addEventListener('click', () => {
@@ -1017,6 +1089,35 @@
         });
         btnMinifyJson.addEventListener('click', () => { try { jsonOut.value = JSON.stringify(JSON.parse(jsonInp.value)); } catch(e) {} });
         btnCopyJson.addEventListener('click', () => { navigator.clipboard.writeText(jsonOut.value); btnCopyJson.textContent = '¡Copiado!'; setTimeout(() => btnCopyJson.textContent = 'Copiar', 2000); });
+
+
+        // Búsqueda rápida de herramientas
+        const toolSearch = document.getElementById('tool-search');
+        const searchCount = document.getElementById('search-count');
+        const toolCards = Array.from(document.querySelectorAll('.tool-card'));
+        const noResults = document.createElement('div');
+        noResults.className = 'no-results';
+        noResults.innerHTML = '<i class="fa-solid fa-magnifying-glass-minus fa-2x mb-2"></i><br>No encontramos una herramienta con ese nombre.';
+        const toolContainer = document.querySelector('main .container.pb-5');
+        if (toolContainer) toolContainer.appendChild(noResults);
+        if (toolSearch) toolSearch.addEventListener('input', () => {
+            const q = toolSearch.value.trim().toLowerCase();
+            let visible = 0;
+            toolCards.forEach(card => {
+                const match = !q || card.textContent.toLowerCase().includes(q);
+                card.style.display = match ? '' : 'none';
+                if (match) visible++;
+            });
+            if (searchCount) searchCount.textContent = q ? (visible + ' de ' + toolCards.length + ' herramientas') : (toolCards.length + ' herramientas disponibles');
+            if (noResults) noResults.style.display = visible ? 'none' : 'block';
+        });
+
+        // PWA: registro del Service Worker para caché básica.
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./sw.js').catch(err => console.warn('AMS PWA:', err));
+            });
+        }
 
     </script>
 </body>
