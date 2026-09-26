@@ -556,8 +556,12 @@ const Tools = (() => {
     // y deja claro que el resultado no se conoce hasta que se detiene.
     const finalFace = Math.floor(Math.random() * 6) + 1;
     const rotations = [
-      [720, 1080], [900, 1260], [720, 1260],
-      [1080, 900], [900, 1080], [1080, 1260]
+      [720, 1080],   // 1 -> frente
+      [630, 1080],   // 2 -> abajo
+      [720, 990],    // 3 -> derecha
+      [720, 1170],   // 4 -> izquierda
+      [810, 1080],   // 5 -> arriba
+      [720, 1260]    // 6 -> atrás
     ][finalFace - 1];
 
     cube.style.setProperty("--spin-x", rotations[0] + "deg");
