@@ -341,7 +341,7 @@ const ImpostorGame = (() => {
 
     if (role === "impostor") {
       area.innerHTML = `
-        <div class="emoji-display">${window.uiIcon("impostor")}</div>
+        <div class="pass-art">${window.uiIcon("impostor")}</div>
         <div class="badge badge-pink">Rol secreto</div>
         <h2 class="game-title" style="margin-top:6px;color:var(--danger);">ERES EL IMPOSTOR</h2>
         <p class="muted strong-copy">No conoces la palabra exacta.</p>
@@ -363,7 +363,7 @@ const ImpostorGame = (() => {
       `;
     } else {
       area.innerHTML = `
-        <div class="emoji-display">${escapeHTML(selectedCard.emoji)}</div>
+        <div class="pass-art">${window.uiIcon("impostor")}</div>
         <div class="badge badge-cyan">Palabra secreta</div>
         <h2 class="game-title" style="margin-top:6px;">${escapeHTML(selectedCard.word)}</h2>
         <p class="muted strong-copy">Todos los inocentes comparten esta palabra.</p>
@@ -542,7 +542,7 @@ const ImpostorGame = (() => {
       title.style.color = "var(--success)";
 
       area.innerHTML = `
-        <div class="emoji-display">${window.uiIcon("impostor")}</div>
+        <div class="pass-art">${window.uiIcon("impostor")}</div>
         <h2 class="big-player-name" style="font-size:1.9rem;">${escapeHTML(votedPlayer)}</h2>
         <p class="muted strong-copy">Sí era impostor.</p>
         <div class="box panel-soft full-width">
@@ -565,7 +565,7 @@ const ImpostorGame = (() => {
       title.style.color = "var(--danger)";
 
       area.innerHTML = `
-        <div class="emoji-display">${window.uiIcon("impostor")}</div>
+        <div class="pass-art">${window.uiIcon("impostor")}</div>
         <h2 class="big-player-name" style="font-size:1.9rem;">${escapeHTML(votedPlayer)}</h2>
         <p class="muted strong-copy">Era inocente.</p>
         <div class="box panel-soft full-width">
@@ -693,7 +693,7 @@ const ImpostorGame = (() => {
     bindEvents();
     changeScreen("i-scr-lobby");
 
-    console.log("ImpostorGame listo ✅");
+    console.log("ImpostorGame listo");
   }
 
   return {
