@@ -213,7 +213,7 @@ const PWA = (() => {
   }
 
   function init() {
-    try { sessionStorage.removeItem("ams_sw_reloaded_v31"); } catch {}
+    try { sessionStorage.removeItem("ams_sw_reloaded_v32"); } catch {}
     createUI();
 
     window.addEventListener("beforeinstallprompt", event => {
@@ -245,13 +245,13 @@ const PWA = (() => {
         // que la página actual use también el HTML/JS/CSS recién publicados.
         if (!hadController) return;
         try {
-          if (sessionStorage.getItem("ams_sw_reloaded_v31") === "1") return;
-          sessionStorage.setItem("ams_sw_reloaded_v31", "1");
+          if (sessionStorage.getItem("ams_sw_reloaded_v32") === "1") return;
+          sessionStorage.setItem("ams_sw_reloaded_v32", "1");
         } catch {}
         window.location.reload();
       });
 
-      navigator.serviceWorker.register("./sw.js?v=20260926-31", {
+      navigator.serviceWorker.register("./sw.js?v=20260926-32", {
         scope: "./",
         updateViaCache: "none"
       }).then(registration => {
@@ -567,8 +567,6 @@ const Tools = (() => {
     const resultEl = $("dice-result");
     if (!resultEl) return;
 
-    // Algunas páginas ya traen un modal antiguo en el HTML. Lo actualizamos
-    // aquí para que el botón nunca dependa de que exista previamente el cubo 3D.
     let cube = resultEl.querySelector(".dice-cube");
     if (!cube) {
       resultEl.className = "dice-stage";
@@ -585,35 +583,53 @@ const Tools = (() => {
     }
     if (!cube || cube.classList.contains("dice-rolling")) return;
 
-    cube.classList.remove("dice-settled");
+    const randomInt = (max) => {
+      try {
+        const values = new Uint32Array(1);
+        crypto.getRandomValues(values);
+        return values[0] % max;
+      } catch {
+        return Math.floor(Math.random() * max);
+      }
+    };
+
+    const finalFace = randomInt(6) + 1;
+
+    // Duración continua y aleatoria: desde muy rápido hasta una tirada
+    // deliberadamente larga. No hay solo 3 velocidades predeterminadas.
+    const duration = 650 + randomInt(2151); // 650–2800 ms
+    const rotations = [720, 900, 1080, 1260, 1440, 1620, 1800, 1980];
+    const spinX = rotations[randomInt(rotations.length)] + randomInt(360);
+    const spinY = rotations[randomInt(rotations.length)] + randomInt(360);
+
+    const front = cube.querySelector(".dice-front");
+    if (front) front.textContent = String(finalFace);
+
+    cube.classList.remove("dice-settled", "dice-rolling");
+    cube.style.animationDuration = duration + "ms";
+    cube.style.setProperty("--spin-x", spinX + "deg");
+    cube.style.setProperty("--spin-y", spinY + "deg");
+
+    void cube.offsetWidth;
     cube.classList.add("dice-rolling");
     resultEl.setAttribute("aria-label", "El dado está rodando");
 
-    const finalFace = Math.floor(Math.random() * 6) + 1;
-    const rotations = [900, 990, 1080, 1170, 1260, 1350];
-    const front = cube.querySelector(".dice-front");
-
-    // La animación gira libremente, pero el resultado siempre termina de frente.
-    // Así el número mostrado coincide SIEMPRE con el valor aleatorio calculado.
-    if (front) front.textContent = String(finalFace);
-    cube.style.setProperty("--spin-x", rotations[Math.floor(Math.random() * rotations.length)] + "deg");
-    cube.style.setProperty("--spin-y", rotations[Math.floor(Math.random() * rotations.length)] + "deg");
-
-    let ticks = 0;
+    let elapsed = 0;
+    const tickEvery = Math.max(95, Math.min(145, duration / 14));
     const tickInt = setInterval(() => {
-      window.emitSound(220 + Math.random() * 160, 0.035, "square", 0.18);
-      ticks++;
-      if (ticks >= 10) {
+      window.emitSound(220 + randomInt(161), 0.035, "square", 0.18);
+      elapsed += tickEvery;
+      if (elapsed >= duration) {
         clearInterval(tickInt);
         cube.classList.remove("dice-rolling");
-        // Dejamos el resultado mirando al usuario, independientemente del giro.
+        cube.style.animationDuration = "";
         cube.style.transform = "rotateX(0deg) rotateY(0deg)";
         cube.classList.add("dice-settled");
         resultEl.setAttribute("aria-label", "Resultado del dado: " + finalFace);
         window.emitSound(760, 0.08, "triangle", 0.28);
         setTimeout(() => window.emitSound(980, 0.14, "triangle", 0.22), 90);
       }
-    }, 120);
+    }, tickEvery);
   }
   function drawCard() {
     const resultEl = $("card-result");
@@ -840,61 +856,6 @@ window.GamesMenu = GamesMenu;
 /********************
  * APP GLOBAL
  ********************/
-const MobileInputGuard = (() => {
-  function init() {
-    const input = document.getElementById("globalPlayerInput");
-    if (!input) return;
-
-    let lockedY = null;
-    let releaseTimer = null;
-    let viewportHandler = null;
-
-    const restore = () => {
-      if (lockedY === null || document.activeElement !== input) return;
-      if (Math.abs(window.scrollY - lockedY) > 1) {
-        window.scrollTo(0, lockedY);
-      }
-    };
-
-    const release = () => {
-      if (viewportHandler && window.visualViewport) {
-        window.visualViewport.removeEventListener("resize", viewportHandler);
-        window.visualViewport.removeEventListener("scroll", viewportHandler);
-      }
-      viewportHandler = null;
-      lockedY = null;
-      clearTimeout(releaseTimer);
-    };
-
-    input.addEventListener("pointerdown", event => {
-      const y = window.scrollY;
-      event.preventDefault();
-      lockedY = y;
-      try { input.focus({ preventScroll: true }); } catch { input.focus(); }
-
-      viewportHandler = restore;
-      if (window.visualViewport) {
-        window.visualViewport.addEventListener("resize", viewportHandler, { passive: true });
-        window.visualViewport.addEventListener("scroll", viewportHandler, { passive: true });
-      }
-      restore();
-      requestAnimationFrame(restore);
-      setTimeout(restore, 30);
-      setTimeout(restore, 100);
-      setTimeout(restore, 250);
-      releaseTimer = setTimeout(release, 900);
-    });
-
-    input.addEventListener("focus", () => {
-      if (lockedY === null) lockedY = window.scrollY;
-      restore();
-    });
-
-    input.addEventListener("blur", release);
-  }
-
-  return { init };
-})();
 
 const App = (() => {
   function initExternalLinks() {
@@ -910,7 +871,6 @@ const App = (() => {
     Theme.init();
 Nav.init();
     Tools.init();
-    MobileInputGuard.init();
     GamesMenu.init();
     initExternalLinks();
   }
