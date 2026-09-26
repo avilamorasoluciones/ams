@@ -94,12 +94,14 @@ const closeMobile = () => {
   mobilePanel.classList.remove("open");
   mobilePanel.setAttribute("aria-hidden", "true");
   menuBtn.setAttribute("aria-expanded", "false");
+  document.body.classList.remove("menu-open");
 };
 
 menuBtn.addEventListener("click", () => {
   const isOpen = mobilePanel.classList.toggle("open");
   mobilePanel.setAttribute("aria-hidden", String(!isOpen));
   menuBtn.setAttribute("aria-expanded", String(isOpen));
+  document.body.classList.toggle("menu-open", isOpen);
 });
 
 document.addEventListener("click", (e) => {
