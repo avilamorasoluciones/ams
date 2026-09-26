@@ -4247,3 +4247,7 @@ body.light-theme[class*="theme-"] .muted,
 body.light-theme[class*="theme-"] .label-muted {
   color: #475569 !important;
 }
+
+@media (min-width: 701px) {
+  .hero-actions { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
