@@ -18,7 +18,7 @@
   <meta name="theme-color" content="#0f1714" id="themeColorMeta" />
   <link rel="icon" href="assets/ayukcal-avocado.svg" type="image/svg+xml" />
   <link rel="apple-touch-icon" href="assets/ayukcal-avocado.svg" />
-  <link rel="manifest" href="manifest.webmanifest" />
+  <link rel="manifest" href="manifest.webmanifest?v=7" />
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -1019,7 +1019,7 @@
   // PWA AyuKcal: actualiza el Service Worker sin interferir con Supabase ni con los datos de la app.
   if ("serviceWorker" in navigator && (location.protocol === "https:" || location.hostname === "localhost" || location.hostname === "127.0.0.1")) {
     window.addEventListener("load", () => {
-      navigator.serviceWorker.register("./sw.js", { scope: "./", updateViaCache: "none" }).catch(() => {});
+      navigator.serviceWorker.register("./sw.js?v=7", { scope: "./", updateViaCache: "none" }).catch(() => {});
     }, { once: true });
   }
 </script>
