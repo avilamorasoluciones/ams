@@ -739,11 +739,15 @@ const GamesMenu = (() => {
     const list = visibleSlides();
     if (!list.length) return;
     activeIndex = Math.max(0, Math.min(index, list.length - 1));
-    list[activeIndex].scrollIntoView({
-      behavior: smooth ? "smooth" : "auto",
-      block: "nearest",
-      inline: "center"
-    });
+    const carousel = document.getElementById("gameCarousel");
+    const slide = list[activeIndex];
+    if (carousel && slide) {
+      const targetLeft = slide.offsetLeft - Math.max(0, (carousel.clientWidth - slide.offsetWidth) / 2);
+      carousel.scrollTo({
+        left: Math.max(0, targetLeft),
+        behavior: smooth ? "smooth" : "auto"
+      });
+    }
     updateControls(list);
   }
 
@@ -815,60 +819,8 @@ const GamesMenu = (() => {
       carousel._amsScrollTimer = window.setTimeout(syncActive, 90);
     }, { passive: true });
 
-    // Gesto híbrido: el dedo puede desplazarse verticalmente por la página
-    // y solo se captura cuando realmente empieza un gesto horizontal.
-    let drag = null;
-    carousel.addEventListener("pointerdown", event => {
-      if (event.pointerType === "mouse") return;
-      drag = {
-        x: event.clientX,
-        y: event.clientY,
-        scrollLeft: carousel.scrollLeft,
-        horizontal: false,
-        dx: 0,
-        pointerId: event.pointerId
-      };
-      try { carousel.setPointerCapture(event.pointerId); } catch {}
-      carousel.classList.remove("is-dragging");
-    }, { passive: true });
-
-    carousel.addEventListener("pointermove", event => {
-      if (!drag) return;
-      const dx = event.clientX - drag.x;
-      const dy = event.clientY - drag.y;
-      if (!drag.horizontal && Math.abs(dx) < 10 && Math.abs(dy) < 10) return;
-      if (!drag.horizontal && Math.abs(dy) > Math.abs(dx)) {
-        drag = null;
-        carousel.classList.remove("is-dragging");
-        return;
-      }
-      if (Math.abs(dx) >= Math.abs(dy)) {
-        drag.horizontal = true;
-        drag.dx = dx;
-        carousel.classList.add("is-dragging");
-        event.preventDefault();
-        carousel.scrollLeft = drag.scrollLeft - dx;
-      }
-    }, { passive: false });
-
-    const finishDrag = () => {
-      if (!drag) return;
-      const wasHorizontal = drag.horizontal;
-      const dx = drag.dx;
-      const pointerId = drag.pointerId;
-      drag = null;
-      carousel.classList.remove("is-dragging");
-      try { carousel.releasePointerCapture(pointerId); } catch {}
-      if (wasHorizontal && Math.abs(dx) > 36) {
-        goTo(activeIndex + (dx < 0 ? 1 : -1), true);
-      } else if (wasHorizontal) {
-        syncActive();
-      }
-    };
-    carousel.addEventListener("pointerup", finishDrag, { passive: true });
-    carousel.addEventListener("pointercancel", finishDrag, { passive: true });
-    carousel.addEventListener("pointerleave", finishDrag, { passive: true });
-
+    // El navegador gestiona el gesto táctil de forma nativa.
+    // Evitamos pointer capture porque en Android puede cancelar el scroll o los clics.
     carousel.addEventListener("keydown", event => {
       if (event.key === "ArrowRight") {
         event.preventDefault();
