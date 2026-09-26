@@ -103,7 +103,7 @@ const PWA = (() => {
   let deferredPrompt = null;
   let banner = null;
   let installButton = null;
-  const DISMISS_KEY = "avila_mora_pwa_install_dismissed_v1";
+  const DISMISS_KEY = "avila_mora_pwa_install_dismissed_v2";
 
   function isStandalone() {
     return window.matchMedia("(display-mode: standalone)").matches ||
