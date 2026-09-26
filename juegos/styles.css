@@ -3913,3 +3913,286 @@ body.playing:not(.has-game-tools) .fab-right-container { display: none !importan
     font-size: .82rem;
   }
 }
+
+
+/* =========================================================
+   CORRECCIÓN FINAL — JUEGOS AMS
+   Claro/oscuro, formularios, herramientas y navegación.
+   ========================================================= */
+
+/* El botón Agregar necesita espacio real para icono + texto. */
+.inline-input-group .btn-inline-square,
+.btn-inline-square {
+  width: auto !important;
+  min-width: 108px;
+  flex: 0 0 auto !important;
+  padding: 0 14px !important;
+  white-space: nowrap;
+}
+.inline-input-group {
+  align-items: stretch;
+}
+.inline-input-group input {
+  min-width: 0;
+}
+
+/* Al abrir el teclado no dejamos que el foco fuerce un salto extraño. */
+#globalPlayerInput,
+.inline-input-group input {
+  scroll-margin-top: 96px;
+  scroll-margin-bottom: 140px;
+  overflow-anchor: none;
+}
+
+/* Herramientas: dado 3D y cartas reales. */
+.dice-stage {
+  width: 150px;
+  height: 150px;
+  margin: 24px auto 30px;
+  display: grid;
+  place-items: center;
+  perspective: 760px;
+  perspective-origin: 50% 45%;
+}
+.dice-cube {
+  --cube-size: 92px;
+  width: var(--cube-size);
+  height: var(--cube-size);
+  position: relative;
+  transform-style: preserve-3d;
+  transform: rotateX(-18deg) rotateY(24deg);
+}
+.dice-face {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  border-radius: 18px;
+  border: 4px solid rgba(255,255,255,.9);
+  background: linear-gradient(145deg, #ffffff, #dbeafe 52%, #bfdbfe);
+  color: #111827;
+  font-size: 2rem;
+  font-weight: 950;
+  box-shadow: inset 0 0 20px rgba(255,255,255,.7), 0 12px 24px rgba(0,0,0,.28);
+  backface-visibility: hidden;
+}
+.dice-front { transform: translateZ(46px); }
+.dice-back { transform: rotateY(180deg) translateZ(46px); }
+.dice-right { transform: rotateY(90deg) translateZ(46px); }
+.dice-left { transform: rotateY(-90deg) translateZ(46px); }
+.dice-top { transform: rotateX(90deg) translateZ(46px); }
+.dice-bottom { transform: rotateX(-90deg) translateZ(46px); }
+
+.dice-cube.dice-rolling {
+  animation: dice-roll-3d 1.05s cubic-bezier(.12,.72,.18,1) forwards;
+}
+.dice-cube.dice-settled {
+  animation: dice-settle 260ms cubic-bezier(.2,.9,.25,1);
+}
+@keyframes dice-roll-3d {
+  0% { transform: rotateX(-18deg) rotateY(24deg) scale(1); }
+  35% { transform: rotateX(calc(var(--spin-x) * .35)) rotateY(calc(var(--spin-y) * .35)) translateY(-18px) scale(1.12); }
+  70% { transform: rotateX(calc(var(--spin-x) * .78)) rotateY(calc(var(--spin-y) * .78)) translateY(8px) scale(1.02); }
+  100% { transform: rotateX(var(--spin-x)) rotateY(var(--spin-y)) translateY(0) scale(1); }
+}
+@keyframes dice-settle {
+  0% { transform: scale(1.06) translateY(-3px); }
+  100% { transform: scale(1); }
+}
+
+.card-result-box {
+  width: 132px;
+  height: 184px;
+  margin: 20px auto 24px;
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  perspective: 800px;
+  overflow: visible;
+}
+.playing-card {
+  width: 126px;
+  height: 178px;
+  margin: auto;
+  border-radius: 15px;
+  border: 5px solid #fff;
+  background: linear-gradient(145deg, #fff, #e2e8f0);
+  color: #111827;
+  box-shadow: 0 16px 34px rgba(0,0,0,.30);
+  position: relative;
+  transform-style: preserve-3d;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.playing-card-back {
+  background:
+    linear-gradient(135deg, rgba(124,58,237,.95), rgba(34,211,238,.92)),
+    #172554;
+  border-color: #fff;
+}
+.playing-card-mark {
+  color: white;
+  border: 2px solid rgba(255,255,255,.72);
+  border-radius: 9px;
+  padding: 10px 13px;
+  font-size: 1.1rem;
+  font-weight: 950;
+  letter-spacing: .12em;
+}
+.playing-card.red { color: #e11d48; }
+.playing-card.black { color: #111827; }
+.card-corner {
+  position: absolute;
+  display: grid;
+  gap: 0;
+  line-height: .9;
+  font-size: 1.25rem;
+  font-weight: 950;
+}
+.card-corner b { font-size: .9rem; }
+.card-corner.top { top: 10px; left: 11px; }
+.card-corner.bottom { bottom: 10px; right: 11px; transform: rotate(180deg); }
+.card-center-suit {
+  font-size: 4.6rem;
+  line-height: 1;
+}
+.card-result-box.card-flipping .playing-card {
+  animation: card-real-flip .7s cubic-bezier(.2,.75,.2,1);
+}
+@keyframes card-real-flip {
+  0% { transform: rotateY(0deg) scale(1); }
+  48% { transform: rotateY(90deg) scale(1.08); }
+  100% { transform: rotateY(360deg) scale(1); }
+}
+
+/* Claro de verdad: ningún panel de juego se queda con el negro heredado. */
+body.light-theme {
+  --topbar-bg: rgba(255,255,255,.92);
+  --input-bg: #fff;
+  --btn-bg: #fff;
+  --ghost-bg: #fff;
+  --player-bg: #f1f5f9;
+  --footer-bg: #f8fafc;
+  --overlay-bg: rgba(15,23,42,.42);
+}
+body.light-theme .games-hero,
+body.light-theme .game-slide,
+body.light-theme .impostor-hero,
+body.light-theme .box {
+  background:
+    linear-gradient(145deg, rgba(255,255,255,.98), rgba(241,245,249,.98)) !important;
+  color: var(--text);
+  box-shadow: 0 14px 38px rgba(15,23,42,.08);
+}
+body.light-theme .games-hero::after {
+  border-color: rgba(34,211,238,.22);
+}
+body.light-theme .game-slide {
+  border-color: #cbd5e1;
+}
+body.light-theme .game-slide p,
+body.light-theme .game-sub,
+body.light-theme .slide-hint,
+body.light-theme .muted {
+  color: var(--muted) !important;
+}
+body.light-theme .game-slide-index {
+  color: #64748b;
+}
+body.light-theme .hero-action,
+body.light-theme .quick-tool,
+body.light-theme .tool-help-list > div,
+body.light-theme .global-players-empty {
+  background: rgba(248,250,252,.92);
+  color: var(--text);
+}
+body.light-theme .game-search {
+  background: #fff;
+  border-color: #cbd5e1;
+}
+body.light-theme .game-search input {
+  color: var(--text);
+}
+body.light-theme .site-nav {
+  background: rgba(255,255,255,.96);
+}
+body.light-theme .nav-item {
+  background: #f8fafc;
+}
+body.light-theme input,
+body.light-theme select,
+body.light-theme textarea {
+  background: #fff;
+  color: #0f172a;
+  border-color: #cbd5e1;
+}
+body.light-theme input::placeholder,
+body.light-theme textarea::placeholder {
+  color: #64748b;
+}
+body.light-theme .btn {
+  color: #0f172a;
+  border-color: #cbd5e1;
+  background: #fff;
+}
+body.light-theme .btn.primary {
+  color: #fff;
+  border-color: transparent;
+}
+body.light-theme .btn.danger {
+  color: #be123c;
+  border-color: rgba(225,29,72,.45);
+}
+body.light-theme .game-page-hero-icon {
+  filter: drop-shadow(0 10px 20px rgba(15,23,42,.12));
+}
+body.light-theme .player-tag,
+body.light-theme .option-btn,
+body.light-theme .score-row,
+body.light-theme .res-item,
+body.light-theme .mini-stat,
+body.light-theme .panel-soft {
+  background: #f8fafc;
+  color: var(--text);
+  border-color: #cbd5e1;
+}
+body.light-theme .fab-btn {
+  background: #fff;
+  color: #0f172a;
+  border-color: #cbd5e1;
+}
+
+/* En las páginas individuales el menú siempre es una vía rápida a todos los juegos. */
+.site-nav-inner .nav-item {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+.site-nav-inner .nav-item .ui-icon {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+@media (max-width: 700px) {
+  .site-nav-inner {
+    max-height: min(70dvh, 520px);
+    overflow-y: auto;
+  }
+  .inline-input-group .btn-inline-square {
+    min-width: 112px;
+  }
+}
+@media (max-width: 430px) {
+  .inline-input-group {
+    gap: 7px;
+  }
+  .inline-input-group .btn-inline-square {
+    min-width: 104px;
+    padding-inline: 10px !important;
+  }
+}
+
+/* La música ambiental se retiró; no debe quedar ningún control fantasma. */
+#musicToggle {
+  display: none !important;
+}
