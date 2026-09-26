@@ -4281,3 +4281,15 @@ html:focus-within {
   width: 92px !important;
   height: 92px !important;
 }
+
+
+/* Keep the install prompt above every game/tool overlay. */
+.pwa-install-banner { z-index: 5000 !important; }
+
+/* Android name entry: do not ask the browser for any extra scroll margin. */
+#globalPlayerInput {
+  scroll-margin: 0 !important;
+  -webkit-user-select: text;
+  user-select: text;
+  touch-action: manipulation;
+}
