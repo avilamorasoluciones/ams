@@ -290,6 +290,7 @@ const GameSession = (() => {
     if (document.visibilityState === "hidden") activeSaver?.();
   });
   window.addEventListener("pagehide", () => activeSaver?.());
+  window.addEventListener("beforeunload", () => activeSaver?.());
 
   return { save, load, clear, register };
 })();
@@ -451,6 +452,32 @@ const Tools = (() => {
     return $(`${type}-modal`);
   }
 
+  function ensureModals() {
+    if (document.getElementById("dice-modal") && document.getElementById("cards-modal")) return;
+
+    const host = document.createElement("div");
+    host.innerHTML = `
+      <div id="dice-modal" class="tool-overlay" role="dialog" aria-modal="true" aria-labelledby="dice-modal-title">
+        <div class="box narrow stack center tool-modal-card">
+          <button type="button" class="btn ghost modal-close-btn" data-tool-close="dice" aria-label="Cerrar modal de dado">×</button>
+          <h2 id="dice-modal-title" class="modal-title color-accent">Lanzar Dado</h2>
+          <p class="muted modal-copy">Un comodín para decidir quién empieza, ordenar turnos o desempatar sin salir del juego.</p>
+          <div id="dice-result" class="emoji-display giant-emoji"><img src="tool-dice.svg" alt="Dado"></div>
+          <button type="button" class="btn primary btn-xl" data-tool-roll>¡Lanzar!</button>
+        </div>
+      </div>
+      <div id="cards-modal" class="tool-overlay" role="dialog" aria-modal="true" aria-labelledby="cards-modal-title">
+        <div class="box narrow stack center tool-modal-card">
+          <button type="button" class="btn ghost modal-close-btn" data-tool-close="cards" aria-label="Cerrar modal de cartas">×</button>
+          <h2 id="cards-modal-title" class="modal-title color-danger">Sacar Carta</h2>
+          <p class="muted modal-copy">Un comodín para resolver decisiones al azar, formar equipos o desempatar dentro de la partida.</p>
+          <div id="card-result" class="card-result-box"><img src="tool-cards.svg" alt="Carta"></div>
+          <button type="button" class="btn danger btn-xl" data-tool-card>¡Sacar Carta!</button>
+        </div>
+      </div>`;
+    while (host.firstElementChild) document.body.appendChild(host.firstElementChild);
+  }
+
   function openModal(type) {
     const modal = getModal(type);
     if (!modal) return;
@@ -524,6 +551,16 @@ const Tools = (() => {
   }
 
   function bindModalEvents() {
+    document.querySelectorAll("[data-tool-close]").forEach((button) => {
+      button.addEventListener("click", () => closeModal(button.dataset.toolClose));
+    });
+    document.querySelectorAll("[data-tool-roll]").forEach((button) => {
+      button.addEventListener("click", rollDice);
+    });
+    document.querySelectorAll("[data-tool-card]").forEach((button) => {
+      button.addEventListener("click", drawCard);
+    });
+
     ["dice", "cards"].forEach((type) => {
       const modal = getModal(type);
       if (!modal) return;
@@ -543,6 +580,7 @@ const Tools = (() => {
   }
 
   function init() {
+    ensureModals();
     bindModalEvents();
   }
 
