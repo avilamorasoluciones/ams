@@ -3426,6 +3426,7 @@ body.light-theme.appearance-luxe {
 
 /* ===== Ajustes móviles del selector: scroll natural + guía de gesto ===== */
 .game-carousel {
+  position: relative;
   touch-action: pan-y pinch-zoom;
   overscroll-behavior-x: contain;
   cursor: grab;
