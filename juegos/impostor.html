@@ -29,12 +29,12 @@
         <span class="txt"><span class="name">Avila Mora Soluciones</span><small>Juegos · El Impostor</small></span>
       </a>
       <div class="topbar-actions">
-        <button id="navToggle" type="button" class="icon-btn">☰</button>
+        <button id="navToggle" type="button" class="icon-btn"><svg class="ui-icon ui-icon-lg" aria-hidden="true"><use href="ui-icons.svg#menu"></use></svg></button>
       </div>
     </div>
     <nav id="siteNav" class="site-nav" hidden>
       <div class="site-nav-inner">
-        <a class="nav-item" href="index.html">🏠 Menú</a>
+        <a class="nav-item" href="index.html"><svg class="ui-icon" aria-hidden="true"><use href="ui-icons.svg#home"></use></svg><span>Menú</span></a>
       </div>
     </nav>
   </header>
@@ -54,7 +54,7 @@
                 <div class="box stack">
                   <div class="inline-input-group">
                     <input type="text" id="i-inpName" placeholder="Nombre del jugador..." autocomplete="off" maxlength="18" />
-                    <button type="button" class="btn btn-inline-square" id="i-btnAddPlayer">➕</button>
+                    <button type="button" class="btn btn-inline-square" id="i-btnAddPlayer"><svg class="ui-icon" aria-hidden="true"><use href="ui-icons.svg#plus"></use></svg><span>Agregar</span></button>
                   </div>
                   <div class="player-list" id="i-uiPlayerList"></div>
                 </div>
@@ -77,8 +77,8 @@
                 </div>
 
                 <div class="row">
-                  <button type="button" class="btn danger" id="i-btnClearPlayers">🧹 Limpiar</button>
-                  <button type="button" class="btn primary" id="i-btnStartGame">🎮 Empezar</button>
+                  <button type="button" class="btn danger" id="i-btnClearPlayers"><svg class="ui-icon" aria-hidden="true"><use href="ui-icons.svg#trash"></use></svg><span>Limpiar</span></button>
+                  <button type="button" class="btn primary" id="i-btnStartGame"><svg class="ui-icon" aria-hidden="true"><use href="ui-icons.svg#play"></use></svg><span>Empezar</span></button>
                 </div>
               </div>
 
@@ -89,7 +89,7 @@
                   <h2 id="i-txtPassName" class="pass-name">-</h2>
                   <p class="muted">Nadie más puede mirar la pantalla.</p>
                 </div>
-                <button type="button" id="i-btnReveal" class="btn primary btn-xxl">👀 Ver mi rol</button>
+                <button type="button" id="i-btnReveal" class="btn primary btn-xxl"><svg class="ui-icon" aria-hidden="true"><use href="ui-icons.svg#eye"></use></svg><span>Ver mi rol</span></button>
               </div>
 
               <div id="i-scr-reveal" class="im-screen">
@@ -97,7 +97,7 @@
                   <h3 id="i-txtRevealPlayer" class="muted reveal-player-name">-</h3>
                   <div id="i-uiSecretArea" class="stack center"></div>
                 </div>
-                <button type="button" id="i-btnHide" class="btn danger">🙈 Ocultar y Pasar</button>
+                <button type="button" id="i-btnHide" class="btn danger"><svg class="ui-icon" aria-hidden="true"><use href="ui-icons.svg#eye-off"></use></svg><span>Ocultar y Pasar</span></button>
               </div>
 
               <div id="i-scr-game" class="im-screen center">
@@ -109,8 +109,8 @@
                 <div class="box stack center">
                   <div class="timer-text" id="i-uiTimer">05:00</div>
                   <div class="row">
-                    <button id="i-btnPause" type="button" class="btn">⏸ Pausar</button>
-                    <button type="button" id="i-btnVoteNow" class="btn danger">🗳️ Votar</button>
+                    <button id="i-btnPause" type="button" class="btn"><svg class="ui-icon" aria-hidden="true"><use href="ui-icons.svg#pause"></use></svg><span>Pausar</span></button>
+                    <button type="button" id="i-btnVoteNow" class="btn danger"><svg class="ui-icon" aria-hidden="true"><use href="ui-icons.svg#vote"></use></svg><span>Votar</span></button>
                   </div>
                 </div>
               </div>
@@ -126,8 +126,8 @@
                 <h1 id="i-txtResultTitle" class="game-title result-title-lg">-</h1>
                 <div class="box result-area stack center" id="i-uiResultArea"></div>
                 <div class="row">
-                  <button type="button" id="i-btnRestart" class="btn primary">🔄 Nueva ronda</button>
-                  <a href="index.html" class="btn ghost">🏠 Menú</a>
+                  <button type="button" id="i-btnRestart" class="btn primary"><svg class="ui-icon" aria-hidden="true"><use href="ui-icons.svg#refresh"></use></svg><span>Nueva ronda</span></button>
+                  <a href="index.html" class="btn ghost"><svg class="ui-icon" aria-hidden="true"><use href="ui-icons.svg#home"></use></svg><span>Menú</span></a>
                 </div>
               </div>
             </div>
