@@ -1070,6 +1070,9 @@ document.addEventListener("DOMContentLoaded", () => {
   $("datePicker").value = viewDate; 
   go("inicio"); 
   updateInstallUI();
+  setTimeout(() => {
+    if (!isStandaloneApp() && !deferredInstallPrompt) updateInstallUI();
+  }, 900);
   bootCloud();
 });
 
@@ -1139,7 +1142,7 @@ window.addEventListener("beforeinstallprompt",e=>{
 });
 window.addEventListener("appinstalled",()=>{
   deferredInstallPrompt=null;
-  localStorage.removeItem("ayukcal_install_dismissed");
+  sessionStorage.removeItem("ayukcal_install_dismissed");
   updateInstallUI();
   toast("🥑 AyuKcal ya está instalada.");
 });
