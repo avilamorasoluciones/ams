@@ -4293,3 +4293,24 @@ html:focus-within {
   user-select: text;
   touch-action: manipulation;
 }
+
+
+/* v31: el aviso manual de instalación debe ser visible también en Chrome Custom Tab. */
+.pwa-install-banner[hidden] {
+  display: none !important;
+}
+.pwa-install-banner.is-visible {
+  display: block !important;
+}
+
+/* Evita cualquier desplazamiento suave programado al tocar el campo global. */
+#globalPlayerInput {
+  scroll-margin: 0 !important;
+  scroll-snap-align: none !important;
+  touch-action: manipulation;
+}
+
+/* El resultado del dado se fija de frente al terminar. */
+.dice-cube.dice-settled {
+  transform: rotateX(0deg) rotateY(0deg) !important;
+}
