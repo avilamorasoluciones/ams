@@ -6,20 +6,58 @@
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
-  "display_override": ["window-controls-overlay", "standalone"],
+  "display_override": [
+    "window-controls-overlay",
+    "standalone"
+  ],
   "orientation": "portrait-primary",
   "background_color": "#070b18",
   "theme_color": "#070b18",
   "lang": "es-CO",
   "dir": "ltr",
-  "categories": ["utilities", "productivity"],
+  "categories": [
+    "utilities",
+    "productivity"
+  ],
   "prefer_related_applications": false,
   "icons": [
-    { "src": "../img/ams-favicon.svg", "sizes": "192x192", "type": "image/svg+xml", "purpose": "any maskable" },
-    { "src": "../img/ams-favicon.svg", "sizes": "512x512", "type": "image/svg+xml", "purpose": "any maskable" }
+    {
+      "src": "icon-192.svg",
+      "sizes": "192x192",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icon-512.svg",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
   ],
   "shortcuts": [
-    { "name": "Unir PDFs", "short_name": "Unir PDFs", "url": "./#tool-merge", "icons": [{ "src": "../img/ams-favicon.svg", "sizes": "192x192", "type": "image/svg+xml" }] },
-    { "name": "Comprimir imágenes", "short_name": "Comprimir", "url": "./#tool-compress", "icons": [{ "src": "../img/ams-favicon.svg", "sizes": "192x192", "type": "image/svg+xml" }] }
+    {
+      "name": "Unir PDFs",
+      "short_name": "Unir PDFs",
+      "url": "./#tool-merge",
+      "icons": [
+        {
+          "src": "icon-192.svg",
+          "sizes": "192x192",
+          "type": "image/svg+xml"
+        }
+      ]
+    },
+    {
+      "name": "Comprimir imágenes",
+      "short_name": "Comprimir",
+      "url": "./#tool-compress",
+      "icons": [
+        {
+          "src": "icon-192.svg",
+          "sizes": "192x192",
+          "type": "image/svg+xml"
+        }
+      ]
+    }
   ]
 }
