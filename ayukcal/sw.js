@@ -1,4 +1,4 @@
-const CACHE_NAME = "ayukcal-app-v2";
+const CACHE_NAME = "ayukcal-app-v3";
 const APP_SHELL = [
   "./",
   "./index.html",
@@ -12,7 +12,8 @@ const STATIC_THIRD_PARTY = [
   "cdn.jsdelivr.net",
   "fonts.googleapis.com",
   "fonts.gstatic.com",
-  "tesseract.projectnaptha.com"
+  "tesseract.projectnaptha.com",
+  "unpkg.com"
 ];
 
 self.addEventListener("install", event => {
