@@ -984,9 +984,7 @@ const App = (() => {
 
   function init() {
     PWA.init();
-    Appearance.init();
-    Theme.init();
-    Nav.init();
+Nav.init();
     Tools.init();
     PartyMusic.init();
     GamesMenu.init();
