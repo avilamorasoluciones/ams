@@ -204,7 +204,8 @@
     .no-results { display:none; text-align:center; padding:35px 15px; color:#94a3b8; border:1px dashed rgba(255,255,255,.10); border-radius:16px; margin:10px 0 30px; }
     @media (max-width:575px) { .hero-section { padding-top:42px; } .hero-section h1 { font-size:2.05rem; } .tool-card { border-radius:16px; } .section-header { margin-top:38px; } }
 
-    </style>
+    .ams-toast{position:fixed;left:50%;bottom:22px;transform:translate(-50%,20px);opacity:0;z-index:9999;padding:11px 18px;border-radius:12px;background:#111827;color:#f8fafc;border:1px solid rgba(255,255,255,.12);box-shadow:0 18px 45px rgba(0,0,0,.3);font-size:.82rem;transition:.2s}.ams-toast.show{opacity:1;transform:translate(-50%,0)}.ams-toast.error{border-color:rgba(236,72,153,.45)}.button-pulse{transform:translateY(-1px);filter:brightness(1.08)}
+    </style
   <link rel="canonical" href="https://avilamorasoluciones.com/herramientas/" />
   <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
   <meta name="author" content="Avila Mora Soluciones" />
@@ -630,6 +631,133 @@
                 
             </div>
         </div>
+
+            <!-- SECCIÓN 4: HERRAMIENTAS AMS -->
+            <div class="section-header">
+                <h2><i class="fa-solid fa-toolbox me-2"></i> Herramientas AMS</h2>
+                <hr>
+            </div>
+            <div class="tool-grid">
+
+                <div class="tool-card" id="tool-resize">
+                    <div class="icon-box cyan"><i class="fa-solid fa-expand"></i></div>
+                    <h3 class="h4 fw-bold">Redimensionar Imagen</h3>
+                    <p class="text-muted small">Cambia ancho y alto manteniendo la proporción.</p>
+                    <label class="drop-zone" id="dz-resize"><i class="fa-regular fa-image text-info"></i><div class="small fw-bold mt-1">Seleccionar imagen</div><input type="file" id="inp-resize" accept="image/*"></label>
+                    <div id="resize-workspace" class="mt-2" style="display:none">
+                        <div class="d-flex gap-2 mb-2">
+                            <input id="resize-w" type="number" class="form-control" min="1" placeholder="Ancho">
+                            <input id="resize-h" type="number" class="form-control" min="1" placeholder="Alto">
+                        </div>
+                        <label class="small text-muted"><input id="resize-lock" type="checkbox" checked> Mantener proporción</label>
+                        <select id="resize-format" class="form-select mt-2"><option value="image/webp">WebP</option><option value="image/jpeg">JPG</option><option value="image/png">PNG</option></select>
+                        <button class="btn btn-ams w-100 mt-2" id="btn-resize">Redimensionar</button>
+                    </div>
+                </div>
+
+                <div class="tool-card" id="tool-base64">
+                    <div class="icon-box purple"><i class="fa-solid fa-code"></i></div>
+                    <h3 class="h4 fw-bold">Base64</h3>
+                    <p class="text-muted small">Codifica texto o decodifica Base64 directamente en tu navegador.</p>
+                    <textarea id="base64-input" class="form-control mb-2" rows="3" placeholder="Texto o Base64..."></textarea>
+                    <div class="d-flex gap-2">
+                        <button class="btn btn-ams w-100" id="btn-b64-encode">Codificar</button>
+                        <button class="btn btn-outline-light w-100" id="btn-b64-decode">Decodificar</button>
+                    </div>
+                    <textarea id="base64-output" class="form-control mt-2" rows="3" readonly placeholder="Resultado..."></textarea>
+                    <button class="btn btn-sm btn-link text-info w-100" id="btn-b64-copy">Copiar resultado</button>
+                </div>
+
+                <div class="tool-card" id="tool-uuid">
+                    <div class="icon-box green"><i class="fa-solid fa-fingerprint"></i></div>
+                    <h3 class="h4 fw-bold">UUID</h3>
+                    <p class="text-muted small">Genera identificadores UUID v4 localmente.</p>
+                    <div id="uuid-output" class="result-box text-center py-3 mb-2 small text-break">Pulsa generar</div>
+                    <div class="d-flex gap-2">
+                        <button class="btn btn-ams w-100" id="btn-uuid">Generar UUID</button>
+                        <button class="btn btn-outline-light" id="btn-uuid-copy"><i class="fa-regular fa-copy"></i></button>
+                    </div>
+                </div>
+
+                <div class="tool-card" id="tool-timestamp">
+                    <div class="icon-box yellow"><i class="fa-solid fa-clock"></i></div>
+                    <h3 class="h4 fw-bold">Timestamp</h3>
+                    <p class="text-muted small">Convierte fechas y timestamps Unix.</p>
+                    <input id="timestamp-input" class="form-control mb-2" placeholder="Ej: 2026-09-26 15:30">
+                    <div class="d-flex gap-2 mb-2"><button class="btn btn-ams w-100" id="btn-ts-now">Ahora</button><button class="btn btn-outline-light w-100" id="btn-ts-date">Convertir fecha</button></div>
+                    <div id="timestamp-output" class="result-box p-2 small text-break">—</div>
+                </div>
+
+                <div class="tool-card" id="tool-color">
+                    <div class="icon-box cyan"><i class="fa-solid fa-palette"></i></div>
+                    <h3 class="h4 fw-bold">Color</h3>
+                    <p class="text-muted small">Convierte HEX, RGB y HSL para tus diseños.</p>
+                    <input id="color-picker" type="color" class="form-control form-control-color mb-2" value="#6366f1" title="Elegir color">
+                    <input id="color-hex" class="form-control mb-2" value="#6366F1" placeholder="#6366F1">
+                    <div id="color-values" class="result-box p-2 small">RGB: —<br>HSL: —</div>
+                    <button class="btn btn-outline-light w-100 mt-2" id="btn-copy-color">Copiar HEX</button>
+                </div>
+
+                <div class="tool-card" id="tool-units">
+                    <div class="icon-box purple"><i class="fa-solid fa-right-left"></i></div>
+                    <h3 class="h4 fw-bold">Conversor de Unidades</h3>
+                    <p class="text-muted small">Longitud, peso y temperatura sin conexión.</p>
+                    <div class="d-flex gap-2 mb-2">
+                        <input id="unit-value" type="number" class="form-control" value="1">
+                        <select id="unit-type" class="form-select"><option value="km-mi">km → millas</option><option value="mi-km">millas → km</option><option value="kg-lb">kg → lb</option><option value="lb-kg">lb → kg</option><option value="c-f">°C → °F</option><option value="f-c">°F → °C</option></select>
+                    </div>
+                    <div id="unit-output" class="result-box text-center py-3 fw-bold">1</div>
+                </div>
+
+                <div class="tool-card" id="tool-text">
+                    <div class="icon-box green"><i class="fa-solid fa-align-left"></i></div>
+                    <h3 class="h4 fw-bold">Contador de Texto</h3>
+                    <p class="text-muted small">Caracteres, palabras, líneas y bytes.</p>
+                    <textarea id="text-counter-input" class="form-control mb-2" rows="5" placeholder="Escribe o pega tu texto..."></textarea>
+                    <div id="text-counter-output" class="result-box p-2 small">0 caracteres · 0 palabras · 0 líneas · 0 bytes</div>
+                </div>
+
+                <div class="tool-card" id="tool-regex">
+                    <div class="icon-box yellow"><i class="fa-solid fa-filter"></i></div>
+                    <h3 class="h4 fw-bold">Regex Tester</h3>
+                    <p class="text-muted small">Prueba expresiones regulares sobre texto local.</p>
+                    <input id="regex-pattern" class="form-control mb-2" placeholder="Ej: ^[A-Z].*$">
+                    <textarea id="regex-text" class="form-control mb-2" rows="3" placeholder="Texto de prueba..."></textarea>
+                    <div id="regex-output" class="result-box p-2 small">Escribe una expresión.</div>
+                </div>
+
+                <div class="tool-card" id="tool-meta">
+                    <div class="icon-box cyan"><i class="fa-solid fa-globe"></i></div>
+                    <h3 class="h4 fw-bold">Meta Tags</h3>
+                    <p class="text-muted small">Genera etiquetas SEO básicas para una página web.</p>
+                    <input id="meta-title" class="form-control mb-2" placeholder="Título">
+                    <input id="meta-desc" class="form-control mb-2" placeholder="Descripción">
+                    <input id="meta-url" class="form-control mb-2" placeholder="https://ejemplo.com/">
+                    <button class="btn btn-ams w-100" id="btn-meta">Generar código</button>
+                    <textarea id="meta-output" class="form-control mt-2" rows="5" readonly></textarea>
+                    <button class="btn btn-sm btn-link text-info w-100" id="btn-meta-copy">Copiar</button>
+                </div>
+
+                <div class="tool-card" id="tool-favicon">
+                    <div class="icon-box purple"><i class="fa-solid fa-icons"></i></div>
+                    <h3 class="h4 fw-bold">Generador Favicon</h3>
+                    <p class="text-muted small">Convierte una imagen cuadrada en un favicon PNG.</p>
+                    <label class="drop-zone" id="dz-favicon"><i class="fa-solid fa-image text-info"></i><div class="small fw-bold mt-1">Seleccionar imagen</div><input type="file" id="inp-favicon" accept="image/*"></label>
+                    <div id="favicon-preview" class="text-center mt-2" style="display:none"></div>
+                    <button class="btn btn-ams w-100 mt-2" id="btn-favicon" disabled>Generar favicon</button>
+                </div>
+
+                <div class="tool-card" id="tool-csv">
+                    <div class="icon-box green"><i class="fa-solid fa-table"></i></div>
+                    <h3 class="h4 fw-bold">CSV → JSON</h3>
+                    <p class="text-muted small">Convierte CSV simple con encabezados a JSON.</p>
+                    <textarea id="csv-input" class="form-control mb-2" rows="5" placeholder="nombre,edad,ciudad&#10;Diego,28,Bogotá"></textarea>
+                    <button class="btn btn-ams w-100" id="btn-csv">Convertir a JSON</button>
+                    <textarea id="csv-output" class="form-control mt-2" rows="5" readonly></textarea>
+                    <button class="btn btn-sm btn-link text-info w-100" id="btn-csv-copy">Copiar</button>
+                </div>
+            </div>
+
     </main>
 
     <!-- FOOTER PROMOCIONAL & COPYRIGHT -->
@@ -1122,6 +1250,82 @@
             });
         }
 
+
+        // ========================================================
+        // HERRAMIENTAS AMS — utilidades adicionales
+        // ========================================================
+        const $ = id => document.getElementById(id);
+        const toast = (message, type='ok') => {
+            let el=$('ams-toast');
+            if(!el){ el=document.createElement('div'); el.id='ams-toast'; el.className='ams-toast'; document.body.appendChild(el); }
+            el.textContent=message; el.className='ams-toast show '+type;
+            clearTimeout(window.__amsToast); window.__amsToast=setTimeout(()=>el.className='ams-toast',2600);
+        };
+        const copyText = async value => {
+            try { await navigator.clipboard.writeText(value); toast('Copiado al portapapeles'); }
+            catch { toast('No se pudo copiar automáticamente','error'); }
+        };
+        const escapeHtml = s => String(s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]));
+
+        // Redimensionador
+        let resizeFile=null, resizeImg=null;
+        $('inp-resize')?.addEventListener('change', e => {
+            resizeFile=e.target.files[0]; if(!resizeFile)return;
+            resizeImg=new Image();
+            resizeImg.onload=()=>{ $('resize-w').value=resizeImg.naturalWidth; $('resize-h').value=resizeImg.naturalHeight; $('resize-workspace').style.display='block'; };
+            resizeImg.src=URL.createObjectURL(resizeFile);
+        });
+        $('resize-w')?.addEventListener('input',()=>{if($('resize-lock').checked&&resizeImg){$('resize-h').value=Math.round($('resize-w').value*resizeImg.naturalHeight/resizeImg.naturalWidth)}});
+        $('resize-h')?.addEventListener('input',()=>{if($('resize-lock').checked&&resizeImg){$('resize-w').value=Math.round($('resize-h').value*resizeImg.naturalWidth/resizeImg.naturalHeight)}});
+        $('btn-resize')?.addEventListener('click',()=>{
+            if(!resizeImg)return;
+            const w=Math.max(1,Number($('resize-w').value)),h=Math.max(1,Number($('resize-h').value)),canvas=document.createElement('canvas');
+            canvas.width=w;canvas.height=h;canvas.getContext('2d').drawImage(resizeImg,0,0,w,h);
+            const mime=$('resize-format').value, ext=mime==='image/png'?'.png':mime==='image/jpeg'?'.jpg':'.webp';
+            canvas.toBlob(b=>{if(b)downloadFile(b,(resizeFile.name.replace(/\.[^.]+$/,'')+'_AMS'+ext),mime);else toast('Formato no soportado','error')},mime,.9);
+        });
+
+        // Base64 Unicode-safe
+        $('btn-b64-encode')?.addEventListener('click',()=>{try{$('base64-output').value=btoa(unescape(encodeURIComponent($('base64-input').value)))}catch{toast('No se pudo codificar','error')}});
+        $('btn-b64-decode')?.addEventListener('click',()=>{try{$('base64-output').value=decodeURIComponent(escape(atob($('base64-input').value.trim())))}catch{toast('Base64 inválido','error')}});
+        $('btn-b64-copy')?.addEventListener('click',()=>copyText($('base64-output').value));
+
+        // UUID
+        $('btn-uuid')?.addEventListener('click',()=>{$('uuid-output').textContent=crypto.randomUUID?crypto.randomUUID():([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g,c=>(c^crypto.getRandomValues(new Uint8Array(1))[0]&15>>c/4).toString(16))});
+        $('btn-uuid-copy')?.addEventListener('click',()=>copyText($('uuid-output').textContent));
+
+        // Timestamp
+        const updateTimestampNow=()=>{const d=new Date();$('timestamp-input').value=d.toISOString().slice(0,16).replace('T',' ');$('timestamp-output').innerHTML='<strong>Unix:</strong> '+Math.floor(d.getTime()/1000)+'<br><strong>ISO:</strong> '+d.toISOString()};
+        $('btn-ts-now')?.addEventListener('click',updateTimestampNow);
+        $('btn-ts-date')?.addEventListener('click',()=>{const raw=$('timestamp-input').value.trim(), n=Number(raw),d=Number.isFinite(n)&&raw!==''?new Date(raw.length<=10?n*1000:n):new Date(raw);if(isNaN(d.getTime())){toast('Fecha inválida','error');return}$('timestamp-output').innerHTML='<strong>Unix:</strong> '+Math.floor(d.getTime()/1000)+'<br><strong>ISO:</strong> '+d.toISOString()});
+
+        // Colores
+        const colorInfo=hex=>{hex=hex.replace('#','');if(hex.length!==6)return null;const r=parseInt(hex.slice(0,2),16),g=parseInt(hex.slice(2,4),16),b=parseInt(hex.slice(4,6),16);const max=Math.max(r,g,b)/255,min=Math.min(r,g,b)/255,l=(max+min)/2,d=max-min;let h=0,s=0;if(d){s=l>.5?d/(2-max-min):d/(max+min);switch(max){case r/255:h=((g-b)/255/d)%6;break;case g/255:h=(b/255-r/255)/d+2;break;default:h=(r/255-g/255)/d+4}h=Math.round(h*60);if(h<0)h+=360}s=Math.round(s*100);l=Math.round(l*100)}return {r,g,b,h,s,l}};
+        const refreshColor=()=>{let h=$('color-hex').value.trim();if(!/^#[0-9a-f]{6}$/i.test(h))return;const x=colorInfo(h);$('color-picker').value=h;$('color-values').innerHTML='RGB: '+x.r+', '+x.g+', '+x.b+'<br>HSL: '+x.h+'°, '+x.s+'%, '+x.l+'%'};
+        $('color-picker')?.addEventListener('input',e=>{$('color-hex').value=e.target.value.toUpperCase();refreshColor()});$('color-hex')?.addEventListener('input',refreshColor);$('btn-copy-color')?.addEventListener('click',()=>copyText($('color-hex').value));refreshColor();
+
+        // Unidades
+        const unitCalc=()=>{const v=Number($('unit-value').value),t=$('unit-type').value;const map={'km-mi':v*.621371,'mi-km':v*1.609344,'kg-lb':v*2.2046226218,'lb-kg':v*.45359237,'c-f':v*9/5+32,'f-c':(v-32)*5/9};$('unit-output').textContent=Number.isFinite(v)?map[t].toLocaleString('es-CO',{maximumFractionDigits:6}):'—'};$('unit-value')?.addEventListener('input',unitCalc);$('unit-type')?.addEventListener('change',unitCalc);unitCalc();
+
+        // Contador
+        $('text-counter-input')?.addEventListener('input',e=>{const v=e.target.value;const words=v.trim()?v.trim().split(/\s+/).length:0;const lines=v?v.split(/\r?\n/).length:0;$('text-counter-output').textContent=v.length+' caracteres · '+words+' palabras · '+lines+' líneas · '+new Blob([v]).size+' bytes'});
+
+        // Regex
+        const testRegex=()=>{const p=$('regex-pattern').value,t=$('regex-text').value;if(!p){$('regex-output').textContent='Escribe una expresión.';return}try{const r=new RegExp(p,'g'),matches=[...t.matchAll(r)];$('regex-output').innerHTML=matches.length?'<strong>'+matches.length+' coincidencia(s)</strong><br>'+matches.slice(0,20).map(m=>'<code>'+escapeHtml(m[0])+'</code>').join(' · '):'Sin coincidencias.'}catch(e){$('regex-output').textContent='Regex inválida: '+e.message}};$('regex-pattern')?.addEventListener('input',testRegex);$('regex-text')?.addEventListener('input',testRegex);
+
+        // Meta tags
+        $('btn-meta')?.addEventListener('click',()=>{const title=$('meta-title').value.trim(),desc=$('meta-desc').value.trim(),url=$('meta-url').value.trim();$('meta-output').value='<title>'+title+'</title>\n<meta name="description" content="'+desc.replace(/"/g,'&quot;')+'">\n<meta property="og:title" content="'+title.replace(/"/g,'&quot;')+'">\n<meta property="og:description" content="'+desc.replace(/"/g,'&quot;')+'">\n<meta property="og:url" content="'+url.replace(/"/g,'&quot;')+'">';});$('btn-meta-copy')?.addEventListener('click',()=>copyText($('meta-output').value));
+
+        // Favicon
+        let faviconFile=null,faviconImg=null;$('inp-favicon')?.addEventListener('change',e=>{faviconFile=e.target.files[0];if(!faviconFile)return;faviconImg=new Image();faviconImg.onload=()=>{$('favicon-preview').style.display='block';$('favicon-preview').innerHTML='<img src="'+faviconImg.src+'" alt="Vista previa" style="width:72px;height:72px;object-fit:cover;border-radius:14px">';$('btn-favicon').disabled=false};faviconImg.src=URL.createObjectURL(faviconFile)});$('btn-favicon')?.addEventListener('click',()=>{if(!faviconImg)return;const canvas=document.createElement('canvas');canvas.width=512;canvas.height=512;canvas.getContext('2d').drawImage(faviconImg,0,0,512,512);canvas.toBlob(b=>downloadFile(b,'AMS_Favicon_512.png','image/png'),'image/png')});
+
+        // CSV simple con comillas básicas
+        const parseCSVLine=line=>{const out=[];let cur='',quoted=false;for(let i=0;i<line.length;i++){const ch=line[i];if(ch==='"'&&line[i+1]==='"'){cur+='"';i++}else if(ch==='"'){quoted=!quoted}else if(ch===','&&!quoted){out.push(cur);cur=''}else cur+=ch}out.push(cur);return out};
+        $('btn-csv')?.addEventListener('click',()=>{const lines=$('csv-input').value.trim().split(/\r?\n/).filter(Boolean);if(lines.length<2){toast('Necesitas encabezados y al menos una fila','error');return}const headers=parseCSVLine(lines[0]);const data=lines.slice(1).map(line=>{const cells=parseCSVLine(line);return Object.fromEntries(headers.map((h,i)=>[h.trim(),(cells[i]??'').trim()]))});$('csv-output').value=JSON.stringify(data,null,2)});$('btn-csv-copy')?.addEventListener('click',()=>copyText($('csv-output').value));
+
+        // Estados globales de botones
+        document.querySelectorAll('button').forEach(btn=>btn.addEventListener('click',()=>{if(btn.id.startsWith('btn-')&&!btn.disabled){btn.classList.add('button-pulse');setTimeout(()=>btn.classList.remove('button-pulse'),350)}}));
+
     </script>
-</body>
+</body
 </html>
