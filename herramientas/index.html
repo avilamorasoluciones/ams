@@ -556,6 +556,68 @@
         background: rgba(241,245,249,.82) !important;
         border-top-color: rgba(15,23,42,.08);
     }
+    /* Controles AMS: una sola superficie para todas las herramientas. */
+    :root {
+        --field-bg: rgba(15,23,42,.78);
+        --field-text: #f8fafc;
+        --field-border: rgba(255,255,255,.12);
+        --field-placeholder: #94a3b8;
+        --field-focus: #818cf8;
+    }
+    .form-control,
+    .form-select,
+    textarea.form-control,
+    input.form-control,
+    input.form-control[type="text"],
+    input.form-control[type="search"],
+    input.form-control[type="number"] {
+        min-height: 42px;
+        width: 100%;
+        background: var(--field-bg) !important;
+        color: var(--field-text) !important;
+        border: 1px solid var(--field-border) !important;
+        border-radius: 12px !important;
+        padding: 10px 12px;
+        font: inherit;
+        font-size: .9rem;
+        line-height: 1.35;
+        box-shadow: none !important;
+        opacity: 1;
+    }
+    textarea.form-control { min-height: 92px; resize: vertical; }
+    .form-control::placeholder,
+    textarea.form-control::placeholder { color: var(--field-placeholder) !important; opacity: 1 !important; }
+    .form-control:focus,
+    .form-select:focus,
+    textarea.form-control:focus {
+        background: var(--field-bg) !important;
+        color: var(--field-text) !important;
+        border-color: var(--field-focus) !important;
+        outline: 0 !important;
+        box-shadow: 0 0 0 3px rgba(99,102,241,.14) !important;
+    }
+    .form-select { color-scheme: dark; }
+    .form-select option { background: #0f172a; color: #f8fafc; }
+    .form-control:disabled,
+    .form-select:disabled,
+    textarea.form-control:disabled { opacity: .58; cursor: not-allowed; }
+    #json-output { background: var(--field-bg) !important; color: #67e8f9 !important; }
+    body.light-theme {
+        --field-bg: #fff;
+        --field-text: #172033;
+        --field-border: rgba(15,23,42,.13);
+        --field-placeholder: #64748b;
+        --field-focus: #6366f1;
+    }
+    body.light-theme .form-select { color-scheme: light; }
+    body.light-theme .form-select option { background: #fff; color: #172033; }
+    body.light-theme #json-output { color: #0f766e !important; }
+    body.light-theme .form-control:focus,
+    body.light-theme .form-select:focus,
+    body.light-theme textarea.form-control:focus { background: #fff !important; color: #172033 !important; }
+    @media (max-width: 575px) {
+        .form-control, .form-select, textarea.form-control { min-height: 44px; }
+    }
 
     </style>
   <link rel="canonical" href="https://avilamorasoluciones.com/herramientas/" />
@@ -1956,16 +2018,14 @@
 
 
 
-        // Instalación PWA AMS: Android/Chrome/Edge + guía específica para iOS/iPadOS
-        (function(){
+                (function(){
             const banner=document.getElementById('ams-install'), btn=document.getElementById('ams-install-btn'), close=document.getElementById('ams-install-close');
             if(!banner||!btn)return;
             let deferredPrompt=null;
             const dismissedKey='ams-install-dismissed-v1';
             const isStandalone=()=>window.matchMedia('(display-mode: standalone)').matches||window.navigator.standalone===true;
             const isIOS=/iphone|ipad|ipod/i.test(navigator.userAgent)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);
-            const isAndroid=/android/i.test(navigator.userAgent);
-            const canShow=()=>!isStandalone()&&!sessionStorage.getItem(dismissedKey);
+                        const canShow=()=>!isStandalone()&&!sessionStorage.getItem(dismissedKey);
             function show(title,text,action){
                 document.getElementById('ams-install-title').textContent=title;
                 document.getElementById('ams-install-text').innerHTML=text;
@@ -1990,12 +2050,10 @@
                 }
             });
             window.addEventListener('appinstalled',()=>{sessionStorage.setItem(dismissedKey,'1');hide();deferredPrompt=null;});
-            // iOS no dispara beforeinstallprompt: mostramos guía después de que la página esté lista.
-            if(isIOS&&canShow()) setTimeout(()=>show('Añade Herramientas AMS','Instálala desde <strong>Compartir → Añadir a pantalla de inicio</strong>.','Cómo instalar'),1600);
+                        if(isIOS&&canShow()) setTimeout(()=>show('Añade Herramientas AMS','Instálala desde <strong>Compartir → Añadir a pantalla de inicio</strong>.','Cómo instalar'),1600);
         })();
 
-        // Estados globales de botones
-        document.querySelectorAll('button').forEach(btn=>btn.addEventListener('click',()=>{if(btn.id.startsWith('btn-')&&!btn.disabled){btn.classList.add('button-pulse');setTimeout(()=>btn.classList.remove('button-pulse'),350)}}));
+                document.querySelectorAll('button').forEach(btn=>btn.addEventListener('click',()=>{if(btn.id.startsWith('btn-')&&!btn.disabled){btn.classList.add('button-pulse');setTimeout(()=>btn.classList.remove('button-pulse'),350)}}));
 
     </script>
 </body>
