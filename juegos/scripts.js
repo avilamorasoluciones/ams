@@ -608,7 +608,7 @@ const Theme = (() => {
   function apply(mode) {
     const isLight = mode === "light";
     document.body.classList.toggle("light-theme", isLight);
-    updateIcon(isLight ? "light" : "dark");
+    updateIcon();
     updateMetaTheme();
   }
 
@@ -628,6 +628,228 @@ const Theme = (() => {
   return { init, toggle, apply };
 })();
 window.Theme = Theme;
+
+/********************
+ * MÚSICA AMBIENTAL
+ ********************/
+const PartyMusic = (() => {
+  let ctx = null;
+  let master = null;
+  let timer = null;
+  let enabled = false;
+  const chords = [
+    [196.00, 246.94, 293.66],
+    [174.61, 220.00, 261.63],
+    [146.83, 196.00, 246.94],
+    [164.81, 207.65, 246.94]
+  ];
+
+  function playChord(notes) {
+    if (!ctx || !master || !enabled) return;
+    const now = ctx.currentTime;
+    notes.forEach((frequency, index) => {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      const filter = ctx.createBiquadFilter();
+      osc.type = index === 0 ? "sine" : "triangle";
+      osc.frequency.setValueAtTime(frequency, now);
+      filter.type = "lowpass";
+      filter.frequency.setValueAtTime(900, now);
+      gain.gain.setValueAtTime(0.0001, now);
+      gain.gain.exponentialRampToValueAtTime(0.028 / (index + 1), now + 0.45);
+      gain.gain.exponentialRampToValueAtTime(0.0001, now + 3.4);
+      osc.connect(filter);
+      filter.connect(gain);
+      gain.connect(master);
+      osc.start(now);
+      osc.stop(now + 3.6);
+    });
+  }
+
+  async function start() {
+    try {
+      if (!ctx) {
+        ctx = new (window.AudioContext || window.webkitAudioContext)();
+        master = ctx.createGain();
+        master.gain.value = 0.42;
+        master.connect(ctx.destination);
+      }
+      if (ctx.state === "suspended") await ctx.resume();
+      enabled = true;
+      playChord(chords[0]);
+      let step = 1;
+      clearInterval(timer);
+      timer = setInterval(() => {
+        playChord(chords[step % chords.length]);
+        step++;
+      }, 3000);
+      updateButton();
+    } catch {
+      enabled = false;
+      updateButton();
+    }
+  }
+
+  function stop() {
+    enabled = false;
+    clearInterval(timer);
+    timer = null;
+    if (master && ctx) {
+      try {
+        master.gain.cancelScheduledValues(ctx.currentTime);
+        master.gain.setTargetAtTime(0.0001, ctx.currentTime, 0.08);
+      } catch {}
+    }
+    updateButton();
+  }
+
+  function toggle() {
+    if (enabled) stop();
+    else start();
+  }
+
+  function updateButton() {
+    const button = document.getElementById("musicToggle");
+    if (!button) return;
+    button.classList.toggle("is-on", enabled);
+    button.setAttribute("aria-pressed", String(enabled));
+    button.setAttribute("title", enabled ? "Apagar música ambiental" : "Activar música ambiental");
+    const small = button.querySelector("small");
+    if (small) small.textContent = enabled ? "Encendida" : "Ambiente";
+  }
+
+  function init() {
+    document.getElementById("musicToggle")?.addEventListener("click", toggle);
+    updateButton();
+  }
+
+  return { init, start, stop, toggle };
+})();
+window.PartyMusic = PartyMusic;
+
+/********************
+ * SELECTOR DE JUEGOS
+ ********************/
+const GamesMenu = (() => {
+  let slides = [];
+  let activeIndex = 0;
+
+  function visibleSlides() {
+    return slides.filter(slide => !slide.hidden);
+  }
+
+  function updateDots(list) {
+    const dots = document.getElementById("gameDots");
+    if (!dots) return;
+    dots.innerHTML = list.map((slide, index) =>
+      '<button type="button" class="game-dot" data-dot-index="' + index + '" aria-label="Ir a ' +
+      (slide.querySelector("h3")?.textContent || "juego") + '" aria-current="' + (index === activeIndex ? "true" : "false") + '"></button>'
+    ).join("");
+    dots.querySelectorAll("[data-dot-index]").forEach(dot => {
+      dot.addEventListener("click", () => goTo(Number(dot.dataset.dotIndex), true));
+    });
+  }
+
+  function goTo(index, smooth = true) {
+    const list = visibleSlides();
+    if (!list.length) return;
+    activeIndex = Math.max(0, Math.min(index, list.length - 1));
+    list[activeIndex].scrollIntoView({
+      behavior: smooth ? "smooth" : "auto",
+      block: "nearest",
+      inline: "center"
+    });
+    updateControls(list);
+  }
+
+  function updateControls(list = visibleSlides()) {
+    const count = document.getElementById("gameSelectorCount");
+    if (count) count.textContent = list.length + " juego" + (list.length === 1 ? "" : "s");
+    const prev = document.getElementById("gamePrev");
+    const next = document.getElementById("gameNext");
+    if (prev) prev.disabled = list.length <= 1 || activeIndex <= 0;
+    if (next) next.disabled = list.length <= 1 || activeIndex >= list.length - 1;
+    updateDots(list);
+  }
+
+  function syncActive() {
+    const list = visibleSlides();
+    const carousel = document.getElementById("gameCarousel");
+    if (!carousel || !list.length) return;
+    const center = carousel.scrollLeft + carousel.clientWidth / 2;
+    let best = 0;
+    let distance = Infinity;
+    list.forEach((slide, index) => {
+      const slideCenter = slide.offsetLeft + slide.offsetWidth / 2;
+      const d = Math.abs(slideCenter - center);
+      if (d < distance) {
+        distance = d;
+        best = index;
+      }
+    });
+    activeIndex = best;
+    updateControls(list);
+  }
+
+  function filter() {
+    const input = document.getElementById("gameSearch");
+    const query = (input?.value || "").trim().toLowerCase();
+    slides.forEach(slide => {
+      const haystack = ((slide.dataset.search || "") + " " + (slide.querySelector("h3")?.textContent || "")).toLowerCase();
+      slide.hidden = Boolean(query && !haystack.includes(query));
+    });
+    activeIndex = 0;
+    const list = visibleSlides();
+    if (list.length) list[0].scrollIntoView({ behavior: "smooth", block: "nearest", inline: "center" });
+    updateControls(list);
+    const clear = document.getElementById("gameSearchClear");
+    if (clear) clear.classList.toggle("is-visible", Boolean(query));
+    const empty = document.getElementById("gameSearchEmpty");
+    if (empty) empty.hidden = list.length !== 0;
+  }
+
+  function bind() {
+    const carousel = document.getElementById("gameCarousel");
+    if (!carousel) return;
+    slides = [...carousel.querySelectorAll(".game-slide")];
+
+    document.getElementById("gamePrev")?.addEventListener("click", () => goTo(activeIndex - 1));
+    document.getElementById("gameNext")?.addEventListener("click", () => goTo(activeIndex + 1));
+
+    const search = document.getElementById("gameSearch");
+    search?.addEventListener("input", filter);
+    document.getElementById("gameSearchClear")?.addEventListener("click", () => {
+      if (search) search.value = "";
+      filter();
+      search?.focus();
+    });
+
+    carousel.addEventListener("scroll", () => {
+      window.clearTimeout(carousel._amsScrollTimer);
+      carousel._amsScrollTimer = window.setTimeout(syncActive, 90);
+    }, { passive: true });
+
+    carousel.addEventListener("keydown", event => {
+      if (event.key === "ArrowRight") {
+        event.preventDefault();
+        goTo(activeIndex + 1);
+      }
+      if (event.key === "ArrowLeft") {
+        event.preventDefault();
+        goTo(activeIndex - 1);
+      }
+    });
+
+    updateControls();
+  }
+
+  function init() {
+    bind();
+  }
+
+  return { init, goTo, filter };
+})();
+window.GamesMenu = GamesMenu;
 
 /********************
  * APP GLOBAL
