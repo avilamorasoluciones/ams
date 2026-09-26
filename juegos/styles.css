@@ -4258,3 +4258,26 @@ input[type="search"] {
   scroll-margin: 0 !important;
   -webkit-tap-highlight-color: transparent;
 }
+
+/* PWA banner must remain above game/tool modals so it is actually visible. */
+.pwa-install-banner {
+  z-index: 5000 !important;
+}
+
+/* Prevent the page from introducing a smooth scroll while Android is opening
+   the keyboard. */
+html:focus-within {
+  scroll-behavior: auto;
+}
+
+/* The dice result is an interactive visual, not a static image. */
+.dice-stage {
+  min-height: 210px;
+  display: grid;
+  place-items: center;
+  perspective: 900px;
+}
+.dice-cube {
+  width: 92px !important;
+  height: 92px !important;
+}
