@@ -3873,3 +3873,46 @@ body.theme-tabu {
 @media (prefers-reduced-motion: reduce) {
   .game-page-hero-icon { animation: none; }
 }
+
+/* Animación distintiva y sutil por experiencia */
+body.theme-impostor .game-page-hero-icon { animation: gameDetectivePulse 2.8s ease-in-out infinite; }
+body.theme-bomba .game-page-hero-icon { animation: gameBombPulse 1.8s ease-in-out infinite; }
+body.theme-nosconocemos .game-page-hero-icon { animation: gameWarmFloat 3.2s ease-in-out infinite; }
+body.theme-rompehielo .game-page-hero-icon { animation: gameIceDrift 3.6s ease-in-out infinite; }
+body.theme-tabu .game-page-hero-icon { animation: gameTabuGlow 2.6s ease-in-out infinite; }
+body.theme-verdadreto .game-page-hero-icon { animation: gamePinkPulse 2.4s ease-in-out infinite; }
+body.theme-yonunca .game-page-hero-icon { animation: gameGreenFloat 3.4s ease-in-out infinite; }
+
+@keyframes gameDetectivePulse {
+  0%,100% { transform: scale(1); box-shadow: 0 0 28px color-mix(in srgb,var(--primary) 14%,transparent); }
+  50% { transform: scale(1.035); box-shadow: 0 0 44px color-mix(in srgb,var(--primary) 28%,transparent); }
+}
+@keyframes gameBombPulse {
+  0%,100% { transform: scale(1); }
+  42% { transform: scale(1.035); }
+  52% { transform: scale(.985); }
+  62% { transform: scale(1.025); }
+}
+@keyframes gameWarmFloat {
+  0%,100% { transform: translateY(0) rotate(-1deg); }
+  50% { transform: translateY(-5px) rotate(1deg); }
+}
+@keyframes gameIceDrift {
+  0%,100% { transform: translateX(0) rotate(0); }
+  50% { transform: translateX(4px) rotate(-1.5deg); }
+}
+@keyframes gameTabuGlow {
+  0%,100% { transform: translateY(0); box-shadow: 0 0 28px color-mix(in srgb,var(--primary) 12%,transparent); }
+  50% { transform: translateY(-3px); box-shadow: 0 0 48px color-mix(in srgb,var(--primary) 27%,transparent); }
+}
+@keyframes gamePinkPulse {
+  0%,100% { transform: scale(1); }
+  50% { transform: scale(1.025); }
+}
+@keyframes gameGreenFloat {
+  0%,100% { transform: translateY(0); }
+  50% { transform: translateY(-5px); }
+}
+@media (prefers-reduced-motion: reduce) {
+  body[class*="theme-"] .game-page-hero-icon { animation: none; }
+}
