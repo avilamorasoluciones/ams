@@ -746,7 +746,7 @@ footer { background: #050811; border-top: 1px solid rgba(255,255,255,0.10); padd
 }
 
 /* ===== Responsive ===== */
-@media (max-width: 1024px) {
+@media (max-width: 1250px) {
   :root { --navH: 76px; }
   .nav-links, .nav-cta { display: none; }
   .menu-btn { display: inline-grid; place-items: center; }
@@ -1008,7 +1008,7 @@ body.light-theme .section-inverted .section-sub {
 }
 
 /* Ocultar botones y links en celulares para que solo salga la "hamburguesa" */
-@media (max-width: 1024px) {
+@media (max-width: 1250px) {
     .nav-links, .nav-cta {
         display: none !important; 
     }
@@ -1070,7 +1070,7 @@ body.light-theme .section-inverted .section-sub {
 
 
 /* ===== Menú móvil AMS · ajuste responsive ===== */
-@media (max-width: 1024px) {
+@media (max-width: 1250px) {
   .mobile-panel {
     top: calc(var(--navH) + var(--safe-top) + 8px);
     max-height: calc(100dvh - var(--navH) - var(--safe-top) - 24px);
