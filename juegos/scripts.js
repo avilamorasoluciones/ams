@@ -434,9 +434,9 @@ const Nav = (() => {
       ["index.html", "Menú principal", "home"],
       ["impostor.html", "El Impostor", "user"],
       ["bomba.html", "La Bomba", "bomb"],
-      ["nosconocemos.html", "¿Nos Conocemos?", "users"],
-      ["rompehielo.html", "Rompehielo", "message"],
-      ["tabu.html", "Tabú", "forbidden"],
+      ["nosconocemos.html", "¿Nos Conocemos?", "user"],
+      ["rompehielo.html", "Rompehielo", "question"],
+      ["tabu.html", "Tabú", "close"],
       ["verdadreto.html", "Verdad o Reto", "flame"],
       ["yonunca.html", "Yo Nunca", "question"]
     ];
