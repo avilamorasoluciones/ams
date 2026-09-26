@@ -164,6 +164,9 @@ const PWA = (() => {
     if (mode === "ios") {
       copy.textContent = "En Safari: Compartir → Añadir a pantalla de inicio.";
       installButton.textContent = "Cómo instalar";
+    } else if (mode === "manual") {
+      copy.textContent = "Desde el menú del navegador puedes instalar Juegos Avila Mora.";
+      installButton.textContent = "Cómo instalar";
     } else {
       copy.textContent = "Ten tus juegos siempre a mano.";
       installButton.textContent = "Instalar";
@@ -199,7 +202,15 @@ const PWA = (() => {
   }
 
   function handleInstallClick() {
-    triggerInstall();
+    if (deferredPrompt) {
+      triggerInstall();
+      return;
+    }
+    if (isIOS()) {
+      showBanner("ios");
+      return;
+    }
+    alert("Para instalar Juegos Avila Mora, abre el menú del navegador y busca «Instalar aplicación» o «Añadir a pantalla de inicio».");
   }
 
   function init() {
@@ -220,6 +231,10 @@ const PWA = (() => {
       hideBanner();
     } else if (isIOS()) {
       setTimeout(() => showBanner("ios"), 1500);
+    } else {
+      setTimeout(() => {
+        if (!deferredPrompt) showBanner("manual");
+      }, 2800);
     }
 
     if ("serviceWorker" in navigator && (location.protocol === "https:" || location.hostname === "localhost" || location.hostname === "127.0.0.1")) {
