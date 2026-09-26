@@ -2022,6 +2022,7 @@
             const banner=document.getElementById('ams-install'), btn=document.getElementById('ams-install-btn'), close=document.getElementById('ams-install-close');
             if(!banner||!btn)return;
             let deferredPrompt=null;
+            let manualHelp=false;
             const dismissedKey='ams-install-dismissed-v1';
             const isStandalone=()=>window.matchMedia('(display-mode: standalone)').matches||window.navigator.standalone===true;
             const isIOS=/iphone|ipad|ipod/i.test(navigator.userAgent)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);
@@ -2052,7 +2053,7 @@
                     btn.onclick=function(){sessionStorage.setItem(dismissedKey,'1');hide();};
                 }
             });
-            window.addEventListener('appinstalled',()=>{sessionStorage.setItem(dismissedKey,'1');hide();deferredPrompt=null;});
+            window.addEventListener('appinstalled',()=>{sessionStorage.setItem(dismissedKey,'1');hide();deferredPrompt=null;manualHelp=false;});
                         if(isIOS&&canShow()) setTimeout(()=>show('Añade Herramientas AMS','Instálala desde <strong>Compartir → Añadir a pantalla de inicio</strong>.','Cómo instalar'),1600);
         })();
 
