@@ -600,9 +600,10 @@ const Theme = (() => {
     meta.setAttribute("content", isLight ? "#f8fafc" : "#070A12");
   }
 
-  function updateIcon(mode) {
+  function updateIcon() {
     const btn = document.getElementById("themeToggleBtn");
-    if (btn) btn.textContent = mode === "light" ? "☀️" : "🌓";
+    if (!btn) return;
+    btn.innerHTML = '<img src="tool-theme.svg" alt="">';
   }
 
   function apply(mode) {
@@ -869,6 +870,8 @@ const App = (() => {
     Theme.init();
     Nav.init();
     Tools.init();
+    PartyMusic.init();
+    GamesMenu.init();
     initExternalLinks();
   }
 
