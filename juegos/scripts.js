@@ -247,6 +247,44 @@ const PWA = (() => {
 window.PWA = PWA;
 
 /********************
+ * SESIÓN DE JUEGO
+ * Guarda el estado local para recuperar partidas tras recarga,
+ * botón atrás o cambio de aplicación.
+ ********************/
+const GameSession = (() => {
+  const PREFIX = "ams_game_session_v2_";
+  const MAX_AGE = 24 * 60 * 60 * 1000;
+
+  function save(game, state) {
+    try {
+      localStorage.setItem(PREFIX + game, JSON.stringify({ ...state, savedAt: Date.now() }));
+    } catch {}
+  }
+
+  function load(game) {
+    try {
+      const raw = localStorage.getItem(PREFIX + game);
+      if (!raw) return null;
+      const data = JSON.parse(raw);
+      if (!data || Date.now() - Number(data.savedAt || 0) > MAX_AGE) {
+        localStorage.removeItem(PREFIX + game);
+        return null;
+      }
+      return data;
+    } catch {
+      return null;
+    }
+  }
+
+  function clear(game) {
+    try { localStorage.removeItem(PREFIX + game); } catch {}
+  }
+
+  return { save, load, clear };
+})();
+window.GameSession = GameSession;
+
+/********************
  * TEMA CLARO / OSCURO
  ********************/
 const Theme = (() => {
