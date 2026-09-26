@@ -1,6 +1,6 @@
 {
-  "name": "Juegos Avila Mora",
-  "short_name": "Juegos",
+  "name": "Avila Mora Soluciones - Juegos",
+  "short_name": "Juegos AMS",
   "description": "Colección de juegos para familia y amigos, directa, divertida y sin registro.",
   "start_url": "./index.html",
   "scope": "./",
