@@ -1182,3 +1182,26 @@ body.light-theme .mobile-shortcut {
   border-color: rgba(15,23,42,.10);
   background: rgba(15,23,42,.035);
 }
+
+/* ===== Controles flotantes · no invadir el contenido al llegar al final ===== */
+@media (max-width: 740px) {
+  body.page-end-mobile .fab,
+  body.page-end-mobile .to-top {
+    opacity: .18 !important;
+    filter: saturate(.72);
+    transform: translateY(4px) scale(.94);
+  }
+
+  body.page-end-mobile .fab-wa {
+    opacity: .22 !important;
+  }
+
+  body.page-end-mobile .fab:active,
+  body.page-end-mobile .to-top:active,
+  body.page-end-mobile .fab:focus-visible,
+  body.page-end-mobile .to-top:focus-visible {
+    opacity: 1 !important;
+    filter: none;
+    transform: translateY(0) scale(1);
+  }
+}
