@@ -282,6 +282,7 @@ const TabuGame = (() => {
     $("t-btnRestart").onclick = () => { clearInterval(timerId); window.GameSession?.clear("tabu"); changeScreen("t-scr-lobby"); };
     
     renderPlayers();
+    window.GameSession?.register(saveSession);
     const saved = window.GameSession?.load("tabu");
     if (saved && saved.screen !== "t-scr-lobby" && Array.isArray(saved.teams) && saved.teams.length) {
       players = Array.isArray(saved.players) ? saved.players : players;
