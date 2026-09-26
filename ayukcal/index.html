@@ -26,6 +26,62 @@
 
   <style>
     /* =========================================
+       LOADER DE ENTRADA AYUKCAL — AGUACATE
+       ========================================= */
+    .ayukcal-entry-loader{
+      position:fixed;
+      inset:0;
+      z-index:99999;
+      display:grid;
+      place-items:center;
+      background:
+        radial-gradient(circle at 50% 42%, rgba(74,222,128,.10), transparent 28%),
+        radial-gradient(circle at 50% 50%, rgba(163,230,53,.07), transparent 48%),
+        var(--bg);
+      opacity:1;
+      visibility:visible;
+      transition:opacity .42s ease,visibility .42s ease;
+    }
+    .ayukcal-entry-loader.is-hidden{opacity:0;visibility:hidden;pointer-events:none}
+    .ayukcal-loader-art{position:relative;width:132px;height:132px;display:grid;place-items:center}
+    .ayukcal-loader-ring{
+      position:absolute;inset:4px;border:2px solid color-mix(in srgb,var(--primary) 22%,transparent);
+      border-top-color:var(--primary);border-right-color:var(--accent);
+      border-radius:50%;animation:ayukcalSpin 1.15s linear infinite;
+    }
+    .ayukcal-loader-glow{
+      position:absolute;width:76px;height:76px;border-radius:50%;
+      background:radial-gradient(circle,rgba(74,222,128,.24),transparent 68%);
+      filter:blur(7px);animation:ayukcalPulse 1.25s ease-in-out infinite;
+    }
+    .ayukcal-avocado-loader{position:relative;width:72px;height:94px;transform:rotate(17deg);animation:ayukcalFloat 1.45s ease-in-out infinite}
+    .ayukcal-avocado-body{
+      position:absolute;inset:3px 8px 5px 5px;
+      border-radius:54% 46% 48% 52% / 44% 45% 55% 56%;
+      background:linear-gradient(145deg,#9bdc43 0%,#4ade80 34%,#2d6a4f 100%);
+      box-shadow:inset 7px 7px 0 rgba(255,255,255,.14),inset -8px -10px 0 rgba(13,72,42,.16),0 10px 24px rgba(45,106,79,.20);
+    }
+    .ayukcal-avocado-body:before{
+      content:"";position:absolute;inset:8px 9px 12px 10px;border-radius:inherit;
+      background:linear-gradient(155deg,rgba(255,255,255,.16),transparent 45%);
+    }
+    .ayukcal-avocado-seed{
+      position:absolute;width:30px;height:34px;left:24px;top:47px;border-radius:50%;
+      background:radial-gradient(circle at 35% 28%,#c98945,#8b552c 62%,#663919);
+      box-shadow:inset 3px 4px 0 rgba(255,255,255,.12),0 5px 10px rgba(73,38,16,.18);
+    }
+    .ayukcal-loader-shine{
+      position:absolute;width:13px;height:30px;left:20px;top:17px;border-radius:50%;
+      background:rgba(255,255,255,.28);transform:rotate(-25deg);filter:blur(.3px);
+    }
+    @keyframes ayukcalSpin{to{transform:rotate(360deg)}}
+    @keyframes ayukcalPulse{0%,100%{transform:scale(.82);opacity:.45}50%{transform:scale(1.08);opacity:.9}}
+    @keyframes ayukcalFloat{0%,100%{transform:translateY(3px) rotate(17deg)}50%{transform:translateY(-7px) rotate(12deg)}}
+    @media(prefers-reduced-motion:reduce){
+      .ayukcal-loader-ring,.ayukcal-loader-glow,.ayukcal-avocado-loader{animation:none}
+    }
+
+    /* =========================================
        VARIABLES Y TEMAS (AGUACATE) 🥑
        ========================================= */
     :root {
@@ -378,6 +434,17 @@
   </script>
 </head>
 <body>
+  <div class="ayukcal-entry-loader" id="ayukcalEntryLoader" role="status" aria-label="Cargando AyuKcal">
+    <div class="ayukcal-loader-art" aria-hidden="true">
+      <div class="ayukcal-loader-ring"></div>
+      <div class="ayukcal-loader-glow"></div>
+      <div class="ayukcal-avocado-loader">
+        <div class="ayukcal-avocado-body"></div>
+        <div class="ayukcal-avocado-seed"></div>
+        <div class="ayukcal-loader-shine"></div>
+      </div>
+    </div>
+  </div>
 
 <script src="db.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -919,6 +986,20 @@
     <p>&copy; <span id="year"></span> <a href="https://avilamorasoluciones.github.io/ams" target="_blank" rel="noopener">Avila Mora Soluciones</a></p>
   </div>
 </footer>
+
+<script>
+  (() => {
+    const loader = document.getElementById("ayukcalEntryLoader");
+    if (!loader) return;
+    const started = performance.now();
+    const hide = () => {
+      const wait = Math.max(0, 720 - (performance.now() - started));
+      setTimeout(() => loader.classList.add("is-hidden"), wait);
+    };
+    if (document.readyState === "complete") hide();
+    else window.addEventListener("load", hide, { once:true });
+  })();
+</script>
 
 <script>
 // =========================================
