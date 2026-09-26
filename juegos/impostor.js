@@ -690,7 +690,47 @@ const ImpostorGame = (() => {
     loadUsedWords();
     renderPlayers();
     bindEvents();
-    changeScreen("i-scr-lobby");
+
+    const saved = window.GameSession?.load("impostor");
+    if (saved && saved.screen !== "i-scr-lobby" && Array.isArray(saved.players) && saved.selectedCard) {
+      players = saved.players;
+      usedWords = Array.isArray(saved.usedWords) ? saved.usedWords : usedWords;
+      roles = Array.isArray(saved.roles) ? saved.roles : [];
+      selectedCard = saved.selectedCard;
+      currentIndex = Number(saved.currentIndex || 0);
+      starterIndex = Number(saved.starterIndex || 0);
+      secondsLeft = Number(saved.secondsLeft || 0);
+      timerRunning = Boolean(saved.timerRunning);
+      lastVoteIndex = Number.isInteger(saved.lastVoteIndex) ? saved.lastVoteIndex : null;
+      renderPlayers();
+
+      const elapsed = Math.max(0, Math.floor((Date.now() - Number(saved.savedAt || Date.now())) / 1000));
+      if (saved.screen === "i-scr-pass") {
+        showPassScreen();
+      } else if (saved.screen === "i-scr-reveal") {
+        revealRole();
+      } else if (saved.screen === "i-scr-vote") {
+        showVoteScreen();
+      } else if (saved.screen === "i-scr-result" && lastVoteIndex !== null) {
+        finishGame(lastVoteIndex);
+      } else if (saved.screen === "i-scr-game") {
+        secondsLeft = Math.max(0, secondsLeft - (saved.timerRunning ? elapsed : 0));
+        $("i-txtSpeaker").textContent = players[starterIndex] || "";
+        changeScreen("i-scr-game");
+        updateTimer();
+        if (saved.timerRunning && secondsLeft > 0) {
+          startTimer();
+        } else {
+          clearInterval(timerId);
+          timerRunning = false;
+          updateTimer();
+        }
+      } else {
+        changeScreen(saved.screen);
+      }
+    } else {
+      changeScreen("i-scr-lobby");
+    }
 
     console.log("ImpostorGame listo");
   }
