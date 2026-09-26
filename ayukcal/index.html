@@ -447,7 +447,21 @@
   </div>
 
 <script src="db.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+  window.__AYUKCAL_SUPABASE_READY = new Promise(resolve => {
+    const load = (src, fallback) => {
+      const script = document.createElement("script");
+      script.src = src;
+      script.onload = () => resolve(true);
+      script.onerror = () => fallback ? load(fallback, null) : resolve(false);
+      document.head.appendChild(script);
+    };
+    load(
+      "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2",
+      "https://unpkg.com/@supabase/supabase-js@2"
+    );
+  });
+</script>
 <script src="supabase/config.js"></script>
 
 <header>
@@ -2227,8 +2241,9 @@ async function migrateLocalToCloud(){
   await cloudSave(local); toast("☁️ Tus datos locales fueron migrados a tu cuenta.");
 }
 async function bootCloud(){
-  if(!window.supabase || !window.AYUKCAL_SUPABASE_URL || String(window.AYUKCAL_SUPABASE_URL).includes("PEGAR_AQUI")){
-    setCloudStatus("Modo local · falta configurar Supabase");
+  const sdkReady = await (window.__AYUKCAL_SUPABASE_READY || Promise.resolve(Boolean(window.supabase)));
+  if(!sdkReady || !window.supabase || !window.AYUKCAL_SUPABASE_URL || String(window.AYUKCAL_SUPABASE_URL).includes("PEGAR_AQUI")){
+    setCloudStatus(!sdkReady ? "⚠️ No se pudo cargar el módulo de cuenta. Revisa tu conexión." : "Modo local · falta configurar Supabase");
     return;
   }
   if(!window.ayukcalSupabase){
