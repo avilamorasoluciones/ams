@@ -3807,3 +3807,39 @@ body[class*="theme-"] .top-turn-player {
 @media (prefers-reduced-motion: reduce) {
   .pass-art { animation: none; }
 }
+
+.game-back-btn {
+  min-height: 46px;
+  padding: 0 13px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  border-radius: 14px;
+  border: 1px solid color-mix(in srgb, var(--primary) 28%, var(--border) 72%);
+  background: color-mix(in srgb, var(--primary) 7%, var(--card) 93%);
+  color: var(--text);
+  font-weight: 900;
+  box-shadow: 0 8px 22px color-mix(in srgb, var(--primary) 8%, transparent);
+  transition: transform .18s ease, border-color .18s ease, background .18s ease;
+}
+.game-back-btn:hover {
+  transform: translateY(-1px);
+  border-color: var(--primary);
+  background: color-mix(in srgb, var(--primary) 12%, var(--card) 88%);
+}
+@media (max-width: 560px) {
+  .game-back-btn {
+    width: 46px;
+    padding: 0;
+  }
+  .game-back-btn span { display: none; }
+}
+body.theme-tabu {
+  --primary: #8b5cf6;
+  --accent: #a78bfa;
+  --danger: #f43f5e;
+  --warning: #eab308;
+  --gradA: rgba(139, 92, 246, 1);
+  --gradB: rgba(20, 184, 166, .92);
+}
