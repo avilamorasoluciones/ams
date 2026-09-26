@@ -1424,3 +1424,46 @@ body.game-yonunca .game-page-hero-icon { animation: gameGreenFloat 3.4s ease-in-
 @media (prefers-reduced-motion: reduce) {
   body[class*="game-"] .game-page-hero-icon { animation: none; }
 }
+body.light-theme {
+  --bg: #f8fafc;
+  --card: #ffffff;
+  --card2: #f1f5f9;
+  --border: #cbd5e1;
+  --border-light: #cbd5e1;
+  --text: #0f172a;
+  --muted: #475569;
+  --shadow: 0 14px 40px rgba(0, 0, 0, 0.08);
+  --shadow-soft: 0 10px 28px rgba(0, 0, 0, 0.08);
+  --topbar-bg: rgba(255, 255, 255, 0.85);
+  --input-bg: #ffffff;
+  --btn-bg: #f8fafc;
+  --ghost-bg: #ffffff;
+  --player-bg: #f1f5f9;
+  --footer-bg: #f8fafc;
+  --overlay-bg: rgba(255, 255, 255, 0.86);
+}
+
+
+
+/* Selector sutil de modo claro/oscuro en la barra superior */
+.theme-switch-btn {
+  width: 42px;
+  height: 42px;
+  border-radius: 13px;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  color: var(--text);
+  background: var(--card);
+  border: 1px solid var(--border);
+  box-shadow: 0 8px 22px rgba(0,0,0,.16);
+}
+.theme-switch-btn:hover { border-color: var(--accent); box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent) 14%, transparent), 0 10px 28px rgba(0,0,0,.2); }
+.theme-switch-btn .ui-icon { width: 1.15rem; height: 1.15rem; }
+body.light-theme .theme-switch-btn { background: rgba(255,255,255,.82); }
+body.light-theme .brand .txt .name { color: var(--text); }
+body.light-theme .topbar { backdrop-filter: blur(14px); }
+
+/* Herramientas flotantes solo en juegos donde aportan un comodín real. */
+body.playing:not(.has-game-tools) .fab-right-container { display: none !important; }
+.game-tools-fab .fab-btn { width: 46px; height: 46px; }
