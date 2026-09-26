@@ -17,7 +17,7 @@
     .guess-results { display: flex; flex-direction: column; gap: 8px; margin-top: 15px; }
   </style>
 </head>
-<body class="game-nosconocemos">
+<body class="game-nosconocemos has-game-tools">
   <header class="topbar">
     <div class="topbar-inner">
       <a class="brand brand-link" href="index.html">
@@ -130,6 +130,11 @@
       </section>
     </div>
   </main>
+
+  <div class="fab-right-container game-tools-fab" aria-label="Comodines del juego">
+    <button type="button" class="fab-btn" onclick="Tools.openModal('dice')" title="Lanzar dado" aria-label="Lanzar dado"><img src="tool-dice.svg" alt=""></button>
+    <button type="button" class="fab-btn" onclick="Tools.openModal('cards')" title="Sacar carta" aria-label="Sacar carta"><img src="tool-cards.svg" alt=""></button>
+  </div>
   <script src="datos.js"></script>
   <script src="scripts.js"></script>
   <script src="nosconocemos.js"></script>
