@@ -88,9 +88,9 @@ const NosConocemosGame = (() => {
     
     $("nc-txtMainPlayer").textContent = mainPlayer;
     $("nc-txtQuestionMain").textContent = currentQuestion.q;
-    saveSession("nc-scr-pass-main");
     
     guesserQueue = players.filter((_, i) => i !== currentMainIndex);
+    saveSession("nc-scr-pass-main");
     changeScreen("nc-scr-pass-main");
   }
 
