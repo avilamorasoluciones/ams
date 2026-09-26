@@ -9,7 +9,7 @@ const APP_SHELL = [
   "./tabu.html",
   "./verdadreto.html",
   "./yonunca.html",
-  "./styles.css?v=20260926-10",
+  "./styles.css?v=20260926-11",
   "./scripts.js",
   "./players.js",
   "./game-bridge.js",
