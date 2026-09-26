@@ -1534,7 +1534,9 @@
                 }
             },true);
         })();
-\n        // Estados globales de botones
+
+
+        // Estados globales de botones
         document.querySelectorAll('button').forEach(btn=>btn.addEventListener('click',()=>{if(btn.id.startsWith('btn-')&&!btn.disabled){btn.classList.add('button-pulse');setTimeout(()=>btn.classList.remove('button-pulse'),350)}}));
 
     </script>
