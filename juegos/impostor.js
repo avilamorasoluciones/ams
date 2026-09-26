@@ -86,7 +86,6 @@ const ImpostorGame = (() => {
 
         cards.push({
           category: category,
-          emoji: item[0],
           word: item[1]
         });
       });
