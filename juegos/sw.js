@@ -1,4 +1,4 @@
-const CACHE_NAME = "juegos-avila-mora-v12";
+const CACHE_NAME = "juegos-avila-mora-v13";
 const APP_SHELL = [
   "./",
   "./index.html",
@@ -9,7 +9,7 @@ const APP_SHELL = [
   "./tabu.html",
   "./verdadreto.html",
   "./yonunca.html",
-  "./styles.css?v=20260926-4",
+  "./styles.css?v=20260926-5",
   "./scripts.js",
   "./players.js",
   "./game-bridge.js",
