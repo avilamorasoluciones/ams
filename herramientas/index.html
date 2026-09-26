@@ -230,6 +230,16 @@
   </script>
 </head>
 <body class="d-flex flex-column min-vh-100">
+    <div class="ams-loader" id="ams-loader" aria-hidden="true" role="status" aria-live="polite">
+        <div class="ams-loader-card">
+            <div class="ams-loader-orbit" aria-hidden="true"><div class="ams-loader-core"></div></div>
+            <div class="ams-loader-title" id="ams-loader-title">Procesando</div>
+            <div class="ams-loader-message" id="ams-loader-message">Estamos trabajando localmente en tu archivo…</div>
+            <div class="ams-loader-bar" aria-hidden="true"><span></span></div>
+            <div class="ams-loader-hint">Tus archivos permanecen en tu navegador.</div>
+        </div>
+    </div>
+
 
     <!-- NAVEGACIÓN -->
     <nav class="navbar navbar-dark navbar-expand-lg sticky-top">
@@ -1441,7 +1451,7 @@
         });
         ams$('btn-csv-copy')?.addEventListener('click',function(){amsCopy(ams$('csv-output').value);});
 
-        // Estados globales de botones
+        // Loader global AMS para operaciones de procesamiento\n        (function(){\n            const loader=document.getElementById('ams-loader');\n            const title=document.getElementById('ams-loader-title');\n            const message=document.getElementById('ams-loader-message');\n            window.amsLoading=function(show,msg,titleText){\n                if(!loader)return;\n                if(show){ title.textContent=titleText||'Procesando'; message.textContent=msg||'Estamos trabajando localmente en tu archivo…'; loader.classList.add('active'); loader.setAttribute('aria-hidden','false'); document.body.style.overflow='hidden'; }\n                else { loader.classList.remove('active'); loader.setAttribute('aria-hidden','true'); document.body.style.overflow=''; }\n            };\n        })();\n\n        // Estados globales de botones
         document.querySelectorAll('button').forEach(btn=>btn.addEventListener('click',()=>{if(btn.id.startsWith('btn-')&&!btn.disabled){btn.classList.add('button-pulse');setTimeout(()=>btn.classList.remove('button-pulse'),350)}}));
 
     </script>
