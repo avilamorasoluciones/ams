@@ -121,7 +121,7 @@ const BombaGame = (() => {
     $("b-btnStop").onclick = stopGame;
     $("b-btnNext").onclick = nextRound;
     window.GameSession?.register(saveSession);
-    if (!restoreSession(window.GameSession?.load("bomba")) changeScreen("b-scr-lobby");
+    if (!restoreSession(window.GameSession?.load("bomba"))) changeScreen("b-scr-lobby");
   }
 
   return { init };
