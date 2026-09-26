@@ -251,7 +251,7 @@ const PWA = (() => {
         window.location.reload();
       });
 
-      navigator.serviceWorker.register("./sw.js?v=20260926-32", {
+      navigator.serviceWorker.register("./sw.js?v=20260926-33", {
         scope: "./",
         updateViaCache: "none"
       }).then(registration => {
@@ -263,7 +263,7 @@ const PWA = (() => {
   }
 
   return { init, triggerInstall };
-})();;
+})();
 window.PWA = PWA;
 
 /********************
@@ -494,7 +494,6 @@ const Tools = (() => {
 
   const CARD_SUITS = ["S", "H", "D", "C"];
   const CARD_VALUES = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"];
-  const DICE_FACES = ["1", "2", "3", "4", "5", "6"];
 
   function getModal(type) {
     return $(`${type}-modal`);
