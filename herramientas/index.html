@@ -1314,7 +1314,18 @@
         const testRegex=()=>{const p=$('regex-pattern').value,t=$('regex-text').value;if(!p){$('regex-output').textContent='Escribe una expresión.';return}try{const r=new RegExp(p,'g'),matches=[...t.matchAll(r)];$('regex-output').innerHTML=matches.length?'<strong>'+matches.length+' coincidencia(s)</strong><br>'+matches.slice(0,20).map(m=>'<code>'+escapeHtml(m[0])+'</code>').join(' · '):'Sin coincidencias.'}catch(e){$('regex-output').textContent='Regex inválida: '+e.message}};$('regex-pattern')?.addEventListener('input',testRegex);$('regex-text')?.addEventListener('input',testRegex);
 
         // Meta tags
-        $('btn-meta')?.addEventListener('click',()=>{const title=$('meta-title').value.trim(),desc=$('meta-desc').value.trim(),url=$('meta-url').value.trim();$('meta-output').value='<title>'+title+'</title>\n<meta name="description" content="'+desc.replace(/"/g,'&quot;')+'">\n<meta property="og:title" content="'+title.replace(/"/g,'&quot;')+'">\n<meta property="og:description" content="'+desc.replace(/"/g,'&quot;')+'">\n<meta property="og:url" content="'+url.replace(/"/g,'&quot;')+'">';});$('btn-meta-copy')?.addEventListener('click',()=>copyText($('meta-output').value));
+        $('btn-meta')?.addEventListener('click',()=>{
+            const title=$('meta-title').value.trim(), desc=$('meta-desc').value.trim(), url=$('meta-url').value.trim();
+            const esc=v=>v.replace(/"/g,'&quot;');
+            $('meta-output').value=[
+                '<title>'+title+'</title>',
+                '<meta name="description" content="'+esc(desc)+'">',
+                '<meta property="og:title" content="'+esc(title)+'">',
+                '<meta property="og:description" content="'+esc(desc)+'">',
+                '<meta property="og:url" content="'+esc(url)+'">'
+            ].join('\n');
+        });
+        $('btn-meta-copy')?.addEventListener('click',()=>copyText($('meta-output').value));
 
         // Favicon
         let faviconFile=null,faviconImg=null;$('inp-favicon')?.addEventListener('change',e=>{faviconFile=e.target.files[0];if(!faviconFile)return;faviconImg=new Image();faviconImg.onload=()=>{$('favicon-preview').style.display='block';$('favicon-preview').innerHTML='<img src="'+faviconImg.src+'" alt="Vista previa" style="width:72px;height:72px;object-fit:cover;border-radius:14px">';$('btn-favicon').disabled=false};faviconImg.src=URL.createObjectURL(faviconFile)});$('btn-favicon')?.addEventListener('click',()=>{if(!faviconImg)return;const canvas=document.createElement('canvas');canvas.width=512;canvas.height=512;canvas.getContext('2d').drawImage(faviconImg,0,0,512,512);canvas.toBlob(b=>downloadFile(b,'AMS_Favicon_512.png','image/png'),'image/png')});
