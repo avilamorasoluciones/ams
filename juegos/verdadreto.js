@@ -139,6 +139,7 @@ const VerdadRetoGame = (() => {
     };
 
     renderPlayers();
+    window.GameSession?.register(saveSession);
     const saved = window.GameSession?.load("verdadreto");
     if (saved && saved.screen !== "vr-scr-lobby") {
       players = Array.isArray(saved.players) ? saved.players : players;
