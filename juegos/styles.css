@@ -3820,8 +3820,7 @@ body.playing:not(.has-game-tools) .fab-right-container { display: none !importan
   min-width: 0;
 }
 
-/* Al abrir el teclado no dejamos que el foco fuerce un salto extraño. */
-#globalPlayerInput,
+/* Evita desplazamientos artificiales al enfocar formularios de juego. */
 .inline-input-group input {
   scroll-margin-top: 96px;
   scroll-margin-bottom: 140px;
