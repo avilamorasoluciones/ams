@@ -55,6 +55,12 @@ const Utils = (() => {
 })();
 window.Utils = Utils;
 
+function uiIcon(name, extraClass = "") {
+  const cls = ["ui-icon", extraClass].filter(Boolean).join(" ");
+  return '<svg class="' + cls + '" aria-hidden="true" focusable="false"><use href="ui-icons.svg#' + name + '"></use></svg>';
+}
+window.uiIcon = uiIcon;
+
 /********************
  * SONIDO GLOBAL 🎧
  ********************/
@@ -125,8 +131,8 @@ const PWA = (() => {
     dock.className = "pwa-dock";
     const hasThemeControl = Boolean(document.getElementById("themeToggleBtn"));
     dock.innerHTML = `
-      <button id="appearance-fab" class="pwa-fab" type="button" aria-label="Cambiar apariencia" title="Cambiar apariencia">🎨</button>
-      ${hasThemeControl ? "" : '<button id="pwa-theme-fab" class="pwa-fab" type="button" aria-label="Cambiar modo claro u oscuro" title="Modo claro u oscuro">🌓</button>'}
+      <button id="appearance-fab" class="pwa-fab" type="button" aria-label="Cambiar apariencia" title="Cambiar apariencia">${window.uiIcon("palette")}</button>
+      ${hasThemeControl ? "" : '<button id="pwa-theme-fab" class="pwa-fab" type="button" aria-label="Cambiar modo claro u oscuro" title="Modo claro u oscuro">${window.uiIcon("theme")}</button>'}
     `;
     document.body.appendChild(dock);
 
@@ -245,32 +251,32 @@ const Appearance = (() => {
   const OPTIONS = {
     original: {
       name: "Original",
-      icon: "🎮",
+      icon: "game",
       description: "La apariencia original de Juegos Avila Mora, sin cambios visuales."
     },
     neon: {
       name: "Neon Pulse",
-      icon: "🌌",
+      icon: "neon",
       description: "El estilo actual: cyber, brillante y energético."
     },
     aurora: {
       name: "Aurora Glass",
-      icon: "🌈",
+      icon: "aurora",
       description: "Cristal translúcido, auroras suaves y sensación premium."
     },
     arcade: {
       name: "Arcade Pixel",
-      icon: "🕹️",
+      icon: "arcade",
       description: "Retro, cuadrado y con vibra de máquina arcade."
     },
     sakura: {
       name: "Sakura Dream",
-      icon: "🌸",
+      icon: "sakura",
       description: "Suave, colorido y juguetón, inspirado en una estética anime."
     },
     luxe: {
       name: "Midnight Luxe",
-      icon: "✨",
+      icon: "luxe",
       description: "Elegante, sobrio y con detalles dorados sobre negro."
     }
   };
@@ -315,16 +321,16 @@ const Appearance = (() => {
     modal.className = "tool-overlay";
     modal.innerHTML = `
       <div class="box narrow stack appearance-modal-card" role="dialog" aria-modal="true" aria-labelledby="appearance-title">
-        <button type="button" class="btn ghost modal-close-btn" id="appearance-close" aria-label="Cerrar apariencias">❌</button>
+        <button type="button" class="btn ghost modal-close-btn" id="appearance-close" aria-label="Cerrar apariencias">${window.uiIcon("close")}</button>
         <div class="center">
-          <div class="emoji-display">🎨</div>
+          <div class="modal-icon-art">${window.uiIcon("palette")}</div>
           <h2 id="appearance-title" class="modal-title color-primary">Apariencia</h2>
           <p class="muted modal-copy">Elige un estilo visual. El modo claro u oscuro sigue funcionando por separado.</p>
         </div>
         <div class="appearance-grid">
           ${Object.entries(OPTIONS).map(([key, option]) => `
             <button type="button" class="appearance-choice" data-appearance-choice="${key}" role="radio" aria-checked="false">
-              <span class="appearance-choice-icon">${option.icon}</span>
+              <span class="appearance-choice-icon">${window.uiIcon(option.icon)}</span>
               <span class="appearance-choice-copy"><strong>${option.name}</strong><small>${option.description}</small></span>
             </button>
           `).join("")}
@@ -473,9 +479,9 @@ window.Nav = Nav;
 const Tools = (() => {
   const $ = (id) => document.getElementById(id);
 
-  const CARD_SUITS = ["♠", "♥", "♦", "♣"];
+  const CARD_SUITS = ["S", "H", "D", "C"];
   const CARD_VALUES = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"];
-  const DICE_FACES = ["⚀", "⚁", "⚂", "⚃", "⚄", "⚅"];
+  const DICE_FACES = ["1", "2", "3", "4", "5", "6"];
 
   function getModal(type) {
     return $(`${type}-modal`);
@@ -543,7 +549,7 @@ const Tools = (() => {
 
       resultEl.textContent = `${value}${suit}`;
       resultEl.className = "card-result-box";
-      resultEl.classList.add(suit === "♥" || suit === "♦" ? "red" : "black");
+      resultEl.classList.add(suit === "H" || suit === "D" ? "red" : "black");
 
       window.emitSound(800, 0.15, "triangle");
     }, 250);
@@ -636,8 +642,11 @@ window.Theme = Theme;
 const PartyMusic = (() => {
   let ctx = null;
   let master = null;
+  let compressor = null;
   let timer = null;
   let enabled = false;
+  let step = 0;
+
   const chords = [
     [196.00, 246.94, 293.66],
     [174.61, 220.00, 261.63],
@@ -655,34 +664,75 @@ const PartyMusic = (() => {
       osc.type = index === 0 ? "sine" : "triangle";
       osc.frequency.setValueAtTime(frequency, now);
       filter.type = "lowpass";
-      filter.frequency.setValueAtTime(1200, now);
+      filter.frequency.setValueAtTime(1700, now);
       gain.gain.setValueAtTime(0.0001, now);
-      gain.gain.exponentialRampToValueAtTime(0.055 / (index + 1), now + 0.45);
-      gain.gain.exponentialRampToValueAtTime(0.0001, now + 3.4);
+      gain.gain.exponentialRampToValueAtTime([0.13, 0.085, 0.06][index], now + 0.32);
+      gain.gain.exponentialRampToValueAtTime(0.0001, now + 2.7);
       osc.connect(filter);
       filter.connect(gain);
       gain.connect(master);
       osc.start(now);
-      osc.stop(now + 3.6);
+      osc.stop(now + 3.0);
     });
+  }
+
+  function playPulse() {
+    if (!ctx || !master || !enabled) return;
+    const now = ctx.currentTime;
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.type = "sine";
+    osc.frequency.setValueAtTime(392, now);
+    osc.frequency.exponentialRampToValueAtTime(196, now + 0.22);
+    gain.gain.setValueAtTime(0.0001, now);
+    gain.gain.exponentialRampToValueAtTime(0.12, now + 0.025);
+    gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.42);
+    osc.connect(gain);
+    gain.connect(master);
+    osc.start(now);
+    osc.stop(now + 0.45);
+  }
+
+  async function ensureContext() {
+    if (!ctx) {
+      const AudioCtor = window.AudioContext || window.webkitAudioContext;
+      if (!AudioCtor) throw new Error("Web Audio no disponible");
+      ctx = new AudioCtor({ latencyHint: "interactive" });
+      master = ctx.createGain();
+      compressor = ctx.createDynamicsCompressor();
+      compressor.threshold.value = -18;
+      compressor.knee.value = 16;
+      compressor.ratio.value = 5;
+      compressor.attack.value = 0.01;
+      compressor.release.value = 0.2;
+      master.gain.value = 0.86;
+      master.connect(compressor);
+      compressor.connect(ctx.destination);
+    }
+    if (ctx.state === "suspended" || ctx.state === "interrupted") {
+      await ctx.resume();
+    }
+    if (ctx.state !== "running") throw new Error("AudioContext no está activo");
   }
 
   async function start() {
     try {
-      if (!ctx) {
-        ctx = new (window.AudioContext || window.webkitAudioContext)();
-        master = ctx.createGain();
-        master.gain.value = 0.72;
-        master.connect(ctx.destination);
-      }
-      if (ctx.state === "suspended") await ctx.resume();
+      await ensureContext();
       enabled = true;
-      playChord(chords[0]);
-      let step = 1;
+      if (master) {
+        master.gain.cancelScheduledValues(ctx.currentTime);
+        master.gain.setTargetAtTime(0.86, ctx.currentTime, 0.05);
+      }
+      step = 0;
+      playPulse();
+      playChord(chords[step]);
+      step++;
       clearInterval(timer);
       timer = setInterval(() => {
-        playChord(chords[step % chords.length]);
-        step++;
+        if (ctx && ctx.state === "running") {
+          playChord(chords[step % chords.length]);
+          step++;
+        }
       }, 3000);
       updateButton();
     } catch {
@@ -721,6 +771,11 @@ const PartyMusic = (() => {
 
   function init() {
     document.getElementById("musicToggle")?.addEventListener("click", toggle);
+    document.addEventListener("visibilitychange", () => {
+      if (enabled && ctx && document.visibilityState === "visible") {
+        ctx.resume().catch(() => {});
+      }
+    });
     updateButton();
   }
 
