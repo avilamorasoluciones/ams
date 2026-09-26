@@ -94,12 +94,12 @@ const VerdadRetoGame = (() => {
     if (type === "verdad") {
       if (poolVerdad.length === 0) return alert("¡Ya no quedan verdades!");
       text = poolVerdad.pop();
-      badge = "Verdad";
+      badge = window.uiIcon("question") + " Verdad";
       colorClass = "color-primary";
     } else {
       if (poolReto.length === 0) return alert("¡Ya no quedan retos!");
       text = poolReto.pop();
-      badge = "Reto";
+      badge = window.uiIcon("flame") + " Reto";
       colorClass = "color-danger";
     }
 
