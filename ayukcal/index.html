@@ -1085,13 +1085,13 @@ function isIOSDevice(){
     (navigator.platform==="MacIntel" && navigator.maxTouchPoints>1);
 }
 function dismissInstallCard(){
-  localStorage.setItem("ayukcal_install_dismissed","1");
+  sessionStorage.setItem("ayukcal_install_dismissed","1");
   if($("installAppCard")) $("installAppCard").style.display="none";
 }
 function updateInstallUI(){
   const card=$("installAppCard");
   if(!card) return;
-  if(isStandaloneApp() || localStorage.getItem("ayukcal_install_dismissed")==="1"){
+  if(isStandaloneApp()){
     card.style.display="none";
     return;
   }
@@ -1109,7 +1109,10 @@ function updateInstallUI(){
     card.style.display="flex";
     return;
   }
-  card.style.display="none";
+  $("installAppTitle").textContent="📲 Instala AyuKcal como app";
+  $("installAppText").textContent="En Chrome: abre ⋮ y elige «Instalar aplicación» o «Añadir a pantalla de inicio».";
+  $("installAppBtn").textContent="Cómo instalar";
+  card.style.display="flex";
 }
 async function installAyuKcal(){
   if(isStandaloneApp()) return updateInstallUI();
@@ -1118,13 +1121,15 @@ async function installAyuKcal(){
     deferredInstallPrompt=null;
     try{
       const result=await prompt.prompt();
-      if(result?.outcome==="accepted") localStorage.removeItem("ayukcal_install_dismissed");
+      if(result?.outcome==="accepted") sessionStorage.removeItem("ayukcal_install_dismissed");
     }catch(err){ console.warn("AyuKcal install prompt",err); }
     updateInstallUI();
     return;
   }
   if(isIOSDevice()){
     toast("📲 En iPhone/iPad: abre Compartir y elige «Añadir a pantalla de inicio».");
+  } else {
+    toast("📲 En Chrome: abre ⋮ y elige «Instalar aplicación» o «Añadir a pantalla de inicio».");
   }
 }
 window.addEventListener("beforeinstallprompt",e=>{
