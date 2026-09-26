@@ -2,6 +2,12 @@ const BombaGame = (() => {
   let pool = [];
   let bombTimer = null;
   let tickInterval = null;
+  let roundEndsAt = 0;
+  let timeRemaining = 0;
+
+  function saveSession(screen = document.querySelector(".im-screen.active")?.id || "b-scr-lobby") {
+    window.GameSession?.save("bomba", { pool, word: $("b-txtWord")?.textContent || "", screen, timeRemaining, roundEndsAt });
+  }
 
   function $(id) { return document.getElementById(id); }
 
@@ -9,6 +15,7 @@ const BombaGame = (() => {
     document.querySelectorAll(".im-screen").forEach(s => s.classList.remove("active"));
     $(id).classList.add("active");
     document.body.classList.toggle("playing", id !== "b-scr-lobby");
+    saveSession(id);
   }
 
   function startGame() {
@@ -22,12 +29,14 @@ const BombaGame = (() => {
     nextRound();
   }
 
-  function startTicks(totalTime) {
-    let elapsed = 0;
+  function startTicks(totalTime, initialElapsed = 0) {
+    let elapsed = initialElapsed;
     const bombEmoji = $("b-bombEmoji");
     
     tickInterval = setInterval(() => {
       elapsed += 500;
+      timeRemaining = Math.max(0, totalTime - elapsed);
+      saveSession("b-scr-game");
       let freq = 400 + (elapsed / totalTime) * 500;
       window.emitSound(freq, 0.05, "square", 0.3);
       
@@ -45,8 +54,11 @@ const BombaGame = (() => {
     $("b-txtWord").textContent = pool.pop();
     $("b-bombEmoji").innerHTML = window.uiIcon("bomb");
     $("b-bombEmoji").style.transform = "scale(1)";
+    saveSession("b-scr-game");
     
     const timeToBoom = Math.floor(Math.random() * (45000 - 15000 + 1)) + 15000;
+    timeRemaining = timeToBoom;
+    roundEndsAt = Date.now() + timeToBoom;
     
     clearTimeout(bombTimer);
     clearInterval(tickInterval);
@@ -76,7 +88,31 @@ const BombaGame = (() => {
   function stopGame() {
     clearTimeout(bombTimer);
     clearInterval(tickInterval);
+    window.GameSession?.clear("bomba");
     changeScreen("b-scr-lobby");
+  }
+
+  function restoreSession(saved) {
+    if (!saved || !saved.screen || saved.screen === "b-scr-lobby" || !saved.word) return false;
+    pool = Array.isArray(saved.pool) ? saved.pool : [];
+    $("b-txtWord").textContent = saved.word;
+    if (saved.screen === "b-scr-boom") {
+      changeScreen("b-scr-boom");
+      return true;
+    }
+    const remaining = Math.max(0, Number(saved.timeRemaining || 0) - Math.floor((Date.now() - Number(saved.savedAt || Date.now())) / 1000) * 1000);
+    timeRemaining = remaining;
+    roundEndsAt = Date.now() + remaining;
+    changeScreen("b-scr-game");
+    if (remaining > 0) {
+      clearTimeout(bombTimer);
+      clearInterval(tickInterval);
+      startTicks(Math.max(remaining, 1000), 0);
+      bombTimer = setTimeout(explode, remaining);
+    } else {
+      explode();
+    }
+    return true;
   }
 
   function init() {
@@ -84,6 +120,7 @@ const BombaGame = (() => {
     $("b-btnSkip").onclick = skipWord;
     $("b-btnStop").onclick = stopGame;
     $("b-btnNext").onclick = nextRound;
+    if (!restoreSession(window.GameSession?.load("bomba"))) changeScreen("b-scr-lobby");
   }
 
   return { init };
