@@ -248,7 +248,7 @@ const PWA = (() => {
           sessionStorage.setItem("ams_sw_reloaded_v27", "1");
         } catch {}
         window.location.reload();
-      }, { once: true });
+      });
 
       navigator.serviceWorker.register("./sw.js?v=20260926-27", {
         scope: "./",
