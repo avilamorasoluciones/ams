@@ -31,4 +31,5 @@ function render(){let all=load(),q=(search.value||"").toLowerCase(),view=all.fil
 function openModal(){modal.classList.add("open")}function closeModal(){modal.classList.remove("open");clientForm.reset();document.querySelector('[name=country]').value="USA";document.querySelector('[name=grace]').value=7}
 search.oninput=render;
 clientForm.onsubmit=function(e){e.preventDefault();let f=new FormData(clientForm),c={id:Date.now(),company:f.get("company"),contact:f.get("contact"),email:f.get("email"),phone:f.get("phone"),country:f.get("country"),webType:f.get("webType"),domain:f.get("domain"),url:f.get("url"),price:Number(f.get("price")),currency:f.get("currency"),period:f.get("period"),start:f.get("start"),due:due(f.get("start"),f.get("period")),grace:Number(f.get("grace")||7),suspended:false,created:new Date().toISOString()};let all=load();all.push(c);save(all);closeModal();render()};
-</script></body></html>
+</script><script>if("serviceWorker" in navigator){window.addEventListener("load",()=>navigator.serviceWorker.register("./sw.js").catch(()=>{}));}</script>
+</body></html>
