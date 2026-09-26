@@ -1,0 +1,19 @@
+{
+  "name": "Avila Mora Soluciones",
+  "short_name": "AMS",
+  "description": "Soluciones digitales, desarrollo web y sistemas a medida.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#02040b",
+  "theme_color": "#0f172a",
+  "orientation": "any",
+  "icons": [
+    {
+      "src": "img/ams-favicon.svg?v=6",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
