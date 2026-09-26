@@ -856,6 +856,59 @@ window.GamesMenu = GamesMenu;
  * APP GLOBAL
  ********************/
 
+/**
+ * RESTAURACIÓN DE SCROLL — PORTADA DE JUEGOS
+ */
+const GamesScrollState = (() => {
+  const KEY = "ams-games-home-scroll-v1";
+  let saveFrame = 0;
+
+  function isHome() {
+    return Boolean(document.getElementById("gameCarousel"));
+  }
+
+  function save() {
+    if (!isHome()) return;
+    try {
+      sessionStorage.setItem(KEY, String(Math.max(0, Math.round(window.scrollY || 0))));
+    } catch {}
+  }
+
+  function scheduleSave() {
+    if (saveFrame) return;
+    saveFrame = window.requestAnimationFrame(() => {
+      saveFrame = 0;
+      save();
+    });
+  }
+
+  function restore() {
+    if (!isHome()) return;
+    let y = 0;
+    try {
+      y = Math.max(0, Number(sessionStorage.getItem(KEY) || 0));
+    } catch {}
+    window.requestAnimationFrame(() => {
+      window.requestAnimationFrame(() => window.scrollTo(0, y));
+    });
+  }
+
+  function init() {
+    if (!isHome()) return;
+    try { history.scrollRestoration = "manual"; } catch {}
+    window.addEventListener("scroll", scheduleSave, { passive: true });
+    window.addEventListener("pagehide", save, { passive: true });
+    window.addEventListener("beforeunload", save, { passive: true });
+    document.addEventListener("visibilitychange", () => {
+      if (document.visibilityState === "hidden") save();
+    });
+    restore();
+  }
+
+  return { init, save, restore };
+})();
+window.GamesScrollState = GamesScrollState;
+
 const App = (() => {
   function initExternalLinks() {
     document.querySelectorAll('a[target="_blank"]').forEach((link) => {
@@ -866,6 +919,7 @@ const App = (() => {
   }
 
   function init() {
+    GamesScrollState.init();
     PWA.init();
     Theme.init();
 Nav.init();
