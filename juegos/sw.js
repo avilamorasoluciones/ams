@@ -1,4 +1,4 @@
-const CACHE_NAME = "juegos-avila-mora-v6";
+const CACHE_NAME = "juegos-avila-mora-v7";
 const APP_SHELL = [
   "./",
   "./index.html",
@@ -11,6 +11,8 @@ const APP_SHELL = [
   "./yonunca.html",
   "./styles.css?v=20260926",
   "./scripts.js",
+  "./players.js",
+  "./game-bridge.js",
   "./datos.js",
   "./impostor.js",
   "./bomba.js",
@@ -21,7 +23,19 @@ const APP_SHELL = [
   "./yonunca.js",
   "./manifest.webmanifest",
   "./icon-192.svg",
-  "./icon-512.svg"
+  "./icon-512.svg",
+  "./icon-games.svg",
+  "./game-impostor.svg",
+  "./game-bomba.svg",
+  "./game-nosconocemos.svg",
+  "./game-rompehielo.svg",
+  "./game-tabu.svg",
+  "./game-verdadreto.svg",
+  "./game-yonunca.svg",
+  "./tool-dice.svg",
+  "./tool-cards.svg",
+  "./tool-theme.svg",
+  "./tool-music.svg"
 ];
 
 self.addEventListener("install", event => {
