@@ -909,6 +909,18 @@ const GamesMenu = (() => {
 
   function init() {
     bind();
+    window.addEventListener("resize", () => {
+      const input = document.getElementById("gameSearch");
+      if (input) {
+        filter();
+        return;
+      }
+      slides.forEach(slide => {
+        slide.hidden = !isAvailableOnCurrentDevice(slide);
+      });
+      activeIndex = 0;
+      updateControls();
+    }, { passive: true });
   }
 
   return { init, goTo, filter };
