@@ -103,7 +103,7 @@ const PWA = (() => {
   let deferredPrompt = null;
   let banner = null;
   let installButton = null;
-  const DISMISS_KEY = "avila_mora_pwa_install_dismissed_v3";
+  const DISMISS_KEY = "avila_mora_pwa_install_dismissed_v4";
 
   function isStandalone() {
     return window.matchMedia("(display-mode: standalone)").matches ||
@@ -214,7 +214,7 @@ const PWA = (() => {
   }
 
   function init() {
-    try { sessionStorage.removeItem("ams_sw_reloaded_v27"); } catch {}
+    try { sessionStorage.removeItem("ams_sw_reloaded_v29"); } catch {}
     createUI();
 
     window.addEventListener("beforeinstallprompt", event => {
@@ -245,13 +245,13 @@ const PWA = (() => {
         // que la página actual use también el HTML/JS/CSS recién publicados.
         if (!hadController) return;
         try {
-          if (sessionStorage.getItem("ams_sw_reloaded_v27") === "1") return;
-          sessionStorage.setItem("ams_sw_reloaded_v27", "1");
+          if (sessionStorage.getItem("ams_sw_reloaded_v29") === "1") return;
+          sessionStorage.setItem("ams_sw_reloaded_v29", "1");
         } catch {}
         window.location.reload();
       });
 
-      navigator.serviceWorker.register("./sw.js?v=20260926-28", {
+      navigator.serviceWorker.register("./sw.js?v=20260926-29", {
         scope: "./",
         updateViaCache: "none"
       }).then(registration => {
@@ -843,8 +843,46 @@ window.GamesMenu = GamesMenu;
  ********************/
 const MobileInputGuard = (() => {
   function init() {
-    // Intencionalmente vacío: Chrome/Android gestiona el desplazamiento necesario
-    // para mostrar el teclado. No forzamos scroll al enfocar un campo.
+    const inputs = document.querySelectorAll("input[type=text], input[type=search]");
+    inputs.forEach(input => {
+      let lockedScrollY = null;
+      let wasVisibleBeforeFocus = false;
+      let releaseTimer = null;
+
+      const restoreIfNeeded = () => {
+        if (lockedScrollY === null || !wasVisibleBeforeFocus) return;
+        // Only undo a browser jump; never call scrollIntoView.
+        if (Math.abs(window.scrollY - lockedScrollY) > 2) {
+          window.scrollTo(0, lockedScrollY);
+        }
+      };
+
+      input.addEventListener("focus", () => {
+        lockedScrollY = window.scrollY;
+        const rect = input.getBoundingClientRect();
+        const viewportHeight = window.visualViewport?.height || window.innerHeight;
+        wasVisibleBeforeFocus = rect.top >= 0 && rect.bottom <= viewportHeight;
+        clearTimeout(releaseTimer);
+        if (!wasVisibleBeforeFocus) return;
+
+        // Android may reposition once when the keyboard appears. Undo that jump
+        // for a short window while the keyboard settles.
+        requestAnimationFrame(restoreIfNeeded);
+        setTimeout(restoreIfNeeded, 60);
+        setTimeout(restoreIfNeeded, 180);
+        setTimeout(restoreIfNeeded, 360);
+        releaseTimer = setTimeout(() => {
+          lockedScrollY = null;
+          wasVisibleBeforeFocus = false;
+        }, 650);
+      });
+
+      input.addEventListener("blur", () => {
+        lockedScrollY = null;
+        wasVisibleBeforeFocus = false;
+        clearTimeout(releaseTimer);
+      });
+    });
   }
   return { init };
 })();
