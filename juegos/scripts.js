@@ -420,11 +420,39 @@ const Nav = (() => {
     });
   }
 
+  function populateGameNavigation() {
+    if (!panel) return;
+    const inner = panel.querySelector(".site-nav-inner");
+    if (!inner) return;
+
+    // En las páginas individuales dejamos el menú completo disponible,
+    // sin obligar a volver a la portada para cambiar de juego.
+    const hasGameLinks = inner.querySelectorAll('a[href$=".html"]').length > 1;
+    if (hasGameLinks) return;
+
+    const games = [
+      ["index.html", "Menú principal", "home"],
+      ["impostor.html", "El Impostor", "user"],
+      ["bomba.html", "La Bomba", "bomb"],
+      ["nosconocemos.html", "¿Nos Conocemos?", "users"],
+      ["rompehielo.html", "Rompehielo", "message"],
+      ["tabu.html", "Tabú", "forbidden"],
+      ["verdadreto.html", "Verdad o Reto", "flame"],
+      ["yonunca.html", "Yo Nunca", "question"]
+    ];
+
+    inner.innerHTML = games.map(([href, label, icon]) =>
+      '<a class="nav-item" href="' + href + '"><svg class="ui-icon" aria-hidden="true"><use href="ui-icons.svg#' + icon + '"></use></svg><span>' + label + '</span></a>'
+    ).join("");
+  }
+
   function init() {
     btn = document.getElementById("navToggle");
     panel = document.getElementById("siteNav");
 
     if (!btn || !panel) return;
+
+    populateGameNavigation();
 
     // FUERZA EL CIERRE SIEMPRE AL INICIAR
     panel.hidden = true;
@@ -462,7 +490,16 @@ const Tools = (() => {
           <button type="button" class="btn ghost modal-close-btn" data-tool-close="dice" aria-label="Cerrar modal de dado">×</button>
           <h2 id="dice-modal-title" class="modal-title color-accent">Lanzar Dado</h2>
           <p class="muted modal-copy">Un comodín para decidir quién empieza, ordenar turnos o desempatar sin salir del juego.</p>
-          <div id="dice-result" class="emoji-display giant-emoji"><img src="tool-dice.svg" alt="Dado"></div>
+          <div id="dice-result" class="dice-stage" aria-live="polite" aria-label="Resultado del dado">
+            <div class="dice-cube" aria-hidden="true">
+              <span class="dice-face dice-front">1</span>
+              <span class="dice-face dice-back">6</span>
+              <span class="dice-face dice-right">3</span>
+              <span class="dice-face dice-left">4</span>
+              <span class="dice-face dice-top">5</span>
+              <span class="dice-face dice-bottom">2</span>
+            </div>
+          </div>
           <button type="button" class="btn primary btn-xl" data-tool-roll>¡Lanzar!</button>
         </div>
       </div>
@@ -471,7 +508,11 @@ const Tools = (() => {
           <button type="button" class="btn ghost modal-close-btn" data-tool-close="cards" aria-label="Cerrar modal de cartas">×</button>
           <h2 id="cards-modal-title" class="modal-title color-danger">Sacar Carta</h2>
           <p class="muted modal-copy">Un comodín para resolver decisiones al azar, formar equipos o desempatar dentro de la partida.</p>
-          <div id="card-result" class="card-result-box"><img src="tool-cards.svg" alt="Carta"></div>
+          <div id="card-result" class="card-result-box" aria-live="polite">
+            <div class="playing-card playing-card-back" aria-label="Carta lista para sacar">
+              <span class="playing-card-mark">AMS</span>
+            </div>
+          </div>
           <button type="button" class="btn danger btn-xl" data-tool-card>¡Sacar Carta!</button>
         </div>
       </div>`;
@@ -504,52 +545,63 @@ const Tools = (() => {
 
   function rollDice() {
     const resultEl = $("dice-result");
-    if (!resultEl || resultEl.classList.contains("dice-rolling")) return;
+    const cube = resultEl?.querySelector(".dice-cube");
+    if (!resultEl || !cube || cube.classList.contains("dice-rolling")) return;
 
-    resultEl.classList.add("dice-rolling");
+    cube.classList.remove("dice-settled");
+    cube.classList.add("dice-rolling");
+    resultEl.setAttribute("aria-label", "El dado está rodando");
+
+    // Varias vueltas + un giro final aleatorio: se siente como un dado real
+    // y deja claro que el resultado no se conoce hasta que se detiene.
+    const finalFace = Math.floor(Math.random() * 6) + 1;
+    const rotations = [
+      [720, 1080], [900, 1260], [720, 1260],
+      [1080, 900], [900, 1080], [1080, 1260]
+    ][finalFace - 1];
+
+    cube.style.setProperty("--spin-x", rotations[0] + "deg");
+    cube.style.setProperty("--spin-y", rotations[1] + "deg");
 
     let ticks = 0;
     const tickInt = setInterval(() => {
-      resultEl.textContent = DICE_FACES[Math.floor(Math.random() * DICE_FACES.length)];
-      window.emitSound(800 + Math.random() * 400, 0.02, "square", 0.3);
+      window.emitSound(220 + Math.random() * 160, 0.035, "square", 0.18);
       ticks++;
-
-      if (ticks > 8) {
+      if (ticks >= 7) {
         clearInterval(tickInt);
-        resultEl.classList.remove("dice-rolling");
-
-        const finalFace = DICE_FACES[Math.floor(Math.random() * DICE_FACES.length)];
-        resultEl.textContent = finalFace;
-
-        window.emitSound(1000, 0.1, "triangle");
-        setTimeout(() => window.emitSound(1200, 0.15, "triangle"), 100);
+        cube.classList.remove("dice-rolling");
+        cube.classList.add("dice-settled");
+        resultEl.setAttribute("aria-label", "Resultado del dado: " + finalFace);
+        window.emitSound(760, 0.08, "triangle", 0.28);
+        setTimeout(() => window.emitSound(980, 0.14, "triangle", 0.22), 90);
       }
-    }, 50);
+    }, 120);
   }
-
   function drawCard() {
     const resultEl = $("card-result");
     if (!resultEl || resultEl.classList.contains("card-flipping")) return;
 
-    resultEl.classList.add("card-flipping");
-    window.emitSound(400, 0.1, "sawtooth");
+    resultEl.className = "card-result-box card-flipping";
+    resultEl.innerHTML = '<div class="playing-card playing-card-back" aria-label="Sacando carta"><span class="playing-card-mark">AMS</span></div>';
+    window.emitSound(360, 0.08, "sawtooth", 0.18);
 
     setTimeout(() => {
       const suit = CARD_SUITS[Math.floor(Math.random() * CARD_SUITS.length)];
       const value = CARD_VALUES[Math.floor(Math.random() * CARD_VALUES.length)];
-
-      resultEl.textContent = `${value}${suit}`;
+      const symbols = { S: "♠", H: "♥", D: "♦", C: "♣" };
+      const red = suit === "H" || suit === "D";
       resultEl.className = "card-result-box";
-      resultEl.classList.add(suit === "H" || suit === "D" ? "red" : "black");
+      resultEl.innerHTML =
+        '<div class="playing-card ' + (red ? "red" : "black") + '" aria-label="Carta ' + value + ' ' + symbols[suit] + '">' +
+          '<span class="card-corner top">' + value + '<b>' + symbols[suit] + '</b></span>' +
+          '<span class="card-center-suit">' + symbols[suit] + '</span>' +
+          '<span class="card-corner bottom">' + value + '<b>' + symbols[suit] + '</b></span>' +
+        '</div>';
+      window.emitSound(760, 0.12, "triangle", 0.22);
+    }, 420);
 
-      window.emitSound(800, 0.15, "triangle");
-    }, 250);
-
-    setTimeout(() => {
-      resultEl.classList.remove("card-flipping");
-    }, 500);
+    setTimeout(() => resultEl.classList.remove("card-flipping"), 700);
   }
-
   function bindModalEvents() {
     document.querySelectorAll("[data-tool-close]").forEach((button) => {
       button.addEventListener("click", () => closeModal(button.dataset.toolClose));
@@ -595,153 +647,6 @@ const Tools = (() => {
 })();
 window.Tools = Tools;
 
-
-/********************
- * MÚSICA AMBIENTAL
- ********************/
-const PartyMusic = (() => {
-  let ctx = null;
-  let master = null;
-  let compressor = null;
-  let timer = null;
-  let enabled = false;
-  let step = 0;
-
-  const chords = [
-    [196.00, 246.94, 293.66],
-    [174.61, 220.00, 261.63],
-    [146.83, 196.00, 246.94],
-    [164.81, 207.65, 246.94]
-  ];
-
-  function playChord(notes) {
-    if (!ctx || !master || !enabled) return;
-    const now = ctx.currentTime;
-    notes.forEach((frequency, index) => {
-      const osc = ctx.createOscillator();
-      const gain = ctx.createGain();
-      const filter = ctx.createBiquadFilter();
-      osc.type = index === 0 ? "sine" : "triangle";
-      osc.frequency.setValueAtTime(frequency, now);
-      filter.type = "lowpass";
-      filter.frequency.setValueAtTime(1700, now);
-      gain.gain.setValueAtTime(0.0001, now);
-      gain.gain.exponentialRampToValueAtTime([0.13, 0.085, 0.06][index], now + 0.32);
-      gain.gain.exponentialRampToValueAtTime(0.0001, now + 2.7);
-      osc.connect(filter);
-      filter.connect(gain);
-      gain.connect(master);
-      osc.start(now);
-      osc.stop(now + 3.0);
-    });
-  }
-
-  function playPulse() {
-    if (!ctx || !master || !enabled) return;
-    const now = ctx.currentTime;
-    const osc = ctx.createOscillator();
-    const gain = ctx.createGain();
-    osc.type = "sine";
-    osc.frequency.setValueAtTime(392, now);
-    osc.frequency.exponentialRampToValueAtTime(196, now + 0.22);
-    gain.gain.setValueAtTime(0.0001, now);
-    gain.gain.exponentialRampToValueAtTime(0.12, now + 0.025);
-    gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.42);
-    osc.connect(gain);
-    gain.connect(master);
-    osc.start(now);
-    osc.stop(now + 0.45);
-  }
-
-  async function ensureContext() {
-    if (!ctx) {
-      const AudioCtor = window.AudioContext || window.webkitAudioContext;
-      if (!AudioCtor) throw new Error("Web Audio no disponible");
-      ctx = new AudioCtor({ latencyHint: "interactive" });
-      master = ctx.createGain();
-      compressor = ctx.createDynamicsCompressor();
-      compressor.threshold.value = -18;
-      compressor.knee.value = 16;
-      compressor.ratio.value = 5;
-      compressor.attack.value = 0.01;
-      compressor.release.value = 0.2;
-      master.gain.value = 0.86;
-      master.connect(compressor);
-      compressor.connect(ctx.destination);
-    }
-    if (ctx.state === "suspended" || ctx.state === "interrupted") {
-      await ctx.resume();
-    }
-    if (ctx.state !== "running") throw new Error("AudioContext no está activo");
-  }
-
-  async function start() {
-    try {
-      await ensureContext();
-      enabled = true;
-      if (master) {
-        master.gain.cancelScheduledValues(ctx.currentTime);
-        master.gain.setTargetAtTime(0.86, ctx.currentTime, 0.05);
-      }
-      step = 0;
-      playPulse();
-      playChord(chords[step]);
-      step++;
-      clearInterval(timer);
-      timer = setInterval(() => {
-        if (ctx && ctx.state === "running") {
-          playChord(chords[step % chords.length]);
-          step++;
-        }
-      }, 3000);
-      updateButton();
-    } catch {
-      enabled = false;
-      updateButton();
-    }
-  }
-
-  function stop() {
-    enabled = false;
-    clearInterval(timer);
-    timer = null;
-    if (master && ctx) {
-      try {
-        master.gain.cancelScheduledValues(ctx.currentTime);
-        master.gain.setTargetAtTime(0.0001, ctx.currentTime, 0.08);
-      } catch {}
-    }
-    updateButton();
-  }
-
-  function toggle() {
-    if (enabled) stop();
-    else start();
-  }
-
-  function updateButton() {
-    const button = document.getElementById("musicToggle");
-    if (!button) return;
-    button.classList.toggle("is-on", enabled);
-    button.setAttribute("aria-pressed", String(enabled));
-    button.setAttribute("title", enabled ? "Apagar música ambiental" : "Activar música ambiental");
-    const small = button.querySelector("small");
-    if (small) small.textContent = enabled ? "Encendida" : "Ambiente";
-  }
-
-  function init() {
-    document.getElementById("musicToggle")?.addEventListener("click", toggle);
-    document.addEventListener("visibilitychange", () => {
-      if (enabled && ctx && document.visibilityState === "visible") {
-        ctx.resume().catch(() => {});
-      }
-    });
-    updateButton();
-  }
-
-  return { init, start, stop, toggle };
-})();
-window.PartyMusic = PartyMusic;
 
 /********************
  * SELECTOR DE JUEGOS
@@ -911,7 +816,6 @@ const App = (() => {
     Theme.init();
 Nav.init();
     Tools.init();
-    PartyMusic.init();
     GamesMenu.init();
     initExternalLinks();
   }
