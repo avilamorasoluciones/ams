@@ -1,4 +1,4 @@
-const CACHE_NAME = "juegos-avila-mora-v26";
+const CACHE_NAME = "juegos-avila-mora-v27";
 const APP_SHELL = [
   "./",
   "./index.html",
@@ -9,7 +9,7 @@ const APP_SHELL = [
   "./tabu.html",
   "./verdadreto.html",
   "./yonunca.html",
-  "./styles.css?v=20260926-11",
+  "./styles.css?v=20260926-12",
   "./scripts.js",
   "./players.js",
   "./game-bridge.js",
@@ -34,15 +34,19 @@ const APP_SHELL = [
   "./game-yonunca.svg",
   "./tool-dice.svg",
   "./tool-cards.svg",
-  "./tool-music.svg",
   "./ui-icons.svg"
 ];
 
 self.addEventListener("install", event => {
   event.waitUntil(
-    caches.open(CACHE_NAME)
-      .then(cache => cache.addAll(APP_SHELL))
-      .then(() => self.skipWaiting())
+    caches.open(CACHE_NAME).then(async cache => {
+      await Promise.all(APP_SHELL.map(async url => {
+        const request = new Request(url, { cache: "no-store" });
+        const response = await fetch(request);
+        if (!response.ok) throw new Error("No se pudo precargar " + url);
+        await cache.put(request, response.clone());
+      }));
+    }).then(() => self.skipWaiting())
   );
 });
 
@@ -59,21 +63,37 @@ self.addEventListener("activate", event => {
 self.addEventListener("fetch", event => {
   if (event.request.method !== "GET") return;
 
+  const url = new URL(event.request.url);
+  if (url.origin !== self.location.origin) return;
+
+  const freshDestinations = new Set(["document", "script", "style", "manifest"]);
+  const mustBeFresh = event.request.mode === "navigate" || freshDestinations.has(event.request.destination);
+
   event.respondWith(
-    caches.match(event.request).then(cached => {
-      const network = fetch(event.request).then(response => {
-        if (response && response.ok && new URL(event.request.url).origin === self.location.origin) {
+    (async () => {
+      const cached = await caches.match(event.request);
+
+      try {
+        // Los documentos y recursos de código siempre intentan red primero.
+        // Así una publicación nueva no queda atrapada detrás del caché local.
+        const request = mustBeFresh
+          ? new Request(event.request, { cache: "no-store" })
+          : event.request;
+        const response = await fetch(request);
+
+        if (response && response.ok) {
           const copy = response.clone();
-          caches.open(CACHE_NAME).then(cache => cache.put(event.request, copy));
+          const cache = await caches.open(CACHE_NAME);
+          await cache.put(event.request, copy);
         }
         return response;
-      }).catch(() => {
+      } catch {
         if (cached) return cached;
-        if (event.request.mode === "navigate") return caches.match("./index.html");
+        if (event.request.mode === "navigate") {
+          return caches.match("./index.html");
+        }
         return Response.error();
-      });
-
-      return cached || network;
-    })
+      }
+    })()
   );
 });
