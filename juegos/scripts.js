@@ -214,6 +214,7 @@ const PWA = (() => {
   }
 
   function init() {
+    try { sessionStorage.removeItem("ams_sw_reloaded_v27"); } catch {}
     createUI();
 
     window.addEventListener("beforeinstallprompt", event => {
