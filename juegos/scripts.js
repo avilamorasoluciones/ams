@@ -127,18 +127,6 @@ const PWA = (() => {
   function createUI() {
     if (document.getElementById("pwa-install-banner")) return;
 
-    const dock = document.createElement("div");
-    dock.className = "pwa-dock";
-    const hasThemeControl = Boolean(document.getElementById("themeToggleBtn"));
-    dock.innerHTML = `
-      <button id="appearance-fab" class="pwa-fab" type="button" aria-label="Cambiar apariencia" title="Cambiar apariencia">${window.uiIcon("palette")}</button>
-      ${hasThemeControl ? "" : '<button id="pwa-theme-fab" class="pwa-fab" type="button" aria-label="Cambiar modo claro u oscuro" title="Modo claro u oscuro">${window.uiIcon("theme")}</button>'}
-    `;
-    document.body.appendChild(dock);
-
-    document.getElementById("appearance-fab")?.addEventListener("click", () => Appearance.open());
-    document.getElementById("pwa-theme-fab")?.addEventListener("click", () => Theme.toggle());
-
     banner = document.createElement("div");
     banner.id = "pwa-install-banner";
     banner.className = "pwa-install-banner";
