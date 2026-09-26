@@ -4196,3 +4196,54 @@ body.light-theme .fab-btn {
 #musicToggle {
   display: none !important;
 }
+
+
+/* El modo claro manda también sobre las personalidades visuales de cada juego. */
+body.light-theme[class*="theme-"] {
+  --bg: #f8fafc !important;
+  --card: #ffffff !important;
+  --card2: #f1f5f9 !important;
+  --border: #cbd5e1 !important;
+  --border-light: #cbd5e1 !important;
+  --text: #0f172a !important;
+  --muted: #475569 !important;
+  --topbar-bg: rgba(255,255,255,.94) !important;
+  --input-bg: #ffffff !important;
+  --btn-bg: #ffffff !important;
+  --ghost-bg: #ffffff !important;
+  --player-bg: #f1f5f9 !important;
+  --footer-bg: #f8fafc !important;
+  --overlay-bg: rgba(15,23,42,.42) !important;
+}
+body.light-theme[class*="theme-"] .topbar,
+body.light-theme[class*="theme-"] .site-nav {
+  background: rgba(255,255,255,.94) !important;
+  color: var(--text);
+}
+body.light-theme[class*="theme-"] .box,
+body.light-theme[class*="theme-"] .impostor-hero,
+body.light-theme[class*="theme-"] .game-slide {
+  background: linear-gradient(145deg,#ffffff,#f1f5f9) !important;
+  color: #0f172a !important;
+}
+body.light-theme[class*="theme-"] .box .box {
+  background: #f8fafc !important;
+}
+body.light-theme[class*="theme-"] .game-title,
+body.light-theme[class*="theme-"] h1,
+body.light-theme[class*="theme-"] h2,
+body.light-theme[class*="theme-"] h3,
+body.light-theme[class*="theme-"] .big-player-name,
+body.light-theme[class*="theme-"] .pass-name,
+body.light-theme[class*="theme-"] .result-title {
+  color: var(--text);
+}
+body.light-theme[class*="theme-"] .game-title {
+  color: var(--primary);
+}
+body.light-theme[class*="theme-"] .game-sub,
+body.light-theme[class*="theme-"] p.muted,
+body.light-theme[class*="theme-"] .muted,
+body.light-theme[class*="theme-"] .label-muted {
+  color: #475569 !important;
+}
