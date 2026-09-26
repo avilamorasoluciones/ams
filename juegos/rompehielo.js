@@ -3,10 +3,15 @@ const RompehieloGame = (() => {
 
   function $(id) { return document.getElementById(id); }
 
+  function saveSession(screen = document.querySelector(".im-screen.active")?.id || "r-scr-lobby") {
+    window.GameSession?.save("rompehielo", { pool, currentQuestion, screen });
+  }
+
   function changeScreen(id) {
     document.querySelectorAll(".im-screen").forEach(s => s.classList.remove("active"));
     $(id).classList.add("active");
     document.body.classList.toggle("playing", id !== "r-scr-lobby");
+    saveSession(id);
   }
 
   function startGame() {
@@ -30,13 +35,26 @@ const RompehieloGame = (() => {
     const q = pool.pop();
     $("r-catBadge").textContent = q.cat;
     $("r-txtQuestion").textContent = q.q;
+    currentQuestion = q;
+    saveSession("r-scr-game");
     window.emitSound(600, 0.1, "triangle");
+  }
+
+  function restoreSession(saved) {
+    if (!saved || !saved.screen || saved.screen === "r-scr-lobby" || !saved.currentQuestion) return false;
+    pool = Array.isArray(saved.pool) ? saved.pool : [];
+    currentQuestion = saved.currentQuestion;
+    $("r-catBadge").textContent = currentQuestion.cat;
+    $("r-txtQuestion").textContent = currentQuestion.q;
+    changeScreen(saved.screen);
+    return true;
   }
 
   function init() {
     $("r-btnStart").onclick = startGame;
     $("r-btnNext").onclick = nextQuestion;
-    $("r-btnEnd").onclick = () => changeScreen("r-scr-lobby");
+    $("r-btnEnd").onclick = () => { window.GameSession?.clear("rompehielo"); changeScreen("r-scr-lobby"); };
+    if (!restoreSession(window.GameSession?.load("rompehielo"))) changeScreen("r-scr-lobby");
   }
 
   return { init };
