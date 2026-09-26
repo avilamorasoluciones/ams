@@ -251,7 +251,7 @@ const PWA = (() => {
         window.location.reload();
       });
 
-      navigator.serviceWorker.register("./sw.js?v=20260926-27", {
+      navigator.serviceWorker.register("./sw.js?v=20260926-28", {
         scope: "./",
         updateViaCache: "none"
       }).then(registration => {
@@ -565,23 +565,38 @@ const Tools = (() => {
 
   function rollDice() {
     const resultEl = $("dice-result");
-    const cube = resultEl?.querySelector(".dice-cube");
-    if (!resultEl || !cube || cube.classList.contains("dice-rolling")) return;
+    if (!resultEl) return;
+
+    // Algunas páginas ya traen un modal antiguo en el HTML. Lo actualizamos
+    // aquí para que el botón nunca dependa de que exista previamente el cubo 3D.
+    let cube = resultEl.querySelector(".dice-cube");
+    if (!cube) {
+      resultEl.className = "dice-stage";
+      resultEl.innerHTML = `
+        <div class="dice-cube" aria-hidden="true">
+          <span class="dice-face dice-front">1</span>
+          <span class="dice-face dice-back">6</span>
+          <span class="dice-face dice-right">3</span>
+          <span class="dice-face dice-left">4</span>
+          <span class="dice-face dice-top">5</span>
+          <span class="dice-face dice-bottom">2</span>
+        </div>`;
+      cube = resultEl.querySelector(".dice-cube");
+    }
+    if (!cube || cube.classList.contains("dice-rolling")) return;
 
     cube.classList.remove("dice-settled");
     cube.classList.add("dice-rolling");
     resultEl.setAttribute("aria-label", "El dado está rodando");
 
-    // Varias vueltas + un giro final aleatorio: se siente como un dado real
-    // y deja claro que el resultado no se conoce hasta que se detiene.
     const finalFace = Math.floor(Math.random() * 6) + 1;
     const rotations = [
-      [720, 1080],   // 1 -> frente
-      [630, 1080],   // 2 -> abajo
-      [720, 990],    // 3 -> derecha
-      [720, 1170],   // 4 -> izquierda
-      [810, 1080],   // 5 -> arriba
-      [720, 1260]    // 6 -> atrás
+      [720, 1080],
+      [630, 1080],
+      [720, 990],
+      [720, 1170],
+      [810, 1080],
+      [720, 1260]
     ][finalFace - 1];
 
     cube.style.setProperty("--spin-x", rotations[0] + "deg");
@@ -828,22 +843,8 @@ window.GamesMenu = GamesMenu;
  ********************/
 const MobileInputGuard = (() => {
   function init() {
-    const inputs = document.querySelectorAll("input[type=text], input[type=search]");
-    inputs.forEach(input => {
-      input.addEventListener("focus", () => {
-        // Una sola corrección después de que Android haya terminado de
-        // redimensionar el viewport por el teclado.
-        window.setTimeout(() => {
-          if (document.activeElement !== input) return;
-          const rect = input.getBoundingClientRect();
-          const topSafe = 92;
-          const bottomSafe = Math.max(topSafe + 40, window.innerHeight - 150);
-          if (rect.bottom > bottomSafe || rect.top < topSafe) {
-            input.scrollIntoView({ block: "center", behavior: "smooth" });
-          }
-        }, 180);
-      });
-    });
+    // Intencionalmente vacío: Chrome/Android gestiona el desplazamiento necesario
+    // para mostrar el teclado. No forzamos scroll al enfocar un campo.
   }
   return { init };
 })();
