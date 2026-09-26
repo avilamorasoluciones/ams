@@ -496,7 +496,7 @@
       <h1>Tu cuerpo,<br>tus reglas.</h1>
       <p class="muted">Registra comidas, agua, actividad, ayuno y peso. Tus datos se sincronizan con tu cuenta.</p>
     </div>
-    <div id="installAppCard" class="panel install-app-card" style="display:none;">
+    <div id="installAppCard" class="panel install-app-card">
       <div>
         <b id="installAppTitle">📲 Lleva AyuKcal contigo</b>
         <p id="installAppText" class="muted" style="margin-top:5px;font-size:.86rem;">Instala AyuKcal como app para abrirla directamente desde tu dispositivo.</p>
@@ -2291,6 +2291,28 @@ window.addEventListener("resize",()=>{if($("chart")&&document.getElementById("pe
 setInterval(() => { if (state().fast) renderFast(); }, 1000);
 bindUISounds();
 
+</script>
+<script id="ayukcal-install-fallback">
+(function(){
+  function forceInstallBanner(){
+    const card=document.getElementById("installAppCard");
+    if(!card) return;
+    const standalone=window.matchMedia("(display-mode: standalone)").matches ||
+      window.matchMedia("(display-mode: window-controls-overlay)").matches ||
+      window.navigator.standalone===true;
+    if(standalone){ card.style.display="none"; return; }
+    const title=document.getElementById("installAppTitle");
+    const text=document.getElementById("installAppText");
+    const btn=document.getElementById("installAppBtn");
+    if(title) title.textContent="📲 Instala AyuKcal como app";
+    if(text) text.textContent="En Chrome: abre ⋮ y elige «Instalar aplicación» o «Añadir a pantalla de inicio».";
+    if(btn) btn.textContent="Cómo instalar";
+    card.style.display="flex";
+  }
+  if(document.readyState==="loading") document.addEventListener("DOMContentLoaded",()=>setTimeout(forceInstallBanner,700),{once:true});
+  else setTimeout(forceInstallBanner,700);
+  setTimeout(forceInstallBanner,1800);
+})();
 </script>
 </body>
 </html>
