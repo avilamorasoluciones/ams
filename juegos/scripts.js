@@ -232,6 +232,55 @@ const PWA = (() => {
 window.PWA = PWA;
 
 /********************
+ * TEMA CLARO / OSCURO
+ ********************/
+const Theme = (() => {
+  const KEY = "avila_mora_theme_v3";
+
+  function updateMeta() {
+    const meta = document.querySelector('meta[name="theme-color"]');
+    if (meta) meta.setAttribute("content", document.body.classList.contains("light-theme") ? "#f8fafc" : "#070A12");
+  }
+
+  function updateButtons() {
+    const light = document.body.classList.contains("light-theme");
+    document.querySelectorAll("[data-theme-toggle]").forEach(btn => {
+      btn.setAttribute("aria-pressed", String(light));
+      btn.setAttribute("aria-label", light ? "Cambiar a modo oscuro" : "Cambiar a modo claro");
+      btn.setAttribute("title", light ? "Modo oscuro" : "Modo claro");
+    });
+  }
+
+  function apply(mode, persist = true) {
+    const light = mode === "light";
+    document.body.classList.toggle("light-theme", light);
+    if (persist) {
+      try { localStorage.setItem(KEY, light ? "light" : "dark"); } catch {}
+    }
+    updateMeta();
+    updateButtons();
+  }
+
+  function toggle() {
+    const light = !document.body.classList.contains("light-theme");
+    apply(light ? "light" : "dark", true);
+    if (typeof window.emitSound === "function") window.emitSound(light ? 800 : 400, 0.05, "triangle");
+  }
+
+  function init() {
+    let saved = "dark";
+    try { saved = localStorage.getItem(KEY) || "dark"; } catch {}
+    apply(saved === "light" ? "light" : "dark", false);
+    document.querySelectorAll("[data-theme-toggle]").forEach(btn => {
+      btn.addEventListener("click", toggle);
+    });
+  }
+
+  return { init, toggle, apply };
+})();
+window.Theme = Theme;
+
+/********************
  * NAVEGACIÓN MÓVIL
  ********************/
 const Nav = (() => {
@@ -804,6 +853,7 @@ const App = (() => {
 
   function init() {
     PWA.init();
+    Theme.init();
 Nav.init();
     Tools.init();
     PartyMusic.init();
