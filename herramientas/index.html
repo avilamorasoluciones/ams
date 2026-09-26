@@ -633,19 +633,19 @@
     </main>
 
     <!-- FOOTER PROMOCIONAL & COPYRIGHT -->
-    <footer class="mt-auto w-100">
+    <footer class="footer-ams mt-auto w-100">
         <div class="py-4 text-center" style="background: rgba(5,8,16,0.9); border-top: 1px solid var(--border-glass);">
             <div class="container">
                 <h4 class="fw-bold mb-1" style="font-family: 'Space Grotesk', sans-serif; font-size: 1.2rem;">Arquitectura Digital a Medida</h4>
                 <p class="text-muted mb-3 small">¿Necesitas automatizar procesos complejos para tu empresa?</p>
-                <a href="https://avilamorasoluciones.github.io/ams" target="_blank" class="btn btn-outline-light rounded-pill px-4 btn-sm">
+                <a href="../" class="btn btn-outline-light rounded-pill px-4 btn-sm">
                     Conoce nuestros servicios <i class="fa-solid fa-arrow-right ms-2"></i>
                 </a>
             </div>
         </div>
         <div class="text-center py-3" style="background: #020408; border-top: 1px solid rgba(255,255,255,0.02);">
             <div class="container text-muted small" style="font-size: 0.75rem;">
-                &copy; <span id="current-year"></span> Avila Mora Soluciones. Todos los derechos reservados.
+                &copy; <span id="current-year"></span> <strong>Avila Mora Soluciones</strong> · Herramientas que respetan tus archivos.
             </div>
         </div>
     </footer>
@@ -825,7 +825,9 @@
                 for (let file of files) {
                     const img = await createImageBitmap(file), canvas = document.createElement('canvas');
                     canvas.width = img.width; canvas.height = img.height; canvas.getContext('2d').drawImage(img, 0, 0);
-                    const blob = await new Promise(res => canvas.toBlob(res, targetFormat, quality)); 
+                    const blob = await new Promise(res => canvas.toBlob(res, targetFormat, quality));
+                    if (img.close) img.close();
+                    if (!blob) throw new Error('El navegador no admite el formato de salida seleccionado.');
                     const newName = file.name.replace(/\.[^/.]+$/, "") + extension;
                     if(isMultiple) zip.file(newName, blob); else downloadFile(blob, newName, targetFormat);
                 }
@@ -964,7 +966,8 @@
             const btn = document.getElementById('btn-split'); btn.innerHTML = 'Procesando...';
             try {
                 const file = wsSplit.getFile(), rng = document.getElementById('split-ranges').value;
-                const toExt = parsePdfRanges(rng).map(p=>p-1); 
+                const toExt = parsePdfRanges(rng).map(p=>p-1);
+                if (!toExt.length) { alert('Indica al menos una página válida. Ejemplo: 1, 3, 5-8'); return; }
                 const src = await PDFDocument.load(await file.arrayBuffer()); const doc = await PDFDocument.create();
                 const pages = await doc.copyPages(src, toExt.filter(p => p>=0 && p<src.getPageCount())); pages.forEach(p => doc.addPage(p));
                 downloadFile(await doc.save(), 'AMS_Extraido.pdf');
@@ -983,7 +986,7 @@
                     await page.render({canvasContext: canvas.getContext('2d'), viewport: viewport}).promise;
                     zip.file(`pagina_${i}.png`, await new Promise(res => canvas.toBlob(res, 'image/png')));
                 }
-                downloadFile(await zip.generateAsync({type: 'blob'}), file.name.replace('.pdf', '_AMS_Fotos.zip'), 'application/zip');
+                downloadFile(await zip.generateAsync({type: 'blob'}), file.name.replace(/\.pdf$/i, '_AMS_Fotos.zip'), 'application/zip');
             } catch(e) { alert('Error al extraer'); } finally { btn.innerHTML = 'Extraer Fotos'; }
         });
 
@@ -993,7 +996,8 @@
             const btn = document.getElementById('btn-remove'); btn.innerHTML = 'Procesando...';
             try {
                 const file = wsRemove.getFile(), rng = document.getElementById('remove-ranges').value;
-                const toRemove = parsePdfRanges(rng).map(p=>p-1); 
+                const toRemove = parsePdfRanges(rng).map(p=>p-1);
+                if (!toRemove.length) { alert('Indica al menos una página válida. Ejemplo: 2, 4-6'); return; }
                 const src = await PDFDocument.load(await file.arrayBuffer()); const doc = await PDFDocument.create();
                 const toKeep = Array.from({length: src.getPageCount()}, (_, i) => i).filter(i => !toRemove.includes(i));
                 const pages = await doc.copyPages(src, toKeep); pages.forEach(p => doc.addPage(p));
