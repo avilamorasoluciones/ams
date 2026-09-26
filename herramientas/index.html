@@ -1225,7 +1225,7 @@
         // Búsqueda rápida de herramientas
         const toolSearch = document.getElementById('tool-search');
         const searchCount = document.getElementById('search-count');
-        const toolCards = Array.from(document.querySelectorAll('.tool-card'));
+        const toolCards = Array.from(document.querySelectorAll('.tool-card')); if (searchCount) searchCount.textContent = toolCards.length + ' herramientas disponibles';
         const noResults = document.createElement('div');
         noResults.className = 'no-results';
         noResults.innerHTML = '<i class="fa-solid fa-magnifying-glass-minus fa-2x mb-2"></i><br>No encontramos una herramienta con ese nombre.';
@@ -1327,5 +1327,5 @@
         document.querySelectorAll('button').forEach(btn=>btn.addEventListener('click',()=>{if(btn.id.startsWith('btn-')&&!btn.disabled){btn.classList.add('button-pulse');setTimeout(()=>btn.classList.remove('button-pulse'),350)}}));
 
     </script>
-</body
+</body>
 </html>
