@@ -276,11 +276,22 @@ const GameSession = (() => {
     }
   }
 
+  let activeSaver = null;
+
   function clear(game) {
     try { localStorage.removeItem(PREFIX + game); } catch {}
   }
 
-  return { save, load, clear };
+  function register(saver) {
+    activeSaver = typeof saver === "function" ? saver : null;
+  }
+
+  document.addEventListener("visibilitychange", () => {
+    if (document.visibilityState === "hidden") activeSaver?.();
+  });
+  window.addEventListener("pagehide", () => activeSaver?.());
+
+  return { save, load, clear, register };
 })();
 window.GameSession = GameSession;
 
