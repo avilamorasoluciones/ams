@@ -779,5 +779,21 @@
 
   <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
   <script src="scripts.js"></script>
+
+<script>
+  // En móvil, los controles flotantes se atenúan al llegar al final para no tapar el footer.
+  (() => {
+    const updatePageEndState = () => {
+      const nearEnd = window.innerWidth <= 740 &&
+        (window.scrollY + window.innerHeight >= document.documentElement.scrollHeight - 28);
+      document.body.classList.toggle("page-end-mobile", nearEnd);
+    };
+    window.addEventListener("scroll", updatePageEndState, { passive: true });
+    window.addEventListener("resize", updatePageEndState, { passive: true });
+    window.addEventListener("load", updatePageEndState, { once: true });
+    requestAnimationFrame(updatePageEndState);
+  })();
+</script>
+
 </body>
 </html>
