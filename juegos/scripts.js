@@ -839,8 +839,11 @@ const GamesMenu = (() => {
         x: event.clientX,
         y: event.clientY,
         scrollLeft: carousel.scrollLeft,
-        horizontal: false
+        horizontal: false,
+        dx: 0,
+        pointerId: event.pointerId
       };
+      try { carousel.setPointerCapture(event.pointerId); } catch {}
       carousel.classList.remove("is-dragging");
     }, { passive: true });
 
@@ -856,6 +859,7 @@ const GamesMenu = (() => {
       }
       if (Math.abs(dx) >= Math.abs(dy)) {
         drag.horizontal = true;
+        drag.dx = dx;
         carousel.classList.add("is-dragging");
         event.preventDefault();
         carousel.scrollLeft = drag.scrollLeft - dx;
@@ -865,18 +869,15 @@ const GamesMenu = (() => {
     const finishDrag = () => {
       if (!drag) return;
       const wasHorizontal = drag.horizontal;
+      const dx = drag.dx;
+      const pointerId = drag.pointerId;
       drag = null;
       carousel.classList.remove("is-dragging");
-      if (wasHorizontal) {
-        const list = visibleSlides();
-        if (!list.length) return;
-        const direction = carousel.scrollLeft > (list[Math.max(0, activeIndex)]?.offsetLeft || 0) ? 1 : -1;
+      try { carousel.releasePointerCapture(pointerId); } catch {}
+      if (wasHorizontal && Math.abs(dx) > 36) {
+        goTo(activeIndex + (dx < 0 ? 1 : -1), true);
+      } else if (wasHorizontal) {
         syncActive();
-        const current = activeIndex;
-        const projected = Math.abs(carousel.scrollLeft - (list[current]?.offsetLeft || 0)) > 36
-          ? current + direction
-          : current;
-        goTo(Math.max(0, Math.min(projected, list.length - 1)), true);
       }
     };
     carousel.addEventListener("pointerup", finishDrag, { passive: true });
