@@ -145,7 +145,7 @@ const ImpostorGame = (() => {
       .map((player, index) => {
         return `
           <div class="player-tag">
-            👤 ${escapeHTML(player)}
+            ${window.uiIcon("user")} ${escapeHTML(player)}
             <span class="delete-btn" data-remove="${index}">×</span>
           </div>
         `;
@@ -341,7 +341,7 @@ const ImpostorGame = (() => {
 
     if (role === "impostor") {
       area.innerHTML = `
-        <div class="emoji-display">😈</div>
+        <div class="emoji-display">${window.uiIcon("impostor")}</div>
         <div class="badge badge-pink">Rol secreto</div>
         <h2 class="game-title" style="margin-top:6px;color:var(--danger);">ERES EL IMPOSTOR</h2>
         <p class="muted strong-copy">No conoces la palabra exacta.</p>
@@ -354,7 +354,7 @@ const ImpostorGame = (() => {
           starts
             ? `
               <div class="box panel-soft full-width">
-                <div class="label-muted color-warning">⚠️ Empiezas tú</div>
+                <div class="label-muted color-warning">${window.uiIcon("warning")} Empiezas tú</div>
                 <p class="muted strong-copy">Habla con seguridad y da una pista creíble.</p>
               </div>
             `
@@ -376,7 +376,7 @@ const ImpostorGame = (() => {
           starts
             ? `
               <div class="box panel-soft full-width">
-                <div class="label-muted color-warning">⚠️ Empiezas tú</div>
+                <div class="label-muted color-warning">${window.uiIcon("warning")} Empiezas tú</div>
                 <p class="muted strong-copy">No reveles demasiado la palabra.</p>
               </div>
             `
@@ -511,7 +511,7 @@ const ImpostorGame = (() => {
       .map((player, index) => {
         return `
           <button class="vote-btn" type="button" data-vote="${index}">
-            👤 ${escapeHTML(player)}
+            ${window.uiIcon("user")} ${escapeHTML(player)}
           </button>
         `;
       })
@@ -538,11 +538,11 @@ const ImpostorGame = (() => {
     }
 
     if (votedRole === "impostor") {
-      title.textContent = "¡ATRAPARON AL IMPOSTOR! 🎉";
+      title.textContent = "¡ATRAPARON AL IMPOSTOR! ";
       title.style.color = "var(--success)";
 
       area.innerHTML = `
-        <div class="emoji-display">😈</div>
+        <div class="emoji-display">${window.uiIcon("impostor")}</div>
         <h2 class="big-player-name" style="font-size:1.9rem;">${escapeHTML(votedPlayer)}</h2>
         <p class="muted strong-copy">Sí era impostor.</p>
         <div class="box panel-soft full-width">
@@ -561,11 +561,11 @@ const ImpostorGame = (() => {
       safeSound(520, 0.08, "square");
       setTimeout(() => safeSound(760, 0.12, "square"), 120);
     } else {
-      title.textContent = "¡GANÓ EL IMPOSTOR! 😈";
+      title.textContent = "¡GANÓ EL IMPOSTOR! ${window.uiIcon("impostor")}";
       title.style.color = "var(--danger)";
 
       area.innerHTML = `
-        <div class="emoji-display">🤡</div>
+        <div class="emoji-display">${window.uiIcon("impostor")}</div>
         <h2 class="big-player-name" style="font-size:1.9rem;">${escapeHTML(votedPlayer)}</h2>
         <p class="muted strong-copy">Era inocente.</p>
         <div class="box panel-soft full-width">
