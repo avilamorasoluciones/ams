@@ -655,9 +655,9 @@ const PartyMusic = (() => {
       osc.type = index === 0 ? "sine" : "triangle";
       osc.frequency.setValueAtTime(frequency, now);
       filter.type = "lowpass";
-      filter.frequency.setValueAtTime(900, now);
+      filter.frequency.setValueAtTime(1200, now);
       gain.gain.setValueAtTime(0.0001, now);
-      gain.gain.exponentialRampToValueAtTime(0.028 / (index + 1), now + 0.45);
+      gain.gain.exponentialRampToValueAtTime(0.055 / (index + 1), now + 0.45);
       gain.gain.exponentialRampToValueAtTime(0.0001, now + 3.4);
       osc.connect(filter);
       filter.connect(gain);
@@ -672,7 +672,7 @@ const PartyMusic = (() => {
       if (!ctx) {
         ctx = new (window.AudioContext || window.webkitAudioContext)();
         master = ctx.createGain();
-        master.gain.value = 0.42;
+        master.gain.value = 0.72;
         master.connect(ctx.destination);
       }
       if (ctx.state === "suspended") await ctx.resume();
@@ -829,6 +829,59 @@ const GamesMenu = (() => {
       window.clearTimeout(carousel._amsScrollTimer);
       carousel._amsScrollTimer = window.setTimeout(syncActive, 90);
     }, { passive: true });
+
+    // Gesto híbrido: el dedo puede desplazarse verticalmente por la página
+    // y solo se captura cuando realmente empieza un gesto horizontal.
+    let drag = null;
+    carousel.addEventListener("pointerdown", event => {
+      if (event.pointerType === "mouse") return;
+      drag = {
+        x: event.clientX,
+        y: event.clientY,
+        scrollLeft: carousel.scrollLeft,
+        horizontal: false
+      };
+      carousel.classList.remove("is-dragging");
+    }, { passive: true });
+
+    carousel.addEventListener("pointermove", event => {
+      if (!drag) return;
+      const dx = event.clientX - drag.x;
+      const dy = event.clientY - drag.y;
+      if (!drag.horizontal && Math.abs(dx) < 10 && Math.abs(dy) < 10) return;
+      if (!drag.horizontal && Math.abs(dy) > Math.abs(dx)) {
+        drag = null;
+        carousel.classList.remove("is-dragging");
+        return;
+      }
+      if (Math.abs(dx) >= Math.abs(dy)) {
+        drag.horizontal = true;
+        carousel.classList.add("is-dragging");
+        event.preventDefault();
+        carousel.scrollLeft = drag.scrollLeft - dx;
+      }
+    }, { passive: false });
+
+    const finishDrag = () => {
+      if (!drag) return;
+      const wasHorizontal = drag.horizontal;
+      drag = null;
+      carousel.classList.remove("is-dragging");
+      if (wasHorizontal) {
+        const list = visibleSlides();
+        if (!list.length) return;
+        const direction = carousel.scrollLeft > (list[Math.max(0, activeIndex)]?.offsetLeft || 0) ? 1 : -1;
+        syncActive();
+        const current = activeIndex;
+        const projected = Math.abs(carousel.scrollLeft - (list[current]?.offsetLeft || 0)) > 36
+          ? current + direction
+          : current;
+        goTo(Math.max(0, Math.min(projected, list.length - 1)), true);
+      }
+    };
+    carousel.addEventListener("pointerup", finishDrag, { passive: true });
+    carousel.addEventListener("pointercancel", finishDrag, { passive: true });
+    carousel.addEventListener("pointerleave", finishDrag, { passive: true });
 
     carousel.addEventListener("keydown", event => {
       if (event.key === "ArrowRight") {
