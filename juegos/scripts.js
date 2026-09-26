@@ -62,7 +62,7 @@ function uiIcon(name, extraClass = "") {
 window.uiIcon = uiIcon;
 
 /********************
- * SONIDO GLOBAL 🎧
+ * SONIDO GLOBAL
  ********************/
 let audioCtx;
 
@@ -97,7 +97,7 @@ function emitSound(frequency, duration, waveType = "sine", volume = 0.5) {
 window.emitSound = emitSound;
 
 /********************
- * PWA / INSTALACIÓN 📲
+ * PWA / INSTALACIÓN
  ********************/
 const PWA = (() => {
   let deferredPrompt = null;
@@ -244,7 +244,7 @@ const PWA = (() => {
 window.PWA = PWA;
 
 /********************
- * APARIENCIAS 🎨
+ * APARIENCIAS
  ********************/
 const Appearance = (() => {
   const KEY = "avila_mora_appearance_v1";
@@ -381,7 +381,7 @@ const Appearance = (() => {
 window.Appearance = Appearance;
 
 /********************
- * NAVEGACIÓN MÓVIL ☰
+ * NAVEGACIÓN MÓVIL
  ********************/
 const Nav = (() => {
   let btn = null;
@@ -474,7 +474,7 @@ const Nav = (() => {
 window.Nav = Nav;
 
 /********************
- * HERRAMIENTAS 🎲🃏
+ * HERRAMIENTAS
  ********************/
 const Tools = (() => {
   const $ = (id) => document.getElementById(id);
@@ -594,7 +594,7 @@ const Tools = (() => {
 window.Tools = Tools;
 
 /********************
- * TEMA (CLARO/OSCURO) 🌓
+ * TEMA (CLARO/OSCURO)
  ********************/
 const Theme = (() => {
   const THEME_KEY = "avila_mora_theme_v2";
