@@ -692,6 +692,7 @@ const ImpostorGame = (() => {
     renderPlayers();
     bindEvents();
 
+    window.GameSession?.register(saveSession);
     const saved = window.GameSession?.load("impostor");
     if (saved && saved.screen !== "i-scr-lobby" && Array.isArray(saved.players) && saved.selectedCard) {
       players = saved.players;
