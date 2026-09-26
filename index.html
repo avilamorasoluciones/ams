@@ -109,6 +109,31 @@
     .nav-cta .btn{padding:8px 16px!important;font-size:.85rem!important;height:auto!important;line-height:1.2!important}
     .nav-cta .btn i{font-size:.85rem!important}
 
+    /* Accesos rápidos AMS: discretos en escritorio, claros en móvil */
+    .nav-shortcuts{display:flex!important;align-items:center!important;gap:6px!important;margin-left:auto!important;flex-shrink:0!important}
+    .nav-shortcut{width:32px!important;height:32px!important;border-radius:10px!important;display:inline-flex!important;align-items:center!important;justify-content:center!important;text-decoration:none!important;border:1px solid rgba(255,255,255,.12)!important;background:rgba(255,255,255,.045)!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.05)!important;transition:transform .2s ease,background .2s ease,border-color .2s ease,box-shadow .2s ease!important}
+    .nav-shortcut i{font-size:.82rem!important}
+    .nav-shortcut:hover{transform:translateY(-2px)!important;background:rgba(255,255,255,.09)!important;box-shadow:0 7px 18px rgba(0,0,0,.18)!important}
+    .shortcut-ayukcal{color:#4ade80!important}
+    .shortcut-ayukcal:hover{border-color:rgba(74,222,128,.45)!important}
+    .shortcut-juegos{color:#60a5fa!important}
+    .shortcut-juegos:hover{border-color:rgba(96,165,250,.45)!important}
+    .shortcut-herramientas{color:#22d3ee!important}
+    .shortcut-herramientas:hover{border-color:rgba(34,211,238,.45)!important}
+    .mobile-shortcuts{display:flex;gap:10px;margin:12px 0 4px;padding-top:14px;border-top:1px solid rgba(255,255,255,.08)}
+    .mobile-shortcut{display:flex!important;align-items:center!important;justify-content:center!important;gap:8px!important;flex:1!important;min-height:42px!important;padding:9px 10px!important;border:1px solid rgba(255,255,255,.1)!important;border-radius:12px!important;background:rgba(255,255,255,.035)!important;text-decoration:none!important;font-size:.82rem!important;font-weight:700!important}
+    .mobile-shortcut i{font-size:.9rem!important}
+    @media(max-width:1250px){
+      .nav-shortcuts{display:none!important}
+    }
+    @media(min-width:1251px){
+      .mobile-shortcuts{display:none!important}
+    }
+    @media(max-width:520px){
+      .mobile-shortcuts{gap:7px!important}
+      .mobile-shortcut{font-size:.75rem!important;padding:8px 5px!important}
+    }
+
     .resource-card{position:relative;border-radius:16px;padding:30px;overflow:hidden;display:flex;flex-direction:column;gap:15px;transition:transform .3s ease,box-shadow .3s ease;z-index:1;height:100%;color:#fff!important}
     .resource-card:hover{transform:translateY(-8px)}
     .floating-icon{position:absolute;right:-15px;bottom:-20px;font-size:9rem;opacity:.15;color:#fff;z-index:-1;transform:rotate(-15deg);transition:transform .5s ease}
@@ -180,14 +205,26 @@
       </a>
 
       <ul class="nav-links" id="navLinks">
-        <li><a href="#inicio">inicio</a></li>
-        <li><a href="#servicios">servicios</a></li>
-        <li><a href="#planes">planes</a></li>
-        <li><a href="#gestion">gestión</a></li>
-        <li><a href="#portafolio">ejemplos</a></li>
-        <li><a href="#recursos">recursos</a></li>
-        <li><a href="#faq">preguntas</a></li>
+        <li><a href="#inicio">Inicio</a></li>
+        <li><a href="#servicios">Servicios</a></li>
+        <li><a href="#planes">Planes</a></li>
+        <li><a href="#gestion">Gestión</a></li>
+        <li><a href="#portafolio">Ejemplos</a></li>
+        <li><a href="#recursos">Recursos</a></li>
+        <li><a href="#faq">Preguntas</a></li>
       </ul>
+
+      <div class="nav-shortcuts" aria-label="Accesos rápidos">
+        <a class="nav-shortcut shortcut-ayukcal" href="./ayukcal/" aria-label="AyuKcal" title="AyuKcal">
+          <i class="fa-solid fa-heart-pulse" aria-hidden="true"></i>
+        </a>
+        <a class="nav-shortcut shortcut-juegos" href="./juegos/" aria-label="Juegos" title="Juegos">
+          <i class="fa-solid fa-gamepad" aria-hidden="true"></i>
+        </a>
+        <a class="nav-shortcut shortcut-herramientas" href="./herramientas/" aria-label="Herramientas" title="Herramientas">
+          <i class="fa-solid fa-toolbox" aria-hidden="true"></i>
+        </a>
+      </div>
 
       <div class="nav-cta">
         <a class="btn btn-primary" href="https://forms.gle/ybGKbvqcQe1vdx3K8" target="_blank" rel="noopener">
@@ -202,14 +239,20 @@
   </nav>
 
   <div class="mobile-panel" id="mobilePanel" aria-hidden="true">
-    <a href="#inicio">inicio <i class="fa-solid fa-arrow-right"></i></a>
-    <a href="#servicios">servicios <i class="fa-solid fa-arrow-right"></i></a>
-    <a href="#planes">planes <i class="fa-solid fa-arrow-right"></i></a>
-    <a href="#gestion">gestión <i class="fa-solid fa-arrow-right"></i></a>
-    <a href="#portafolio">ejemplos <i class="fa-solid fa-arrow-right"></i></a>
-    <a href="#recursos">recursos <i class="fa-solid fa-arrow-right"></i></a>
-    <a href="#faq">preguntas <i class="fa-solid fa-arrow-right"></i></a>
-    <a href="#contacto">contacto <i class="fa-solid fa-arrow-right"></i></a>
+    <a href="#inicio">Inicio <i class="fa-solid fa-arrow-right"></i></a>
+    <a href="#servicios">Servicios <i class="fa-solid fa-arrow-right"></i></a>
+    <a href="#planes">Planes <i class="fa-solid fa-arrow-right"></i></a>
+    <a href="#gestion">Gestión <i class="fa-solid fa-arrow-right"></i></a>
+    <a href="#portafolio">Ejemplos <i class="fa-solid fa-arrow-right"></i></a>
+    <a href="#recursos">Recursos <i class="fa-solid fa-arrow-right"></i></a>
+    <a href="#faq">Preguntas <i class="fa-solid fa-arrow-right"></i></a>
+    <a href="#contacto">Contacto <i class="fa-solid fa-arrow-right"></i></a>
+
+    <div class="mobile-shortcuts" aria-label="Accesos rápidos">
+      <a class="mobile-shortcut shortcut-ayukcal" href="./ayukcal/"><i class="fa-solid fa-heart-pulse" aria-hidden="true"></i><span>AyuKcal</span></a>
+      <a class="mobile-shortcut shortcut-juegos" href="./juegos/"><i class="fa-solid fa-gamepad" aria-hidden="true"></i><span>Juegos</span></a>
+      <a class="mobile-shortcut shortcut-herramientas" href="./herramientas/"><i class="fa-solid fa-toolbox" aria-hidden="true"></i><span>Herramientas</span></a>
+    </div>
   </div>
 
   <header class="hero" id="inicio">
