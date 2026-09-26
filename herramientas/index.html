@@ -28,7 +28,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <!-- SortableJS para Drag & Drop de tarjetas -->
-    <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.7/Sortable.min.js"></script>
 
     <style>
         /* =========================================
@@ -1808,7 +1808,6 @@
             else window.addEventListener('load',finishEntry,{once:true});
         })();
 
-        // Loader global AMS para operaciones de procesamiento\n        (function(){\n            const loader=document.getElementById('ams-loader');\n            const title=document.getElementById('ams-loader-title');\n            const message=document.getElementById('ams-loader-message');\n            window.amsLoading=function(show,msg,titleText){\n                if(!loader)return;\n                if(show){ title.textContent=titleText||'Procesando'; message.textContent=msg||'Estamos trabajando localmente en tu archivo…'; loader.classList.add('active'); loader.setAttribute('aria-hidden','false'); document.body.style.overflow='hidden'; }\n                else { loader.classList.remove('active'); loader.setAttribute('aria-hidden','true'); document.body.style.overflow=''; }\n            };\n        })();\n\n
         // Loader visual AMS para operaciones que requieren procesamiento
         (function(){
             const loader=document.getElementById('ams-loader');
