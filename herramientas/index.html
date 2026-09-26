@@ -1776,7 +1776,7 @@
         // PWA: registro del Service Worker para caché básica.
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
-                navigator.serviceWorker.register('./sw.js?v=7'.catch(err => console.warn('AMS PWA:', err));
+                navigator.serviceWorker.register('./sw.js?v=7').catch(err => console.warn('AMS PWA:', err));
             });
         }
 
