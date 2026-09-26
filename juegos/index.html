@@ -470,5 +470,21 @@
 
   <script src="scripts.js"></script>
   <script src="players.js"></script>
+
+<script>
+  // Al llegar al final en móvil, los controles flotantes de Juegos se atenúan para no cubrir el footer.
+  (() => {
+    const updatePageEndState = () => {
+      const nearEnd = window.innerWidth <= 700 &&
+        (window.scrollY + window.innerHeight >= document.documentElement.scrollHeight - 28);
+      document.body.classList.toggle("page-end-mobile", nearEnd);
+    };
+    window.addEventListener("scroll", updatePageEndState, { passive: true });
+    window.addEventListener("resize", updatePageEndState, { passive: true });
+    window.addEventListener("load", updatePageEndState, { once: true });
+    requestAnimationFrame(updatePageEndState);
+  })();
+</script>
+
 </body>
 </html>
