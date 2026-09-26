@@ -18,9 +18,9 @@
   />
 
   <link rel="icon" href="pwa-icon-192.svg" type="image/svg+xml" />
-  <link rel="manifest" href="manifest.webmanifest?v=20260926-29" />
+  <link rel="manifest" href="manifest.webmanifest?v=20260926-30" />
   <link rel="apple-touch-icon" href="pwa-icon-192.svg" />
-  <link rel="stylesheet" href="styles.css?v=20260926-14" />
+  <link rel="stylesheet" href="styles.css?v=20260926-15" />
   <link rel="canonical" href="https://avilamorasoluciones.com/juegos/" />
 
   <style id="ams-games-loader-style">
@@ -341,62 +341,6 @@
   </footer>
 
 
-  <div id="dice-modal" class="tool-overlay" role="dialog" aria-modal="true" aria-labelledby="dice-modal-title">
-    <div class="box narrow stack center tool-modal-card">
-      <button
-        type="button"
-        class="btn ghost modal-close-btn"
-        onclick="Tools.closeModal('dice')"
-        aria-label="Cerrar modal de dado"
-      >
-        ×
-      </button>
-
-      <h2 id="dice-modal-title" class="modal-title color-accent">Lanzar Dado</h2>
-      <p class="muted modal-copy">
-        El dado es un comodín para cualquier momento en que el grupo necesite una decisión al azar.
-        Úsalo para decidir quién empieza, ordenar turnos, elegir equipo o desempatar.
-      </p>
-      <div class="tool-help-list">
-        <div><strong>Quién empieza:</strong> cada persona lanza; el número más alto empieza.</div>
-        <div><strong>Orden de turnos:</strong> asigna un número a cada jugador y lánzalo para elegir.</div>
-        <div><strong>Desempate:</strong> si hay empate, vuelvan a lanzar solo los empatados.</div>
-      </div>
-
-      <div id="dice-result" class="emoji-display giant-emoji"><img src="tool-dice.svg" alt="Dado"></div>
-
-      <button type="button" class="btn primary btn-xl" onclick="Tools.rollDice()">¡Lanzar!</button>
-    </div>
-  </div>
-
-  <div id="cards-modal" class="tool-overlay" role="dialog" aria-modal="true" aria-labelledby="cards-modal-title">
-    <div class="box narrow stack center tool-modal-card">
-      <button
-        type="button"
-        class="btn ghost modal-close-btn"
-        onclick="Tools.closeModal('cards')"
-        aria-label="Cerrar modal de cartas"
-      >
-        <svg class="ui-icon"><use href="ui-icons.svg#close"></use></svg>
-      </button>
-
-      <h2 id="cards-modal-title" class="modal-title color-danger">Sacar Carta</h2>
-      <p class="muted modal-copy">
-        La carta también es un comodín. Saca una cuando quieran dejar una decisión al azar
-        sin tener que ponerse de acuerdo.
-      </p>
-      <div class="tool-help-list">
-        <div><strong>Carta más alta:</strong> quien saque el valor más alto empieza. Si usan As, acuerden si vale 1 o 14.</div>
-        <div><strong>Rojo o negro:</strong> rojo puede significar una opción y negro la otra; también sirve para formar equipos.</div>
-        <div><strong>Empate:</strong> si dos personas sacan el mismo valor, solo ellas vuelven a sacar.</div>
-      </div>
-
-      <div id="card-result" class="card-result-box"><img src="tool-cards.svg" alt="Carta"></div>
-
-      <button type="button" class="btn danger btn-xl" onclick="Tools.drawCard()">¡Sacar Carta!</button>
-    </div>
-  </div>
-
   <script>
     (() => {
       const loader = document.getElementById("amsGamesLoader");
@@ -444,8 +388,8 @@
     })();
   </script>
 
-  <script src="scripts.js?v=20260926-29"></script>
-  <script src="players.js?v=20260926-29"></script>
+  <script src="scripts.js?v=20260926-30"></script>
+  <script src="players.js?v=20260926-30"></script>
 
 <script>
   // Al llegar al final en móvil, los controles flotantes de Juegos se atenúan para no cubrir el footer.
