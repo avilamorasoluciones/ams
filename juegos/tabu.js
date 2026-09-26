@@ -40,7 +40,7 @@ const TabuGame = (() => {
       return;
     }
     list.innerHTML = players.map((p, i) => `
-      <div class="player-tag">👤 ${window.Utils.escapeHTML(p)} <button type="button" class="delete-btn" data-remove="${i}" aria-label="Eliminar ${window.Utils.escapeHTML(p)}">×</button></div>
+      <div class="player-tag">${window.uiIcon("user")} ${window.Utils.escapeHTML(p)} <button type="button" class="delete-btn" data-remove="${i}" aria-label="Eliminar ${window.Utils.escapeHTML(p)}">×</button></div>
     `).join("");
   }
 
@@ -206,7 +206,7 @@ const TabuGame = (() => {
     $("t-statPoints").textContent = pointsEarned > 0 ? `+${pointsEarned}` : pointsEarned;
 
     const isLastTurn = (currentRound === maxRounds && activeTeamIndex === teams.length - 1);
-    $("t-btnNextTurn").textContent = isLastTurn ? "🏆 Ver Resultados" : "Siguiente Turno ➡️";
+    $("t-btnNextTurn").textContent = isLastTurn ? "${window.uiIcon("crown")} Ver Resultados" : "Siguiente Turno ${window.uiIcon("next")}";
 
     changeScreen("t-scr-turn-summary");
   }
@@ -236,7 +236,7 @@ const TabuGame = (() => {
           <div class="giant-score" style="font-size:2rem; margin-top:0;">${t.stats.score} pts</div>
         </div>
         <p class="muted" style="font-size:0.9rem; margin-top:4px;">
-          ✔️ Aciertos: ${t.stats.correct} | ❌ Tabús: ${t.stats.taboo} | ⏭️ Saltos: ${t.stats.skip}
+          ${window.uiIcon("check")} Aciertos: ${t.stats.correct} | ${window.uiIcon("close")} Tabús: ${t.stats.taboo} | ⏭️ Saltos: ${t.stats.skip}
         </p>
       </div>
     `).join("");
