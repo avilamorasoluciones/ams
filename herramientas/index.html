@@ -205,6 +205,163 @@
     @media (max-width:575px) { .hero-section { padding-top:42px; } .hero-section h1 { font-size:2.05rem; } .tool-card { border-radius:16px; } .section-header { margin-top:38px; } }
 
     .ams-toast{position:fixed;left:50%;bottom:22px;transform:translate(-50%,20px);opacity:0;z-index:9999;padding:11px 18px;border-radius:12px;background:#111827;color:#f8fafc;border:1px solid rgba(255,255,255,.12);box-shadow:0 18px 45px rgba(0,0,0,.3);font-size:.82rem;transition:.2s}.ams-toast.show{opacity:1;transform:translate(-50%,0)}.ams-toast.error{border-color:rgba(236,72,153,.45)}.button-pulse{transform:translateY(-1px);filter:brightness(1.08)}
+
+    
+    /* ===== Selector de tema AMS ===== */
+    .ams-theme-switch {
+        display:flex;
+        align-items:center;
+        gap:4px;
+        padding:3px;
+        margin-left:auto;
+        margin-right:10px;
+        border:1px solid rgba(255,255,255,.10);
+        border-radius:999px;
+        background:rgba(255,255,255,.045);
+    }
+    .ams-theme-btn {
+        display:inline-flex;
+        align-items:center;
+        justify-content:center;
+        gap:6px;
+        min-height:32px;
+        padding:5px 10px;
+        border:0;
+        border-radius:999px;
+        background:transparent;
+        color:#94a3b8;
+        font:700 .74rem/1 'Inter',sans-serif;
+        cursor:pointer;
+        transition:.2s ease;
+    }
+    .ams-theme-btn i { font-size:.78rem; }
+    .ams-theme-btn:hover { color:#f8fafc; background:rgba(255,255,255,.07); }
+    .ams-theme-btn.active {
+        color:#07101c;
+        background:linear-gradient(135deg,#22d3ee,#818cf8);
+        box-shadow:0 5px 16px rgba(34,211,238,.18);
+    }
+
+    /* ===== Tema claro ===== */
+    body.light-theme {
+        --bg-deep:#f4f7fb;
+        --bg-card:#ffffff;
+        --text-main:#172033;
+        --text-muted:#64748b;
+        --border-glass:rgba(15,23,42,.11);
+        --border-hover:rgba(99,102,241,.42);
+        --cyan-glow:rgba(8,145,178,.18);
+        background:
+          radial-gradient(circle at 8% 10%,rgba(99,102,241,.09),transparent 28%),
+          radial-gradient(circle at 92% 8%,rgba(236,72,153,.07),transparent 25%),
+          linear-gradient(180deg,#f8fafc 0%,#eef2f7 52%,#f8fafc 100%);
+        color:var(--text-main);
+    }
+    body.light-theme .navbar {
+        background:rgba(248,250,252,.88);
+        border-bottom-color:rgba(15,23,42,.10);
+        box-shadow:0 10px 30px rgba(15,23,42,.08);
+    }
+    body.light-theme .brand-text-sub { color:#64748b; }
+    body.light-theme .ams-theme-switch {
+        background:rgba(15,23,42,.045);
+        border-color:rgba(15,23,42,.10);
+    }
+    body.light-theme .ams-theme-btn { color:#64748b; }
+    body.light-theme .ams-theme-btn:hover { color:#172033; background:rgba(15,23,42,.06); }
+    body.light-theme .ams-theme-btn.active {
+        color:#fff;
+        background:linear-gradient(135deg,#4f46e5,#db2777);
+        box-shadow:0 5px 16px rgba(79,70,229,.18);
+    }
+    body.light-theme .offcanvas.text-bg-dark,
+    body.light-theme .offcanvas {
+        background:#f8fafc !important;
+        color:#172033 !important;
+        border-left-color:rgba(15,23,42,.10);
+    }
+    body.light-theme .offcanvas .offcanvas-header { border-bottom-color:rgba(15,23,42,.10) !important; }
+    body.light-theme .offcanvas .btn-close { filter:none; }
+    body.light-theme .menu-link {
+        color:#334155;
+        background:rgba(15,23,42,.025);
+        border-color:rgba(15,23,42,.07);
+    }
+    body.light-theme .menu-link:hover { background:#fff; color:#111827; border-color:rgba(99,102,241,.25); }
+    body.light-theme .tool-card {
+        background:linear-gradient(180deg,rgba(255,255,255,.98),rgba(248,250,252,.98));
+        border-color:rgba(15,23,42,.09);
+        box-shadow:0 14px 35px rgba(15,23,42,.08);
+    }
+    body.light-theme .tool-card:hover { border-color:rgba(99,102,241,.42); box-shadow:0 20px 45px rgba(15,23,42,.12); }
+    body.light-theme .section-header hr { border-color:rgba(15,23,42,.12); }
+    body.light-theme .section-header h2 { color:#172033; }
+    body.light-theme .badge-core { background:rgba(99,102,241,.08); color:#4338ca; border-color:rgba(99,102,241,.22); }
+    body.light-theme .tool-search input {
+        background:rgba(255,255,255,.92);
+        color:#172033;
+        border-color:rgba(15,23,42,.12);
+        box-shadow:0 10px 28px rgba(15,23,42,.07);
+    }
+    body.light-theme .tool-search input::placeholder { color:#94a3b8; }
+    body.light-theme .drop-zone {
+        background:rgba(15,23,42,.025);
+        border-color:rgba(15,23,42,.13);
+    }
+    body.light-theme .drop-zone:hover,
+    body.light-theme .drop-zone.dragover { background:rgba(99,102,241,.06); border-color:#6366f1; }
+    body.light-theme .workspace-container,
+    body.light-theme .micro-options {
+        background:rgba(15,23,42,.025);
+        border-color:rgba(15,23,42,.09);
+    }
+    body.light-theme .file-card {
+        background:#fff;
+        border-color:rgba(15,23,42,.09);
+    }
+    body.light-theme .form-control,
+    body.light-theme .form-select,
+    body.light-theme .form-control-color {
+        background:#fff;
+        color:#172033;
+        border-color:rgba(15,23,42,.13);
+    }
+    body.light-theme .form-control:focus,
+    body.light-theme .form-select:focus {
+        background:#fff;
+        color:#172033;
+    }
+    body.light-theme .form-control::placeholder,
+    body.light-theme textarea::placeholder { color:#94a3b8; }
+    body.light-theme .result-box {
+        background:rgba(15,23,42,.035);
+        color:#475569;
+        border-color:rgba(15,23,42,.12);
+    }
+    body.light-theme .footer-ams {
+        background:rgba(248,250,252,.86);
+        border-top-color:rgba(15,23,42,.09);
+        color:#64748b;
+    }
+    body.light-theme .footer-ams strong { color:#4338ca; }
+    body.light-theme .ams-toast {
+        background:#fff;
+        color:#172033;
+        border-color:rgba(15,23,42,.12);
+        box-shadow:0 18px 45px rgba(15,23,42,.16);
+    }
+    body.light-theme .no-results {
+        color:#64748b;
+        border-color:rgba(15,23,42,.12);
+    }
+
+    @media (max-width:575px) {
+        .ams-theme-switch { margin-right:7px; }
+        .ams-theme-btn { width:34px; min-width:34px; padding:5px; }
+        .ams-theme-btn span { display:none; }
+        .ams-theme-btn i { font-size:.85rem; }
+    }
+
     </style>
   <link rel="canonical" href="https://avilamorasoluciones.com/herramientas/" />
   <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
@@ -305,6 +462,15 @@
                     </span>
                 </span>
             </a>
+            
+            <div class="ams-theme-switch" role="group" aria-label="Elegir tema">
+                <button type="button" class="ams-theme-btn" id="themeLightBtn" aria-label="Usar tema claro" title="Tema claro">
+                    <i class="fa-solid fa-sun" aria-hidden="true"></i><span>Claro</span>
+                </button>
+                <button type="button" class="ams-theme-btn" id="themeDarkBtn" aria-label="Usar tema oscuro" title="Tema oscuro">
+                    <i class="fa-solid fa-moon" aria-hidden="true"></i><span>Oscuro</span>
+                </button>
+            </div>
             
             <button class="navbar-toggler shadow-none border-0 p-1" type="button" data-bs-toggle="offcanvas" data-bs-target="#menuHerramientas" aria-controls="menuHerramientas">
                 <span class="navbar-toggler-icon" style="width: 1.2em; height: 1.2em;"></span>
@@ -853,6 +1019,38 @@
     </footer>
 
     <!-- LÓGICA JAVASCRIPT -->
+    <script>
+        /* ===== Tema claro/oscuro AMS ===== */
+        (() => {
+            const THEME_KEY = 'ams-herramientas-theme';
+            const lightBtn = document.getElementById('themeLightBtn');
+            const darkBtn = document.getElementById('themeDarkBtn');
+            const meta = document.querySelector('meta[name="theme-color"]');
+
+            const applyTheme = (theme) => {
+                const isLight = theme === 'light';
+                document.body.classList.toggle('light-theme', isLight);
+                if (lightBtn) lightBtn.classList.toggle('active', isLight);
+                if (darkBtn) darkBtn.classList.toggle('active', !isLight);
+                if (meta) meta.setAttribute('content', isLight ? '#f4f7fb' : '#070b18');
+                document.documentElement.style.colorScheme = isLight ? 'light' : 'dark';
+            };
+
+            const saved = localStorage.getItem(THEME_KEY);
+            applyTheme(saved === 'light' ? 'light' : 'dark');
+
+            lightBtn?.addEventListener('click', () => {
+                localStorage.setItem(THEME_KEY, 'light');
+                applyTheme('light');
+            });
+
+            darkBtn?.addEventListener('click', () => {
+                localStorage.setItem(THEME_KEY, 'dark');
+                applyTheme('dark');
+            });
+        })();
+    </script>
+
     <script>
         document.getElementById('current-year').textContent = new Date().getFullYear();
         const { PDFDocument, rgb, degrees } = PDFLib;
