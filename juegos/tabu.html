@@ -28,11 +28,11 @@
         <span class="logo brand-logo-svg"><img src="game-tabu.svg" alt=""></span>
         <span class="txt"><span class="name">Avila Mora Soluciones</span><small>Juegos · Tabú</small></span>
       </a>
-      <div class="topbar-actions"><button id="navToggle" type="button" class="icon-btn">☰</button></div>
+      <div class="topbar-actions"><button id="navToggle" type="button" class="icon-btn"><svg class="ui-icon ui-icon-lg" aria-hidden="true"><use href="ui-icons.svg#menu"></use></svg></button></div>
     </div>
     <nav id="siteNav" class="site-nav" hidden>
       <div class="site-nav-inner">
-        <a class="nav-item" href="index.html">🏠 Menú</a>
+        <a class="nav-item" href="index.html"><svg class="ui-icon" aria-hidden="true"><use href="ui-icons.svg#home"></use></svg><span>Menú</span></a>
       </div>
     </nav>
   </header>
@@ -53,7 +53,7 @@
                 <div class="box stack">
                   <div class="inline-input-group">
                     <input type="text" id="t-inpName" placeholder="Añadir jugador..." autocomplete="off" maxlength="18" />
-                    <button type="button" class="btn btn-inline-square" id="t-btnAddPlayer">➕</button>
+                    <button type="button" class="btn btn-inline-square" id="t-btnAddPlayer"><svg class="ui-icon" aria-hidden="true"><use href="ui-icons.svg#plus"></use></svg><span>Agregar</span></button>
                   </div>
                   <div class="player-list" id="t-uiPlayerList"></div>
                 </div>
@@ -93,8 +93,8 @@
                 </div>
 
                 <div class="row">
-                  <button type="button" class="btn danger" id="t-btnClearPlayers">🧹 Limpiar</button>
-                  <button type="button" class="btn primary" id="t-btnStart">🎮 Empezar</button>
+                  <button type="button" class="btn danger" id="t-btnClearPlayers"><svg class="ui-icon" aria-hidden="true"><use href="ui-icons.svg#trash"></use></svg><span>Limpiar</span></button>
+                  <button type="button" class="btn primary" id="t-btnStart"><svg class="ui-icon" aria-hidden="true"><use href="ui-icons.svg#play"></use></svg><span>Empezar</span></button>
                 </div>
               </div>
 
@@ -118,7 +118,7 @@
                     <p class="muted"><strong>Atención:</strong> Un jugador del <span id="t-txtWatcher" class="color-danger"></span> debe mirar la pantalla para vigilar que no diga palabras prohibidas.</p>
                   </div>
                 </div>
-                <button type="button" class="btn primary btn-xl" id="t-btnStartTurn">▶️ Iniciar Temporizador</button>
+                <button type="button" class="btn primary btn-xl" id="t-btnStartTurn"><svg class="ui-icon" aria-hidden="true"><use href="ui-icons.svg#play"></use></svg><span>Iniciar Temporizador</span></button>
               </div>
 
               <!-- JUEGO ACTIVO -->
@@ -143,9 +143,9 @@
                   </div>
                 </div>
                 <div class="tabu-controls">
-                  <button type="button" class="btn success" id="t-btnCorrect">✔️ Acierto</button>
-                  <button type="button" class="btn danger" id="t-btnTaboo">❌ Tabú</button>
-                  <button type="button" class="btn ghost btn-full" id="t-btnSkip">⏭️ Saltar</button>
+                  <button type="button" class="btn success" id="t-btnCorrect"><svg class="ui-icon" aria-hidden="true"><use href="ui-icons.svg#check"></use></svg><span>Acierto</span></button>
+                  <button type="button" class="btn danger" id="t-btnTaboo"><svg class="ui-icon" aria-hidden="true"><use href="ui-icons.svg#close"></use></svg><span>Tabú</span></button>
+                  <button type="button" class="btn ghost btn-full" id="t-btnSkip"><svg class="ui-icon" aria-hidden="true"><use href="ui-icons.svg#next"></use></svg><span>Saltar</span></button>
                 </div>
               </div>
 
@@ -160,7 +160,7 @@
                     <div class="mini-stat"><span>Total</span><strong class="color-primary" id="t-statPoints">0</strong></div>
                   </div>
                 </div>
-                <button type="button" class="btn primary btn-xl" id="t-btnNextTurn">Siguiente Turno</button>
+                <button type="button" class="btn primary btn-xl" id="t-btnNextTurn"><svg class="ui-icon" aria-hidden="true"><use href="ui-icons.svg#next"></use></svg><span>Siguiente Turno</span></button>
               </div>
 
               <!-- RESULTADO FINAL -->
@@ -168,8 +168,8 @@
                 <h1 class="game-title winner-title">¡Partida Terminada! 🎉</h1>
                 <div class="box result-area stack" id="t-uiFinalResults" style="text-align: left;"></div>
                 <div class="row" style="margin-top: 15px;">
-                  <button type="button" id="t-btnRestart" class="btn primary">🔄 Nueva partida</button>
-                  <a href="index.html" class="btn ghost">🏠 Menú</a>
+                  <button type="button" id="t-btnRestart" class="btn primary"><svg class="ui-icon" aria-hidden="true"><use href="ui-icons.svg#refresh"></use></svg><span>Nueva partida</span></button>
+                  <a href="index.html" class="btn ghost"><svg class="ui-icon" aria-hidden="true"><use href="ui-icons.svg#home"></use></svg><span>Menú</span></a>
                 </div>
               </div>
 
