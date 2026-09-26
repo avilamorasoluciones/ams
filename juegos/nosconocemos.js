@@ -23,10 +23,15 @@ const NosConocemosGame = (() => {
     try { localStorage.setItem(STORAGE_KEY, JSON.stringify(players)); } catch(e) {}
   }
 
+  function saveSession(screen = document.querySelector(".im-screen.active")?.id || "nc-scr-lobby") {
+    window.GameSession?.save("nosconocemos", { players, pool, currentMainIndex, currentQuestion, mainAnswer, guesserQueue, currentGuesser, guesses, screen });
+  }
+
   function changeScreen(id) {
     document.querySelectorAll(".im-screen").forEach(s => s.classList.remove("active"));
     $(id).classList.add("active");
     document.body.classList.toggle("playing", id !== "nc-scr-lobby");
+    saveSession(id);
   }
 
   function renderPlayers() {
@@ -83,6 +88,7 @@ const NosConocemosGame = (() => {
     
     $("nc-txtMainPlayer").textContent = mainPlayer;
     $("nc-txtQuestionMain").textContent = currentQuestion.q;
+    saveSession("nc-scr-pass-main");
     
     guesserQueue = players.filter((_, i) => i !== currentMainIndex);
     changeScreen("nc-scr-pass-main");
@@ -118,6 +124,7 @@ const NosConocemosGame = (() => {
     
     currentGuesser = guesserQueue.shift();
     $("nc-txtGuesser").textContent = currentGuesser;
+    saveSession("nc-scr-pass-guess");
     changeScreen("nc-scr-pass-guess");
   }
 
@@ -149,6 +156,7 @@ const NosConocemosGame = (() => {
   function showResults() {
     $("nc-resName").textContent = players[currentMainIndex];
     $("nc-txtAnswer").textContent = mainAnswer;
+    saveSession("nc-scr-result");
     
     const resultsContainer = $("nc-uiGuessResults");
     resultsContainer.innerHTML = "";
@@ -190,11 +198,33 @@ const NosConocemosGame = (() => {
       startTurn();
     };
     
-    const endFn = () => changeScreen("nc-scr-lobby");
+    const endFn = () => { window.GameSession?.clear("nosconocemos"); changeScreen("nc-scr-lobby"); };
     $("nc-btnEnd").onclick = endFn;
     $("nc-btnEndSecret").onclick = endFn;
     
     renderPlayers();
+    const saved = window.GameSession?.load("nosconocemos");
+    if (saved && saved.screen !== "nc-scr-lobby" && saved.currentQuestion) {
+      players = Array.isArray(saved.players) ? saved.players : players;
+      pool = Array.isArray(saved.pool) ? saved.pool : [];
+      currentMainIndex = Number(saved.currentMainIndex || 0);
+      currentQuestion = saved.currentQuestion;
+      mainAnswer = saved.mainAnswer || "";
+      guesserQueue = Array.isArray(saved.guesserQueue) ? saved.guesserQueue : [];
+      currentGuesser = saved.currentGuesser || "";
+      guesses = saved.guesses && typeof saved.guesses === "object" ? saved.guesses : {};
+      renderPlayers();
+      $("nc-txtMainPlayer").textContent = players[currentMainIndex] || "";
+      $("nc-txtQuestionMain").textContent = currentQuestion.q || "";
+      $("nc-txtGuesser").textContent = currentGuesser;
+      $("nc-txtQuestionGuess").textContent = currentQuestion.q || "";
+      if (saved.screen === "nc-scr-secret") showMainSecret();
+      else if (saved.screen === "nc-scr-guess") showGuessOptions();
+      else if (saved.screen === "nc-scr-result") showResults();
+      else changeScreen(saved.screen);
+    } else {
+      changeScreen("nc-scr-lobby");
+    }
   }
 
   return { init };
