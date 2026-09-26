@@ -24,11 +24,11 @@
         <span class="logo brand-logo-svg"><img src="game-nosconocemos.svg" alt=""></span>
         <span class="txt"><span class="name">Avila Mora Soluciones</span><small>Juegos · ¿Nos Conocemos?</small></span>
       </a>
-      <div class="topbar-actions"><button id="navToggle" type="button" class="icon-btn">☰</button></div>
+      <div class="topbar-actions"><button id="navToggle" type="button" class="icon-btn"><svg class="ui-icon ui-icon-lg" aria-hidden="true"><use href="ui-icons.svg#menu"></use></svg></button></div>
     </div>
     <nav id="siteNav" class="site-nav" hidden>
       <div class="site-nav-inner">
-        <a class="nav-item" href="index.html">🏠 Menú</a>
+        <a class="nav-item" href="index.html"><svg class="ui-icon" aria-hidden="true"><use href="ui-icons.svg#home"></use></svg><span>Menú</span></a>
       </div>
     </nav>
   </header>
@@ -49,7 +49,7 @@
                 <div class="box stack">
                   <div class="inline-input-group">
                     <input type="text" id="nc-inpName" placeholder="Nombre del jugador..." autocomplete="off" maxlength="18" />
-                    <button type="button" class="btn btn-inline-square" id="nc-btnAddPlayer">➕</button>
+                    <button type="button" class="btn btn-inline-square" id="nc-btnAddPlayer"><svg class="ui-icon" aria-hidden="true"><use href="ui-icons.svg#plus"></use></svg><span>Agregar</span></button>
                   </div>
                   <div class="player-list" id="nc-uiPlayerList"></div>
                 </div>
@@ -65,8 +65,8 @@
                 </div>
 
                 <div class="row">
-                  <button type="button" class="btn danger" id="nc-btnClearPlayers">🧹 Limpiar</button>
-                  <button type="button" class="btn primary" id="nc-btnStart">🎮 Empezar</button>
+                  <button type="button" class="btn danger" id="nc-btnClearPlayers"><svg class="ui-icon" aria-hidden="true"><use href="ui-icons.svg#trash"></use></svg><span>Limpiar</span></button>
+                  <button type="button" class="btn primary" id="nc-btnStart"><svg class="ui-icon" aria-hidden="true"><use href="ui-icons.svg#play"></use></svg><span>Empezar</span></button>
                 </div>
               </div>
 
@@ -78,7 +78,7 @@
                   <h2 id="nc-txtMainPlayer" class="pass-name">-</h2>
                   <p class="muted strong-copy">Responde en secreto. Que nadie más mire.</p>
                 </div>
-                <button type="button" id="nc-btnSeeOptions" class="btn primary btn-xxl">👀 Ver Pregunta</button>
+                <button type="button" id="nc-btnSeeOptions" class="btn primary btn-xxl"><svg class="ui-icon" aria-hidden="true"><use href="ui-icons.svg#eye"></use></svg><span>Ver Pregunta</span></button>
               </div>
 
               <!-- SELECCIÓN SECRETA DEL PROTAGONISTA -->
@@ -89,7 +89,7 @@
                   <div class="vote-list" id="nc-uiOptionsMain"></div>
                 </div>
                 <!-- Botón de terminar siempre visible -->
-                <button type="button" class="btn ghost mt-2" id="nc-btnEndSecret">🏠 Terminar / Menú</button>
+                <button type="button" class="btn ghost mt-2" id="nc-btnEndSecret"><svg class="ui-icon" aria-hidden="true"><use href="ui-icons.svg#home"></use></svg><span>Terminar / Menú</span></button>
               </div>
 
               <!-- PASAR A ADIVINADORES -->
@@ -100,7 +100,7 @@
                   <h2 id="nc-txtGuesser" class="pass-name">-</h2>
                   <p class="muted strong-copy">Intenta adivinar lo que respondió el protagonista.</p>
                 </div>
-                <button type="button" id="nc-btnSeeGuess" class="btn primary btn-xxl">👀 Adivinar</button>
+                <button type="button" id="nc-btnSeeGuess" class="btn primary btn-xxl"><svg class="ui-icon" aria-hidden="true"><use href="ui-icons.svg#question"></use></svg><span>Adivinar</span></button>
               </div>
 
               <!-- ADIVINANZA -->
@@ -119,8 +119,8 @@
                   <h2 id="nc-txtAnswer" class="result-answer">-</h2>
                   <div id="nc-uiGuessResults" class="guess-results"></div>
                 </div>
-                <button type="button" class="btn primary btn-xl" id="nc-btnNextTurn">Siguiente Turno</button>
-                <button type="button" class="btn ghost" id="nc-btnEnd">🏠 Menú</button>
+                <button type="button" class="btn primary btn-xl" id="nc-btnNextTurn"><svg class="ui-icon" aria-hidden="true"><use href="ui-icons.svg#next"></use></svg><span>Siguiente Turno</span></button>
+                <button type="button" class="btn ghost" id="nc-btnEnd"><svg class="ui-icon" aria-hidden="true"><use href="ui-icons.svg#home"></use></svg><span>Menú</span></button>
               </div>
 
             </div>
