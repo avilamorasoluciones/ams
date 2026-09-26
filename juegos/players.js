@@ -81,9 +81,13 @@
       add(value);
       if (input) {
         input.value = "";
-        input.focus();
       }
       render();
+      // No volvemos a enfocar automáticamente: en Android eso reabre el
+      // teclado y hace que el navegador reposicione la página por su cuenta.
+      if (input) {
+        window.setTimeout(() => input.blur(), 0);
+      }
     };
 
     addButton?.addEventListener("click", addCurrent);
