@@ -43,7 +43,7 @@ const BombaGame = (() => {
     }
 
     $("b-txtWord").textContent = pool.pop();
-    $("b-bombEmoji").textContent = "💣";
+    $("b-bombEmoji").innerHTML = window.uiIcon("bomb");
     $("b-bombEmoji").style.transform = "scale(1)";
     
     const timeToBoom = Math.floor(Math.random() * (45000 - 15000 + 1)) + 15000;
