@@ -36,7 +36,7 @@ const NosConocemosGame = (() => {
       return;
     }
     list.innerHTML = players.map((p, i) => `
-      <div class="player-tag">👤 ${window.Utils.escapeHTML(p)} <button type="button" class="delete-btn" data-remove="${i}" aria-label="Eliminar ${window.Utils.escapeHTML(p)}">×</button></div>
+      <div class="player-tag">${window.uiIcon("user")} ${window.Utils.escapeHTML(p)} <button type="button" class="delete-btn" data-remove="${i}" aria-label="Eliminar ${window.Utils.escapeHTML(p)}">×</button></div>
     `).join("");
   }
 
@@ -158,7 +158,7 @@ const NosConocemosGame = (() => {
       resultsContainer.innerHTML += `
         <div class="res-item ${isCorrect ? 'correct' : 'incorrect'}">
           <span>${window.Utils.escapeHTML(name)}</span>
-          <span>${isCorrect ? '✔️ Acertó' : '❌ Falló'}</span>
+          <span>${isCorrect ? '${window.uiIcon("check")} Acertó' : '${window.uiIcon("close")} Falló'}</span>
         </div>
       `;
     }
