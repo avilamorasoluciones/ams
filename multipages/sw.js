@@ -1,0 +1,5 @@
+const CACHE_NAME='ams-multipages-v1';
+const APP_SHELL=['./','./index.html','./manifest.webmanifest','./icon-192.svg','./icon-512.svg','./contacto.html','./servicios.html'];
+self.addEventListener('install',e=>e.waitUntil(caches.open(CACHE_NAME).then(c=>c.addAll(APP_SHELL)).then(()=>self.skipWaiting())));
+self.addEventListener('activate',e=>e.waitUntil(caches.keys().then(k=>Promise.all(k.filter(x=>x!==CACHE_NAME).map(x=>caches.delete(x)))).then(()=>self.clients.claim())));
+self.addEventListener('fetch',e=>{if(e.request.method!=='GET'||new URL(e.request.url).origin!==self.location.origin)return;e.respondWith((async()=>{const cached=await caches.match(e.request);try{const req=(e.request.mode==='navigate'||['script','style','manifest'].includes(e.request.destination))?new Request(e.request,{cache:'no-store'}):e.request;const res=await fetch(req);if(res.ok){const c=await caches.open(CACHE_NAME);await c.put(e.request,res.clone())}return res}catch{return cached||(e.request.mode==='navigate'?caches.match('./index.html'):Response.error())}})())});
