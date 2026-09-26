@@ -42,6 +42,7 @@ const YoNuncaGame = (() => {
     $("yn-btnStart").onclick = startGame;
     $("yn-btnNext").onclick = nextTurn;
     $("yn-btnEnd").onclick = () => { window.GameSession?.clear("yonunca"); changeScreen("yn-scr-lobby"); };
+    window.GameSession?.register(saveSession);
     const saved = window.GameSession?.load("yonunca");
     if (saved?.screen === "yn-scr-game" && saved?.prompt) {
       pool = Array.isArray(saved.pool) ? saved.pool : [];
