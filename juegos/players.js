@@ -79,15 +79,9 @@
       const value = input?.value?.trim();
       if (!value) return;
       add(value);
-      if (input) {
-        input.value = "";
-      }
+      if (input) input.value = "";
       render();
-      // No volvemos a enfocar automáticamente: en Android eso reabre el
-      // teclado y hace que el navegador reposicione la página por su cuenta.
-      if (input) {
-        window.setTimeout(() => input.blur(), 0);
-      }
+      if (input) window.setTimeout(() => input.blur(), 0);
     };
 
     addButton?.addEventListener("click", addCurrent);
@@ -125,4 +119,16 @@
 
   window.AMSPlayers = { read, add, remove, clear, encodePlayers, render };
   document.addEventListener("DOMContentLoaded", initUI);
+
+  /*
+   * Android: no permitimos que el guard global de scripts.js haga un
+   * scrollIntoView suave al enfocar este campo. El propio navegador/teclado
+   * se encarga de mantener el input visible. Capturamos solo este focus y
+   * dejamos intactos los demás campos de la aplicación.
+   */
+  document.addEventListener("focus", event => {
+    if (event.target?.id === "globalPlayerInput") {
+      event.stopImmediatePropagation();
+    }
+  }, true);
 })();
