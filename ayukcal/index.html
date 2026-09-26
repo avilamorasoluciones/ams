@@ -1002,6 +1002,15 @@
 </script>
 
 <script>
+  // PWA AyuKcal: actualiza el Service Worker sin interferir con Supabase ni con los datos de la app.
+  if ("serviceWorker" in navigator && (location.protocol === "https:" || location.hostname === "localhost" || location.hostname === "127.0.0.1")) {
+    window.addEventListener("load", () => {
+      navigator.serviceWorker.register("./sw.js", { scope: "./", updateViaCache: "none" }).catch(() => {});
+    }, { once: true });
+  }
+</script>
+
+<script>
 // =========================================
 // UTILIDADES Y SEGURIDAD
 // =========================================
@@ -1596,7 +1605,7 @@ function loadTesseract(){
   if(tesseractLoadPromise) return tesseractLoadPromise;
   tesseractLoadPromise=new Promise((resolve,reject)=>{
     const script=document.createElement("script");
-    script.src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js";
+    script.src="https://cdn.jsdelivr.net/npm/tesseract.js@5.1.1/dist/tesseract.min.js";
     script.onload=()=>resolve(window.Tesseract);
     script.onerror=()=>reject(new Error("No se pudo cargar OCR"));
     document.head.appendChild(script);
