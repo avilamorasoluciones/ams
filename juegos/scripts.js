@@ -107,8 +107,7 @@ const PWA = (() => {
 
   function isStandalone() {
     return window.matchMedia("(display-mode: standalone)").matches ||
-      window.navigator.standalone === true ||
-      document.referrer.startsWith("android-app://");
+      window.navigator.standalone === true;
   }
 
   function isIOS() {
@@ -214,7 +213,7 @@ const PWA = (() => {
   }
 
   function init() {
-    try { sessionStorage.removeItem("ams_sw_reloaded_v30"); } catch {}
+    try { sessionStorage.removeItem("ams_sw_reloaded_v31"); } catch {}
     createUI();
 
     window.addEventListener("beforeinstallprompt", event => {
@@ -233,9 +232,10 @@ const PWA = (() => {
     } else if (isIOS()) {
       setTimeout(() => showBanner("ios"), 1500);
     } else {
-      setTimeout(() => {
-        if (!deferredPrompt) showBanner("manual");
-      }, 1800);
+      // En Android Chrome el evento beforeinstallprompt puede no estar disponible
+      // en todas las variantes de navegador. Mostramos igualmente nuestro aviso
+      // manual para que el usuario siempre vea cómo instalarla.
+      setTimeout(() => showBanner("manual"), 1200);
     }
 
     if ("serviceWorker" in navigator && (location.protocol === "https:" || location.hostname === "localhost" || location.hostname === "127.0.0.1")) {
@@ -245,13 +245,13 @@ const PWA = (() => {
         // que la página actual use también el HTML/JS/CSS recién publicados.
         if (!hadController) return;
         try {
-          if (sessionStorage.getItem("ams_sw_reloaded_v30") === "1") return;
-          sessionStorage.setItem("ams_sw_reloaded_v30", "1");
+          if (sessionStorage.getItem("ams_sw_reloaded_v31") === "1") return;
+          sessionStorage.setItem("ams_sw_reloaded_v31", "1");
         } catch {}
         window.location.reload();
       });
 
-      navigator.serviceWorker.register("./sw.js?v=20260926-30", {
+      navigator.serviceWorker.register("./sw.js?v=20260926-31", {
         scope: "./",
         updateViaCache: "none"
       }).then(registration => {
@@ -590,17 +590,14 @@ const Tools = (() => {
     resultEl.setAttribute("aria-label", "El dado está rodando");
 
     const finalFace = Math.floor(Math.random() * 6) + 1;
-    const rotations = [
-      [720, 1080],
-      [630, 1080],
-      [720, 990],
-      [720, 1170],
-      [810, 1080],
-      [720, 1260]
-    ][finalFace - 1];
+    const rotations = [900, 990, 1080, 1170, 1260, 1350];
+    const front = cube.querySelector(".dice-front");
 
-    cube.style.setProperty("--spin-x", rotations[0] + "deg");
-    cube.style.setProperty("--spin-y", rotations[1] + "deg");
+    // La animación gira libremente, pero el resultado siempre termina de frente.
+    // Así el número mostrado coincide SIEMPRE con el valor aleatorio calculado.
+    if (front) front.textContent = String(finalFace);
+    cube.style.setProperty("--spin-x", rotations[Math.floor(Math.random() * rotations.length)] + "deg");
+    cube.style.setProperty("--spin-y", rotations[Math.floor(Math.random() * rotations.length)] + "deg");
 
     let ticks = 0;
     const tickInt = setInterval(() => {
@@ -609,6 +606,8 @@ const Tools = (() => {
       if (ticks >= 10) {
         clearInterval(tickInt);
         cube.classList.remove("dice-rolling");
+        // Dejamos el resultado mirando al usuario, independientemente del giro.
+        cube.style.transform = "rotateX(0deg) rotateY(0deg)";
         cube.classList.add("dice-settled");
         resultEl.setAttribute("aria-label", "Resultado del dado: " + finalFace);
         window.emitSound(760, 0.08, "triangle", 0.28);
@@ -843,56 +842,57 @@ window.GamesMenu = GamesMenu;
  ********************/
 const MobileInputGuard = (() => {
   function init() {
-    const inputs = document.querySelectorAll("input[type=text], input[type=search]");
-    inputs.forEach(input => {
-      // The global player field is intentionally focused with preventScroll on
-      // the user's tap. This avoids Android Chrome jumping the whole page.
-      if (input.id === "globalPlayerInput") {
-        input.addEventListener("pointerdown", event => {
-          event.preventDefault();
-          try { input.focus({ preventScroll: true }); } catch { input.focus(); }
-        });
+    const input = document.getElementById("globalPlayerInput");
+    if (!input) return;
+
+    let lockedY = null;
+    let releaseTimer = null;
+    let viewportHandler = null;
+
+    const restore = () => {
+      if (lockedY === null || document.activeElement !== input) return;
+      if (Math.abs(window.scrollY - lockedY) > 1) {
+        window.scrollTo(0, lockedY);
       }
+    };
 
-      let lockedScrollY = null;
-      let wasVisibleBeforeFocus = false;
-      let releaseTimer = null;
+    const release = () => {
+      if (viewportHandler && window.visualViewport) {
+        window.visualViewport.removeEventListener("resize", viewportHandler);
+        window.visualViewport.removeEventListener("scroll", viewportHandler);
+      }
+      viewportHandler = null;
+      lockedY = null;
+      clearTimeout(releaseTimer);
+    };
 
-      const restoreIfNeeded = () => {
-        if (lockedScrollY === null || !wasVisibleBeforeFocus) return;
-        // Only undo a browser jump; never call scrollIntoView.
-        if (Math.abs(window.scrollY - lockedScrollY) > 2) {
-          window.scrollTo(0, lockedScrollY);
-        }
-      };
+    input.addEventListener("pointerdown", event => {
+      const y = window.scrollY;
+      event.preventDefault();
+      lockedY = y;
+      try { input.focus({ preventScroll: true }); } catch { input.focus(); }
 
-      input.addEventListener("focus", () => {
-        lockedScrollY = window.scrollY;
-        const rect = input.getBoundingClientRect();
-        const viewportHeight = window.visualViewport?.height || window.innerHeight;
-        wasVisibleBeforeFocus = rect.top >= 0 && rect.bottom <= viewportHeight;
-        clearTimeout(releaseTimer);
-        if (!wasVisibleBeforeFocus) return;
-
-        // Android may reposition once when the keyboard appears. Undo that jump
-        // for a short window while the keyboard settles.
-        requestAnimationFrame(restoreIfNeeded);
-        setTimeout(restoreIfNeeded, 60);
-        setTimeout(restoreIfNeeded, 180);
-        setTimeout(restoreIfNeeded, 360);
-        releaseTimer = setTimeout(() => {
-          lockedScrollY = null;
-          wasVisibleBeforeFocus = false;
-        }, 650);
-      });
-
-      input.addEventListener("blur", () => {
-        lockedScrollY = null;
-        wasVisibleBeforeFocus = false;
-        clearTimeout(releaseTimer);
-      });
+      viewportHandler = restore;
+      if (window.visualViewport) {
+        window.visualViewport.addEventListener("resize", viewportHandler, { passive: true });
+        window.visualViewport.addEventListener("scroll", viewportHandler, { passive: true });
+      }
+      restore();
+      requestAnimationFrame(restore);
+      setTimeout(restore, 30);
+      setTimeout(restore, 100);
+      setTimeout(restore, 250);
+      releaseTimer = setTimeout(release, 900);
     });
+
+    input.addEventListener("focus", () => {
+      if (lockedY === null) lockedY = window.scrollY;
+      restore();
+    });
+
+    input.addEventListener("blur", release);
   }
+
   return { init };
 })();
 
