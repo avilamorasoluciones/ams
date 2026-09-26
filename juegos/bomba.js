@@ -120,7 +120,8 @@ const BombaGame = (() => {
     $("b-btnSkip").onclick = skipWord;
     $("b-btnStop").onclick = stopGame;
     $("b-btnNext").onclick = nextRound;
-    if (!restoreSession(window.GameSession?.load("bomba"))) changeScreen("b-scr-lobby");
+    window.GameSession?.register(saveSession);
+    if (!restoreSession(window.GameSession?.load("bomba")) changeScreen("b-scr-lobby");
   }
 
   return { init };
