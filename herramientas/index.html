@@ -2036,8 +2036,11 @@
             close.addEventListener('click',()=>{sessionStorage.setItem(dismissedKey,'1');hide();});
             window.addEventListener('beforeinstallprompt',e=>{
                 e.preventDefault(); deferredPrompt=e;
-                if(canShow()) setTimeout(()=>show('Instala Herramientas AMS','Accede como una aplicación, sin buscarla cada vez.','Instalar'),1100);
+                if(canShow()) setTimeout(()=>show('Instala Herramientas AMS','Accede como una aplicación, sin buscarla cada vez.','Instalar'),500);
             });
+            if(canShow()) setTimeout(()=>{
+                if(!deferredPrompt && !isIOS) show('Instala Herramientas AMS','Desde el menú de Chrome puedes <strong>Instalar aplicación</strong> o <strong>Añadir a pantalla de inicio</strong>.','Cómo instalar');
+            },1400);
             btn.addEventListener('click',async()=>{
                 if(deferredPrompt){
                     deferredPrompt.prompt();
