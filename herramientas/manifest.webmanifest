@@ -1,7 +1,7 @@
 {
   "id": "./",
   "name": "Herramientas — Avila Mora Soluciones",
-  "short_name": "AMS Tools",
+  "short_name": "Avila Mora Soluciones - Herramientas",
   "description": "Herramientas gratuitas de PDF, imágenes y utilidades para trabajar directamente desde el navegador.",
   "start_url": "./",
   "scope": "./",
