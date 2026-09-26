@@ -548,7 +548,7 @@ const ImpostorGame = (() => {
         <div class="box panel-soft full-width">
           <div class="label-muted">Palabra real</div>
           <div class="big-player-name" style="font-size:1.8rem;">
-            ${escapeHTML(selectedCard.emoji)} ${escapeHTML(selectedCard.word)}
+            ${escapeHTML(selectedCard.word)}
           </div>
           <p class="muted">Categoría: ${escapeHTML(selectedCard.category)}</p>
         </div>
@@ -561,7 +561,7 @@ const ImpostorGame = (() => {
       safeSound(520, 0.08, "square");
       setTimeout(() => safeSound(760, 0.12, "square"), 120);
     } else {
-      title.textContent = "¡GANÓ EL IMPOSTOR! ${window.uiIcon("impostor")}";
+      title.textContent = "¡GANÓ EL IMPOSTOR!";
       title.style.color = "var(--danger)";
 
       area.innerHTML = `
@@ -575,7 +575,7 @@ const ImpostorGame = (() => {
         <div class="box panel-soft full-width">
           <div class="label-muted">Palabra real</div>
           <div class="big-player-name" style="font-size:1.8rem;">
-            ${escapeHTML(selectedCard.emoji)} ${escapeHTML(selectedCard.word)}
+            ${escapeHTML(selectedCard.word)}
           </div>
           <p class="muted">Categoría: ${escapeHTML(selectedCard.category)}</p>
         </div>
