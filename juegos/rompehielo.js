@@ -54,6 +54,7 @@ const RompehieloGame = (() => {
     $("r-btnStart").onclick = startGame;
     $("r-btnNext").onclick = nextQuestion;
     $("r-btnEnd").onclick = () => { window.GameSession?.clear("rompehielo"); changeScreen("r-scr-lobby"); };
+    window.GameSession?.register(saveSession);
     if (!restoreSession(window.GameSession?.load("rompehielo"))) changeScreen("r-scr-lobby");
   }
 
