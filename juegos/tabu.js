@@ -27,10 +27,15 @@ const TabuGame = (() => {
     try { localStorage.setItem(STORAGE_KEY, JSON.stringify(players)); } catch(e) {}
   }
 
+  function saveSession(screen = document.querySelector(".im-screen.active")?.id || "t-scr-lobby") {
+    window.GameSession?.save("tabu", { players, teams, pool, currentRound, maxRounds, activeTeamIndex, timePerTurn, secondsLeft, currentWord, turnStats, screen, savedAt: Date.now() });
+  }
+
   function changeScreen(id) {
     document.querySelectorAll(".im-screen").forEach(s => s.classList.remove("active"));
     $(id).classList.add("active");
     document.body.classList.toggle("playing", id !== "t-scr-lobby" && id !== "t-scr-teams");
+    saveSession(id);
   }
 
   function renderPlayers() {
@@ -128,14 +133,17 @@ const TabuGame = (() => {
     changeScreen("t-scr-preturn");
   }
 
-  function startTimer() {
-    loadWord();
-    secondsLeft = timePerTurn;
+  function startTimer(resume = false) {
+    if (!resume) {
+      loadWord();
+      secondsLeft = timePerTurn;
+    }
     updateTimerUI();
     
     clearInterval(timerId);
     timerId = setInterval(() => {
       secondsLeft--;
+      saveSession("t-scr-game");
       updateTimerUI();
       
       if (secondsLeft > 0 && secondsLeft <= 10) {
@@ -271,9 +279,55 @@ const TabuGame = (() => {
     $("t-btnSkip").onclick = () => recordAction('skip');
     
     $("t-btnNextTurn").onclick = advanceNextTurn;
-    $("t-btnRestart").onclick = () => { changeScreen("t-scr-lobby"); };
+    $("t-btnRestart").onclick = () => { clearInterval(timerId); window.GameSession?.clear("tabu"); changeScreen("t-scr-lobby"); };
     
     renderPlayers();
+    const saved = window.GameSession?.load("tabu");
+    if (saved && saved.screen !== "t-scr-lobby" && Array.isArray(saved.teams) && saved.teams.length) {
+      players = Array.isArray(saved.players) ? saved.players : players;
+      teams = saved.teams;
+      pool = Array.isArray(saved.pool) ? saved.pool : [];
+      currentRound = Number(saved.currentRound || 1);
+      maxRounds = Number(saved.maxRounds || 3);
+      activeTeamIndex = Number(saved.activeTeamIndex || 0);
+      timePerTurn = Number(saved.timePerTurn || 60);
+      secondsLeft = Number(saved.secondsLeft || 0);
+      currentWord = saved.currentWord || null;
+      turnStats = saved.turnStats || { correct: 0, taboo: 0, skip: 0 };
+      renderPlayers();
+      $("t-uiTeamsList").innerHTML = teams.map(t => `
+        <div class="team-card"><div class="team-name">${t.name}</div><div class="team-members">${t.members.map(window.Utils.escapeHTML).join(" · ")}</div></div>
+      `).join("");
+      if (currentWord) {
+        $("t-catBadge").textContent = currentWord.cat?.toUpperCase() || "";
+        $("t-txtMainWord").textContent = currentWord.word || "";
+        $("t-uiForbiddenList").innerHTML = (currentWord.forbidden || []).map(w => `<li>${w}</li>`).join("");
+      }
+      updateLiveStats();
+      if (saved.screen === "t-scr-preturn") {
+        setupTurn();
+      } else if (saved.screen === "t-scr-game") {
+        updateTimerUI();
+        changeScreen("t-scr-game");
+        const elapsed = Math.max(0, Math.floor((Date.now() - Number(saved.savedAt || Date.now())) / 1000));
+        secondsLeft = Math.max(0, secondsLeft - elapsed);
+        updateTimerUI();
+        if (secondsLeft > 0) startTimer(true); else finishTurn();
+      } else if (saved.screen === "t-scr-turn-summary") {
+        const activeTeam = teams[activeTeamIndex];
+        $("t-txtSummaryTeam").textContent = `Puntaje de ${activeTeam?.name || ""}`;
+        $("t-statCorrect").textContent = turnStats.correct;
+        $("t-statTaboo").textContent = turnStats.taboo;
+        $("t-statPoints").textContent = turnStats.correct - turnStats.taboo > 0 ? `+${turnStats.correct - turnStats.taboo}` : turnStats.correct - turnStats.taboo;
+        changeScreen(saved.screen);
+      } else if (saved.screen === "t-scr-result") {
+        endGame();
+      } else {
+        changeScreen(saved.screen);
+      }
+    } else {
+      changeScreen("t-scr-lobby");
+    }
   }
 
   return { init };
