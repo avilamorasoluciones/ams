@@ -1,4 +1,4 @@
-const CACHE_NAME = "juegos-avila-mora-v21";
+const CACHE_NAME = "juegos-avila-mora-v22";
 const APP_SHELL = [
   "./",
   "./index.html",
@@ -9,7 +9,7 @@ const APP_SHELL = [
   "./tabu.html",
   "./verdadreto.html",
   "./yonunca.html",
-  "./styles.css?v=20260926-8",
+  "./styles.css?v=20260926-9",
   "./scripts.js",
   "./players.js",
   "./game-bridge.js",
@@ -22,8 +22,8 @@ const APP_SHELL = [
   "./verdadreto.js",
   "./yonunca.js",
   "./manifest.webmanifest",
-  "./icon-192.svg",
-  "./icon-512.svg",
+  "./pwa-icon-192.svg",
+  "./pwa-icon-512.svg",
   "./icon-games.svg",
   "./game-impostor.svg",
   "./game-bomba.svg",
