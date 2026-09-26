@@ -214,7 +214,7 @@ const PWA = (() => {
   }
 
   function init() {
-    try { sessionStorage.removeItem("ams_sw_reloaded_v29"); } catch {}
+    try { sessionStorage.removeItem("ams_sw_reloaded_v30"); } catch {}
     createUI();
 
     window.addEventListener("beforeinstallprompt", event => {
@@ -245,13 +245,13 @@ const PWA = (() => {
         // que la página actual use también el HTML/JS/CSS recién publicados.
         if (!hadController) return;
         try {
-          if (sessionStorage.getItem("ams_sw_reloaded_v29") === "1") return;
-          sessionStorage.setItem("ams_sw_reloaded_v29", "1");
+          if (sessionStorage.getItem("ams_sw_reloaded_v30") === "1") return;
+          sessionStorage.setItem("ams_sw_reloaded_v30", "1");
         } catch {}
         window.location.reload();
       });
 
-      navigator.serviceWorker.register("./sw.js?v=20260926-29", {
+      navigator.serviceWorker.register("./sw.js?v=20260926-30", {
         scope: "./",
         updateViaCache: "none"
       }).then(registration => {
@@ -606,7 +606,7 @@ const Tools = (() => {
     const tickInt = setInterval(() => {
       window.emitSound(220 + Math.random() * 160, 0.035, "square", 0.18);
       ticks++;
-      if (ticks >= 7) {
+      if (ticks >= 10) {
         clearInterval(tickInt);
         cube.classList.remove("dice-rolling");
         cube.classList.add("dice-settled");
@@ -845,6 +845,15 @@ const MobileInputGuard = (() => {
   function init() {
     const inputs = document.querySelectorAll("input[type=text], input[type=search]");
     inputs.forEach(input => {
+      // The global player field is intentionally focused with preventScroll on
+      // the user's tap. This avoids Android Chrome jumping the whole page.
+      if (input.id === "globalPlayerInput") {
+        input.addEventListener("pointerdown", event => {
+          event.preventDefault();
+          try { input.focus({ preventScroll: true }); } catch { input.focus(); }
+        });
+      }
+
       let lockedScrollY = null;
       let wasVisibleBeforeFocus = false;
       let releaseTimer = null;
