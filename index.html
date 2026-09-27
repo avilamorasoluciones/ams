@@ -228,10 +228,18 @@
         margin-left:-16px!important;
         padding-left:16px!important;
         padding-right:16px!important;
-        scroll-snap-type:x mandatory!important;
+        scroll-snap-type:x proximity!important;
+        scroll-snap-stop:normal!important;
         -webkit-overflow-scrolling:touch!important;
         scrollbar-width:none!important;
-        touch-action:pan-x!important;
+        /*
+         * Importante en móvil:
+         * el dedo debe poder decidir entre deslizar horizontalmente
+         * el carrusel o continuar desplazando la página verticalmente.
+         * Antes pan-x atrapaba el gesto dentro de la tarjeta.
+         */
+        touch-action:pan-x pan-y!important;
+        overscroll-behavior-x:contain!important;
       }
 
       .services-grid::-webkit-scrollbar,
@@ -253,7 +261,8 @@
         width:min(84vw,350px)!important;
         max-width:none!important;
         scroll-snap-align:start!important;
-        scroll-snap-stop:always!important;
+        scroll-snap-stop:normal!important;
+        touch-action:pan-x pan-y!important;
       }
 
       /* Las tarjetas dejan de sentirse "pesadas" en pantallas pequeñas. */
