@@ -190,6 +190,194 @@
     .briefing-box p{margin:0 auto 16px;max-width:720px}
     .plan-card{height:100%}
     .plan-card .micro{margin-top:auto}
+  
+    /* ===== UX móvil: menos bajada, más lectura por bloques ===== */
+    /* En escritorio no cambia nada. En móvil convertimos los grids largos en
+       carruseles táctiles: se conserva todo el contenido, pero ocupa mucha menos
+       altura y se siente como una app. */
+    @media (max-width:740px){
+      section.section{
+        padding-top:42px!important;
+        padding-bottom:42px!important;
+      }
+      .section-head{
+        margin-bottom:20px!important;
+      }
+      .section-title{
+        font-size:clamp(1.7rem,7.5vw,2.15rem)!important;
+        line-height:1.08!important;
+      }
+      .section-sub{
+        font-size:.92rem!important;
+        line-height:1.45!important;
+      }
+
+      .services-grid,
+      .demos-grid,
+      .portfolio-grid,
+      .process,
+      .grid-2,
+      .ams-resource-grid{
+        display:flex!important;
+        flex-wrap:nowrap!important;
+        overflow-x:auto!important;
+        overflow-y:hidden!important;
+        gap:12px!important;
+        padding:2px 4px 14px!important;
+        margin-right:-16px!important;
+        margin-left:-16px!important;
+        padding-left:16px!important;
+        padding-right:16px!important;
+        scroll-snap-type:x mandatory!important;
+        -webkit-overflow-scrolling:touch!important;
+        scrollbar-width:none!important;
+        touch-action:pan-x!important;
+      }
+
+      .services-grid::-webkit-scrollbar,
+      .demos-grid::-webkit-scrollbar,
+      .portfolio-grid::-webkit-scrollbar,
+      .process::-webkit-scrollbar,
+      .grid-2::-webkit-scrollbar,
+      .ams-resource-grid::-webkit-scrollbar{
+        display:none!important;
+      }
+
+      .services-grid > *,
+      .demos-grid > *,
+      .portfolio-grid > *,
+      .process > *,
+      .grid-2 > *,
+      .ams-resource-grid > *{
+        flex:0 0 min(84vw,350px)!important;
+        width:min(84vw,350px)!important;
+        max-width:none!important;
+        scroll-snap-align:start!important;
+        scroll-snap-stop:always!important;
+      }
+
+      /* Las tarjetas dejan de sentirse "pesadas" en pantallas pequeñas. */
+      .service,
+      .demo,
+      .portfolio-card,
+      .step,
+      .card{
+        border-radius:20px!important;
+      }
+      .service,
+      .demo,
+      .portfolio-card,
+      .step{
+        min-height:0!important;
+      }
+
+      .service{padding:20px!important;}
+      .step{padding:20px!important;}
+      .portfolio-info{padding:16px!important;}
+      .demo-body{padding:16px!important;}
+
+      .ams-resource-grid{
+        padding-top:2px!important;
+      }
+      .ams-resource-grid > .ams-resource-card{
+        flex-basis:min(84vw,350px)!important;
+        width:min(84vw,350px)!important;
+        min-height:300px!important;
+      }
+
+      /* Evita que las imágenes hagan crecer demasiado los ejemplos. */
+      .portfolio-img-container{
+        aspect-ratio:16/9!important;
+        min-height:0!important;
+      }
+      .portfolio-img-container img{
+        width:100%!important;
+        height:100%!important;
+        object-fit:cover!important;
+      }
+
+      /* FAQ y proceso quedan más compactos, sin ocultar información. */
+      .faq-list{gap:8px!important;}
+      details{
+        border-radius:16px!important;
+        padding:12px 14px!important;
+      }
+      details p{
+        font-size:.9rem!important;
+        line-height:1.5!important;
+      }
+
+      .briefing-box{
+        margin-top:18px!important;
+        padding:18px!important;
+        border-radius:16px!important;
+      }
+
+      /* Pequeña pista visual para descubrir el gesto de deslizar. */
+      .services-grid::after,
+      .demos-grid::after,
+      .portfolio-grid::after,
+      .process::after,
+      .grid-2::after,
+      .ams-resource-grid::after{
+        content:"Desliza →";
+        flex:0 0 auto;
+        align-self:center;
+        width:auto;
+        padding:7px 10px;
+        border:1px solid rgba(255,255,255,.10);
+        border-radius:999px;
+        background:rgba(255,255,255,.035);
+        color:rgba(255,255,255,.48);
+        font-size:.68rem;
+        font-weight:800;
+        letter-spacing:.03em;
+        pointer-events:none;
+      }
+
+      .light-theme .services-grid::after,
+      .light-theme .demos-grid::after,
+      .light-theme .portfolio-grid::after,
+      .light-theme .process::after,
+      .light-theme .grid-2::after,
+      .light-theme .ams-resource-grid::after{
+        border-color:rgba(15,23,42,.10);
+        background:rgba(15,23,42,.035);
+        color:rgba(15,23,42,.52);
+      }
+
+      /* El CTA final también respira mejor en móvil. */
+      .cta{
+        border-radius:28px 28px 0 0!important;
+        padding:48px 0 calc(48px + var(--safe-bottom))!important;
+      }
+      .cta h2{font-size:clamp(1.8rem,8vw,2.5rem)!important;}
+      .cta p{font-size:1rem!important;line-height:1.5!important;}
+    }
+
+    @media (max-width:390px){
+      .services-grid,
+      .demos-grid,
+      .portfolio-grid,
+      .process,
+      .grid-2,
+      .ams-resource-grid{
+        margin-right:-14px!important;
+        margin-left:-14px!important;
+        padding-left:14px!important;
+        padding-right:14px!important;
+      }
+      .services-grid > *,
+      .demos-grid > *,
+      .portfolio-grid > *,
+      .process > *,
+      .grid-2 > *,
+      .ams-resource-grid > *{
+        flex-basis:86vw!important;
+        width:86vw!important;
+      }
+    }
+
   </style>
 </head>
 
