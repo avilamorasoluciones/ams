@@ -32,9 +32,10 @@ button,input,select,textarea{font:inherit}.top{height:70px;border-bottom:1px sol
     <section class="panel form-panel">
       <h2>Datos del documento</h2>
       <div class="grid">
-        <div class="field"><label>N.º de cuenta de cobro</label><input id="number" placeholder="CC-0001"></div>
+        <div class="field"><label>Tipo de documento</label><select id="docType"><option value="account">Cuenta de cobro</option><option value="quote">Propuesta / cobro comercial</option></select></div>
+<div class="field"><label>N.º de documento</label><input id="number" placeholder="CC-0001"></div>
         <div class="field"><label>Fecha</label><input id="date" type="date"></div>
-        <div class="field"><label>Prestador</label><input id="issuer" placeholder="Diego Andrés Avila Ríos"></div>
+        <div class="field"><label>Prestador</label><select id="issuer"><option value="">Seleccionar…</option><option>Diego Andrés Avila Ríos</option><option>María José</option></select></div>
         <div class="field"><label>Documento</label><input id="issuerId" placeholder="Cédula"></div>
         <div class="field full"><label>Correo del prestador</label><input id="issuerEmail" type="email" placeholder="equipo@avilamorasoluciones.com"></div>
         <div class="section full"><h2>Cliente</h2></div>
@@ -46,6 +47,7 @@ button,input,select,textarea{font:inherit}.top{height:70px;border-bottom:1px sol
         <div class="field full"><label>Concepto</label><textarea id="concept" placeholder="Hosting y mantenimiento web correspondiente al periodo..."></textarea></div>
         <div class="field"><label>Cantidad</label><input id="qty" type="number" value="1" min="1" step="1"></div>
         <div class="field"><label>Precio unitario</label><input id="price" type="number" value="25" min="0" step=".01"></div>
+<div class="field"><label>IVA</label><select id="tax"><option value="0">No aplicar</option><option value="19">19%</option></select></div>
         <div class="field"><label>Moneda</label><select id="currency"><option>USD</option><option>COP</option><option>EUR</option></select></div>
         <div class="field"><label>Periodicidad / periodo</label><input id="period" placeholder="Mensual · octubre 2026"></div>
         <div class="section full"><h2>Pago</h2></div>
@@ -64,7 +66,7 @@ button,input,select,textarea{font:inherit}.top{height:70px;border-bottom:1px sol
           <button class="btn" id="clearBtn">Limpiar</button>
         </div>
         <div class="status" id="status"></div>
-        <p class="hint">“Compartir” usa el menú del teléfono cuando el navegador permite compartir archivos. “Preparar correo” abre tu cliente de correo con el mensaje listo; el PDF se adjunta manualmente.</p>
+        <p class="hint"><strong>Modo correcto:</strong> esta herramienta genera una cuenta de cobro/documento comercial. No la presenta como factura electrónica DIAN ni inventa CUFE. Si AMS llega a estar obligada a facturar, la emisión electrónica debe hacerse por un sistema habilitado.</p><p class="hint">“Compartir” usa el menú del teléfono cuando el navegador permite compartir archivos. “Preparar correo” abre tu cliente de correo con el mensaje listo; el PDF se adjunta manualmente.</p>
       </div>
     </section>
 
@@ -76,7 +78,7 @@ button,input,select,textarea{font:inherit}.top{height:70px;border-bottom:1px sol
             <svg viewBox="0 0 64 64" aria-hidden="true"><defs><linearGradient id="pg" x1="0" x2="1"><stop stop-color="#8b5cf6"/><stop offset="1" stop-color="#c7a1ff"/></linearGradient></defs><rect x="3" y="3" width="58" height="58" rx="18" fill="#f5f3ff" stroke="#e9ddff"/><path d="M13 45 24 18h8l11 27h-7l-2.5-6H22.5L20 45h-7Zm12-12h5l-2.5-7L25 33Z" fill="url(#pg)"/><path d="M41 18h8v27h-8z" fill="#172033"/></svg>
             <div><strong>Avila Mora Soluciones</strong><span>Soluciones digitales</span></div>
           </div>
-          <div class="doc-title"><h2>CUENTA DE COBRO</h2><p id="pMeta">CC-0001 · —</p></div>
+          <div class="doc-title"><h2 id="pDocTitle">CUENTA DE COBRO</h2><p id="pMeta">CC-0001 · —</p></div>
         </div>
         <div class="doc-grid doc-block">
           <div><div class="doc-label">De</div><div class="doc-value" id="pIssuer">Nombre del prestador<br><span class="empty-note">Documento · correo</span></div></div>
@@ -85,7 +87,7 @@ button,input,select,textarea{font:inherit}.top{height:70px;border-bottom:1px sol
         <div class="doc-block"><div class="doc-label">Detalle del servicio</div>
           <table class="table"><thead><tr><th>Concepto</th><th>Cant.</th><th>Valor</th></tr></thead><tbody><tr><td id="pConcept">Servicio digital</td><td id="pQty">1</td><td id="pPrice">USD 25.00</td></tr></tbody></table>
         </div>
-        <div class="total"><div class="total-box"><span>Total a pagar</span><strong id="pTotal">USD 25.00</strong></div></div>
+        <div class="total"><div class="total-box"><span>Subtotal</span><strong id="pSubtotal">USD 25.00</strong><span style="margin-top:7px">IVA</span><strong id="pTax">USD 0.00</strong><span style="margin-top:7px">Total a pagar</span><strong id="pTotal">USD 25.00</strong></div></div>
         <div class="payment"><strong>Datos de pago</strong><br><span id="pPayment">Método · datos de pago</span></div>
         <div class="footer"><span id="pPeriod">Periodo: —</span><br><span id="pNote">Gracias por confiar en Avila Mora Soluciones.</span><br><br>Documento generado por Avila Mora Soluciones · Este formato es un documento de cobro y no sustituye una factura cuando exista obligación legal de facturar.</div>
       </article>
@@ -95,7 +97,7 @@ button,input,select,textarea{font:inherit}.top{height:70px;border-bottom:1px sol
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.2/jspdf.umd.min.js"></script>
 <script>
-const ids=["number","date","issuer","issuerId","issuerEmail","client","clientEmail","country","clientId","concept","qty","price","currency","period","method","holder","bank","accountType","payment","note"];
+const ids=["docType","number","date","issuer","issuerId","issuerEmail","client","clientEmail","country","clientId","concept","qty","price","tax","currency","period","method","holder","bank","accountType","payment","note"];
 const $=id=>document.getElementById(id);
 const today=new Date();$("date").value=today.toISOString().slice(0,10);$("number").value="CC-"+String(Number(localStorage.getItem("ams_cc_counter")||0)+1).padStart(4,"0");
 $("issuer").value=localStorage.getItem("ams_issuer")||"";$("issuerEmail").value=localStorage.getItem("ams_issuerEmail")||"equipo@avilamorasoluciones.com";
@@ -103,11 +105,12 @@ $("concept").value="Hosting y mantenimiento web";$("period").value=today.toLocal
 function val(id){return ($(id).value||"").trim()}
 function money(n,c){return c+" "+Number(n||0).toLocaleString("en-US",{minimumFractionDigits:2,maximumFractionDigits:2})}
 function update(){
- const c=val("currency"), q=Number(val("qty")||0), p=Number(val("price")||0), total=q*p;
+ const c=val("currency"), q=Number(val("qty")||0), p=Number(val("price")||0), subtotal=q*p, taxRate=Number(val("tax")||0), taxAmount=subtotal*taxRate/100, total=subtotal+taxAmount;
+ $("pDocTitle").textContent=val("docType")==="quote"?"DOCUMENTO COMERCIAL":"CUENTA DE COBRO";
  $("pMeta").textContent=(val("number")||"CC-0001")+" · "+(val("date")||"—");
  $("pIssuer").innerHTML=esc(val("issuer")||"Nombre del prestador")+"<br>"+esc(val("issuerId")||"Documento")+" · "+esc(val("issuerEmail")||"correo");
  $("pClient").innerHTML=esc(val("client")||"Nombre del cliente")+"<br>"+esc(val("clientEmail")||"correo")+" · "+esc(val("country")||"país");
- $("pConcept").textContent=val("concept")||"Servicio digital";$("pQty").textContent=q||1;$("pPrice").textContent=money(p,c);$("pTotal").textContent=money(total,c);
+ $("pConcept").textContent=val("concept")||"Servicio digital";$("pQty").textContent=q||1;$("pPrice").textContent=money(p,c);$("pSubtotal").textContent=money(subtotal,c);$("pTax").textContent=money(taxAmount,c);$("pTotal").textContent=money(total,c);
  $("pPayment").textContent=[val("method"),val("holder"),val("bank"),val("accountType"),val("payment")].filter(Boolean).join(" · ")||"Método · datos de pago";
  $("pPeriod").textContent="Periodo: "+(val("period")||"—");$("pNote").textContent=val("note")||"Gracias por confiar en Avila Mora Soluciones.";
  localStorage.setItem("ams_issuer",val("issuer"));localStorage.setItem("ams_issuerEmail",val("issuerEmail"));
@@ -118,18 +121,18 @@ function buildPdf(){
  const {jsPDF}=window.jspdf;const pdf=new jsPDF({unit:"mm",format:"a4"});const purple=[139,92,246],ink=[23,32,51],muted=[102,112,133],light=[245,243,255];
  pdf.setFillColor(245,243,255);pdf.roundedRect(16,15,18,18,4,4,"F");pdf.setFillColor(...purple);pdf.triangle(20,28,25,18,30,28,"F");pdf.setFillColor(...ink);pdf.rect(27,19,2.5,9,"F");
  pdf.setTextColor(...ink);pdf.setFont("helvetica","bold");pdf.setFontSize(14);pdf.text("Avila Mora Soluciones",40,22);pdf.setTextColor(...muted);pdf.setFont("helvetica","normal");pdf.setFontSize(8);pdf.text("SOLUCIONES DIGITALES",40,27);
- pdf.setTextColor(...ink);pdf.setFont("helvetica","bold");pdf.setFontSize(19);pdf.text("CUENTA DE COBRO",194,21,{align:"right"});pdf.setFontSize(8);pdf.setTextColor(...muted);pdf.text((val("number")||"CC-0001")+" · "+(val("date")||""),194,27,{align:"right"});
+ pdf.setTextColor(...ink);pdf.setFont("helvetica","bold");pdf.setFontSize(19);pdf.text(val("docType")==="quote"?"DOCUMENTO COMERCIAL":"CUENTA DE COBRO",194,21,{align:"right"});pdf.setFontSize(8);pdf.setTextColor(...muted);pdf.text((val("number")||"CC-0001")+" · "+(val("date")||""),194,27,{align:"right"});
  pdf.setDrawColor(225,228,234);pdf.line(16,38,194,38);
  let y=51;pdf.setFontSize(7);pdf.setFont("helvetica","bold");pdf.setTextColor(...muted);pdf.text("DE",16,y);pdf.text("PARA",108,y);
  pdf.setFontSize(9);pdf.setFont("helvetica","bold");pdf.setTextColor(...ink);pdf.text(val("issuer")||"Nombre del prestador",16,y+7);pdf.text(val("client")||"Nombre del cliente",108,y+7);
  pdf.setFont("helvetica","normal");pdf.setFontSize(7.5);pdf.setTextColor(...muted);pdf.text([val("issuerId"),val("issuerEmail")].filter(Boolean).join(" · "),16,y+13);pdf.text([val("clientEmail"),val("country")].filter(Boolean).join(" · "),108,y+13);
  y=82;pdf.setFillColor(244,245,247);pdf.rect(16,y,178,9,"F");pdf.setFont("helvetica","bold");pdf.setFontSize(7);pdf.setTextColor(...muted);pdf.text("CONCEPTO",19,y+6);pdf.text("CANT.",145,y+6);pdf.text("VALOR",191,y+6,{align:"right"});
- const total=Number(val("qty")||1)*Number(val("price")||0);y+=9;pdf.setTextColor(...ink);pdf.setFont("helvetica","normal");pdf.setFontSize(8.5);
+ const subtotal=Number(val("qty")||1)*Number(val("price")||0);const taxAmount=subtotal*Number(val("tax")||0)/100;const total=subtotal+taxAmount;y+=9;pdf.setTextColor(...ink);pdf.setFont("helvetica","normal");pdf.setFontSize(8.5);
  const lines=pdf.splitTextToSize(val("concept")||"Servicio digital",110);pdf.text(lines,19,y+7);pdf.text(String(val("qty")||1),145,y+7);pdf.text(money(total,val("currency")||"USD"),191,y+7,{align:"right"});pdf.setDrawColor(237,240,243);pdf.line(16,y+15,194,y+15);
- y+=32;pdf.setFillColor(...light);pdf.roundedRect(137,y,57,25,3,3,"F");pdf.setTextColor(...muted);pdf.setFont("helvetica","bold");pdf.setFontSize(7);pdf.text("TOTAL A PAGAR",141,y+8);pdf.setTextColor(...ink);pdf.setFontSize(15);pdf.text(money(total,val("currency")||"USD"),190,y+17,{align:"right"});
- y+=38;pdf.setFillColor(248,250,252);pdf.setDrawColor(231,235,240);pdf.roundedRect(16,y,178,30,3,3,"FD");pdf.setTextColor(...ink);pdf.setFont("helvetica","bold");pdf.setFontSize(8);pdf.text("DATOS DE PAGO",20,y+8);pdf.setFont("helvetica","normal");pdf.setTextColor(...muted);pdf.setFontSize(7.5);
+ y+=32;pdf.setFillColor(...light);pdf.roundedRect(137,y,57,34,3,3,"F");pdf.setTextColor(...muted);pdf.setFont("helvetica","bold");pdf.setFontSize(7);pdf.text("SUBTOTAL",141,y+7);pdf.text("IVA",141,y+14);pdf.text("TOTAL",141,y+22);pdf.setTextColor(...ink);pdf.setFontSize(8);pdf.text(money(subtotal,val("currency")||"USD"),190,y+7,{align:"right"});pdf.text(money(taxAmount,val("currency")||"USD"),190,y+14,{align:"right"});pdf.setFontSize(14);pdf.text(money(total,val("currency")||"USD"),190,y+25,{align:"right"});
+ y+=47;pdf.setFillColor(248,250,252);pdf.setDrawColor(231,235,240);pdf.roundedRect(16,y,178,30,3,3,"FD");pdf.setTextColor(...ink);pdf.setFont("helvetica","bold");pdf.setFontSize(8);pdf.text("DATOS DE PAGO",20,y+8);pdf.setFont("helvetica","normal");pdf.setTextColor(...muted);pdf.setFontSize(7.5);
  const pay=[val("method"),val("holder"),val("bank"),val("accountType"),val("payment")].filter(Boolean).join(" · ")||"Método y datos de pago";pdf.text(pdf.splitTextToSize(pay,168),20,y+15);
- pdf.setDrawColor(237,240,243);pdf.line(16,245,194,245);pdf.setTextColor(...muted);pdf.setFontSize(7);pdf.text("Periodo: "+(val("period")||"—"),16,253);pdf.text(val("note")||"Gracias por confiar en Avila Mora Soluciones.",16,259);pdf.text("Documento generado por Avila Mora Soluciones.",16,268);pdf.text("Este formato no sustituye una factura cuando exista obligación legal de facturar.",16,273);
+ pdf.setDrawColor(237,240,243);pdf.line(16,245,194,245);pdf.setTextColor(...muted);pdf.setFontSize(7);pdf.text("Periodo: "+(val("period")||"—"),16,253);pdf.text(val("note")||"Gracias por confiar en Avila Mora Soluciones.",16,259);pdf.text("Documento generado por Avila Mora Soluciones.",16,268);pdf.text("Documento comercial generado por Avila Mora Soluciones. Si existe obligación de facturar electrónicamente, la factura válida debe emitirse mediante un sistema habilitado por la DIAN.",16,273);
  return pdf;
 }
 async function getFile(){const pdf=buildPdf();const blob=pdf.output("blob");return new File([blob],(val("number")||"cuenta-de-cobro")+".pdf",{type:"application/pdf"})}
