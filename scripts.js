@@ -211,6 +211,43 @@ window.addEventListener("load", () => {
   }
 });
 
+// ===== Pistas de carrusel móvil =====
+(() => {
+  const carouselSelectors = [
+    ".services-grid",
+    ".demos-grid",
+    ".portfolio-grid",
+    ".process",
+    ".grid-2",
+    ".ams-resource-grid"
+  ];
+
+  const carousels = document.querySelectorAll(carouselSelectors.join(","));
+  if (!carousels.length) return;
+
+  carousels.forEach((carousel) => {
+    const hasOverflow = () => carousel.scrollWidth > carousel.clientWidth + 8;
+
+    const hideHint = () => {
+      carousel.classList.add("carousel-used");
+    };
+
+    const onScroll = () => {
+      if (carousel.scrollLeft > 8) hideHint();
+    };
+
+    carousel.addEventListener("pointerdown", hideHint, { passive: true });
+    carousel.addEventListener("scroll", onScroll, { passive: true });
+
+    // Si no hay más tarjetas, no mostramos una pista engañosa.
+    if (!hasOverflow()) hideHint();
+
+    window.addEventListener("resize", () => {
+      if (!hasOverflow()) hideHint();
+    }, { passive: true });
+  });
+})();
+
 // ===== Tema automático y manual =====
 const THEME_KEY = "ams-theme-preference";
 const themeToggle = document.getElementById("themeToggle");
