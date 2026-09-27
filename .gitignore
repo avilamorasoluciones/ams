@@ -1,0 +1,10 @@
+# Secrets / local configuration
+.env
+.env.*
+*.key
+*.pem
+*.p12
+*.pfx
+node_modules/
+.DS_Store
+Thumbs.db
