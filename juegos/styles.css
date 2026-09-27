@@ -3216,7 +3216,7 @@ body.light-theme.appearance-luxe {
   border-radius: 999px;
   background: var(--border);
   cursor: pointer;
-  transition: width .25s ease, background .25s ease, box-shadow .25s ease;
+  transition: width .12s cubic-bezier(.2,.8,.2,1), background .12s ease, box-shadow .12s ease;
 }
 .game-dot[aria-current="true"] {
   width: 26px;
