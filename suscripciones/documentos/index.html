@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#080b14">
+<title>Generador de documentos | Avila Mora Soluciones</title>
+<style>
+:root{--bg:#070b12;--panel:#0e1627;--panel2:#111c31;--text:#f5f7fb;--muted:#9daabd;--line:#ffffff14;--accent:#c7a1ff;--accent2:#8b5cf6;--green:#65e6a4}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 15% 0%,#8b5cf625,transparent 32%),radial-gradient(circle at 90% 10%,#c7a1ff18,transparent 28%),var(--bg);color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,Arial,sans-serif}
+button,input,select,textarea{font:inherit}.top{height:70px;border-bottom:1px solid var(--line);background:#070b12dd;backdrop-filter:blur(16px);display:flex;align-items:center;justify-content:space-between;padding:0 24px;position:sticky;top:0;z-index:10}.brand{display:flex;gap:11px;align-items:center;font-weight:900}.brand svg{width:38px;height:38px}.brand small{display:block;color:var(--muted);font-size:9px;letter-spacing:.16em;text-transform:uppercase}.back{color:var(--muted);text-decoration:none;font-size:12px;font-weight:800}.wrap{max-width:1180px;margin:auto;padding:30px 18px 60px}.intro{margin-bottom:20px}.eyebrow{color:#d8c3ff;font-size:10px;font-weight:900;letter-spacing:.18em;text-transform:uppercase}.intro h1{margin:7px 0 5px;font-size:clamp(26px,4vw,38px);letter-spacing:-.04em}.intro p{margin:0;color:var(--muted);font-size:14px}.layout{display:grid;grid-template-columns:minmax(0,1fr) minmax(330px,470px);gap:18px}.panel{background:linear-gradient(145deg,#111b2f,#0b1322);border:1px solid var(--line);border-radius:20px;padding:20px;box-shadow:0 20px 60px #0003}.panel h2{margin:0 0 14px;font-size:16px}.section{border-top:1px solid var(--line);padding-top:17px;margin-top:18px}.grid{display:grid;grid-template-columns:1fr 1fr;gap:11px}.field label{display:block;color:var(--muted);font-size:10px;font-weight:900;text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px}.field input,.field select,.field textarea{width:100%;background:#080f1c;color:var(--text);border:1px solid #ffffff18;border-radius:10px;padding:11px 12px;outline:none}.field textarea{min-height:72px;resize:vertical}.field input:focus,.field select:focus,.field textarea:focus{border-color:#a78bfa88;box-shadow:0 0 0 3px #8b5cf618}.full{grid-column:1/-1}.actions{display:flex;flex-wrap:wrap;gap:9px;margin-top:18px}.btn{border:1px solid #ffffff18;background:#ffffff08;color:var(--text);border-radius:11px;padding:11px 14px;font-weight:900;cursor:pointer}.btn.primary{background:linear-gradient(135deg,#d8c3ff,#8b5cf6);color:#171022;border:0}.btn.green{background:#65e6a418;color:#9ff3c6;border-color:#65e6a433}.hint{font-size:11px;color:var(--muted);margin-top:9px;line-height:1.5}.doc{background:#fff;color:#172033;border-radius:8px;min-height:680px;padding:38px 36px;box-shadow:0 25px 70px #0007}.doc-head{display:flex;justify-content:space-between;gap:20px;border-bottom:2px solid #eee;padding-bottom:20px}.doc-logo{display:flex;gap:10px;align-items:center}.doc-logo svg{width:48px;height:48px}.doc-logo strong{font-size:15px;letter-spacing:-.02em}.doc-logo span{display:block;color:#667085;font-size:9px;letter-spacing:.15em;text-transform:uppercase;margin-top:2px}.doc-title{text-align:right}.doc-title h2{margin:0;font-size:24px;letter-spacing:-.04em}.doc-title p{margin:4px 0 0;color:#667085;font-size:11px}.doc-block{margin-top:24px}.doc-label{font-size:9px;text-transform:uppercase;letter-spacing:.12em;color:#7b8494;font-weight:900;margin-bottom:7px}.doc-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}.doc-value{font-size:12px;line-height:1.55}.table{width:100%;border-collapse:collapse;margin-top:8px;font-size:11px}.table th{background:#f4f5f7;text-align:left;padding:9px}.table td{padding:10px 9px;border-bottom:1px solid #edf0f3}.table th:last-child,.table td:last-child{text-align:right}.total{display:flex;justify-content:flex-end;margin-top:16px}.total-box{min-width:190px;background:#f5f3ff;border:1px solid #e9ddff;border-radius:10px;padding:12px}.total-box span{display:block;color:#667085;font-size:9px;text-transform:uppercase;font-weight:900}.total-box strong{display:block;margin-top:3px;font-size:21px}.payment{background:#f8fafc;border:1px solid #e7ebf0;border-radius:10px;padding:12px;margin-top:18px;font-size:10px;line-height:1.6}.footer{margin-top:28px;padding-top:13px;border-top:1px solid #edf0f3;color:#7b8494;font-size:9px;line-height:1.5}.empty-note{color:#98a2b3;font-style:italic}.status{font-size:10px;color:#65e6a4;margin-top:8px;min-height:15px}@media(max-width:900px){.layout{grid-template-columns:1fr}.doc{order:-1;min-height:auto}.doc{padding:28px 22px}}@media(max-width:620px){.top{padding:0 14px}.wrap{padding:22px 12px 45px}.grid,.doc-grid{grid-template-columns:1fr}.full{grid-column:auto}.doc-head{display:block}.doc-title{text-align:left;margin-top:15px}.doc{padding:24px 18px}.table{font-size:10px}.table th,.table td{padding:8px 6px}.actions .btn{flex:1}.brand .name{display:none}}
+@media print{body{background:#fff}.top,.intro,.form-panel,.actions-wrap,.hint,.status{display:none!important}.wrap{padding:0}.layout{display:block}.preview-panel{border:0;padding:0;box-shadow:none}.doc{box-shadow:none;border-radius:0;min-height:0;padding:24px}.panel{background:none;border:0;padding:0}}
+</style>
+</head>
+<body>
+<header class="top">
+  <a class="brand" href="../index.html" aria-label="Volver a Suscripciones">
+    <svg viewBox="0 0 64 64" aria-hidden="true"><defs><linearGradient id="g" x1="0" x2="1"><stop stop-color="#d8c3ff"/><stop offset="1" stop-color="#8b5cf6"/></linearGradient></defs><rect x="4" y="4" width="56" height="56" rx="17" fill="#ffffff0a" stroke="#ffffff18"/><path d="M14 44 25 18h7l11 26h-7l-2.4-6H23.4L21 44h-7Zm12-12h5.2L28.6 25 26 32Z" fill="url(#g)"/><path d="M42 18h7v26h-7z" fill="#fff" opacity=".88"/></svg>
+    <span class="name">Avila Mora<small>Soluciones</small></span>
+  </a>
+  <a class="back" href="../index.html">← Suscripciones</a>
+</header>
+
+<main class="wrap">
+  <section class="intro">
+    <div class="eyebrow">Documentos AMS</div>
+    <h1>Generador de cuentas de cobro</h1>
+    <p>Llena los datos, revisa la vista previa y genera el PDF. También puedes compartirlo directamente desde el celular.</p>
+  </section>
+
+  <div class="layout">
+    <section class="panel form-panel">
+      <h2>Datos del documento</h2>
+      <div class="grid">
+        <div class="field"><label>N.º de cuenta de cobro</label><input id="number" placeholder="CC-0001"></div>
+        <div class="field"><label>Fecha</label><input id="date" type="date"></div>
+        <div class="field"><label>Prestador</label><input id="issuer" placeholder="Diego Andrés Avila Ríos"></div>
+        <div class="field"><label>Documento</label><input id="issuerId" placeholder="Cédula"></div>
+        <div class="field full"><label>Correo del prestador</label><input id="issuerEmail" type="email" placeholder="equipo@avilamorasoluciones.com"></div>
+        <div class="section full"><h2>Cliente</h2></div>
+        <div class="field"><label>Cliente / empresa</label><input id="client" placeholder="Nombre o empresa"></div>
+        <div class="field"><label>Correo</label><input id="clientEmail" type="email" placeholder="cliente@email.com"></div>
+        <div class="field"><label>País</label><input id="country" placeholder="Ecuador"></div>
+        <div class="field"><label>Identificación (opcional)</label><input id="clientId" placeholder="NIT / ID"></div>
+        <div class="section full"><h2>Servicio</h2></div>
+        <div class="field full"><label>Concepto</label><textarea id="concept" placeholder="Hosting y mantenimiento web correspondiente al periodo..."></textarea></div>
+        <div class="field"><label>Cantidad</label><input id="qty" type="number" value="1" min="1" step="1"></div>
+        <div class="field"><label>Precio unitario</label><input id="price" type="number" value="25" min="0" step=".01"></div>
+        <div class="field"><label>Moneda</label><select id="currency"><option>USD</option><option>COP</option><option>EUR</option></select></div>
+        <div class="field"><label>Periodicidad / periodo</label><input id="period" placeholder="Mensual · octubre 2026"></div>
+        <div class="section full"><h2>Pago</h2></div>
+        <div class="field"><label>Método</label><select id="method"><option>Transferencia bancaria</option><option>ePayco</option><option>PayPal</option><option>Otro</option></select></div>
+        <div class="field"><label>Titular</label><input id="holder" placeholder="Titular de la cuenta"></div>
+        <div class="field"><label>Banco / plataforma</label><input id="bank" placeholder="Banco / ePayco / PayPal"></div>
+        <div class="field"><label>Tipo de cuenta</label><input id="accountType" placeholder="Ahorros / Corriente / USD"></div>
+        <div class="field full"><label>Datos para pagar</label><textarea id="payment" placeholder="Cuenta, routing/ACH, enlace de pago u otros datos que quieras mostrar."></textarea></div>
+        <div class="field full"><label>Nota</label><textarea id="note" placeholder="Gracias por confiar en Avila Mora Soluciones."></textarea></div>
+      </div>
+      <div class="actions-wrap">
+        <div class="actions">
+          <button class="btn primary" id="pdfBtn">Generar PDF</button>
+          <button class="btn green" id="shareBtn">Compartir</button>
+          <button class="btn" id="mailBtn">Preparar correo</button>
+          <button class="btn" id="clearBtn">Limpiar</button>
+        </div>
+        <div class="status" id="status"></div>
+        <p class="hint">“Compartir” usa el menú del teléfono cuando el navegador permite compartir archivos. “Preparar correo” abre tu cliente de correo con el mensaje listo; el PDF se adjunta manualmente.</p>
+      </div>
+    </section>
+
+    <section class="panel preview-panel">
+      <h2>Vista previa</h2>
+      <article class="doc" id="preview">
+        <div class="doc-head">
+          <div class="doc-logo">
+            <svg viewBox="0 0 64 64" aria-hidden="true"><defs><linearGradient id="pg" x1="0" x2="1"><stop stop-color="#8b5cf6"/><stop offset="1" stop-color="#c7a1ff"/></linearGradient></defs><rect x="3" y="3" width="58" height="58" rx="18" fill="#f5f3ff" stroke="#e9ddff"/><path d="M13 45 24 18h8l11 27h-7l-2.5-6H22.5L20 45h-7Zm12-12h5l-2.5-7L25 33Z" fill="url(#pg)"/><path d="M41 18h8v27h-8z" fill="#172033"/></svg>
+            <div><strong>Avila Mora Soluciones</strong><span>Soluciones digitales</span></div>
+          </div>
+          <div class="doc-title"><h2>CUENTA DE COBRO</h2><p id="pMeta">CC-0001 · —</p></div>
+        </div>
+        <div class="doc-grid doc-block">
+          <div><div class="doc-label">De</div><div class="doc-value" id="pIssuer">Nombre del prestador<br><span class="empty-note">Documento · correo</span></div></div>
+          <div><div class="doc-label">Para</div><div class="doc-value" id="pClient">Nombre del cliente<br><span class="empty-note">Correo · país</span></div></div>
+        </div>
+        <div class="doc-block"><div class="doc-label">Detalle del servicio</div>
+          <table class="table"><thead><tr><th>Concepto</th><th>Cant.</th><th>Valor</th></tr></thead><tbody><tr><td id="pConcept">Servicio digital</td><td id="pQty">1</td><td id="pPrice">USD 25.00</td></tr></tbody></table>
+        </div>
+        <div class="total"><div class="total-box"><span>Total a pagar</span><strong id="pTotal">USD 25.00</strong></div></div>
+        <div class="payment"><strong>Datos de pago</strong><br><span id="pPayment">Método · datos de pago</span></div>
+        <div class="footer"><span id="pPeriod">Periodo: —</span><br><span id="pNote">Gracias por confiar en Avila Mora Soluciones.</span><br><br>Documento generado por Avila Mora Soluciones · Este formato es un documento de cobro y no sustituye una factura cuando exista obligación legal de facturar.</div>
+      </article>
+    </section>
+  </div>
+</main>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.2/jspdf.umd.min.js"></script>
+<script>
+const ids=["number","date","issuer","issuerId","issuerEmail","client","clientEmail","country","clientId","concept","qty","price","currency","period","method","holder","bank","accountType","payment","note"];
+const $=id=>document.getElementById(id);
+const today=new Date();$("date").value=today.toISOString().slice(0,10);$("number").value="CC-"+String(Number(localStorage.getItem("ams_cc_counter")||0)+1).padStart(4,"0");
+$("issuer").value=localStorage.getItem("ams_issuer")||"";$("issuerEmail").value=localStorage.getItem("ams_issuerEmail")||"equipo@avilamorasoluciones.com";
+$("concept").value="Hosting y mantenimiento web";$("period").value=today.toLocaleDateString("es-CO",{month:"long",year:"numeric"});
+function val(id){return ($(id).value||"").trim()}
+function money(n,c){return c+" "+Number(n||0).toLocaleString("en-US",{minimumFractionDigits:2,maximumFractionDigits:2})}
+function update(){
+ const c=val("currency"), q=Number(val("qty")||0), p=Number(val("price")||0), total=q*p;
+ $("pMeta").textContent=(val("number")||"CC-0001")+" · "+(val("date")||"—");
+ $("pIssuer").innerHTML=esc(val("issuer")||"Nombre del prestador")+"<br>"+esc(val("issuerId")||"Documento")+" · "+esc(val("issuerEmail")||"correo");
+ $("pClient").innerHTML=esc(val("client")||"Nombre del cliente")+"<br>"+esc(val("clientEmail")||"correo")+" · "+esc(val("country")||"país");
+ $("pConcept").textContent=val("concept")||"Servicio digital";$("pQty").textContent=q||1;$("pPrice").textContent=money(p,c);$("pTotal").textContent=money(total,c);
+ $("pPayment").textContent=[val("method"),val("holder"),val("bank"),val("accountType"),val("payment")].filter(Boolean).join(" · ")||"Método · datos de pago";
+ $("pPeriod").textContent="Periodo: "+(val("period")||"—");$("pNote").textContent=val("note")||"Gracias por confiar en Avila Mora Soluciones.";
+ localStorage.setItem("ams_issuer",val("issuer"));localStorage.setItem("ams_issuerEmail",val("issuerEmail"));
+}
+function esc(s){return String(s).replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]))}
+ids.forEach(id=>$(id).addEventListener("input",update));ids.forEach(id=>$(id).addEventListener("change",update));update();
+function buildPdf(){
+ const {jsPDF}=window.jspdf;const pdf=new jsPDF({unit:"mm",format:"a4"});const purple=[139,92,246],ink=[23,32,51],muted=[102,112,133],light=[245,243,255];
+ pdf.setFillColor(245,243,255);pdf.roundedRect(16,15,18,18,4,4,"F");pdf.setFillColor(...purple);pdf.triangle(20,28,25,18,30,28,"F");pdf.setFillColor(...ink);pdf.rect(27,19,2.5,9,"F");
+ pdf.setTextColor(...ink);pdf.setFont("helvetica","bold");pdf.setFontSize(14);pdf.text("Avila Mora Soluciones",40,22);pdf.setTextColor(...muted);pdf.setFont("helvetica","normal");pdf.setFontSize(8);pdf.text("SOLUCIONES DIGITALES",40,27);
+ pdf.setTextColor(...ink);pdf.setFont("helvetica","bold");pdf.setFontSize(19);pdf.text("CUENTA DE COBRO",194,21,{align:"right"});pdf.setFontSize(8);pdf.setTextColor(...muted);pdf.text((val("number")||"CC-0001")+" · "+(val("date")||""),194,27,{align:"right"});
+ pdf.setDrawColor(225,228,234);pdf.line(16,38,194,38);
+ let y=51;pdf.setFontSize(7);pdf.setFont("helvetica","bold");pdf.setTextColor(...muted);pdf.text("DE",16,y);pdf.text("PARA",108,y);
+ pdf.setFontSize(9);pdf.setFont("helvetica","bold");pdf.setTextColor(...ink);pdf.text(val("issuer")||"Nombre del prestador",16,y+7);pdf.text(val("client")||"Nombre del cliente",108,y+7);
+ pdf.setFont("helvetica","normal");pdf.setFontSize(7.5);pdf.setTextColor(...muted);pdf.text([val("issuerId"),val("issuerEmail")].filter(Boolean).join(" · "),16,y+13);pdf.text([val("clientEmail"),val("country")].filter(Boolean).join(" · "),108,y+13);
+ y=82;pdf.setFillColor(244,245,247);pdf.rect(16,y,178,9,"F");pdf.setFont("helvetica","bold");pdf.setFontSize(7);pdf.setTextColor(...muted);pdf.text("CONCEPTO",19,y+6);pdf.text("CANT.",145,y+6);pdf.text("VALOR",191,y+6,{align:"right"});
+ const total=Number(val("qty")||1)*Number(val("price")||0);y+=9;pdf.setTextColor(...ink);pdf.setFont("helvetica","normal");pdf.setFontSize(8.5);
+ const lines=pdf.splitTextToSize(val("concept")||"Servicio digital",110);pdf.text(lines,19,y+7);pdf.text(String(val("qty")||1),145,y+7);pdf.text(money(total,val("currency")||"USD"),191,y+7,{align:"right"});pdf.setDrawColor(237,240,243);pdf.line(16,y+15,194,y+15);
+ y+=32;pdf.setFillColor(...light);pdf.roundedRect(137,y,57,25,3,3,"F");pdf.setTextColor(...muted);pdf.setFont("helvetica","bold");pdf.setFontSize(7);pdf.text("TOTAL A PAGAR",141,y+8);pdf.setTextColor(...ink);pdf.setFontSize(15);pdf.text(money(total,val("currency")||"USD"),190,y+17,{align:"right"});
+ y+=38;pdf.setFillColor(248,250,252);pdf.setDrawColor(231,235,240);pdf.roundedRect(16,y,178,30,3,3,"FD");pdf.setTextColor(...ink);pdf.setFont("helvetica","bold");pdf.setFontSize(8);pdf.text("DATOS DE PAGO",20,y+8);pdf.setFont("helvetica","normal");pdf.setTextColor(...muted);pdf.setFontSize(7.5);
+ const pay=[val("method"),val("holder"),val("bank"),val("accountType"),val("payment")].filter(Boolean).join(" · ")||"Método y datos de pago";pdf.text(pdf.splitTextToSize(pay,168),20,y+15);
+ pdf.setDrawColor(237,240,243);pdf.line(16,245,194,245);pdf.setTextColor(...muted);pdf.setFontSize(7);pdf.text("Periodo: "+(val("period")||"—"),16,253);pdf.text(val("note")||"Gracias por confiar en Avila Mora Soluciones.",16,259);pdf.text("Documento generado por Avila Mora Soluciones.",16,268);pdf.text("Este formato no sustituye una factura cuando exista obligación legal de facturar.",16,273);
+ return pdf;
+}
+async function getFile(){const pdf=buildPdf();const blob=pdf.output("blob");return new File([blob],(val("number")||"cuenta-de-cobro")+".pdf",{type:"application/pdf"})}
+$("pdfBtn").onclick=async()=>{const f=await getFile();const a=document.createElement("a");a.href=URL.createObjectURL(f);a.download=f.name;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000);localStorage.setItem("ams_cc_counter",String(parseInt((val("number")||"CC-0001").replace(/\D/g,""))||1));$("status").textContent="PDF generado: "+f.name};
+$("shareBtn").onclick=async()=>{const f=await getFile();if(navigator.canShare&&navigator.canShare({files:[f]})){await navigator.share({title:"Cuenta de cobro · Avila Mora Soluciones",text:"Cuenta de cobro "+(val("number")||""),files:[f]});$("status").textContent="Documento listo para compartir."}else{$("status").textContent="Tu navegador no permite compartir archivos directamente. Usa Generar PDF."}};
+$("mailBtn").onclick=()=>{const to=encodeURIComponent(val("clientEmail"));const subject=encodeURIComponent("Cuenta de cobro "+(val("number")||"")+" · Avila Mora Soluciones");const body=encodeURIComponent("Hola "+(val("client")||"")+"\n\nAdjunto encontrarás la cuenta de cobro "+(val("number")||"")+" correspondiente a "+(val("period")||"")+" por "+money(Number(val("qty")||1)*Number(val("price")||0),val("currency")||"USD")+"."+"\n\nSaludos,\nAvila Mora Soluciones");location.href="mailto:"+(to||"")+"?subject="+subject+"&body="+body};
+$("clearBtn").onclick=()=>{if(confirm("¿Limpiar el documento?")){ids.forEach(id=>{if(id!=="date"&&id!=="number"&&id!=="issuerEmail")$(id).value=""});$("qty").value=1;$("price").value=25;$("currency").value="USD";$("date").value=new Date().toISOString().slice(0,10);$("number").value="CC-"+String(Number(localStorage.getItem("ams_cc_counter")||0)+1).padStart(4,"0");update()}};
+</script>
+</body>
+</html>
