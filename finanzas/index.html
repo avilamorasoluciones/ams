@@ -23,7 +23,7 @@
 <div class="actions"><button class="btn primary" id="new">＋ Movimiento</button><button class="btn" id="backup">↓ Respaldo</button><button class="btn" id="restoreBtn">↑ Restaurar</button><input id="restore" type="file" accept="application/json" hidden></div></section>
 <div class="danger"><b>Regla:</b> un aporte de ustedes no es ingreso de ventas; un retiro no es gasto. Este panel es control de gestión, no reemplaza la contabilidad ni los documentos fiscales.</div>
 <section class="stats">
-<div class="stat"><span>Ingresos</span><b id="income">$0</b></div><div class="stat"><span>Gastos</span><b id="expense">$0</b></div><div class="stat"><span>Aportes</span><b id="capital">$0</b></div><div class="stat"><span>Caja neta</span><b id="cash">$0</b></div>
+<div class="stat"><span>Ingresos USD</span><b id="income">$0</b></div><div class="stat"><span>Gastos USD</span><b id="expense">$0</b></div><div class="stat"><span>Aportes USD</span><b id="capital">$0</b></div><div class="stat"><span>Caja USD</span><b id="cash">$0</b></div>
 </section>
 <section class="panel"><div class="toolbar"><input id="search" class="input" placeholder="Buscar cliente, proveedor o concepto"><select id="filter"><option value="">Todos</option><option value="Ingreso">Ingresos</option><option value="Gasto">Gastos</option><option value="Aporte">Aportes</option><option value="Retiro">Retiros</option></select></div><div id="list"></div></section>
 </main>
@@ -47,8 +47,8 @@ const money=(n,c)=>new Intl.NumberFormat("es-CO",{style:"currency",currency:c,ma
 const save=()=>{localStorage.setItem(KEY,JSON.stringify(data));render();};
 function totals(currency){let inc=0,exp=0,cap=0,ret=0;data.filter(x=>x.currency===currency).forEach(x=>{let n=+x.amount||0;if(x.type==="Ingreso")inc+=n;if(x.type==="Gasto")exp+=n;if(x.type==="Aporte")cap+=n;if(x.type==="Retiro")ret+=n});return{inc,exp,cap,ret,cash:inc+cap-exp-ret}};
 function render(){
- const cur="USD"; const t=totals(cur);
- $("income").textContent=money(t.inc,cur);$("expense").textContent=money(t.exp,cur);$("capital").textContent=money(t.cap,cur);$("cash").textContent=money(t.cash,cur);
+ const cur="USD"; const t=totals(cur); const cop=totals("COP");
+ $("income").textContent=money(t.inc,cur);$("expense").textContent=money(t.exp,cur);$("capital").textContent=money(t.cap,cur);$("cash").textContent=money(t.cash,cur); $("cash").title="Caja COP: "+money(cop.cash,"COP");
  const q=$("search").value.toLowerCase(),f=$("filter").value;
  const arr=data.filter(x=>(!f||x.type===f)&&(!q||[x.party,x.description,x.category,x.ref].join(" ").toLowerCase().includes(q))).sort((a,b)=>b.date.localeCompare(a.date));
  $("list").innerHTML=arr.length?arr.map((x,i)=>{const sign=x.type==="Ingreso"||x.type==="Aporte"?"+":"-";const cls=x.type==="Ingreso"?"income":x.type==="Gasto"?"expense":x.type==="Aporte"?"capital":"withdraw";return '<div class="entry"><div><b>'+esc(x.type)+" · "+esc(x.description||"Sin concepto")+'</b><small>'+esc(x.date)+' · '+esc(x.currency)+' · '+esc(x.party||"Sin tercero")+(x.recurring==="yes"?" · Recurrente":"")+'</small></div><div class="amount '+cls+'">'+sign+money(x.amount,x.currency)+'<br><button class="btn" style="padding:5px 8px;margin-top:5px" onclick="del('+data.indexOf(x)+')">Eliminar</button></div></div>'}).join(""):'<div class="entry"><span class="muted">Aún no hay movimientos.</span></div>';
