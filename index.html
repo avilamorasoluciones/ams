@@ -322,37 +322,58 @@
         border-radius:16px!important;
       }
 
-      /* Pequeña pista visual para descubrir el gesto de deslizar. */
-      .services-grid::after,
-      .demos-grid::after,
-      .portfolio-grid::after,
-      .process::after,
-      .grid-2::after,
-      .ams-resource-grid::after{
+      /*
+       * Pista de carrusel:
+       * antes era un elemento ::after al FINAL del carrusel, por eso
+       * aparecía cortado después de la segunda/última tarjeta.
+       * Ahora vive dentro de la PRIMERA tarjeta y no ocupa espacio
+       * horizontal. Así se entiende desde el inicio que hay más contenido.
+       */
+      .services-grid > :first-child,
+      .demos-grid > :first-child,
+      .portfolio-grid > :first-child,
+      .process > :first-child,
+      .grid-2 > :first-child,
+      .ams-resource-grid > :first-child{
+        position:relative!important;
+      }
+
+      .services-grid > :first-child::after,
+      .demos-grid > :first-child::after,
+      .portfolio-grid > :first-child::after,
+      .process > :first-child::after,
+      .grid-2 > :first-child::after,
+      .ams-resource-grid > :first-child::after{
         content:"Desliza →";
-        flex:0 0 auto;
-        align-self:center;
+        position:absolute;
+        top:12px;
+        right:12px;
+        z-index:8;
         width:auto;
         padding:7px 10px;
-        border:1px solid rgba(255,255,255,.10);
+        border:1px solid rgba(255,255,255,.14);
         border-radius:999px;
-        background:rgba(255,255,255,.035);
-        color:rgba(255,255,255,.48);
+        background:rgba(7,10,18,.78);
+        backdrop-filter:blur(8px);
+        -webkit-backdrop-filter:blur(8px);
+        color:rgba(248,250,252,.82);
         font-size:.68rem;
         font-weight:800;
         letter-spacing:.03em;
+        line-height:1;
         pointer-events:none;
+        box-shadow:0 5px 18px rgba(0,0,0,.18);
       }
 
-      .light-theme .services-grid::after,
-      .light-theme .demos-grid::after,
-      .light-theme .portfolio-grid::after,
-      .light-theme .process::after,
-      .light-theme .grid-2::after,
-      .light-theme .ams-resource-grid::after{
-        border-color:rgba(15,23,42,.10);
-        background:rgba(15,23,42,.035);
-        color:rgba(15,23,42,.52);
+      .light-theme .services-grid > :first-child::after,
+      .light-theme .demos-grid > :first-child::after,
+      .light-theme .portfolio-grid > :first-child::after,
+      .light-theme .process > :first-child::after,
+      .light-theme .grid-2 > :first-child::after,
+      .light-theme .ams-resource-grid > :first-child::after{
+        border-color:rgba(15,23,42,.12);
+        background:rgba(255,255,255,.88);
+        color:#334155;
       }
 
       /* El CTA final también respira mejor en móvil. */
