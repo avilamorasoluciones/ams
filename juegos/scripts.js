@@ -707,6 +707,8 @@ window.Tools = Tools;
 const GamesMenu = (() => {
   let slides = [];
   let activeIndex = 0;
+  let renderedListKey = "";
+  let rafId = 0;
 
   function isMobileLayout() {
     return window.matchMedia("(max-width: 700px)").matches;
@@ -720,16 +722,41 @@ const GamesMenu = (() => {
     return slides.filter(slide => !slide.hidden && isAvailableOnCurrentDevice(slide));
   }
 
-  function updateDots(list) {
+  function listKey(list) {
+    return list.map(slide => slide.dataset.game || slide.querySelector("h3")?.textContent || "").join("|");
+  }
+
+  // Los puntos se crean una sola vez. Antes se reconstruían en cada evento
+  // de scroll, lo que hacía que el indicador se sintiera retrasado durante
+  // un arrastre lento.
+  function renderDots(list) {
     const dots = document.getElementById("gameDots");
     if (!dots) return;
+    const key = listKey(list);
+    if (key === renderedListKey) return;
+
+    renderedListKey = key;
     dots.innerHTML = list.map((slide, index) =>
-      '<button type="button" class="game-dot" data-dot-index="' + index + '" aria-label="Ir a ' +
-      (slide.querySelector("h3")?.textContent || "juego") + '" aria-current="' + (index === activeIndex ? "true" : "false") + '"></button>'
+      '<button type="button" class="game-dot" data-dot-index="' + index +
+      '" aria-label="Ir a ' + (slide.querySelector("h3")?.textContent || "juego") +
+      '" aria-current="' + (index === activeIndex ? "true" : "false") + '"></button>'
     ).join("");
+
     dots.querySelectorAll("[data-dot-index]").forEach(dot => {
       dot.addEventListener("click", () => goTo(Number(dot.dataset.dotIndex), true));
     });
+  }
+
+  function paintActiveDot(list) {
+    const dots = document.querySelectorAll("#gameDots [data-dot-index]");
+    dots.forEach(dot => {
+      dot.setAttribute("aria-current", String(Number(dot.dataset.dotIndex) === activeIndex));
+    });
+  }
+
+  function updateDots(list) {
+    renderDots(list);
+    paintActiveDot(list);
   }
 
   function goTo(index, smooth = true) {
@@ -738,6 +765,7 @@ const GamesMenu = (() => {
     activeIndex = Math.max(0, Math.min(index, list.length - 1));
     const carousel = document.getElementById("gameCarousel");
     const slide = list[activeIndex];
+
     if (carousel && slide) {
       const targetLeft = slide.offsetLeft - Math.max(0, (carousel.clientWidth - slide.offsetWidth) / 2);
       carousel.scrollTo({
@@ -745,26 +773,32 @@ const GamesMenu = (() => {
         behavior: smooth ? "smooth" : "auto"
       });
     }
+
     updateControls(list);
   }
 
   function updateControls(list = visibleSlides()) {
     const count = document.getElementById("gameSelectorCount");
     if (count) count.textContent = list.length + " juego" + (list.length === 1 ? "" : "s");
+
     const prev = document.getElementById("gamePrev");
     const next = document.getElementById("gameNext");
     if (prev) prev.disabled = list.length <= 1 || activeIndex <= 0;
     if (next) next.disabled = list.length <= 1 || activeIndex >= list.length - 1;
+
     updateDots(list);
   }
 
   function syncActive() {
+    rafId = 0;
     const list = visibleSlides();
     const carousel = document.getElementById("gameCarousel");
     if (!carousel || !list.length) return;
+
     const center = carousel.scrollLeft + carousel.clientWidth / 2;
     let best = 0;
     let distance = Infinity;
+
     list.forEach((slide, index) => {
       const slideCenter = slide.offsetLeft + slide.offsetWidth / 2;
       const d = Math.abs(slideCenter - center);
@@ -773,24 +807,43 @@ const GamesMenu = (() => {
         best = index;
       }
     });
-    activeIndex = best;
-    updateControls(list);
+
+    if (best !== activeIndex) {
+      activeIndex = best;
+      // Solo actualizamos el estado visual del punto. No tocamos el DOM
+      // completo ni volvemos a crear los botones durante el scroll.
+      paintActiveDot(list);
+    }
+  }
+
+  function scheduleSync() {
+    if (rafId) return;
+    rafId = window.requestAnimationFrame(syncActive);
   }
 
   function filter() {
     const input = document.getElementById("gameSearch");
     const query = (input?.value || "").trim().toLowerCase();
+
     slides.forEach(slide => {
       const haystack = ((slide.dataset.search || "") + " " + (slide.querySelector("h3")?.textContent || "")).toLowerCase();
       const unavailable = !isAvailableOnCurrentDevice(slide);
       slide.hidden = unavailable || Boolean(query && !haystack.includes(query));
     });
+
     activeIndex = 0;
+    renderedListKey = "";
     const list = visibleSlides();
-    if (list.length) list[0].scrollIntoView({ behavior: "smooth", block: "nearest", inline: "center" });
+
+    if (list.length) {
+      list[0].scrollIntoView({ behavior: "smooth", block: "nearest", inline: "center" });
+    }
+
     updateControls(list);
+
     const clear = document.getElementById("gameSearchClear");
     if (clear) clear.classList.toggle("is-visible", Boolean(query));
+
     const empty = document.getElementById("gameSearchEmpty");
     if (empty) empty.hidden = list.length !== 0;
   }
@@ -798,6 +851,7 @@ const GamesMenu = (() => {
   function bind() {
     const carousel = document.getElementById("gameCarousel");
     if (!carousel) return;
+
     slides = [...carousel.querySelectorAll(".game-slide")];
 
     document.getElementById("gamePrev")?.addEventListener("click", () => goTo(activeIndex - 1));
@@ -805,19 +859,18 @@ const GamesMenu = (() => {
 
     const search = document.getElementById("gameSearch");
     search?.addEventListener("input", filter);
+
     document.getElementById("gameSearchClear")?.addEventListener("click", () => {
       if (search) search.value = "";
       filter();
       search?.focus();
     });
 
-    carousel.addEventListener("scroll", () => {
-      window.clearTimeout(carousel._amsScrollTimer);
-      carousel._amsScrollTimer = window.setTimeout(syncActive, 90);
-    }, { passive: true });
+    // Antes había un debounce de 90 ms. Eso significa que el indicador
+    // podía quedarse hasta ~90 ms mirando la tarjeta anterior. Ahora usamos
+    // requestAnimationFrame: se sincroniza con el refresco visual del navegador.
+    carousel.addEventListener("scroll", scheduleSync, { passive: true });
 
-    // El navegador gestiona el gesto táctil de forma nativa.
-    // Evitamos pointer capture porque en Android puede cancelar el scroll o los clics.
     carousel.addEventListener("keydown", event => {
       if (event.key === "ArrowRight") {
         event.preventDefault();
@@ -834,16 +887,20 @@ const GamesMenu = (() => {
 
   function init() {
     bind();
+
     window.addEventListener("resize", () => {
       const input = document.getElementById("gameSearch");
       if (input) {
         filter();
         return;
       }
+
       slides.forEach(slide => {
         slide.hidden = !isAvailableOnCurrentDevice(slide);
       });
+
       activeIndex = 0;
+      renderedListKey = "";
       updateControls();
     }, { passive: true });
   }
