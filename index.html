@@ -323,57 +323,86 @@
       }
 
       /*
-       * Pista de carrusel:
-       * antes era un elemento ::after al FINAL del carrusel, por eso
-       * aparecía cortado después de la segunda/última tarjeta.
-       * Ahora vive dentro de la PRIMERA tarjeta y no ocupa espacio
-       * horizontal. Así se entiende desde el inicio que hay más contenido.
+       * Pista de gesto móvil:
+       * no se coloca encima de las tarjetas. Vive en el espacio inferior
+       * del carrusel, se anima suavemente y desaparece en cuanto el usuario
+       * empieza a deslizar. Así enseña el gesto sin tapar títulos, iconos
+       * ni botones.
        */
-      .services-grid > :first-child,
-      .demos-grid > :first-child,
-      .portfolio-grid > :first-child,
-      .process > :first-child,
-      .grid-2 > :first-child,
-      .ams-resource-grid > :first-child{
+      .services-grid,
+      .demos-grid,
+      .portfolio-grid,
+      .process,
+      .grid-2,
+      .ams-resource-grid{
         position:relative!important;
+        padding-bottom:34px!important;
       }
 
-      .services-grid > :first-child::after,
-      .demos-grid > :first-child::after,
-      .portfolio-grid > :first-child::after,
-      .process > :first-child::after,
-      .grid-2 > :first-child::after,
-      .ams-resource-grid > :first-child::after{
-        content:"Desliza →";
+      .services-grid::after,
+      .demos-grid::after,
+      .portfolio-grid::after,
+      .process::after,
+      .grid-2::after,
+      .ams-resource-grid::after{
+        content:"↔  Desliza";
         position:absolute;
-        top:12px;
-        right:12px;
-        z-index:8;
-        width:auto;
-        padding:7px 10px;
-        border:1px solid rgba(255,255,255,.14);
+        left:50%;
+        bottom:5px;
+        transform:translateX(-50%);
+        z-index:6;
+        width:max-content;
+        padding:4px 9px;
+        border:1px solid rgba(255,255,255,.08);
         border-radius:999px;
-        background:rgba(7,10,18,.78);
-        backdrop-filter:blur(8px);
-        -webkit-backdrop-filter:blur(8px);
-        color:rgba(248,250,252,.82);
-        font-size:.68rem;
+        background:rgba(255,255,255,.035);
+        color:rgba(248,250,252,.42);
+        font-size:.58rem;
         font-weight:800;
-        letter-spacing:.03em;
+        letter-spacing:.04em;
         line-height:1;
         pointer-events:none;
-        box-shadow:0 5px 18px rgba(0,0,0,.18);
+        opacity:1;
+        animation:amsSwipeHint 1.9s ease-in-out infinite;
+        transition:opacity .25s ease,transform .25s ease;
       }
 
-      .light-theme .services-grid > :first-child::after,
-      .light-theme .demos-grid > :first-child::after,
-      .light-theme .portfolio-grid > :first-child::after,
-      .light-theme .process > :first-child::after,
-      .light-theme .grid-2 > :first-child::after,
-      .light-theme .ams-resource-grid > :first-child::after{
-        border-color:rgba(15,23,42,.12);
-        background:rgba(255,255,255,.88);
-        color:#334155;
+      .services-grid.carousel-used::after,
+      .demos-grid.carousel-used::after,
+      .portfolio-grid.carousel-used::after,
+      .process.carousel-used::after,
+      .grid-2.carousel-used::after,
+      .ams-resource-grid.carousel-used::after{
+        opacity:0;
+        transform:translateX(-50%) translateY(5px);
+        animation:none;
+      }
+
+      @keyframes amsSwipeHint{
+        0%,100%{opacity:.34;transform:translateX(-50%) translateX(-3px);}
+        50%{opacity:.82;transform:translateX(-50%) translateX(4px);}
+      }
+
+      .light-theme .services-grid::after,
+      .light-theme .demos-grid::after,
+      .light-theme .portfolio-grid::after,
+      .light-theme .process::after,
+      .light-theme .grid-2::after,
+      .light-theme .ams-resource-grid::after{
+        border-color:rgba(15,23,42,.09);
+        background:rgba(15,23,42,.025);
+        color:rgba(15,23,42,.48);
+      }
+
+      @media (prefers-reduced-motion: reduce){
+        .services-grid::after,
+        .demos-grid::after,
+        .portfolio-grid::after,
+        .process::after,
+        .grid-2::after,
+        .ams-resource-grid::after{
+          animation:none;
+        }
       }
 
       /* El CTA final también respira mejor en móvil. */
