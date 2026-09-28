@@ -139,7 +139,7 @@ const SEED_DB = [
   ["Arroz con Pollo Casero", "Plato", "Casero", 100, 170, 10, 18, 6],
   ["Pollo Sudado Casero", "Plato", "Casero", 100, 180, 26, 2, 6],
   ["Sopa de Verduras Casera", "Plato", "Casero", 100, 45, 2, 8, 1],
-  ["Hamburguesa Casera (Pan y Carne)", "Comida Rápida", "Casero", 200, 450, 23, 43, 20]
+  ["Hamburguesa Casera (Pan y Carne)", "Comida Rápida", "Casero", 200, 450, 23, 43, 20],
   // --- ALIMENTOS COLOMBIANOS Y DE USO COTIDIANO (REFERENCIA) ---
   ["Arroz con Coco Casero", "Plato", "Casero", 100, 185, 3, 25, 8],
   ["Arroz con Frijoles Casero", "Plato", "Casero", 100, 145, 6, 24, 3],
