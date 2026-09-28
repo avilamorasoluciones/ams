@@ -23,7 +23,7 @@ La web oficial publica `equipo@avilamorasoluciones.com` y WhatsApp +57 305 254 7
 14. Entrega.
 15. Mantenimiento/renovación si corresponde.
 
-## 4. Briefing
+## 4. Formulario de Proyecto
 Debe entregar datos del cliente, objetivo, negocio, contenido, diseño, funciones, situación actual, dominio, referencias, prioridades, fecha y observaciones.
 No pedir contraseñas, tarjetas, códigos de autenticación ni datos bancarios sensibles.
 El formulario debe conservarse como registro del proyecto.
@@ -92,7 +92,7 @@ Contenido correcto · móvil · tablet · PC · enlaces · formularios · WhatsA
 
 ## 17. Fuente de verdad
 1. Web pública = captación.
-2. Briefing = requisitos del cliente.
+2. Formulario de Proyecto = requisitos del cliente.
 3. Propuesta = alcance vendido.
 4. Términos = condiciones.
 5. Documentos = soporte comercial/fiscal según corresponda.
