@@ -53,8 +53,7 @@ main{padding-bottom:40px}.hero{padding:92px 0 30px}.eyebrow{display:inline-flex;
 <div class="choice-grid">
 <label class="choice active"><input type="checkbox" id="managedHosting" checked disabled><span class="fake"><i class="fa-solid fa-server"></i></span><span><strong>Alojamiento administrado por AMS</strong><small>Incluido en la mensualidad.</small></span></label>
 <label class="choice active"><input type="checkbox" id="managedDomain" checked disabled><span class="fake"><i class="fa-solid fa-globe"></i></span><span><strong>Dominio administrado por AMS</strong><small>Incluido en la mensualidad.</small></span></label>
-<label class="choice" id="dbChoice"><input type="checkbox" id="database"><span class="fake"><i class="fa-solid fa-database"></i></span><span><strong>Datos / base de datos</strong><small>Para apps y sistemas con datos.</small></span></label>
-<label class="choice"><input type="checkbox" id="external"><span class="fake"><i class="fa-solid fa-plug"></i></span><span><strong>Servicios externos reales</strong><small>APIs o herramientas pagadas.</small></span></label>
+<label class="choice"><input type="checkbox" id="external"><span class="fake"><i class="fa-solid fa-plug"></i></span><span><strong>Servicio externo pagado</strong><small>Solo cuando exista un costo mensual real.</small></span></label>
 </div>
 </div>
 
@@ -92,13 +91,13 @@ const $=id=>document.getElementById(id);
 const SERVICE={
  landing:{label:"Landing / web sencilla",base:8,friend:5,business:10,dev:60},
  corporate:{label:"Web empresarial",base:10,friend:7,business:12,dev:120},
- store:{label:"Tienda virtual / e-commerce",base:14,friend:10,business:17,dev:220},
- app:{label:"Aplicación web",base:18,friend:13,business:22,dev:300},
- system:{label:"Sistema a medida",base:23,friend:17,business:28,dev:400},
- advanced:{label:"Sistema avanzado / integraciones",base:30,friend:23,business:36,dev:550}
+ store:{label:"Tienda virtual / e-commerce",base:15,friend:10,business:18,dev:220},
+ app:{label:"Aplicación web",base:20,friend:14,business:24,dev:300},
+ system:{label:"Sistema a medida",base:25,friend:18,business:30,dev:400},
+ advanced:{label:"Sistema avanzado / integraciones",base:32,friend:24,business:38,dev:550}
 };
 const TRAFFIC={low:{label:"bajo",add:0},normal:{label:"normal",add:0},high:{label:"alto",add:3},veryhigh:{label:"muy alto",add:6}};
-const DOMAIN={com:12,net:13,co:32,other:20};
+const DOMAIN={com:12,net:13,co:32,other:30};
 let billView="both";
 function money(n){return "$"+Number(n||0).toFixed(2)+" USD"}
 function selectedRadio(name){return document.querySelector('input[name="'+name+'"]:checked')?.value||""}
@@ -108,8 +107,6 @@ function monthlyCostEstimate(monthlyPrice){const vps=(+$("vpsCost").value||0),ca
 function calc(){
  const client=$("clientType").value,service=$("service").value,s=SERVICE[service],traffic=selectedRadio("traffic"),support=$("support").value;
  let r=baseFor(client,service)+TRAFFIC[traffic].add+(support==="standard"?2:support==="priority"?5:0);
- if($("database").checked&&["landing","corporate"].includes(service))r+=2;
- if($("database").checked&&["app","system","advanced","store"].includes(service))r+=2;
  if($("external").checked)r+=2;
  r=Math.ceil(r);
  const cost=monthlyCostEstimate(r);
@@ -143,9 +140,9 @@ function copyQuote(){
 }
 function selectedBillingAnnual(){return billView==="annual"}
 function setStatus(s){$("status").textContent=s;setTimeout(()=>{if($("status").textContent===s)$("status").textContent=""},2800)}
-function saveState(){try{const d={clientType:$("clientType").value,service:$("service").value,traffic:selectedRadio("traffic"),support:$("support").value,domain:$("domain").value,database:$("database").checked,external:$("external").checked};localStorage.setItem("ams_calc_v3",JSON.stringify(d))}catch(e){}}
+function saveState(){try{const d={clientType:$("clientType").value,service:$("service").value,traffic:selectedRadio("traffic"),support:$("support").value,domain:$("domain").value,external:$("external").checked};localStorage.setItem("ams_calc_v3",JSON.stringify(d))}catch(e){}}
 function loadState(){try{const d=JSON.parse(localStorage.getItem("ams_calc_v3")||"null");if(!d)return;$("clientType").value=d.clientType||"normal";$("service").value=d.service||"landing";$("support").value=d.support||"basic";$("domain").value=d.domain||"com";$("database").checked=!!d.database;$("external").checked=!!d.external;if(d.traffic){const r=document.querySelector('input[name="traffic"][value="'+d.traffic+'"]');if(r)r.checked=true}}catch(e){}}
-function reset(){["clientType","service","support","domain"].forEach(()=>{});$("clientType").value="normal";$("service").value="landing";$("support").value="basic";$("domain").value="com";document.querySelectorAll('input[name="traffic"]').forEach(x=>x.checked=x.value==="low");$("database").checked=false;$("external").checked=false;billView="both";document.querySelectorAll(".bill").forEach(x=>x.classList.toggle("active",x.dataset.bill==="both"));calc();setStatus("Calculadora restablecida.")}
+function reset(){["clientType","service","support","domain"].forEach(()=>{});$("clientType").value="normal";$("service").value="landing";$("support").value="basic";$("domain").value="com";document.querySelectorAll('input[name="traffic"]').forEach(x=>x.checked=x.value==="low");$("external").checked=false;billView="both";document.querySelectorAll(".bill").forEach(x=>x.classList.toggle("active",x.dataset.bill==="both"));calc();setStatus("Calculadora restablecida.")}
 document.querySelectorAll("input,select").forEach(e=>{e.addEventListener("input",calc);e.addEventListener("change",calc)});
 document.querySelectorAll(".bill").forEach(b=>b.onclick=()=>{billView=b.dataset.bill;document.querySelectorAll(".bill").forEach(x=>x.classList.toggle("active",x===b));calc()});
 $("copy").onclick=copyQuote;$("reset").onclick=reset;
