@@ -11,7 +11,7 @@
 <link rel="icon" href="icon-192.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="icon-192.svg">
 <link rel="manifest" href="manifest.webmanifest">
-<title>Calculadora interna | Avila Mora Soluciones</title>
+<title>Calculadora | Gestión AMS</title>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet">
@@ -21,13 +21,8 @@
 </style>
 </head>
 <body>
-<div id="loginScreen" class="login-screen"><div class="login-card">
-<div class="login-brand"><span class="dot"></span>Avila Mora Soluciones</div>
-<div class="login-icon"><i class="fa-solid fa-lock"></i></div><h1>Calculadora interna</h1><p>Herramienta privada de cotización.</p>
-<form id="loginForm" autocomplete="off"><label>Usuario</label><input id="loginUser" class="form-control" required><label class="mt-3">Contraseña</label><input id="loginPass" class="form-control" type="password" required><button class="btn btn-gold w-100 mt-4">Entrar</button><div id="loginError" class="login-error d-none">Datos incorrectos.</div></form>
-</div></div>
 <div id="app" class="d-none">
-<nav class="navbar navbar-dark fixed-top"><div class="container"><a class="brand" href="#"><span class="dot"></span><span>Avila Mora <small>Soluciones</small></span></a><span class="internal">Calculadora interna</span></div></nav>
+<nav class="navbar navbar-dark fixed-top"><div class="container"><a class="brand" href="#"><span class="dot"></span><span>Avila Mora <small>Soluciones</small></span></a><span class="internal">Gestión AMS · Calculadora</span></div></nav>
 <main class="container"><header class="hero text-center"><div class="eyebrow"><i class="fa-solid fa-calculator"></i> Cotización rápida</div><h1>¿Cuánto cobrar <span>al mes?</span></h1><p>La mensualidad cubre la operación; el desarrollo inicial se cotiza aparte.</p></header>
 <div class="row g-4 align-items-start"><section class="col-lg-7"><div class="card panel"><div class="card-body p-4 p-md-5">
 <div class="step"><b>1</b><div><h2>¿Qué tipo de cliente es?</h2><p>Elige la relación comercial.</p></div></div>
@@ -45,28 +40,6 @@
 <details class="advanced mt-4"><summary><i class="fa-solid fa-sliders"></i> Ajustes internos <span>solo para cambiar costos reales</span></summary><div class="row g-3 pt-3"><div class="col-md-6"><label>Dominio / año (USD)<input id="domainCost" class="form-control" type="number" value="12"></label></div><div class="col-md-6"><label>Infraestructura compartida / mes (USD)<input id="hostingMonthly" class="form-control" type="number" value="8"></label></div><div class="col-md-6"><label>Proyectos activos esperados<input id="activeProjects" class="form-control" type="number" value="30" min="1"></label></div><div class="col-md-6"><label>Servicios externos / mes (USD)<input id="externalCost" class="form-control" type="number" value="0"></label></div><div class="col-md-6"><label>Margen objetivo sobre costos (%)<input id="margin" class="form-control" type="number" value="20"></label></div><div class="col-md-6"><label>Demanda alta / mes (USD)<input id="trafficCost" class="form-control" type="number" value="8"></label></div></div><div class="tiny">La tarifa base representa el trabajo recurrente de AMS. La infraestructura se reparte entre los proyectos activos: no se cobra un servidor completo por cliente. Las bases de datos pequeñas viven en la infraestructura compartida y los backups se automatizan; solo se agrega un costo cuando existe un servicio externo real. Una web estática en GitHub Pages puede tener infraestructura de producción de $0.</div></details>
 </div></div></section>
 <aside class="col-lg-5"><div class="result"><div class="result-head"><span><i class="fa-solid fa-bolt"></i> Resultado</span><small id="profile">Cliente normal</small></div><div id="recommended" class="recommended">Mensualidad sugerida</div><div id="monthly" class="big">$0</div><div id="usdLabel" class="usd">USD / mes</div><div id="explain" class="explain"></div><div id="annualBox" class="annual-box"><div><span>Si paga mensual</span><strong id="monthlyTotal">$0/año</strong><small>12 pagos</small></div><div><span>Si paga anual</span><strong id="annualTotal">$0</strong><small>1 pago · 12 meses</small></div></div><div class="included"><strong><i class="fa-solid fa-check-circle"></i> Incluye en el cálculo</strong><ul id="includedList"></ul></div><div id="warning" class="warning d-none"></div><button id="copy" class="btn btn-gold w-100 mt-3"><i class="fa-regular fa-copy"></i> Copiar cotización</button></div><div class="mini-note"><i class="fa-solid fa-circle-info"></i><span><b>Modelo AMS:</b><br>El desarrollo inicial se cotiza una sola vez. La mensualidad cubre operación, mantenimiento, soporte básico y la parte de infraestructura que realmente consume el proyecto. AMS trabaja con infraestructura compartida para repartir costos entre varios clientes.</span></div></aside></div><footer>Avila Mora Soluciones · Herramienta interna</footer></main></div>
-<script>
-const UH="40e8d8fc6587f23492589938715563ff0563cc8d0f960aea338fe2c2ea4a1305";
-const PH="ade9437d34d13f61298a2fe4479c08d085a1265fc8905d0457ad836ed245adad";
-async function h(v){const x=await crypto.subtle.digest("SHA-256",new TextEncoder().encode(v));return Array.from(new Uint8Array(x)).map(b=>b.toString(16).padStart(2,"0")).join("")}
-document.getElementById("loginForm").onsubmit=async e=>{e.preventDefault();const u=await h(loginUser.value),p=await h(loginPass.value);if(u===UH&&p===PH){sessionStorage.amsCalc="1";loginScreen.classList.add("d-none");app.classList.remove("d-none")}else loginError.classList.remove("d-none")};
-if(sessionStorage.amsCalc==="1"){loginScreen.classList.add("d-none");app.classList.remove("d-none")}
-const P={static:{b:10},corporate:{b:13},store:{b:17},app:{b:20},system:{b:23},advanced:{b:27}};
-const $=id=>document.getElementById(id),M=n=>"$"+n.toFixed(2)+" USD";
-function calc(){let c=$("client").value,t=$("service").value,p=P[t],base=p.b,domain=+$("domainCost").value||0,infra=+$("hostingMonthly").value||0,projects=Math.max(1,+$("activeProjects").value||1),external=+$("externalCost").value||0,traffic=+$("trafficCost").value||0;
-let a=base+infra/projects+external;
-if($("domain").checked)a+=domain/12;
-if($("highTraffic").checked)a+=traffic;
-let target=a*(1+(+$("margin").value||0)/100),r=target;
-if(c==="friend")r=5;
-if(c==="business")r*=1.05;
-r=Math.ceil(r*2)/2;
-let annual=r*10;
-$("profile").textContent={friend:"Cliente amigo",normal:"Cliente normal",business:"Negocio con mayor demanda"}[c];
-$("monthly").textContent=M(r);$("monthlyTotal").textContent=M(r*12)+"/año";$("annualTotal").textContent=M(annual);
-$("explain").textContent=c==="friend"?"Tarifa especial de $5/mes.":"Referencia económica: "+M(r)+"/mes. La infraestructura se distribuye entre los proyectos activos; el anual equivale a 10 mensualidades y cubre 12 meses.";
-let l=[];l.push($("domain").checked?"Dominio incluido":"Dominio no incluido");l.push($("database").checked?"Base de datos en infraestructura compartida":"Sin base de datos");l.push($("backups").checked?"Backups y exportación del proyecto":"Backups no incluidos");l.push($("highTraffic").checked?"Demanda alta":"Infraestructura compartida estándar");$("includedList").innerHTML=l.map(x=>"<li>"+x+"</li>").join("");applyBillingView()}
-function applyBillingView(){let selected=document.querySelector(".bill.active")?.dataset.bill||"both",m=$("monthly"),title=$("recommended"),unit=$("usdLabel"),box=$("annualBox");if(selected==="annual"){title.textContent="Pago anual sugerido";m.textContent=$("annualTotal").textContent;unit.textContent="USD · 1 pago / 12 meses";box.style.display="none"}else if(selected==="monthly"){title.textContent="Mensualidad sugerida";m.textContent=$("monthly").textContent;unit.textContent="USD / mes";box.style.display="none"}else{title.textContent="Mensualidad sugerida";m.textContent=$("monthly").textContent;unit.textContent="USD / mes";box.style.display="grid"}}document.querySelectorAll("input,select").forEach(e=>{e.addEventListener("input",calc);e.addEventListener("change",calc)});document.querySelectorAll(".bill").forEach(b=>b.onclick=()=>{document.querySelectorAll(".bill").forEach(x=>x.classList.remove("active"));b.classList.add("active");applyBillingView()});copy.onclick=()=>{navigator.clipboard?.writeText("Avila Mora Soluciones\nMensualidad: "+$("monthly").textContent+"\nPlan anual: "+$("annualTotal").textContent+" (1 pago / 12 meses, equivalente a 10 mensualidades).");copy.innerHTML='<i class="fa-solid fa-check"></i> Copiado';setTimeout(()=>copy.innerHTML='<i class="fa-regular fa-copy"></i> Copiar cotización',1300)};calc();
-</script><script>if('serviceWorker' in navigator){window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}));}</script>
+<script>if(sessionStorage.amsGestionAuth!=="1")location.replace("../index.html");<script>if('serviceWorker' in navigator){window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}));}</script>
 <script src="../contacto.js?v=20260927-2"></script>
 </body></html>
