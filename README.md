@@ -82,7 +82,7 @@ Quedan fuera del código y requieren revisión de ustedes:
 7. Definir el procedimiento real de backups.
 8. Configurar OVHcloud/Coolify solo cuando el volumen y el flujo de trabajo lo justifiquen.
 
-**Nota:** que AMS sea una iniciativa pequeña o que todavía no tenga registro propio no permite asumir por sí solo una situación legal o tributaria concreta. No hacemos esa afirmación en el sitio; los documentos públicos se mantienen generales y se actualizan cuando la operación real cambie.
+**Nota:** que AMS sea una iniciativa pequeña o que todavía no tenga registro propio no permite asumir por sí solo una situación legal concreta. No hacemos esa afirmación en el sitio; los documentos públicos se mantienen generales y se actualizan cuando la operación real cambie.
 
 ## Principio de desarrollo
 No agregar tecnología por moda. Cada herramienta debe ahorrar tiempo, reducir un riesgo, controlar dinero, mejorar una venta, facilitar producción o mejorar la entrega.
