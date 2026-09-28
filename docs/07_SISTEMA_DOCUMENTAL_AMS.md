@@ -13,7 +13,7 @@ El Centro Documental no usa un formulario único para todo. Cada tipo de documen
 El generador puede reutilizar:
 - datos del prestador;
 - correo y teléfono de AMS;
-- datos de un cliente ya registrado en Operación o Suscripciones;
+- datos del cliente maestro registrado en Gestión;
 - dominio, URL, hosting y proyecto;
 - una plantilla del servicio;
 - valores y condiciones del caso concreto.
@@ -50,11 +50,11 @@ Gestión → Documentos → elegir tipo → seleccionar cliente → seleccionar 
 
 Los documentos y borradores se guardan localmente en el navegador de este dispositivo mediante `localStorage`. Eso permite operar sin backend, pero no sincroniza automáticamente entre computadores o celulares.
 
-El sistema aprovecha las claves locales de Operación, Suscripciones y Finanzas cuando corresponde, por lo que todos esos módulos deben abrirse desde la misma instalación/origen de AMS.
+Los documentos consultan el cliente maestro y los datos de proyecto disponibles en Gestión. Todo sigue siendo local al origen del navegador; mientras no exista backend, no hay sincronización automática entre dispositivos.
 
 ## Firma y revisión
 
-Contrato y acta incluyen espacios para firma. El documento generado es una plantilla administrativa/comercial y debe revisarse antes de firmar o entregar, especialmente cuando existan condiciones particulares sobre propiedad intelectual, datos personales, permanencia, penalidades, licencias, servicios de terceros o terminación.
+El acta incluye espacios para firma. El documento generado es una plantilla administrativa/comercial y debe revisarse antes de entregar, especialmente cuando existan condiciones particulares sobre alcance, datos personales, propiedad de materiales o servicios de terceros.
 
 ## Alcance actual
 
