@@ -36,6 +36,9 @@
     [...new Set(anchors)].forEach((a) => {
       const href = (a.getAttribute("href") || "").trim();
       if (!href || href === "#" || href.startsWith("#") || href.toLowerCase().startsWith("javascript:")) return;
+      let url;
+      try { url = new URL(href, location.href); } catch (_) { return; }
+      if (!["http:","https:"].includes(url.protocol) || url.origin === location.origin) return;
       a.target = "_blank";
       const rel = new Set((a.getAttribute("rel") || "").split(/\s+/).filter(Boolean));
       rel.add("noopener");
