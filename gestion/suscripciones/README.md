@@ -5,10 +5,11 @@ Este módulo forma parte de `/gestion/` y **no tiene un login propio**. El acces
 ## Función
 
 Panel local para mantener:
-- clientes;
+- cliente maestro;
 - contacto;
 - correo;
 - teléfono;
+- país y ciudad;
 - dominio;
 - URL;
 - infraestructura;
@@ -18,15 +19,18 @@ Panel local para mantener:
 - fecha de inicio;
 - vencimiento;
 - días de gracia;
+- último pago;
 - estado.
 
 ## Integración
 
-El Centro Documental puede leer los clientes guardados aquí para autocompletar documentos. Operación mantiene información adicional del proyecto. Ambos módulos comparten el mismo `localStorage` cuando se usan en el mismo origen.
+Operación y Documentos reutilizan el mismo cliente maestro cuando se usan en el mismo origen del navegador.
+
+**Registrar pago** actualiza la próxima fecha y crea el ingreso correspondiente en Caja AMS.
 
 ## Respaldo
 
-Usar **Respaldo** para exportar JSON y **Restaurar** para recuperar la información.
+Usar **Respaldo completo** desde Gestión para exportar clientes, proyectos, movimientos y checklist. Restaurar solo archivos de respaldo generados por AMS.
 
 ## Seguridad
 
