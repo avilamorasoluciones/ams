@@ -1,7 +1,7 @@
 # Avila Mora Soluciones · AMS
 
 ## Manual y cumplimiento
-El procedimiento operativo completo está en `MANUAL_OPERATIVO.md`. Las páginas públicas cuentan con política de privacidad, términos y política de cookies. Actualmente el sitio no despliega analítica ni publicidad propia.
+El procedimiento operativo completo está en `MANUAL_OPERATIVO.md`. Las páginas públicas cuentan con política de privacidad, términos y política de cookies; las demos de portafolio se marcan como demos y no se indexan. Actualmente el sitio no despliega analítica ni publicidad propia.
 
 ## Estado
 AMS está preparado para comenzar con **GitHub Pages + dominio propio**. No se incorpora Hetzner/Coolify hasta que el volumen real lo justifique; la referencia operativa actual es esperar a tener al menos dos clientes activos simultáneamente que necesiten infraestructura propia.
@@ -16,6 +16,7 @@ AMS está preparado para comenzar con **GitHub Pages + dominio propio**. No se i
 - `/legal_terminos.html` — términos y condiciones.
 - `/legal_cookies.html` — política de cookies y tecnologías similares.
 - `/MANUAL_OPERATIVO.md` — manual operativo.
+- `/LANZAMIENTO.md` — checklist para pasar de GitHub Pages al dominio propio, correo y pagos.
 - Demos y juegos — carpetas públicas independientes.
 
 ## Flujo de cliente
@@ -43,7 +44,7 @@ Antes de usar dinero personal para una compra:
 No mezclar dinero personal y dinero de AMS sin registrarlo.
 
 ## GitHub Pages mientras arrancamos
-GitHub Pages sirve para el sitio público y demos estáticas.
+GitHub Pages sirve para el sitio público y demos estáticas. Mientras no esté comprado/configurado el dominio, las URLs `avilamorasoluciones.github.io/ams/...` se conservan funcionales.
 
 No usar GitHub Pages como backend seguro. No guardar allí:
 - contraseñas;
