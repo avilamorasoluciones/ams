@@ -777,9 +777,24 @@ const GamesMenu = (() => {
     updateControls(list);
   }
 
+  function updateSlideIndices(list) {
+    const total = list.length;
+    slides.forEach(slide => {
+      const index = list.indexOf(slide);
+      const label = slide.querySelector(".game-slide-index");
+      if (!label) return;
+      if (index < 0 || !total) {
+        label.textContent = "";
+        return;
+      }
+      label.textContent = String(index + 1).padStart(2, "0") + " / " + String(total).padStart(2, "0");
+    });
+  }
+
   function updateControls(list = visibleSlides()) {
     const count = document.getElementById("gameSelectorCount");
     if (count) count.textContent = list.length + " juego" + (list.length === 1 ? "" : "s");
+    updateSlideIndices(list);
 
     const prev = document.getElementById("gamePrev");
     const next = document.getElementById("gameNext");
