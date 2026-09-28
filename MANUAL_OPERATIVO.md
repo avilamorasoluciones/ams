@@ -41,6 +41,10 @@ El formulario debe conservarse como registro del proyecto.
 - Preferir registro/control del cliente y administración técnica por AMS cuando corresponda.
 - Renovaciones deben quedar registradas en Operación/Suscripciones.
 
+## 6.1 Tiendas virtuales
+
+Cuando el proyecto sea una tienda virtual, el enfoque base de AMS es catálogo + carrito + pedido por WhatsApp + gestión del pedido según el alcance. La parte de pagos en línea se evalúa por separado cuando el cliente ya tiene una integración que deba conservarse.
+
 ## 7. Operación AMS
 La información operativa se administra desde `/gestion/`, en Operación. El cliente se guarda como registro maestro y los proyectos quedan vinculados a ese cliente.
 Etapas: Contacto inicial (Lead) → Calificado → Propuesta → Aceptado → Pago pendiente → Producción → Revisión cliente → Entrega → Mantenimiento → Cerrado.
