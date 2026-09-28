@@ -40,33 +40,17 @@ Los datos quedan en el navegador del dispositivo.
 Ruta dentro de Gestión:
 `/gestion/documentos/`
 
-Cada documento tiene un formulario diferente.
+Cada documento tiene un formulario específico y el PDF se adapta al cliente y al servicio.
 
-### Contrato
-Se completa con servicio, alcance, entregables, fechas, valor inicial, valor recurrente, pagos, soporte, terceros, propiedad/licencia, confidencialidad, terminación, jurisdicción y cláusulas específicas.
+Documentos disponibles:
+- **Propuesta comercial / cotización:** servicio, alcance, entregables, tiempos, conceptos, valores, vigencia y condiciones.
+- **Acta de entrega:** entregables realizados, pendientes, observaciones, correcciones y aceptación.
+- **Comprobante de pago:** fecha, valor, método, referencia, periodo y concepto.
+- **Ficha de cliente / proyecto:** expediente interno para consultar y reutilizar datos.
 
-### Cotización / propuesta
-Se completa con servicio, alcance, entregables, tiempos y una tabla de conceptos con cantidades y valores, además de descuento, impuestos, forma de pago, vigencia y exclusiones.
+El generador permite seleccionar el cliente existente, seleccionar una plantilla de servicio y completar solo lo particular del caso. Los datos conocidos del prestador también se reutilizan.
 
-### Cuenta de cobro
-Se completa con periodo, concepto, valor, impuestos cuando correspondan, vencimiento y datos de pago.
-
-### Recibo
-Se completa con fecha del pago, valor recibido, método, referencia, periodo y concepto.
-
-### Ficha de cliente
-Resume datos de contacto, proyecto, servicio, dominio, URLs, infraestructura, alta, renovación y notas.
-
-### Cierre mensual
-Lee los movimientos de Caja AMS del periodo seleccionado y construye un resumen de ingresos, gastos, aportes, retiros y saldo neto.
-
-### Acta de entrega
-Se completa con entregables efectivamente entregados, pendientes, observaciones, correcciones/garantía y texto de aceptación.
-
-### Ficha del prestador
-Guarda los datos reutilizables de la persona que presta el servicio para no volver a escribirlos en cada documento.
-
-El botón **Generar PDF** crea el archivo a partir de la vista previa actual. Antes de enviarlo, revisar los datos.
+Por ahora AMS no necesita módulos de facturación, cuentas de cobro ni contratos de prestación de servicios para su operación cotidiana.
 
 ## 5. Calculadora
 
@@ -97,7 +81,9 @@ Ruta dentro de Gestión:
 Registrar cliente, proyecto, servicio, etapa, precio, dominio, staging, URL final, fecha objetivo, próximo paso y notas.
 
 Etapas actuales:
-Lead → Calificado → Propuesta → Aceptado → Pago pendiente → Producción → Revisión cliente → Entrega → Mantenimiento → Cerrado.
+Contacto inicial (Lead) → Calificado → Propuesta → Aceptado → Pago pendiente → Producción → Revisión cliente → Entrega → Mantenimiento → Cerrado.
+
+**Contacto inicial (Lead)** significa simplemente que una persona o negocio acaba de llegar, preguntar o mostrar interés; todavía no es una venta.
 
 ## 8. Flujo recomendado
 
