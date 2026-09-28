@@ -33,7 +33,7 @@ const api={
  today:localToday,
  clients:()=>arr(CK).map(normalizeClient),
  saveClients:v=>{write(CK,v.map(normalizeClient));writeMirrors();return api.clients()},
- upsertClient(c){const a=arr(CK).map(normalizeClient),x=normalizeClient(c),i=a.findIndex(y=>y.id===x.id),sameIdx=i>-1?i:a.findIndex(y=>same(clientKey(y),clientKey(x)));x.updated=new Date().toISOString();if(sameIdx>-1)a[sameIdx]=Object.assign(a[sameIdx],x,{subscription:Object.assign({},a[sameIdx].subscription,x.subscription)});else a.push(x);write(CK,a);writeMirrors();return a.find(y=>y.id===(sameIdx>-1?a[sameIdx].id:x.id))},
+ upsertClient(c){const a=arr(CK).map(normalizeClient),x=normalizeClient(c),i=a.findIndex(y=>y.id===x.id),sameIdx=i>-1?i:a.findIndex(y=>same(clientKey(y),clientKey(x)));x.updated=new Date().toISOString();if(sameIdx>-1){x.id=a[sameIdx].id;a[sameIdx]=Object.assign(a[sameIdx],x,{subscription:Object.assign({},a[sameIdx].subscription,x.subscription)})}else a.push(x);write(CK,a);writeMirrors();return a.find(y=>y.id===(sameIdx>-1?a[sameIdx].id:x.id))},
  findClient(id){return api.clients().find(c=>c.id===id)},
  deleteClient(id){const a=arr(CK).filter(c=>c.id!==id);write(CK,a);const p=arr(PK).map(normalizeProject);p.forEach(x=>{if(x.clientId===id)x.clientId=""});write(PK,p);writeMirrors();},
  projects:()=>arr(PK).map(normalizeProject),
