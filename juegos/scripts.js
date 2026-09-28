@@ -251,7 +251,7 @@ const PWA = (() => {
         window.location.reload();
       });
 
-      navigator.serviceWorker.register("./sw.js?v=20260926-33", {
+      navigator.serviceWorker.register("./sw.js?v=20260927-35", {
         scope: "./",
         updateViaCache: "none"
       }).then(registration => {
