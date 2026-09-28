@@ -1,37 +1,29 @@
 # Cierre mensual y anual · AMS
 
 ## Cada mes
-
-1. Exportar Caja AMS desde Gestión → Finanzas.
-2. Exportar clientes y Suscripciones desde Gestión → Clientes / Suscripciones.
-3. Exportar Operación desde Gestión → Operación.
-4. Revisar dominios por vencer.
-5. Revisar servicios recurrentes.
-6. Conciliar cobros recibidos.
-7. Guardar soportes de gastos.
-8. Revisar renovaciones próximas.
-9. Revisar backups.
-10. Anotar cualquier aporte o retiro personal separado de ventas.
+1. Exportar **Respaldo completo** desde Gestión.
+2. Revisar clientes y Suscripciones.
+3. Revisar dominios por vencer.
+4. Revisar servicios recurrentes.
+5. Conciliar cobros recibidos con los movimientos de Caja.
+6. Revisar gastos y soportes.
+7. Revisar renovaciones próximas.
+8. Revisar backups.
+9. Anotar cualquier aporte o retiro personal separado de ventas.
+10. Guardar los documentos comerciales importantes del mes.
 
 ## Cierre anual
+Guardar en un lugar privado:
+- respaldo completo de Gestión;
+- relación de ingresos y gastos de la operación;
+- soportes importantes;
+- movimientos de Wompi u otros medios de pago;
+- propuestas, actas, comprobantes y demás documentos relevantes.
 
-Entregar al contador:
-- RUT vigente.
-- documentos fiscales disponibles;
-- relación de ingresos;
-- relación de gastos;
-- soportes;
-- extractos que corresponda aportar;
-- relación de aportes/retiros;
-- dominios/hosting/servicios pagados por AMS;
-- información de pagos Wompi u otros;
-- contratos/propuestas relevantes.
-
-El contador define qué soportes debe conservar Diego y por cuánto tiempo según la situación tributaria real.
+La documentación privada debe mantenerse fuera del repositorio público.
 
 ## Regla de caja
-
-- Ingreso = dinero generado por AMS.
+- Ingreso = dinero que entra a AMS.
 - Gasto = dinero usado para operar AMS.
 - Aporte = dinero personal que entra temporalmente.
 - Retiro = dinero que sale hacia los propietarios.
@@ -39,6 +31,5 @@ El contador define qué soportes debe conservar Diego y por cuánto tiempo segú
 No convertir aportes en ventas ni retiros en gastos.
 
 ## Revisión
-
-Última revisión: [POR COMPLETAR]
-Revisó: [POR COMPLETAR]
+Última revisión: 28/09/2026
+Revisó: Equipo AMS
