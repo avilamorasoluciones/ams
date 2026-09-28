@@ -31,7 +31,7 @@
 - Correo del dominio: pendiente de configuración
 - Wompi: pendiente de alta e integración
 - Backend seguro: pendiente para pagos/webhooks y herramientas internas que necesiten protección real
-- Hetzner/Coolify: evaluar cuando el volumen operativo lo justifique
+- OVHcloud/Coolify: evaluar cuando el volumen operativo lo justifique
 
 ## Datos que deben mantenerse privados
 
