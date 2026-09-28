@@ -2,64 +2,155 @@
 <html lang="es">
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="robots" content="noindex,nofollow,noarchive">
-<meta name="theme-color" content="#070b12">
-<meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="Calculadora AMS">
-<link rel="icon" href="icon-192.svg" type="image/svg+xml">
-<link rel="apple-touch-icon" href="icon-192.svg">
-<link rel="manifest" href="manifest.webmanifest">
+<meta name="robots" content="noindex,nofollow,noarchive"><meta name="theme-color" content="#070b12">
+<meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Calculadora AMS">
+<link rel="icon" href="icon-192.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="icon-192.svg"><link rel="manifest" href="manifest.webmanifest">
 <title>Calculadora | Gestión AMS</title>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet">
 <style>
-:root{--bg:#070b12;--panel:#101a2d;--gold:#f0cc58;--gold2:#ffe07a;--text:#f4f7fb;--muted:#aeb9ca;--line:rgba(255,255,255,.1)}
-*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 80% 0%,rgba(240,204,88,.09),transparent 35%),var(--bg);color:var(--text);font-family:Montserrat,Arial,sans-serif;min-height:100vh}.navbar{height:66px;background:rgba(7,11,18,.94);border-bottom:1px solid var(--line)}.brand{color:#fff;text-decoration:none;font-weight:900;display:flex;align-items:center;gap:10px}.brand small{display:block;color:var(--muted);font-size:.55rem;letter-spacing:.22em;text-transform:uppercase}.dot{width:11px;height:11px;border-radius:50%;background:var(--gold);box-shadow:0 0 18px #f0cc5866}.internal{font-size:.65rem;color:var(--gold2);border:1px solid #f0cc5844;padding:7px 10px;border-radius:99px}.hero{padding:110px 0 38px}.eyebrow{display:inline-flex;gap:7px;color:var(--gold2);background:#f0cc5814;border:1px solid #f0cc5838;padding:7px 11px;border-radius:99px;font-size:.72rem;font-weight:800}.hero h1{font-size:clamp(2.2rem,5vw,3.7rem);font-weight:900;margin:17px 0 8px}.hero h1 span{color:var(--gold2)}.hero p{color:var(--muted);margin:0}.panel,.result,.login-card{border:1px solid var(--line);border-radius:20px;background:linear-gradient(145deg,#111c31,#0c1423);box-shadow:0 20px 60px #0000003d}.step{display:flex;gap:13px;align-items:flex-start}.step>b{width:29px;height:29px;flex:0 0 29px;border-radius:50%;display:grid;place-items:center;background:var(--gold);color:#111;font-size:.8rem}.step h2{font-size:1rem;font-weight:800;margin:2px 0 3px;color:var(--text)!important}.panel,.result,.login-card{color:var(--text)}.step p{font-size:.72rem;color:var(--muted);margin:0 0 10px}.form-select,.form-control{background:#080f1c!important;color:#fff!important;border:1px solid #2a3a53!important;border-radius:11px;padding:.8rem .9rem}.form-select:focus,.form-control:focus{border-color:var(--gold)!important;box-shadow:0 0 0 .18rem #f0cc581f!important}.choices{display:grid;grid-template-columns:1fr 1fr;gap:10px}.choice{position:relative;display:flex;gap:10px;align-items:flex-start;padding:13px;border:1px solid var(--line);border-radius:13px;background:#ffffff06;cursor:pointer}.choice:has(input:checked){border-color:#f0cc5888;background:#f0cc5812}.choice input{position:absolute;opacity:0}.fake{width:31px;height:31px;flex:0 0 31px;display:grid;place-items:center;border-radius:9px;background:#18253a;color:#7e8ca1}.choice:has(input:checked) .fake{background:var(--gold);color:#111}.choice strong{display:block;font-size:.76rem;color:#fff;margin-bottom:3px}.choice small{display:block;color:var(--muted);font-size:.63rem;line-height:1.35}.billing{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}.bill{border:1px solid var(--line);background:#ffffff06;color:#fff;border-radius:12px;padding:12px 7px;cursor:pointer}.bill i{color:var(--gold2);display:block;margin-bottom:5px}.bill span,.bill small{display:block}.bill span{font-size:.73rem;font-weight:800}.bill small{font-size:.58rem;color:var(--muted);margin-top:3px}.bill.active{border-color:var(--gold);background:#f0cc5817}.advanced{border-top:1px solid var(--line);padding-top:14px}.advanced summary{cursor:pointer;color:var(--gold2);font-size:.75rem;font-weight:800;list-style:none}.advanced summary span{color:var(--muted);font-weight:500;margin-left:7px}.advanced label{font-size:.68rem;color:var(--muted);font-weight:700}.advanced input{margin-top:5px}.tiny{font-size:.62rem;color:var(--muted);margin-top:10px}.result{padding:27px;position:sticky;top:84px}.result-head{display:flex;justify-content:space-between;color:var(--gold2);font-weight:900;text-transform:uppercase;letter-spacing:.1em;font-size:.72rem}.result-head small{font-size:.6rem;color:var(--muted);letter-spacing:0;text-transform:none}.recommended{color:#c1cad8;font-size:.78rem;margin-top:30px}.big{font-size:clamp(3.8rem,8vw,5.7rem);line-height:.95;font-weight:900;color:var(--gold2);margin-top:5px}.usd{color:var(--gold2);font-weight:800;font-size:.78rem}.explain{color:#d7dfeb;font-size:.72rem;line-height:1.5;margin-top:9px;min-height:34px}.annual-box{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:21px}.annual-box>div{background:#0a1322;border:1px solid var(--line);border-radius:12px;padding:13px}.annual-box span,.annual-box small{display:block;color:#aeb9ca;font-size:.62rem}.annual-box strong{display:block;color:#fff;font-size:.92rem;margin:5px 0}.annual-box small{color:var(--gold2)}.included{margin-top:17px;padding:14px;border:1px solid #34d39933;background:#34d3990e;border-radius:13px}.included strong{font-size:.7rem;color:#baf7df}.included ul{margin:8px 0 0;padding-left:18px;color:#d9e3ed;font-size:.65rem;line-height:1.8}.warning{margin-top:13px;padding:11px;border-radius:10px;background:#f59e0b17;border:1px solid #f59e0b40;color:#fbd38d;font-size:.65rem}.btn-gold{background:linear-gradient(135deg,#ffe07a,#c39a25);border:0;color:#10151d;font-weight:900;padding:.8rem;border-radius:10px}.mini-note{display:flex;gap:10px;margin-top:13px;padding:14px;border-radius:13px;border:1px solid var(--line);color:#c6d0de;background:#ffffff06;font-size:.64rem;line-height:1.5}.mini-note i{color:var(--gold2)}footer{text-align:center;color:#65738a;font-size:.62rem;padding:35px 0}.login-screen{min-height:100vh;display:grid;place-items:center;padding:24px;background:radial-gradient(circle at 50% 0%,#f0cc581a,transparent 42%),#070b12}.login-card{width:min(420px,100%);padding:34px}.login-brand{display:flex;align-items:center;gap:9px;font-weight:900;margin-bottom:30px}.login-icon{width:54px;height:54px;border-radius:15px;display:grid;place-items:center;background:#f0cc5819;border:1px solid #f0cc5840;color:var(--gold2);font-size:1.25rem}.login-card h1{font-size:1.45rem;font-weight:900;margin:18px 0 5px}.login-card>p{color:var(--muted);font-size:.76rem}.login-card label{font-size:.72rem;color:#dbe3ee;font-weight:700}.login-error{margin-top:12px;padding:9px;border-radius:8px;background:#ef44441a;border:1px solid #ef444440;color:#fca5a5;font-size:.7rem;text-align:center}@media(max-width:767px){.choices,.billing{grid-template-columns:1fr}.result{position:static}.internal{display:none}}
+:root{--bg:#070b12;--panel:#101a2d;--panel2:#0b1322;--gold:#f0cc58;--gold2:#ffe07a;--text:#f4f7fb;--muted:#aeb9ca;--line:rgba(255,255,255,.1);--green:#65e6a4;--purple:#c7a1ff}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 82% 0%,rgba(240,204,88,.09),transparent 35%),radial-gradient(circle at 10% 30%,rgba(139,92,246,.08),transparent 32%),var(--bg);color:var(--text);font-family:Montserrat,Arial,sans-serif;min-height:100vh}
+.navbar{height:66px;background:rgba(7,11,18,.94);border-bottom:1px solid var(--line)}.brand{color:#fff;text-decoration:none;font-weight:900;display:flex;align-items:center;gap:10px}.brand small{display:block;color:var(--muted);font-size:.55rem;letter-spacing:.22em;text-transform:uppercase}.dot{width:11px;height:11px;border-radius:50%;background:var(--gold);box-shadow:0 0 18px #f0cc5866}.internal{font-size:.63rem;color:var(--gold2);border:1px solid #f0cc5844;padding:7px 10px;border-radius:99px}
+main{padding-bottom:40px}.hero{padding:92px 0 30px}.eyebrow{display:inline-flex;gap:7px;align-items:center;color:var(--gold2);background:#f0cc5814;border:1px solid #f0cc5838;padding:7px 11px;border-radius:99px;font-size:.69rem;font-weight:900}.hero h1{font-size:clamp(2.1rem,5vw,3.5rem);font-weight:900;margin:16px 0 8px}.hero h1 span{color:var(--gold2)}.hero p{color:var(--muted);max-width:760px;margin:0;font-size:.8rem}
+.panel,.result{border:1px solid var(--line);border-radius:20px;background:linear-gradient(145deg,#111c31,#0c1423);box-shadow:0 20px 60px #0000003d}.panel{height:100%}.panel-body{padding:25px}.step{display:flex;gap:12px;align-items:flex-start}.step>b{width:28px;height:28px;flex:0 0 28px;border-radius:50%;display:grid;place-items:center;background:var(--gold);color:#111;font-size:.76rem}.step h2{font-size:.95rem;font-weight:800;margin:2px 0 3px}.step p{font-size:.68rem;color:var(--muted);margin:0 0 10px}
+.form-select,.form-control{background:#080f1c!important;color:#fff!important;border:1px solid #2a3a53!important;border-radius:11px;padding:.78rem .88rem}.form-select:focus,.form-control:focus{border-color:var(--gold)!important;box-shadow:0 0 0 .18rem #f0cc581f!important}.choice-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}.choice{position:relative;display:flex;gap:9px;align-items:flex-start;padding:12px;border:1px solid var(--line);border-radius:13px;background:#ffffff06;cursor:pointer}.choice.active{border-color:#f0cc5888;background:#f0cc5812}.choice input{position:absolute;opacity:0;pointer-events:none}.choice .fake{width:30px;height:30px;flex:0 0 30px;display:grid;place-items:center;border-radius:9px;background:#18253a;color:#7e8ca1}.choice.active .fake{background:var(--gold);color:#111}.choice strong{display:block;font-size:.7rem;margin-bottom:2px}.choice small{display:block;color:var(--muted);font-size:.6rem;line-height:1.35}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:10px}.three{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}.section-line{border-top:1px solid var(--line);margin-top:18px;padding-top:17px}.small-label{font-size:.63rem;color:var(--muted);font-weight:800}.advanced{border:1px solid var(--line);border-radius:12px;background:#ffffff04}.advanced summary{cursor:pointer;color:var(--gold2);font-size:.69rem;font-weight:800;padding:11px 12px}.advanced .inside{padding:0 12px 12px}.hint{font-size:.6rem;color:var(--muted);line-height:1.5}
+.bill{border:1px solid var(--line);background:#ffffff06;color:#fff;border-radius:12px;padding:11px 7px;cursor:pointer}.bill i{color:var(--gold2);display:block;margin-bottom:5px}.bill span,.bill small{display:block}.bill span{font-size:.68rem;font-weight:800}.bill small{font-size:.56rem;color:var(--muted);margin-top:2px}.bill.active{border-color:var(--gold);background:#f0cc5817}
+.result{padding:25px;position:sticky;top:82px}.result-head{display:flex;justify-content:space-between;gap:10px;color:var(--gold2);font-weight:900;text-transform:uppercase;letter-spacing:.1em;font-size:.68rem}.result-head small{font-size:.58rem;color:var(--muted);letter-spacing:0;text-transform:none}.label{color:#c1cad8;font-size:.72rem;margin-top:22px}.big{font-size:clamp(3.5rem,8vw,5.4rem);line-height:.9;font-weight:900;color:var(--gold2);margin-top:5px}.unit{color:var(--gold2);font-weight:800;font-size:.7rem}.explain{color:#d7dfeb;font-size:.67rem;line-height:1.5;margin-top:10px;min-height:33px}.summary{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:18px}.sum-box{background:#0a1322;border:1px solid var(--line);border-radius:12px;padding:12px}.sum-box span,.sum-box small{display:block;color:var(--muted);font-size:.56rem}.sum-box strong{display:block;color:#fff;font-size:.9rem;margin:4px 0}.sum-box small{color:var(--gold2)}.included{margin-top:15px;padding:13px;border:1px solid #65e6a433;background:#65e6a409;border-radius:12px}.included strong{font-size:.64rem;color:#baf7df}.included ul{margin:8px 0 0;padding-left:17px;color:#d9e3ed;font-size:.6rem;line-height:1.7}.internal-box{margin-top:12px;padding:11px 12px;border:1px dashed #f0cc5844;border-radius:12px;background:#f0cc5808}.internal-box b{font-size:.62rem;color:var(--gold2)}.internal-box div{display:flex;justify-content:space-between;gap:10px;font-size:.6rem;margin-top:5px;color:#d9e3ed}.actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:15px}.btn-main{border:0;border-radius:11px;padding:.78rem;font-weight:900;background:linear-gradient(135deg,#ffe07a,#c39a25);color:#10151d}.btn-soft{border:1px solid var(--line);background:#ffffff08;color:#fff;border-radius:11px;padding:.78rem;font-weight:900}.status{min-height:15px;color:var(--green);font-size:.6rem;margin-top:8px;text-align:center}.footnote{margin-top:16px;color:#718099;font-size:.57rem;line-height:1.45}
+@media(max-width:991px){.result{position:static}.hero{padding-top:80px}}@media(max-width:767px){.internal{display:none}.panel-body,.result{padding:19px}.hero h1{font-size:2rem}.choice-grid,.two,.summary{grid-template-columns:1fr}.three{grid-template-columns:1fr}.actions .btn-main,.actions .btn-soft{width:100%}}
 </style>
 </head>
 <body>
-<div id="app">
-<nav class="navbar navbar-dark fixed-top"><div class="container"><a class="brand" href="#"><span class="dot"></span><span>Avila Mora <small>Soluciones</small></span></a><span class="internal">Gestión AMS · Calculadora</span></div></nav>
-<main class="container"><header class="hero text-center"><div class="eyebrow"><i class="fa-solid fa-calculator"></i> Cotización rápida</div><h1>¿Cuánto cobrar <span>al mes?</span></h1><p>La mensualidad cubre la operación; el desarrollo inicial se cotiza aparte.</p></header>
-<div class="row g-4 align-items-start"><section class="col-lg-7"><div class="card panel"><div class="card-body p-4 p-md-5">
-<div class="step"><b>1</b><div><h2>¿Qué tipo de cliente es?</h2><p>Elige la relación comercial.</p></div></div>
-<select id="client" class="form-select form-select-lg"><option value="friend">Cliente amigo — precio especial</option><option value="normal" selected>Cliente normal</option><option value="business">Negocio con mayor demanda</option></select>
-<div class="step mt-4"><b>2</b><div><h2>¿Qué vas a mantener?</h2><p>La complejidad del proyecto orienta el trabajo recurrente; no se cobra el desarrollo otra vez.</p></div></div>
-<select id="service" class="form-select form-select-lg"><option value="static">Web sencilla — landing, portafolio, información</option><option value="corporate">Web corporativa — varias páginas y formularios</option><option value="store">Tienda virtual — productos, pedidos y catálogo</option><option value="app">Web app — usuarios, panel y procesos</option><option value="system">Sistema + base de datos — CRUD, reportes y usuarios</option><option value="advanced">Sistema avanzado — automatizaciones e integraciones</option></select>
-<div class="step mt-4"><b>3</b><div><h2>¿Qué necesita por debajo?</h2><p>Marca solo los costos que realmente existan. La infraestructura, base de datos y respaldos normales se comparten entre proyectos.</p></div></div>
-<div class="choices">
-<label class="choice active"><input type="checkbox" id="domain" checked><span class="fake"><i class="fa-solid fa-globe"></i></span><span><strong>Dominio incluido</strong><small>AMS lo administra y renueva.</small></span></label>
-<label class="choice"><input type="checkbox" id="database"><span class="fake"><i class="fa-solid fa-database"></i></span><span><strong>Base de datos</strong><small>Se aloja en la infraestructura compartida AMS.</small></span></label>
-<label class="choice active"><input type="checkbox" id="backups" checked><span class="fake"><i class="fa-solid fa-shield-halved"></i></span><span><strong>Copias de seguridad</strong><small>Backups automáticos y exportación del proyecto.</small></span></label>
-<label class="choice"><input type="checkbox" id="highTraffic"><span class="fake"><i class="fa-solid fa-chart-line"></i></span><span><strong>Demanda alta</strong><small>Más visitas, usuarios o consumo.</small></span></label></div>
-<div class="step mt-4"><b>4</b><div><h2>¿Cómo quieres mostrar el cobro?</h2><p>El anual cubre 12 meses en un solo pago, con descuento equivalente a 2 meses.</p></div></div>
-<div class="billing"><button type="button" class="bill active" data-bill="both"><i class="fa-solid fa-arrows-left-right"></i><span>Ver ambos</span><small>Mensual y anual</small></button><button type="button" class="bill" data-bill="monthly"><i class="fa-regular fa-calendar"></i><span>Mensual</span><small>12 pagos</small></button><button type="button" class="bill" data-bill="annual"><i class="fa-solid fa-calendar-check"></i><span>Anual</span><small>1 pago · 12 meses</small></button></div>
-<details class="advanced mt-4"><summary><i class="fa-solid fa-sliders"></i> Ajustes internos <span>solo para cambiar costos reales</span></summary><div class="row g-3 pt-3"><div class="col-md-6"><label>Dominio / año (USD)<input id="domainCost" class="form-control" type="number" value="12"></label></div><div class="col-md-6"><label>Infraestructura compartida / mes (USD)<input id="hostingMonthly" class="form-control" type="number" value="8"></label></div><div class="col-md-6"><label>Proyectos activos esperados<input id="activeProjects" class="form-control" type="number" value="30" min="1"></label></div><div class="col-md-6"><label>Servicios externos / mes (USD)<input id="externalCost" class="form-control" type="number" value="0"></label></div><div class="col-md-6"><label>Margen objetivo sobre costos (%)<input id="margin" class="form-control" type="number" value="20"></label></div><div class="col-md-6"><label>Demanda alta / mes (USD)<input id="trafficCost" class="form-control" type="number" value="8"></label></div></div><div class="tiny">La tarifa base representa el trabajo recurrente de AMS. La infraestructura se reparte entre los proyectos activos: no se cobra un servidor completo por cliente. Las bases de datos pequeñas viven en la infraestructura compartida y los backups se automatizan; solo se agrega un costo cuando existe un servicio externo real. Una web estática en GitHub Pages puede tener infraestructura de producción de $0.</div></details>
+<nav class="navbar navbar-dark fixed-top"><div class="container"><a class="brand" href="../index.html"><span class="dot"></span><span>Avila Mora <small>Soluciones</small></span></a><span class="internal">Gestión AMS · Calculadora</span></div></nav>
+<main class="container">
+<header class="hero text-center"><div class="eyebrow"><i class="fa-solid fa-calculator"></i> Herramienta interna</div><h1>Precio justo, <span>sin complicarlo.</span></h1><p>La calculadora separa el trabajo recurrente, la infraestructura compartida y los extras reales. El dominio y el alojamiento se consideran dentro del servicio administrado por AMS.</p></header>
+<div class="row g-4 align-items-start">
+<section class="col-lg-7"><div class="panel"><div class="panel-body">
+<div class="step"><b>1</b><div><h2>Relación con el cliente</h2><p>Define el punto de partida comercial.</p></div></div>
+<select id="clientType" class="form-select mb-1"><option value="friend">Cliente amigo</option><option value="normal" selected>Cliente estándar</option><option value="business">Negocio / mayor demanda</option></select>
+
+<div class="step section-line"><b>2</b><div><h2>Qué vas a mantener</h2><p>La mensualidad cubre la operación recurrente; el desarrollo inicial se cobra aparte.</p></div></div>
+<select id="service" class="form-select">
+<option value="landing">Landing / web sencilla</option><option value="corporate">Web empresarial</option><option value="store">Tienda virtual / e-commerce</option><option value="app">Aplicación web</option><option value="system">Sistema a medida</option><option value="advanced">Sistema avanzado / integraciones</option>
+</select>
+
+<div class="step section-line"><b>3</b><div><h2>Nivel de uso y soporte</h2><p>Solo agrega lo que realmente cambie el trabajo mensual.</p></div></div>
+<div class="choice-grid">
+<label class="choice active"><input type="radio" name="traffic" value="low" checked><span class="fake"><i class="fa-solid fa-gauge"></i></span><span><strong>Tráfico bajo</strong><small>Web pequeña, visitas normales.</small></span></label>
+<label class="choice"><input type="radio" name="traffic" value="normal"><span class="fake"><i class="fa-solid fa-chart-simple"></i></span><span><strong>Tráfico normal</strong><small>Negocio activo y visitas constantes.</small></span></label>
+<label class="choice"><input type="radio" name="traffic" value="high"><span class="fake"><i class="fa-solid fa-chart-line"></i></span><span><strong>Tráfico alto</strong><small>Más consumo o picos frecuentes.</small></span></label>
+<label class="choice"><input type="radio" name="traffic" value="veryhigh"><span class="fake"><i class="fa-solid fa-fire"></i></span><span><strong>Tráfico muy alto</strong><small>Requiere revisar infraestructura.</small></span></label>
+</div>
+<div class="two section-line">
+<div><div class="small-label mb-2">Soporte</div><select id="support" class="form-select"><option value="basic">Básico — incluido</option><option value="standard">Estándar — +$2/mes</option><option value="priority">Prioritario — +$5/mes</option></select></div>
+<div><div class="small-label mb-2">Dominio</div><select id="domain" class="form-select"><option value="com">.com — $12/año</option><option value="net">.net — $13/año</option><option value="co">.co — $32/año</option><option value="other">Otro / especial — $20/año*</option></select></div>
+</div>
+
+<div class="section-line">
+<div class="small-label mb-2">Factores del proyecto</div>
+<div class="choice-grid">
+<label class="choice active"><input type="checkbox" id="managedHosting" checked disabled><span class="fake"><i class="fa-solid fa-server"></i></span><span><strong>Alojamiento administrado por AMS</strong><small>Incluido en la mensualidad.</small></span></label>
+<label class="choice active"><input type="checkbox" id="managedDomain" checked disabled><span class="fake"><i class="fa-solid fa-globe"></i></span><span><strong>Dominio administrado por AMS</strong><small>Incluido en la mensualidad.</small></span></label>
+<label class="choice" id="dbChoice"><input type="checkbox" id="database"><span class="fake"><i class="fa-solid fa-database"></i></span><span><strong>Datos / base de datos</strong><small>Para apps y sistemas con datos.</small></span></label>
+<label class="choice"><input type="checkbox" id="external"><span class="fake"><i class="fa-solid fa-plug"></i></span><span><strong>Servicios externos reales</strong><small>APIs o herramientas pagadas.</small></span></label>
+</div>
+</div>
+
+<div class="section-line"><div class="small-label mb-2">Forma de cobro</div>
+<div class="three" id="billing"><button type="button" class="bill active" data-bill="both"><i class="fa-solid fa-arrows-left-right"></i><span>Ver ambos</span><small>Mensual y anual</small></button><button type="button" class="bill" data-bill="monthly"><i class="fa-regular fa-calendar"></i><span>Mensual</span><small>12 pagos</small></button><button type="button" class="bill" data-bill="annual"><i class="fa-solid fa-calendar-check"></i><span>Anual</span><small>1 mes incluido</small></button></div></div>
+
+<details class="advanced section-line"><summary><i class="fa-solid fa-sliders"></i> Ajustes internos</summary><div class="inside">
+<div class="two mt-2">
+<div><label class="small-label">VPS mensual (USD)<input id="vpsCost" class="form-control" type="number" min="0" step=".01" value="4.54"></label></div>
+<div><label class="small-label">Clientes ligeros previstos<input id="capacity" class="form-control" type="number" min="1" value="10"></label></div>
+<div><label class="small-label">Reserva operativa / cliente (USD)<input id="opsReserve" class="form-control" type="number" min="0" step=".25" value="1.50"></label></div>
+<div><label class="small-label">Costo dominio .com / año<input id="domainCost" class="form-control" type="number" min="0" step=".01" value="12"></label></div>
+<div><label class="small-label">Costo servicios externos / mes<input id="externalMonthly" class="form-control" type="number" min="0" step=".50" value="0"></label></div>
+<div><label class="small-label">Reserva pagos electrónicos (%)<input id="paymentReserve" class="form-control" type="number" min="0" step=".25" value="4"></label></div>
+</div>
+<div class="hint mt-2">Los valores de infraestructura son referencias internas. La capacidad de clientes no es un límite técnico garantizado; depende del tipo de aplicaciones y del tráfico real. El VPS-1 de referencia permite arrancar barato, y se cambia de nivel cuando el consumo lo justifique.</div>
+</div></details>
+<div class="actions"><button id="copy" class="btn-main"><i class="fa-regular fa-copy"></i> Copiar cotización</button><button id="reset" class="btn-soft"><i class="fa-solid fa-rotate-left"></i> Restablecer</button></div>
+<div id="status" class="status"></div>
 </div></div></section>
-<aside class="col-lg-5"><div class="result"><div class="result-head"><span><i class="fa-solid fa-bolt"></i> Resultado</span><small id="profile">Cliente normal</small></div><div id="recommended" class="recommended">Mensualidad sugerida</div><div id="monthly" class="big">$0</div><div id="usdLabel" class="usd">USD / mes</div><div id="explain" class="explain"></div><div id="annualBox" class="annual-box"><div><span>Si paga mensual</span><strong id="monthlyTotal">$0/año</strong><small>12 pagos</small></div><div><span>Si paga anual</span><strong id="annualTotal">$0</strong><small>1 pago · 12 meses</small></div></div><div class="included"><strong><i class="fa-solid fa-check-circle"></i> Incluye en el cálculo</strong><ul id="includedList"></ul></div><div id="warning" class="warning d-none"></div><button id="copy" class="btn btn-gold w-100 mt-3"><i class="fa-regular fa-copy"></i> Copiar cotización</button></div><div class="mini-note"><i class="fa-solid fa-circle-info"></i><span><b>Modelo AMS:</b><br>El desarrollo inicial se cotiza una sola vez. La mensualidad cubre operación, mantenimiento, soporte básico y la parte de infraestructura que realmente consume el proyecto. AMS trabaja con infraestructura compartida para repartir costos entre varios clientes.</span></div></aside></div><footer>Avila Mora Soluciones · Herramienta interna</footer></main></div>
+
+<aside class="col-lg-5"><div class="result">
+<div class="result-head"><span><i class="fa-solid fa-bolt"></i> Resultado</span><small id="profile">Cliente estándar</small></div>
+<div id="recommended" class="label">Mensualidad sugerida</div><div id="mainPrice" class="big">$0.00</div><div id="unit" class="unit">USD / mes</div><div id="explain" class="explain"></div>
+<div class="summary"><div class="sum-box"><span>12 meses pagando mensual</span><strong id="monthlyYear">$0.00</strong><small>12 pagos</small></div><div class="sum-box"><span>Pago anual</span><strong id="annualPrice">$0.00</strong><small>11 mensualidades · 12 meses</small></div></div>
+<div class="included"><strong><i class="fa-solid fa-circle-check"></i> Qué cubre la mensualidad</strong><ul id="included"></ul></div>
+<div class="internal-box"><b>Referencia interna</b><div><span>Costo compartido estimado</span><strong id="costRef">$0.00/mes</strong></div><div><span>Margen sobre costo</span><strong id="marginRef">—</strong></div></div>
+<div class="actions"><button id="toggleInternal" class="btn-soft" type="button"><i class="fa-solid fa-eye"></i> Ocultar referencia interna</button></div>
+<div class="footnote">AMS busca cobrar lo suficiente para mantener el servicio rentable sin convertir el hosting o el dominio en un sobreprecio. Los cambios grandes, nuevas funciones y desarrollos adicionales se cotizan aparte.</div>
+</div></aside>
+</div></main>
 <script>
 if(sessionStorage.amsGestionAuth!=="1")location.replace("../index.html");
-const P={static:{b:10},corporate:{b:13},store:{b:17},app:{b:20},system:{b:23},advanced:{b:27}};
-let currentMonthly=0,currentAnnual=0;
-const $=id=>document.getElementById(id),M=n=>"$"+n.toFixed(2)+" USD";
-function calc(){let c=$("client").value,t=$("service").value,p=P[t],base=p.b,domain=+$("domainCost").value||0,infra=+$("hostingMonthly").value||0,projects=Math.max(1,+$("activeProjects").value||1),external=+$("externalCost").value||0,traffic=+$("trafficCost").value||0;
-let a=base+infra/projects+external;
-if($("domain").checked)a+=domain/12;
-if($("highTraffic").checked)a+=traffic;
-let target=a*(1+(+$("margin").value||0)/100),r=target;
-if(c==="friend")r=5;
-if(c==="business")r*=1.05;
-r=Math.ceil(r*2)/2;
-let annual=r*10;currentMonthly=r;currentAnnual=annual;
-$("monthly").dataset.monthly=M(r);$("annualTotal").dataset.annual=M(annual);
-$("profile").textContent={friend:"Cliente amigo",normal:"Cliente normal",business:"Negocio con mayor demanda"}[c];
-$("monthly").textContent=M(r);$("monthlyTotal").textContent=M(r*12)+"/año";$("annualTotal").textContent=M(annual);
-$("explain").textContent=c==="friend"?"Tarifa especial de $5/mes.":"Referencia económica: "+M(r)+"/mes. La infraestructura se distribuye entre los proyectos activos; el anual equivale a 10 mensualidades y cubre 12 meses.";
-let l=[];l.push($("domain").checked?"Dominio incluido":"Dominio no incluido");l.push($("database").checked?"Base de datos en infraestructura compartida":"Sin base de datos");l.push($("backups").checked?"Backups y exportación del proyecto":"Backups no incluidos");l.push($("highTraffic").checked?"Demanda alta":"Infraestructura compartida estándar");$("includedList").innerHTML=l.map(x=>"<li>"+x+"</li>").join("");applyBillingView()}
-function applyBillingView(){let selected=document.querySelector(".bill.active")?.dataset.bill||"both",m=$("monthly"),title=$("recommended"),unit=$("usdLabel"),box=$("annualBox");if(selected==="annual"){title.textContent="Pago anual sugerido";m.textContent=$("annualTotal").textContent;unit.textContent="USD · 1 pago / 12 meses";box.style.display="none"}else if(selected==="monthly"){title.textContent="Mensualidad sugerida";m.textContent=$("monthly").textContent;unit.textContent="USD / mes";box.style.display="none"}else{title.textContent="Mensualidad sugerida";m.textContent=$("monthly").textContent;unit.textContent="USD / mes";box.style.display="grid"}}document.querySelectorAll("input,select").forEach(e=>{e.addEventListener("input",calc);e.addEventListener("change",calc)});document.querySelectorAll(".bill").forEach(b=>b.onclick=()=>{document.querySelectorAll(".bill").forEach(x=>x.classList.remove("active"));b.classList.add("active");applyBillingView()});copy.onclick=()=>{const monthlyText=M(currentMonthly),annualText=M(currentAnnual);navigator.clipboard?.writeText("Avila Mora Soluciones\nMensualidad: "+monthlyText+" / mes\nPago anual: "+annualText+" / 12 meses (equivalente a 10 mensualidades).");copy.innerHTML='<i class="fa-solid fa-check"></i> Copiado';setTimeout(()=>copy.innerHTML='<i class="fa-regular fa-copy"></i> Copiar cotización',1300)};calc();
-</script><script>if('serviceWorker' in navigator){window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}));}</script>
-<script src="../contacto.js?v=20260927-2"></script>
+const $=id=>document.getElementById(id);
+const SERVICE={
+ landing:{label:"Landing / web sencilla",base:8,friend:5,business:10,dev:60},
+ corporate:{label:"Web empresarial",base:10,friend:7,business:12,dev:120},
+ store:{label:"Tienda virtual / e-commerce",base:14,friend:10,business:17,dev:220},
+ app:{label:"Aplicación web",base:18,friend:13,business:22,dev:300},
+ system:{label:"Sistema a medida",base:23,friend:17,business:28,dev:400},
+ advanced:{label:"Sistema avanzado / integraciones",base:30,friend:23,business:36,dev:550}
+};
+const TRAFFIC={low:{label:"bajo",add:0},normal:{label:"normal",add:0},high:{label:"alto",add:3},veryhigh:{label:"muy alto",add:6}};
+const DOMAIN={com:12,net:13,co:32,other:20};
+let billView="both";
+function money(n){return "$"+Number(n||0).toFixed(2)+" USD"}
+function selectedRadio(name){return document.querySelector('input[name="'+name+'"]:checked')?.value||""}
+function baseFor(type,service){const s=SERVICE[service];if(type==="friend")return s.friend;if(type==="business")return s.business;return s.base}
+function domainAnnual(){const k=$("domain").value;if(k==="com")return +$("domainCost").value||12;return DOMAIN[k]??20}
+function monthlyCostEstimate(monthlyPrice){const vps=(+$("vpsCost").value||0),cap=Math.max(1,+$("capacity").value||1),ops=+$("opsReserve").value||0,domain=domainAnnual()/12,ext=$("external").checked?(+$("externalMonthly").value||0):0,pay=(+$("paymentReserve").value||0)/100*monthlyPrice;return vps/cap+ops+domain+ext+pay}
+function calc(){
+ const client=$("clientType").value,service=$("service").value,s=SERVICE[service],traffic=selectedRadio("traffic"),support=$("support").value;
+ let r=baseFor(client,service)+TRAFFIC[traffic].add+(support==="standard"?2:support==="priority"?5:0);
+ if($("database").checked&&["landing","corporate"].includes(service))r+=2;
+ if($("database").checked&&["app","system","advanced","store"].includes(service))r+=2;
+ if($("external").checked)r+=2;
+ r=Math.ceil(r);
+ const cost=monthlyCostEstimate(r);
+ const annual=Math.max(1,Math.round(r*11*100)/100);
+ const year=r*12;
+ $("profile").textContent=client==="friend"?"Cliente amigo":client==="business"?"Negocio / mayor demanda":"Cliente estándar";
+ $("mainPrice").textContent=billView==="annual"?money(annual):money(r);
+ $("recommended").textContent=billView==="annual"?"Pago anual sugerido":"Mensualidad sugerida";
+ $("unit").textContent=billView==="annual"?"USD · 1 pago / 12 meses":"USD / mes";
+ $("monthlyYear").textContent=money(year);
+ $("annualPrice").textContent=money(annual);
+ $("explain").textContent="Servicio "+s.label.toLowerCase()+". Dominio y alojamiento administrados por AMS forman parte del modelo. Grandes cambios o nuevas funciones se cotizan aparte.";
+ const list=["Dominio administrado por AMS","Alojamiento gestionado por AMS","Copias de seguridad y operación básica","Soporte según el nivel seleccionado"];
+ if(["store","app","system","advanced"].includes(service))list.push("Recursos de datos / infraestructura compartida");
+ if(traffic==="high")list.push("Reserva adicional para mayor consumo");
+ if(traffic==="veryhigh")list.push("Reserva adicional para tráfico alto; revisar VPS antes de aceptar");
+ if($("external").checked)list.push("Servicios externos considerados en el cálculo");
+ $("included").innerHTML=list.map(x=>"<li>"+x+"</li>").join("");
+ const pct=((r-cost)/Math.max(r,0))*100;
+ $("costRef").textContent=money(cost);
+ $("marginRef").textContent=Number.isFinite(pct)?Math.round(pct)+"%":"—";
+ applyChoiceState();saveState();
+}
+function applyChoiceState(){document.querySelectorAll(".choice").forEach(c=>{const i=c.querySelector("input");if(i)c.classList.toggle("active",i.checked)});document.getElementById("dbChoice").style.display=["store","app","system","advanced"].includes($("service").value)?"flex":"none"}
+function copyQuote(){
+ const service=SERVICE[$("service").value],t=$("clientType").value,r=Number($("mainPrice").textContent.replace(/[^0-9.]/g,""))||0;
+ const monthly=selectedBillingAnnual()?r/11:r;
+ const annual=Number($("annualPrice").textContent.replace(/[^0-9.]/g,""))||0;
+ const txt="Avila Mora Soluciones\nServicio: "+service.label+"\nMensualidad: "+money(monthly)+" / mes\nPago anual: "+money(annual)+" / 12 meses (1 mes incluido)\nIncluye: dominio y alojamiento administrados por AMS, copias de seguridad, operación y soporte según el nivel elegido.\nDesarrollo inicial: desde "+money(service.dev)+" (se define según alcance).";
+ navigator.clipboard?.writeText(txt).then(()=>{setStatus("Cotización copiada con los valores correctos.")}).catch(()=>setStatus("No se pudo copiar automáticamente."));
+}
+function selectedBillingAnnual(){return billView==="annual"}
+function setStatus(s){$("status").textContent=s;setTimeout(()=>{if($("status").textContent===s)$("status").textContent=""},2800)}
+function saveState(){try{const d={clientType:$("clientType").value,service:$("service").value,traffic:selectedRadio("traffic"),support:$("support").value,domain:$("domain").value,database:$("database").checked,external:$("external").checked};localStorage.setItem("ams_calc_v3",JSON.stringify(d))}catch(e){}}
+function loadState(){try{const d=JSON.parse(localStorage.getItem("ams_calc_v3")||"null");if(!d)return;$("clientType").value=d.clientType||"normal";$("service").value=d.service||"landing";$("support").value=d.support||"basic";$("domain").value=d.domain||"com";$("database").checked=!!d.database;$("external").checked=!!d.external;if(d.traffic){const r=document.querySelector('input[name="traffic"][value="'+d.traffic+'"]');if(r)r.checked=true}}catch(e){}}
+function reset(){["clientType","service","support","domain"].forEach(()=>{});$("clientType").value="normal";$("service").value="landing";$("support").value="basic";$("domain").value="com";document.querySelectorAll('input[name="traffic"]').forEach(x=>x.checked=x.value==="low");$("database").checked=false;$("external").checked=false;billView="both";document.querySelectorAll(".bill").forEach(x=>x.classList.toggle("active",x.dataset.bill==="both"));calc();setStatus("Calculadora restablecida.")}
+document.querySelectorAll("input,select").forEach(e=>{e.addEventListener("input",calc);e.addEventListener("change",calc)});
+document.querySelectorAll(".bill").forEach(b=>b.onclick=()=>{billView=b.dataset.bill;document.querySelectorAll(".bill").forEach(x=>x.classList.toggle("active",x===b));calc()});
+$("copy").onclick=copyQuote;$("reset").onclick=reset;
+$("toggleInternal").onclick=()=>{const box=document.querySelector(".internal-box"),btn=$("toggleInternal");box.style.display=box.style.display==="none"?"block":"none";btn.innerHTML=box.style.display==="none"?'<i class="fa-solid fa-eye"></i> Mostrar referencia interna':'<i class="fa-solid fa-eye-slash"></i> Ocultar referencia interna'};
+loadState();calc();
+</script>
+<script>if("serviceWorker" in navigator){window.addEventListener("load",()=>navigator.serviceWorker.register("./sw.js").catch(()=>{}));}</script>
 </body></html>
