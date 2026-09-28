@@ -4,7 +4,7 @@ El sistema documental vive dentro de **Gestión AMS** en:
 
 - `/gestion/documentos/`
 
-La entrada normal es `/gestion/` y existe un único acceso interno. Los módulos de Gestión no deben volver a pedir un segundo usuario o contraseña.
+La entrada normal es `/gestion/` y existe un único acceso interno.
 
 ## Qué hace
 
@@ -20,16 +20,14 @@ El generador puede reutilizar:
 
 El mismo documento puede editarse antes de generar el PDF. Los datos variables no deben quedar congelados en una plantilla genérica.
 
-## Documentos
+## Documentos realmente usados en AMS
 
-1. Contrato de prestación de servicios.
-2. Cotización / propuesta comercial.
-3. Cuenta de cobro.
-4. Comprobante / recibo de pago.
-5. Ficha de cliente.
-6. Cierre mensual de AMS.
-7. Acta de entrega y aceptación.
-8. Ficha de datos del prestador.
+1. Propuesta comercial / cotización.
+2. Acta de entrega.
+3. Comprobante de pago.
+4. Ficha de cliente / proyecto interna.
+
+AMS no necesita por ahora un módulo fiscal, de facturación electrónica ni un contrato de prestación de servicios dentro de este sistema. Esos documentos no forman parte del flujo cotidiano de este emprendimiento.
 
 ## Plantillas de servicio
 
