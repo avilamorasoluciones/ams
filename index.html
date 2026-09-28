@@ -506,16 +506,28 @@
         <li><a href="#faq">Preguntas</a></li>
       </ul>
 
-      <div class="nav-shortcuts" aria-label="Accesos rápidos">
-        <a class="nav-shortcut shortcut-ayukcal" href="./ayukcal/" aria-label="AyuKcal" title="AyuKcal">
-          <i class="fa-solid fa-heart-pulse" aria-hidden="true"></i>
-        </a>
-        <a class="nav-shortcut shortcut-juegos" href="./juegos/" aria-label="Juegos" title="Juegos">
-          <i class="fa-solid fa-gamepad" aria-hidden="true"></i>
-        </a>
-        <a class="nav-shortcut shortcut-herramientas" href="./herramientas/" aria-label="Herramientas" title="Herramientas">
-          <i class="fa-solid fa-toolbox" aria-hidden="true"></i>
-        </a>
+      <div class="nav-extra" aria-label="Accesos y recursos">
+        <div class="nav-utility-group" aria-label="Contacto y tema">
+          <a class="nav-shortcut nav-utility-wa" href="https://wa.me/573052547072?text=Hola%20Avila%20Mora%20Soluciones!%20Quiero%20cotizar%20un%20proyecto." target="_blank" rel="noopener" aria-label="WhatsApp" title="WhatsApp">
+            <i class="fa-brands fa-whatsapp" aria-hidden="true"></i>
+          </a>
+          <button class="nav-shortcut nav-utility-theme" id="themeToggle" type="button" aria-label="Cambiar tema" title="Cambiar tema">
+            <i class="fa-solid fa-circle-half-stroke" aria-hidden="true"></i>
+          </button>
+        </div>
+        <span class="nav-divider" aria-hidden="true">—</span>
+        <div class="nav-shortcuts" aria-label="Recursos">
+          <a class="nav-shortcut shortcut-ayukcal" href="./ayukcal/" aria-label="AyuKcal" title="AyuKcal">
+            <i class="fa-solid fa-heart-pulse" aria-hidden="true"></i>
+          </a>
+          <a class="nav-shortcut shortcut-juegos" href="./juegos/" aria-label="Juegos" title="Juegos">
+            <i class="fa-solid fa-gamepad" aria-hidden="true"></i>
+          </a>
+          <a class="nav-shortcut shortcut-herramientas" href="./herramientas/" aria-label="Herramientas" title="Herramientas">
+            <i class="fa-solid fa-toolbox" aria-hidden="true"></i>
+          </a>
+        </div>
+        <span class="nav-divider" aria-hidden="true">—</span>
         <span class="nav-payment" aria-label="Pagos — Próximamente" title="Próximamente">
           <i class="fa-solid fa-credit-card" aria-hidden="true"></i>
           <span>Pagos</span>
@@ -529,6 +541,14 @@
         </a>
       </div>
 
+      <div class="mobile-utilities" aria-label="Accesos rápidos">
+        <a class="nav-shortcut nav-utility-wa" href="https://wa.me/573052547072?text=Hola%20Avila%20Mora%20Soluciones!%20Quiero%20cotizar%20un%20proyecto." target="_blank" rel="noopener" aria-label="WhatsApp" title="WhatsApp">
+          <i class="fa-brands fa-whatsapp" aria-hidden="true"></i>
+        </a>
+        <button class="nav-shortcut nav-utility-theme" type="button" id="themeToggleMobile" aria-label="Cambiar tema" title="Cambiar tema">
+          <i class="fa-solid fa-circle-half-stroke" aria-hidden="true"></i>
+        </button>
+      </div>
       <button class="menu-btn" id="menuBtn" aria-label="Abrir menú" aria-expanded="false">
         <i class="fa-solid fa-bars"></i>
       </button>
@@ -1130,13 +1150,6 @@
 
   <button class="to-top" id="toTop" aria-label="Volver arriba" title="Volver arriba"><i class="fa-solid fa-arrow-up"></i></button>
 
-  <a class="fab fab-wa" href="https://wa.me/573052547072?text=Hola%20Avila%20Mora%20Soluciones!%20Quiero%20cotizar%20un%20proyecto." target="_blank" rel="noopener" aria-label="WhatsApp" title="Escríbenos por WhatsApp">
-    <i class="fa-brands fa-whatsapp"></i>
-  </a>
-
-  <button class="fab fab-theme" id="themeToggle" type="button" aria-label="Cambiar tema" title="Cambiar tema">
-    <i class="fa-solid fa-circle-half-stroke"></i>
-  </button>
 
   <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
   <script src="scripts.js?v=20260926-2"></script>
@@ -1146,22 +1159,11 @@
       const panel = document.getElementById("emailQuick");
       if (panel) panel.hidden = !panel.hidden;
     });
+    const themeMobile = document.getElementById("themeToggleMobile");
+    const themeDesktop = document.getElementById("themeToggle");
+    themeMobile?.addEventListener("click", () => themeDesktop?.click());
   </script>
 
-<script>
-  // En móvil, los controles flotantes se atenúan al llegar al final para no tapar el footer.
-  (() => {
-    const updatePageEndState = () => {
-      const nearEnd = window.innerWidth <= 740 &&
-        (window.scrollY + window.innerHeight >= document.documentElement.scrollHeight - 28);
-      document.body.classList.toggle("page-end-mobile", nearEnd);
-    };
-    window.addEventListener("scroll", updatePageEndState, { passive: true });
-    window.addEventListener("resize", updatePageEndState, { passive: true });
-    window.addEventListener("load", updatePageEndState, { once: true });
-    requestAnimationFrame(updatePageEndState);
-  })();
-</script>
 
 </body>
 </html>
