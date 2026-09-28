@@ -42,7 +42,7 @@ El formulario debe conservarse como registro del proyecto.
 - Renovaciones deben quedar registradas en Operación/Suscripciones.
 
 ## 7. Operación AMS
-La información operativa se administra desde `/gestion/`, en el módulo Operación. Registrar cliente, proyecto, etapa, fechas, dominio, staging, producción, siguiente paso y notas.
+La información operativa se administra desde `/gestion/`, en el módulo Operación. El cliente se guarda como registro maestro y los proyectos quedan vinculados a ese cliente. Registrar etapa, fechas, dominio, staging, producción, siguiente paso y notas.
 Etapas: Contacto inicial (Lead) → Calificado → Propuesta → Aceptado → Pago pendiente → Producción → Revisión cliente → Entrega → Mantenimiento → Cerrado. Contacto inicial (Lead) significa que alguien acaba de llegar o preguntar y todavía no es una venta.
 
 ## 8. Caja AMS
@@ -54,8 +54,9 @@ Un aporte no es una venta; un retiro no es un gasto.
 Objetivo: pagar progresivamente infraestructura y operación con caja generada por AMS.
 
 ## 9. Clientes y Suscripciones
-Registrar cliente, precio, moneda, periodicidad, inicio, vencimiento y estado.
-El panel actual usa almacenamiento local y no sincroniza automáticamente entre dispositivos. Mantener un equipo principal y respaldar JSON.
+Registrar o editar el cliente maestro y su suscripción: precio, moneda, periodicidad, inicio, vencimiento, días de gracia, último pago y estado.
+Un cliente debe existir una sola vez. Operación y Documentos reutilizan este registro.
+El panel actual usa almacenamiento local y no sincroniza automáticamente entre dispositivos. Existe un respaldo completo de Gestión que incluye clientes, proyectos, finanzas y checklist.
 
 ## 10. Documentos
 Gestión → Documentos se limita a los PDFs realmente útiles para el emprendimiento: propuesta comercial/cotización, acta de entrega, comprobante de pago y ficha interna de cliente/proyecto. Cada tipo tiene un formulario propio y puede usar una plantilla de servicio para ahorrar trabajo repetitivo. Por ahora quedan fuera del flujo de Gestión la facturación electrónica, cuentas de cobro y contratos de prestación de servicios.
@@ -87,18 +88,18 @@ Debe incluir staging protegido, producción separada, variables de entorno, back
 La migración no debe cambiar el flujo comercial.
 
 ## 16. Checklist antes de entregar
-Contenido correcto · móvil · tablet · PC · enlaces · formularios · WhatsApp · dominio · HTTPS · SEO básico · PDF si aplica · permisos · backup · aprobación del cliente · documento comercial/fiscal correspondiente · instrucciones de uso.
+Contenido correcto · móvil · tablet · PC · enlaces · formularios · WhatsApp · dominio · HTTPS · SEO básico · PDF si aplica · permisos · backup · aprobación del cliente · documento comercial correspondiente · instrucciones de uso.
 
 ## 17. Fuente de verdad
 1. Web pública = captación.
 2. Formulario de Proyecto = requisitos del cliente.
 3. Propuesta = alcance vendido.
-4. Términos = condiciones.
-5. Documentos = soporte comercial/fiscal según corresponda.
-6. Operación = proyecto.
-7. Suscripciones = recurrentes.
-8. Finanzas = caja.
-9. Infraestructura = hosting/staging/producción.
+4. Documentos = soporte comercial del caso.
+5. Cliente maestro = datos de la persona/empresa.
+6. Operación = proyectos y próximos pasos.
+7. Suscripciones = servicio recurrente y renovaciones.
+8. Finanzas = único libro de movimientos de caja.
+9. Procesos = checklist persistente por proyecto.
 10. Backups = recuperación.
 
 ## 18. Regla de cambio de infraestructura
