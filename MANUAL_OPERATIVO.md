@@ -43,7 +43,7 @@ El formulario debe conservarse como registro del proyecto.
 
 ## 7. Operación AMS
 La información operativa se administra desde `/gestion/`, en el módulo Operación. Registrar cliente, proyecto, etapa, fechas, dominio, staging, producción, siguiente paso y notas.
-Etapas: Lead → Calificado → Propuesta → Aceptado → Pago pendiente → Producción → Revisión cliente → Entrega → Mantenimiento → Cerrado.
+Etapas: Contacto inicial (Lead) → Calificado → Propuesta → Aceptado → Pago pendiente → Producción → Revisión cliente → Entrega → Mantenimiento → Cerrado. Contacto inicial (Lead) significa que alguien acaba de llegar o preguntar y todavía no es una venta.
 
 ## 8. Caja AMS
 - Ingreso: venta o servicio cobrado por AMS.
@@ -58,8 +58,7 @@ Registrar cliente, precio, moneda, periodicidad, inicio, vencimiento y estado.
 El panel actual usa almacenamiento local y no sincroniza automáticamente entre dispositivos. Mantener un equipo principal y respaldar JSON.
 
 ## 10. Documentos
-Gestión → Documentos genera documentos comerciales/cuentas de cobro. No es un sistema de facturación electrónica DIAN.
-Cuando exista obligación de facturar, usar un sistema habilitado y la numeración y requisitos correspondientes.
+Gestión → Documentos se limita a los PDFs realmente útiles para el emprendimiento: propuesta comercial/cotización, acta de entrega, comprobante de pago y ficha interna de cliente/proyecto. Cada tipo tiene un formulario propio y puede usar una plantilla de servicio para ahorrar trabajo repetitivo. Por ahora quedan fuera del flujo de Gestión la facturación electrónica, cuentas de cobro y contratos de prestación de servicios.
 
 ## 11. Datos y privacidad
 AMS debe cumplir su Política de Privacidad y limitar la información a la necesaria.
