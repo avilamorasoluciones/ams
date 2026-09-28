@@ -56,9 +56,9 @@ El sistema aprovecha las claves locales de Operación, Suscripciones y Finanzas 
 
 Contrato y acta incluyen espacios para firma. El documento generado es una plantilla administrativa/comercial y debe revisarse antes de firmar o entregar, especialmente cuando existan condiciones particulares sobre propiedad intelectual, datos personales, permanencia, penalidades, licencias, servicios de terceros o terminación.
 
-## Facturación
+## Alcance actual
 
-La cuenta de cobro y los demás documentos comerciales no deben presentarse como factura electrónica si existe obligación legal de facturar. El generador no crea CUFE ni reemplaza un sistema de facturación electrónica habilitado.
+El sistema documental no pretende reemplazar un sistema fiscal o contable. Es una herramienta interna para preparar PDFs profesionales y mantener orden en la relación con cada cliente.
 
 ## Evolución
 
