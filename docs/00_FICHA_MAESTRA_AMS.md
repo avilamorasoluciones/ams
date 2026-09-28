@@ -1,43 +1,32 @@
 # Ficha maestra · Avila Mora Soluciones
 
-## Identidad
-
+## Identidad del proyecto
 - Nombre comercial: Avila Mora Soluciones
-- Titular / responsable: Diego Andrés Avila Ríos [CONFIRMAR]
-- Tipo de operación: Persona natural [CONFIRMAR]
-- Ciudad / domicilio: [POR COMPLETAR]
-- País: Colombia
-- RUT: [POR COMPLETAR]
-- NIT: [POR COMPLETAR]
-- Matrícula mercantil: [POR COMPLETAR / NO APLICA, SEGÚN CONFIRMACIÓN]
-- Actividad económica / responsabilidades RUT: [POR COMPLETAR CON CONTADOR]
-- IVA: [POR COMPLETAR CON CONTADOR]
-- Facturación electrónica: [CONFIRMAR CON CONTADOR]
+- Tipo de operación actual: iniciativa/marca en desarrollo.
+- País de operación previsto: Colombia.
+- Titular operativo: [POR COMPLETAR INTERNAMENTE]
+- Domicilio/canal legal público: [POR DEFINIR ANTES DE ACTIVIDAD COMERCIAL ESTABLE]
 
-## Contacto público
+No guardar en este repositorio documentos de identidad completos, RUT, datos bancarios ni otros datos que deban permanecer privados.
 
+## Contacto público previsto
 - Correo: equipo@avilamorasoluciones.com
 - WhatsApp: +57 305 254 7072
-- Web: https://avilamorasoluciones.com/
-- Política de privacidad: https://avilamorasoluciones.com/legal_privacidad.html
-- Términos: https://avilamorasoluciones.com/legal_terminos.html
-- Cookies: https://avilamorasoluciones.com/legal_cookies.html
+- Web actual de prueba: https://avilamorasoluciones.github.io/ams/
+- Dominio previsto: https://avilamorasoluciones.com/
 
 ## Infraestructura
-
-- Estado actual: GitHub Pages
-- Dominio propio: pendiente de compra/configuración
-- Fecha prevista indicada por el equipo: 30/09/2026
-- Correo del dominio: pendiente de configuración
-- Wompi: pendiente de alta e integración
-- Backend seguro: pendiente para pagos/webhooks y herramientas internas que necesiten protección real
-- OVHcloud/Coolify: evaluar cuando el volumen operativo lo justifique
+- Estado actual: GitHub Pages.
+- Dominio propio: pendiente de compra/configuración.
+- Correo del dominio: pendiente de configuración.
+- Wompi: pendiente de alta e integración.
+- Backend seguro: pendiente para pagos/webhooks y herramientas internas que necesiten protección real.
+- OVHcloud/Coolify: evaluar cuando el volumen operativo lo justifique.
 
 ## Datos que deben mantenerse privados
-
 No colocar en la web pública ni en GitHub:
-- cédula completa;
-- RUT completo si se decide mantenerlo interno;
+- documentos de identidad completos;
+- RUT u otros registros privados;
 - contraseñas;
 - claves de recuperación;
 - API keys;
@@ -47,20 +36,21 @@ No colocar en la web pública ni en GitHub:
 - datos bancarios completos;
 - respuestas privadas de clientes.
 
-## Carpeta física/digital recomendada
-
-Crear una carpeta privada fuera del repositorio público:
+## Carpeta privada recomendada
+Crear fuera del repositorio público una carpeta para los documentos que no deban circular públicamente:
 
 AMS/
-  01_Identidad_RUT/
-  02_Contabilidad_Impuestos/
-  03_Bancos_Pagos/
-  04_Clientes_Contratos/
-  05_Dominios_Hosting/
-  06_Backups/
-  07_Incidentes_PQR/
-  08_Wompi/
-  09_Correo/
-  10_Cierres_Mensuales/
+  01_Identidad_y_Documentos/
+  02_Bancos_y_Pagos/
+  03_Clientes/
+  04_Dominios_y_Hosting/
+  05_Backups/
+  06_Wompi/
+  07_Correo/
+  08_Incidentes/
+  09_Cierres/
 
-La carpeta privada debe tener una copia de seguridad independiente.
+La carpeta privada debe tener su propia copia de seguridad.
+
+## Regla de publicación
+El repositorio debe describir lo que AMS realmente es hoy. No afirmar que existe una sociedad, registro, certificación, acreditación o condición jurídica concreta si todavía no existe o no se ha verificado.
