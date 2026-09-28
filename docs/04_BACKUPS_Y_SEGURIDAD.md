@@ -5,64 +5,84 @@
 GitHub es la copia principal del código fuente.
 
 No subir:
-- .env;
+- `.env`;
 - API keys;
 - tokens;
 - secretos;
 - certificados privados;
 - credenciales;
-- información privada de clientes.
+- datos privados de clientes.
 
-## Herramientas internas actuales
+## Herramientas internas
 
-Operación, Finanzas, Suscripciones y Calculadora usan almacenamiento local del navegador en distintos grados.
+Las herramientas de **Gestión AMS** usan almacenamiento local del navegador en la versión actual.
 
-Consecuencia:
-- no sincronizan automáticamente entre dispositivos;
-- limpiar navegador puede borrar datos;
-- el login JavaScript no es seguridad de servidor;
-- no guardar allí secretos ni información especialmente sensible.
+Módulos principales:
+- Gestión/Operación;
+- Gestión/Suscripciones;
+- Gestión/Finanzas;
+- Gestión/Calculadora;
+- Gestión/Documentos.
+
+Esto significa:
+- no hay sincronización automática entre dispositivos;
+- borrar datos del navegador puede eliminar información local;
+- el acceso JavaScript no equivale a autenticación de servidor;
+- no deben guardarse secretos allí.
 
 ## Backup operativo
 
-Como mínimo:
-- Operación: exportar JSON.
-- Finanzas: exportar JSON.
-- Suscripciones: exportar JSON.
-- Mantener una copia fuera del navegador.
-- Fecha del último backup: [POR COMPLETAR].
-- Ubicación: [POR COMPLETAR].
+Hacer respaldos periódicos de:
+- Operación;
+- Finanzas;
+- Suscripciones;
+- documentos/borradores importantes.
 
-## Regla 3-2-1 recomendada
+Mantener al menos una copia fuera del equipo principal.
 
-- 3 copias.
-- 2 medios diferentes.
+## Cambio de dominio
+
+Antes de pasar de `avilamorasoluciones.github.io/ams` a `avilamorasoluciones.com`:
+1. Exportar los JSON de Operación, Finanzas y Suscripciones.
+2. Guardar los PDFs finales.
+3. Confirmar los datos guardados de los prestadores.
+4. Configurar el dominio.
+5. Restaurar los JSON en el nuevo origen.
+6. Generar un documento de prueba y verificar enlaces/PDF.
+
+## Regla 3-2-1
+
+- 3 copias;
+- 2 medios diferentes;
 - 1 copia separada del equipo principal.
 
 ## Cuando exista backend
 
+Añadir:
 - variables de entorno;
 - autenticación real;
+- base de datos;
 - backups automáticos;
 - pruebas de restauración;
 - logs;
 - monitorización;
-- separación de staging y producción.
+- staging y producción separadas.
+
+## PWA y caché
+
+Los Service Workers pueden conservar recursos antiguos. Al cambiar un recurso crítico:
+- actualizar la versión de caché;
+- comprobar que el navegador recibe la nueva versión;
+- limpiar/reinstalar solo cuando sea necesario;
+- verificar de nuevo formularios, enlaces y PDF.
 
 ## Incidente
 
-- detener la exposición;
-- preservar evidencia;
-- revocar secretos;
-- rotar credenciales;
-- revisar logs;
-- documentar;
-- restaurar si hace falta;
-- comunicar a afectados cuando legalmente corresponda.
-
-## PWA
-
-Los Service Workers pueden conservar recursos en caché. Al desplegar cambios:
-- subir una nueva versión de caché;
-- probar actualización;
-- verificar que una versión vieja no bloquee cambios críticos.
+Ante una exposición:
+1. detener la causa;
+2. preservar evidencia;
+3. revocar/rotar secretos afectados;
+4. revisar acceso y registros;
+5. restaurar una copia limpia si hace falta;
+6. documentar el incidente;
+7. comunicar a quienes correspondan según el caso.
