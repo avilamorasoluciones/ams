@@ -1,15 +1,13 @@
-# PQR y datos personales · AMS
+# Solicitudes y datos personales · AMS
 
 ## Canal
-
 Canal principal:
 - equipo@avilamorasoluciones.com
-- WhatsApp +57 305 254 7072 para orientación inicial
+- WhatsApp +57 305 254 7072 para orientación inicial.
 
-Las solicitudes formales de protección de datos deben quedar registradas por escrito y trasladarse al canal definido para su tratamiento.
+Las solicitudes formales relacionadas con datos personales deben quedar registradas por escrito y trasladarse al canal definido para su atención.
 
 ## Datos que no se deben solicitar por WhatsApp
-
 No pedir:
 - contraseñas;
 - códigos MFA;
@@ -19,33 +17,25 @@ No pedir:
 - secretos de API;
 - credenciales bancarias.
 
-## Consulta de datos personales
-
+## Solicitudes sobre datos personales
 Registrar:
-- Fecha de recepción.
-- Nombre del titular.
-- Correo/contacto.
-- Solicitud.
-- Base donde puede estar la información.
-- Responsable interno.
-- Fecha límite legal.
-- Fecha y contenido de respuesta.
-- Evidencia del envío.
+- fecha de recepción;
+- nombre del titular;
+- correo/contacto;
+- solicitud;
+- sistema o base donde puede estar la información;
+- responsable interno;
+- fecha límite aplicable;
+- fecha y contenido de respuesta;
+- evidencia del envío.
 
-La SIC informa que las consultas y reclamos deben tramitarse mediante un procedimiento interno y que los titulares pueden ejercer derechos como conocer, actualizar, rectificar, suprimir y revocar la autorización en los casos aplicables. Fuente: https://sedeelectronica.sic.gov.co/politica-de-tratamiento-de-datos-personales
+La normativa colombiana de protección de datos reconoce derechos como conocer, actualizar, rectificar y solicitar la supresión de datos en los casos aplicables. La autoridad de protección de datos es la Superintendencia de Industria y Comercio (SIC). AMS no debe afirmar una inscripción o certificación ante la SIC que no exista. Fuente oficial: https://sedeelectronica.sic.gov.co/politica-de-tratamiento-de-datos-personales
 
 ## Tiempos de referencia
-
-Para el régimen general colombiano:
-- Consulta: 10 días hábiles, con las prórrogas previstas.
-- Reclamo: 15 días hábiles, con las prórrogas previstas.
-
-Registrar siempre fecha de entrada y fecha de vencimiento del trámite.
+Para el régimen general de protección de datos, registrar siempre la fecha de entrada y revisar el plazo aplicable al tipo de solicitud antes de responder. Las consultas y reclamos tienen plazos legales específicos y pueden existir prórrogas.
 
 ## AyuKcal
-
-AyuKcal puede tratar información relacionada con peso, alimentación, ejercicio, ayuno, estatura y otros datos que pueden ser sensibles por su relación con salud.
-
+AyuKcal puede tratar información relacionada con peso, alimentación, ejercicio, ayuno, estatura y otras categorías que pueden estar vinculadas con salud.
 Para nuevos registros:
 - informar la finalidad;
 - obtener el consentimiento que corresponda;
@@ -54,25 +44,23 @@ Para nuevos registros:
 - proteger el acceso.
 
 ## Incidente de datos
-
 Ante una posible exposición:
-1. No borrar evidencias sin control.
-2. Aislar la causa.
-3. Cambiar credenciales afectadas.
-4. Determinar qué datos fueron expuestos.
-5. Registrar fecha, alcance y acciones.
-6. Evaluar obligaciones de notificación y medidas con asesoría especializada.
+1. detener la causa;
+2. conservar evidencia sin alterar innecesariamente los registros;
+3. cambiar credenciales afectadas;
+4. determinar qué datos fueron expuestos;
+5. registrar fecha, alcance y acciones;
+6. evaluar las medidas y comunicaciones que correspondan según el caso.
 
-## PQR comercial
+## Atención comercial
+Para una inconformidad de un cliente, registrar:
+- cliente;
+- fecha;
+- servicio;
+- motivo;
+- evidencia;
+- respuesta;
+- solución ofrecida;
+- fecha de cierre.
 
-Registrar:
-- Cliente.
-- Fecha.
-- Producto/servicio.
-- Motivo.
-- Evidencia.
-- Respuesta.
-- Solución ofrecida.
-- Fecha de cierre.
-
-Para ventas electrónicas, revisar también las obligaciones de protección al consumidor y el enlace a la SIC.
+Cuando AMS active venta directa en línea, revisar las reglas de protección al consumidor que correspondan.
