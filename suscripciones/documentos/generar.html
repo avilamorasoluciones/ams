@@ -186,7 +186,11 @@ function renderBase(){
  if(["contrato","propuesta","cobro","recibo"].includes(type)){
    html+='<div class="p-section"><div class="p-label">'+(type==="contrato"?"Objeto del servicio":"Detalle")+'</div><div class="p-value">'+esc(val("concept")||"Servicio digital")+'</div></div>';
  }
- if(type==="contrato"||type==="acta") html+='<div class="p-section"><div class="p-label">Inicio / periodo</div><div class="p-value">'+esc(val("period")||"")+(val("startDate")?' · Inicio: '+esc(fmtDate(val("startDate"))):"")+'</div></div>';
+ if(type==="contrato"||type==="acta") html+='<div class="p-section"><div class="p-label">Inicio / periodo</div><div class="p-value">'+esc(val("period")||"")+(val("startDate")?' · Inicio: '+esc(fmtDate(val("startDate"))):"")+(val("validity")?' · Vigencia / plazo: '+esc(val("validity")):"")+'</div></div>';
+ if(type==="contrato"){
+   if(val("deliverables")) html+='<div class="p-section"><div class="p-label">Entregables / alcance concreto</div><div class="p-value">'+esc(val("deliverables"))+'</div></div>';
+   if(val("amount")||val("method")||val("conditions")) html+='<div class="p-section"><div class="p-label">Valor y condiciones económicas</div><div class="p-value">'+esc([val("amount")?money(val("amount"),val("currency")):"",val("method"),val("conditions")].filter(Boolean).join(" · ")||"Según acuerdo")+'</div></div>';
+ }
  if(type==="propuesta"||type==="cobro"||type==="recibo") html+='<div class="p-section">'+renderFinancial()+'</div>';
  if(type==="propuesta") html+='<div class="p-section"><div class="p-label">Entregables</div><div class="p-value">'+esc(val("deliverables")||"Por definir con el cliente.")+'</div></div>';
  if(type==="recibo") html+='<div class="p-section"><div class="p-label">Pago recibido</div><div class="p-value">'+esc([val("method"),val("paymentRef"),val("period")].filter(Boolean).join(" · ")||"Método / referencia / periodo")+'</div></div>';
