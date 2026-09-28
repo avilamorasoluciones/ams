@@ -1,7 +1,7 @@
 # Manual Operativo AMS
 
 ## 1. Regla principal
-AMS comienza simple en GitHub Pages. Mientras el dominio propio no esté comprado/configurado, deben conservarse y probarse las URLs `avilamorasoluciones.github.io/ams/...`. Una vez configurado `avilamorasoluciones.com`, se mantiene el contenido funcional del repositorio y se hacen los cambios de canonical, sitemap y redirecciones de forma controlada. No migrar a Hetzner/Coolify hasta que existan 2 clientes activos simultáneamente que justifiquen infraestructura propia.
+AMS comienza simple en GitHub Pages. Mientras el dominio propio no esté comprado/configurado, deben conservarse y probarse las URLs `avilamorasoluciones.github.io/ams/...`. Una vez configurado `avilamorasoluciones.com`, se mantiene el contenido funcional del repositorio y se hacen los cambios de canonical, sitemap y redirecciones de forma controlada. No migrar a OVHcloud/Coolify hasta que existan 2 clientes activos simultáneamente que justifiquen infraestructura propia.
 
 ## 2. Contacto rápido
 La web oficial publica `equipo@avilamorasoluciones.com` y WhatsApp +57 305 254 7072. Los botones de WhatsApp llevan un mensaje prellenado. Los botones de correo pueden abrir Gmail, Outlook o el cliente de correo predeterminado con asunto y mensaje prellenados.
@@ -42,7 +42,7 @@ El formulario debe conservarse como registro del proyecto.
 - Renovaciones deben quedar registradas en Operación/Suscripciones.
 
 ## 7. Operación AMS
-Registrar cliente, proyecto, etapa, fechas, dominio, staging, producción, siguiente paso y notas.
+La información operativa se administra desde `/gestion/`, en el módulo Operación. Registrar cliente, proyecto, etapa, fechas, dominio, staging, producción, siguiente paso y notas.
 Etapas: Lead → Calificado → Propuesta → Aceptado → Pago pendiente → Producción → Revisión cliente → Entrega → Mantenimiento → Cerrado.
 
 ## 8. Caja AMS
@@ -83,7 +83,7 @@ Las pantallas internas publicadas en GitHub Pages no son seguridad real. Cuando 
 4. Si falta caja, registrar un Aporte separado.
 5. No mezclar gasto personal con gasto AMS.
 
-## 15. Cuando llegue Hetzner/Coolify
+## 15. Cuando llegue OVHcloud/Coolify
 Debe incluir staging protegido, producción separada, variables de entorno, backups automáticos, monitorización, backend/base de datos cuando haga falta y autenticación real para herramientas internas.
 La migración no debe cambiar el flujo comercial.
 
