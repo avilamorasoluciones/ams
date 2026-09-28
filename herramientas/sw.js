@@ -1,5 +1,5 @@
-const CACHE_NAME = 'ams-tools-v7';
-const APP_SHELL = ['./','./index.html','./manifest.webmanifest?v=7','./icon-192.svg','./icon-512.svg','../img/ams-favicon.svg'];
+const CACHE_NAME = 'ams-tools-v8';
+const APP_SHELL = ['./','./index.html','./manifest.webmanifest?v=8','./icon-192.svg','./icon-512.svg','../img/ams-favicon.svg'];
 
 self.addEventListener('install', event => {
   event.waitUntil(
