@@ -57,7 +57,13 @@ Por ahora AMS no necesita módulos de facturación, cuentas de cobro ni contrato
 Ruta dentro de Gestión:
 `/gestion/calculadora/`
 
-Sirve para estimar precios de desarrollo y mensualidades. El resultado de la calculadora es una referencia comercial y debe reflejar el alcance real del proyecto.
+Sirve para estimar precios de desarrollo y mensualidades. El resultado de la calculadora es una referencia comercial y debe reflejar el alcance real del proyecto. Los precios base actuales priorizan una relación precio/servicio competitiva, con dominio y alojamiento gestionados por AMS incluidos en la mensualidad. La referencia interna parte de un VPS-1 económico y una reserva por cliente; esos valores se pueden revisar desde Ajustes internos cuando cambien los costos reales.
+
+## 5.1 Referencia de precios
+
+Con tráfico bajo y soporte básico, la calculadora parte de esta escala interna: Landing $8/mes, Web empresarial $10, E-commerce $15, Aplicación web $20, Sistema a medida $25 y Sistema avanzado $32. El precio amigo parte de $5 y aumenta según la complejidad; el perfil de mayor demanda tiene una tarifa base algo superior. Soporte estándar agrega $2/mes y prioritario $5/mes. Tráfico alto o muy alto agrega una reserva. El plan anual equivale a 11 mensualidades y cubre 12 meses.
+
+Los precios no muestran a los clientes el proveedor de dominio o infraestructura ni la estructura interna de costos. Los cambios de desarrollo, nuevas funciones y trabajos fuera de alcance se cotizan aparte.
 
 ## 6. Finanzas
 
