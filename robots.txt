@@ -1,4 +1,7 @@
 User-agent: *
 Allow: /
+Disallow: /operacion/
+Disallow: /finanzas/
+Disallow: /suscripciones/
 
 Sitemap: https://avilamorasoluciones.com/sitemap.xml
