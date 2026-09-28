@@ -34,7 +34,7 @@
   </form>
 </div>
 <div class="app" id="app">
-<header class="top"><div class="brand"><span class="dot"></span>AMS</div><div class="title" id="title">Gestión</div><div class="right"><a class="btn" href="../index.html">Web AMS</a><button class="btn gold" id="logout">Cerrar sesión</button></div></header>
+<header class="top"><div class="brand"><span class="dot"></span>AMS</div><div class="title" id="title">Gestión</div><div class="right"><button class="btn" id="globalBackup">↓ Respaldo</button><a class="btn" href="../index.html">Web AMS</a><button class="btn gold" id="logout">Cerrar sesión</button></div></header>
 <div class="layout"><aside><div class="nav" id="nav">
 <button class="active" data-v="home">⌂ Inicio</button><button data-v="calculadora">▣ Calculadora</button><button data-v="suscripciones">◉ Clientes / Suscripciones</button><button data-v="documentos">▤ Documentos PDF</button><button data-v="finanzas">▤ Finanzas</button><button data-v="operacion">⚙ Operación</button>
 </div></aside><main>
@@ -71,7 +71,7 @@ function renderDashboard(){if(!window.AMSStore)return;const cs=AMSStore.clients(
 
 function showApp(){auth.style.display="none";app.style.display="block";renderDashboard()}
 function openView(v){all.forEach(b=>b.classList.toggle("active",b.dataset.v===v));if(v==="home"){home.style.display="block";workspace.style.display="none";title.textContent="Gestión";frame.src="about:blank"}else{home.style.display="none";workspace.style.display="block";title.textContent=mods[v][1];frame.src=mods[v][0]}}
-all.forEach(b=>b.onclick=()=>openView(b.dataset.v));document.querySelectorAll("[data-quick]").forEach(b=>b.onclick=()=>openView(b.dataset.quick));document.querySelectorAll(".module").forEach(b=>b.onclick=()=>openView(b.dataset.v));
+all.forEach(b=>b.onclick=()=>openView(b.dataset.v));document.querySelectorAll("[data-quick]").forEach(b=>b.onclick=()=>openView(b.dataset.quick));\nfunction backupGlobal(){if(!window.AMSStore)return;const b=AMSStore.backup(),blob=new Blob([JSON.stringify(b,null,2)],{type:"application/json"}),a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="ams-gestion-backup-"+AMSStore.today()+".json";a.click();setTimeout(()=>URL.revokeObjectURL(a.href),800)}\ndocument.getElementById("globalBackup").onclick=backupGlobal;document.querySelectorAll(".module").forEach(b=>b.onclick=()=>openView(b.dataset.v));
 document.getElementById("loginForm").onsubmit=async e=>{e.preventDefault();const u=await hash(loginUser.value),p=await hash(loginPass.value);if(u===UH&&p===PH){sessionStorage.amsGestionAuth="1";sessionStorage.amsCalc="1";showApp();openView("home")}else loginError.classList.remove("hidden")};
 if(sessionStorage.amsGestionAuth==="1"){showApp();openView("home")}
 document.getElementById("logout").onclick=()=>{sessionStorage.removeItem("amsGestionAuth");sessionStorage.removeItem("amsCalc");sessionStorage.removeItem("amsSub");location.reload()};
