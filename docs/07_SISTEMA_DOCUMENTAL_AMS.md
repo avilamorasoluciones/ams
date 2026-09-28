@@ -34,7 +34,7 @@ No se incorporan módulos adicionales al sistema documental mientras no sean nec
 El generador incluye plantillas base para:
 - Landing / web sencilla.
 - Web empresarial.
-- E-commerce.
+- Tienda virtual + pedidos por WhatsApp.
 - Aplicación web.
 - Sistema a medida.
 - Hosting / mantenimiento.
