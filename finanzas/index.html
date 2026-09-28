@@ -16,7 +16,8 @@
 .modal{position:fixed;inset:0;background:#000c;display:none;align-items:center;justify-content:center;padding:15px;z-index:20}.modal.open{display:flex}.card{width:min(650px,100%);max-height:92vh;overflow:auto;background:#0d1728;border:1px solid var(--l);border-radius:20px;padding:20px}.head{display:flex;justify-content:space-between}.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.field label{display:block;color:var(--m);font-size:9px;font-weight:900;margin-bottom:5px}.full{grid-column:1/-1}.hidden{display:none!important}
 .note{font-size:11px;color:var(--m);line-height:1.5}.danger{border:1px solid #ff7b9133;background:#ff7b910c;padding:10px;border-radius:10px;margin-top:10px}
 @media(max-width:700px){.stats{grid-template-columns:1fr 1fr}.grid{grid-template-columns:1fr}.full{grid-column:auto}.entry{align-items:flex-start}.hero h1{font-size:28px}}
-</style></head><body>
+</style><link rel="icon" href="../img/ams-favicon.svg?v=7" type="image/svg+xml" />
+</head><body>
 <header class="top"><a href="../operacion/index.html">← Operación AMS</a><span class="muted">Caja interna</span></header>
 <main class="wrap">
 <section><div class="eyebrow">CONTROL FINANCIERO INTERNO</div><h1>Caja AMS</h1><p class="muted">Control de dinero del negocio: ingresos, gastos, aportes y retiros.</p>
@@ -63,4 +64,5 @@ $("backup").onclick=()=>{const blob=new Blob([JSON.stringify(data,null,2)],{type
 $("restoreBtn").onclick=()=>$("restore").click();
 $("restore").onchange=e=>{const file=e.target.files[0];if(!file)return;const r=new FileReader();r.onload=()=>{try{const x=JSON.parse(r.result);if(!Array.isArray(x))throw 0;data=x;save();alert("Respaldo restaurado.")}catch{alert("Archivo no válido.")}};r.readAsText(file)};
 render();
-</script></body></html>
+</script><script src="../contacto.js?v=20260927-2"></script>
+</body></html>
