@@ -4,14 +4,11 @@
 El procedimiento operativo completo está en `MANUAL_OPERATIVO.md`. Las páginas públicas cuentan con política de privacidad, términos y política de cookies; las demos de portafolio se marcan como demos y no se indexan. Actualmente el sitio no despliega analítica ni publicidad propia.
 
 ## Estado
-AMS está preparado para comenzar con **GitHub Pages + dominio propio**. No se incorpora Hetzner/Coolify hasta que el volumen real lo justifique; la referencia operativa actual es esperar a tener al menos dos clientes activos simultáneamente que necesiten infraestructura propia.
+AMS está preparado para comenzar con **GitHub Pages + dominio propio**. No se incorpora OVHcloud/Coolify hasta que el volumen real lo justifique; la referencia operativa actual es esperar a tener al menos dos clientes activos simultáneamente que necesiten infraestructura propia.
 
 ## Estructura
 - `/` — web pública y captación.
-- `/operacion/` — proyectos, etapas, dominios, staging, gastos y procesos.
-- `/finanzas/` — Caja AMS: ingresos, gastos, aportes y retiros.
-- `/suscripciones/` — clientes recurrentes y vencimientos.
-- `/suscripciones/documentos/` — documentos comerciales/cuentas de cobro.
+- `/gestion/` — centro interno con Calculadora, Clientes/Suscripciones, Documentos, Finanzas y Operación.
 - `/legal_privacidad.html` — política de privacidad y tratamiento de datos.
 - `/legal_terminos.html` — términos y condiciones.
 - `/legal_cookies.html` — política de cookies y tecnologías similares.
@@ -83,7 +80,7 @@ Quedan fuera del código y requieren acción de ustedes:
 5. Confirmar con contador la situación fiscal/facturación.
 6. Comprar/configurar el dominio AMS.
 7. Definir el procedimiento real de backups.
-8. Configurar Hetzner/Coolify solo cuando existan 2 clientes activos simultáneamente y el costo quede justificado.
+8. Configurar OVHcloud/Coolify solo cuando existan 2 clientes activos simultáneamente y el costo quede justificado.
 
 ## Principio de desarrollo
 No agregar tecnología por moda. Cada herramienta debe ahorrar tiempo, reducir un riesgo, controlar dinero, mejorar una venta, facilitar producción o mejorar la entrega.
