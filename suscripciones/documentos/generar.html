@@ -7,7 +7,7 @@
 <meta name="theme-color" content="#070b12">
 <link rel="icon" href="../../img/ams-favicon.svg?v=8" type="image/svg+xml">
 <title>Generador documental | Avila Mora Soluciones</title>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <style>
 :root{--bg:#070b12;--panel:#10192b;--panel2:#0b1322;--text:#f5f7fb;--muted:#9daabd;--line:#ffffff14;--a:#c7a1ff;--a2:#8b5cf6;--green:#65e6a4;--red:#ff8b9b}
 *{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 12% 0%,#8b5cf626,transparent 31%),radial-gradient(circle at 90% 8%,#c7a1ff18,transparent 28%),var(--bg);color:var(--text);font:14px system-ui,Arial,sans-serif}
@@ -247,21 +247,31 @@ function loadCurrentIssuer(){
 }
 async function toPdf(){
  const {jsPDF}=window.jspdf;
- const paper=$("paper");const clone=paper.cloneNode(true);clone.style.width="760px";clone.style.position="absolute";clone.style.left="-99999px";clone.style.top="0";document.body.appendChild(clone);
+ const paper=$("paper");
+ const clone=paper.cloneNode(true);
+ clone.style.width="760px";
+ clone.style.maxWidth="760px";
+ clone.style.position="fixed";
+ clone.style.left="-100000px";
+ clone.style.top="0";
+ clone.style.background="#fff";
+ clone.style.boxShadow="none";
+ clone.style.borderRadius="0";
+ clone.style.minHeight="0";
+ clone.style.padding="38px 38px 46px";
+ clone.style.color="#172033";
+ document.body.appendChild(clone);
  const pdf=new jsPDF({unit:"mm",format:"a4",orientation:"portrait"});
- const margin=12, pageW=210, pageH=297, usableW=pageW-margin*2;
- const title=typeTitle();
- const lines=String(clone.innerText||"").split("\n").map(x=>x.trim()).filter(Boolean);
- let y=margin;
- function addLines(arr,size=9,lead=4.5,bold=false){
-   pdf.setFont("helvetica",bold?"bold":"normal");pdf.setFontSize(size);
-   arr.forEach(line=>{const parts=pdf.splitTextToSize(line,usableW);parts.forEach(p=>{if(y>pageH-margin){pdf.addPage();y=margin}pdf.text(p,margin,y);y+=lead});y+=1.5});
- }
- pdf.setTextColor(23,32,51);pdf.setFont("helvetica","bold");pdf.setFontSize(15);pdf.text("Avila Mora Soluciones",margin,y);pdf.setFontSize(12);pdf.text(title,pageW-margin,y,{align:"right"});y+=8;
- pdf.setDrawColor(220,223,229);pdf.line(margin,y,pageW-margin,y);y+=7;
- addLines(lines.slice(0,18),8.7,4.2,false);
- if(lines.length>18){pdf.setFont("helvetica","bold");pdf.setFontSize(9);pdf.text("Contenido adicional",margin,y);y+=5;addLines(lines.slice(18),8.7,4.2,false)}
- pdf.setDrawColor(210,214,220);pdf.line(margin,pageH-21,pageW-margin,pageH-21);pdf.setFont("helvetica","normal");pdf.setFontSize(7);pdf.setTextColor(110,120,133);pdf.text("Documento generado por Avila Mora Soluciones · "+(val("number")||"AMS"),margin,pageH-15);pdf.text("Página "+pdf.getNumberOfPages(),pageW-margin,pageH-15,{align:"right"});
+ await new Promise((resolve,reject)=>{
+   pdf.html(clone,{
+     x:10,y:10,width:190,
+     windowWidth:760,
+     autoPaging:"text",
+     margin:[10,10,14,10],
+     html2canvas:{scale:1.45,useCORS:true,backgroundColor:"#ffffff",logging:false},
+     callback:(doc)=>resolve(doc)
+   });
+ });
  clone.remove();
  return pdf;
 }
