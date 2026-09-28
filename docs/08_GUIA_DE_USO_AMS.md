@@ -1,142 +1,138 @@
-# Guía rápida de uso de AMS
+# Guía de uso de AMS
 
-## Entrada principal
+## 1. Entrada principal
 
 Web pública:
-- GitHub Pages: `https://avilamorasoluciones.github.io/ams/`
-- Dominio final: `https://avilamorasoluciones.com/`
+- `https://avilamorasoluciones.github.io/ams/`
+- futuro dominio: `https://avilamorasoluciones.com/`
 
-El dominio propio se configura cuando el sitio esté listo. No hace falta mover el frontend para publicar la web.
+Gestión interna:
+- `/gestion/`
 
-## Herramientas internas
+**Gestión es la única entrada para las herramientas internas.**
 
-### 1. Suscripciones
+## 2. Acceso a Gestión
 
-Ruta:
-`/suscripciones/`
+1. Abrir `/gestion/`.
+2. Iniciar sesión.
+3. Desde el menú entrar a Calculadora, Clientes/Suscripciones, Documentos, Finanzas u Operación.
+4. No volver a introducir credenciales al cambiar de módulo.
+5. Cerrar sesión desde la barra superior de Gestión.
 
-Uso:
-- Entrar al panel interno.
-- Crear cada cliente una sola vez.
-- Guardar empresa, contacto, correo, dominio, URL, alojamiento/infraestructura, precio, moneda, periodicidad y fecha de inicio.
-- El sistema calcula el próximo vencimiento.
-- Hacer respaldo desde “Respaldo”.
+La contraseña no debe copiarse a documentación pública ni almacenarse en texto plano. La protección actual del frontend es una barrera de uso interno, no autenticación de servidor.
 
-Nota: hoy guarda la información en el navegador mediante `localStorage`. No es todavía un sistema multiusuario ni una base de datos central.
+## 3. Clientes y Suscripciones
 
-### 2. Documentos
-
-Ruta:
-`/suscripciones/documentos/`
-
-Flujo:
-1. Elegir el documento.
-2. Seleccionar un cliente existente cuando aplique.
-3. Completar o revisar datos.
-4. Revisar la vista previa.
-5. Exportar el PDF.
-
-Documentos disponibles:
-- Contrato de prestación de servicios.
-- Cotización / propuesta comercial.
-- Cuenta de cobro.
-- Comprobante / recibo de pago.
-- Ficha de cliente.
-- Cierre mensual.
-- Acta de entrega y aceptación.
-- Ficha de datos del prestador.
-
-Contrato y acta incluyen espacios de firma.
-
-### 3. Finanzas
-
-Ruta:
-`/finanzas/`
+Ruta dentro de Gestión:
+`/gestion/suscripciones/`
 
 Uso:
-- Registrar ingresos.
-- Registrar gastos.
-- Registrar aportes.
-- Registrar retiros.
-- Guardar referencia o soporte.
-- Exportar respaldo.
+- Crear el cliente una sola vez.
+- Guardar empresa, contacto, correo, teléfono, dominio, URL, infraestructura, precio, moneda, periodicidad, inicio y días de gracia.
+- Revisar estados y próximos pagos.
+- Exportar un respaldo JSON.
+- Restaurar un respaldo cuando sea necesario.
 
-El sistema distingue aportes de ingresos y retiros de gastos. No sustituye un sistema contable.
+Los datos quedan en el navegador del dispositivo.
 
-### 4. Operación
+## 4. Documentos
 
-Ruta:
-`/operacion/`
+Ruta dentro de Gestión:
+`/gestion/documentos/`
 
-Uso:
-- Consultar y organizar información operativa interna.
-- Mantener separados los datos de operación de los documentos y finanzas.
+Cada documento tiene un formulario diferente.
 
-No guardar contraseñas, tarjetas, tokens ni secretos.
+### Contrato
+Se completa con servicio, alcance, entregables, fechas, valor inicial, valor recurrente, pagos, soporte, terceros, propiedad/licencia, confidencialidad, terminación, jurisdicción y cláusulas específicas.
 
-### 5. Calculadora
+### Cotización / propuesta
+Se completa con servicio, alcance, entregables, tiempos y una tabla de conceptos con cantidades y valores, además de descuento, impuestos, forma de pago, vigencia y exclusiones.
 
-Ruta:
-`/calculadora/`
+### Cuenta de cobro
+Se completa con periodo, concepto, valor, impuestos cuando correspondan, vencimiento y datos de pago.
 
-Uso:
-- Herramienta interna para cálculos comerciales de AMS.
+### Recibo
+Se completa con fecha del pago, valor recibido, método, referencia, periodo y concepto.
 
-### 6. Herramientas
+### Ficha de cliente
+Resume datos de contacto, proyecto, servicio, dominio, URLs, infraestructura, alta, renovación y notas.
 
-Ruta:
-`/herramientas/`
+### Cierre mensual
+Lee los movimientos de Caja AMS del periodo seleccionado y construye un resumen de ingresos, gastos, aportes, retiros y saldo neto.
 
-Uso:
-- Herramientas públicas disponibles desde la web de AMS.
+### Acta de entrega
+Se completa con entregables efectivamente entregados, pendientes, observaciones, correcciones/garantía y texto de aceptación.
 
-### 7. Juegos
+### Ficha del prestador
+Guarda los datos reutilizables de la persona que presta el servicio para no volver a escribirlos en cada documento.
 
-Ruta:
-`/juegos/`
+El botón **Generar PDF** crea el archivo a partir de la vista previa actual. Antes de enviarlo, revisar los datos.
 
-Uso:
-- Juegos y herramientas recreativas públicas.
+## 5. Calculadora
 
-### 8. AyuKcal
+Ruta dentro de Gestión:
+`/gestion/calculadora/`
 
-Ruta:
-`/ayukcal/`
+Sirve para estimar precios de desarrollo y mensualidades. El resultado de la calculadora es una referencia comercial y debe reflejar el alcance real del proyecto.
 
-Es una aplicación independiente dentro del repositorio. Utiliza Supabase para autenticación y almacenamiento de los datos de usuario. Tratar sus datos personales conforme a la política de privacidad.
+## 6. Finanzas
 
-## Flujo recomendado para un cliente nuevo
+Ruta dentro de Gestión:
+`/gestion/finanzas/`
 
-Formulario de proyecto → conversación → propuesta/cotización → contrato si corresponde → desarrollo → acta de entrega → cuenta de cobro o factura según corresponda → recibo/comprobante → registrar movimiento en Finanzas → actualizar Suscripciones.
+Registrar:
+- ingresos;
+- gastos;
+- aportes;
+- retiros;
+- soportes y referencias.
 
-## Acceso y seguridad
+Aporte no significa venta y retiro no significa gasto. Es control de gestión y no reemplaza la contabilidad fiscal.
 
-Las rutas internas tienen `noindex` y el archivo `robots.txt` evita su rastreo, pero esto **no equivale a seguridad**. La versión actual de los paneles internos está pensada para uso local y de apoyo. Cuando AMS maneje información centralizada o varios usuarios, se debe migrar el acceso a autenticación real + backend + base de datos.
+## 7. Operación
 
-## Pagos
+Ruta dentro de Gestión:
+`/gestion/operacion/`
 
-Wompi se integrará cuando AMS necesite cobros automáticos. La llave pública puede estar en el frontend según la integración, pero los secretos y la validación de webhooks deben permanecer en backend.
+Registrar cliente, proyecto, servicio, etapa, precio, dominio, staging, URL final, fecha objetivo, próximo paso y notas.
 
-## Servidor futuro
+Etapas actuales:
+Lead → Calificado → Propuesta → Aceptado → Pago pendiente → Producción → Revisión cliente → Entrega → Mantenimiento → Cerrado.
 
-Cuando AMS necesite backend:
-- OVHcloud: VPS.
-- Coolify: despliegue y administración.
-- PostgreSQL u otra base de datos: dentro del VPS al inicio, si el tamaño y criticidad lo permiten.
-- GitHub: código y frontend estático.
-- Backups: independientes del VPS.
+## 8. Flujo recomendado
 
-## Dominio y correo
+Formulario de proyecto → conversación/calificación → propuesta → aceptación → pago → alta en Operación → producción → revisión → entrega → documento correspondiente → registro financiero → Suscripción/mantenimiento.
+
+## 9. Datos y respaldos
+
+Las herramientas actuales usan almacenamiento local. Antes de cambiar de origen o equipo:
+- respaldar Operación;
+- respaldar Finanzas;
+- respaldar Suscripciones;
+- guardar los documentos generados;
+- conservar los borradores/perfiles importantes.
+
+Al pasar de GitHub Pages a `avilamorasoluciones.com`, el `localStorage` no se copia automáticamente porque pertenece al origen del navegador.
+
+## 10. Seguridad
+
+No guardar en estas herramientas:
+- contraseñas;
+- tokens;
+- API keys;
+- claves privadas;
+- números completos de tarjetas;
+- secretos de Wompi;
+- credenciales de hosting.
+
+Las pantallas internas de GitHub Pages y su contraseña JavaScript no constituyen seguridad de servidor. Para información sensible o varios usuarios, migrar a backend + autenticación real + base de datos.
+
+## 11. Infraestructura prevista
 
 - Porkbun: dominio.
-- Zoho Mail: correo oficial `equipo@avilamorasoluciones.com`.
-- GitHub: código y Pages.
+- Zoho Mail: correo.
+- GitHub: código y GitHub Pages.
 - Google: Search Console.
 - Wompi: pagos.
-- OVHcloud: infraestructura.
-
-## Antes de pasar de GitHub Pages al dominio propio
-
-Los datos guardados en el navegador mediante `localStorage` pertenecen al origen actual. Al pasar de `avilamorasoluciones.github.io/ams` a `avilamorasoluciones.com`, esos datos no se trasladan automáticamente.
-
-Antes del cambio de dominio, usar “Respaldo” en Operación, Finanzas y Suscripciones y conservar los archivos JSON. Después del cambio, usar “Restaurar”. El generador de documentos también guarda borradores/perfiles localmente; conviene volver a guardar los datos del prestador en el nuevo origen.
+- OVHcloud: servidor.
+- Coolify: despliegue y administración del servidor.
