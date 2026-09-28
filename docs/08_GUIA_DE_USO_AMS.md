@@ -134,3 +134,9 @@ Cuando AMS necesite backend:
 - Google: Search Console.
 - Wompi: pagos.
 - OVHcloud: infraestructura.
+
+## Antes de pasar de GitHub Pages al dominio propio
+
+Los datos guardados en el navegador mediante `localStorage` pertenecen al origen actual. Al pasar de `avilamorasoluciones.github.io/ams` a `avilamorasoluciones.com`, esos datos no se trasladan automáticamente.
+
+Antes del cambio de dominio, usar “Respaldo” en Operación, Finanzas y Suscripciones y conservar los archivos JSON. Después del cambio, usar “Restaurar”. El generador de documentos también guarda borradores/perfiles localmente; conviene volver a guardar los datos del prestador en el nuevo origen.
