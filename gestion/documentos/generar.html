@@ -1,298 +1,107 @@
 <!doctype html>
 <html lang="es">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="robots" content="noindex,nofollow,noarchive">
-<meta name="theme-color" content="#070b12">
-<link rel="icon" href="../../img/ams-favicon.svg?v=8" type="image/svg+xml">
-<title>Generador documental | Avila Mora Soluciones</title>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow,noarchive"><meta name="theme-color" content="#070b12">
+<link rel="icon" href="../../img/ams-favicon.svg?v=9" type="image/svg+xml">
+<title>Generar documento | Gestión AMS</title>
+<script>if(sessionStorage.amsGestionAuth!=="1")location.replace("../index.html");</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <style>
-:root{--bg:#070b12;--panel:#10192b;--panel2:#0b1322;--text:#f5f7fb;--muted:#9daabd;--line:#ffffff14;--a:#c7a1ff;--a2:#8b5cf6;--green:#65e6a4;--red:#ff8b9b}
-*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 12% 0%,#8b5cf626,transparent 31%),radial-gradient(circle at 90% 8%,#c7a1ff18,transparent 28%),var(--bg);color:var(--text);font:14px system-ui,Arial,sans-serif}
-button,input,select,textarea{font:inherit}.top{height:68px;border-bottom:1px solid var(--line);background:#070b12ea;backdrop-filter:blur(16px);display:flex;align-items:center;justify-content:space-between;padding:0 22px;position:sticky;top:0;z-index:20}.brand{display:flex;align-items:center;gap:10px;color:#fff;text-decoration:none;font-weight:900}.brand svg{width:38px;height:38px}.brand small{display:block;color:var(--muted);font-size:8px;letter-spacing:.15em;text-transform:uppercase}.back{color:var(--muted);text-decoration:none;font-size:12px;font-weight:800}.wrap{max-width:1220px;margin:auto;padding:28px 16px 65px}.intro{margin-bottom:18px}.eyebrow{font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:#d8c3ff;font-weight:900}.intro h1{font-size:clamp(28px,4vw,40px);letter-spacing:-.04em;margin:7px 0}.intro p{margin:0;color:var(--muted);font-size:13px}
-.layout{display:grid;grid-template-columns:minmax(0,500px) minmax(0,1fr);gap:18px;align-items:start}.panel{background:linear-gradient(145deg,#111b2f,#0b1322);border:1px solid var(--line);border-radius:20px;padding:20px;box-shadow:0 22px 70px #0005}.panel h2{font-size:16px;margin:0 0 14px}.section{border-top:1px solid var(--line);padding-top:16px;margin-top:18px}.section h3{font-size:13px;margin:0 0 12px}.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.full{grid-column:1/-1}.field label{display:block;color:var(--muted);font-size:9px;letter-spacing:.07em;text-transform:uppercase;font-weight:900;margin-bottom:6px}.field input,.field select,.field textarea{width:100%;border:1px solid #ffffff1c;background:#080f1c;color:#fff;border-radius:10px;padding:10px 11px;outline:none}.field textarea{min-height:76px;resize:vertical}.field input:focus,.field select:focus,.field textarea:focus{border-color:#a78bfa88;box-shadow:0 0 0 3px #8b5cf615}
-.actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}.btn{border:1px solid #ffffff1a;background:#ffffff08;color:#fff;border-radius:11px;padding:10px 13px;font-weight:900;cursor:pointer}.btn.primary{border:0;background:linear-gradient(135deg,#d8c3ff,#8b5cf6);color:#160f25}.btn.green{color:#9ff3c6;border-color:#65e6a433;background:#65e6a410}.btn.warn{color:#ffd8dd;border-color:#ff8b9b33;background:#ff8b9b0e}.status{min-height:15px;color:#8ff2be;font-size:11px;margin-top:9px}.hint{color:var(--muted);font-size:10px;line-height:1.5;margin:9px 0 0}.mini{font-size:10px;color:var(--muted);line-height:1.5}
-.preview-panel{position:sticky;top:84px}.paper{background:#fff;color:#172033;border-radius:8px;min-height:760px;padding:38px 38px 46px;box-shadow:0 28px 80px #0008}.p-head{display:flex;justify-content:space-between;gap:20px;border-bottom:2px solid #edf0f3;padding-bottom:18px}.p-brand{display:flex;gap:10px;align-items:center}.p-brand svg{width:48px;height:48px}.p-brand strong{display:block;font-size:15px}.p-brand span{display:block;color:#667085;font-size:9px;letter-spacing:.13em;text-transform:uppercase;margin-top:2px}.p-title{text-align:right}.p-title h2{margin:0;font-size:22px;letter-spacing:-.04em}.p-title p{margin:5px 0 0;color:#667085;font-size:10px}.p-section{margin-top:22px}.p-label{font-size:8px;color:#7b8494;font-weight:900;letter-spacing:.12em;text-transform:uppercase;margin-bottom:7px}.p-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}.p-value{font-size:10.5px;line-height:1.55}.p-table{width:100%;border-collapse:collapse;margin-top:8px;font-size:9.5px}.p-table th{text-align:left;background:#f4f5f7;padding:8px}.p-table td{padding:8px;border-bottom:1px solid #edf0f3;vertical-align:top}.p-table th:last-child,.p-table td:last-child{text-align:right}.totals{display:flex;justify-content:flex-end;margin-top:13px}.total-box{min-width:190px;border:1px solid #e9ddff;background:#f5f3ff;border-radius:10px;padding:11px}.total-box span{display:block;color:#667085;font-size:8px;text-transform:uppercase;font-weight:900}.total-box strong{display:block;font-size:17px;margin-top:3px}.clause{margin-top:10px;font-size:9.6px;line-height:1.55}.clause b{font-size:9.8px}.signatures{display:grid;grid-template-columns:1fr 1fr;gap:45px;margin-top:58px}.sign{border-top:1px solid #344054;padding-top:7px;font-size:9px;line-height:1.45}.sign strong{display:block;font-size:10px}.p-footer{margin-top:25px;border-top:1px solid #edf0f3;padding-top:11px;color:#7b8494;font-size:8px;line-height:1.55}
-@media(max-width:950px){.layout{grid-template-columns:1fr}.preview-panel{position:static}.paper{order:-1}}@media(max-width:620px){.top{padding:0 14px}.wrap{padding:20px 10px 45px}.grid,.p-grid,.signatures{grid-template-columns:1fr}.full{grid-column:auto}.paper{padding:25px 20px 32px}.p-head{display:block}.p-title{text-align:left;margin-top:13px}.actions .btn{flex:1;min-width:140px}}
-@media print{body{background:#fff}.top,.intro,.form-panel,.actions,.status,.hint{display:none!important}.wrap{padding:0}.layout{display:block}.preview-panel{padding:0;border:0;box-shadow:none}.paper{box-shadow:none;border-radius:0;min-height:0;padding:16mm 14mm}.panel{background:none;border:0;padding:0}}
-</style>
-</head>
+:root{--bg:#070b12;--panel:#10192b;--panel2:#0b1322;--text:#f5f7fb;--muted:#9daabd;--line:#ffffff14;--a:#c7a1ff;--a2:#8b5cf6;--green:#65e6a4;--red:#ff8b9b;--gold:#f0cc58}
+*{box-sizing:border-box}html,body{margin:0;min-height:100%;background:radial-gradient(circle at 12% 0%,#8b5cf626,transparent 31%),radial-gradient(circle at 90% 8%,#c7a1ff18,transparent 28%),var(--bg);color:var(--text);font:14px system-ui,Arial,sans-serif}
+button,input,select,textarea{font:inherit}.top{height:68px;border-bottom:1px solid var(--line);background:#070b12ea;backdrop-filter:blur(16px);display:flex;align-items:center;justify-content:space-between;padding:0 22px;position:sticky;top:0;z-index:20}.brand{display:flex;align-items:center;gap:10px;color:#fff;text-decoration:none;font-weight:900}.brand small{display:block;color:var(--muted);font-size:8px;letter-spacing:.15em;text-transform:uppercase}.back{color:var(--muted);text-decoration:none;font-size:12px;font-weight:800}
+.wrap{max-width:1260px;margin:auto;padding:26px 15px 60px}.intro{margin-bottom:16px}.eyebrow{font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:#d8c3ff;font-weight:900}.intro h1{font-size:clamp(28px,4vw,40px);letter-spacing:-.04em;margin:7px 0}.intro p{margin:0;color:var(--muted);font-size:13px;max-width:850px}
+.layout{display:grid;grid-template-columns:minmax(0,540px) minmax(0,1fr);gap:18px;align-items:start}.panel{background:linear-gradient(145deg,#111b2f,#0b1322);border:1px solid var(--line);border-radius:20px;padding:19px;box-shadow:0 22px 70px #0005}.section{border-top:1px solid var(--line);padding-top:16px;margin-top:18px}.section h3{font-size:13px;margin:0 0 11px}.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.full{grid-column:1/-1}.field label{display:block;color:var(--muted);font-size:9px;letter-spacing:.07em;text-transform:uppercase;font-weight:900;margin-bottom:6px}.field input,.field select,.field textarea{width:100%;border:1px solid #ffffff1c;background:#080f1c;color:#fff;border-radius:10px;padding:10px 11px;outline:0}.field textarea{min-height:82px;resize:vertical}.field input:focus,.field select:focus,.field textarea:focus{border-color:#a78bfa88;box-shadow:0 0 0 3px #8b5cf615}
+.note{margin-top:10px;padding:10px 12px;border:1px solid #f0cc5833;background:#f0cc5809;border-radius:10px;color:#eadfae;font-size:10px;line-height:1.5}.mini{font-size:10px;color:var(--muted);line-height:1.5}.actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}.btn{border:1px solid #ffffff1a;background:#ffffff08;color:#fff;border-radius:11px;padding:10px 13px;font-weight:900;cursor:pointer}.btn.primary{border:0;background:linear-gradient(135deg,#d8c3ff,#8b5cf6);color:#160f25}.btn.green{color:#9ff3c6;border-color:#65e6a433;background:#65e6a410}.btn.warn{color:#ffd8dd;border-color:#ff8b9b33;background:#ff8b9b0e}.status{min-height:16px;color:#8ff2be;font-size:11px;margin-top:9px}
+.service-box{display:grid;grid-template-columns:1fr auto;gap:9px;align-items:end}.service-box .btn{height:42px}.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}.chip{border:1px solid #ffffff14;border-radius:99px;padding:5px 8px;color:#cdd6e3;background:#ffffff06;font-size:9px;cursor:pointer}.chip:hover{border-color:#c7a1ff55}
+.items{display:grid;gap:8px}.item-row{display:grid;grid-template-columns:1fr 75px 115px 34px;gap:7px;align-items:center}.item-row .input{width:100%}.xbtn{border:1px solid #ffffff15;background:#ffffff06;color:#ffb7c0;border-radius:9px;height:41px;cursor:pointer}.add-row{margin-top:8px}
+.preview-panel{position:sticky;top:84px}.paper{background:#fff;color:#172033;border-radius:8px;min-height:760px;padding:38px 38px 46px;box-shadow:0 28px 80px #0008}.p-head{display:flex;justify-content:space-between;gap:20px;border-bottom:2px solid #edf0f3;padding-bottom:18px}.p-brand{display:flex;gap:10px;align-items:center}.p-brand strong{display:block;font-size:15px}.p-brand span{display:block;color:#667085;font-size:9px;letter-spacing:.13em;text-transform:uppercase;margin-top:2px}.mark{width:48px;height:48px;border-radius:15px;background:#f5f3ff;border:1px solid #e9ddff;display:grid;place-items:center;color:#8b5cf6;font-weight:900;font-size:19px}.p-title{text-align:right}.p-title h2{margin:0;font-size:22px;letter-spacing:-.04em}.p-title p{margin:5px 0 0;color:#667085;font-size:10px}.p-section{margin-top:22px}.p-label{font-size:8px;color:#7b8494;font-weight:900;letter-spacing:.12em;text-transform:uppercase;margin-bottom:7px}.p-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}.p-value{font-size:10.5px;line-height:1.55}.p-table{width:100%;border-collapse:collapse;margin-top:8px;font-size:9.5px}.p-table th{text-align:left;background:#f4f5f7;padding:8px}.p-table td{padding:8px;border-bottom:1px solid #edf0f3;vertical-align:top}.p-table th:last-child,.p-table td:last-child{text-align:right}.total-wrap{display:flex;justify-content:flex-end;margin-top:12px}.total-box{min-width:220px;border:1px solid #e9ddff;background:#f5f3ff;border-radius:10px;padding:11px}.total-box span{display:block;color:#667085;font-size:8px;text-transform:uppercase;font-weight:900}.total-box strong{display:block;font-size:15px;margin:4px 0}.clause{margin-top:9px;font-size:9.5px;line-height:1.55}.clause b{font-size:9.7px}.signatures{display:grid;grid-template-columns:1fr 1fr;gap:45px;margin-top:56px}.sign{border-top:1px solid #344054;padding-top:7px;font-size:9px;line-height:1.45}.sign strong{display:block;font-size:10px}.p-footer{margin-top:25px;border-top:1px solid #edf0f3;padding-top:11px;color:#7b8494;font-size:8px;line-height:1.55}
+@media(max-width:980px){.layout{grid-template-columns:1fr}.preview-panel{position:static}.paper{order:-1}}@media(max-width:650px){.top{padding:0 14px}.wrap{padding:20px 10px 45px}.grid,.p-grid,.signatures{grid-template-columns:1fr}.full{grid-column:auto}.item-row{grid-template-columns:1fr 70px 110px 34px}.p-head{display:block}.p-title{text-align:left;margin-top:13px}.paper{padding:25px 20px 32px}.actions .btn{flex:1;min-width:140px}}
+@media print{body{background:#fff}.top,.intro,.form-panel,.actions,.status,.note{display:none!important}.wrap{padding:0}.layout{display:block}.preview-panel{padding:0;border:0;box-shadow:none}.paper{box-shadow:none;border-radius:0;min-height:0;padding:16mm 14mm}.panel{background:none;border:0;padding:0}}
+</style></head>
 <body>
-<header class="top">
-  <a class="brand" href="../index.html" aria-label="Volver a Gestión">
-    <svg viewBox="0 0 64 64" aria-hidden="true"><defs><linearGradient id="g" x1="0" x2="1"><stop stop-color="#d8c3ff"/><stop offset="1" stop-color="#8b5cf6"/></linearGradient></defs><rect x="4" y="4" width="56" height="56" rx="17" fill="#ffffff0a" stroke="#ffffff18"/><path d="M14 44 25 18h7l11 26h-7l-2.4-6H23.4L21 44h-7Zm12-12h5.2L28.6 25 26 32Z" fill="url(#g)"/><path d="M42 18h7v26h-7z" fill="#fff" opacity=".88"/></svg>
-    <span>Avila Mora<small>Soluciones</small></span>
-  </a>
-  <a class="back" href="centro.html">← Centro documental</a>
-</header>
-
+<header class="top"><a class="brand" href="../index.html"><span class="mark">AM</span><span>Avila Mora<small>Soluciones</small></span></a><a class="back" href="index.html">← Documentos</a></header>
 <main class="wrap">
-  <section class="intro">
-    <div class="eyebrow">Sistema documental AMS</div>
-    <h1 id="pageTitle">Generador de documentos</h1>
-    <p id="pageSub">Selecciona un tipo, completa los campos, revisa la vista previa y exporta el PDF.</p>
-  </section>
-
-  <div class="layout">
-    <section class="panel form-panel">
-      <h2>Datos</h2>
-      <div class="grid">
-        <div class="field full"><label>Tipo de documento</label><select id="docType">
-          <option value="contrato">Contrato de prestación de servicios</option>
-          <option value="propuesta">Cotización / propuesta comercial</option>
-          <option value="cobro">Cuenta de cobro</option>
-          <option value="recibo">Comprobante / recibo de pago</option>
-          <option value="ficha">Ficha de cliente</option>
-          <option value="cierre">Cierre mensual de AMS</option>
-          <option value="acta">Acta de entrega / aceptación</option>
-          <option value="perfil">Ficha de datos del prestador</option>
-        </select></div>
-
-        <div class="field full"><label>Cliente existente (opcional)</label><select id="existingClient"><option value="">- Sin seleccionar -</option></select></div>
-
-        <div class="field"><label>N.º documento</label><input id="number" placeholder="AMS-0001"></div>
-        <div class="field"><label>Fecha</label><input id="date" type="date"></div>
-
-        <div class="section full"><h3>Prestador / AMS</h3></div>
-        <div class="field"><label>Prestador</label><select id="issuer"><option value="">- Seleccionar -</option><option>Diego Andrés Avila Ríos</option><option>María José</option></select></div>
-        <div class="field"><label>Identificación</label><input id="issuerId" placeholder="Cédula"></div>
-        <div class="field"><label>Correo</label><input id="issuerEmail" type="email" placeholder="equipo@avilamorasoluciones.com"></div>
-        <div class="field"><label>Teléfono</label><input id="issuerPhone" placeholder="+57 ..."></div>
-        <div class="field full"><label>Dirección / ciudad (opcional)</label><input id="issuerAddress" placeholder="Ciudad, Colombia"></div>
-
-        <div class="section full"><h3>Cliente</h3></div>
-        <div class="field"><label>Nombre / empresa</label><input id="client"></div>
-        <div class="field"><label>Identificación (opcional)</label><input id="clientId" placeholder="NIT / documento"></div>
-        <div class="field"><label>Correo</label><input id="clientEmail" type="email"></div>
-        <div class="field"><label>Teléfono</label><input id="clientPhone"></div>
-        <div class="field"><label>País</label><input id="country" value="Colombia"></div>
-        <div class="field"><label>Ciudad</label><input id="clientCity"></div>
-        <div class="field"><label>Dominio</label><input id="domain" placeholder="empresa.com"></div>
-        <div class="field"><label>URL</label><input id="website" placeholder="https://..."></div>
-        <div class="field"><label>Alojamiento / infraestructura</label><input id="hosting" placeholder="OVH, GitHub Pages, servidor del cliente…"></div>
-        <div class="field full"><label>Dirección (opcional)</label><input id="clientAddress"></div>
-
-        <div class="section full"><h3>Servicio / operación</h3></div>
-        <div class="field full"><label>Objeto / concepto principal</label><textarea id="concept" placeholder="Desarrollo, hosting, mantenimiento, sistema a medida, etc."></textarea></div>
-        <div class="field"><label>Periodicidad / periodo</label><input id="period" placeholder="Mensual · octubre 2026"></div>
-        <div class="field"><label>Moneda</label><select id="currency"><option>USD</option><option>COP</option><option>EUR</option></select></div>
-        <div class="field"><label>Valor</label><input id="amount" type="number" min="0" step="0.01" value="0"></div>
-        <div class="field"><label>IVA (%)</label><input id="tax" type="number" min="0" step="0.01" value="0"></div>
-        <div class="field full"><label>Entregables / detalle</label><textarea id="deliverables" placeholder="Lista breve de entregables, módulos, páginas o actividades."></textarea></div>
-        <div class="field full"><label>Condiciones / observaciones</label><textarea id="conditions" placeholder="Forma de pago, tiempos, límites de soporte, vigencia, renovaciones, etc."></textarea></div>
-
-        <div class="section full"><h3>Pago</h3></div>
-        <div class="field"><label>Método</label><input id="method" placeholder="Transferencia / Wompi / PayPal..."></div>
-        <div class="field"><label>Referencia</label><input id="paymentRef" placeholder="ID de transacción / comprobante"></div>
-        <div class="field full"><label>Datos de pago</label><textarea id="paymentData" placeholder="Cuenta, plataforma, enlace o instrucciones que deban aparecer en el documento."></textarea></div>
-
-        <div class="section full"><h3>Contrato / aceptación</h3></div>
-        <div class="field full"><label>Cláusulas o texto adicional</label><textarea id="clauses" placeholder="Añade condiciones específicas. El sistema agregará las cláusulas base cuando aplique."></textarea></div>
-        <div class="field"><label>Vigencia / validez</label><input id="validity" placeholder="30 días / hasta 31 oct. 2026"></div>
-        <div class="field"><label>Fecha de inicio del servicio</label><input id="startDate" type="date"></div>
-
-        <div class="section full"><h3>Acta / cierre</h3></div>
-        <div class="field full"><label>Resultado / observaciones finales</label><textarea id="outcome" placeholder="Qué se entregó, qué quedó pendiente, saldos o comentarios."></textarea></div>
-      </div>
-
-      <div class="actions">
-        <button class="btn primary" id="pdfBtn">Exportar PDF</button>
-        <button class="btn green" id="shareBtn">Compartir PDF</button>
-        <button class="btn" id="printBtn">Imprimir</button>
-        <button class="btn" id="saveBtn">Guardar borrador</button>
-        <button class="btn warn" id="clearBtn">Limpiar</button>
-      </div>
-      <div class="status" id="status"></div>
-      <p class="hint"><strong>Importante:</strong> este sistema genera documentos comerciales y administrativos. Para contratos de mayor complejidad puedes ajustar las cláusulas antes de firmar. No presenta una cuenta de cobro como factura electrónica DIAN ni inventa datos fiscales.</p>
-    </section>
-
-    <section class="panel preview-panel">
-      <h2>Vista previa</h2>
-      <article class="paper" id="paper"></article>
-    </section>
-  </div>
-</main>
-
+<section class="intro"><div class="eyebrow">DOCUMENTO PERSONALIZADO</div><h1 id="pageTitle">Generar documento</h1><p id="pageSub">Elige un cliente, un servicio y completa únicamente los datos propios de este documento. Las plantillas se adaptan al caso.</p></section>
+<div class="layout">
+<section class="panel form-panel" id="formPanel"></section>
+<section class="panel preview-panel"><h2 style="margin:0 0 14px;font-size:15px">Vista previa del PDF</h2><article class="paper" id="paper"></article></section>
+</div></main>
 <script>
-const $=id=>document.getElementById(id);
-const fields=["docType","existingClient","number","date","issuer","issuerId","issuerEmail","issuerPhone","issuerAddress","client","clientId","clientEmail","clientPhone","country","clientCity","domain","website","hosting","clientAddress","concept","period","currency","amount","tax","deliverables","conditions","method","paymentRef","paymentData","clauses","validity","startDate","outcome"];
-const today=()=>new Date().toISOString().slice(0,10);
-const params=new URLSearchParams(location.search);
-const initialType=params.get("tipo");
-const typeMap={contract:"contrato",quote:"propuesta",account:"cobro",payment:"recibo",receipt:"recibo",client:"ficha",closing:"cierre",delivery:"acta",acta:"acta",profile:"perfil"};
-if(typeMap[initialType])$("docType").value=typeMap[initialType];
-$("date").value=today(); $("startDate").value=today();
-function nextNumber(type){
- const key="ams_doc_counter_"+type; const n=Number(localStorage.getItem(key)||0)+1; localStorage.setItem(key,String(n));
- return "AMS-"+type.slice(0,3).toUpperCase()+"-"+String(n).padStart(4,"0");
-}
-$("number").value=nextNumber($("docType").value);
-function val(id){return String($(id)?.value||"").trim()}
+const $=id=>document.getElementById(id), qs=(s,r=document)=>r.querySelector(s), qsa=(s,r=document)=>[...r.querySelectorAll(s)];
+const TYPE_NAMES={contrato:"Contrato de prestación de servicios",propuesta:"Cotización / propuesta comercial",cobro:"Cuenta de cobro",recibo:"Comprobante / recibo de pago",ficha:"Ficha de cliente",cierre:"Cierre mensual de AMS",acta:"Acta de entrega y aceptación",perfil:"Ficha de datos del prestador"};
+const TYPE_SUB={contrato:"Acuerdo de servicio con alcance, pagos, soporte y condiciones específicas.",propuesta:"Propuesta comercial con servicios, entregables, tiempos y valores.",cobro:"Cobro por un servicio o periodo, con datos de pago y valor discriminado.",recibo:"Constancia de un pago recibido con su referencia y concepto.",ficha:"Registro completo del cliente y del servicio asociado.",cierre:"Resumen del periodo construido a partir de Caja AMS.",acta:"Registro de entrega, pendientes, observaciones y aceptación.",perfil:"Ficha reutilizable de los datos de la persona que presta el servicio."};
+const SERVICES={
+landing:{label:"Landing / web sencilla",scope:"Sitio web informativo de una sola página, optimizado para móvil y con publicación en la infraestructura acordada.",deliver:["Diseño y estructura de la landing","Contenido suministrado por el cliente","Formulario o canal de contacto","Publicación y revisión final"],timeline:"5–10 días hábiles",support:"Mantenimiento básico y correcciones del alcance acordado"},
+corporate:{label:"Web empresarial",scope:"Sitio web corporativo de varias secciones para presentar la empresa, servicios, contacto y presencia digital.",deliver:["Arquitectura y páginas acordadas","Diseño responsive","Formularios y enlaces de contacto","SEO básico y publicación"],timeline:"7–15 días hábiles",support:"Mantenimiento y ajustes menores según el plan acordado"},
+store:{label:"E-commerce",scope:"Tienda virtual con catálogo, flujo de compra y configuración de los servicios de terceros que correspondan.",deliver:["Catálogo y estructura comercial","Carrito y flujo de pedido","Integración de pago acordada","Revisión responsive y publicación"],timeline:"15–30 días hábiles",support:"Soporte, mantenimiento y revisión de integraciones según el alcance"},
+app:{label:"Aplicación web",scope:"Aplicación web con usuarios, formularios, paneles o procesos definidos para el negocio.",deliver:["Flujos y pantallas acordadas","Autenticación cuando aplique","Panel o procesos definidos","Pruebas y publicación"],timeline:"2–6 semanas",support:"Mantenimiento y soporte según el plan contratado"},
+system:{label:"Sistema a medida",scope:"Sistema web con datos, procesos, CRUD, reportes y roles definidos de acuerdo con las necesidades del cliente.",deliver:["Módulos y procesos acordados","Base de datos y lógica del sistema","Reportes requeridos","Pruebas, respaldo y entrega"],timeline:"3–8 semanas",support:"Mantenimiento, soporte y respaldos según el acuerdo"},
+hosting:{label:"Hosting / mantenimiento",scope:"Servicio recurrente de operación, mantenimiento, actualizaciones, respaldos y gestión de infraestructura según lo contratado.",deliver:["Alojamiento / infraestructura acordada","Mantenimiento recurrente","Copias de seguridad","Soporte básico y revisión"],timeline:"Servicio recurrente",support:"Soporte y mantenimiento durante la vigencia"},
+custom:{label:"Servicio personalizado",scope:"Servicio digital definido específicamente para el cliente y documentado en este formulario.",deliver:["Alcance 1 definido por AMS y el cliente","Alcance 2 definido por AMS y el cliente","Revisión y entrega acordadas"],timeline:"Según planificación",support:"Según el alcance y la modalidad contratada"}
+};
+const params=new URLSearchParams(location.search), initialType=params.get("tipo")||"propuesta";
+const type=TYPE_NAMES[initialType]?initialType:"propuesta";
+let clients=[],items=[{description:"",qty:1,unit:"",price:0}];
+const defaultIssuer={name:"",id:"",email:"equipo@avilamorasoluciones.com",phone:"+57 305 254 7072",address:""};
+function read(k,d=[]){try{return JSON.parse(localStorage.getItem(k)||JSON.stringify(d))}catch(e){return d}}
+function save(k,v){localStorage.setItem(k,JSON.stringify(v))}
 function esc(v){return String(v??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]))}
-function money(n,c){return (c||"USD")+" "+Number(n||0).toLocaleString("en-US",{minimumFractionDigits:2,maximumFractionDigits:2})}
+function val(id){const e=$(id);return e?String(e.value||"").trim():""}
+function money(n,c){return (c||"USD")+" "+Number(n||0).toLocaleString("es-CO",{minimumFractionDigits:2,maximumFractionDigits:2})}
 function fmtDate(v){if(!v)return "-";const d=new Date(v+"T12:00:00");return d.toLocaleDateString("es-CO",{year:"numeric",month:"long",day:"numeric"})}
-function profileKey(){return "ams_profile_"+(val("issuer")||"default")}
-function saveIssuerProfile(){localStorage.setItem(profileKey(),JSON.stringify({issuerId:val("issuerId"),issuerEmail:val("issuerEmail"),issuerPhone:val("issuerPhone"),issuerAddress:val("issuerAddress")}));setStatus("Datos del prestador guardados en este dispositivo.")}
-function loadIssuerProfile(){const x=JSON.parse(localStorage.getItem(profileKey())||"null");if(!x)return;$("issuerId").value=x.issuerId||"";$("issuerEmail").value=x.issuerEmail||"equipo@avilamorasoluciones.com";$("issuerPhone").value=x.issuerPhone||"";$("issuerAddress").value=x.issuerAddress||""}
-function loadClients(){
- const list=(()=>{try{return JSON.parse(localStorage.getItem("ams_subscriptions_v1")||"[]")}catch(e){return[]}})();
- $("existingClient").innerHTML='<option value="">- Sin seleccionar -</option>'+list.map((c,i)=>'<option value="'+esc(String(i))+'">'+esc(c.company||"Cliente")+' · '+esc(c.email||"")+'</option>').join("");
- return list;
-}
-function useClient(){
- const list=loadClients();const c=list[Number(val("existingClient"))];if(!c)return;
- $("client").value=c.company||"";$("clientEmail").value=c.email||"";$("clientPhone").value=c.phone||"";$("country").value=c.country||"Colombia";$("clientAddress").value=c.address||"";$("clientCity").value=c.city||"";$("domain").value=c.domain||"";$("website").value=c.url||"";$("hosting").value=c.hosting||"";$("concept").value=$("concept").value||((c.webType||"Servicio web")+" para "+(c.company||"cliente"));$("currency").value=c.currency||$("currency").value;$("amount").value=c.price??$("amount").value;$("period").value=c.period==="annual"?"Anual":"Mensual";$("validity").value=c.due?"Renovación / próximo pago: "+c.due:"";
- render();
-}
-function setStatus(s){$("status").textContent=s;setTimeout(()=>{if($("status").textContent===s)$("status").textContent=""},3500)}
-function typeTitle(){
- return {contrato:"CONTRATO DE PRESTACIÓN DE SERVICIOS",propuesta:"COTIZACIÓN / PROPUESTA COMERCIAL",cobro:"CUENTA DE COBRO",recibo:"COMPROBANTE DE PAGO",ficha:"FICHA DE CLIENTE",cierre:"CIERRE MENSUAL DE AMS",acta:"ACTA DE ENTREGA Y ACEPTACIÓN",perfil:"FICHA DE DATOS DEL PRESTADOR"}[val("docType")]||"DOCUMENTO";
-}
-function typeSub(){
- return {contrato:"Prestación independiente de servicios",propuesta:"Propuesta comercial",cobro:"Documento de cobro comercial",recibo:"Constancia de pago recibido",ficha:"Registro interno del cliente",cierre:"Resumen administrativo y financiero",acta:"Registro de entregables y aceptación",perfil:"Datos para documentos AMS"}[val("docType")]||"";
-}
-function baseClauses(){
- const common=[
-  ["1. Objeto","El prestador realizará el servicio descrito en este documento conforme al alcance acordado con el cliente."],
-  ["2. Alcance","Los entregables se limitan a lo aquí indicado y a los acuerdos escritos posteriores entre las partes. Cambios o trabajos adicionales pueden requerir una nueva cotización."],
-  ["3. Pago","El cliente pagará el valor y en la forma indicados. Los costos de terceros, dominios, plataformas, licencias o servicios externos se entienden incluidos solo cuando así se indique expresamente."],
-  ["4. Soporte y tiempos","Los tiempos dependen de la información, accesos y aprobaciones entregados por el cliente. El soporte se presta dentro del alcance contratado."],
-  ["5. Propiedad y materiales","Cada parte conserva los derechos sobre sus materiales preexistentes. La entrega o licencia del trabajo desarrollado se entiende conforme a lo acordado en la propuesta o contrato."],
-  ["6. Confidencialidad","Las partes procurarán mantener reservada la información no pública que reciban con ocasión del servicio, salvo autorización o obligación legal."],
-  ["7. Terceros","Cuando el proyecto dependa de proveedores externos, sus condiciones, disponibilidad, costos y políticas también pueden afectar el servicio."],
-  ["8. Terminación","Cualquiera de las partes podrá solicitar la terminación conforme a lo pactado. Los trabajos realizados y costos ya causados deberán ser tratados según el estado del servicio."],
-  ["9. Aceptación","La firma o aceptación del documento acredita que las partes conocen su contenido y el alcance acordado."],
-  ["10. Datos personales","El tratamiento de datos personales se realizará conforme a la política de privacidad aplicable de Avila Mora Soluciones y a la normativa vigente."]
- ];
- if(val("clauses")) common.push(["Condición específica",val("clauses")]);
- return common;
-}
-function renderParties(){
- const issuer=[val("issuer"),val("issuerId"),val("issuerEmail"),val("issuerPhone"),val("issuerAddress")].filter(Boolean).join(" · ");
- const client=[val("client"),val("clientId"),val("clientEmail"),val("clientPhone"),val("clientCity"),val("country")].filter(Boolean).join(" · ");
- return '<div class="p-grid"><div><div class="p-label">Prestador / emisor</div><div class="p-value">'+esc(issuer||"Pendiente de completar")+'</div></div><div><div class="p-label">Cliente</div><div class="p-value">'+esc(client||"Pendiente de completar")+'</div></div></div>';
-}
-function renderFinancial(){
- const qty=1, amount=Number(val("amount")||0), tax=amount*Number(val("tax")||0)/100, total=amount+tax, cur=val("currency")||"USD";
- return '<div class="p-table-wrap"><table class="p-table"><thead><tr><th>Concepto</th><th>Valor</th></tr></thead><tbody><tr><td>'+esc(val("concept")||"Servicio digital")+'</td><td>'+esc(money(amount,cur))+'</td></tr></tbody></table></div><div class="totals"><div class="total-box"><span>Subtotal</span><strong>'+esc(money(amount,cur))+'</strong><span style="margin-top:7px">IVA</span><strong>'+esc(money(tax,cur))+'</strong><span style="margin-top:7px">Total</span><strong>'+esc(money(total,cur))+'</strong></div></div>';
-}
-function renderBase(){
- const title=typeTitle();
- let html='<div class="p-head"><div class="p-brand"><svg viewBox="0 0 64 64" aria-hidden="true"><defs><linearGradient id="pg" x1="0" x2="1"><stop stop-color="#8b5cf6"/><stop offset="1" stop-color="#c7a1ff"/></linearGradient></defs><rect x="3" y="3" width="58" height="58" rx="18" fill="#f5f3ff" stroke="#e9ddff"/><path d="M13 45 24 18h8l11 27h-7l-2.5-6H22.5L20 45h-7Zm12-12h5l-2.5-7L25 33Z" fill="url(#pg)"/><path d="M41 18h8v27h-8z" fill="#172033"/></svg><div><strong>Avila Mora Soluciones</strong><span>Soluciones digitales</span></div></div><div class="p-title"><h2>'+esc(title)+'</h2><p>'+esc(val("number")||"AMS-0001")+' · '+esc(fmtDate(val("date")))+'</p></div></div>';
- html+='<div class="p-section">'+renderParties()+'</div>';
- const type=val("docType");
- if(["contrato","propuesta","cobro","recibo"].includes(type)){
-   html+='<div class="p-section"><div class="p-label">'+(type==="contrato"?"Objeto del servicio":"Detalle")+'</div><div class="p-value">'+esc(val("concept")||"Servicio digital")+'</div></div>';
- }
- if(type==="contrato"||type==="acta") html+='<div class="p-section"><div class="p-label">Inicio / periodo</div><div class="p-value">'+esc(val("period")||"")+(val("startDate")?' · Inicio: '+esc(fmtDate(val("startDate"))):"")+(val("validity")?' · Vigencia / plazo: '+esc(val("validity")):"")+'</div></div>';
- if(type==="contrato"){
-   if(val("deliverables")) html+='<div class="p-section"><div class="p-label">Entregables / alcance concreto</div><div class="p-value">'+esc(val("deliverables"))+'</div></div>';
-   if(val("amount")||val("method")||val("conditions")) html+='<div class="p-section"><div class="p-label">Valor y condiciones económicas</div><div class="p-value">'+esc([val("amount")?money(val("amount"),val("currency")):"",val("method"),val("conditions")].filter(Boolean).join(" · ")||"Según acuerdo")+'</div></div>';
- }
- if(type==="propuesta"||type==="cobro"||type==="recibo") html+='<div class="p-section">'+renderFinancial()+'</div>';
- if(type==="propuesta") html+='<div class="p-section"><div class="p-label">Entregables</div><div class="p-value">'+esc(val("deliverables")||"Por definir con el cliente.")+'</div></div>';
- if(type==="recibo") html+='<div class="p-section"><div class="p-label">Pago recibido</div><div class="p-value">'+esc([val("method"),val("paymentRef"),val("period")].filter(Boolean).join(" · ")||"Método / referencia / periodo")+'</div></div>';
- if(type==="cobro") html+='<div class="p-section"><div class="p-label">Datos de pago</div><div class="p-value">'+esc([val("method"),val("paymentData")].filter(Boolean).join(" · ")||"Pendiente de indicar forma de pago")+'</div></div>';
- if(type==="ficha") html+=renderFicha();
- if(type==="perfil") html+=renderPerfil();
- if(type==="cierre") html+=renderCierre();
- if(type==="acta") html+=renderActa();
- if(type==="contrato"){html+='<div class="p-section"><div class="p-label">Condiciones contractuales</div>'+baseClauses().map(([a,b])=>'<div class="clause"><b>'+esc(a)+'.</b> '+esc(b)+'</div>').join("")+'</div>'}
- if(type==="propuesta"){html+='<div class="p-section"><div class="p-label">Condiciones</div><div class="p-value">'+esc(val("conditions")||"Vigencia: "+(val("validity")||"según propuesta")+".")+'</div></div>'}
- if(type==="acta"){html+='<div class="p-section"><div class="p-label">Observaciones</div><div class="p-value">'+esc(val("outcome")||val("conditions")||"Sin observaciones.")+'</div></div>'}
- if(type==="cierre"){html+='<div class="p-section"><div class="p-label">Observaciones finales</div><div class="p-value">'+esc(val("outcome")||val("conditions")||"Sin observaciones.")+'</div></div>'}
- if(["contrato","propuesta","acta"].includes(type)) html+=signatures();
- html+='<div class="p-footer">Documento generado por Avila Mora Soluciones. Este documento es una plantilla administrativa/comercial elaborada con la información suministrada. Ajusta los datos y condiciones antes de firmar o entregar. La cuenta de cobro no sustituye una factura electrónica cuando exista obligación legal de facturar.</div>';
- return html;
-}
-function renderFicha(){
- return '<div class="p-section"><div class="p-label">Información del cliente</div><table class="p-table"><tbody><tr><td>Empresa / nombre</td><td>'+esc(val("client")||"-")+'</td></tr><tr><td>Identificación</td><td>'+esc(val("clientId")||"-")+'</td></tr><tr><td>Correo</td><td>'+esc(val("clientEmail")||"-")+'</td></tr><tr><td>Teléfono</td><td>'+esc(val("clientPhone")||"-")+'</td></tr><tr><td>País / ciudad</td><td>'+esc([val("country"),val("clientCity")].filter(Boolean).join(" · ")||"-")+'</td></tr><tr><td>Dirección</td><td>'+esc(val("clientAddress")||"-")+'</td></tr><tr><td>Dominio</td><td>'+esc(val("domain")||"-")+'</td></tr><tr><td>URL</td><td>'+esc(val("website")||"-")+'</td></tr><tr><td>Alojamiento / infraestructura</td><td>'+esc(val("hosting")||"-")+'</td></tr></tbody></table></div><div class="p-section"><div class="p-label">Servicio asociado</div><div class="p-value">'+esc(val("concept")||"-")+'<br>'+esc(val("deliverables")||"")+'</div></div><div class="p-section"><div class="p-label">Pago / renovación</div><div class="p-value">'+esc([val("currency"),val("amount")?money(val("amount"),val("currency")):"",val("period"),val("validity"),val("method")].filter(Boolean).join(" · ")||"-")+'</div></div><div class="p-section"><div class="p-label">Condiciones / notas</div><div class="p-value">'+esc(val("conditions")||val("outcome")||"-")+'</div></div>';
-}
-function renderPerfil(){
- return '<div class="p-section"><div class="p-label">Datos registrados</div><table class="p-table"><tbody><tr><td>Nombre</td><td>'+esc(val("issuer")||"-")+'</td></tr><tr><td>Identificación</td><td>'+esc(val("issuerId")||"-")+'</td></tr><tr><td>Correo</td><td>'+esc(val("issuerEmail")||"-")+'</td></tr><tr><td>Teléfono</td><td>'+esc(val("issuerPhone")||"-")+'</td></tr><tr><td>Dirección / ciudad</td><td>'+esc(val("issuerAddress")||"-")+'</td></tr></tbody></table></div><div class="p-section"><div class="p-label">Uso</div><div class="p-value">Perfil interno para completar documentos de Avila Mora Soluciones. Cada persona puede guardar sus propios datos en el dispositivo.</div></div>';
-}
-function readCash(){
- try{return JSON.parse(localStorage.getItem("ams_cash_v1")||"[]")}catch(e){return[]}
-}
-function renderCierre(){
- const ym=(val("period")||"").match(/\d{4}[-/]\d{2}/)?.[0]||val("date").slice(0,7);
- const arr=readCash().filter(x=>String(x.date||"").startsWith(ym));
- const cur=val("currency")||"USD"; const sum=t=>arr.filter(x=>x.currency===cur&&x.type===t).reduce((a,x)=>a+Number(x.amount||0),0);
- const inc=sum("Ingreso"),exp=sum("Gasto"),cap=sum("Aporte"),ret=sum("Retiro"),net=inc+cap-exp-ret;
- const rows=arr.filter(x=>x.currency===cur).sort((a,b)=>String(a.date).localeCompare(String(b.date))).map(x=>'<tr><td>'+esc(x.date||"")+'</td><td>'+esc(x.type||"")+'</td><td>'+esc(x.description||x.category||"")+'</td><td>'+esc(money(x.amount,cur))+'</td></tr>').join("");
- return '<div class="p-section"><div class="p-label">Resumen del periodo</div><table class="p-table"><tbody><tr><td>Ingresos</td><td>'+esc(money(inc,cur))+'</td></tr><tr><td>Gastos</td><td>'+esc(money(exp,cur))+'</td></tr><tr><td>Aportes</td><td>'+esc(money(cap,cur))+'</td></tr><tr><td>Retiros</td><td>'+esc(money(ret,cur))+'</td></tr><tr><td><strong>Saldo neto</strong></td><td><strong>'+esc(money(net,cur))+'</strong></td></tr></tbody></table></div><div class="p-section"><div class="p-label">Movimientos del mes · '+esc(ym)+'</div><table class="p-table"><thead><tr><th>Fecha</th><th>Tipo</th><th>Concepto</th><th>Valor</th></tr></thead><tbody>'+(rows||'<tr><td colspan="4">No hay movimientos registrados para el periodo seleccionado.</td></tr>')+'</tbody></table></div>';
-}
-function renderActa(){
- return '<div class="p-section"><div class="p-label">Entregables</div><div class="p-value">'+esc(val("deliverables")||"No especificados.")+'</div></div><div class="p-section"><div class="p-label">Resultado</div><div class="p-value">'+esc(val("outcome")||"El cliente recibe los entregables descritos.")+'</div></div><div class="p-section"><div class="p-label">Condiciones</div><div class="p-value">'+esc(val("conditions")||"Sin observaciones adicionales.")+'</div></div>';
-}
-function signatures(){
- return '<div class="signatures"><div class="sign"><strong>'+esc(val("issuer")||"Prestador")+'</strong>'+esc(val("issuerId")||"Documento")+'<br>Firma</div><div class="sign"><strong>'+esc(val("client")||"Cliente")+'</strong>'+esc(val("clientId")||"Documento")+'<br>Firma</div></div>';
-}
-function render(){
- $("pageTitle").textContent=typeTitle();
- $("pageSub").textContent=typeSub()+". Completa, revisa y exporta.";
- $("paper").innerHTML=renderBase();
-}
-function saveAll(){
- const data={};fields.forEach(id=>data[id]=val(id));localStorage.setItem("ams_doc_draft_v2",JSON.stringify(data));
- if(val("issuer"))saveIssuerProfile();setStatus("Datos guardados en este dispositivo.");
-}
-function loadDraft(){
- try{const d=JSON.parse(localStorage.getItem("ams_doc_draft_v2")||"null");if(!d)return;fields.forEach(id=>{if(d[id]!=null)$(id).value=d[id]});}catch(e){}
-}
-function clearAll(){
- if(!confirm("¿Limpiar el documento actual?"))return;
- fields.forEach(id=>{if(id==="docType")$(id).value="contrato";else if(id==="currency")$(id).value="USD";else $(id).value=""});
- $("date").value=today();$("startDate").value=today();$("amount").value=0;$("tax").value=0;$("country").value="Colombia";$("number").value=nextNumber($("docType").value);loadClients();render();setStatus("Formulario limpio.");
-}
-function loadCurrentIssuer(){
- if(!val("issuer"))return;
- loadIssuerProfile();
- if(!val("issuerEmail"))$("issuerEmail").value="equipo@avilamorasoluciones.com";
-}
-async function toPdf(){
- const {jsPDF}=window.jspdf;
- const paper=$("paper");
- const clone=paper.cloneNode(true);
- clone.style.width="760px";
- clone.style.maxWidth="760px";
- clone.style.position="fixed";
- clone.style.left="-100000px";
- clone.style.top="0";
- clone.style.background="#fff";
- clone.style.boxShadow="none";
- clone.style.borderRadius="0";
- clone.style.minHeight="0";
- clone.style.padding="38px 38px 46px";
- clone.style.color="#172033";
- document.body.appendChild(clone);
- const pdf=new jsPDF({unit:"mm",format:"a4",orientation:"portrait"});
- await new Promise((resolve,reject)=>{
-   pdf.html(clone,{
-     x:10,y:10,width:190,
-     windowWidth:760,
-     autoPaging:"text",
-     margin:[10,10,14,10],
-     html2canvas:{scale:1.45,useCORS:true,backgroundColor:"#ffffff",logging:false},
-     callback:(doc)=>resolve(doc)
-   });
- });
- clone.remove();
- return pdf;
-}
-async function exportPdf(){
- try{const pdf=await toPdf();const fn=(val("number")||"AMS-documento")+".pdf";pdf.save(fn);setStatus("PDF generado: "+fn)}catch(e){console.error(e);setStatus("No se pudo generar el PDF. Revisa los datos e inténtalo de nuevo.");}
-}
-async function sharePdf(){
- try{const pdf=await toPdf();const blob=pdf.output("blob");const file=new File([blob],(val("number")||"AMS-documento")+".pdf",{type:"application/pdf"});if(navigator.canShare&&navigator.canShare({files:[file]})){await navigator.share({title:typeTitle(),files:[file]});setStatus("Documento listo para compartir.")}else{pdf.save(file.name);setStatus("El navegador no permite compartir directamente; se descargó el PDF.")}}catch(e){setStatus("No se pudo compartir el PDF.")}
-}
-fields.forEach(id=>$(id).addEventListener("input",render));
-fields.forEach(id=>$(id).addEventListener("change",()=>{if(id==="issuer")loadCurrentIssuer();if(id==="existingClient")useClient();if(id==="docType" && !val("number"))$("number").value=nextNumber(val("docType"));render();}));
-$("saveBtn").onclick=saveAll;$("clearBtn").onclick=clearAll;$("pdfBtn").onclick=exportPdf;$("shareBtn").onclick=sharePdf;$("printBtn").onclick=()=>window.print();
-loadDraft();loadClients();if(initialType&&typeMap[initialType])$("docType").value=typeMap[initialType];loadCurrentIssuer();render();
-</script>
-<script src="../contacto.js?v=20260927-2"></script>
-</body>
-</html>
+function today(){return new Date().toISOString().slice(0,10)}
+function numberFor(t){const k="ams_doc_counter_v3_"+t,n=Number(localStorage.getItem(k)||0)+1;localStorage.setItem(k,String(n));return "AMS-"+t.slice(0,3).toUpperCase()+"-"+String(n).padStart(4,"0")}
+function profileKey(){return "ams_doc_profile_"+encodeURIComponent(val("issuerName")||"default")}
+function loadProfiles(){return read("ams_doc_profiles_v3",[])}
+function saveIssuer(){const x={name:val("issuerName"),id:val("issuerId"),email:val("issuerEmail"),phone:val("issuerPhone"),address:val("issuerAddress")};if(!x.name){setStatus("Selecciona o escribe el nombre del prestador antes de guardar.");return}const all=loadProfiles().filter(p=>p.name!==x.name);all.push(x);save("ams_doc_profiles_v3",all);setStatus("Datos del prestador guardados para futuros documentos.")}
+function loadIssuer(){const name=val("issuerName");const x=loadProfiles().find(p=>p.name===name);const d=x||Object.assign({},defaultIssuer,{name:name});$("issuerId").value=d.id||"";$("issuerEmail").value=d.email||defaultIssuer.email;$("issuerPhone").value=d.phone||defaultIssuer.phone;$("issuerAddress").value=d.address||""}
+function mergeClients(){const a=read("ams_subscriptions_v1",[]).map(c=>({source:"Suscripción",company:c.company||"",contact:c.contact||"",email:c.email||"",phone:c.phone||"",country:c.country||"",city:c.city||"",address:c.address||"",domain:c.domain||"",url:c.url||"",hosting:c.hosting||"",service:c.webType||"",price:c.price||0,currency:c.currency||"USD",period:c.period||"monthly",due:c.due||"",project:"",notes:""}));const b=read("ams_ops_projects_v1",[]).map(c=>({source:"Operación",company:c.client||"",contact:"",email:c.email||"",phone:c.phone||"",country:"",city:"",address:"",domain:c.domain||"",url:c.url||"",hosting:"",service:c.service||"",price:c.price||0,currency:c.currency||"USD",period:"",due:"",project:c.project||"",notes:c.notes||""}));const map=new Map;[...a,...b].forEach(c=>{const k=(c.email||c.company).toLowerCase().trim();if(!k)return;if(!map.has(k))map.set(k,c);else{const x=map.get(k);Object.keys(c).forEach(q=>{if(!x[q]&&c[q])x[q]=c[q]})}});clients=[...map.values()].sort((x,y)=>x.company.localeCompare(y.company,"es"));return clients}
+function fillClient(c){if(!c)return;$("clientName").value=c.company||"";$("clientId").value=$("clientId").value||"";$("clientEmail").value=c.email||"";$("clientPhone").value=c.phone||"";$("clientCountry").value=c.country||"Colombia";$("clientCity").value=c.city||"";$("clientAddress").value=c.address||"";$("domain").value=c.domain||"";$("website").value=c.url||"";$("hosting").value=c.hosting||"";$("project").value=c.project||"";if(c.service&&$("serviceKey")){const opt=[...$("serviceKey").options].find(o=>o.textContent===c.service);if(opt)$("serviceKey").value=opt.value}if($("currency"))$("currency").value=c.currency||$("currency").value;if(c.price&&$("recurringFee"))$("recurringFee").value=c.price;applyService(false)}
+function setStatus(s){$("status").textContent=s;setTimeout(()=>{if($("status").textContent===s)$("status").textContent=""},3800)}
+function selectedService(){return SERVICES[val("serviceKey")]||SERVICES.custom}
+function applyService(force=true){const s=selectedService();if(force||!val("scope"))$("scope").value=s.scope;if(force||!val("deliverables"))$("deliverables").value=s.deliver.join("\n");if(force||!val("timeline"))$("timeline").value=s.timeline;if($("support")&&(force||!val("support")))$("support").value=s.support;if($("serviceName")&&(force||!val("serviceName")))$("serviceName").value=s.label;render()}
+function lineItemsHtml(){return '<div id="items" class="items">'+items.map((x,i)=>'<div class="item-row"><input class="input line-desc" data-i="'+i+'" value="'+esc(x.description)+'" placeholder="Concepto / entregable"><input class="input line-qty" data-i="'+i+'" type="number" min="1" step="1" value="'+(x.qty||1)+'"><input class="input line-price" data-i="'+i+'" type="number" min="0" step="0.01" value="'+(x.price||0)+'" placeholder="Valor"><button class="xbtn" data-rm="'+i+'" title="Quitar">×</button></div>').join("")+'</div><button class="chip add-row" id="addItem" type="button">＋ Agregar concepto</button>'}
+function commonForm(extra){const prof=loadProfiles();return '<div class="section" style="border-top:0;padding-top:0;margin-top:0"><h3>1. Documento</h3><div class="grid"><div class="field"><label>Tipo</label><select id="docType">'+Object.entries(TYPE_NAMES).map(([k,v])=>'<option value="'+k+'" '+(k===type?"selected":"")+'>'+v+'</option>').join("")+'</select></div><div class="field"><label>N.º documento</label><input id="number" value="'+esc(numberFor(type))+'"></div><div class="field"><label>Fecha</label><input id="date" type="date" value="'+today()+'"></div><div class="field"><label>Prestador</label><select id="issuerName"><option value="">Seleccionar</option><option>Diego Andrés Avila Ríos</option><option>María José</option>'+prof.filter(p=>p.name&&!["Diego Andrés Avila Ríos","María José"].includes(p.name)).map(p=>'<option>'+esc(p.name)+'</option>').join("")+'</select></div><div class="field"><label>Identificación del prestador</label><input id="issuerId"></div><div class="field"><label>Correo del prestador</label><input id="issuerEmail" type="email" value="'+defaultIssuer.email+'"></div><div class="field"><label>Teléfono del prestador</label><input id="issuerPhone" value="'+defaultIssuer.phone+'"></div><div class="field full"><label>Dirección / ciudad del prestador</label><input id="issuerAddress"></div></div></div><div class="section"><h3>2. Cliente y proyecto</h3><div class="grid"><div class="field full"><label>Cliente existente</label><select id="clientRef"><option value="">Seleccionar para autocompletar</option>'+mergeClients().map((c,i)=>'<option value="'+i+'">'+esc(c.company||"Cliente")+(c.email?" · "+esc(c.email):"")+'</option>').join("")+'</select></div><div class="field"><label>Nombre / empresa</label><input id="clientName"></div><div class="field"><label>Identificación</label><input id="clientId" placeholder="NIT / documento"></div><div class="field"><label>Correo</label><input id="clientEmail" type="email"></div><div class="field"><label>Teléfono / WhatsApp</label><input id="clientPhone"></div><div class="field"><label>País</label><input id="clientCountry" value="Colombia"></div><div class="field"><label>Ciudad</label><input id="clientCity"></div><div class="field"><label>Dirección</label><input id="clientAddress"></div><div class="field"><label>Dominio</label><input id="domain"></div><div class="field"><label>URL</label><input id="website"></div><div class="field"><label>Infraestructura / hosting</label><input id="hosting"></div><div class="field"><label>Proyecto</label><input id="project"></div></div></div>'+extra+'<div class="actions"><button class="btn primary" id="pdfBtn" type="button">Generar PDF</button><button class="btn green" id="shareBtn" type="button">Compartir PDF</button><button class="btn" id="saveBtn" type="button">Guardar borrador</button><button class="btn" id="printBtn" type="button">Imprimir</button><button class="btn warn" id="clearBtn" type="button">Nuevo</button></div><div class="status" id="status"></div><div class="note"><strong>Plantilla:</strong> este documento combina datos reutilizables del prestador y del cliente con campos específicos del tipo elegido. Antes de firmar o entregar, revisa valores, impuestos, alcance y condiciones.</div>'}
+function specialized(){const service='<div class="section"><h3>3. Servicio estandarizado</h3><div class="grid"><div class="field full"><label>Plantilla del servicio</label><div class="service-box"><select id="serviceKey">'+Object.entries(SERVICES).map(([k,v])=>'<option value="'+k+'">'+v.label+'</option>').join("")+'</select><button class="btn" id="applyService" type="button">Aplicar plantilla</button></div></div><div class="field"><label>Nombre del servicio</label><input id="serviceName"></div><div class="field"><label>Modalidad</label><select id="mode"><option>Desarrollo inicial</option><option>Mantenimiento / recurrente</option><option>Servicio único</option><option>Mixto</option></select></div><div class="field full"><label>Alcance / descripción</label><textarea id="scope"></textarea></div><div class="field full"><label>Entregables</label><textarea id="deliverables"></textarea></div><div class="field"><label>Tiempo estimado</label><input id="timeline"></div><div class="field"><label>Soporte / mantenimiento</label><input id="support"></div></div><div class="chips">'+Object.entries(SERVICES).slice(0,6).map(([k,v])=>'<button class="chip" type="button" data-service="'+k+'">'+v.label+'</button>').join("")+'</div></div>';
+if(type==="contrato")return service+'<div class="section"><h3>4. Condiciones del contrato</h3><div class="grid"><div class="field"><label>Fecha de inicio</label><input id="startDate" type="date" value="'+today()+'"></div><div class="field"><label>Plazo / vigencia</label><input id="term" placeholder="30 días, 12 meses, hasta entrega..."></div><div class="field"><label>Valor inicial</label><input id="initialFee" type="number" min="0" step="0.01" value="0"></div><div class="field"><label>Valor recurrente</label><input id="recurringFee" type="number" min="0" step="0.01" value="0"></div><div class="field"><label>Moneda</label><select id="currency"><option>USD</option><option>COP</option><option>EUR</option></select></div><div class="field"><label>Forma / calendario de pago</label><input id="paymentSchedule" placeholder="50% al iniciar / 50% al entregar..."></div><div class="field full"><label>Dominio, hosting y terceros</label><textarea id="thirdParty" placeholder="Quién compra, administra y paga dominios, hosting, licencias, APIs u otros servicios."></textarea></div><div class="field full"><label>Cambios y trabajos fuera de alcance</label><textarea id="changes" placeholder="Cómo se cotizan solicitudes adicionales o cambios no contemplados."></textarea></div><div class="field full"><label>Propiedad / licencia / entrega</label><textarea id="ownership" placeholder="Qué se entrega, cuándo y bajo qué condiciones."></textarea></div><div class="field full"><label>Confidencialidad</label><textarea id="confidentiality" placeholder="Condiciones específicas de reserva de información."></textarea></div><div class="field"><label>Terminación / aviso previo</label><input id="termination" placeholder="Según lo acordado"></div><div class="field"><label>Ciudad / jurisdicción acordada</label><input id="jurisdiction" placeholder="Completar según corresponda"></div><div class="field full"><label>Cláusulas adicionales</label><textarea id="extraClauses" placeholder="Solo lo específico de este cliente y este servicio."></textarea></div></div></div>';
+if(type==="propuesta")return service+'<div class="section"><h3>4. Propuesta comercial</h3><div class="grid"><div class="field"><label>Vigencia de la propuesta (días)</label><input id="validity" type="number" min="1" value="15"></div><div class="field"><label>Moneda</label><select id="currency"><option>USD</option><option>COP</option><option>EUR</option></select></div><div class="field full"><label>Conceptos y entregables cotizados</label>'+lineItemsHtml()+'</div><div class="field"><label>Descuento (%)</label><input id="discount" type="number" min="0" step="0.01" value="0"></div><div class="field"><label>IVA / impuesto (%)</label><input id="tax" type="number" min="0" step="0.01" value="0"></div><div class="field"><label>Forma de pago</label><input id="paymentSchedule" placeholder="Ej. 50% inicio / 50% entrega"></div><div class="field"><label>Tiempo de entrega</label><input id="deliveryTime"></div><div class="field full"><label>Supuestos / exclusiones</label><textarea id="assumptions"></textarea></div><div class="field full"><label>Notas comerciales específicas</label><textarea id="notes"></textarea></div></div></div>';
+if(type==="cobro")return service+'<div class="section"><h3>4. Cuenta de cobro</h3><div class="grid"><div class="field"><label>Periodo cobrado</label><input id="billingPeriod" placeholder="Octubre 2026"></div><div class="field"><label>Fecha de vencimiento</label><input id="dueDate" type="date"></div><div class="field"><label>Moneda</label><select id="currency"><option>USD</option><option>COP</option><option>EUR</option></select></div><div class="field"><label>Valor antes de impuesto</label><input id="amount" type="number" min="0" step="0.01" value="0"></div><div class="field"><label>IVA / impuesto (%)</label><input id="tax" type="number" min="0" step="0.01" value="0"></div><div class="field"><label>Forma de pago</label><input id="paymentMethod" placeholder="Transferencia / Wompi / otro"></div><div class="field full"><label>Datos de pago que deben aparecer</label><textarea id="paymentData"></textarea></div><div class="field full"><label>Concepto</label><textarea id="concept"></textarea></div><div class="field full"><label>Notas</label><textarea id="notes"></textarea></div></div><div class="mini">Este documento no sustituye una factura electrónica cuando exista obligación legal de facturar.</div></div>';
+if(type==="recibo")return '<div class="section" style="border-top:0;padding-top:0;margin-top:0"><h3>3. Pago recibido</h3><div class="grid"><div class="field"><label>Fecha del pago</label><input id="paymentDate" type="date" value="'+today()+'"></div><div class="field"><label>Moneda</label><select id="currency"><option>USD</option><option>COP</option><option>EUR</option></select></div><div class="field"><label>Valor recibido</label><input id="amount" type="number" min="0" step="0.01" value="0"></div><div class="field"><label>Método</label><input id="paymentMethod"></div><div class="field"><label>Referencia</label><input id="paymentRef"></div><div class="field"><label>Periodo</label><input id="billingPeriod"></div><div class="field full"><label>Concepto pagado</label><textarea id="concept"></textarea></div><div class="field full"><label>Observaciones</label><textarea id="notes"></textarea></div></div></div>';
+if(type==="ficha")return service+'<div class="section"><h3>4. Ficha interna</h3><div class="grid"><div class="field"><label>Identificación del responsable</label><input id="clientContact"></div><div class="field"><label>Canal principal</label><input id="clientChannel" placeholder="WhatsApp / correo / llamada"></div><div class="field"><label>Fecha de alta</label><input id="clientStart" type="date"></div><div class="field"><label>Próxima renovación</label><input id="renewal" type="date"></div><div class="field full"><label>Notas operativas</label><textarea id="notes"></textarea></div></div></div>';
+if(type==="cierre")return '<div class="section" style="border-top:0;padding-top:0;margin-top:0"><h3>3. Cierre de Caja AMS</h3><div class="grid"><div class="field"><label>Mes</label><input id="closingMonth" type="month"></div><div class="field"><label>Moneda</label><select id="currency"><option>USD</option><option>COP</option><option>EUR</option></select></div><div class="field full"><label>Comentario del cierre</label><textarea id="notes" placeholder="Qué cambió, pendientes y decisiones para el siguiente periodo."></textarea></div></div><div class="note">Los movimientos se leen automáticamente desde Finanzas. El cierre es control de gestión y no reemplaza la contabilidad fiscal.</div></div>';
+if(type==="acta")return service+'<div class="section"><h3>4. Entrega y aceptación</h3><div class="grid"><div class="field"><label>Fecha de entrega</label><input id="deliveryDate" type="date" value="'+today()+'"></div><div class="field"><label>Resultado</label><select id="deliveryStatus"><option>Entregado y aceptado</option><option>Entregado con observaciones</option><option>Pendiente de correcciones</option></select></div><div class="field full"><label>Entregables efectivamente entregados</label><textarea id="delivered"></textarea></div><div class="field full"><label>Pendientes / observaciones</label><textarea id="pending"></textarea></div><div class="field full"><label>Correcciones o garantía acordada</label><textarea id="warranty"></textarea></div><div class="field full"><label>Texto de aceptación</label><textarea id="acceptance">El cliente manifiesta que recibió los entregables descritos y deja constancia de las observaciones indicadas en esta acta.</textarea></div></div></div>';
+return '<div class="section" style="border-top:0;padding-top:0;margin-top:0"><h3>3. Datos del prestador</h3><div class="grid"><div class="field full"><label>Persona</label><select id="profilePerson"><option value="">Seleccionar persona</option><option>Diego Andrés Avila Ríos</option><option>María José</option></select></div><div class="field"><label>Identificación</label><input id="profileId"></div><div class="field"><label>Correo</label><input id="profileEmail" type="email" value="'+defaultIssuer.email+'"></div><div class="field"><label>Teléfono</label><input id="profilePhone" value="'+defaultIssuer.phone+'"></div><div class="field full"><label>Dirección / ciudad</label><input id="profileAddress"></div><div class="field full"><label>Observaciones</label><textarea id="profileNotes"></textarea></div></div></div>'}
+function documentTitle(){return TYPE_NAMES[val("docType")]}
+function baseHead(){const issuer=[val("issuerName"),val("issuerId"),val("issuerEmail"),val("issuerPhone"),val("issuerAddress")].filter(Boolean).join(" · ");const client=[val("clientName"),val("clientId"),val("clientEmail"),val("clientPhone"),val("clientCity"),val("clientCountry")].filter(Boolean).join(" · ");return '<div class="p-head"><div class="p-brand"><div class="mark">AM</div><div><strong>Avila Mora Soluciones</strong><span>Soluciones digitales</span></div></div><div class="p-title"><h2>'+esc(documentTitle())+'</h2><p>'+esc(val("number"))+' · '+esc(fmtDate(val("date")))+'</p></div></div><div class="p-section"><div class="p-grid"><div><div class="p-label">Prestador / emisor</div><div class="p-value">'+esc(issuer||"Pendiente de completar")+'</div></div><div><div class="p-label">Cliente</div><div class="p-value">'+esc(client||"Pendiente de completar")+'</div></div></div></div>'}
+function lines(){return items.filter(x=>x.description||x.price).map(x=>({description:x.description||"Concepto",qty:Number(x.qty||1),price:Number(x.price||0)}))}
+function totals(){const arr=lines(),sub=arr.reduce((a,x)=>a+x.qty*x.price,0),disc=sub*(Number(val("discount")||0)/100),base=sub-disc,tax=base*(Number(val("tax")||0)/100),total=base+tax;return {sub,disc,base,tax,total}}
+function financialBlock(t){const cur=val("currency")||"USD";if(t==="propuesta"){const z=totals();return '<div class="p-section"><div class="p-label">Cotización</div><table class="p-table"><thead><tr><th>Concepto</th><th>Cant.</th><th>Valor</th></tr></thead><tbody>'+lines().map(x=>'<tr><td>'+esc(x.description)+'</td><td>'+x.qty+'</td><td>'+esc(money(x.qty*x.price,cur))+'</td></tr>').join("")+'</tbody></table><div class="total-wrap"><div class="total-box"><span>Subtotal</span><strong>'+esc(money(z.sub,cur))+'</strong><span>Descuento</span><strong>'+esc(money(z.disc,cur))+'</strong><span>Impuesto</span><strong>'+esc(money(z.tax,cur))+'</strong><span>Total</span><strong>'+esc(money(z.total,cur))+'</strong></div></div></div>'}
+if(t==="cobro"||t==="recibo"){const a=Number(val("amount")||0),tx=a*Number(val("tax")||0)/100;return '<div class="p-section"><div class="p-label">'+(t==="recibo"?"Pago recibido":"Valor cobrado")+'</div><div class="total-wrap"><div class="total-box"><span>Base</span><strong>'+esc(money(a,cur))+'</strong><span>Impuesto</span><strong>'+esc(money(tx,cur))+'</strong><span>Total</span><strong>'+esc(money(a+tx,cur))+'</strong></div></div></div>'}
+return '' }
+function renderDocument(){const t=val("docType"),html=baseHead();let h=html;
+if(t==="contrato"){h+='<div class="p-section"><div class="p-label">Objeto y alcance</div><div class="p-value"><b>'+esc(val("serviceName")||"Servicio")+'</b><br>'+esc(val("scope")||"-")+'<br><br><b>Entregables</b><br>'+esc(val("deliverables")||"-")+'</div></div><div class="p-section"><div class="p-label">Plazo, soporte y pagos</div><div class="p-value">Inicio: '+esc(fmtDate(val("startDate")))+' · Plazo: '+esc(val("term")||"-")+' · Tiempo estimado: '+esc(val("timeline")||"-")+'<br>Valor inicial: '+esc(money(val("initialFee"),val("currency")))+' · Recurrente: '+esc(money(val("recurringFee"),val("currency")))+'<br>Forma de pago: '+esc(val("paymentSchedule")||"-")+'<br>Soporte: '+esc(val("support")||"-")+'</div></div><div class="p-section"><div class="p-label">Condiciones específicas</div>'+[["Dominio, hosting y terceros",val("thirdParty")],["Cambios fuera de alcance",val("changes")],["Propiedad / licencia / entrega",val("ownership")],["Confidencialidad",val("confidentiality")],["Terminación / aviso previo",val("termination")],["Ciudad / jurisdicción",val("jurisdiction")],["Cláusulas adicionales",val("extraClauses")]].filter(x=>x[1]).map(x=>'<div class="clause"><b>'+esc(x[0])+':</b> '+esc(x[1])+'</div>').join("")+'</div><div class="signatures"><div class="sign"><strong>'+esc(val("issuerName")||"Prestador")+'</strong>'+esc(val("issuerId")||"")+'<br>Firma</div><div class="sign"><strong>'+esc(val("clientName")||"Cliente")+'</strong>'+esc(val("clientId")||"")+'<br>Firma</div></div>'}
+if(t==="propuesta"){const s=selectedService();h+='<div class="p-section"><div class="p-label">Servicio propuesto</div><div class="p-value"><b>'+esc(val("serviceName")||s.label)+'</b><br>'+esc(val("scope")||s.scope)+'</div></div><div class="p-section"><div class="p-label">Entregables y tiempos</div><div class="p-value">'+esc(val("deliverables")||"-")+'<br><br>Tiempo estimado: '+esc(val("deliveryTime")||val("timeline")||s.timeline)+'</div></div>'+financialBlock(t)+'<div class="p-section"><div class="p-label">Condiciones comerciales</div><div class="p-value">Vigencia: '+esc(val("validity")||"15")+' días · Forma de pago: '+esc(val("paymentSchedule")||"-")+'<br>'+esc(val("assumptions")||"")+'<br>'+esc(val("notes")||"")+'</div></div>'}
+if(t==="cobro"){h+='<div class="p-section"><div class="p-label">Concepto y periodo</div><div class="p-value">'+esc(val("concept")||val("serviceName")||"Servicio")+" · "+esc(val("billingPeriod")||"-")+'</div></div>'+financialBlock(t)+'<div class="p-section"><div class="p-label">Datos de pago</div><div class="p-value">'+esc([val("paymentMethod"),val("paymentData"),val("dueDate")?"Vencimiento: "+fmtDate(val("dueDate")):""].filter(Boolean).join(" · ")||"-")+'</div></div><div class="p-section"><div class="p-label">Notas</div><div class="p-value">'+esc(val("notes")||"")+'</div></div>'}
+if(t==="recibo"){h+='<div class="p-section"><div class="p-label">Pago registrado</div><div class="p-value">Fecha: '+esc(fmtDate(val("paymentDate")))+' · Método: '+esc(val("paymentMethod")||"-")+' · Referencia: '+esc(val("paymentRef")||"-")+'<br>Periodo: '+esc(val("billingPeriod")||"-")+'<br>'+esc(val("concept")||"-")+'</div></div>'+financialBlock(t)+'<div class="p-section"><div class="p-label">Observaciones</div><div class="p-value">'+esc(val("notes")||"")+'</div></div>'}
+if(t==="ficha"){h+='<div class="p-section"><div class="p-label">Servicio</div><div class="p-value"><b>'+esc(val("serviceName")||selectedService().label)+'</b><br>'+esc(val("scope")||"")+'<br><br>'+esc(val("deliverables")||"")+'</div></div><div class="p-section"><div class="p-label">Datos operativos</div><div class="p-value">Responsable: '+esc(val("clientContact")||"-")+' · Canal: '+esc(val("clientChannel")||"-")+' · Alta: '+esc(fmtDate(val("clientStart")))+' · Renovación: '+esc(fmtDate(val("renewal")))+'</div></div><div class="p-section"><div class="p-label">Notas</div><div class="p-value">'+esc(val("notes")||"")+'</div></div>'}
+if(t==="cierre"){const arr=read("ams_cash_v1",[]),ym=val("closingMonth")||today().slice(0,7),cur=val("currency")||"USD",m=arr.filter(x=>String(x.date||"").startsWith(ym)&&x.currency===cur),sum=k=>m.filter(x=>x.type===k).reduce((a,x)=>a+Number(x.amount||0),0),inc=sum("Ingreso"),exp=sum("Gasto"),ap=sum("Aporte"),re=sum("Retiro"),net=inc+ap-exp-re;h+='<div class="p-section"><div class="p-label">Resumen '+esc(ym)+'</div><table class="p-table"><tbody><tr><td>Ingresos</td><td>'+esc(money(inc,cur))+'</td></tr><tr><td>Gastos</td><td>'+esc(money(exp,cur))+'</td></tr><tr><td>Aportes</td><td>'+esc(money(ap,cur))+'</td></tr><tr><td>Retiros</td><td>'+esc(money(re,cur))+'</td></tr><tr><td><strong>Saldo neto del periodo</strong></td><td><strong>'+esc(money(net,cur))+'</strong></td></tr></tbody></table></div><div class="p-section"><div class="p-label">Movimientos</div><table class="p-table"><thead><tr><th>Fecha</th><th>Tipo</th><th>Concepto</th><th>Valor</th></tr></thead><tbody>'+m.map(x=>'<tr><td>'+esc(x.date||"")+'</td><td>'+esc(x.type||"")+'</td><td>'+esc(x.description||x.category||"")+'</td><td>'+esc(money(x.amount,cur))+'</td></tr>').join("")+'</tbody></table></div><div class="p-section"><div class="p-label">Comentario</div><div class="p-value">'+esc(val("notes")||"")+'</div></div>'}
+if(t==="acta"){h+='<div class="p-section"><div class="p-label">Servicio y alcance</div><div class="p-value"><b>'+esc(val("serviceName")||selectedService().label)+'</b><br>'+esc(val("scope")||"")+'</div></div><div class="p-section"><div class="p-label">Entrega</div><div class="p-value">Fecha: '+esc(fmtDate(val("deliveryDate")))+' · Estado: '+esc(val("deliveryStatus")||"-")+'<br><br><b>Entregados</b><br>'+esc(val("delivered")||"-")+'<br><br><b>Pendientes / observaciones</b><br>'+esc(val("pending")||"-")+'<br><br><b>Correcciones o garantía</b><br>'+esc(val("warranty")||"-")+'</div></div><div class="p-section"><div class="p-label">Aceptación</div><div class="p-value">'+esc(val("acceptance")||"-")+'</div></div><div class="signatures"><div class="sign"><strong>'+esc(val("issuerName")||"Prestador")+'</strong><br>Firma</div><div class="sign"><strong>'+esc(val("clientName")||"Cliente")+'</strong><br>Firma</div></div>'}
+if(t==="perfil"){h+='<div class="p-section"><div class="p-label">Datos del prestador</div><table class="p-table"><tbody><tr><td>Nombre</td><td>'+esc(val("profilePerson")||"-")+'</td></tr><tr><td>Identificación</td><td>'+esc(val("profileId")||"-")+'</td></tr><tr><td>Correo</td><td>'+esc(val("profileEmail")||"-")+'</td></tr><tr><td>Teléfono</td><td>'+esc(val("profilePhone")||"-")+'</td></tr><tr><td>Dirección / ciudad</td><td>'+esc(val("profileAddress")||"-")+'</td></tr></tbody></table></div><div class="p-section"><div class="p-label">Observaciones</div><div class="p-value">'+esc(val("profileNotes")||"")+'</div></div>'}
+h+='<div class="p-footer">Documento generado desde Gestión AMS. La plantilla usa información suministrada y datos guardados localmente. Revisa el documento antes de firmar, enviar o usarlo como soporte fiscal.</div>';return h}
+function render(){if(!$("paper"))return;$("pageTitle").textContent=documentTitle();$("pageSub").textContent=TYPE_SUB[val("docType")];$("paper").innerHTML=renderDocument();bindDynamic()}
+function bindDynamic(){qsa("[data-rm]").forEach(b=>b.onclick=()=>{items.splice(Number(b.dataset.rm),1);render()});qsa(".line-desc").forEach(e=>e.oninput=()=>{items[Number(e.dataset.i)].description=e.value;renderDocumentOnly()});qsa(".line-qty").forEach(e=>e.oninput=()=>{items[Number(e.dataset.i)].qty=Number(e.value||1);renderDocumentOnly()});qsa(".line-price").forEach(e=>e.oninput=()=>{items[Number(e.dataset.i)].price=Number(e.value||0);renderDocumentOnly()});$("addItem")&&($("addItem").onclick=()=>{items.push({description:"",qty:1,price:0});render()});qsa("[data-service]").forEach(b=>b.onclick=()=>{$("serviceKey").value=b.dataset.service;applyService(true)});$("applyService")&&($("applyService").onclick=()=>applyService(true))}
+function renderDocumentOnly(){if($("paper"))$("paper").innerHTML=renderDocument()}
+function buildForm(){const panel=$("formPanel");panel.innerHTML=commonForm(specialized());afterFormBuild()}
+function afterFormBuild(){const profile=loadProfiles(),chosen=profile.find(p=>p.name);if(profile.length===1)$("issuerName").value=profile[0].name;$("issuerEmail").value=defaultIssuer.email;$("issuerPhone").value=defaultIssuer.phone;if($("issuerName").value)loadIssuer();if($("clientRef"))$("clientRef").onchange=()=>fillClient(clients[Number($("clientRef").value)]);$("issuerName").onchange=loadIssuer;$("serviceKey")&&($("serviceKey").onchange=()=>applyService(true));$("docType").onchange=()=>{location.search="?tipo="+$("docType").value};qsa("input,select,textarea",panel).forEach(e=>e.addEventListener("input",renderDocumentOnly));qsa("select",panel).forEach(e=>e.addEventListener("change",renderDocumentOnly));if($("serviceName")&&!val("serviceName"))applyService(false);if($("profilePerson"))$("profilePerson").onchange=()=>{const name=val("profilePerson"),p=loadProfiles().find(x=>x.name===name)||{};$("profileId").value=p.id||"";$("profileEmail").value=p.email||defaultIssuer.email;$("profilePhone").value=p.phone||defaultIssuer.phone;$("profileAddress").value=p.address||"";renderDocumentOnly()};$("pdfBtn").onclick=exportPdf;$("shareBtn").onclick=sharePdf;$("saveBtn").onclick=saveDraft;$("printBtn").onclick=()=>window.print();$("clearBtn").onclick=()=>{if(confirm("¿Crear un documento nuevo?"))location.reload()};loadDraft();render()}
+function draftKey(){return "ams_doc_draft_v3_"+type}
+function saveDraft(){const data={};qsa("input,select,textarea",$("formPanel")).forEach(e=>data[e.id]=e.value);data.items=items;save(draftKey(),data);if(type==="perfil"&&val("profilePerson")){const all=loadProfiles().filter(p=>p.name!==val("profilePerson"));all.push({name:val("profilePerson"),id:val("profileId"),email:val("profileEmail"),phone:val("profilePhone"),address:val("profileAddress")});save("ams_doc_profiles_v3",all);setStatus("Perfil guardado.");}else if(val("issuerName"))saveIssuer();else setStatus("Borrador guardado en este dispositivo.")}
+function loadDraft(){const d=read(draftKey(),null);if(!d)return;qsa("input,select,textarea",$("formPanel")).forEach(e=>{if(d[e.id]!==undefined)e.value=d[e.id]});if(Array.isArray(d.items))items=d.items;renderDocumentOnly()}
+function collectClient(){const c={company:val("clientName"),email:val("clientEmail"),phone:val("clientPhone"),country:val("clientCountry"),city:val("clientCity"),address:val("clientAddress"),domain:val("domain"),url:val("website"),hosting:val("hosting"),webType:val("serviceName"),project:val("project"),price:val("recurringFee")||val("initialFee")||val("amount")||0,currency:val("currency")||"USD"};return c}
+async function makePdf(){const {jsPDF}=window.jspdf,paper=$("paper"),clone=paper.cloneNode(true);clone.style.width="760px";clone.style.position="fixed";clone.style.left="-100000px";clone.style.top="0";clone.style.boxShadow="none";clone.style.borderRadius="0";clone.style.minHeight="0";clone.style.padding="38px";clone.style.color="#172033";document.body.appendChild(clone);const pdf=new jsPDF({unit:"mm",format:"a4",orientation:"portrait"});await new Promise((resolve)=>pdf.html(clone,{x:10,y:10,width:190,windowWidth:760,autoPaging:"text",margin:[10,10,14,10],html2canvas:{scale:1.35,useCORS:true,backgroundColor:"#fff",logging:false},callback:doc=>resolve(doc)}));clone.remove();const pages=pdf.internal.getNumberOfPages();for(let i=1;i<=pages;i++){pdf.setPage(i);pdf.setFontSize(7);pdf.setTextColor(123,132,148);pdf.text("AMS · "+documentTitle(),10,288);pdf.text("Página "+i+" / "+pages,195,288,{align:"right"})}return pdf}
+async function exportPdf(){try{const pdf=await makePdf(),name=(val("number")||"AMS-documento")+".pdf";pdf.save(name);saveDraft();setStatus("PDF generado: "+name)}catch(e){console.error(e);setStatus("No se pudo generar el PDF.")}}
+async function sharePdf(){try{const pdf=await makePdf(),blob=pdf.output("blob"),file=new File([blob],(val("number")||"AMS-documento")+".pdf",{type:"application/pdf"});if(navigator.canShare&&navigator.canShare({files:[file]})){await navigator.share({title:documentTitle(),files:[file]});setStatus("PDF listo para compartir.")}else{pdf.save(file.name);setStatus("El navegador no permite compartir directamente; se descargó el PDF.")}}catch(e){setStatus("No se pudo compartir el PDF.")}}
+buildForm();
+</script><script src="../contacto.js?v=20260928-1"></script>
+</body></html>
