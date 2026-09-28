@@ -29,7 +29,11 @@
     window.open(mailto, "_blank");
   };
   const applyBlankTargets = (root = document) => {
-    root.querySelectorAll('a[href]').forEach((a) => {
+    const anchors = [];
+    if (root.nodeType === 1 && root.matches && root.matches('a[href]')) anchors.push(root);
+    if (root.querySelectorAll) anchors.push(...root.querySelectorAll('a[href]'));
+    if (root === document) anchors.push(...document.querySelectorAll('a[href]'));
+    [...new Set(anchors)].forEach((a) => {
       const href = (a.getAttribute("href") || "").trim();
       if (!href || href === "#" || href.startsWith("#") || href.toLowerCase().startsWith("javascript:")) return;
       a.target = "_blank";
