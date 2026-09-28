@@ -61,7 +61,7 @@ Sirve para estimar precios de desarrollo y mensualidades. El resultado es una re
 
 Con tráfico bajo y soporte básico, la calculadora parte de esta escala interna: Landing $8/mes, Web empresarial $10, E-commerce $15, Aplicación web $20, Sistema a medida $25 y Sistema avanzado $32. El precio amigo parte de $5 y aumenta según la complejidad; el perfil de mayor demanda tiene una tarifa base algo superior. Soporte estándar agrega $2/mes y prioritario $5/mes. Tráfico alto o muy alto agrega una reserva. El plan anual equivale a 11 mensualidades y cubre 12 meses.
 
-Los precios no muestran a los clientes el proveedor de dominio o infraestructura ni la estructura interna de costos. Los cambios de desarrollo, nuevas funciones y trabajos fuera de alcance se cotizan aparte.
+Los precios no muestran a los clientes el proveedor de dominio o infraestructura ni la estructura interna de costos. Para tiendas virtuales, la propuesta base está pensada para catálogo, carrito y pedidos por WhatsApp; nuevas funciones o trabajos fuera de alcance se cotizan aparte.
 
 ## 6. Finanzas
 
