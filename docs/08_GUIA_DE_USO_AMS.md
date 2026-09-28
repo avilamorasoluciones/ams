@@ -63,6 +63,12 @@ Con tráfico bajo y soporte básico, la calculadora parte de esta escala interna
 
 Los precios no muestran a los clientes el proveedor de dominio o infraestructura ni la estructura interna de costos. Para tiendas virtuales, la propuesta base está pensada para catálogo, carrito y pedidos por WhatsApp; nuevas funciones o trabajos fuera de alcance se cotizan aparte.
 
+## 5.2 Tiendas virtuales
+
+AMS enfoca este servicio en **tiendas virtuales que convierten la visita en una conversación por WhatsApp**. Pueden incluir catálogo amplio, categorías, búsqueda, fichas de producto, carrito, captura de datos, gestión de pedidos y una base de datos cuando el alcance lo necesite.
+
+La propuesta comercial se centra en una experiencia de compra propia y no en imponer una plataforma concreta.
+
 ## 6. Finanzas
 
 Ruta dentro de Gestión:
