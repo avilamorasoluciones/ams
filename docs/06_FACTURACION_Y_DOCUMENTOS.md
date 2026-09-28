@@ -2,7 +2,7 @@
 
 ## Regla
 
-El generador interno de AMS produce documentos comerciales/cuentas de cobro. No es un sistema de facturación electrónica DIAN.
+Gestión → Documentos genera documentos comerciales y administrativos a partir de formularios especializados por tipo de documento y servicio. No es un sistema de facturación electrónica DIAN.
 
 Cuando AMS esté obligada a facturar electrónicamente, debe utilizar un sistema habilitado y cumplir los requisitos aplicables.
 
@@ -70,3 +70,10 @@ Conservar:
 - soportes;
 - entregables;
 - comunicaciones relevantes.
+
+
+## Generador documental
+
+Ruta: `/gestion/documentos/`
+
+Cada documento tiene campos propios. El generador puede autocompletar clientes desde Operación/Suscripciones, reutilizar datos del prestador y aplicar plantillas base por servicio. El PDF final se construye con los datos introducidos para ese cliente y ese caso.
