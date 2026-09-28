@@ -12,7 +12,7 @@ Colección de utilidades que funcionan directamente en el navegador.
 
 ## Herramientas actuales
 
-15 herramientas: compresión/conversión de imágenes, recorte circular, herramientas PDF, minificador, QR, contraseñas y JSON.
+26 herramientas: imágenes, PDF, utilidades de código y herramientas prácticas AMS como Base64, UUID, timestamps, color, unidades, texto, regex, meta tags, favicon y CSV → JSON.
 
 ## Importante
 
