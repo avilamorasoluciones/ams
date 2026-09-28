@@ -819,7 +819,7 @@
             <div class="demo-body">
               <h4>Landing</h4>
               <p>Una página directa para presentar un servicio, producto o negocio y facilitar el contacto.</p>
-              <div class="demo-actions"><a class="btn btn-primary btn-wide" href="https://avilamorasoluciones.com/landing/" target="_blank" rel="noopener"><i class="fa-solid fa-arrow-up-right-from-square"></i> Ver ejemplo</a></div>
+              <div class="demo-actions"><a class="btn btn-primary btn-wide" href="./landing/" target="_blank" rel="noopener"><i class="fa-solid fa-arrow-up-right-from-square"></i> Ver ejemplo</a></div>
             </div>
           </div>
 
@@ -828,7 +828,7 @@
             <div class="demo-body">
               <h4>Web Corporativa</h4>
               <p>Varias secciones para empresas que necesitan explicar quiénes son, qué hacen y cómo contactarlas.</p>
-              <div class="demo-actions"><a class="btn btn-primary btn-wide" href="https://avilamorasoluciones.com/multipages/" target="_blank" rel="noopener"><i class="fa-solid fa-arrow-up-right-from-square"></i> Ver ejemplo</a></div>
+              <div class="demo-actions"><a class="btn btn-primary btn-wide" href="./multipages/" target="_blank" rel="noopener"><i class="fa-solid fa-arrow-up-right-from-square"></i> Ver ejemplo</a></div>
             </div>
           </div>
 
@@ -837,7 +837,7 @@
             <div class="demo-body">
               <h4>Tienda Virtual</h4>
               <p>Catálogo y experiencia de compra adaptada al negocio y a las herramientas que necesite.</p>
-              <div class="demo-actions"><a class="btn btn-primary btn-wide" href="https://avilamorasoluciones.com/ecommerce/" target="_blank" rel="noopener"><i class="fa-solid fa-arrow-up-right-from-square"></i> Ver ejemplo</a></div>
+              <div class="demo-actions"><a class="btn btn-primary btn-wide" href="./ecommerce/" target="_blank" rel="noopener"><i class="fa-solid fa-arrow-up-right-from-square"></i> Ver ejemplo</a></div>
             </div>
           </div>
         </div>
@@ -1083,7 +1083,16 @@
       <div class="hero-actions" style="justify-content:center;">
         <a class="btn btn-primary" href="https://forms.cloud.microsoft/r/nrTBEJ1E3C" target="_blank" rel="noopener"><i class="fa-solid fa-clipboard-list"></i> Llenar briefing</a>
         <a class="btn btn-wa" href="https://wa.me/573052547072?text=Hola%20Avila%20Mora%20Soluciones!%20Quiero%20hablar%20sobre%20un%20proyecto." target="_blank" rel="noopener"><i class="fa-brands fa-whatsapp"></i> Hablar por WhatsApp</a>
+        <button class="btn btn-ghost" type="button" id="emailCta"><i class="fa-solid fa-envelope"></i> Escribir por correo</button>
         <a class="btn btn-ghost" href="#portafolio"><i class="fa-solid fa-eye"></i> Ver ejemplos</a>
+        <div id="emailQuick" hidden style="width:100%;max-width:760px;margin:12px auto 0;padding:12px;border:1px solid rgba(255,255,255,.12);border-radius:16px;background:rgba(255,255,255,.04)">
+          <div style="font-size:.78rem;margin-bottom:9px"><strong>equipo@avilamorasoluciones.com</strong><br><span style="opacity:.72">Mensaje prellenado para que solo revises y envíes.</span></div>
+          <div style="display:flex;justify-content:center;gap:8px;flex-wrap:wrap">
+            <button class="btn btn-ghost" type="button" onclick="AMSContact.openEmail('gmail')"><i class="fa-brands fa-google"></i> Gmail</button>
+            <button class="btn btn-ghost" type="button" onclick="AMSContact.openEmail('outlook')"><i class="fa-brands fa-microsoft"></i> Outlook</button>
+            <button class="btn btn-ghost" type="button" onclick="AMSContact.openEmail('default')"><i class="fa-solid fa-at"></i> Correo predeterminado</button>
+          </div>
+        </div>
       </div>
 
       <div class="cta-note"><i class="fa-solid fa-lock"></i> Tratamos la información de cada proyecto con confidencialidad.</div>
@@ -1095,6 +1104,10 @@
       <div style="margin-bottom:12px;font-size:.82rem;opacity:.78;">* La adaptación PWA se incluye sin costo adicional cuando el proyecto es compatible y así se solicita.</div>
       <span style="display:inline-flex;align-items:center;gap:9px;padding:6px 10px;border:1px solid rgba(255,255,255,.12);border-radius:999px;background:rgba(255,255,255,.04);font-weight:900;">© 2026 Avila Mora Soluciones <img src="img/colombia-flag.svg" alt="Colombia" width="30" height="20" style="display:block;width:30px;height:20px;object-fit:cover;border-radius:3px;" /></span>
       <div style="margin-top:10px;">Soluciones digitales claras, hechas para negocios reales.</div>
+      <div style="margin-top:10px;display:flex;justify-content:center;gap:10px;flex-wrap:wrap;align-items:center;font-size:.78rem;">
+        <a href="mailto:equipo@avilamorasoluciones.com"><i class="fa-solid fa-envelope"></i> equipo@avilamorasoluciones.com</a>
+        <a href="https://wa.me/573052547072?text=Hola%20Avila%20Mora%20Soluciones!%20Quiero%20información%20sobre%20sus%20servicios." target="_blank" rel="noopener"><i class="fa-brands fa-whatsapp"></i> WhatsApp</a>
+      </div>
     </div>
   <div style="display:flex;justify-content:center;gap:14px;flex-wrap:wrap;margin-top:12px;font-size:.78rem"><a href="./legal_privacidad.html" style="color:inherit">Privacidad</a><a href="./legal_terminos.html" style="color:inherit">Términos</a><a href="./legal_cookies.html" style="color:inherit">Cookies</a></div></footer>
 
@@ -1110,6 +1123,13 @@
 
   <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
   <script src="scripts.js?v=20260926-2"></script>
+  <script src="contacto.js?v=20260927-1"></script>
+  <script>
+    document.getElementById("emailCta")?.addEventListener("click", () => {
+      const panel = document.getElementById("emailQuick");
+      if (panel) panel.hidden = !panel.hidden;
+    });
+  </script>
 
 <script>
   // En móvil, los controles flotantes se atenúan al llegar al final para no tapar el footer.
