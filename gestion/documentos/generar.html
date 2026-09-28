@@ -21,7 +21,7 @@ button,input,select,textarea{font:inherit}.top{height:68px;border-bottom:1px sol
 </head>
 <body>
 <header class="top">
-  <a class="brand" href="../index.html" aria-label="Volver a Suscripciones">
+  <a class="brand" href="../index.html" aria-label="Volver a Gestión">
     <svg viewBox="0 0 64 64" aria-hidden="true"><defs><linearGradient id="g" x1="0" x2="1"><stop stop-color="#d8c3ff"/><stop offset="1" stop-color="#8b5cf6"/></linearGradient></defs><rect x="4" y="4" width="56" height="56" rx="17" fill="#ffffff0a" stroke="#ffffff18"/><path d="M14 44 25 18h7l11 26h-7l-2.4-6H23.4L21 44h-7Zm12-12h5.2L28.6 25 26 32Z" fill="url(#g)"/><path d="M42 18h7v26h-7z" fill="#fff" opacity=".88"/></svg>
     <span>Avila Mora<small>Soluciones</small></span>
   </a>
@@ -293,6 +293,6 @@ fields.forEach(id=>$(id).addEventListener("change",()=>{if(id==="issuer")loadCur
 $("saveBtn").onclick=saveAll;$("clearBtn").onclick=clearAll;$("pdfBtn").onclick=exportPdf;$("shareBtn").onclick=sharePdf;$("printBtn").onclick=()=>window.print();
 loadDraft();loadClients();if(initialType&&typeMap[initialType])$("docType").value=typeMap[initialType];loadCurrentIssuer();render();
 </script>
-<script src="../../contacto.js?v=20260927-2"></script>
+<script src="../contacto.js?v=20260927-2"></script>
 </body>
 </html>
