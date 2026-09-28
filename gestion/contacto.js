@@ -22,9 +22,9 @@ function migrate(){
  const byKey=new Map();clients.forEach(c=>{const k=clientKey(c);if(k)byKey.set(k,c.id)});
  const projects=[];
  arr("ams_ops_projects_v1").forEach(old=>{let key=text(old.email).toLowerCase()||text(old.client).toLowerCase(),cid=byKey.get(key);if(!cid){const c=normalizeClient({company:old.client,email:old.email,phone:old.phone||"",webType:old.service||"",domain:old.domain||"",url:old.url||"",created:old.created||new Date().toISOString()});clients.push(c);cid=c.id;const k=clientKey(c);if(k)byKey.set(k,cid)}projects.push(normalizeProject(Object.assign({},old,{clientId:cid})))});
- const finance=[];const seen=new Set();
+ const finance=[];const seen=new Set();const projectIdFor=v=>{const k=text(v);if(!k)return"";const p=projects.find(q=>q.id===k||same(q.project,k)||same(q.client,k));return p?p.id:""};
  arr("ams_cash_v1").forEach(x=>{const f=normalizeFinance(x),k=[f.date,f.type,f.currency,f.amount,f.description,f.party].join("|");if(!seen.has(k)){seen.add(k);finance.push(f)}});
- arr("ams_ops_expenses_v1").forEach(x=>{const f=normalizeFinance({id:x.id?"fin_"+x.id:undefined,type:"Gasto",currency:x.currency||"USD",amount:Number(x.amount||0),date:x.date||localToday(),party:x.vendor||"",category:x.category||"Otro",description:x.concept||"",recurring:x.recurring&&x.recurring!=="No recurrente"?"yes":"no",ref:x.ref||"",projectId:text(x.project)}),k=[f.date,f.type,f.currency,f.amount,f.description,f.party].join("|");if(!seen.has(k)){seen.add(k);finance.push(f)}});
+ arr("ams_ops_expenses_v1").forEach(x=>{const f=normalizeFinance({id:x.id?"fin_"+x.id:undefined,type:"Gasto",currency:x.currency||"USD",amount:Number(x.amount||0),date:x.date||localToday(),party:x.vendor||"",category:x.category||"Otro",description:x.concept||"",recurring:x.recurring&&x.recurring!=="No recurrente"?"yes":"no",ref:x.ref||"",projectId:projectIdFor(x.project)}),k=[f.date,f.type,f.currency,f.amount,f.description,f.party].join("|");if(!seen.has(k)){seen.add(k);finance.push(f)}});
  write(CK,clients);write(PK,projects);write(FK,finance);write(TK,read(TK)||{});write(MK,{at:new Date().toISOString(),version:2});writeMirrors();
 }
 migrate();
