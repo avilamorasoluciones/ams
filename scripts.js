@@ -250,7 +250,6 @@ window.addEventListener("load", () => {
 
 // ===== Tema automático y manual =====
 const THEME_KEY = "ams-theme-preference";
-const themeToggle = document.getElementById("themeToggle");
 const themeColorMeta = document.querySelector('meta[name="theme-color"]');
 
 function getAutoTheme() {
