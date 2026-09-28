@@ -25,9 +25,23 @@
       window.open(url, "_blank", "noopener,noreferrer");
       return;
     }
-    window.location.href = "mailto:" + EMAIL + "?subject=" + subject + "&body=" + body;
+    const mailto = "mailto:" + EMAIL + "?subject=" + subject + "&body=" + body;
+    window.open(mailto, "_blank");
   };
+  const applyBlankTargets = (root = document) => {
+    root.querySelectorAll('a[href]').forEach((a) => {
+      const href = (a.getAttribute("href") || "").trim();
+      if (!href || href === "#" || href.startsWith("#") || href.toLowerCase().startsWith("javascript:")) return;
+      a.target = "_blank";
+      const rel = new Set((a.getAttribute("rel") || "").split(/\s+/).filter(Boolean));
+      rel.add("noopener");
+      rel.add("noreferrer");
+      a.rel = Array.from(rel).join(" ");
+    });
+  };
+
   const decorateWhatsapp = () => {
+    applyBlankTargets();
     document.querySelectorAll('a[href*="wa.me/"]').forEach((a) => {
       const href = a.getAttribute("href") || "";
       if (!href.includes(PHONE)) return;
@@ -43,9 +57,21 @@
     });
   };
   window.AMSContact = { PHONE, EMAIL, openWhatsApp, openEmail };
-  if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", decorateWhatsapp, { once: true });
-  } else {
+  const boot = () => {
     decorateWhatsapp();
+    const observer = new MutationObserver((mutations) => {
+      mutations.forEach((mutation) => {
+        mutation.addedNodes.forEach((node) => {
+          if (node.nodeType === 1) applyBlankTargets(node);
+        });
+      });
+    });
+    observer.observe(document.documentElement, { childList: true, subtree: true });
+  };
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", boot, { once: true });
+  } else {
+    boot();
   }
 })();
