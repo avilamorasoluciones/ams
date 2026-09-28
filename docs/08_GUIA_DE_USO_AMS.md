@@ -68,6 +68,7 @@ Los precios no muestran a los clientes el proveedor de dominio o infraestructura
 AMS enfoca este servicio en **tiendas virtuales que convierten la visita en una conversación por WhatsApp**. Pueden incluir catálogo amplio, categorías, búsqueda, fichas de producto, carrito, captura de datos, gestión de pedidos y una base de datos cuando el alcance lo necesite.
 
 La propuesta comercial se centra en una experiencia de compra propia y no en imponer una plataforma concreta.
+Internamente, la tienda base no contempla una pasarela de pago nueva. Si el cliente ya dispone de una integración de pagos que deba conservarse, se evalúa y se cotiza dentro del alcance técnico correspondiente.
 
 ## 6. Finanzas
 
