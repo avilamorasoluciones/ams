@@ -1,40 +1,39 @@
-# Checklist legal y tributario AMS
+# Base legal práctica AMS
 
-Última revisión documental: 27/09/2026.
+Última revisión: 28/09/2026.
 
-Este archivo es una guía operativa y no reemplaza asesoría de contador o abogado.
+Este archivo sirve como lista interna de preparación. No afirma que AMS tenga una inscripción, sociedad, certificación o condición jurídica determinada.
 
-## Datos personales — Colombia
-- Ley 1581 de 2012: informar finalidades, derechos y canales; proteger los datos y atender consultas/reclamos.
-- Los datos relativos a la salud son datos sensibles. Su tratamiento requiere autorización explícita salvo las excepciones legales.
-- Para AyuKcal, la creación de cuenta incluye un consentimiento expreso para el tratamiento de datos personales y, cuando corresponda, sensibles.
-- Mantener las respuestas del briefing fuera del repositorio público y limitar su acceso.
+## 1. Situación pública
+- No publicar registros, certificaciones o datos legales que todavía no existan o no estén verificados.
+- Mientras AMS sea una iniciativa en desarrollo, mantener los textos públicos descriptivos y honestos.
+- Antes de iniciar una operación comercial estable, completar los datos reales del titular y canales de atención.
 
-Fuente oficial: https://sedeelectronica.sic.gov.co/sites/default/files/normatividad/Ley_1581_2012.pdf
+## 2. Datos personales — Colombia
+Cuando AMS recopile datos personales de personas naturales, mantener una política de tratamiento clara, informar la finalidad, atender las solicitudes de los titulares y aplicar medidas razonables de seguridad.
+Para datos sensibles —por ejemplo, ciertos datos de salud que pueda manejar AyuKcal— revisar las reglas especiales y obtener la autorización que corresponda.
 
-## Comercio electrónico
-- Cuando AMS venda directamente por medios electrónicos, revisar identidad/contacto del proveedor, precio y condiciones, medios de pago, recurrencia, PQR y derechos aplicables.
-- La SIC indica que las plataformas de comercio electrónico deben incluir un enlace visible y fácilmente identificable a la autoridad de protección al consumidor.
+La SIC es la autoridad colombiana competente en protección de datos personales. No se debe afirmar que AMS está registrada o certificada ante la SIC si no existe tal situación.
 
-Fuentes oficiales:
-- https://sedeelectronica.sic.gov.co/publicaciones/boletin-juridico/concepto/titulo-obligacion-de-incluir-enlace-la-superindustria-en-plataformas-de-comercio-electronico
-- https://sedeelectronica.sic.gov.co/transparencia/normativa/ley-2439-de-2024
+Fuente oficial:
+https://sedeelectronica.sic.gov.co/politica-de-tratamiento-de-datos-personales
 
-## Facturación
-- La obligación de facturar depende de la situación tributaria concreta; no asumir que por ser persona natural siempre se puede usar cuenta de cobro.
-- DIAN indica que quienes estén obligados a facturar deben hacerlo electrónicamente.
-- Antes de activar pagos recurrentes para AMS, confirmar con contador: responsabilidades del RUT, IVA, facturación electrónica y régimen tributario aplicable.
+## 3. Atención de solicitudes
+Mantener un canal escrito para consultas y reclamos relacionados con datos personales. Registrar fecha, titular, solicitud, responsable interno y respuesta.
+La SIC informa que existen plazos generales para consultas y reclamos, sujetos a las reglas y prórrogas aplicables.
 
-Fuentes oficiales:
-- https://www.dian.gov.co/impuestos/sociedades/Paginas/obligadosfacturar.aspx
-- https://www.dian.gov.co/impuestos/factura-electronica/como-hacerlo/Paginas/ser-facturador-electronico.aspx
+## 4. Comercio electrónico
+Este apartado solo se activa cuando AMS venda directamente por un checkout público.
+Antes de habilitarlo, revisar la información que debe mostrarse al consumidor, condiciones de compra, medios de pago, recurrencia, atención de solicitudes y reclamos, privacidad, cookies y demás reglas que resulten aplicables a la actividad concreta.
 
-## Wompi
-- Wompi publica actualmente registro para persona natural o jurídica con RUT y cuenta Bancolombia o Nequi.
-- La guía actual de alta también indica una condición de antigüedad para cuenta Bancolombia cuando el registro es como persona natural. Verificar durante el alta porque las páginas de Wompi pueden presentar requisitos distintos según el producto.
-- Nunca guardar credenciales secretas de Wompi en GitHub Pages.
+## 5. Wompi
+- Wompi todavía no está conectado.
+- No guardar secretos de Wompi en GitHub Pages.
+- Las credenciales privadas y webhooks deben permanecer en backend/variables de entorno.
+- Probar pagos aprobados, rechazados, cancelados y pendientes antes de habilitar el flujo real.
 
-Fuente oficial: https://wompi.com/es/co/ayuda/como-crear-cuenta
+## 6. Regla de actualización
+Si cambia el modo de operar AMS, se debe actualizar primero la Política de Privacidad, los Términos y esta guía antes de afirmar públicamente una condición nueva.
 
-## Política de lanzamiento
-Antes de activar el checkout público: confirmar datos legales del titular, PQR, privacidad, condiciones de pago/recurrencia, derechos del consumidor cuando correspondan y facturación.
+## Nota
+La situación tributaria o las obligaciones concretas de una actividad no se determinan por el tamaño del emprendimiento ni por usar GitHub Pages. Antes de una actividad comercial sostenida, revisar esa situación con la información real del titular. Esta guía no intenta determinarla.
