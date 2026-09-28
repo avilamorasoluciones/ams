@@ -19,7 +19,7 @@ Gestión interna:
 4. No volver a introducir credenciales al cambiar de módulo.
 5. Cerrar sesión desde la barra superior de Gestión.
 
-La contraseña no debe copiarse a documentación pública ni almacenarse en texto plano. La protección actual del frontend es una barrera de uso interno, no autenticación de servidor.
+La protección actual del frontend es una barrera de uso interno, no autenticación de servidor.
 
 ## 3. Clientes y Suscripciones
 
@@ -48,16 +48,14 @@ Documentos disponibles:
 - **Comprobante de pago:** fecha, valor, método, referencia, periodo y concepto.
 - **Ficha de cliente / proyecto:** expediente interno para consultar y reutilizar datos.
 
-El generador permite seleccionar el cliente existente, seleccionar una plantilla de servicio y completar solo lo particular del caso. Los datos conocidos del prestador también se reutilizan.
-
-Por ahora AMS no necesita módulos de facturación, cuentas de cobro ni contratos de prestación de servicios para su operación cotidiana.
+El generador permite seleccionar el cliente existente, seleccionar una plantilla de servicio y completar solo lo particular del caso. Los datos conocidos del responsable también se reutilizan.
 
 ## 5. Calculadora
 
 Ruta dentro de Gestión:
 `/gestion/calculadora/`
 
-Sirve para estimar precios de desarrollo y mensualidades. El resultado de la calculadora es una referencia comercial y debe reflejar el alcance real del proyecto. Los precios base actuales priorizan una relación precio/servicio competitiva, con dominio y alojamiento gestionados por AMS incluidos en la mensualidad. La referencia interna parte de un VPS-1 económico y una reserva por cliente; esos valores se pueden revisar desde Ajustes internos cuando cambien los costos reales.
+Sirve para estimar precios de desarrollo y mensualidades. El resultado es una referencia comercial y debe reflejar el alcance real del proyecto. Los precios base actuales priorizan una relación precio/servicio competitiva, con dominio y alojamiento gestionados por AMS incluidos en la mensualidad.
 
 ## 5.1 Referencia de precios
 
@@ -78,7 +76,7 @@ Registrar:
 - cliente/proyecto relacionado;
 - soportes y referencias.
 
-Aporte no significa venta y retiro no significa gasto. Es control de gestión y no reemplaza la contabilidad fiscal.
+Aporte no significa venta y retiro no significa gasto. La Caja es una herramienta de control interno.
 
 ## 7. Operación
 
@@ -100,7 +98,7 @@ Cuando el pago sea de una suscripción, **Registrar pago** desde Clientes/Suscri
 
 ## 9. Datos y respaldos
 
-Las herramientas actuales usan almacenamiento local. Antes de cambiar de origen o equipo, usar primero **Respaldo completo** desde Gestión. El respaldo reúne clientes, proyectos, finanzas y checklist. Además, conservar los PDFs generados y los perfiles/borradores importantes.
+Las herramientas actuales usan almacenamiento local. Antes de cambiar de origen o equipo, usar **Respaldo completo** desde Gestión. El respaldo reúne clientes, proyectos, movimientos y checklist. Además, conservar los PDFs generados y los borradores importantes.
 
 Al pasar de GitHub Pages a `avilamorasoluciones.com`, el `localStorage` no se copia automáticamente porque pertenece al origen del navegador.
 
