@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="es"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow,noarchive">
+<meta name="theme-color" content="#070b12">
+<title>Caja AMS | Avila Mora Soluciones</title>
+<style>
+:root{--bg:#070b12;--p:#10182a;--m:#9ca9bd;--a:#c7a1ff;--l:#ffffff14;--g:#55e6a5;--r:#ff7b91;--y:#f6d365}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 10% 0%,#8b5cf626,transparent 30%),var(--bg);color:#fff;font:13px system-ui,Arial}
+.top{height:64px;padding:0 16px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--l);position:sticky;top:0;background:#070b12ee;z-index:5}.top a{color:#fff;text-decoration:none;font-weight:900}.muted{color:var(--m)}
+.wrap{max-width:1150px;margin:auto;padding:24px 14px 60px}.eyebrow{color:#d9c5ff;font-size:9px;font-weight:900;letter-spacing:.18em}.hero h1{font-size:32px;margin:6px 0}.actions,.toolbar{display:flex;gap:8px;flex-wrap:wrap}.actions{margin-top:12px}
+.btn{border:1px solid #ffffff18;background:#ffffff08;color:#fff;border-radius:10px;padding:10px 12px;font-weight:900;cursor:pointer}.primary{background:linear-gradient(135deg,#decaff,#8b5cf6);color:#160e22;border:0}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:18px 0 10px}.stat,.panel,.entry{background:linear-gradient(145deg,#111b2f,#0b1322);border:1px solid var(--l);border-radius:15px}.stat{padding:13px}.stat span{display:block;color:var(--m);font-size:9px}.stat b{display:block;font-size:21px;margin-top:4px}
+.panel{padding:14px;margin-top:10px}.toolbar{margin-bottom:10px}.input,select{background:#080f1c;color:#fff;border:1px solid #ffffff18;border-radius:9px;padding:10px;font:inherit}.input{width:100%}.toolbar .input{flex:1;min-width:180px}
+.entry{padding:12px;display:flex;justify-content:space-between;gap:12px;align-items:center}.entry small{display:block;color:var(--m);margin-top:3px}.amount{font-weight:900}.income{color:var(--g)}.expense{color:var(--r)}.capital{color:var(--y)}.withdraw{color:#ffb4c1}
+.modal{position:fixed;inset:0;background:#000c;display:none;align-items:center;justify-content:center;padding:15px;z-index:20}.modal.open{display:flex}.card{width:min(650px,100%);max-height:92vh;overflow:auto;background:#0d1728;border:1px solid var(--l);border-radius:20px;padding:20px}.head{display:flex;justify-content:space-between}.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.field label{display:block;color:var(--m);font-size:9px;font-weight:900;margin-bottom:5px}.full{grid-column:1/-1}.hidden{display:none!important}
+.note{font-size:11px;color:var(--m);line-height:1.5}.danger{border:1px solid #ff7b9133;background:#ff7b910c;padding:10px;border-radius:10px;margin-top:10px}
+@media(max-width:700px){.stats{grid-template-columns:1fr 1fr}.grid{grid-template-columns:1fr}.full{grid-column:auto}.entry{align-items:flex-start}.hero h1{font-size:28px}}
+</style><link rel="icon" href="../img/ams-favicon.svg?v=7" type="image/svg+xml" />
+</head><body>
+<header class="top"><a href="../operacion/index.html">← Operación AMS</a><span class="muted">Caja interna</span></header>
+<main class="wrap">
+<section><div class="eyebrow">CONTROL FINANCIERO INTERNO</div><h1>Caja AMS</h1><p class="muted">Control de dinero del negocio: ingresos, gastos, aportes y retiros.</p>
+<div class="actions"><button class="btn primary" id="new">＋ Movimiento</button><button class="btn" id="backup">↓ Respaldo</button><button class="btn" id="restoreBtn">↑ Restaurar</button><input id="restore" type="file" accept="application/json" hidden></div></section>
+<div class="danger"><b>Regla:</b> un aporte de ustedes no es ingreso de ventas; un retiro no es gasto. Este panel es control de gestión, no reemplaza la contabilidad ni los documentos fiscales.</div>
+<section class="stats">
+<div class="stat"><span>Ingresos USD</span><b id="income">$0</b></div><div class="stat"><span>Gastos USD</span><b id="expense">$0</b></div><div class="stat"><span>Aportes USD</span><b id="capital">$0</b></div><div class="stat"><span>Caja USD</span><b id="cash">$0</b></div>
+</section>
+<section class="panel"><div class="toolbar"><input id="search" class="input" placeholder="Buscar cliente, proveedor o concepto"><select id="filter"><option value="">Todos</option><option value="Ingreso">Ingresos</option><option value="Gasto">Gastos</option><option value="Aporte">Aportes</option><option value="Retiro">Retiros</option></select></div><div id="list"></div></section>
+</main>
+<div id="modal" class="modal"><div class="card"><div class="head"><div><h2>Registrar movimiento</h2><p class="muted">Registra el movimiento real cuando ocurra.</p></div><button class="btn" id="close">✕</button></div>
+<form id="form"><div class="grid">
+<div class="field"><label>Tipo *</label><select name="type" required><option>Ingreso</option><option>Gasto</option><option>Aporte</option><option>Retiro</option></select></div>
+<div class="field"><label>Moneda *</label><select name="currency"><option>USD</option><option>COP</option><option>EUR</option></select></div>
+<div class="field"><label>Valor *</label><input class="input" name="amount" type="number" min="0" step="0.01" required></div>
+<div class="field"><label>Fecha *</label><input class="input" name="date" type="date" required></div>
+<div class="field"><label>Cliente / proveedor</label><input class="input" name="party"></div>
+<div class="field"><label>Categoría</label><select name="category"><option>Servicio</option><option>Dominio</option><option>Hosting</option><option>Software</option><option>API</option><option>Publicidad</option><option>Equipo</option><option>Impuestos</option><option>Otro</option></select></div>
+<div class="field full"><label>Concepto</label><input class="input" name="description" placeholder="Ej. Dominio cliente X / pago mensual / compra de hosting"></div>
+<div class="field"><label>Recurrente</label><select name="recurring"><option value="no">No</option><option value="yes">Sí</option></select></div>
+<div class="field"><label>Referencia / soporte</label><input class="input" name="ref" placeholder="Factura, comprobante, enlace o referencia"></div>
+</div><div class="actions" style="justify-content:flex-end;margin-top:16px"><button type="button" class="btn" id="cancel">Cancelar</button><button class="btn primary">Guardar</button></div></form></div></div>
+<script>
+const KEY="ams_cash_v1";
+let data=JSON.parse(localStorage.getItem(KEY)||"[]");
+const $=id=>document.getElementById(id);
+const money=(n,c)=>new Intl.NumberFormat("es-CO",{style:"currency",currency:c,maximumFractionDigits:2}).format(Number(n)||0);
+const save=()=>{localStorage.setItem(KEY,JSON.stringify(data));render();};
+function totals(currency){let inc=0,exp=0,cap=0,ret=0;data.filter(x=>x.currency===currency).forEach(x=>{let n=+x.amount||0;if(x.type==="Ingreso")inc+=n;if(x.type==="Gasto")exp+=n;if(x.type==="Aporte")cap+=n;if(x.type==="Retiro")ret+=n});return{inc,exp,cap,ret,cash:inc+cap-exp-ret}};
+function render(){
+ const cur="USD"; const t=totals(cur); const cop=totals("COP");
+ $("income").textContent=money(t.inc,cur);$("expense").textContent=money(t.exp,cur);$("capital").textContent=money(t.cap,cur);$("cash").textContent=money(t.cash,cur); $("cash").title="Caja COP: "+money(cop.cash,"COP");
+ const q=$("search").value.toLowerCase(),f=$("filter").value;
+ const arr=data.filter(x=>(!f||x.type===f)&&(!q||[x.party,x.description,x.category,x.ref].join(" ").toLowerCase().includes(q))).sort((a,b)=>b.date.localeCompare(a.date));
+ $("list").innerHTML=arr.length?arr.map((x,i)=>{const sign=x.type==="Ingreso"||x.type==="Aporte"?"+":"-";const cls=x.type==="Ingreso"?"income":x.type==="Gasto"?"expense":x.type==="Aporte"?"capital":"withdraw";return '<div class="entry"><div><b>'+esc(x.type)+" · "+esc(x.description||"Sin concepto")+'</b><small>'+esc(x.date)+' · '+esc(x.currency)+' · '+esc(x.party||"Sin tercero")+(x.recurring==="yes"?" · Recurrente":"")+'</small></div><div class="amount '+cls+'">'+sign+money(x.amount,x.currency)+'<br><button class="btn" style="padding:5px 8px;margin-top:5px" onclick="del('+data.indexOf(x)+')">Eliminar</button></div></div>'}).join(""):'<div class="entry"><span class="muted">Aún no hay movimientos.</span></div>';
+}
+function esc(v){return String(v??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]))}
+function del(i){if(confirm("¿Eliminar este movimiento?")){data.splice(i,1);save()}}
+$("new").onclick=()=>{$("modal").classList.add("open");$("form").reset();$("form").elements.date.value=new Date().toISOString().slice(0,10)};
+$("close").onclick=$("cancel").onclick=()=>$("modal").classList.remove("open");
+$("form").onsubmit=e=>{e.preventDefault();const f=new FormData(e.target);data.push({id:Date.now(),type:f.get("type"),currency:f.get("currency"),amount:+f.get("amount"),date:f.get("date"),party:f.get("party"),category:f.get("category"),description:f.get("description"),recurring:f.get("recurring"),ref:f.get("ref")});save();$("modal").classList.remove("open")};
+$("search").oninput=render;$("filter").onchange=render;
+$("backup").onclick=()=>{const blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json"}),a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="ams-caja-backup-"+new Date().toISOString().slice(0,10)+".json";a.click();URL.revokeObjectURL(a.href)};
+$("restoreBtn").onclick=()=>$("restore").click();
+$("restore").onchange=e=>{const file=e.target.files[0];if(!file)return;const r=new FileReader();r.onload=()=>{try{const x=JSON.parse(r.result);if(!Array.isArray(x))throw 0;data=x;save();alert("Respaldo restaurado.")}catch{alert("Archivo no válido.")}};r.readAsText(file)};
+render();
+</script><script src="../contacto.js?v=20260927-2"></script>
+</body></html>
