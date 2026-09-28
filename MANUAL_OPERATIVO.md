@@ -101,3 +101,9 @@ Contenido correcto · móvil · tablet · PC · enlaces · formularios · WhatsA
 
 ## 17. Regla de cambio de infraestructura
 No pagar servidor propio por anticipación. Cuando haya 2 clientes activos a la vez, evaluar Hetzner/Coolify u otra infraestructura similar y confirmar que los ingresos recurrentes justifican el costo.
+
+## 18. Texto legal del briefing
+En la descripción de Microsoft Forms, después de explicar el tiempo estimado, incluir:
+"Al enviar este formulario, autorizas a Avila Mora Soluciones a utilizar la información proporcionada para analizar, preparar, cotizar y desarrollar tu proyecto, de acuerdo con nuestra Política de Privacidad. Consulta: https://avilamorasoluciones.com/legal_privacidad.html"
+
+Mantener como preguntas obligatorias la confirmación y los datos esenciales. No solicitar contraseñas, tarjetas, códigos de autenticación ni datos bancarios sensibles.
