@@ -1,4 +1,4 @@
-const CACHE_NAME = "juegos-avila-mora-v34";
+const CACHE_NAME = 'ams-games-20260927-35';
 const APP_SHELL = [
   "./",
   "./index.html",
