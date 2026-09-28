@@ -24,7 +24,7 @@ La web oficial publica `equipo@avilamorasoluciones.com` y WhatsApp +57 305 254 7
 15. Mantenimiento/renovación si corresponde.
 
 ## 4. Formulario de Proyecto
-Debe entregar datos del cliente, objetivo, negocio, contenido, diseño, funciones, situación actual, dominio, referencias, prioridades, fecha y observaciones.
+Debe recoger datos del cliente, objetivo, negocio, contenido, diseño, funciones, situación actual, dominio, referencias, prioridades, fecha y observaciones.
 No pedir contraseñas, tarjetas, códigos de autenticación ni datos bancarios sensibles.
 El formulario debe conservarse como registro del proyecto.
 
@@ -42,46 +42,53 @@ El formulario debe conservarse como registro del proyecto.
 - Renovaciones deben quedar registradas en Operación/Suscripciones.
 
 ## 7. Operación AMS
-La información operativa se administra desde `/gestion/`, en el módulo Operación. El cliente se guarda como registro maestro y los proyectos quedan vinculados a ese cliente. Registrar etapa, fechas, dominio, staging, producción, siguiente paso y notas.
-Etapas: Contacto inicial (Lead) → Calificado → Propuesta → Aceptado → Pago pendiente → Producción → Revisión cliente → Entrega → Mantenimiento → Cerrado. Contacto inicial (Lead) significa que alguien acaba de llegar o preguntar y todavía no es una venta.
+La información operativa se administra desde `/gestion/`, en Operación. El cliente se guarda como registro maestro y los proyectos quedan vinculados a ese cliente.
+Etapas: Contacto inicial (Lead) → Calificado → Propuesta → Aceptado → Pago pendiente → Producción → Revisión cliente → Entrega → Mantenimiento → Cerrado.
+**Contacto inicial (Lead)** significa que una persona o negocio acaba de llegar, preguntar o mostrar interés; todavía no es una venta.
 
 ## 8. Caja AMS
-- Ingreso: venta o servicio cobrado por AMS.
-- Gasto: costo de operación.
+- Ingreso: dinero que entra.
+- Gasto: dinero utilizado para operar.
 - Aporte: dinero personal puesto temporalmente en AMS.
-- Retiro: dinero sacado de AMS.
-Un aporte no es una venta; un retiro no es un gasto.
-Objetivo: pagar progresivamente infraestructura y operación con caja generada por AMS.
+- Retiro: dinero que sale hacia los propietarios.
+La Caja es control interno para saber qué dinero entró, qué dinero salió y qué pagos quedan por atender.
 
 ## 9. Clientes y Suscripciones
 Registrar o editar el cliente maestro y su suscripción: precio, moneda, periodicidad, inicio, vencimiento, días de gracia, último pago y estado.
 Un cliente debe existir una sola vez. Operación y Documentos reutilizan este registro.
-El panel actual usa almacenamiento local y no sincroniza automáticamente entre dispositivos. Existe un respaldo completo de Gestión que incluye clientes, proyectos, finanzas y checklist.
+El panel actual usa almacenamiento local y no sincroniza automáticamente entre dispositivos. Existe un respaldo completo de Gestión que incluye clientes, proyectos, movimientos y checklist.
 
 ## 10. Documentos
-Gestión → Documentos se limita a los PDFs realmente útiles para el emprendimiento: propuesta comercial/cotización, acta de entrega, comprobante de pago y ficha interna de cliente/proyecto. Cada tipo tiene un formulario propio y puede usar una plantilla de servicio para ahorrar trabajo repetitivo. Por ahora quedan fuera del flujo de Gestión la facturación electrónica, cuentas de cobro y contratos de prestación de servicios.
+Gestión → Documentos se limita a los PDFs realmente útiles para el emprendimiento:
+- propuesta comercial / cotización;
+- acta de entrega;
+- comprobante de pago;
+- ficha interna de cliente/proyecto.
+
+Cada tipo tiene un formulario propio y puede usar una plantilla de servicio para ahorrar trabajo repetitivo.
+No se incorporan módulos administrativos adicionales mientras no sean necesarios para la operación real.
 
 ## 11. Datos y privacidad
-AMS debe cumplir su Política de Privacidad y limitar la información a la necesaria.
+AMS limita la información a la necesaria para cada finalidad.
 Las solicitudes de titulares se atienden por el canal comercial definido.
-No almacenar secretos en GitHub, LocalStorage, Forms, WhatsApp o documentos públicos.
+No almacenar secretos en GitHub, almacenamiento público, formularios, WhatsApp o documentos públicos.
 
 ## 12. Seguridad
-Nunca subir al repositorio contraseñas, API keys/tokens, claves privadas, credenciales de hosting, tarjetas o datos personales de clientes que deban permanecer privados.
-Las pantallas internas publicadas en GitHub Pages no son seguridad real. Cuando haya información sensible o varios usuarios, migrar a backend con autenticación.
+Nunca subir al repositorio contraseñas, API keys/tokens, claves privadas, credenciales de hosting, tarjetas o datos privados de clientes.
+Las pantallas internas publicadas en GitHub Pages no son seguridad real. Cuando haya información sensible o varios usuarios, migrar a backend con autenticación real.
 
 ## 13. Backups
 - Código: GitHub.
-- Datos de Operación/Finanzas/Suscripciones: respaldos JSON periódicos.
-- Bases de datos: exportación SQL cuando exista backend.
-- Con OVHcloud/Coolify: backups automáticos y restauración probada.
+- Gestión: usar el respaldo completo desde el inicio de Gestión.
+- Documentos: conservar los PDFs finales y los borradores importantes.
+- Con infraestructura propia: backups automáticos y restauración probada.
 
-## 14. Finanzas y compras
+## 14. Compras y movimientos
 1. Revisar Caja AMS.
 2. Identificar el gasto.
-3. Registrar el gasto.
-4. Si falta caja, registrar un Aporte separado.
-5. No mezclar gasto personal con gasto AMS.
+3. Registrar el movimiento.
+4. Si falta caja, registrar un aporte separado.
+5. No mezclar gasto personal con gasto de AMS.
 
 ## 15. Cuando llegue OVHcloud/Coolify
 Debe incluir staging protegido, producción separada, variables de entorno, backups automáticos, monitorización, backend/base de datos cuando haga falta y autenticación real para herramientas internas.
@@ -105,8 +112,10 @@ Contenido correcto · móvil · tablet · PC · enlaces · formularios · WhatsA
 ## 18. Regla de cambio de infraestructura
 No pagar servidor propio por anticipación. Cuando haya 2 clientes activos a la vez, evaluar OVHcloud/Coolify u otra infraestructura similar y confirmar que los ingresos recurrentes justifican el costo.
 
-## 19. Texto legal del briefing
-En la descripción de Microsoft Forms, después de explicar el tiempo estimado, incluir:
-"Al enviar este formulario, autorizas a Avila Mora Soluciones a utilizar la información proporcionada para analizar, preparar, cotizar y desarrollar tu proyecto, de acuerdo con nuestra Política de Privacidad. Consulta: https://avilamorasoluciones.com/legal_privacidad.html"
+## 19. Texto de privacidad del briefing
+En la descripción de Microsoft Forms, cuando el formulario vaya a utilizarse para captar datos reales, incluir un enlace visible a `legal_privacidad.html` y explicar de forma clara para qué se usarán los datos.
 
-Mantener como preguntas obligatorias la confirmación y los datos esenciales. No solicitar contraseñas, tarjetas, códigos de autenticación ni datos bancarios sensibles.
+Mantener como preguntas obligatorias solo las confirmaciones y datos esenciales. No solicitar contraseñas, tarjetas, códigos de autenticación ni datos bancarios sensibles.
+
+## 20. Nota de situación
+AMS es una iniciativa/marca en desarrollo. El repositorio no debe afirmar que existe una sociedad, registro, certificación o condición jurídica concreta si todavía no se ha formalizado o verificado.
