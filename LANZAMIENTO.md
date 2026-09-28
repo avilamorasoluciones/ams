@@ -45,3 +45,7 @@ Antes de activar un checkout público, revisar:
 
 ## Infraestructura
 GitHub Pages primero. Evaluar Hetzner/Coolify cuando existan al menos dos clientes activos simultáneamente o el flujo real de operación lo justifique.
+
+### Datos locales antes del cambio de dominio
+
+Los paneles internos actuales almacenan información en el navegador mediante `localStorage`. Ese almacenamiento pertenece al origen; al pasar de GitHub Pages a `avilamorasoluciones.com` no se copia automáticamente. Antes del cambio, exportar los respaldos de Operación, Finanzas y Suscripciones y conservar los archivos JSON para restaurarlos en el dominio nuevo. Los borradores y perfiles del generador documental se deben volver a guardar en el nuevo origen.
