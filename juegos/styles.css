@@ -3369,6 +3369,22 @@ footer {
   min-height: 108px;
   padding-bottom: calc(82px + var(--safe-bottom));
 }
+/* ===== Correcciones de escritorio del carrusel =====
+   Evita capas de sombreado sobre las tarjetas y mantiene una escala estable. */
+@media (min-width: 701px) {
+  .game-carousel::before,
+  .game-carousel::after {
+    display: none;
+  }
+  .game-slide,
+  .game-slide:hover {
+    transform: none;
+  }
+  .game-slide:hover {
+    transform: translateY(-2px);
+  }
+}
+
 @media (max-width: 700px) {
   .game-selector {
     gap: 12px;
