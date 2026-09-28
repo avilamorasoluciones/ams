@@ -1,11 +1,10 @@
 # Backups y seguridad · AMS
 
 ## GitHub
-
 GitHub es la copia principal del código fuente.
 
 No subir:
-- `.env`;
+- .env;
 - API keys;
 - tokens;
 - secretos;
@@ -14,15 +13,7 @@ No subir:
 - datos privados de clientes.
 
 ## Herramientas internas
-
-Las herramientas de **Gestión AMS** usan almacenamiento local del navegador en la versión actual.
-
-Módulos principales:
-- Gestión/Operación;
-- Gestión/Suscripciones;
-- Gestión/Finanzas;
-- Gestión/Calculadora;
-- Gestión/Documentos.
+Las herramientas de Gestión AMS usan almacenamiento local del navegador en la versión actual.
 
 Esto significa:
 - no hay sincronización automática entre dispositivos;
@@ -31,33 +22,24 @@ Esto significa:
 - no deben guardarse secretos allí.
 
 ## Backup operativo
-
-Hacer respaldos periódicos de:
-- Operación;
-- Finanzas;
-- Suscripciones;
-- documentos/borradores importantes.
-
+Hacer respaldos periódicos usando **Respaldo completo** desde Gestión.
 Mantener al menos una copia fuera del equipo principal.
+Conservar además los PDFs finales y los archivos que resulten importantes para la operación.
 
 ## Cambio de dominio
-
 Antes de pasar de `avilamorasoluciones.github.io/ams` a `avilamorasoluciones.com`:
-1. Exportar los JSON de Operación, Finanzas y Suscripciones.
+1. Exportar el respaldo completo de Gestión.
 2. Guardar los PDFs finales.
-3. Confirmar los datos guardados de los prestadores.
-4. Configurar el dominio.
-5. Restaurar los JSON en el nuevo origen.
-6. Generar un documento de prueba y verificar enlaces/PDF.
+3. Confirmar que el dominio funciona.
+4. Restaurar el respaldo en el nuevo origen.
+5. Generar un documento de prueba y verificar enlaces/PDF.
 
 ## Regla 3-2-1
-
 - 3 copias;
 - 2 medios diferentes;
 - 1 copia separada del equipo principal.
 
 ## Cuando exista backend
-
 Añadir:
 - variables de entorno;
 - autenticación real;
@@ -69,7 +51,6 @@ Añadir:
 - staging y producción separadas.
 
 ## PWA y caché
-
 Los Service Workers pueden conservar recursos antiguos. Al cambiar un recurso crítico:
 - actualizar la versión de caché;
 - comprobar que el navegador recibe la nueva versión;
@@ -77,7 +58,6 @@ Los Service Workers pueden conservar recursos antiguos. Al cambiar un recurso cr
 - verificar de nuevo formularios, enlaces y PDF.
 
 ## Incidente
-
 Ante una exposición:
 1. detener la causa;
 2. preservar evidencia;
