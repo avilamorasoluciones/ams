@@ -13,7 +13,7 @@ La web oficial publica `equipo@avilamorasoluciones.com` y WhatsApp +57 305 254 7
 4. Cliente acepta.
 5. Se registra el pago.
 6. Cliente completa el Formulario de Proyecto en Microsoft Forms.
-7. Se crea o actualiza el proyecto en Operación AMS.
+7. Se crea o actualiza el proyecto en Gestión → Operación.
 8. Se prepara staging/demo.
 9. Se desarrolla y prueba.
 10. Se muestra el proyecto mediante un enlace.
