@@ -17,7 +17,7 @@ AMS está preparado para comenzar con **GitHub Pages + dominio propio**. No se i
 - Demos y juegos — carpetas públicas independientes.
 
 ## Flujo de cliente
-Contacto → Briefing → Calificación → Propuesta → Aceptación → Pago → Alta → Dominio → Staging/Demo → Producción → Revisión → Correcciones → Publicación → Entrega → Mantenimiento → Renovación.
+Contacto → Formulario de proyecto → Calificación → Propuesta → Aceptación → Pago → Alta → Dominio → Staging/Demo → Producción → Revisión → Correcciones → Publicación → Entrega → Mantenimiento → Renovación.
 
 ## Caja AMS: regla financiera
 El objetivo es que **AMS pague progresivamente sus propios gastos**.
@@ -60,7 +60,7 @@ No esperar al dominio para comenzar un proyecto.
 - Mientras tanto: trabajar con staging/demo.
 - Las demos públicas deben usar contenido ficticio y no datos sensibles.
 
-## Cuando llegue Hetzner/Coolify
+## Cuando llegue OVHcloud/Coolify
 La migración debe añadir:
 - staging protegido;
 - producción separada por proyecto;
