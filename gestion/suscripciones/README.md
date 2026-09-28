@@ -1,9 +1,35 @@
-# Suscripciones · Avila Mora Soluciones
+# Clientes y Suscripciones · Gestión AMS
 
-Panel interno para clientes y membresías.
+Este módulo forma parte de `/gestion/` y **no tiene un login propio**. El acceso se realiza una sola vez desde Gestión AMS.
 
-Este prototipo está pensado para guardarse desde ahora en el repositorio AMS. Incluye login interno, alta rápida de clientes, mensual/anual, precio, fecha de inicio, días de gracia, buscador y estados.
+## Función
 
-Los datos del prototipo se guardan en localStorage. Cuando AMS tenga servidor, se reemplaza por autenticación y base de datos reales y se conectan correo transaccional, pagos, Wenia/pasarela y API de Coolify.
+Panel local para mantener:
+- clientes;
+- contacto;
+- correo;
+- teléfono;
+- dominio;
+- URL;
+- infraestructura;
+- precio;
+- moneda;
+- periodicidad;
+- fecha de inicio;
+- vencimiento;
+- días de gracia;
+- estado.
 
-El login actual NO es seguridad real: es apropiado para el prototipo estático. La autenticación real debe vivir en servidor.
+## Integración
+
+El Centro Documental puede leer los clientes guardados aquí para autocompletar documentos. Operación mantiene información adicional del proyecto. Ambos módulos comparten el mismo `localStorage` cuando se usan en el mismo origen.
+
+## Respaldo
+
+Usar **Respaldo** para exportar JSON y **Restaurar** para recuperar la información.
+
+## Seguridad
+
+No guardar contraseñas, tokens, secretos, tarjetas ni credenciales de proveedores.
+
+El acceso de Gestión AMS es una protección de uso interno del frontend actual. No equivale a autenticación de servidor. Cuando la operación necesite varios usuarios o información sensible, migrar a backend + autenticación real + base de datos.
