@@ -43,6 +43,7 @@
 <script>
 if(sessionStorage.amsGestionAuth!=="1")location.replace("../index.html");
 const P={static:{b:10},corporate:{b:13},store:{b:17},app:{b:20},system:{b:23},advanced:{b:27}};
+let currentMonthly=0,currentAnnual=0;
 const $=id=>document.getElementById(id),M=n=>"$"+n.toFixed(2)+" USD";
 function calc(){let c=$("client").value,t=$("service").value,p=P[t],base=p.b,domain=+$("domainCost").value||0,infra=+$("hostingMonthly").value||0,projects=Math.max(1,+$("activeProjects").value||1),external=+$("externalCost").value||0,traffic=+$("trafficCost").value||0;
 let a=base+infra/projects+external;
@@ -52,12 +53,13 @@ let target=a*(1+(+$("margin").value||0)/100),r=target;
 if(c==="friend")r=5;
 if(c==="business")r*=1.05;
 r=Math.ceil(r*2)/2;
-let annual=r*10;
+let annual=r*10;currentMonthly=r;currentAnnual=annual;
+$("monthly").dataset.monthly=M(r);$("annualTotal").dataset.annual=M(annual);
 $("profile").textContent={friend:"Cliente amigo",normal:"Cliente normal",business:"Negocio con mayor demanda"}[c];
 $("monthly").textContent=M(r);$("monthlyTotal").textContent=M(r*12)+"/año";$("annualTotal").textContent=M(annual);
 $("explain").textContent=c==="friend"?"Tarifa especial de $5/mes.":"Referencia económica: "+M(r)+"/mes. La infraestructura se distribuye entre los proyectos activos; el anual equivale a 10 mensualidades y cubre 12 meses.";
 let l=[];l.push($("domain").checked?"Dominio incluido":"Dominio no incluido");l.push($("database").checked?"Base de datos en infraestructura compartida":"Sin base de datos");l.push($("backups").checked?"Backups y exportación del proyecto":"Backups no incluidos");l.push($("highTraffic").checked?"Demanda alta":"Infraestructura compartida estándar");$("includedList").innerHTML=l.map(x=>"<li>"+x+"</li>").join("");applyBillingView()}
-function applyBillingView(){let selected=document.querySelector(".bill.active")?.dataset.bill||"both",m=$("monthly"),title=$("recommended"),unit=$("usdLabel"),box=$("annualBox");if(selected==="annual"){title.textContent="Pago anual sugerido";m.textContent=$("annualTotal").textContent;unit.textContent="USD · 1 pago / 12 meses";box.style.display="none"}else if(selected==="monthly"){title.textContent="Mensualidad sugerida";m.textContent=$("monthly").textContent;unit.textContent="USD / mes";box.style.display="none"}else{title.textContent="Mensualidad sugerida";m.textContent=$("monthly").textContent;unit.textContent="USD / mes";box.style.display="grid"}}document.querySelectorAll("input,select").forEach(e=>{e.addEventListener("input",calc);e.addEventListener("change",calc)});document.querySelectorAll(".bill").forEach(b=>b.onclick=()=>{document.querySelectorAll(".bill").forEach(x=>x.classList.remove("active"));b.classList.add("active");applyBillingView()});copy.onclick=()=>{navigator.clipboard?.writeText("Avila Mora Soluciones\nMensualidad: "+$("monthly").textContent+"\nPlan anual: "+$("annualTotal").textContent+" (1 pago / 12 meses, equivalente a 10 mensualidades).");copy.innerHTML='<i class="fa-solid fa-check"></i> Copiado';setTimeout(()=>copy.innerHTML='<i class="fa-regular fa-copy"></i> Copiar cotización',1300)};calc();
+function applyBillingView(){let selected=document.querySelector(".bill.active")?.dataset.bill||"both",m=$("monthly"),title=$("recommended"),unit=$("usdLabel"),box=$("annualBox");if(selected==="annual"){title.textContent="Pago anual sugerido";m.textContent=$("annualTotal").textContent;unit.textContent="USD · 1 pago / 12 meses";box.style.display="none"}else if(selected==="monthly"){title.textContent="Mensualidad sugerida";m.textContent=$("monthly").textContent;unit.textContent="USD / mes";box.style.display="none"}else{title.textContent="Mensualidad sugerida";m.textContent=$("monthly").textContent;unit.textContent="USD / mes";box.style.display="grid"}}document.querySelectorAll("input,select").forEach(e=>{e.addEventListener("input",calc);e.addEventListener("change",calc)});document.querySelectorAll(".bill").forEach(b=>b.onclick=()=>{document.querySelectorAll(".bill").forEach(x=>x.classList.remove("active"));b.classList.add("active");applyBillingView()});copy.onclick=()=>{const monthlyText=M(currentMonthly),annualText=M(currentAnnual);navigator.clipboard?.writeText("Avila Mora Soluciones\nMensualidad: "+monthlyText+" / mes\nPago anual: "+annualText+" / 12 meses (equivalente a 10 mensualidades).");copy.innerHTML='<i class="fa-solid fa-check"></i> Copiado';setTimeout(()=>copy.innerHTML='<i class="fa-regular fa-copy"></i> Copiar cotización',1300)};calc();
 </script><script>if('serviceWorker' in navigator){window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}));}</script>
 <script src="../contacto.js?v=20260927-2"></script>
 </body></html>
