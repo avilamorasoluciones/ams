@@ -1,6 +1,6 @@
 # Kit documental AMS
 
-Documentos de trabajo para operar Avila Mora Soluciones con orden antes y después del dominio propio.
+Documentos de trabajo para operar Avila Mora Soluciones con orden antes y después del dominio propio. Las herramientas operativas viven en `/gestion/`; esta carpeta contiene la documentación del proceso y cumplimiento.
 
 1. [Ficha maestra de AMS](00_FICHA_MAESTRA_AMS.md)
 2. [Checklist de pre-lanzamiento](01_CHECKLIST_PRE_LANZAMIENTO.md)
