@@ -36,4 +36,4 @@ Antes de habilitarlo, revisar la información que debe mostrarse al consumidor, 
 Si cambia el modo de operar AMS, se debe actualizar primero la Política de Privacidad, los Términos y esta guía antes de afirmar públicamente una condición nueva.
 
 ## Nota
-La situación tributaria o las obligaciones concretas de una actividad no se determinan por el tamaño del emprendimiento ni por usar GitHub Pages. Antes de una actividad comercial sostenida, revisar esa situación con la información real del titular. Esta guía no intenta determinarla.
+La situación legal concreta de una actividad no se determina por el tamaño del emprendimiento ni por usar GitHub Pages. Antes de una actividad comercial sostenida, revisar la situación real del titular y de la operación. Esta guía no intenta determinarla.
