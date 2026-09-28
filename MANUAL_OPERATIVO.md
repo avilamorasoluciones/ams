@@ -12,7 +12,7 @@ La web oficial publica `equipo@avilamorasoluciones.com` y WhatsApp +57 305 254 7
 3. Se envía propuesta con alcance, precio, tiempos y servicios.
 4. Cliente acepta.
 5. Se registra el pago.
-6. Cliente completa el Briefing de Proyecto en Microsoft Forms.
+6. Cliente completa el Formulario de Proyecto en Microsoft Forms.
 7. Se crea o actualiza el proyecto en Operación AMS.
 8. Se prepara staging/demo.
 9. Se desarrolla y prueba.
@@ -53,12 +53,12 @@ Etapas: Lead → Calificado → Propuesta → Aceptado → Pago pendiente → Pr
 Un aporte no es una venta; un retiro no es un gasto.
 Objetivo: pagar progresivamente infraestructura y operación con caja generada por AMS.
 
-## 9. Suscripciones
+## 9. Clientes y Suscripciones
 Registrar cliente, precio, moneda, periodicidad, inicio, vencimiento y estado.
 El panel actual usa almacenamiento local y no sincroniza automáticamente entre dispositivos. Mantener un equipo principal y respaldar JSON.
 
 ## 10. Documentos
-El Centro de Documentos genera documentos comerciales/cuentas de cobro. No es un sistema de facturación electrónica DIAN.
+Gestión → Documentos genera documentos comerciales/cuentas de cobro. No es un sistema de facturación electrónica DIAN.
 Cuando exista obligación de facturar, usar un sistema habilitado y la numeración y requisitos correspondientes.
 
 ## 11. Datos y privacidad
@@ -74,7 +74,7 @@ Las pantallas internas publicadas en GitHub Pages no son seguridad real. Cuando 
 - Código: GitHub.
 - Datos de Operación/Finanzas/Suscripciones: respaldos JSON periódicos.
 - Bases de datos: exportación SQL cuando exista backend.
-- Con Hetzner/Coolify: backups automáticos y restauración probada.
+- Con OVHcloud/Coolify: backups automáticos y restauración probada.
 
 ## 14. Finanzas y compras
 1. Revisar Caja AMS.
@@ -103,7 +103,7 @@ Contenido correcto · móvil · tablet · PC · enlaces · formularios · WhatsA
 10. Backups = recuperación.
 
 ## 18. Regla de cambio de infraestructura
-No pagar servidor propio por anticipación. Cuando haya 2 clientes activos a la vez, evaluar Hetzner/Coolify u otra infraestructura similar y confirmar que los ingresos recurrentes justifican el costo.
+No pagar servidor propio por anticipación. Cuando haya 2 clientes activos a la vez, evaluar OVHcloud/Coolify u otra infraestructura similar y confirmar que los ingresos recurrentes justifican el costo.
 
 ## 19. Texto legal del briefing
 En la descripción de Microsoft Forms, después de explicar el tiempo estimado, incluir:
