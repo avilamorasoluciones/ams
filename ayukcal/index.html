@@ -981,6 +981,12 @@
       </div>
 
       <button type="button" id="forgotPasswordBtn" class="btn" onclick="resetPassword()" style="display:none;">¿Olvidaste tu contraseña?</button>
+      <div id="privacyConsentRow" style="display:none;margin-top:12px;padding:12px;border:1px solid var(--border);border-radius:12px;background:var(--bg);font-size:.82rem;line-height:1.45;">
+        <label style="display:flex;gap:9px;align-items:flex-start;font-weight:700;">
+          <input id="privacyConsent" type="checkbox" style="margin-top:3px;flex:none;">
+          <span>Autorizo de forma expresa el tratamiento de los datos personales y, cuando aplique, de los <strong>datos sensibles de salud o nutrición</strong> que decida ingresar en AyuKcal, para las funciones solicitadas, conforme a la <a href="../legal_privacidad.html" target="_blank" rel="noopener" style="color:var(--primary);">Política de Privacidad</a>.</span>
+        </label>
+      </div>
 
       <div class="actions">
         <button type="button" class="btn" onclick="closeAccountModal()">Cancelar</button>
@@ -2105,6 +2111,7 @@ function updateAuthUI(){
   if($("authModeBtn")) $("authModeBtn").style.display=logged?"none":"block";if($("accountSecurityActions")) $("accountSecurityActions").style.display=logged?"grid":"none";
   if($("authLogoutBtn")) $("authLogoutBtn").style.display=logged?"block":"none";
   if($("forgotPasswordBtn")) $("forgotPasswordBtn").style.display=logged||AUTH_MODE!=="login"?"none":"block";
+  if($("privacyConsentRow")) $("privacyConsentRow").style.display=logged||AUTH_MODE!=="signup"?"none":"block";
   if(logged){
     const p=state().profile;
     const name=(p?.name||CLOUD_USER.user_metadata?.name||CLOUD_USER.user_metadata?.username||"Sin nombre").trim();
@@ -2127,6 +2134,7 @@ function toggleAuthMode(){
   $("authMsg").textContent="";
   $("authPassword").type="password";
   $("authPasswordToggle").textContent="👁️";
+  const consent = $("privacyConsent"); if (consent) consent.checked = false;
   updateAuthUI();
 }
 
@@ -2156,13 +2164,27 @@ async function submitAuth(e){
   const email=$("authEmail").value.trim().toLowerCase(), password=$("authPassword").value;
   if(!email || !email.includes("@")){ $("authMsg").textContent="Escribe un correo válido."; return; }
   if(password.length<6){ $("authMsg").textContent="La contraseña debe tener al menos 6 caracteres."; return; }
+  if(AUTH_MODE==="signup" && !$("privacyConsent")?.checked){
+    $("authMsg").textContent="Debes aceptar el tratamiento de datos para crear la cuenta.";
+    return;
+  }
 
   setAuthBusy(true,AUTH_MODE==="login"?"Entrando…":"Creando cuenta…");
   $("authMsg").textContent="";
   try{
     const res=AUTH_MODE==="login"
       ? await window.ayukcalSupabase.auth.signInWithPassword({email,password})
-      : await window.ayukcalSupabase.auth.signUp({email,password});
+      : await window.ayukcalSupabase.auth.signUp({
+          email,
+          password,
+          options:{
+            data:{
+              privacy_consent:true,
+              privacy_consent_at:new Date().toISOString(),
+              privacy_policy_version:"2026-09-27"
+            }
+          }
+        });
     if(res.error){
       $("authMsg").textContent="⚠️ "+friendlyAuthError(res.error);
       return;
