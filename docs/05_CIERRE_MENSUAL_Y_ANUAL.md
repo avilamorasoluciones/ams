@@ -2,9 +2,9 @@
 
 ## Cada mes
 
-1. Exportar Caja AMS.
-2. Exportar Suscripciones.
-3. Exportar Operación.
+1. Exportar Caja AMS desde Gestión → Finanzas.
+2. Exportar clientes y Suscripciones desde Gestión → Clientes / Suscripciones.
+3. Exportar Operación desde Gestión → Operación.
 4. Revisar dominios por vencer.
 5. Revisar servicios recurrentes.
 6. Conciliar cobros recibidos.
