@@ -98,7 +98,7 @@ button,input,select,textarea{font:inherit}.top{height:68px;border-bottom:1px sol
         <button class="btn primary" id="pdfBtn">Exportar PDF</button>
         <button class="btn green" id="shareBtn">Compartir PDF</button>
         <button class="btn" id="printBtn">Imprimir</button>
-        <button class="btn" id="saveBtn">Guardar perfil</button>
+        <button class="btn" id="saveBtn">Guardar borrador</button>
         <button class="btn warn" id="clearBtn">Limpiar</button>
       </div>
       <div class="status" id="status"></div>
@@ -114,7 +114,7 @@ button,input,select,textarea{font:inherit}.top{height:68px;border-bottom:1px sol
 
 <script>
 const $=id=>document.getElementById(id);
-const fields=["docType","existingClient","number","date","issuer","issuerId","issuerEmail","issuerPhone","issuerAddress","client","clientId","clientEmail","clientPhone","country","clientCity","clientAddress","concept","period","currency","amount","tax","deliverables","conditions","method","paymentRef","paymentData","clauses","validity","startDate","outcome"];
+const fields=["docType","existingClient","number","date","issuer","issuerId","issuerEmail","issuerPhone","issuerAddress","client","clientId","clientEmail","clientPhone","country","clientCity","domain","website","hosting","clientAddress","concept","period","currency","amount","tax","deliverables","conditions","method","paymentRef","paymentData","clauses","validity","startDate","outcome"];
 const today=()=>new Date().toISOString().slice(0,10);
 const params=new URLSearchParams(location.search);
 const initialType=params.get("tipo");
@@ -140,7 +140,7 @@ function loadClients(){
 }
 function useClient(){
  const list=loadClients();const c=list[Number(val("existingClient"))];if(!c)return;
- $("client").value=c.company||"";$("clientEmail").value=c.email||"";$("clientPhone").value=c.phone||"";$("country").value=c.country||"Colombia";$("clientAddress").value=c.address||"";$("clientCity").value=c.city||"";$("concept").value=$("concept").value||((c.webType||"Servicio web")+" para "+(c.company||"cliente"));$("currency").value=c.currency||$("currency").value;$("amount").value=c.price??$("amount").value;
+ $("client").value=c.company||"";$("clientEmail").value=c.email||"";$("clientPhone").value=c.phone||"";$("country").value=c.country||"Colombia";$("clientAddress").value=c.address||"";$("clientCity").value=c.city||"";$("domain").value=c.domain||"";$("website").value=c.url||"";$("hosting").value=c.hosting||"";$("concept").value=$("concept").value||((c.webType||"Servicio web")+" para "+(c.company||"cliente"));$("currency").value=c.currency||$("currency").value;$("amount").value=c.price??$("amount").value;$("period").value=c.period==="annual"?"Anual":"Mensual";$("validity").value=c.due?"Renovación / próximo pago: "+c.due:"";
  render();
 }
 function setStatus(s){$("status").textContent=s;setTimeout(()=>{if($("status").textContent===s)$("status").textContent=""},3500)}
@@ -201,7 +201,7 @@ function renderBase(){
  return html;
 }
 function renderFicha(){
- return '<div class="p-section"><div class="p-label">Información del cliente</div><table class="p-table"><tbody><tr><td>Empresa / nombre</td><td>'+esc(val("client")||"-")+'</td></tr><tr><td>Identificación</td><td>'+esc(val("clientId")||"-")+'</td></tr><tr><td>Correo</td><td>'+esc(val("clientEmail")||"-")+'</td></tr><tr><td>Teléfono</td><td>'+esc(val("clientPhone")||"-")+'</td></tr><tr><td>País / ciudad</td><td>'+esc([val("country"),val("clientCity")].filter(Boolean).join(" · ")||"-")+'</td></tr><tr><td>Dirección</td><td>'+esc(val("clientAddress")||"-")+'</td></tr></tbody></table></div><div class="p-section"><div class="p-label">Servicio asociado</div><div class="p-value">'+esc(val("concept")||"-")+'<br>'+esc(val("deliverables")||"")+'</div></div><div class="p-section"><div class="p-label">Pago / renovación</div><div class="p-value">'+esc([val("currency"),val("amount")?money(val("amount"),val("currency")):"",val("period"),val("method")].filter(Boolean).join(" · ")||"-")+'</div></div><div class="p-section"><div class="p-label">Condiciones / notas</div><div class="p-value">'+esc(val("conditions")||val("outcome")||"-")+'</div></div>';
+ return '<div class="p-section"><div class="p-label">Información del cliente</div><table class="p-table"><tbody><tr><td>Empresa / nombre</td><td>'+esc(val("client")||"-")+'</td></tr><tr><td>Identificación</td><td>'+esc(val("clientId")||"-")+'</td></tr><tr><td>Correo</td><td>'+esc(val("clientEmail")||"-")+'</td></tr><tr><td>Teléfono</td><td>'+esc(val("clientPhone")||"-")+'</td></tr><tr><td>País / ciudad</td><td>'+esc([val("country"),val("clientCity")].filter(Boolean).join(" · ")||"-")+'</td></tr><tr><td>Dirección</td><td>'+esc(val("clientAddress")||"-")+'</td></tr><tr><td>Dominio</td><td>'+esc(val("domain")||"-")+'</td></tr><tr><td>URL</td><td>'+esc(val("website")||"-")+'</td></tr><tr><td>Alojamiento / infraestructura</td><td>'+esc(val("hosting")||"-")+'</td></tr></tbody></table></div><div class="p-section"><div class="p-label">Servicio asociado</div><div class="p-value">'+esc(val("concept")||"-")+'<br>'+esc(val("deliverables")||"")+'</div></div><div class="p-section"><div class="p-label">Pago / renovación</div><div class="p-value">'+esc([val("currency"),val("amount")?money(val("amount"),val("currency")):"",val("period"),val("validity"),val("method")].filter(Boolean).join(" · ")||"-")+'</div></div><div class="p-section"><div class="p-label">Condiciones / notas</div><div class="p-value">'+esc(val("conditions")||val("outcome")||"-")+'</div></div>';
 }
 function renderPerfil(){
  return '<div class="p-section"><div class="p-label">Datos registrados</div><table class="p-table"><tbody><tr><td>Nombre</td><td>'+esc(val("issuer")||"-")+'</td></tr><tr><td>Identificación</td><td>'+esc(val("issuerId")||"-")+'</td></tr><tr><td>Correo</td><td>'+esc(val("issuerEmail")||"-")+'</td></tr><tr><td>Teléfono</td><td>'+esc(val("issuerPhone")||"-")+'</td></tr><tr><td>Dirección / ciudad</td><td>'+esc(val("issuerAddress")||"-")+'</td></tr></tbody></table></div><div class="p-section"><div class="p-label">Uso</div><div class="p-value">Perfil interno para completar documentos de Avila Mora Soluciones. Cada persona puede guardar sus propios datos en el dispositivo.</div></div>';
