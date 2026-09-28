@@ -11,7 +11,7 @@
 *{box-sizing:border-box}html,body{margin:0;height:100%;background:var(--bg);color:var(--text);font-family:Arial,system-ui,sans-serif}body{overflow:hidden}
 .auth{position:fixed;inset:0;background:radial-gradient(circle at 50% 0%,#f0cc5818,transparent 45%),var(--bg);z-index:50;display:grid;place-items:center;padding:20px}
 .auth-card{width:min(430px,100%);padding:32px;border:1px solid var(--line);border-radius:22px;background:linear-gradient(145deg,#111c31,#0c1423);box-shadow:0 28px 90px #0007}
-.brand{font-weight:900;display:flex;align-items:center;gap:10px}.dot{width:11px;height:11px;border-radius:50%;background:var(--gold);box-shadow:0 0 18px #f0cc5866}.brand small{display:block;color:var(--muted);font-size:9px;letter-spacing:.18em;text-transform:uppercase}
+.brand{font-weight:900;display:flex;align-items:center;gap:10px}.brand img{width:34px;height:34px;border-radius:10px}.brand small{display:block;color:var(--muted);font-size:9px;letter-spacing:.18em;text-transform:uppercase}.dot{width:11px;height:11px;border-radius:50%;background:var(--gold);box-shadow:0 0 18px #f0cc5866}
 .auth-icon{width:54px;height:54px;border-radius:15px;background:#f0cc5818;border:1px solid #f0cc5840;display:grid;place-items:center;color:#ffe07a;font-size:22px;margin-top:28px}
 .auth h1{font-size:25px;margin:17px 0 6px}.auth p{color:var(--muted);font-size:12px;line-height:1.5}.auth label{display:block;color:#dbe3ee;font-size:11px;font-weight:800;margin-top:15px}.input{width:100%;background:#080f1c;color:#fff;border:1px solid #2a3a53;border-radius:10px;padding:12px;font:inherit;margin-top:6px;outline:0}.input:focus{border-color:#f0cc58}.btn{border:1px solid var(--line);background:#ffffff08;color:#fff;border-radius:10px;padding:10px 13px;font-weight:900;text-decoration:none;cursor:pointer}.gold{background:linear-gradient(135deg,#ffe07a,#c39a25);color:#111;border:0}.error{color:#ff9baa;background:#f06b7c12;border:1px solid #f06b7c30;padding:9px;border-radius:9px;font-size:11px;margin-top:10px;text-align:center}
 .app{display:none;height:100vh}.top{height:70px;display:flex;align-items:center;gap:12px;padding:10px 14px;border-bottom:1px solid var(--line);background:#070b12f5}.top .right{margin-left:auto;display:flex;gap:8px}.title{font-weight:900;font-size:15px}
@@ -23,7 +23,7 @@
 <body>
 <div class="auth" id="auth">
   <form class="auth-card" id="loginForm" autocomplete="off">
-    <div class="brand"><span class="dot"></span><span>Avila Mora<small>Soluciones</small></span></div>
+    <div class="brand"><img src="../img/ams-favicon.svg?v=10" alt=""><span>Avila Mora<small>Soluciones</small></span></div>
     <div class="auth-icon">🔒</div>
     <h1>Acceso a Gestión AMS</h1>
     <p>Centro interno para clientes, documentos, finanzas, operación y cotización.</p>
@@ -34,7 +34,7 @@
   </form>
 </div>
 <div class="app" id="app">
-<header class="top"><div class="brand"><span class="dot"></span>AMS</div><div class="title" id="title">Gestión</div><div class="right"><button class="btn" id="globalBackup">↓ Respaldo</button><a class="btn" href="../index.html">Web AMS</a><button class="btn gold" id="logout">Cerrar sesión</button></div></header>
+<header class="top"><div class="brand"><img src="../img/ams-favicon.svg?v=10" alt=""><span>Avila Mora<small>Soluciones</small></span></div><div class="title" id="title">Gestión</div><div class="right"><button class="btn" id="globalBackup">↓ Respaldo</button><a class="btn" href="../index.html">Web AMS</a><button class="btn gold" id="logout">Cerrar sesión</button></div></header>
 <div class="layout"><aside><div class="nav" id="nav">
 <button class="active" data-v="home">⌂ Inicio</button><button data-v="calculadora">▣ Calculadora</button><button data-v="suscripciones">◉ Clientes / Suscripciones</button><button data-v="documentos">▤ Documentos PDF</button><button data-v="finanzas">▤ Finanzas</button><button data-v="operacion">⚙ Operación</button>
 </div></aside><main>
