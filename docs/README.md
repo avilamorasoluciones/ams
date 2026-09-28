@@ -9,5 +9,7 @@ Documentos de trabajo para operar Avila Mora Soluciones con orden antes y despu�
 5. [Backups y seguridad](04_BACKUPS_Y_SEGURIDAD.md)
 6. [Cierre mensual y anual](05_CIERRE_MENSUAL_Y_ANUAL.md)
 7. [Facturación y documentos](06_FACTURACION_Y_DOCUMENTOS.md)
+8. [Sistema documental AMS](07_SISTEMA_DOCUMENTAL_AMS.md)
+9. [Guía rápida de uso](08_GUIA_DE_USO_AMS.md)
 
 Los campos entre corchetes [POR COMPLETAR] dependen de datos reales de Diego, del RUT, del proveedor de dominio/correo y de las decisiones del contador. No inventarlos.
