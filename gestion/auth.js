@@ -1,0 +1,1 @@
+(()=>{if(sessionStorage.amsGestionAuth!=="1"&&sessionStorage.amsCalc!=="1")location.replace("../index.html")})()
