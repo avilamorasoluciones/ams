@@ -3,5 +3,6 @@ Allow: /
 Disallow: /operacion/
 Disallow: /finanzas/
 Disallow: /suscripciones/
+Disallow: /calculadora/
 
 Sitemap: https://avilamorasoluciones.com/sitemap.xml
