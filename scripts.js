@@ -271,12 +271,17 @@ function initTheme() {
   applyTheme(savedTheme || getAutoTheme());
 }
 
-if (themeToggle) {
-  themeToggle.addEventListener("click", () => {
+const themeToggles = [
+  document.getElementById("themeToggle"),
+  document.getElementById("themeToggleMobile")
+].filter(Boolean);
+
+themeToggles.forEach((toggle) => {
+  toggle.addEventListener("click", () => {
     const nextTheme = document.body.classList.contains("light-theme") ? "dark" : "light";
     localStorage.setItem(THEME_KEY, nextTheme);
     applyTheme(nextTheme);
   });
-}
+});
 
 initTheme();
