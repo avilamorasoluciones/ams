@@ -11,14 +11,14 @@ La entrada normal es `/gestion/` y existe un único acceso interno.
 El Centro Documental no usa un formulario único para todo. Cada tipo de documento tiene su propio formulario y su propia estructura de PDF.
 
 El generador puede reutilizar:
-- datos del prestador;
+- datos del responsable;
 - correo y teléfono de AMS;
 - datos del cliente maestro registrado en Gestión;
 - dominio, URL, hosting y proyecto;
 - una plantilla del servicio;
 - valores y condiciones del caso concreto.
 
-El mismo documento puede editarse antes de generar el PDF. Los datos variables no deben quedar congelados en una plantilla genérica.
+El mismo documento puede editarse antes de generar el PDF.
 
 ## Documentos realmente usados en AMS
 
@@ -27,7 +27,7 @@ El mismo documento puede editarse antes de generar el PDF. Los datos variables n
 3. Comprobante de pago.
 4. Ficha de cliente / proyecto interna.
 
-AMS no necesita por ahora un módulo fiscal, de facturación electrónica ni un contrato de prestación de servicios dentro de este sistema. Esos documentos no forman parte del flujo cotidiano de este emprendimiento.
+No se incorporan módulos adicionales al sistema documental mientras no sean necesarios para la operación real.
 
 ## Plantillas de servicio
 
@@ -40,7 +40,7 @@ El generador incluye plantillas base para:
 - Hosting / mantenimiento.
 - Servicio personalizado.
 
-La plantilla solamente propone alcance, entregables y tiempos de referencia. Los datos del cliente, servicio, precio, calendario, alcance final y condiciones se deben revisar en cada documento.
+La plantilla solamente propone alcance, entregables y tiempos de referencia. Los datos del cliente, servicio, precio, calendario, alcance final y condiciones se revisan en cada documento.
 
 ## Flujo
 
@@ -48,17 +48,17 @@ Gestión → Documentos → elegir tipo → seleccionar cliente → seleccionar 
 
 ## Datos
 
-Los documentos y borradores se guardan localmente en el navegador de este dispositivo mediante `localStorage`. Eso permite operar sin backend, pero no sincroniza automáticamente entre computadores o celulares.
+Los documentos y borradores se guardan localmente en el navegador de este dispositivo mediante `localStorage`. Esto permite operar sin backend, pero no sincroniza automáticamente entre computadores o celulares.
 
-Los documentos consultan el cliente maestro y los datos de proyecto disponibles en Gestión. Todo sigue siendo local al origen del navegador; mientras no exista backend, no hay sincronización automática entre dispositivos.
+Los documentos consultan el cliente maestro y los datos de proyecto disponibles en Gestión.
 
 ## Firma y revisión
 
-El acta incluye espacios para firma. El documento generado es una plantilla administrativa/comercial y debe revisarse antes de entregar, especialmente cuando existan condiciones particulares sobre alcance, datos personales, propiedad de materiales o servicios de terceros.
+El acta incluye espacios para firma. El documento generado es una herramienta comercial/operativa y debe revisarse antes de entregar, especialmente cuando existan condiciones particulares sobre alcance, datos personales, propiedad de materiales o servicios de terceros.
 
 ## Alcance actual
 
-El sistema documental no pretende reemplazar un sistema fiscal o contable. Es una herramienta interna para preparar PDFs profesionales y mantener orden en la relación con cada cliente.
+El sistema documental existe para preparar PDFs profesionales y mantener orden en la relación con cada cliente. No pretende sustituir otras herramientas administrativas que AMS todavía no necesita.
 
 ## Evolución
 
