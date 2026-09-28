@@ -27,13 +27,13 @@ Ruta dentro de Gestión:
 `/gestion/suscripciones/`
 
 Uso:
-- Crear el cliente una sola vez.
-- Guardar empresa, contacto, correo, teléfono, dominio, URL, infraestructura, precio, moneda, periodicidad, inicio y días de gracia.
-- Revisar estados y próximos pagos.
-- Exportar un respaldo JSON.
-- Restaurar un respaldo cuando sea necesario.
+- Crear o editar el cliente una sola vez.
+- Guardar empresa, contacto, correo, teléfono, país, ciudad, dominio, URL e infraestructura.
+- Guardar la suscripción con precio, moneda, periodicidad, inicio, vencimiento, días de gracia, último pago y estado.
+- Usar **Registrar pago** para actualizar la próxima fecha y crear el ingreso correspondiente en Caja.
+- Exportar o restaurar un **respaldo completo de Gestión**.
 
-Los datos quedan en el navegador del dispositivo.
+Los datos quedan en el navegador del dispositivo y los módulos trabajan sobre el mismo cliente maestro.
 
 ## 4. Documentos
 
@@ -75,6 +75,7 @@ Registrar:
 - gastos;
 - aportes;
 - retiros;
+- cliente/proyecto relacionado;
 - soportes y referencias.
 
 Aporte no significa venta y retiro no significa gasto. Es control de gestión y no reemplaza la contabilidad fiscal.
@@ -93,16 +94,13 @@ Contacto inicial (Lead) → Calificado → Propuesta → Aceptado → Pago pendi
 
 ## 8. Flujo recomendado
 
-Formulario de proyecto → conversación/calificación → propuesta → aceptación → pago → alta en Operación → producción → revisión → entrega → documento correspondiente → registro financiero → Suscripción/mantenimiento.
+Formulario de proyecto → conversación/calificación → cliente maestro → propuesta → aceptación → pago → proyecto en Operación → producción → checklist → revisión → entrega → documento correspondiente → registro financiero → Suscripción/mantenimiento.
+
+Cuando el pago sea de una suscripción, **Registrar pago** desde Clientes/Suscripciones puede crear automáticamente el ingreso en Caja para evitar duplicarlo manualmente.
 
 ## 9. Datos y respaldos
 
-Las herramientas actuales usan almacenamiento local. Antes de cambiar de origen o equipo:
-- respaldar Operación;
-- respaldar Finanzas;
-- respaldar Suscripciones;
-- guardar los documentos generados;
-- conservar los borradores/perfiles importantes.
+Las herramientas actuales usan almacenamiento local. Antes de cambiar de origen o equipo, usar primero **Respaldo completo** desde Gestión. El respaldo reúne clientes, proyectos, finanzas y checklist. Además, conservar los PDFs generados y los perfiles/borradores importantes.
 
 Al pasar de GitHub Pages a `avilamorasoluciones.com`, el `localStorage` no se copia automáticamente porque pertenece al origen del navegador.
 
