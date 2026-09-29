@@ -100,9 +100,15 @@
   <link rel="preload" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700;800;900&display=swap" as="style" />
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700;800;900&display=swap" rel="stylesheet" media="print" onload="this.media='all'" />
   <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700;800;900&display=swap" /></noscript>
-  <link rel="preload" href="https://unpkg.com/aos@2.3.1/dist/aos.css" as="style" />
-  <link rel="stylesheet" href="https://unpkg.com/aos@2.3.1/dist/aos.css" media="print" onload="this.media='all'" />
-  <noscript><link rel="stylesheet" href="https://unpkg.com/aos@2.3.1/dist/aos.css" /></noscript>
+  <script id="ams-aos-css-loader">
+    (() => {
+      if (!window.matchMedia("(min-width: 741px)").matches) return;
+      const l = document.createElement("link");
+      l.rel = "stylesheet";
+      l.href = "https://unpkg.com/aos@2.3.1/dist/aos.css";
+      document.head.appendChild(l);
+    })();
+  </script>
   <script id="ams-aos-loader">
   (() => {
     if (!window.matchMedia("(min-width: 741px)").matches) return;
@@ -114,7 +120,7 @@
     document.head.appendChild(s);
   })();
 </script>
-  <link rel="stylesheet" href="styles.css?v=20260929-2" />
+  <link rel="stylesheet" href="styles.css?v=20260929-3" />
 
   <style>
     @media (max-width: 740px){
