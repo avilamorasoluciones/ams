@@ -1,4 +1,4 @@
-# Backups y seguridad · AMS
+# Backups y seguridad · Avila Mora Soluciones
 
 ## GitHub
 GitHub es la copia principal del código fuente.
@@ -13,7 +13,7 @@ No subir:
 - datos privados de clientes.
 
 ## Herramientas internas
-Las herramientas de Gestión AMS usan almacenamiento local del navegador en la versión actual.
+Las herramientas de Gestión Avila Mora Soluciones usan almacenamiento local del navegador en la versión actual.
 
 Esto significa:
 - no hay sincronización automática entre dispositivos;
