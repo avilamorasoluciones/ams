@@ -1,4 +1,4 @@
-# Cierre mensual y anual · AMS
+# Cierre mensual y anual · Avila Mora Soluciones
 
 ## Cada mes
 1. Exportar **Respaldo completo** desde Gestión.
@@ -23,8 +23,8 @@ Guardar en un lugar privado:
 La documentación privada debe mantenerse fuera del repositorio público.
 
 ## Regla de caja
-- Ingreso = dinero que entra a AMS.
-- Gasto = dinero usado para operar AMS.
+- Ingreso = dinero que entra a Avila Mora Soluciones.
+- Gasto = dinero usado para operar Avila Mora Soluciones.
 - Aporte = dinero personal que entra temporalmente.
 - Retiro = dinero que sale hacia los propietarios.
 
@@ -32,4 +32,4 @@ No convertir aportes en ventas ni retiros en gastos.
 
 ## Revisión
 Última revisión: 28/09/2026
-Revisó: Equipo AMS
+Revisó: Equipo Avila Mora Soluciones
