@@ -120,7 +120,8 @@
     document.head.appendChild(s);
   })();
 </script>
-  <link rel="stylesheet" href="styles.css?v=20260929-3" />
+  <!-- CSS principal local: descubrimiento temprano para reducir el LCP en conexiones lentas. -->
+  <link rel="stylesheet" href="styles.css?v=20260929-4" />
 
   <style>
     @media (max-width: 740px){
@@ -462,7 +463,7 @@
       const loader = document.getElementById("loader");
       if (!loader) return;
       const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-      const delay = reduced ? 120 : 360;
+      const delay = reduced ? 100 : (window.matchMedia("(max-width: 740px)").matches ? 220 : 280);
       window.setTimeout(() => {
         loader.classList.add("hidden");
         window.setTimeout(() => loader.remove(), reduced ? 180 : 620);
@@ -652,7 +653,7 @@
             <img src="img/ams-system-unified.svg" alt="Sistema digital unificado con datos, inventario, automatización y dispositivos conectados" loading="lazy" decoding="async">
           </div>
           <div class="card-body">
-            <h3 style="color:var(--tertiary);">Lo convertimos en un sistema</h3>
+            <h3 class="accent-heading accent-tertiary">Lo convertimos en un sistema</h3>
             <p>Partimos de lo que ya haces, entendemos tu proceso y construimos una solución que se adapte a tu negocio.</p>
             <ul class="bullets success">
               <li><i class="fa-solid fa-circle-check"></i> Datos y procesos organizados en un solo lugar.</li>
@@ -791,7 +792,7 @@
       <div class="grid-2">
         <article class="card" data-aos="fade-right">
           <div class="card-body">
-            <h3 style="color:var(--primary);"><i class="fa-solid fa-handshake"></i> Nos encargamos de todo</h3>
+            <h3 class="accent-heading accent-primary"><i class="fa-solid fa-handshake"></i> Nos encargamos de todo</h3>
             <p>Podemos gestionar la parte técnica para que tú te concentres en tu negocio.</p>
             <ul class="bullets">
               <li><i class="fa-solid fa-check" style="color:var(--tertiary);"></i> Dominio, DNS y renovaciones.</li>
@@ -804,7 +805,7 @@
 
         <article class="card" data-aos="fade-left">
           <div class="card-body">
-            <h3 style="color:var(--secondary);"><i class="fa-solid fa-sliders"></i> O trabajamos con lo que ya tienes</h3>
+            <h3 class="accent-heading accent-secondary"><i class="fa-solid fa-sliders"></i> O trabajamos con lo que ya tienes</h3>
             <p>Si ya tienes dominio, hosting o infraestructura propia, no tienes que cambiarla porque sí.</p>
             <ul class="bullets">
               <li><i class="fa-solid fa-check" style="color:var(--tertiary);"></i> Trabajamos sobre tu infraestructura cuando sea viable.</li>
@@ -817,14 +818,14 @@
 
         <article class="card" data-aos="fade-right">
           <div class="card-body">
-            <h3 style="color:var(--gold);"><i class="fa-solid fa-id-card"></i> Tu dominio, bien administrado</h3>
+            <h3 class="accent-heading accent-gold"><i class="fa-solid fa-id-card"></i> Tu dominio, bien administrado</h3>
             <p>El dominio puede quedar registrado a nombre del cliente. Nosotros podemos administrarlo y encargarnos de renovaciones y configuración mientras el servicio esté contratado.</p>
           </div>
         </article>
 
         <article class="card" data-aos="fade-left">
           <div class="card-body">
-            <h3 style="color:var(--tertiary);"><i class="fa-solid fa-arrow-right-from-bracket"></i> Si algún día te vas</h3>
+            <h3 class="accent-heading accent-tertiary"><i class="fa-solid fa-arrow-right-from-bracket"></i> Si algún día te vas</h3>
             <p>No buscamos encerrarte. Si decides continuar por tu cuenta, te ayudamos con la transición y la entrega de lo que corresponda según el proyecto y el acuerdo.</p>
           </div>
         </article>
@@ -877,7 +878,7 @@
           <div class="portfolio-card" data-aos="fade-up" data-aos-delay="120">
             <div class="portfolio-img-container"><img src="img/controlproduccion.png" alt="Sistema de control de producción" loading="lazy" decoding="async" /></div>
             <div class="portfolio-info">
-              <h4 style="color:var(--primary);">Control de Producción</h4>
+              <h4 class="accent-heading accent-primary">Control de Producción</h4>
               <p>Materiales, pedidos, etapas y fichas técnicas organizadas en una sola solución.</p>
               <div class="portfolio-actions"><a class="btn btn-wa btn-wide" href="https://wa.me/573052547072?text=Hola%20Avila%20Mora%20Soluciones!%20Me%20interesa%20un%20sistema%20de%20producci%C3%B3n." target="_blank" rel="noopener"><i class="fa-brands fa-whatsapp"></i> Consultar</a></div>
             </div>
@@ -886,7 +887,7 @@
           <div class="portfolio-card" data-aos="fade-up" data-aos-delay="200">
             <div class="portfolio-img-container"><img src="img/quotecore.png" alt="LogiSuite - sistema de cotizaciones" loading="lazy" decoding="async" /></div>
             <div class="portfolio-info">
-              <h4 style="color:var(--primary);">LogiSuite / Cotizaciones</h4>
+              <h4 class="accent-heading accent-primary">LogiSuite / Cotizaciones</h4>
               <p>Clientes, productos, reglas y cotizaciones en una solución pensada para agilizar el trabajo comercial.</p>
               <div class="portfolio-actions"><a class="btn btn-wa btn-wide" href="https://wa.me/573052547072?text=Hola%20Avila%20Mora%20Soluciones!%20Me%20interesa%20un%20sistema%20de%20cotizaciones." target="_blank" rel="noopener"><i class="fa-brands fa-whatsapp"></i> Consultar</a></div>
             </div>
@@ -895,7 +896,7 @@
           <div class="portfolio-card" data-aos="fade-up" data-aos-delay="280">
             <div class="portfolio-img-container"><img src="img/parking.png" alt="Sistema de control de parqueaderos" loading="lazy" decoding="async" /></div>
             <div class="portfolio-info">
-              <h4 style="color:var(--primary);">Control de Parqueaderos</h4>
+              <h4 class="accent-heading accent-primary">Control de Parqueaderos</h4>
               <p>Registro, tiempos y cobros organizados para llevar el control diario sin complicaciones.</p>
               <div class="portfolio-actions"><a class="btn btn-wa btn-wide" href="https://wa.me/573052547072?text=Hola%20Avila%20Mora%20Soluciones!%20Me%20interesa%20un%20sistema%20de%20parqueaderos." target="_blank" rel="noopener"><i class="fa-brands fa-whatsapp"></i> Consultar</a></div>
             </div>
@@ -904,7 +905,7 @@
           <div class="portfolio-card" data-aos="fade-up" data-aos-delay="280">
             <div class="portfolio-img-container"><img src="img/reporte.png" alt="Sistema de reportes" loading="lazy" decoding="async" /></div>
             <div class="portfolio-info">
-              <h4 style="color:var(--primary);">Sistemas de Reportes</h4>
+              <h4 class="accent-heading accent-primary">Sistemas de Reportes</h4>
               <p>Información de tu negocio convertida en reportes claros para consultar y tomar decisiones.</p>
               <div class="portfolio-actions"><a class="btn btn-wa btn-wide" href="https://wa.me/573052547072?text=Hola%20Avila%20Mora%20Soluciones!%20Me%20interesa%20un%20sistema%20de%20reportes." target="_blank" rel="noopener"><i class="fa-brands fa-whatsapp"></i> Consultar</a></div>
             </div>
@@ -1147,7 +1148,7 @@
       }
     </style>
 
-      <div style="margin-bottom:12px;font-size:.82rem;color:#cbd5e1;opacity:1;">* La adaptación PWA se incluye sin costo adicional cuando el proyecto es compatible y así se solicita.</div>
+      <div class="ams-pwa-note">* La adaptación PWA se incluye sin costo adicional cuando el proyecto es compatible y así se solicita.</div>
       <span style="display:inline-flex;align-items:center;gap:9px;padding:6px 10px;border:1px solid rgba(255,255,255,.12);border-radius:999px;background:rgba(255,255,255,.04);font-weight:900;">© 2026 Avila Mora Soluciones <img src="img/colombia-flag.svg" alt="Colombia" width="30" height="20" style="display:block;width:30px;height:20px;object-fit:cover;border-radius:3px;" /></span>
       <div style="margin-top:10px;">Soluciones digitales claras, hechas para negocios reales.</div>
       <div class="ams-story-signature" aria-label="Historia de Avila Mora Soluciones">
