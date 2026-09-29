@@ -1,4 +1,4 @@
-# Seguridad de AMS
+# Seguridad de Avila Mora Soluciones
 
 Este repositorio contiene código público destinado principalmente a GitHub Pages.
 
@@ -14,7 +14,7 @@ Este repositorio contiene código público destinado principalmente a GitHub Pag
 ## Herramientas internas
 Las herramientas internas publicadas en GitHub Pages no deben considerarse un sistema de seguridad real. El noindex y la protección JavaScript solo reducen exposición casual; no sustituyen autenticación de servidor.
 
-Cuando AMS maneje información sensible o necesite acceso multiusuario/multidispositivo, migrar la operación a backend/base de datos con autenticación real.
+Cuando Avila Mora Soluciones maneje información sensible o necesite acceso multiusuario/multidispositivo, migrar la operación a backend/base de datos con autenticación real.
 
 ## Datos personales
 - Las rutas internas de Gestión se marcan como noindex y también se excluyen en robots.txt, pero esto **no constituye autenticación ni seguridad**.
