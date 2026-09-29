@@ -209,10 +209,13 @@
 
     <script>
         // Loader
-        window.addEventListener('load', () => {
+        setTimeout(() => {
             const loader = document.getElementById('loader');
-            setTimeout(() => { loader.classList.add('fade-out'); setTimeout(() => { loader.style.display = 'none'; }, 600); }, 500);
-        });
+            if (loader) {
+              loader.classList.add('fade-out');
+              setTimeout(() => { loader.style.display = 'none'; }, 600);
+            }
+        }, 360);
 
         // Mobile Menu
         const menuBtn = document.getElementById('menu-btn');
@@ -229,6 +232,6 @@
         document.querySelectorAll('.hidden').forEach(el => observer.observe(el));
     </script>
 <script>if("serviceWorker" in navigator){window.addEventListener("load",()=>navigator.serviceWorker.register("./sw.js").catch(()=>{}));}</script>
-<script src="../contacto.js?v=20260928-4"></script>
+<script src="../contacto.js?v=20260928-4" defer></script>
 <style>.ams-demo-notice{position:fixed;top:78px;right:18px;z-index:900;display:flex;align-items:center;gap:9px;padding:8px 10px 8px 12px;border:1px solid rgba(255,255,255,.16);border-radius:999px;background:rgba(10,11,13,.9);color:#fff;box-shadow:0 8px 24px rgba(0,0,0,.18);backdrop-filter:blur(12px);font:800 10px/1 system-ui,Arial;letter-spacing:.06em;transition:opacity .35s ease,transform .35s ease}.ams-demo-notice strong{color:var(--primary, #fbbf24)}.ams-demo-notice button{width:20px;height:20px;padding:0;border:0;border-radius:50%;background:rgba(255,255,255,.09);color:#fff;cursor:pointer;font:700 14px/20px system-ui,Arial}.ams-demo-notice button:hover{background:rgba(255,255,255,.18)}.ams-demo-notice.hide{opacity:0;transform:translateY(-8px);pointer-events:none}@media(max-width:600px){.ams-demo-notice{top:72px;right:10px;font-size:9px;padding-left:10px}}</style><script>(function(){var n=document.getElementById("amsDemoNotice");if(!n)return;var key="ams_demo_notice_dismissed_"+location.pathname;if(sessionStorage.getItem(key)==="1"){n.classList.add("hide");return}var hide=function(){n.classList.add("hide");sessionStorage.setItem(key,"1");setTimeout(function(){n.remove()},450)};n.querySelector("button").addEventListener("click",hide);setTimeout(hide,5000)})();</script></body>
 </html>
