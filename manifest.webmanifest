@@ -1,8 +1,8 @@
 {
   "name": "Avila Mora Soluciones",
-  "short_name": "AMS",
+  "short_name": "Avila Mora",
   "id": "./",
-  "description": "Soluciones digitales, desarrollo web y sistemas a medida.",
+  "description": "Desarrollo web y sistemas a medida para negocios.",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
