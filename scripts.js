@@ -21,7 +21,8 @@ if (window.visualViewport) {
     if (!loader) return;
 
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const minimumTime = reduced ? 550 : 2350;
+    const compactViewport = window.matchMedia("(max-width: 740px)").matches;
+    const minimumTime = reduced ? 450 : (compactViewport ? 900 : 1100);
     const elapsed = performance.now() - startedAt;
     const wait = Math.max(0, minimumTime - elapsed);
 
@@ -49,28 +50,41 @@ function initAOS() {
   });
 
   document.documentElement.classList.add("aos-ready");
-  setTimeout(() => AOS.refreshHard(), 60);
+  window.setTimeout(() => AOS.refreshHard(), 60);
 }
 
-try {
-  initAOS();
-} catch (e) {
-  document.documentElement.classList.remove("aos-ready");
-  console.warn("AOS falló, se mostrará sin animaciones:", e);
-}
-
-function refreshAOSLayout() {
-  if (window.AOS && !prefersReduced) {
-    AOS.refreshHard();
+const tryInitAOS = () => {
+  if (!window.AOS) return false;
+  try {
+    initAOS();
+    return true;
+  } catch (e) {
+    document.documentElement.classList.remove("aos-ready");
+    console.warn("AOS falló, se mostrará sin animaciones:", e);
+    return false;
   }
+};
+
+// AOS se descarga de forma diferida y no participa en el bloqueo del HTML inicial.
+if (!tryInitAOS() && !prefersReduced) {
+  document.addEventListener("DOMContentLoaded", tryInitAOS, { once: true });
 }
 
-window.addEventListener("load", refreshAOSLayout);
-window.addEventListener("resize", refreshAOSLayout);
-window.addEventListener("orientationchange", refreshAOSLayout);
+let aosRefreshTimer = 0;
+const queueAOSRefresh = () => {
+  if (!window.AOS || prefersReduced) return;
+  window.clearTimeout(aosRefreshTimer);
+  aosRefreshTimer = window.setTimeout(() => {
+    try { AOS.refreshHard(); } catch (_) {}
+  }, 160);
+};
+
+window.addEventListener("load", queueAOSRefresh, { once: true });
+window.addEventListener("resize", queueAOSRefresh, { passive: true });
+window.addEventListener("orientationchange", queueAOSRefresh, { passive: true });
 
 if (window.visualViewport) {
-  window.visualViewport.addEventListener("resize", refreshAOSLayout);
+  window.visualViewport.addEventListener("resize", queueAOSRefresh, { passive: true });
 }
 
 // ===== Navbar compact + ToTop =====
