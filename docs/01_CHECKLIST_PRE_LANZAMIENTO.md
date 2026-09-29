@@ -1,60 +1,60 @@
-# Checklist de pre-lanzamiento Avila Mora Soluciones
+# Checklist de lanzamiento · Avila Mora Soluciones
 
-## Antes de comprar/configurar el dominio
-- [x] Web principal preparada.
-- [x] WhatsApp con mensajes prellenados.
-- [x] Correo público definido: equipo@avilamorasoluciones.com.
-- [x] Microsoft Forms definido.
-- [x] Política de privacidad.
-- [x] Términos.
-- [x] Política de cookies.
-- [x] Canal de atención visible.
-- [x] Demos marcadas y controladas.
-- [x] GitHub Pages sigue funcionando como versión de prueba.
-- [x] No se ha forzado redirección del repositorio.
+## Sitio y dominio
+- [x] Web principal publicada.
+- [x] Dominio oficial: https://avilamorasoluciones.com/
+- [x] DNS configurado en Porkbun.
+- [x] Dominio verificado en GitHub Pages.
+- [x] HTTPS activo.
+- [x] CNAME de GitHub Pages configurado.
+- [x] Canonical, Open Graph y referencias públicas actualizados al dominio oficial.
+- [x] Sitemap y robots actualizados.
+- [x] Rutas principales revisadas.
+- [x] URL heredada de GitHub Pages conservada para compatibilidad/redirección.
+- [x] PWA principal preparada para instalación cuando el navegador ofrece instalación.
+- [x] Banners PWA simplificados en las experiencias que los muestran.
 - [x] No se han colocado secretos en el repositorio.
 
-## Datos que debe completar Diego
-- [ ] Domicilio/canal público real.
-- [ ] Titularidad real de las cuentas de correo y pago.
-- [ ] Datos que Wompi solicite para el alta.
-- [ ] Información que deba publicarse antes del lanzamiento comercial.
+## Identidad y operación
+- [x] Nombre comercial público: Avila Mora Soluciones.
+- [x] Comunicación pública revisada para reflejar un emprendimiento y marca comercial.
+- [ ] Completar los datos públicos del titular y domicilio/canal legal cuando corresponda a la operación comercial.
+- [ ] Confirmar titularidad y recuperación de las cuentas críticas.
 
-No almacenar esos datos sensibles dentro del repositorio público.
-
-## Cuando se configure avilamorasoluciones.com
-- [ ] DNS.
-- [ ] GitHub Pages.
-- [ ] HTTPS.
-- [ ] CNAME.
-- [ ] Verificar web en dominio propio.
-- [ ] Verificar todas las rutas.
-- [ ] Actualizar canonical donde corresponda.
-- [ ] Actualizar sitemap.
-- [ ] Mantener GitHub Pages de prueba mientras sea útil.
-- [ ] Comprobar redirecciones solo después de verificar el dominio.
-
-## Correo
+## Correo profesional
+- [ ] Definir proveedor de buzón real.
 - [ ] Crear equipo@avilamorasoluciones.com.
-- [ ] Activar recuperación y 2FA del administrador.
-- [ ] Probar recepción.
-- [ ] Probar envío.
-- [ ] Probar botones Gmail / Outlook / cliente predeterminado.
-- [ ] Configurar SPF/DKIM/DMARC según el proveedor elegido.
+- [ ] Probar recepción y envío desde equipo@.
+- [ ] Configurar SPF, DKIM y DMARC según el proveedor elegido.
+- [ ] Activar recuperación y 2FA de la cuenta administradora.
+
+## Google Search Console
+- [ ] Crear propiedad de tipo Dominio para avilamorasoluciones.com.
+- [ ] Añadir el TXT de verificación en Porkbun.
+- [ ] Verificar la propiedad.
+- [ ] Enviar sitemap.xml.
+- [ ] Revisar indexación y cobertura después de los primeros rastreos.
 
 ## Pagos
-- [ ] Crear Wompi si la modalidad elegida está disponible para la situación real.
+- [ ] Crear Wompi cuando corresponda.
 - [ ] Verificar titularidad y cuenta de desembolso.
-- [ ] Activar entorno de prueba.
-- [ ] Documentar los identificadores públicos necesarios.
 - [ ] Diseñar backend para webhooks.
 - [ ] Nunca poner secretos Wompi en GitHub Pages.
-- [ ] Probar pago aprobado, rechazado, cancelado y pendiente.
-- [ ] Probar renovaciones antes de ofrecerlas al público.
+- [ ] Probar los estados del flujo antes de cobrar en línea.
 
-## Antes de cobrar en línea
-- [ ] Confirmar que la identidad pública del proveedor esté completa y sea veraz.
-- [ ] Revisar condiciones de pago y recurrencia.
-- [ ] Revisar atención de solicitudes y reclamos.
-- [ ] Revisar privacidad/cookies.
-- [ ] Revisar cualquier regla específica de comercio electrónico que aplique al producto o servicio.
+## Protección de datos y comercio
+- [x] Política de privacidad publicada.
+- [x] Términos publicados.
+- [x] Política de cookies publicada.
+- [ ] Actualizar datos del responsable cuando la operación lo requiera.
+- [ ] Revisar condiciones específicas antes de activar un checkout público.
+
+## Operación y respaldos
+- [x] Gestión dispone de respaldo completo.
+- [x] Código respaldado en GitHub.
+- [ ] Mantener una copia de respaldo de Gestión fuera del equipo principal.
+- [ ] Conservar PDFs finales y documentos comerciales relevantes.
+
+## Infraestructura
+- [x] GitHub Pages continúa como infraestructura actual.
+- [ ] Evaluar OVHcloud/Coolify cuando el volumen operativo o los requisitos técnicos lo justifiquen.
