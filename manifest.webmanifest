@@ -1,14 +1,21 @@
 {
   "name": "Avila Mora Soluciones",
   "short_name": "Avila Mora",
-  "id": "./",
+  "id": "https://avilamorasoluciones.com/",
   "description": "Desarrollo web y sistemas a medida para negocios.",
-  "start_url": "./",
-  "scope": "./",
+  "start_url": "https://avilamorasoluciones.com/",
+  "scope": "https://avilamorasoluciones.com/",
   "display": "standalone",
+  "display_override": [
+    "window-controls-overlay",
+    "standalone"
+  ],
   "background_color": "#02040b",
   "theme_color": "#0f172a",
   "orientation": "any",
+  "lang": "es-CO",
+  "dir": "ltr",
+  "prefer_related_applications": false,
   "icons": [
     {
       "src": "img/AMS-circle-512.svg?v=2",
