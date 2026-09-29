@@ -2,9 +2,9 @@
 
 ## 1. Entrada principal
 
-Web pública:
-- `https://avilamorasoluciones.github.io/ams/`
-- futuro dominio: `https://avilamorasoluciones.com/`
+Web oficial:
+- `https://avilamorasoluciones.com/`
+- URL heredada: `https://avilamorasoluciones.github.io/ams/` (se conserva para compatibilidad)
 
 Gestión interna:
 - `/gestion/`
@@ -122,7 +122,7 @@ No guardar en estas herramientas:
 
 Las pantallas internas de GitHub Pages y su contraseña JavaScript no constituyen seguridad de servidor. Para información sensible o varios usuarios, migrar a backend + autenticación real + base de datos.
 
-## 11. Infraestructura prevista
+## 11. Infraestructura actual y evolución
 
 - Porkbun: dominio.
 - Zoho Mail: correo.
