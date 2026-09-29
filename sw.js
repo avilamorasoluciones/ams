@@ -1,4 +1,4 @@
-const CACHE_NAME = "ams-main-v4";
+const CACHE_NAME = "ams-main-v5";
 const APP_SHELL = [
   "./",
   "./index.html",
@@ -7,8 +7,8 @@ const APP_SHELL = [
   "./contacto.js",
   "./manifest.webmanifest",
   "./img/ams-favicon.svg",
-  "./img/ams-icon-192.svg",
-  "./img/ams-icon-512.svg",
+  "./img/ams-icon-192.png",
+  "./img/ams-icon-512.png",
   "./legal_privacidad.html",
   "./legal_terminos.html",
   "./legal_cookies.html"
