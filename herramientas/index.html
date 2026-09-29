@@ -712,7 +712,7 @@
         <div class="container">
             <a class="navbar-brand d-flex align-items-center gap-2 m-0" href="../">
                 <span class="brand-logo">
-                    <img src="icon-192.svg" alt="AMS">
+                    <img src="icon-192.svg" alt="Herramientas">
                     <span>
                         <span class="brand-text-main d-block">Avila Mora Soluciones</span>
                         <span class="brand-text-sub d-block">Herramientas digitales</span>
@@ -795,7 +795,7 @@
             <div class="tool-search">
                 <i class="fa-solid fa-magnifying-glass"></i>
                 <input id="tool-search" type="search" autocomplete="off" placeholder="Buscar una herramienta…" aria-label="Buscar una herramienta">
-                <div id="search-count" class="search-count">15 herramientas disponibles</div>
+                <div id="search-count" class="search-count">26 herramientas disponibles</div>
             </div>
         </section>
 
@@ -1230,7 +1230,7 @@
                     <p class="text-muted small">Crea contraseñas ultraseguras generadas localmente en tu dispositivo.</p>
                     
                     <div class="result-box text-center fs-6 py-2 mb-2 d-flex justify-content-between align-items-center" style="letter-spacing: 1px;">
-                        <span id="pass-output" class="text-white text-truncate">AMS-Pass!</span>
+                        <span id="pass-output" class="text-white text-truncate">Genera una clave segura</span>
                         <button class="btn btn-sm btn-outline-info ms-2 py-0 px-2" id="btn-copy-pass"><i class="fa-regular fa-copy"></i></button>
                     </div>
 
@@ -1674,7 +1674,7 @@
             const btn = document.getElementById('btn-watermark'); btn.innerHTML = 'Procesando...';
             try {
                 const doc = await PDFDocument.load(await wsWatermark.getFile().arrayBuffer()); 
-                const text = document.getElementById('watermark-text').value.trim() || "AMS PROTECTED";
+                const text = document.getElementById('watermark-text').value.trim() || "CONFIDENCIAL";
                 const c = hexToRgb(document.getElementById('watermark-color').value), op = parseFloat(document.getElementById('watermark-opacity').value);
                 doc.getPages().forEach(p => { const { width, height } = p.getSize(); p.drawText(text, { x: width/4, y: height/2, size: 50, color: rgb(c.r, c.g, c.b), opacity: op, rotate: degrees(45) }); });
                 downloadFile(await doc.save(), 'AMS_Sellado.pdf');
