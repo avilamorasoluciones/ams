@@ -11,13 +11,13 @@
   "orientation": "any",
   "icons": [
     {
-      "src": "img/ams-icon-192.svg",
+      "src": "img/ams-icon-192.svg?v=11",
       "sizes": "192x192",
       "type": "image/svg+xml",
       "purpose": "any maskable"
     },
     {
-      "src": "img/ams-icon-512.svg",
+      "src": "img/ams-icon-512.svg?v=11",
       "sizes": "512x512",
       "type": "image/svg+xml",
       "purpose": "any maskable"
