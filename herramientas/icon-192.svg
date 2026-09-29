@@ -1,26 +1,14 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="192" height="192" role="img" aria-labelledby="title desc">
-<title id="title">Herramientas — Isotipo AMH</title>
-<desc id="desc">Monograma integrado A, M y H en una sola composición geométrica.</desc>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="192" height="192" role="img" aria-labelledby="t d">
+<title id="t">Herramientas — isotipo AMH</title>
+<desc id="d">Monograma geométrico integrado por A, M y H.</desc>
 <defs>
-  <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#040914"/><stop offset=".52" stop-color="#071a31"/><stop offset="1" stop-color="#08071a"/></linearGradient>
-  <linearGradient id="a" x1="0" y1="1" x2="1" y2="0"><stop stop-color="#1768ff"/><stop offset=".48" stop-color="#258cff"/><stop offset="1" stop-color="#4ee9ff"/></linearGradient>
-  <linearGradient id="m" x1="0" y1="1" x2="1" y2=".15"><stop stop-color="#2449df"/><stop offset=".5" stop-color="#4f72ff"/><stop offset="1" stop-color="#8deaff"/></linearGradient>
-  <linearGradient id="h" x1="0" y1=".2" x2="1" y2=".8"><stop stop-color="#00c9ff"/><stop offset=".5" stop-color="#3bd4ff"/><stop offset="1" stop-color="#6b5cff"/></linearGradient>
-  <linearGradient id="orbit" x1="0" y1=".2" x2="1" y2=".8"><stop stop-color="#22d3ee" stop-opacity=".16"/><stop offset=".55" stop-color="#6366f1" stop-opacity=".25"/><stop offset="1" stop-color="#22d3ee" stop-opacity=".06"/></linearGradient>
-  <filter id="glow" x="-35%" y="-35%" width="170%" height="170%"><feGaussianBlur stdDeviation="5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+ <linearGradient id="a" x1="0" y1="1" x2="1" y2="0"><stop stop-color="#1f5ee8"/><stop offset=".5" stop-color="#2588ff"/><stop offset="1" stop-color="#45dcff"/></linearGradient>
+ <linearGradient id="m" x1="0" y1="1" x2="1" y2="0"><stop stop-color="#2d49d5"/><stop offset=".55" stop-color="#4b6fff"/><stop offset="1" stop-color="#9aeaff"/></linearGradient>
+ <linearGradient id="h" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#00c5ff"/><stop offset=".55" stop-color="#2fd3ff"/><stop offset="1" stop-color="#6672ff"/></linearGradient>
 </defs>
-<rect x="18" y="18" width="476" height="476" rx="112" fill="url(#bg)"/>
-<circle cx="256" cy="256" r="192" fill="none" stroke="url(#orbit)" stroke-width="2"/>
-<circle cx="256" cy="256" r="214" fill="none" stroke="url(#orbit)" stroke-width="1" opacity=".7"/>
-<g fill="none" stroke-linecap="round" stroke-linejoin="round" filter="url(#glow)">
-  <path d="M118 376 L223 154 Q231 137 247 137 H273 L394 376" stroke="url(#a)" stroke-width="32"/>
-  <path d="M165 292 H334" stroke="url(#a)" stroke-width="28"/>
-  <path d="M148 364 L205 230 L256 322 L307 230 L364 364" stroke="url(#m)" stroke-width="28"/>
-  <path d="M376 172 V360 M376 266 H307 M307 360 V172" stroke="url(#h)" stroke-width="25"/>
-</g>
-<path d="M162 332 C208 351 256 354 301 339 C329 330 348 311 347 287 C346 267 326 258 307 253" fill="none" stroke="#fff" stroke-opacity=".13" stroke-width="4" stroke-linecap="round"/>
-<g filter="url(#glow)">
-  <circle cx="104" cy="150" r="5" fill="#22d3ee"/><circle cx="407" cy="150" r="5" fill="#6d6cff"/>
-  <circle cx="95" cy="386" r="3.5" fill="#4ee9ff"/><circle cx="420" cy="378" r="3.5" fill="#7b6dff"/>
-</g>
+<rect x="20" y="20" width="472" height="472" rx="112" fill="#050b17"/>
+<path d="M108 380 L206 150 Q214 130 256 130 Q298 130 306 150 L404 380" fill="none" stroke="url(#a)" stroke-width="34" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M151 350 L211 239 L256 293 L301 239 L361 350" fill="none" stroke="url(#m)" stroke-width="28" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M228 319 V398 M284 319 V398 M228 358 H284" fill="none" stroke="url(#h)" stroke-width="25" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M154 349 L211 239 L256 293 L301 239 L358 349" fill="none" stroke="#ffffff" stroke-opacity=".12" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
 </svg>
