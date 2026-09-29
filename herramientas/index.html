@@ -679,27 +679,21 @@
 .ams-install-ios{font-size:.68rem;color:#cbd5e1;margin-top:4px}.ams-install-ios i{color:#67e8f9}
 @media(max-width:575px){.ams-install{right:10px;bottom:10px;width:calc(100vw - 20px)}.ams-install-card{padding:12px}.ams-install-icon{width:40px;height:40px;flex-basis:40px}.ams-install-actions{flex-direction:column;gap:2px}.ams-install-btn{padding:7px 10px}}
 @media(prefers-reduced-motion:reduce){.ams-install{transition:none}}
-</style>
+.ams-loader-card{width:min(390px,100%);padding:22px 24px;background:transparent;border:0;box-shadow:none}.ams-entry-loader .ams-loader-card:before{display:none}.ams-loader-bar{height:4px;border-radius:999px;background:rgba(255,255,255,.10);overflow:hidden;box-shadow:0 0 18px rgba(99,102,241,.12)}.ams-loader-bar span{display:block;width:38%;height:100%;border-radius:inherit;background:linear-gradient(90deg,#22d3ee,#6366f1 52%,#ec4899);box-shadow:0 0 14px #6366f1,0 0 24px rgba(236,72,153,.42);animation:amsBar 1.15s ease-in-out infinite}@keyframes amsBar{0%{transform:translateX(-125%)}100%{transform:translateX(330%)}}@media(prefers-reduced-motion:reduce){.ams-loader-bar span{animation:none;width:100%}}</style>
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Herramientas online gratuitas | Avila Mora Soluciones">
 <meta name="twitter:description" content="Utilidades prácticas para PDF, imágenes, texto y archivos, directamente desde el navegador.">
 </head>
 <body class="d-flex flex-column min-vh-100">
     <div class="ams-loader active ams-entry-loader" id="ams-loader" aria-hidden="false" role="status" aria-live="polite">
-        <div class="ams-loader-card">
-            <div class="ams-entry-logo" aria-hidden="true"><img src="icon-192.svg" alt=""></div>
-            <div class="ams-entry-kicker">AVILA MORA SOLUCIONES</div>
-            <div class="ams-entry-title">Herramientas</div>
-            <div class="ams-loader-orbit" aria-hidden="true" style="display:none"><div class="ams-loader-core"></div></div>
+        <div class="ams-loader-card" aria-label="Cargando">
             <div class="ams-loader-title" id="ams-loader-title" style="display:none">Procesando</div>
-            <div class="ams-loader-message" id="ams-loader-message">Preparando tus herramientas…</div>
+            <div class="ams-loader-message" id="ams-loader-message" style="display:none">Cargando</div>
             <div class="ams-loader-bar" aria-hidden="true"><span></span></div>
-            <div class="ams-loader-hint">Procesamiento local · Tus archivos permanecen en tu navegador.</div><div class="ams-entry-dots" aria-hidden="true"><span></span><span></span><span></span></div>
         </div>
     </div>
 
-
-<div class="ams-install" id="ams-install" role="dialog" aria-label="Instalar Herramientas">
+    <div class="ams-install" id="ams-install" role="dialog" aria-label="Instalar Herramientas">
   <div class="ams-install-card">
     <div class="ams-install-icon"><img src="icon-192.svg" alt=""></div>
     <div class="ams-install-copy">
