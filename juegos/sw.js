@@ -1,4 +1,4 @@
-const CACHE_NAME = 'ams-games-20260929-43';
+const CACHE_NAME = 'ams-games-20260929-44';
 const APP_SHELL = [
   "./",
   "./index.html",
@@ -19,9 +19,9 @@ const APP_SHELL = [
   "./tabu.js?v=20260926-32",
   "./verdadreto.js?v=20260926-32",
   "./yonunca.js?v=20260926-32",
-  "./manifest.webmanifest?v=20",
-  "./pwa-icon-192.png?v=20",
-  "./pwa-icon-512.png?v=20",
+  "./manifest.webmanifest?v=21",
+  "./pwa-icon-192.svg?v=21",
+  "./pwa-icon-512.svg?v=21",
   "./icon-games.svg",
   "./game-impostor.svg",
   "./game-bomba.svg",
