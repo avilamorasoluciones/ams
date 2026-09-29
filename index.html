@@ -1169,6 +1169,16 @@
   <script src="scripts.js?v=20260926-2"></script>
   <script src="contacto.js?v=20260928-4"></script>
   <script>
+    // Navegación externa de AMS: abrir recursos, formularios y enlaces fuera de la sección actual en una pestaña nueva.
+    document.querySelectorAll('a[href]').forEach((link) => {
+      const href = link.getAttribute('href') || '';
+      if (href && !href.startsWith('#') && !href.startsWith('javascript:')) {
+        link.setAttribute('target', '_blank');
+        link.setAttribute('rel', 'noopener');
+      }
+    });
+  </script>
+  <script>
     document.getElementById("emailCta")?.addEventListener("click", () => {
       const panel = document.getElementById("emailQuick");
       if (panel) panel.hidden = !panel.hidden;
