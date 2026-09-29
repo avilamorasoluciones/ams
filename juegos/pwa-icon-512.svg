@@ -1,12 +1,32 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192 192" width="512" height="512">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512" role="img" aria-label="Juegos Avila Mora">
 <defs>
- <linearGradient id="a" x1="0" y1="1" x2="1" y2="0"><stop stop-color="#ff9d00"/><stop offset=".52" stop-color="#ffc400"/><stop offset="1" stop-color="#ffe66b"/></linearGradient>
- <linearGradient id="m" x1="0" y1="1" x2="1" y2="0"><stop stop-color="#e58b00"/><stop offset=".58" stop-color="#ffb600"/><stop offset="1" stop-color="#ffe27a"/></linearGradient>
- <linearGradient id="j" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#ffd21f"/><stop offset=".55" stop-color="#ffb000"/><stop offset="1" stop-color="#ff8a00"/></linearGradient>
+  <linearGradient id="gold" x1="86" y1="75" x2="426" y2="442" gradientUnits="userSpaceOnUse">
+    <stop stop-color="#fff1a8"/>
+    <stop offset=".28" stop-color="#ffd54a"/>
+    <stop offset=".62" stop-color="#f5b51b"/>
+    <stop offset="1" stop-color="#d88700"/>
+  </linearGradient>
+  <linearGradient id="edge" x1="106" y1="106" x2="402" y2="410" gradientUnits="userSpaceOnUse">
+    <stop stop-color="#fff7c7"/>
+    <stop offset=".5" stop-color="#ffcf32"/>
+    <stop offset="1" stop-color="#b96b00"/>
+  </linearGradient>
+  <radialGradient id="bg" cx="50%" cy="35%" r="75%">
+    <stop stop-color="#30230d"/>
+    <stop offset="1" stop-color="#100c06"/>
+  </radialGradient>
+  <filter id="glow" x="-40%" y="-40%" width="180%" height="180%">
+    <feGaussianBlur stdDeviation="10" result="b"/>
+    <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+  </filter>
 </defs>
-<rect x="7" y="7" width="178" height="178" rx="42" fill="#171006"/>
-<path d="M38 151 72 65c3-8 7-11 24-11s21 3 24 11l34 86" fill="none" stroke="url(#a)" stroke-width="13" stroke-linecap="round" stroke-linejoin="round"/>
-<path d="M49 138 78 91l18 22 18-22 29 47" fill="none" stroke="url(#m)" stroke-width="11" stroke-linecap="round" stroke-linejoin="round"/>
-<path d="M116 118 V144 C116 154 110 160 101 160 C91 160 85 154 85 145" fill="none" stroke="url(#j)" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
-<path d="M51 138 78 92l18 21 18-21 27 46" fill="none" stroke="#fff" stroke-opacity=".12" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<rect width="512" height="512" rx="122" fill="url(#bg)"/>
+<circle cx="256" cy="256" r="192" fill="none" stroke="#f6c33b" stroke-opacity=".12" stroke-width="5"/>
+<path d="M128 299c-14-59 21-115 77-126 32-6 70-6 102 0 56 11 91 67 77 126l-14 59c-6 27-37 38-57 14l-32-43h-50l-32 43c-20 24-51 13-57-14z" fill="#19140b" stroke="url(#edge)" stroke-width="19" stroke-linejoin="round" filter="url(#glow)"/>
+<path d="M163 250v64M131 282h64" stroke="url(#gold)" stroke-width="19" stroke-linecap="round"/>
+<circle cx="354" cy="259" r="16" fill="#ffe37a"/>
+<circle cx="392" cy="297" r="16" fill="#f2aa18"/>
+<path d="M256 192v27M243 205h27" stroke="#fff4bd" stroke-width="8" stroke-linecap="round" opacity=".9"/>
+<path d="M117 125l8 19 19 8-19 8-8 19-8-19-19-8 19-8z" fill="#ffe89a" opacity=".9"/>
+<path d="M402 123l6 14 14 6-14 6-6 14-6-14-14-6 14-6z" fill="#f7c53b" opacity=".7"/>
 </svg>
