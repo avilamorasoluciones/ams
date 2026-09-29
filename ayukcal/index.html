@@ -499,8 +499,8 @@
     </div>
     <div id="installAppCard" class="panel install-app-card">
       <div>
-        <b id="installAppTitle">📲 Lleva AyuKcal contigo</b>
-        <p id="installAppText" class="muted" style="margin-top:5px;font-size:.86rem;">Instala AyuKcal como app para abrirla directamente desde tu dispositivo.</p>
+        <b id="installAppTitle">🥑 Instala AyuKcal</b>
+        <p id="installAppText" class="muted" style="margin-top:5px;font-size:.86rem;">Ten AyuKcal a mano.</p>
       </div>
       <div class="install-app-actions">
         <button id="installAppBtn" type="button" class="btn primary" onclick="installAyuKcal()">Instalar</button>
@@ -1107,21 +1107,21 @@ function updateInstallUI(){
     return;
   }
   if(deferredInstallPrompt){
-    $("installAppTitle").textContent="📲 Instala AyuKcal en tu dispositivo";
-    $("installAppText").textContent="Crea un acceso directo con icono propio y abre AyuKcal como una app.";
-    $("installAppBtn").textContent="Instalar AyuKcal";
+    $("installAppTitle").textContent="🥑 Instala AyuKcal";
+    $("installAppText").textContent="Ten AyuKcal a mano.";
+    $("installAppBtn").textContent="Instalar";
     card.style.display="flex";
     return;
   }
   if(isIOSDevice()){
-    $("installAppTitle").textContent="📲 Añade AyuKcal a tu pantalla de inicio";
-    $("installAppText").textContent="En iPhone/iPad: toca Compartir y luego «Añadir a pantalla de inicio».";
+    $("installAppTitle").textContent="🥑 Instala AyuKcal";
+    $("installAppText").textContent="Añádela desde el menú de tu dispositivo.";
     $("installAppBtn").textContent="Cómo instalar";
     card.style.display="flex";
     return;
   }
-  $("installAppTitle").textContent="📲 Instala AyuKcal como app";
-  $("installAppText").textContent="En Chrome: abre ⋮ y elige «Instalar aplicación» o «Añadir a pantalla de inicio».";
+  $("installAppTitle").textContent="🥑 Instala AyuKcal";
+  $("installAppText").textContent="Disponible desde el menú de instalación de Chrome.";
   $("installAppBtn").textContent="Cómo instalar";
   card.style.display="flex";
 }
@@ -1140,7 +1140,7 @@ async function installAyuKcal(){
   if(isIOSDevice()){
     toast("📲 En iPhone/iPad: abre Compartir y elige «Añadir a pantalla de inicio».");
   } else {
-    toast("📲 En Chrome: abre ⋮ y elige «Instalar aplicación» o «Añadir a pantalla de inicio».");
+    toast("📲 Instala la aplicación desde el menú de Chrome.");
   }
 }
 window.addEventListener("beforeinstallprompt",e=>{
@@ -1152,7 +1152,7 @@ window.addEventListener("appinstalled",()=>{
   deferredInstallPrompt=null;
   sessionStorage.removeItem("ayukcal_install_dismissed");
   updateInstallUI();
-  toast("🥑 AyuKcal ya está instalada.");
+  toast("AyuKcal ya está instalada.");
 });
 
 let CLOUD_USER = null;
