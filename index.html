@@ -438,6 +438,19 @@
     </div>
   </div>
 
+  <script id="ams-loader-boot">
+    (() => {
+      const loader = document.getElementById("loader");
+      if (!loader) return;
+      const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      const delay = reduced ? 120 : 360;
+      window.setTimeout(() => {
+        loader.classList.add("hidden");
+        window.setTimeout(() => loader.remove(), reduced ? 180 : 620);
+      }, delay);
+    })();
+  </script>
+
   <div class="fx-bg" aria-hidden="true">
     <div class="blob b1"></div>
     <div class="blob b2"></div>
@@ -573,7 +586,7 @@
         </div>
       </div>
 
-      <div class="hero-card" data-aos="fade-left">
+      <div class="hero-card">
         <div class="hero-card-inner">
           <div class="mini-title">
             <h2>¿Qué hacemos por ti?</h2>
@@ -1117,7 +1130,7 @@
   <button class="to-top" id="toTop" aria-label="Volver arriba" title="Volver arriba"><i class="fa-solid fa-arrow-up"></i></button>
 
 
-  <script src="scripts.js?v=20260929-3" defer></script>
+  <script src="scripts.js?v=20260929-4" defer></script>
   <script src="contacto.js?v=20260928-4" defer></script>
 <script id="ams-open-links-blank">
 (function(){
@@ -1177,7 +1190,7 @@
 <script id="ams-pwa-root-boot">
 (() => {
   if (!('serviceWorker' in navigator)) return;
-  window.addEventListener('load', () => navigator.serviceWorker.register('./sw.js?v=10').catch(() => {}));
+  window.addEventListener('load', () => navigator.serviceWorker.register('./sw.js?v=11').catch(() => {}));
 })();
 (() => {
   const banner = document.getElementById('amsPwaInstall');
