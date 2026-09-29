@@ -2043,7 +2043,7 @@
             close.addEventListener('click',()=>{sessionStorage.setItem(dismissedKey,'1');hide();});
             window.addEventListener('beforeinstallprompt',e=>{
                 e.preventDefault(); deferredPrompt=e;
-                if(canShow()) setTimeout(()=>show('Instala Herramientas AMS','Ten tus herramientas a mano.','Instalar'),500);
+                if(canShow()) setTimeout(()=>show('Instala Herramientas','', 'Instalar'),500);
             });
             btn.addEventListener('click',async()=>{
                 if(deferredPrompt){
