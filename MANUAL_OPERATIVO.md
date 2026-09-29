@@ -1,7 +1,7 @@
 # Manual Operativo AMS
 
 ## 1. Regla principal
-AMS comienza simple en GitHub Pages. Mientras el dominio propio no esté comprado/configurado, deben conservarse y probarse las URLs `avilamorasoluciones.github.io/ams/...`. Una vez configurado `avilamorasoluciones.com`, se mantiene el contenido funcional del repositorio y se hacen los cambios de canonical, sitemap y redirecciones de forma controlada. No migrar a OVHcloud/Coolify hasta que existan 2 clientes activos simultáneamente que justifiquen infraestructura propia.
+Avila Mora Soluciones opera actualmente con GitHub Pages y el dominio oficial `https://avilamorasoluciones.com/`. La URL heredada `https://avilamorasoluciones.github.io/ams/...` se conserva para compatibilidad y redirección. No migrar a OVHcloud/Coolify hasta que el flujo real de clientes y los requisitos técnicos justifiquen infraestructura propia.
 
 ## 2. Contacto rápido
 La web oficial publica `equipo@avilamorasoluciones.com` y WhatsApp +57 305 254 7072. Los botones de WhatsApp llevan un mensaje prellenado. Los botones de correo pueden abrir Gmail, Outlook o el cliente de correo predeterminado con asunto y mensaje prellenados.
@@ -122,4 +122,4 @@ En la descripción de Microsoft Forms, cuando el formulario vaya a utilizarse pa
 Mantener como preguntas obligatorias solo las confirmaciones y datos esenciales. No solicitar contraseñas, tarjetas, códigos de autenticación ni datos bancarios sensibles.
 
 ## 20. Nota de situación
-AMS es una iniciativa/marca en desarrollo. El repositorio no debe afirmar que existe una sociedad, registro, certificación o condición jurídica concreta si todavía no se ha formalizado o verificado.
+Avila Mora Soluciones es un emprendimiento y marca comercial de servicios digitales. El repositorio no debe afirmar que existe una sociedad, registro, certificación o condición jurídica concreta si esa información no ha sido formalizada o verificada.
