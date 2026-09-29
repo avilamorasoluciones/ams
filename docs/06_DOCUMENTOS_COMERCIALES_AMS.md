@@ -1,4 +1,4 @@
-# Documentos comerciales AMS
+# Documentos comerciales Avila Mora Soluciones
 
 ## Propósito
 
@@ -65,4 +65,4 @@ El generador reutiliza el cliente maestro de Gestión y las plantillas de servic
 
 ## Evolución
 
-Si AMS más adelante necesita otro tipo de documento, se añade solamente cuando exista una necesidad real y concreta.
+Si Avila Mora Soluciones más adelante necesita otro tipo de documento, se añade solamente cuando exista una necesidad real y concreta.
