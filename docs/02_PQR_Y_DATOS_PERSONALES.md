@@ -1,4 +1,4 @@
-# Solicitudes y datos personales · AMS
+# Solicitudes y datos personales · Avila Mora Soluciones
 
 ## Canal
 Canal principal:
@@ -29,7 +29,7 @@ Registrar:
 - fecha y contenido de respuesta;
 - evidencia del envío.
 
-La normativa colombiana de protección de datos reconoce derechos como conocer, actualizar, rectificar y solicitar la supresión de datos en los casos aplicables. La autoridad de protección de datos es la Superintendencia de Industria y Comercio (SIC). AMS no debe afirmar una inscripción o certificación ante la SIC que no exista. Fuente oficial: https://sedeelectronica.sic.gov.co/politica-de-tratamiento-de-datos-personales
+La normativa colombiana de protección de datos reconoce derechos como conocer, actualizar, rectificar y solicitar la supresión de datos en los casos aplicables. La autoridad de protección de datos es la Superintendencia de Industria y Comercio (SIC). Avila Mora Soluciones no debe afirmar una inscripción o certificación ante la SIC que no exista. Fuente oficial: https://sedeelectronica.sic.gov.co/politica-de-tratamiento-de-datos-personales
 
 ## Tiempos de referencia
 Para el régimen general de protección de datos, registrar siempre la fecha de entrada y revisar el plazo aplicable al tipo de solicitud antes de responder. Las consultas y reclamos tienen plazos legales específicos y pueden existir prórrogas.
@@ -63,4 +63,4 @@ Para una inconformidad de un cliente, registrar:
 - solución ofrecida;
 - fecha de cierre.
 
-Cuando AMS active venta directa en línea, revisar las reglas de protección al consumidor que correspondan.
+Cuando Avila Mora Soluciones active venta directa en línea, revisar las reglas de protección al consumidor que correspondan.
