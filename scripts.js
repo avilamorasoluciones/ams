@@ -227,12 +227,10 @@ window.addEventListener("load", () => {
 
   carousels.forEach((carousel) => {
     let settleTimer = 0;
-    let scrollingByScript = false;
+    let userGesture = false;
 
     const items = () => Array.from(carousel.children).filter((el) => el.offsetWidth > 0);
-
     const hasOverflow = () => carousel.scrollWidth > carousel.clientWidth + 8;
-
     const hideHint = () => carousel.classList.add("carousel-used");
 
     const centerNearestCard = (behavior = "smooth") => {
@@ -253,20 +251,28 @@ window.addEventListener("load", () => {
       });
 
       const target = nearest.offsetLeft - (carousel.clientWidth - nearest.offsetWidth) / 2;
-      scrollingByScript = true;
       carousel.scrollTo({ left: Math.max(0, target), behavior });
-      window.setTimeout(() => { scrollingByScript = false; }, behavior === "smooth" ? 420 : 40);
+      userGesture = false;
     };
 
     const scheduleSettle = () => {
       window.clearTimeout(settleTimer);
-      settleTimer = window.setTimeout(() => centerNearestCard("smooth"), 110);
+      settleTimer = window.setTimeout(() => {
+        centerNearestCard("smooth");
+      }, 120);
     };
 
-    carousel.addEventListener("pointerdown", hideHint, { passive: true });
-    carousel.addEventListener("touchstart", hideHint, { passive: true });
-    carousel.addEventListener("scroll", () => {
+    const startGesture = () => {
+      userGesture = true;
       hideHint();
+    };
+
+    carousel.addEventListener("pointerdown", startGesture, { passive: true });
+    carousel.addEventListener("touchstart", startGesture, { passive: true });
+    carousel.addEventListener("wheel", startGesture, { passive: true });
+
+    carousel.addEventListener("scroll", () => {
+      if (!userGesture) return;
       scheduleSettle();
     }, { passive: true });
 
@@ -274,19 +280,12 @@ window.addEventListener("load", () => {
     carousel.addEventListener("pointerup", scheduleSettle, { passive: true });
     carousel.addEventListener("pointercancel", scheduleSettle, { passive: true });
 
-    if ("scrollend" in window) {
-      carousel.addEventListener("scrollend", () => {
-        if (!scrollingByScript) centerNearestCard("smooth");
-      }, { passive: true });
+    if (hasOverflow()) {
+      window.requestAnimationFrame(() => centerNearestCard("auto"));
     }
 
-    if (!hasOverflow()) hideHint();
-
     window.addEventListener("resize", () => {
-      if (!hasOverflow()) {
-        hideHint();
-        return;
-      }
+      if (!hasOverflow()) return;
       window.requestAnimationFrame(() => centerNearestCard("auto"));
     }, { passive: true });
   });
