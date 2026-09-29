@@ -697,6 +697,24 @@
         </div>
     </div>
 
+    <script id="ams-entry-loader-guard">
+      (() => {
+        const loader = document.getElementById('ams-loader');
+        if (!loader) return;
+        const release = () => {
+          loader.classList.remove('active','leaving');
+          loader.setAttribute('aria-hidden','true');
+          document.documentElement.classList.add('ams-tools-ready');
+        };
+        if (document.readyState === 'loading') {
+          document.addEventListener('DOMContentLoaded', release, {once:true});
+        } else {
+          release();
+        }
+        window.setTimeout(release, 1200);
+      })();
+    </script>
+
     <div class="ams-install" id="ams-install" role="dialog" aria-label="Instalar Herramientas">
   <div class="ams-install-card">
     <div class="ams-install-icon"><img src="icon-192.svg" alt=""></div>
@@ -1982,28 +2000,6 @@
             ams$('csv-output').value=JSON.stringify(data,null,2);
         });
         ams$('btn-csv-copy')?.addEventListener('click',function(){amsCopy(ams$('csv-output').value);});
-
-        (function(){
-            const loader=document.getElementById('ams-loader');
-            if(!loader)return;
-            const started=performance.now();
-            const minimum=220;
-            function finishEntry(){
-                const wait=Math.max(0,minimum-(performance.now()-started));
-                setTimeout(function(){
-                    loader.classList.add('leaving');
-                    setTimeout(function(){loader.classList.remove('active');loader.setAttribute('aria-hidden','true');loader.classList.remove('leaving');},380);
-                },wait);
-            }
-            if(document.readyState==="loading") document.addEventListener("DOMContentLoaded",finishEntry,{once:true});
-            else finishEntry();
-            setTimeout(function(){
-                if(loader.classList.contains('active')){
-                    loader.classList.remove('active','leaving');
-                    loader.setAttribute('aria-hidden','true');
-                }
-            }, 1800);
-        })();
 
         // Loader visual AMS para operaciones que requieren procesamiento
         (function(){
