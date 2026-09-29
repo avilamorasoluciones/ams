@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <script src="../github-redirect.js"></script>
+  <script src="../github-redirect.js" defer></script>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <meta name="theme-color" content="#070A12" />
@@ -24,8 +24,12 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" as="style" />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" media="print" onload="this.media='all'" />
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" /></noscript>
+  <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" as="style" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" media="print" onload="this.media='all'" />
+  <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" /></noscript>
 
   <style>
     :root{
@@ -81,9 +85,6 @@
     @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*:before,*:after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
   </style>
 <link rel="icon" href="../img/AMS-circle-192.svg?v=3" type="image/svg+xml" />
-<meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Soluciones digitales para negocios | Avila Mora Soluciones">
-<meta name="twitter:description" content="Catálogos, páginas web y sistemas a medida para llevar tu negocio al siguiente nivel digital.">
 </head>
 <body>
   <nav class="nav"><div class="container nav-inner">
@@ -141,6 +142,6 @@
   </main>
   <footer><div class="container"><p>Desarrollado con <strong>Avila Mora Soluciones</strong> · Tecnología accesible para negocios reales.</p><p>© 2026 Avila Mora Soluciones</p><p><a href="mailto:equipo@avilamorasoluciones.com">equipo@avilamorasoluciones.com</a></p><p style="margin-top:12px;display:flex;justify-content:center;gap:14px;flex-wrap:wrap;font-size:.78rem"><a href="../legal_privacidad.html">Privacidad</a><a href="../legal_terminos.html">Términos</a><a href="../legal_cookies.html">Cookies</a></p></div></footer>
   <a class="fab" href="https://wa.me/573052547072?text=Hola%20Avila%20Mora%20Soluciones!%20Vengo%20del%20catálogo%20y%20quiero%20mejorar%20la%20tecnología%20de%20mi%20negocio." target="_blank" rel="noopener noreferrer" aria-label="Escribir por WhatsApp" title="Escribir por WhatsApp"><i class="fa-brands fa-whatsapp"></i></a>
-<script src="../contacto.js?v=20260928-4"></script>
+<script src="../contacto.js?v=20260928-4" defer></script>
 </body>
 </html>
