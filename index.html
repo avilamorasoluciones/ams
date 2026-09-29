@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <script src="./github-redirect.js"></script>
+  <script src="./github-redirect.js" defer></script>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>Avila Mora Soluciones | Desarrollo web y sistemas a medida</title>
@@ -90,11 +90,14 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link rel="preconnect" href="https://images.unsplash.com" crossorigin />
 
+  <link rel="preload" href="https://fonts.gstatic.com/s/montserrat/v31/JTUSjIg1_i6t8kCHKm459WlhyyTh89Y.woff2" as="font" type="font/woff2" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700;800;900&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
+  <link rel="preload" href="https://unpkg.com/aos@2.3.1/dist/aos.css" as="style" />
+  <link rel="stylesheet" href="https://unpkg.com/aos@2.3.1/dist/aos.css" media="print" onload="this.media='all'" />
+  <noscript><link rel="stylesheet" href="https://unpkg.com/aos@2.3.1/dist/aos.css" /></noscript>
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js" defer></script>
   <link rel="stylesheet" href="styles.css" />
 
   <style>
@@ -457,7 +460,7 @@
 
       <div class="nav-extra" aria-label="Accesos y recursos">
         <div class="nav-utility-group" aria-label="Contacto y tema">
-          <a class="nav-shortcut nav-utility-wa" href="https://wa.me/573052547072?text=Hola%20Avila%20Mora%20Soluciones!%20Quiero%20cotizar%20un%20proyecto." target="_blank" rel="noopener" aria-label="WhatsApp" title="WhatsApp">
+          <a class="nav-shortcut nav-utility-wa" href="https://wa.me/573052547072?text=Hola%20Avila%20Mora%20Soluciones!%20Quiero%20cotizar%20un%20proyecto." target="_blank" rel="noopener" aria-label="WhatsApp · Cotizar" title="WhatsApp · Cotizar">
             <i class="fa-brands fa-whatsapp" aria-hidden="true"></i>
           </a>
           <button class="nav-shortcut nav-utility-theme" id="themeToggle" type="button" aria-label="Cambiar tema" title="Cambiar tema">
@@ -491,7 +494,7 @@
       </div>
 
       <div class="mobile-utilities" aria-label="Accesos rápidos">
-        <a class="nav-shortcut nav-utility-wa" href="https://wa.me/573052547072?text=Hola%20Avila%20Mora%20Soluciones!%20Quiero%20cotizar%20un%20proyecto." target="_blank" rel="noopener" aria-label="WhatsApp" title="WhatsApp">
+        <a class="nav-shortcut nav-utility-wa" href="https://wa.me/573052547072?text=Hola%20Avila%20Mora%20Soluciones!%20Quiero%20cotizar%20un%20proyecto." target="_blank" rel="noopener" aria-label="WhatsApp · Cotizar" title="WhatsApp · Cotizar">
           <i class="fa-brands fa-whatsapp" aria-hidden="true"></i>
         </a>
         <button class="nav-shortcut nav-utility-theme" type="button" id="themeToggleMobile" aria-label="Cambiar tema" title="Cambiar tema">
@@ -525,9 +528,10 @@
     </div>
   </div>
 
+  <main id="main-content">
   <header class="hero" id="inicio">
     <div class="container hero-grid">
-      <div data-aos="fade-right">
+      <div class="hero-copy">
         <div class="badge-row">
           <span class="badge"><i class="fa-solid fa-wand-magic-sparkles"></i> Hecho a medida</span>
           <span class="badge"><i class="fa-solid fa-file-invoice-dollar"></i> Mensualidad bajo cotización</span>
@@ -552,8 +556,8 @@
           <a class="btn btn-ghost" href="#servicios">
             <i class="fa-solid fa-layer-group"></i> Ver servicios
           </a>
-          <a class="btn btn-wa" href="https://wa.me/573052547072?text=Hola%20Avila%20Mora%20Soluciones!%20Quiero%20cotizar%20un%20proyecto." target="_blank" rel="noopener">
-            <i class="fa-brands fa-whatsapp"></i> WhatsApp
+          <a class="btn btn-wa" href="https://wa.me/573052547072?text=Hola%20Avila%20Mora%20Soluciones!%20Quiero%20cotizar%20un%20proyecto." target="_blank" rel="noopener" aria-label="WhatsApp · Cotizar">
+            <i class="fa-brands fa-whatsapp" aria-hidden="true"></i> WhatsApp
           </a>
         </div>
 
@@ -566,7 +570,7 @@
       <div class="hero-card" data-aos="fade-left">
         <div class="hero-card-inner">
           <div class="mini-title">
-            <h3>¿Qué hacemos por ti?</h3>
+            <h2>¿Qué hacemos por ti?</h2>
             <span class="pill">TODO EN UNO</span>
           </div>
           <ul class="hero-checklist">
@@ -1090,14 +1094,16 @@
     </div>
   </section>
 
+  </main>
+
   <footer>
     <div class="container" style="text-align:center;">
-      <div style="margin-bottom:12px;font-size:.82rem;opacity:.78;">* La adaptación PWA se incluye sin costo adicional cuando el proyecto es compatible y así se solicita.</div>
+      <div style="margin-bottom:12px;font-size:.82rem;color:#cbd5e1;opacity:1;">* La adaptación PWA se incluye sin costo adicional cuando el proyecto es compatible y así se solicita.</div>
       <span style="display:inline-flex;align-items:center;gap:9px;padding:6px 10px;border:1px solid rgba(255,255,255,.12);border-radius:999px;background:rgba(255,255,255,.04);font-weight:900;">© 2026 Avila Mora Soluciones <img src="img/colombia-flag.svg" alt="Colombia" width="30" height="20" style="display:block;width:30px;height:20px;object-fit:cover;border-radius:3px;" /></span>
       <div style="margin-top:10px;">Soluciones digitales claras, hechas para negocios reales.</div>
       <div style="margin-top:10px;display:flex;justify-content:center;gap:10px;flex-wrap:wrap;align-items:center;font-size:.78rem;">
         <a href="mailto:equipo@avilamorasoluciones.com"><i class="fa-solid fa-envelope"></i> equipo@avilamorasoluciones.com</a>
-        <a href="https://wa.me/573052547072?text=Hola%20Avila%20Mora%20Soluciones!%20Quiero%20información%20sobre%20sus%20servicios." target="_blank" rel="noopener"><i class="fa-brands fa-whatsapp"></i> WhatsApp</a>
+        <a href="https://wa.me/573052547072?text=Hola%20Avila%20Mora%20Soluciones!%20Quiero%20información%20sobre%20sus%20servicios." target="_blank" rel="noopener" aria-label="WhatsApp · Información"><i class="fa-brands fa-whatsapp" aria-hidden="true"></i> WhatsApp</a>
       </div>
     </div>
   <div style="display:flex;justify-content:center;gap:14px;flex-wrap:wrap;margin-top:12px;font-size:.78rem"><a href="./legal_privacidad.html" style="color:inherit">Privacidad</a><a href="./legal_terminos.html" style="color:inherit">Términos</a><a href="./legal_cookies.html" style="color:inherit">Cookies</a><a href="mailto:equipo@avilamorasoluciones.com?subject=PQR%20-%20Avila%20Mora%20Soluciones&body=Hola%20AMS,%0A%0AQuiero%20presentar%20una%20PQR.%0A%0ANombre:%0AAsunto:%0ADetalle:%0A" style="color:inherit">PQR</a></div></footer>
@@ -1105,8 +1111,7 @@
   <button class="to-top" id="toTop" aria-label="Volver arriba" title="Volver arriba"><i class="fa-solid fa-arrow-up"></i></button>
 
 
-  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-  <script src="scripts.js?v=20260926-2"></script>
+  <script src="scripts.js?v=20260929-1"></script>
   <script src="contacto.js?v=20260928-4"></script>
 <script id="ams-open-links-blank">
 (function(){
@@ -1166,7 +1171,7 @@
 <script id="ams-pwa-root-boot">
 (() => {
   if (!('serviceWorker' in navigator)) return;
-  window.addEventListener('load', () => navigator.serviceWorker.register('./sw.js?v=9').catch(() => {}));
+  window.addEventListener('load', () => navigator.serviceWorker.register('./sw.js?v=10').catch(() => {}));
 })();
 (() => {
   const banner = document.getElementById('amsPwaInstall');
