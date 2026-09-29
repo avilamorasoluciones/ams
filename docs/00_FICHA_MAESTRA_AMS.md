@@ -54,4 +54,4 @@ AMS/
 La carpeta privada debe tener su propia copia de seguridad.
 
 ## Regla de publicación
-El repositorio debe describir lo que AMS realmente es hoy. No afirmar que existe una sociedad, registro, certificación, acreditación o condición jurídica concreta si todavía no existe o no se ha verificado.
+El repositorio debe describir lo que Avila Mora Soluciones realmente es hoy. No afirmar que existe una sociedad, registro, certificación, acreditación o condición jurídica concreta si todavía no existe o no se ha verificado.
