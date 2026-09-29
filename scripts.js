@@ -211,7 +211,7 @@ window.addEventListener("load", () => {
   }
 });
 
-// ===== Pistas de carrusel móvil =====
+// ===== Carruseles móviles: encaje inteligente =====
 (() => {
   const carouselSelectors = [
     ".services-grid",
@@ -226,28 +226,71 @@ window.addEventListener("load", () => {
   if (!carousels.length) return;
 
   carousels.forEach((carousel) => {
+    let settleTimer = 0;
+    let scrollingByScript = false;
+
+    const items = () => Array.from(carousel.children).filter((el) => el.offsetWidth > 0);
+
     const hasOverflow = () => carousel.scrollWidth > carousel.clientWidth + 8;
 
-    const hideHint = () => {
-      carousel.classList.add("carousel-used");
+    const hideHint = () => carousel.classList.add("carousel-used");
+
+    const centerNearestCard = (behavior = "smooth") => {
+      const list = items();
+      if (!list.length || !hasOverflow()) return;
+
+      const viewportCenter = carousel.scrollLeft + carousel.clientWidth / 2;
+      let nearest = list[0];
+      let nearestDistance = Infinity;
+
+      list.forEach((item) => {
+        const center = item.offsetLeft + item.offsetWidth / 2;
+        const distance = Math.abs(center - viewportCenter);
+        if (distance < nearestDistance) {
+          nearestDistance = distance;
+          nearest = item;
+        }
+      });
+
+      const target = nearest.offsetLeft - (carousel.clientWidth - nearest.offsetWidth) / 2;
+      scrollingByScript = true;
+      carousel.scrollTo({ left: Math.max(0, target), behavior });
+      window.setTimeout(() => { scrollingByScript = false; }, behavior === "smooth" ? 420 : 40);
     };
 
-    const onScroll = () => {
-      if (carousel.scrollLeft > 8) hideHint();
+    const scheduleSettle = () => {
+      window.clearTimeout(settleTimer);
+      settleTimer = window.setTimeout(() => centerNearestCard("smooth"), 110);
     };
 
     carousel.addEventListener("pointerdown", hideHint, { passive: true });
-    carousel.addEventListener("scroll", onScroll, { passive: true });
+    carousel.addEventListener("touchstart", hideHint, { passive: true });
+    carousel.addEventListener("scroll", () => {
+      hideHint();
+      scheduleSettle();
+    }, { passive: true });
 
-    // Si no hay más tarjetas, no mostramos una pista engañosa.
+    carousel.addEventListener("touchend", scheduleSettle, { passive: true });
+    carousel.addEventListener("pointerup", scheduleSettle, { passive: true });
+    carousel.addEventListener("pointercancel", scheduleSettle, { passive: true });
+
+    if ("scrollend" in window) {
+      carousel.addEventListener("scrollend", () => {
+        if (!scrollingByScript) centerNearestCard("smooth");
+      }, { passive: true });
+    }
+
     if (!hasOverflow()) hideHint();
 
     window.addEventListener("resize", () => {
-      if (!hasOverflow()) hideHint();
+      if (!hasOverflow()) {
+        hideHint();
+        return;
+      }
+      window.requestAnimationFrame(() => centerNearestCard("auto"));
     }, { passive: true });
   });
 })();
-
 // ===== Tema automático y manual =====
 const THEME_KEY = "ams-theme-preference";
 const themeColorMeta = document.querySelector('meta[name="theme-color"]');
