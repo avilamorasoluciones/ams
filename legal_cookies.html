@@ -19,4 +19,34 @@
 <div class="note">No confundimos las herramientas de almacenamiento local usadas por algunas aplicaciones de AMS con cookies. Cuando cambie la tecnología o se añadan servicios de medición/publicidad, esta política deberá actualizarse antes del lanzamiento.</div>
 <div class="links"><a href="./legal_privacidad.html">Privacidad y datos</a><a href="./legal_terminos.html">Términos y condiciones</a><a href="mailto:equipo@avilamorasoluciones.com">equipo@avilamorasoluciones.com</a><a href="https://wa.me/573052547072" target="_blank" rel="noopener noreferrer">WhatsApp AMS</a></div>
 </main></div><script src="contacto.js?v=20260928-4"></script>
+
+<script id="ams-open-links-blank">
+(function(){
+  function makeBlank(link){
+    if(!link || !link.getAttribute) return;
+    var href=link.getAttribute('href') || '';
+    if(!href || href.startsWith('javascript:')) return;
+    link.setAttribute('target','_blank');
+    var rel=new Set((link.getAttribute('rel') || '').split(/\s+/).filter(Boolean));
+    rel.add('noopener');
+    link.setAttribute('rel',Array.from(rel).join(' '));
+  }
+  function forceBlankLinks(root){
+    if(root && root.matches && root.matches('a[href]')) makeBlank(root);
+    (root || document).querySelectorAll('a[href]').forEach(makeBlank);
+  }
+  forceBlankLinks(document);
+  document.addEventListener('click',function(e){
+    var link=e.target && e.target.closest ? e.target.closest('a[href]') : null;
+    if(link) makeBlank(link);
+  },true);
+  new MutationObserver(function(mutations){
+    mutations.forEach(function(m){
+      m.addedNodes.forEach(function(node){
+        if(node.nodeType===1) forceBlankLinks(node);
+      });
+    });
+  }).observe(document.documentElement,{childList:true,subtree:true});
+})();
+</script>
 </body></html>
