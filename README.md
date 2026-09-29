@@ -4,7 +4,7 @@
 El procedimiento operativo completo está en `MANUAL_OPERATIVO.md`. Las páginas públicas cuentan con privacidad, términos y cookies. Las demos de portafolio se identifican como demos y no se indexan. Actualmente el sitio no despliega analítica ni publicidad propia.
 
 ## Estado
-AMS está preparado para comenzar con **GitHub Pages + dominio propio**. No se incorpora OVHcloud/Coolify hasta que el volumen real lo justifique; la referencia operativa actual es esperar a tener al menos dos clientes activos simultáneamente que necesiten infraestructura propia.
+Avila Mora Soluciones es un emprendimiento de servicios digitales con sitio oficial, dominio propio, HTTPS y publicación mediante **GitHub Pages**. No se incorpora OVHcloud/Coolify hasta que el flujo real de clientes o los requisitos técnicos lo justifiquen.
 
 ## Estructura
 - `/` — web pública y captación.
@@ -39,8 +39,8 @@ Antes de usar dinero personal para una compra:
 
 No mezclar dinero personal y dinero de AMS sin registrarlo.
 
-## GitHub Pages mientras arrancamos
-GitHub Pages sirve para el sitio público y las demos estáticas. Mientras no esté comprado/configurado el dominio, las URLs `avilamorasoluciones.github.io/ams/...` se conservan funcionales.
+## GitHub Pages y dominio oficial
+GitHub Pages sirve para el sitio público y las demos estáticas. El dominio oficial es `https://avilamorasoluciones.com/`. Las URLs `avilamorasoluciones.github.io/ams/...` se conservan para compatibilidad y pueden redirigir al dominio oficial.
 
 No usar GitHub Pages como backend seguro. No guardar allí:
 - contraseñas;
@@ -82,7 +82,7 @@ Quedan fuera del código y requieren revisión de ustedes:
 7. Definir el procedimiento real de backups.
 8. Configurar OVHcloud/Coolify solo cuando el volumen y el flujo de trabajo lo justifiquen.
 
-**Nota:** que AMS sea una iniciativa pequeña o que todavía no tenga registro propio no permite asumir por sí solo una situación legal concreta. No hacemos esa afirmación en el sitio; los documentos públicos se mantienen generales y se actualizan cuando la operación real cambie.
+**Nota:** Avila Mora Soluciones debe mantener sus textos públicos ajustados a su operación real y no afirmar una sociedad, registro, certificación o condición jurídica concreta sin haberla formalizado o verificado.
 
 ## Principio de desarrollo
 No agregar tecnología por moda. Cada herramienta debe ahorrar tiempo, reducir un riesgo, controlar dinero, mejorar una venta, facilitar producción o mejorar la entrega.
