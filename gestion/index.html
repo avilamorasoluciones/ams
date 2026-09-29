@@ -77,4 +77,28 @@ document.getElementById("globalBackup").onclick=backupGlobal;document.querySelec
 document.getElementById("loginForm").onsubmit=async e=>{e.preventDefault();const u=await hash(loginUser.value),p=await hash(loginPass.value);if(u===UH&&p===PH){sessionStorage.amsGestionAuth="1";sessionStorage.amsCalc="1";showApp();openView("home")}else loginError.classList.remove("hidden")};
 if(sessionStorage.amsGestionAuth==="1"){showApp();openView("home")}
 document.getElementById("logout").onclick=()=>{sessionStorage.removeItem("amsGestionAuth");sessionStorage.removeItem("amsCalc");sessionStorage.removeItem("amsSub");location.reload()};
-</script></body></html>
+</script>
+<script id="ams-open-links-blank">
+(function(){
+  function forceBlankLinks(root){
+    (root || document).querySelectorAll('a[href]').forEach(function(link){
+      var href=link.getAttribute('href') || '';
+      if(href && !href.startsWith('javascript:')){
+        link.setAttribute('target','_blank');
+        var rel=new Set((link.getAttribute('rel') || '').split(/\s+/).filter(Boolean));
+        rel.add('noopener');
+        link.setAttribute('rel',Array.from(rel).join(' '));
+      }
+    });
+  }
+  forceBlankLinks(document);
+  new MutationObserver(function(mutations){
+    mutations.forEach(function(m){
+      m.addedNodes.forEach(function(node){
+        if(node.nodeType===1) forceBlankLinks(node);
+      });
+    });
+  }).observe(document.documentElement,{childList:true,subtree:true});
+})();
+</script>
+</body></html>
