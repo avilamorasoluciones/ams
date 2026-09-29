@@ -411,7 +411,7 @@ section.section { padding: 92px 0; }
 .service:hover { transform: translateY(-6px); border-color: rgba(236,72,153,0.28); background: rgba(255,255,255,0.055); }
 .service > * { position: relative; }
 .service i { font-size: 26px; width: 46px; height: 46px; border-radius: 16px; display: grid; place-items: center; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.10); color: var(--secondary); margin-bottom: 14px; flex: 0 0 auto; }
-.service h4 { margin: 0 0 8px; font-size: 1.12rem; font-weight: 900; letter-spacing: -0.2px; }
+.service h4, .service h3 { margin: 0 0 8px; font-size: 1.12rem; font-weight: 900; letter-spacing: -0.2px; }
 .service p { margin: 0; color: rgba(203,213,225,0.95); font-weight: 500; font-size: 0.98rem; flex: 1 1 auto; }
 .service .micro { margin-top: 14px; display: flex; gap: 10px; flex-wrap: wrap; align-items: flex-end; justify-content: flex-start; flex: 0 0 auto; }
 .tag { font-size: 12px; font-weight: 900; padding: 6px 10px; border-radius: 999px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.12); color: rgba(248,250,252,0.92); max-width: 100%; }
@@ -473,7 +473,7 @@ body.light-theme .plan-card .bullets li { color: var(--muted); }
 .step { border-radius: 22px; border: 1px solid rgba(255,255,255,0.12); background: rgba(255,255,255,0.04); padding: 18px; transition: 0.25s ease; }
 .step:hover { transform: translateY(-4px); border-color: rgba(99,102,241,0.30); background: rgba(255,255,255,0.055); }
 .step .num { width: 42px; height: 42px; border-radius: 14px; display: grid; place-items: center; background: rgba(99,102,241,0.14); border: 1px solid rgba(99,102,241,0.22); font-weight: 900; margin-bottom: 12px; }
-.step h4 { margin: 0 0 8px; font-weight: 900; }
+.step h4, .step h3 { margin: 0 0 8px; font-weight: 900; }
 .step p { margin: 0; color: rgba(203,213,225,0.95); font-weight: 500; font-size: 0.98rem; }
 
 /* ===== FAQ ===== */
@@ -487,7 +487,7 @@ summary .chev { transition: transform 0.2s ease; opacity: 0.9; flex: 0 0 auto; }
 details[open] summary .chev { transform: rotate(180deg); }
 details p { margin: 10px 0 0; color: rgba(203,213,225,0.95); font-weight: 500; }
 .faq-card { border-radius: 26px; border: 1px solid rgba(255,255,255,0.12); background: linear-gradient(180deg, rgba(255,255,255,0.05), rgba(255,255,255,0.03)); padding: 20px; box-shadow: 0 14px 40px rgba(0,0,0,0.22); position: sticky; top: 110px; }
-.faq-card h4 { margin: 0 0 10px; font-weight: 900; letter-spacing: -0.3px; }
+.faq-card h4, .faq-card h3 { margin: 0 0 10px; font-weight: 900; letter-spacing: -0.3px; }
 .faq-card p { margin: 0 0 14px; color: rgba(203,213,225,0.95); font-weight: 500; }
 .faq-card .btn-wide { margin-top: 14px; }
 .mini { display: grid; gap: 10px; margin: 0; padding: 0; list-style: none; }
