@@ -9,9 +9,9 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="Avila Mora Soluciones - Herramientas" />
-    <link rel="icon" href="icon-192.svg?v=12" type="image/svg+xml">
-    <link rel="apple-touch-icon" href="icon-192.svg?v=12">
-    <link rel="manifest" href="manifest.webmanifest?v=12">    <!-- Bootstrap 5 CSS -->
+    <link rel="icon" href="icon-192.svg?v=14" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="icon-192.svg?v=14">
+    <link rel="manifest" href="manifest.webmanifest?v=14">    <!-- Bootstrap 5 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- FontAwesome Icons -->
     <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" as="style" />
@@ -687,6 +687,80 @@
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Herramientas online gratuitas | Avila Mora Soluciones">
 <meta name="twitter:description" content="Utilidades prácticas para PDF, imágenes, texto y archivos, directamente desde el navegador.">
+<style id="ams-tools-filter-style">
+    .tool-filters{
+        display:flex;
+        justify-content:center;
+        flex-wrap:wrap;
+        gap:9px;
+        max-width:980px;
+        margin:24px auto 0;
+    }
+    .tool-filter{
+        display:inline-flex;
+        align-items:center;
+        justify-content:center;
+        gap:8px;
+        min-height:42px;
+        padding:9px 14px;
+        border:1px solid rgba(255,255,255,.10);
+        border-radius:999px;
+        background:rgba(15,23,42,.72);
+        color:#cbd5e1;
+        font:700 .78rem/1 'Inter',sans-serif;
+        cursor:pointer;
+        transition:transform .18s ease,border-color .18s ease,background .18s ease,color .18s ease,box-shadow .18s ease;
+    }
+    .tool-filter:hover{
+        transform:translateY(-1px);
+        border-color:rgba(99,102,241,.42);
+        color:#f8fafc;
+    }
+    .tool-filter i{font-size:.88rem}
+    .tool-filter b{
+        min-width:22px;
+        padding:3px 6px;
+        border-radius:999px;
+        background:rgba(255,255,255,.07);
+        color:#94a3b8;
+        font-size:.68rem;
+    }
+    .tool-filter.active{
+        color:#fff;
+        background:linear-gradient(135deg,#6366f1,#ec4899);
+        border-color:transparent;
+        box-shadow:0 10px 24px rgba(99,102,241,.20);
+    }
+    .tool-filter.active b{background:rgba(255,255,255,.18);color:#fff}
+    .tool-filter:focus-visible{outline:3px solid rgba(99,102,241,.28);outline-offset:2px}
+    #filter-count{text-align:center;margin-top:9px}
+    @media(max-width:575px){
+        .tool-filters{
+            justify-content:flex-start;
+            flex-wrap:nowrap;
+            overflow-x:auto;
+            padding:0 2px 5px;
+            margin-top:20px;
+            scrollbar-width:none;
+        }
+        .tool-filters::-webkit-scrollbar{display:none}
+        .tool-filter{flex:0 0 auto;min-height:40px;padding:8px 12px}
+    }
+    body.light-theme .tool-filter{
+        background:rgba(255,255,255,.92);
+        border-color:rgba(15,23,42,.10);
+        color:#475569;
+        box-shadow:0 6px 18px rgba(15,23,42,.05);
+    }
+    body.light-theme .tool-filter:hover{color:#172033;border-color:rgba(99,102,241,.28)}
+    body.light-theme .tool-filter b{background:rgba(15,23,42,.06);color:#64748b}
+    body.light-theme .tool-filter.active{
+        color:#fff;
+        background:linear-gradient(135deg,#4f46e5,#db2777);
+        border-color:transparent;
+    }
+    body.light-theme .tool-filter.active b{background:rgba(255,255,255,.18);color:#fff}
+</style>
 </head>
 <body class="d-flex flex-column min-vh-100">
     <div class="ams-loader active ams-entry-loader" id="ams-loader" aria-hidden="false" role="status" aria-live="polite">
@@ -814,11 +888,24 @@
             <p class="text-muted mx-auto mb-0" style="max-width: 600px;">
                 Herramientas prácticas para documentos, imágenes y utilidades de desarrollo. Tus archivos se procesan localmente en el navegador, sin subirlos a un servidor.
             </p>
-            <div class="tool-search">
-                <i class="fa-solid fa-magnifying-glass"></i>
-                <input id="tool-search" type="search" autocomplete="off" placeholder="Buscar una herramienta…" aria-label="Buscar una herramienta">
-                <div id="search-count" class="search-count">26 herramientas disponibles</div>
+            <div class="tool-filters" aria-label="Filtrar herramientas por categoría">
+                <button class="tool-filter active" type="button" data-filter="all" aria-pressed="true">
+                    <i class="fa-solid fa-border-all" aria-hidden="true"></i><span>Todas</span><b>26</b>
+                </button>
+                <button class="tool-filter" type="button" data-filter="pdf" aria-pressed="false">
+                    <i class="fa-solid fa-file-pdf" aria-hidden="true"></i><span>PDF</span><b>8</b>
+                </button>
+                <button class="tool-filter" type="button" data-filter="images" aria-pressed="false">
+                    <i class="fa-solid fa-images" aria-hidden="true"></i><span>Imágenes</span><b>4</b>
+                </button>
+                <button class="tool-filter" type="button" data-filter="web" aria-pressed="false">
+                    <i class="fa-solid fa-code" aria-hidden="true"></i><span>Web y Desarrollo</span><b>8</b>
+                </button>
+                <button class="tool-filter" type="button" data-filter="utils" aria-pressed="false">
+                    <i class="fa-solid fa-wand-magic-sparkles" aria-hidden="true"></i><span>Utilidades</span><b>6</b>
+                </button>
             </div>
+            <div id="filter-count" class="search-count" aria-live="polite">26 herramientas disponibles</div>
         </section>
 
         <div class="container pb-5">
@@ -1324,45 +1411,67 @@
         })();
     </script>
 
-    <!-- Buscador independiente: funciona aunque alguna herramienta/librería falle. -->
-    <script id="ams-tools-search">
+    <!-- Filtros independientes: no dependen del resto del JavaScript de herramientas. -->
+    <script id="ams-tools-filters">
     (() => {
-        const input = document.getElementById('tool-search');
-        const count = document.getElementById('search-count');
+        const buttons = Array.from(document.querySelectorAll('.tool-filter'));
         const cards = Array.from(document.querySelectorAll('.tool-card'));
-        if (!input || !cards.length) return;
+        const count = document.getElementById('filter-count');
+        if (!buttons.length || !cards.length) return;
 
-        const normalize = (value) => String(value || '')
-            .toLocaleLowerCase('es')
-            .normalize('NFD')
-            .replace(/[\u0300-\u036f]/g, '');
+        const sections = cards.reduce((map, card) => {
+            const grid = card.closest('.tool-grid');
+            const header = grid?.previousElementSibling?.classList.contains('section-header')
+                ? grid.previousElementSibling
+                : null;
+            if (!header) return map;
+            const title = (header.querySelector('h2')?.textContent || '').toLocaleLowerCase('es');
+            const key = title.includes('pdf') ? 'pdf'
+                : title.includes('multimedia') || title.includes('imágenes') ? 'images'
+                : title.includes('web y desarrollo') ? 'web'
+                : 'utils';
+            card.dataset.toolCategory = key;
+            if (!map[key]) map[key] = new Set();
+            map[key].add(header);
+            return map;
+        }, {});
 
         const noResults = document.createElement('div');
         noResults.className = 'no-results';
         noResults.setAttribute('aria-live', 'polite');
-        noResults.innerHTML = '<i class="fa-solid fa-magnifying-glass-minus fa-2x mb-2"></i><br>No encontramos una herramienta con ese nombre.';
+        noResults.innerHTML = '<i class="fa-solid fa-filter-circle-xmark fa-2x mb-2"></i><br>No encontramos herramientas en esta categoría.';
         const container = document.querySelector('main .container.pb-5');
         if (container) container.appendChild(noResults);
 
-        const updateSearch = () => {
-            const query = normalize(input.value.trim());
+        const filter = (key) => {
             let visible = 0;
-            for (const card of cards) {
-                const match = !query || normalize(card.textContent).includes(query);
-                card.hidden = !match;
-                if (match) visible++;
-            }
+            cards.forEach(card => {
+                const show = key === 'all' || card.dataset.toolCategory === key;
+                card.hidden = !show;
+                if (show) visible++;
+            });
+
+            document.querySelectorAll('.section-header').forEach(header => {
+                const grid = header.nextElementSibling?.classList.contains('tool-grid') ? header.nextElementSibling : null;
+                if (!grid) return;
+                const hasVisible = Array.from(grid.querySelectorAll('.tool-card')).some(card => !card.hidden);
+                header.hidden = !hasVisible;
+            });
+
+            buttons.forEach(btn => {
+                const active = btn.dataset.filter === key;
+                btn.classList.toggle('active', active);
+                btn.setAttribute('aria-pressed', active ? 'true' : 'false');
+            });
+
             if (count) {
-                count.textContent = query
-                    ? visible + ' de ' + cards.length + ' herramientas'
-                    : cards.length + ' herramientas disponibles';
+                count.textContent = visible + (visible === 1 ? ' herramienta disponible' : ' herramientas disponibles');
             }
             if (noResults) noResults.hidden = visible !== 0;
         };
 
-        input.addEventListener('input', updateSearch);
-        input.addEventListener('search', updateSearch);
-        updateSearch();
+        buttons.forEach(btn => btn.addEventListener('click', () => filter(btn.dataset.filter || 'all')));
+        filter('all');
     })();
     </script>
 
@@ -1812,7 +1921,7 @@
         // PWA: registro del Service Worker para caché básica.
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
-                navigator.serviceWorker.register('./sw.js?v=13').catch(err => console.warn('AMS PWA:', err));
+                navigator.serviceWorker.register('./sw.js?v=14').catch(err => console.warn('AMS PWA:', err));
             });
         }
 
