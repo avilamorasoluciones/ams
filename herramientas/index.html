@@ -674,7 +674,7 @@
 .ams-install-card{display:flex;align-items:center;gap:13px;padding:13px 14px;border:1px solid rgba(129,140,248,.28);border-radius:18px;background:rgba(10,15,30,.96);backdrop-filter:blur(18px);box-shadow:0 20px 55px rgba(0,0,0,.42),0 0 28px rgba(99,102,241,.10)}
 .ams-install-icon{width:45px;height:45px;flex:0 0 45px;border-radius:12px;padding:5px;background:linear-gradient(145deg,rgba(34,211,238,.14),rgba(99,102,241,.18),rgba(236,72,153,.12));border:1px solid rgba(255,255,255,.1)}
 .ams-install-icon img{width:100%;height:100%;display:block}
-.ams-install-copy{min-width:0;flex:1}.ams-install-title{font-weight:800;font-size:.84rem;color:#f8fafc;margin-bottom:2px}.ams-install-text{font-size:.7rem;line-height:1.3;color:#94a3b8}
+.ams-install-copy{min-width:0;flex:1}.ams-install-title{font-weight:800;font-size:.84rem;color:#f8fafc;margin-bottom:0}.ams-install-text{display:none}
 .ams-install-actions{display:flex;align-items:center;gap:6px;margin-left:auto}.ams-install-btn{border:0;border-radius:10px;padding:8px 11px;background:var(--ams-gradient);color:#fff;font-size:.72rem;font-weight:800;white-space:nowrap}.ams-install-close{border:0;background:transparent;color:#64748b;width:28px;height:28px;border-radius:8px}.ams-install-close:hover{background:rgba(255,255,255,.06);color:#fff}
 .ams-install-ios{font-size:.68rem;color:#cbd5e1;margin-top:4px}.ams-install-ios i{color:#67e8f9}
 @media(max-width:575px){.ams-install{right:10px;bottom:10px;width:calc(100vw - 20px)}.ams-install-card{padding:12px}.ams-install-icon{width:40px;height:40px;flex-basis:40px}.ams-install-actions{flex-direction:column;gap:2px}.ams-install-btn{padding:7px 10px}}
@@ -704,7 +704,7 @@
     <div class="ams-install-icon"><img src="../img/ams-favicon.svg" alt=""></div>
     <div class="ams-install-copy">
       <div class="ams-install-title" id="ams-install-title">Instala Herramientas</div>
-      <div class="ams-install-text" id="ams-install-text">Ten tus herramientas siempre a mano.</div>
+      <div class="ams-install-text" id="ams-install-text"></div>
     </div>
     <div class="ams-install-actions">
       <button class="ams-install-btn" id="ams-install-btn" type="button">Instalar</button>
@@ -2045,22 +2045,16 @@
                 e.preventDefault(); deferredPrompt=e;
                 if(canShow()) setTimeout(()=>show('Instala Herramientas AMS','Ten tus herramientas a mano.','Instalar'),500);
             });
-            if(canShow()) setTimeout(()=>{
-                if(!deferredPrompt && !isIOS) show('Instala Herramientas AMS','Disponible desde el menú de instalación de Chrome.','Cómo instalar');
-            },1400);
             btn.addEventListener('click',async()=>{
                 if(deferredPrompt){
                     deferredPrompt.prompt();
                     try{await deferredPrompt.userChoice;}catch(e){}
                     deferredPrompt=null; hide(); return;
                 }
-                if(isIOS){
-                    show('Instala Herramientas','Añádela desde el menú de tu dispositivo.','Entendido');
-                    btn.onclick=function(){sessionStorage.setItem(dismissedKey,'1');hide();};
-                }
+
             });
             window.addEventListener('appinstalled',()=>{sessionStorage.setItem(dismissedKey,'1');hide();deferredPrompt=null;manualHelp=false;});
-                        if(isIOS&&canShow()) setTimeout(()=>show('Añade Herramientas AMS','Añádela desde el menú de tu dispositivo.','Cómo instalar'),1600);
+
         })();
 
                 document.querySelectorAll('button').forEach(btn=>btn.addEventListener('click',()=>{if(btn.id.startsWith('btn-')&&!btn.disabled){btn.classList.add('button-pulse');setTimeout(()=>btn.classList.remove('button-pulse'),350)}}));
