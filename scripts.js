@@ -195,84 +195,92 @@ window.addEventListener("load", () => {
 
 // ===== Carruseles móviles: encaje inteligente =====
 (() => {
-  const carouselSelectors = [
-    ".services-grid",
-    ".demos-grid",
-    ".portfolio-grid",
-    ".process",
-    ".grid-2",
-    ".ams-resource-grid"
-  ];
+  if (!window.matchMedia("(max-width: 740px)").matches) return;
 
-  const carousels = document.querySelectorAll(carouselSelectors.join(","));
-  if (!carousels.length) return;
+  const initCarousels = () => {
+    const carouselSelectors = [
+      ".services-grid",
+      ".demos-grid",
+      ".portfolio-grid",
+      ".process",
+      ".grid-2",
+      ".ams-resource-grid"
+    ];
 
-  carousels.forEach((carousel) => {
-    let settleTimer = 0;
-    let userGesture = false;
+    const carousels = document.querySelectorAll(carouselSelectors.join(","));
+    if (!carousels.length) return;
 
-    const items = () => Array.from(carousel.children).filter((el) => el.offsetWidth > 0);
-    const hasOverflow = () => carousel.scrollWidth > carousel.clientWidth + 8;
-    const hideHint = () => carousel.classList.add("carousel-used");
+    carousels.forEach((carousel) => {
+      let settleTimer = 0;
+      let userGesture = false;
 
-    const centerNearestCard = (behavior = "smooth") => {
-      const list = items();
-      if (!list.length || !hasOverflow()) return;
+      const items = () => Array.from(carousel.children).filter((el) => el.offsetWidth > 0);
+      const hasOverflow = () => carousel.scrollWidth > carousel.clientWidth + 8;
+      const hideHint = () => carousel.classList.add("carousel-used");
 
-      const viewportCenter = carousel.scrollLeft + carousel.clientWidth / 2;
-      let nearest = list[0];
-      let nearestDistance = Infinity;
+      const centerNearestCard = (behavior = "smooth") => {
+        const list = items();
+        if (!list.length || !hasOverflow()) return;
 
-      list.forEach((item) => {
-        const center = item.offsetLeft + item.offsetWidth / 2;
-        const distance = Math.abs(center - viewportCenter);
-        if (distance < nearestDistance) {
-          nearestDistance = distance;
-          nearest = item;
-        }
-      });
+        const viewportCenter = carousel.scrollLeft + carousel.clientWidth / 2;
+        let nearest = list[0];
+        let nearestDistance = Infinity;
 
-      const target = nearest.offsetLeft - (carousel.clientWidth - nearest.offsetWidth) / 2;
-      carousel.scrollTo({ left: Math.max(0, target), behavior });
-      userGesture = false;
-    };
+        list.forEach((item) => {
+          const center = item.offsetLeft + item.offsetWidth / 2;
+          const distance = Math.abs(center - viewportCenter);
+          if (distance < nearestDistance) {
+            nearestDistance = distance;
+            nearest = item;
+          }
+        });
 
-    const scheduleSettle = () => {
-      window.clearTimeout(settleTimer);
-      settleTimer = window.setTimeout(() => {
-        centerNearestCard("smooth");
-      }, 120);
-    };
+        const target = nearest.offsetLeft - (carousel.clientWidth - nearest.offsetWidth) / 2;
+        carousel.scrollTo({ left: Math.max(0, target), behavior });
+        userGesture = false;
+      };
 
-    const startGesture = () => {
-      userGesture = true;
-      hideHint();
-    };
+      const scheduleSettle = () => {
+        window.clearTimeout(settleTimer);
+        settleTimer = window.setTimeout(() => centerNearestCard("smooth"), 120);
+      };
 
-    carousel.addEventListener("pointerdown", startGesture, { passive: true });
-    carousel.addEventListener("touchstart", startGesture, { passive: true });
-    carousel.addEventListener("wheel", startGesture, { passive: true });
+      const startGesture = () => {
+        userGesture = true;
+        hideHint();
+      };
 
-    carousel.addEventListener("scroll", () => {
-      if (!userGesture) return;
-      scheduleSettle();
-    }, { passive: true });
+      carousel.addEventListener("pointerdown", startGesture, { passive: true });
+      carousel.addEventListener("touchstart", startGesture, { passive: true });
+      carousel.addEventListener("wheel", startGesture, { passive: true });
 
-    carousel.addEventListener("touchend", scheduleSettle, { passive: true });
-    carousel.addEventListener("pointerup", scheduleSettle, { passive: true });
-    carousel.addEventListener("pointercancel", scheduleSettle, { passive: true });
+      carousel.addEventListener("scroll", () => {
+        if (!userGesture) return;
+        scheduleSettle();
+      }, { passive: true });
 
-    if (hasOverflow()) {
-      window.requestAnimationFrame(() => centerNearestCard("auto"));
-    }
+      carousel.addEventListener("touchend", scheduleSettle, { passive: true });
+      carousel.addEventListener("pointerup", scheduleSettle, { passive: true });
+      carousel.addEventListener("pointercancel", scheduleSettle, { passive: true });
 
-    window.addEventListener("resize", () => {
-      if (!hasOverflow()) return;
-      window.requestAnimationFrame(() => centerNearestCard("auto"));
-    }, { passive: true });
-  });
+      if (hasOverflow()) {
+        window.requestAnimationFrame(() => centerNearestCard("auto"));
+      }
+
+      window.addEventListener("resize", () => {
+        if (!hasOverflow()) return;
+        window.requestAnimationFrame(() => centerNearestCard("auto"));
+      }, { passive: true });
+    });
+  };
+
+  if ("requestIdleCallback" in window) {
+    window.requestIdleCallback(initCarousels, { timeout: 1200 });
+  } else {
+    window.setTimeout(initCarousels, 700);
+  }
 })();
-// ===== Tema automático y manual =====
+
 const THEME_KEY = "ams-theme-preference";
 const themeColorMeta = document.querySelector('meta[name="theme-color"]');
 
@@ -283,11 +291,21 @@ function getAutoTheme() {
 
 function applyTheme(theme) {
   const isLight = theme === "light";
-  document.body.classList.toggle("light-theme", isLight);
-  document.documentElement.style.colorScheme = isLight ? "light" : "dark";
-  document.documentElement.style.backgroundColor = isLight ? "#f1f5f9" : "#0f172a";
-  if (themeColorMeta) {
-    themeColorMeta.setAttribute("content", isLight ? "#f1f5f9" : "#0f172a");
+  const hasLight = document.body.classList.contains("light-theme");
+  if (hasLight !== isLight) document.body.classList.toggle("light-theme", isLight);
+
+  const desiredScheme = isLight ? "light" : "dark";
+  if (document.documentElement.style.colorScheme !== desiredScheme) {
+    document.documentElement.style.colorScheme = desiredScheme;
+  }
+
+  const desiredBackground = isLight ? "#f1f5f9" : "#0f172a";
+  if (document.documentElement.style.backgroundColor !== desiredBackground) {
+    document.documentElement.style.backgroundColor = desiredBackground;
+  }
+
+  if (themeColorMeta && themeColorMeta.getAttribute("content") !== desiredBackground) {
+    themeColorMeta.setAttribute("content", desiredBackground);
   }
 }
 
