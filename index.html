@@ -240,24 +240,19 @@
         flex-wrap:nowrap!important;
         overflow-x:auto!important;
         overflow-y:hidden!important;
-        gap:12px!important;
-        padding:2px 4px 14px!important;
-        margin-right:-16px!important;
+        gap:14px!important;
+        padding-top:2px!important;
+        padding-bottom:14px!important;
         margin-left:-16px!important;
-        padding-left:16px!important;
-        padding-right:16px!important;
-        scroll-snap-type:x proximity!important;
-        scroll-snap-stop:normal!important;
+        margin-right:-16px!important;
+        padding-left:calc((100vw - min(84vw,350px))/2)!important;
+        padding-right:calc((100vw - min(84vw,350px))/2)!important;
+        scroll-snap-type:x mandatory!important;
+        scroll-padding-inline:calc((100vw - min(84vw,350px))/2)!important;
         -webkit-overflow-scrolling:touch!important;
         scrollbar-width:none!important;
-        /*
-         * Importante en móvil:
-         * el dedo debe poder decidir entre deslizar horizontalmente
-         * el carrusel o continuar desplazando la página verticalmente.
-         * Antes pan-x atrapaba el gesto dentro de la tarjeta.
-         */
-        touch-action:pan-x pan-y!important;
         overscroll-behavior-x:contain!important;
+        touch-action:pan-x pan-y!important;
       }
 
       .services-grid::-webkit-scrollbar,
@@ -265,9 +260,7 @@
       .portfolio-grid::-webkit-scrollbar,
       .process::-webkit-scrollbar,
       .grid-2::-webkit-scrollbar,
-      .ams-resource-grid::-webkit-scrollbar{
-        display:none!important;
-      }
+      .ams-resource-grid::-webkit-scrollbar{display:none!important}
 
       .services-grid > *,
       .demos-grid > *,
@@ -278,8 +271,8 @@
         flex:0 0 min(84vw,350px)!important;
         width:min(84vw,350px)!important;
         max-width:none!important;
-        scroll-snap-align:start!important;
-        scroll-snap-stop:normal!important;
+        scroll-snap-align:center!important;
+        scroll-snap-stop:always!important;
         touch-action:pan-x pan-y!important;
       }
 
@@ -340,90 +333,8 @@
         border-radius:16px!important;
       }
 
-      /*
-       * Pista de gesto móvil:
-       * no se coloca encima de las tarjetas. Vive en el espacio inferior
-       * del carrusel, se anima suavemente y desaparece en cuanto el usuario
-       * empieza a deslizar. Así enseña el gesto sin tapar títulos, iconos
-       * ni botones.
-       */
-      .services-grid,
-      .demos-grid,
-      .portfolio-grid,
-      .process,
-      .grid-2,
-      .ams-resource-grid{
-        position:relative!important;
-        padding-bottom:34px!important;
-      }
+      /* El carrusel móvil se ajusta automáticamente al centro de cada tarjeta. */
 
-      .services-grid::after,
-      .demos-grid::after,
-      .portfolio-grid::after,
-      .process::after,
-      .grid-2::after,
-      .ams-resource-grid::after{
-        content:"↔  Desliza";
-        position:absolute;
-        left:50%;
-        bottom:5px;
-        transform:translateX(-50%);
-        z-index:6;
-        width:max-content;
-        padding:4px 9px;
-        border:1px solid rgba(255,255,255,.08);
-        border-radius:999px;
-        background:rgba(255,255,255,.035);
-        color:rgba(248,250,252,.42);
-        font-size:.58rem;
-        font-weight:800;
-        letter-spacing:.04em;
-        line-height:1;
-        pointer-events:none;
-        opacity:1;
-        animation:amsSwipeHint 1.9s ease-in-out infinite;
-        transition:opacity .25s ease,transform .25s ease;
-      }
-
-      .services-grid.carousel-used::after,
-      .demos-grid.carousel-used::after,
-      .portfolio-grid.carousel-used::after,
-      .process.carousel-used::after,
-      .grid-2.carousel-used::after,
-      .ams-resource-grid.carousel-used::after{
-        opacity:0;
-        transform:translateX(-50%) translateY(5px);
-        animation:none;
-      }
-
-      @keyframes amsSwipeHint{
-        0%,100%{opacity:.34;transform:translateX(-50%) translateX(-3px);}
-        50%{opacity:.82;transform:translateX(-50%) translateX(4px);}
-      }
-
-      .light-theme .services-grid::after,
-      .light-theme .demos-grid::after,
-      .light-theme .portfolio-grid::after,
-      .light-theme .process::after,
-      .light-theme .grid-2::after,
-      .light-theme .ams-resource-grid::after{
-        border-color:rgba(15,23,42,.09);
-        background:rgba(15,23,42,.025);
-        color:rgba(15,23,42,.48);
-      }
-
-      @media (prefers-reduced-motion: reduce){
-        .services-grid::after,
-        .demos-grid::after,
-        .portfolio-grid::after,
-        .process::after,
-        .grid-2::after,
-        .ams-resource-grid::after{
-          animation:none;
-        }
-      }
-
-      /* El CTA final también respira mejor en móvil. */
       .cta{
         border-radius:28px 28px 0 0!important;
         padding:48px 0 calc(48px + var(--safe-bottom))!important;
@@ -439,10 +350,11 @@
       .process,
       .grid-2,
       .ams-resource-grid{
-        margin-right:-14px!important;
         margin-left:-14px!important;
-        padding-left:14px!important;
-        padding-right:14px!important;
+        margin-right:-14px!important;
+        padding-left:calc((100vw - 84vw)/2)!important;
+        padding-right:calc((100vw - 84vw)/2)!important;
+        scroll-padding-inline:calc((100vw - 84vw)/2)!important;
       }
       .services-grid > *,
       .demos-grid > *,
@@ -450,8 +362,8 @@
       .process > *,
       .grid-2 > *,
       .ams-resource-grid > *{
-        flex-basis:86vw!important;
-        width:86vw!important;
+        flex-basis:84vw!important;
+        width:84vw!important;
       }
     }
 
