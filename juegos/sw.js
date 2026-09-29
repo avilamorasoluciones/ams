@@ -1,4 +1,6 @@
-const CACHE_NAME = 'ams-games-20260929-41"./",
+const CACHE_NAME = 'ams-games-20260929-42';
+const APP_SHELL = [
+  "./",
   "./index.html",
   "./impostor.html",
   "./bomba.html",
@@ -8,7 +10,7 @@ const CACHE_NAME = 'ams-games-20260929-41"./",
   "./verdadreto.html",
   "./yonunca.html",
   "./styles.css?v=20260927-19",
-  "./scripts.js?v=20260929-40",
+  "./scripts.js?v=20260929-42",
   "./datos.js?v=20260926-32",
   "./impostor.js?v=20260926-32",
   "./bomba.js?v=20260926-32",
