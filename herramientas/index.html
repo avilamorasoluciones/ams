@@ -1324,6 +1324,48 @@
         })();
     </script>
 
+    <!-- Buscador independiente: funciona aunque alguna herramienta/librería falle. -->
+    <script id="ams-tools-search">
+    (() => {
+        const input = document.getElementById('tool-search');
+        const count = document.getElementById('search-count');
+        const cards = Array.from(document.querySelectorAll('.tool-card'));
+        if (!input || !cards.length) return;
+
+        const normalize = (value) => String(value || '')
+            .toLocaleLowerCase('es')
+            .normalize('NFD')
+            .replace(/[\u0300-\u036f]/g, '');
+
+        const noResults = document.createElement('div');
+        noResults.className = 'no-results';
+        noResults.setAttribute('aria-live', 'polite');
+        noResults.innerHTML = '<i class="fa-solid fa-magnifying-glass-minus fa-2x mb-2"></i><br>No encontramos una herramienta con ese nombre.';
+        const container = document.querySelector('main .container.pb-5');
+        if (container) container.appendChild(noResults);
+
+        const updateSearch = () => {
+            const query = normalize(input.value.trim());
+            let visible = 0;
+            for (const card of cards) {
+                const match = !query || normalize(card.textContent).includes(query);
+                card.hidden = !match;
+                if (match) visible++;
+            }
+            if (count) {
+                count.textContent = query
+                    ? visible + ' de ' + cards.length + ' herramientas'
+                    : cards.length + ' herramientas disponibles';
+            }
+            if (noResults) noResults.hidden = visible !== 0;
+        };
+
+        input.addEventListener('input', updateSearch);
+        input.addEventListener('search', updateSearch);
+        updateSearch();
+    })();
+    </script>
+
     <script>
         document.getElementById('current-year').textContent = new Date().getFullYear();
         const { PDFDocument, rgb, degrees } = PDFLib;
@@ -1766,27 +1808,6 @@
         btnMinifyJson.addEventListener('click', () => { try { jsonOut.value = JSON.stringify(JSON.parse(jsonInp.value)); } catch(e) {} });
         btnCopyJson.addEventListener('click', () => { navigator.clipboard.writeText(jsonOut.value); btnCopyJson.textContent = '¡Copiado!'; setTimeout(() => btnCopyJson.textContent = 'Copiar', 2000); });
 
-
-        // Búsqueda rápida de herramientas
-        const toolSearch = document.getElementById('tool-search');
-        const searchCount = document.getElementById('search-count');
-        const toolCards = Array.from(document.querySelectorAll('.tool-card')); if (searchCount) searchCount.textContent = toolCards.length + ' herramientas disponibles';
-        const noResults = document.createElement('div');
-        noResults.className = 'no-results';
-        noResults.innerHTML = '<i class="fa-solid fa-magnifying-glass-minus fa-2x mb-2"></i><br>No encontramos una herramienta con ese nombre.';
-        const toolContainer = document.querySelector('main .container.pb-5');
-        if (toolContainer) toolContainer.appendChild(noResults);
-        if (toolSearch) toolSearch.addEventListener('input', () => {
-            const q = toolSearch.value.trim().toLowerCase();
-            let visible = 0;
-            toolCards.forEach(card => {
-                const match = !q || card.textContent.toLowerCase().includes(q);
-                card.style.display = match ? '' : 'none';
-                if (match) visible++;
-            });
-            if (searchCount) searchCount.textContent = q ? (visible + ' de ' + toolCards.length + ' herramientas') : (toolCards.length + ' herramientas disponibles');
-            if (noResults) noResults.style.display = visible ? 'none' : 'block';
-        });
 
         // PWA: registro del Service Worker para caché básica.
         if ('serviceWorker' in navigator) {
