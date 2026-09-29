@@ -281,7 +281,7 @@
       .nav-btn:hover{ background:var(--bg); color:var(--primary); }
       .nav-btn.active{ box-shadow:0 4px 16px rgba(0,0,0,.15); }
     }
-  .smart-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.smart-grid>.smart-card{min-width:0;overflow:hidden}.smart-card{min-width:0;border:1px solid var(--border);background:linear-gradient(145deg,var(--surface),var(--bg));border-radius:18px;padding:16px}.smart-card h3{margin:0 0 6px;font-size:1rem}.smart-actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:12px}.smart-actions .btn{min-width:0;width:100%;white-space:normal;overflow-wrap:anywhere;word-break:break-word;line-height:1.25;padding-inline:10px}.favorite-btn{border:0;background:transparent;color:var(--muted);font-size:1.15rem;cursor:pointer;padding:4px 6px}.favorite-btn.active{color:#f59e0b}.recipe-item{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 0;border-bottom:1px solid var(--border)}.smart-stat{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border)}.barcode-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.barcode-row .input{flex:1;min-width:180px}.recipe-builder-list{max-height:240px;overflow:auto;border:1px solid var(--border);border-radius:14px;padding:8px}@media(max-width:700px){.smart-grid{grid-template-columns:1fr}}.entry-editor-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.entry-editor-grid .full{grid-column:1/-1}.entry-editor-preview{padding:14px;border-radius:16px;background:var(--bg);border:1px solid var(--border);font-weight:800}.entry-editor-name{font-size:1.05rem;font-weight:900;margin-bottom:4px}.account-security{display:grid;gap:10px;margin-top:12px}.account-security .btn{width:100%}.recovery-note{font-size:.82rem;line-height:1.45;padding:12px 14px;border-radius:14px;background:var(--bg);border:1px solid var(--border);color:var(--muted)}@media(max-width:560px){.entry-editor-grid{grid-template-columns:1fr}.entry-editor-grid .full{grid-column:auto}}.install-app-card{display:flex;align-items:center;justify-content:space-between;gap:14px;border-color:var(--accent)}.install-app-actions{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}.install-app-actions .btn{white-space:nowrap}@media(max-width:620px){.install-app-card{display:grid}.install-app-actions{justify-content:stretch}.install-app-actions .btn{flex:1}}
+  .smart-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.smart-grid>.smart-card{min-width:0;overflow:hidden}.smart-card{min-width:0;border:1px solid var(--border);background:linear-gradient(145deg,var(--surface),var(--bg));border-radius:18px;padding:16px}.smart-card h3{margin:0 0 6px;font-size:1rem}.smart-actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:12px}.smart-actions .btn{min-width:0;width:100%;white-space:normal;overflow-wrap:anywhere;word-break:break-word;line-height:1.25;padding-inline:10px}.favorite-btn{border:0;background:transparent;color:var(--muted);font-size:1.15rem;cursor:pointer;padding:4px 6px}.favorite-btn.active{color:#f59e0b}.recipe-item{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 0;border-bottom:1px solid var(--border)}.smart-stat{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border)}.barcode-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.barcode-row .input{flex:1;min-width:180px}.recipe-builder-list{max-height:240px;overflow:auto;border:1px solid var(--border);border-radius:14px;padding:8px}@media(max-width:700px){.smart-grid{grid-template-columns:1fr}}.entry-editor-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.entry-editor-grid .full{grid-column:1/-1}.entry-editor-preview{padding:14px;border-radius:16px;background:var(--bg);border:1px solid var(--border);font-weight:800}.entry-editor-name{font-size:1.05rem;font-weight:900;margin-bottom:4px}.account-security{display:grid;gap:10px;margin-top:12px}.account-security .btn{width:100%}.recovery-note{font-size:.82rem;line-height:1.45;padding:12px 14px;border-radius:14px;background:var(--bg);border:1px solid var(--border);color:var(--muted)}@media(max-width:560px){.entry-editor-grid{grid-template-columns:1fr}.entry-editor-grid .full{grid-column:auto}}.install-app-card{display:flex;align-items:center;justify-content:space-between;gap:12px;border-color:var(--accent)}.install-app-actions{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}.install-app-actions .btn{white-space:nowrap}@media(max-width:620px){.install-app-card{display:grid}.install-app-actions{justify-content:stretch}.install-app-actions .btn{flex:1}}
 
     /* =========================================================
        RESPONSIVE + CONTRASTE 2026
@@ -2318,25 +2318,7 @@ bindUISounds();
 </script>
 <script id="ayukcal-install-fallback">
 (function(){
-  function forceInstallBanner(){
-    const card=document.getElementById("installAppCard");
-    if(!card) return;
-    const standalone=window.matchMedia("(display-mode: standalone)").matches ||
-      window.matchMedia("(display-mode: window-controls-overlay)").matches ||
-      window.navigator.standalone===true;
-    if(standalone){ card.style.display="none"; return; }
-    const title=document.getElementById("installAppTitle");
-    const text=document.getElementById("installAppText");
-    const btn=document.getElementById("installAppBtn");
-    if(title) title.textContent="📲 Instala AyuKcal como app";
-    if(text) text.textContent="En Chrome: abre ⋮ y elige «Instalar aplicación» o «Añadir a pantalla de inicio».";
-    if(btn) btn.textContent="Cómo instalar";
-    card.style.display="flex";
-  }
-  if(document.readyState==="loading") document.addEventListener("DOMContentLoaded",()=>setTimeout(forceInstallBanner,700),{once:true});
-  else setTimeout(forceInstallBanner,700);
-  setTimeout(forceInstallBanner,1800);
-})();
+  function forceInstallBanner(){})();
 </script>
 <script src="../contacto.js?v=20260928-4"></script>
 
