@@ -1,0 +1,79 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="192" height="192" viewBox="0 0 512 512" role="img" aria-labelledby="title desc">
+  <title id="title">Avila Mora Soluciones — Isotipo</title>
+  <desc id="desc">Símbolo geométrico AM entrelazado en degradados azul, violeta y magenta.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#02040b"/>
+      <stop offset=".52" stop-color="#07132d"/>
+      <stop offset="1" stop-color="#12051b"/>
+    </linearGradient>
+    <linearGradient id="left" x1="0" y1=".1" x2=".95" y2=".9">
+      <stop stop-color="#4ee9ff"/>
+      <stop offset=".30" stop-color="#1768ff"/>
+      <stop offset=".66" stop-color="#6b57ff"/>
+      <stop offset="1" stop-color="#d54add"/>
+    </linearGradient>
+    <linearGradient id="right" x1=".1" y1=".1" x2="1" y2=".9">
+      <stop stop-color="#c9d0ff"/>
+      <stop offset=".34" stop-color="#7163ff"/>
+      <stop offset=".68" stop-color="#c84fe8"/>
+      <stop offset="1" stop-color="#ff67c7"/>
+    </linearGradient>
+    <linearGradient id="bridge" x1="0" y1=".5" x2="1" y2=".5">
+      <stop stop-color="#32dbff"/>
+      <stop offset=".48" stop-color="#8d64ff"/>
+      <stop offset=".74" stop-color="#ef4fe2"/>
+      <stop offset="1" stop-color="#37e0c3"/>
+    </linearGradient>
+    <linearGradient id="ring" x1="0" y1=".1" x2="1" y2=".9">
+      <stop stop-color="#28d9ff"/>
+      <stop offset=".33" stop-color="#5f6cff"/>
+      <stop offset=".66" stop-color="#e44df0"/>
+      <stop offset="1" stop-color="#ff58b6"/>
+    </linearGradient>
+    <filter id="glow" x="-40%" y="-40%" width="180%" height="180%">
+      <feGaussianBlur stdDeviation="6" result="b"/>
+      <feMerge>
+        <feMergeNode in="b"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <rect x="8" y="8" width="496" height="496" rx="110" fill="url(#bg)"/>
+
+  <!-- Minimal orbital identity -->
+  <circle cx="256" cy="256" r="194" fill="none" stroke="url(#ring)" stroke-width="2" opacity=".18"/>
+  <circle cx="256" cy="256" r="216" fill="none" stroke="url(#ring)" stroke-width="1.2" opacity=".09"/>
+  <path d="M91 323 A194 194 0 0 1 421 215" fill="none" stroke="url(#ring)" stroke-width="3" opacity=".38"/>
+
+  <!-- One fused AM symbol: the diagonal left ribbon, central join, and right double-peak
+       read as one continuous mark rather than a standalone letter. -->
+  <g filter="url(#glow)">
+    <path d="M105 359 L192 163 Q198 150 211 150 H242 L181 291 L149 360 Q143 373 128 373 H107 Z"
+          fill="url(#left)"/>
+    <path d="M211 150 L264 150 L318 251 L368 170 Q375 158 387 158 H413 L355 258 Q348 270 338 270 H309 Q299 270 293 260 Z"
+          fill="url(#right)"/>
+    <path d="M198 292 C247 259 293 249 335 254 C367 258 393 271 422 294
+             L402 328 C375 308 350 299 323 299
+             C281 299 244 311 201 341 L162 368
+             Q150 376 140 369 Z"
+          fill="url(#bridge)"/>
+    <path d="M270 252 L307 176 Q313 163 325 163 H347 L314 232 L294 275 Z"
+          fill="url(#right)" opacity=".95"/>
+    <path d="M225 341 C254 321 283 311 314 309 C346 307 371 316 398 336
+             L379 370 C360 355 343 350 320 350 C289 350 261 361 232 377 L201 393 L183 367 Z"
+          fill="url(#left)" opacity=".92"/>
+  </g>
+
+  <!-- Fine highlight to emphasize the continuous ribbon -->
+  <path d="M110 354 C149 328 180 302 206 282 C256 243 306 239 354 255 C379 263 402 276 422 294"
+        fill="none" stroke="#ffffff" stroke-opacity=".22" stroke-width="3.5" stroke-linecap="round"/>
+
+  <g filter="url(#glow)">
+    <circle cx="82" cy="150" r="5" fill="#2ddcff"/>
+    <circle cx="430" cy="165" r="5" fill="#ff4fc1"/>
+    <circle cx="112" cy="408" r="3.5" fill="#7869ff"/>
+    <circle cx="405" cy="399" r="3.5" fill="#31e0c2"/>
+  </g>
+</svg>
