@@ -1,4 +1,4 @@
-# Wompi y pagos · AMS
+# Wompi y pagos · Avila Mora Soluciones
 
 ## Estado
 Wompi todavía no está conectado. La integración se hará después de tener el dominio y el correo listos.
@@ -21,7 +21,7 @@ https://wompi.com/es/co/ayuda/como-crear-cuenta
 Cliente
 → checkout Wompi
 → pago
-→ backend AMS
+→ backend Avila Mora Soluciones
 → webhook verificado
 → registro de pago
 → actualización de suscripción
