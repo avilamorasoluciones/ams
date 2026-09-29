@@ -343,7 +343,7 @@ nav.compact {
 @keyframes sheen { 0% { transform: translateX(-120%); } 100% { transform: translateX(120%); } }
 
 .btn-ghost { background: rgba(255, 255, 255, 0.04); }
-.btn-wa { background: #25d366; border-color: transparent; box-shadow: 0 16px 34px rgba(0, 0, 0, 0.22); color:#fff; }
+.btn-wa { background: #15803d; border-color: transparent; box-shadow: 0 16px 34px rgba(0, 0, 0, 0.22); color:#fff; }
 .btn:hover { transform: translateY(-2px); box-shadow: var(--shadow-soft); border-color: rgba(255, 255, 255, 0.18); }
 .btn:active { transform: translateY(0); box-shadow: none; }
 .btn-wide { width: 100%; justify-content: center; }
@@ -375,7 +375,7 @@ header.hero { min-height: 100svh; min-height: calc(var(--app-height, 1vh) * 100)
 .hero-card::before { content: ""; position: absolute; inset: 0; background: radial-gradient(600px 260px at 60% 0%, rgba(99,102,241,0.25), transparent 60%), radial-gradient(520px 260px at 30% 30%, rgba(236,72,153,0.18), transparent 60%); pointer-events: none; }
 .hero-card-inner { position: relative; padding: 22px; }
 .mini-title { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 12px; }
-.mini-title h3 { margin: 0; font-size: 1.05rem; font-weight: 900; letter-spacing: -0.2px; }
+.mini-title h3, .mini-title h2 { margin: 0; font-size: 1.05rem; font-weight: 900; letter-spacing: -0.2px; }
 .pill { font-size: 12px; font-weight: 900; padding: 6px 10px; border-radius: 999px; background: rgba(16,185,129,0.12); border: 1px solid rgba(16,185,129,0.22); color: rgba(236,253,245,0.95); white-space: nowrap; }
 .checklist { display: grid; gap: 10px; margin: 12px 0 0; padding: 0; list-style: none; }
 .checklist li { display: flex; gap: 10px; align-items: flex-start; padding: 12px 12px; border-radius: 16px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); color: rgba(226,232,240,0.95); font-weight: 700; }
@@ -549,7 +549,7 @@ details p { margin: 10px 0 0; color: rgba(203,213,225,0.95); font-weight: 500; }
 .cta p { margin: 0 auto 20px; max-width: 70ch; font-size: 1.15rem; font-weight: 700; opacity: 0.95; }
 .cta-note { margin-top: 16px; font-weight: 900; opacity: 0.98; display: inline-flex; align-items: center; gap: 10px; justify-content: center; padding: 10px 14px; border-radius: 999px; background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.18); box-shadow: 0 12px 30px rgba(0,0,0,0.22); max-width: 100%; }
 
-footer { background: #050811; border-top: 1px solid rgba(255,255,255,0.10); padding: 28px 0 calc(28px + var(--safe-bottom)); color: rgba(148,163,184,0.92); text-align: center; font-weight: 700; font-size: 14px; }
+footer { background: #050811; border-top: 1px solid rgba(255,255,255,0.10); padding: 28px 0 calc(28px + var(--safe-bottom)); color: #cbd5e1; text-align: center; font-weight: 700; font-size: 14px; }
 
 /* ===== Floating buttons ===== */
 .to-top {
