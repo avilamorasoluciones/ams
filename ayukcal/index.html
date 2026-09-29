@@ -500,7 +500,7 @@
     <div id="installAppCard" class="panel install-app-card">
       <div>
         <b id="installAppTitle">🥑 Instala AyuKcal</b>
-        <p id="installAppText" class="muted" style="margin-top:5px;font-size:.86rem;">Ten AyuKcal a mano.</p>
+        <p id="installAppText" class="muted" style="display:none">Ten AyuKcal a mano.</p>
       </div>
       <div class="install-app-actions">
         <button id="installAppBtn" type="button" class="btn primary" onclick="installAyuKcal()">Instalar</button>
@@ -1113,17 +1113,7 @@ function updateInstallUI(){
     card.style.display="flex";
     return;
   }
-  if(isIOSDevice()){
-    $("installAppTitle").textContent="🥑 Instala AyuKcal";
-    $("installAppText").textContent="Añádela desde el menú de tu dispositivo.";
-    $("installAppBtn").textContent="Cómo instalar";
-    card.style.display="flex";
-    return;
-  }
-  $("installAppTitle").textContent="🥑 Instala AyuKcal";
-  $("installAppText").textContent="Disponible desde el menú de instalación de Chrome.";
-  $("installAppBtn").textContent="Cómo instalar";
-  card.style.display="flex";
+  card.style.display="none";
 }
 async function installAyuKcal(){
   if(isStandaloneApp()) return updateInstallUI();
@@ -1137,11 +1127,7 @@ async function installAyuKcal(){
     updateInstallUI();
     return;
   }
-  if(isIOSDevice()){
-    toast("📲 En iPhone/iPad: abre Compartir y elige «Añadir a pantalla de inicio».");
-  } else {
-    toast("📲 Instala la aplicación desde el menú de Chrome.");
-  }
+  return;
 }
 window.addEventListener("beforeinstallprompt",e=>{
   e.preventDefault();
@@ -2317,8 +2303,7 @@ bindUISounds();
 
 </script>
 <script id="ayukcal-install-fallback">
-(function(){
-  function forceInstallBanner(){})();
+(function(){})();
 </script>
 <script src="../contacto.js?v=20260928-4"></script>
 
