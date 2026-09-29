@@ -302,6 +302,7 @@ function getAutoTheme() {
 function applyTheme(theme) {
   const isLight = theme === "light";
   document.body.classList.toggle("light-theme", isLight);
+  document.documentElement.style.colorScheme = isLight ? "light" : "dark";
   if (themeColorMeta) {
     themeColorMeta.setAttribute("content", isLight ? "#f1f5f9" : "#0f172a");
   }
