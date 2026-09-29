@@ -219,6 +219,7 @@ const Theme = (() => {
   function apply(mode, persist = true) {
     const light = mode === "light";
     document.body.classList.toggle("light-theme", light);
+    document.documentElement.style.colorScheme = light ? "light" : "dark";
     if (persist) {
       try { localStorage.setItem(KEY, light ? "light" : "dark"); } catch {}
     }
