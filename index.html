@@ -1190,10 +1190,6 @@
     if(!href || href.startsWith('#') || href.startsWith('javascript:')) return;
     try{
       var url=new URL(href, window.location.href);
-      if(url.origin === window.location.origin){
-        link.removeAttribute('target');
-        return;
-      }
       link.setAttribute('target','_blank');
       var rel=new Set((link.getAttribute('rel') || '').split(/\s+/).filter(Boolean));
       rel.add('noopener');
