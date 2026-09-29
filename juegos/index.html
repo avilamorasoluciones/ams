@@ -7,7 +7,14 @@
     name="viewport"
     content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"
   />
-    <meta property="og:type" content="website" />
+<meta property="og:title" content="Juegos para grupos | Avila Mora Soluciones" />
+<meta property="og:url" content="https://avilamorasoluciones.com/juegos/" />
+<meta property="og:locale" content="es_CO" />
+<meta property="og:image:type" content="image/webp" />
+<meta property="og:image:height" content="640" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:description" content="Colección de juegos party para familia y amigos: El Impostor, La Bomba, ¿Nos Conocemos?, Rompehielo, Tabú, Verdad o Reto y Yo Nunca." />
+  <meta property="og:type" content="website" />
   <meta property="og:title" content="Juegos para grupos | Avila Mora Soluciones" />
   <meta property="og:description" content="Colección de juegos party para familia y amigos: El Impostor, La Bomba, ¿Nos Conocemos?, Rompehielo, Tabú, Verdad o Reto y Yo Nunca." />
   <meta property="og:url" content="https://avilamorasoluciones.com/juegos/" />
@@ -70,12 +77,9 @@
 
   <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
   <meta name="author" content="Avila Mora Soluciones" />
-  <meta property="og:url" content="https://avilamorasoluciones.com/juegos/" />
-  <meta property="og:site_name" content="Avila Mora Soluciones" />
-  <meta property="og:type" content="website" />
-  <meta property="og:title" content="Juegos para grupos | Avila Mora Soluciones" />
-  <meta property="og:description" content="Una colección de juegos gratuitos para amigos y familia, listos para jugar desde el navegador." />
-  <meta property="og:locale" content="es_CO" />
+<meta property="og:site_name" content="Avila Mora Soluciones" />
+<meta property="og:title" content="Juegos para grupos | Avila Mora Soluciones" />
+<meta property="og:locale" content="es_CO" />
   <script type="application/ld+json">
   {
     "@context":"https://schema.org",
@@ -89,9 +93,6 @@
     "author":{"@type":"Organization","name":"Avila Mora Soluciones","url":"https://avilamorasoluciones.com/"}
   }
   </script>
-<meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Juegos para grupos | Avila Mora Soluciones">
-<meta name="twitter:description" content="Una colección de juegos gratuitos para amigos y familia, listos para jugar desde el navegador.">
 </head>
 
 <body>
@@ -380,19 +381,19 @@
       const cycle=setInterval(showNext,430);
 
       const hide=()=>{
-        const wait=Math.max(0,720-(performance.now()-started));
+        const wait=Math.max(0,360-(performance.now()-started));
         setTimeout(()=>{
           clearInterval(cycle);
           loader.classList.add("is-hidden");
           setTimeout(()=>loader.remove(),450);
         },wait);
       };
-      if(document.readyState==="complete") hide();
-      else window.addEventListener("load",hide,{once:true});
+      if(document.readyState==="loading") document.addEventListener("DOMContentLoaded",hide,{once:true});
+      else hide();
     })();
   </script>
 
-  <script src="scripts.js?v=20260927-35"></script><script>
+  <script src="scripts.js?v=20260929-43" defer></script><script>
   // Al llegar al final en móvil, los controles flotantes de Juegos se atenúan para no cubrir el footer.
   (() => {
     const updatePageEndState = () => {
@@ -407,7 +408,7 @@
   })();
 </script>
 
-<script src="../contacto.js?v=20260928-4"></script>
+<script src="../contacto.js?v=20260928-4" defer></script>
 
 <script id="ams-open-links-blank">
 (function(){
@@ -471,5 +472,6 @@
   })();
   </script>
 
+<script id="ams-games-sw">if("serviceWorker" in navigator){window.addEventListener("load",()=>navigator.serviceWorker.register("./sw.js?v=43").catch(()=>{}),{once:true});}</script>
 </body>
 </html>
