@@ -2,4 +2,4 @@ User-agent: *
 Allow: /
 Disallow: /gestion/
 
-Sitemap: https://avilamorasoluciones.github.io/ams/sitemap.xml
+Sitemap: https://avilamorasoluciones.com/sitemap.xml
