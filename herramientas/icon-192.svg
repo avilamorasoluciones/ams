@@ -1,1 +1,26 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192 192"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#00F0FF"/><stop offset="1" stop-color="#8A2BE2"/></linearGradient></defs><rect width="192" height="192" rx="42" fill="#050810"/><rect x="18" y="18" width="156" height="156" rx="34" fill="url(#g)" opacity=".14"/><path d="M55 72h82a9 9 0 0 1 9 9v55a9 9 0 0 1-9 9H55a9 9 0 0 1-9-9V81a9 9 0 0 1 9-9Z" fill="none" stroke="url(#g)" stroke-width="10"/><path d="M68 72v-9c0-8 6-14 14-14h28c8 0 14 6 14 14v9" fill="none" stroke="#fff" stroke-width="10" stroke-linecap="round"/><path d="m67 103 14 14 35-35M62 139h68" fill="none" stroke="#fff" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/></svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="192" height="192" role="img" aria-labelledby="title desc">
+<title id="title">Herramientas — Isotipo AMH</title>
+<desc id="desc">Monograma integrado A, M y H en una sola composición geométrica.</desc>
+<defs>
+  <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#040914"/><stop offset=".52" stop-color="#071a31"/><stop offset="1" stop-color="#08071a"/></linearGradient>
+  <linearGradient id="a" x1="0" y1="1" x2="1" y2="0"><stop stop-color="#1768ff"/><stop offset=".48" stop-color="#258cff"/><stop offset="1" stop-color="#4ee9ff"/></linearGradient>
+  <linearGradient id="m" x1="0" y1="1" x2="1" y2=".15"><stop stop-color="#2449df"/><stop offset=".5" stop-color="#4f72ff"/><stop offset="1" stop-color="#8deaff"/></linearGradient>
+  <linearGradient id="h" x1="0" y1=".2" x2="1" y2=".8"><stop stop-color="#00c9ff"/><stop offset=".5" stop-color="#3bd4ff"/><stop offset="1" stop-color="#6b5cff"/></linearGradient>
+  <linearGradient id="orbit" x1="0" y1=".2" x2="1" y2=".8"><stop stop-color="#22d3ee" stop-opacity=".16"/><stop offset=".55" stop-color="#6366f1" stop-opacity=".25"/><stop offset="1" stop-color="#22d3ee" stop-opacity=".06"/></linearGradient>
+  <filter id="glow" x="-35%" y="-35%" width="170%" height="170%"><feGaussianBlur stdDeviation="5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+</defs>
+<rect x="18" y="18" width="476" height="476" rx="112" fill="url(#bg)"/>
+<circle cx="256" cy="256" r="192" fill="none" stroke="url(#orbit)" stroke-width="2"/>
+<circle cx="256" cy="256" r="214" fill="none" stroke="url(#orbit)" stroke-width="1" opacity=".7"/>
+<g fill="none" stroke-linecap="round" stroke-linejoin="round" filter="url(#glow)">
+  <path d="M118 376 L223 154 Q231 137 247 137 H273 L394 376" stroke="url(#a)" stroke-width="32"/>
+  <path d="M165 292 H334" stroke="url(#a)" stroke-width="28"/>
+  <path d="M148 364 L205 230 L256 322 L307 230 L364 364" stroke="url(#m)" stroke-width="28"/>
+  <path d="M376 172 V360 M376 266 H307 M307 360 V172" stroke="url(#h)" stroke-width="25"/>
+</g>
+<path d="M162 332 C208 351 256 354 301 339 C329 330 348 311 347 287 C346 267 326 258 307 253" fill="none" stroke="#fff" stroke-opacity=".13" stroke-width="4" stroke-linecap="round"/>
+<g filter="url(#glow)">
+  <circle cx="104" cy="150" r="5" fill="#22d3ee"/><circle cx="407" cy="150" r="5" fill="#6d6cff"/>
+  <circle cx="95" cy="386" r="3.5" fill="#4ee9ff"/><circle cx="420" cy="378" r="3.5" fill="#7b6dff"/>
+</g>
+</svg>
