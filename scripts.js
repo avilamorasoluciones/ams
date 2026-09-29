@@ -1,8 +1,9 @@
 // ===== AOS =====
 const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+const aosDesktop = window.matchMedia("(min-width: 741px)").matches;
 
 function initAOS() {
-  if (prefersReduced || !window.AOS) {
+  if (prefersReduced || !aosDesktop || !window.AOS) {
     document.documentElement.classList.remove("aos-ready");
     return;
   }
@@ -20,7 +21,7 @@ function initAOS() {
 }
 
 const tryInitAOS = () => {
-  if (!window.AOS) return false;
+  if (!aosDesktop || !window.AOS) return false;
   try {
     initAOS();
     return true;
@@ -31,14 +32,15 @@ const tryInitAOS = () => {
   }
 };
 
-// AOS se descarga de forma diferida y no participa en el bloqueo del HTML inicial.
-if (!tryInitAOS() && !prefersReduced) {
-  document.addEventListener("DOMContentLoaded", tryInitAOS, { once: true });
+if (aosDesktop && !prefersReduced) {
+  if (!tryInitAOS()) {
+    window.addEventListener("ams-aos-ready", tryInitAOS, { once: true });
+  }
 }
 
 let aosRefreshTimer = 0;
 const queueAOSRefresh = () => {
-  if (!window.AOS || prefersReduced) return;
+  if (!aosDesktop || !window.AOS || prefersReduced) return;
   window.clearTimeout(aosRefreshTimer);
   aosRefreshTimer = window.setTimeout(() => {
     try { AOS.refreshHard(); } catch (_) {}
