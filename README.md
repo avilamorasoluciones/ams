@@ -4,7 +4,7 @@
 El procedimiento operativo completo está en `MANUAL_OPERATIVO.md`. Las páginas públicas cuentan con privacidad, términos y cookies. Las demos de portafolio se identifican como demos y no se indexan. Actualmente el sitio no despliega analítica ni publicidad propia.
 
 ## Estado
-Avila Mora Soluciones es un emprendimiento de servicios digitales con sitio oficial, dominio propio, HTTPS y publicación mediante **GitHub Pages**. No se incorpora OVHcloud/Coolify hasta que el flujo real de clientes o los requisitos técnicos lo justifiquen.
+Avila Mora Soluciones opera como marca comercial y proveedor de servicios digitales con sitio oficial, dominio propio, HTTPS y publicación mediante **GitHub Pages**. No se incorpora OVHcloud/Coolify hasta que el flujo real de clientes o los requisitos técnicos lo justifiquen.
 
 ## Estructura
 - `/` — web pública y captación.
