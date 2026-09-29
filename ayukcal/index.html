@@ -1025,11 +1025,11 @@
     if (!loader) return;
     const started = performance.now();
     const hide = () => {
-      const wait = Math.max(0, 720 - (performance.now() - started));
+      const wait = Math.max(0, 360 - (performance.now() - started));
       setTimeout(() => loader.classList.add("is-hidden"), wait);
     };
-    if (document.readyState === "complete") hide();
-    else window.addEventListener("load", hide, { once:true });
+    if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", hide, { once:true });
+    else hide();
   })();
 </script>
 
