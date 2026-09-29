@@ -101,170 +101,50 @@ window.emitSound = emitSound;
  ********************/
 const PWA = (() => {
   let deferredPrompt = null;
-  let banner = null;
-  let installButton = null;
-  const DISMISS_KEY = "avila_mora_pwa_install_dismissed_v4";
 
   function isStandalone() {
     return window.matchMedia("(display-mode: standalone)").matches ||
       window.navigator.standalone === true;
   }
 
-  function isIOS() {
-    return /iphone|ipad|ipod/i.test(navigator.userAgent) ||
-      (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
-  }
-
-  function wasDismissed() {
-    try { return sessionStorage.getItem(DISMISS_KEY) === "1"; } catch { return false; }
-  }
-
-  function markDismissed() {
-    try { sessionStorage.setItem(DISMISS_KEY, "1"); } catch {}
-  }
-
-  function createUI() {
-    if (document.getElementById("pwa-install-banner")) return;
-
-    banner = document.createElement("div");
-    banner.id = "pwa-install-banner";
-    banner.className = "pwa-install-banner";
-    banner.setAttribute("role", "dialog");
-    banner.setAttribute("aria-label", "Instalar Juegos Avila Mora");
-    banner.hidden = true;
-    banner.innerHTML = `
-      <div class="pwa-install-banner-card">
-        <div class="pwa-install-banner-icon" aria-hidden="true">
-          <img src="pwa-icon-192.svg" alt="">
-        </div>
-        <div class="pwa-install-banner-copy">
-          <strong>Instala Juegos Avila Mora</strong>
-          <span id="pwa-install-copy">Ten tus juegos siempre a mano.</span>
-        </div>
-        <div class="pwa-install-banner-actions">
-          <button id="pwa-install-btn" class="pwa-install-banner-btn" type="button">Instalar</button>
-          <button id="pwa-install-close" class="pwa-install-banner-close" type="button" aria-label="Cerrar">×</button>
-        </div>
-      </div>
-    `;
-    document.body.appendChild(banner);
-
-    installButton = document.getElementById("pwa-install-btn");
-    installButton.addEventListener("click", handleInstallClick);
-    document.getElementById("pwa-install-close")?.addEventListener("click", () => {
-      markDismissed();
-      hideBanner();
-    });
-  }
-
-  function showBanner(mode = "install") {
-    if (!banner || isStandalone() || wasDismissed()) return;
-    const copy = document.getElementById("pwa-install-copy");
-    if (mode === "ios") {
-      copy.textContent = "En Safari: Compartir → Añadir a pantalla de inicio.";
-      installButton.textContent = "Cómo instalar";
-    } else if (mode === "manual") {
-      copy.textContent = "Desde el menú del navegador puedes instalar Juegos Avila Mora.";
-      installButton.textContent = "Cómo instalar";
-    } else {
-      copy.textContent = "Ten tus juegos siempre a mano.";
-      installButton.textContent = "Instalar";
-    }
-    banner.hidden = false;
-    requestAnimationFrame(() => banner.classList.add("is-visible"));
-  }
-
-  function hideBanner() {
-    if (!banner) return;
-    banner.classList.remove("is-visible");
-    setTimeout(() => { if (banner) banner.hidden = true; }, 260);
-  }
-
   async function triggerInstall() {
-    if (!deferredPrompt) {
-      if (isIOS()) showBanner("ios");
-      return;
-    }
+    if (!deferredPrompt || isStandalone()) return false;
     const promptEvent = deferredPrompt;
     deferredPrompt = null;
     try {
       await promptEvent.prompt();
-      const choice = await promptEvent.userChoice;
-      if (choice?.outcome === "accepted") {
-        hideBanner();
-      } else {
-        showBanner();
-      }
+      await promptEvent.userChoice;
+      return true;
     } catch {
-      showBanner();
+      return false;
     }
-  }
-
-  function handleInstallClick() {
-    if (deferredPrompt) {
-      triggerInstall();
-      return;
-    }
-    if (isIOS()) {
-      showBanner("ios");
-      return;
-    }
-    alert("Para instalar Juegos Avila Mora, abre el menú del navegador y busca «Instalar aplicación» o «Añadir a pantalla de inicio».");
   }
 
   function init() {
-    try { sessionStorage.removeItem("ams_sw_reloaded_v32"); } catch {}
-    createUI();
-
     window.addEventListener("beforeinstallprompt", event => {
       event.preventDefault();
       deferredPrompt = event;
-      showBanner("install");
+      // El banner visual vive en index.html; evitamos crear un segundo banner.
+      const banner = document.getElementById("amsGamesInstall");
+      if (banner && !isStandalone()) banner.classList.add("show");
     });
 
     window.addEventListener("appinstalled", () => {
       deferredPrompt = null;
-      hideBanner();
+      document.getElementById("amsGamesInstall")?.classList.remove("show");
     });
 
-    if (isStandalone()) {
-      hideBanner();
-    } else if (isIOS()) {
-      setTimeout(() => showBanner("ios"), 1500);
-    } else {
-      // En Android Chrome el evento beforeinstallprompt puede no estar disponible
-      // en todas las variantes de navegador. Mostramos igualmente nuestro aviso
-      // manual para que el usuario siempre vea cómo instalarla.
-      setTimeout(() => showBanner("manual"), 1200);
-    }
-
-    if ("serviceWorker" in navigator && (location.protocol === "https:" || location.hostname === "localhost" || location.hostname === "127.0.0.1")) {
-      const hadController = Boolean(navigator.serviceWorker.controller);
-      navigator.serviceWorker.addEventListener("controllerchange", () => {
-        // El nuevo worker ya tomó el control. Recargamos una sola vez para
-        // que la página actual use también el HTML/JS/CSS recién publicados.
-        if (!hadController) return;
-        try {
-          if (sessionStorage.getItem("ams_sw_reloaded_v32") === "1") return;
-          sessionStorage.setItem("ams_sw_reloaded_v32", "1");
-        } catch {}
-        window.location.reload();
-      });
-
-      navigator.serviceWorker.register("./sw.js?v=20260927-35", {
+    if ("serviceWorker" in navigator &&
+        (location.protocol === "https:" || location.hostname === "localhost" || location.hostname === "127.0.0.1")) {
+      navigator.serviceWorker.register("./sw.js?v=20260929-37", {
         scope: "./",
         updateViaCache: "none"
-      }).then(registration => {
-        // Fuerza una comprobación de actualización en cada entrada,
-        // sin depender de cuándo Chrome decida revisar el worker.
-        return registration.update();
-      }).catch(() => {});
+      }).then(registration => registration.update()).catch(() => {});
     }
   }
 
   return { init, triggerInstall };
 })();
-window.PWA = PWA;
 
 /********************
  * SESIÓN DE JUEGO
