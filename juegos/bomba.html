@@ -123,5 +123,35 @@
   }).observe(document.documentElement,{childList:true,subtree:true});
 })();
 </script>
+
+<script id="ams-open-links-blank">
+(function(){
+  function makeBlank(link){
+    if(!link || !link.getAttribute) return;
+    var href=link.getAttribute('href') || '';
+    if(!href || href.startsWith('javascript:')) return;
+    link.setAttribute('target','_blank');
+    var rel=new Set((link.getAttribute('rel') || '').split(/\s+/).filter(Boolean));
+    rel.add('noopener');
+    link.setAttribute('rel',Array.from(rel).join(' '));
+  }
+  function forceBlankLinks(root){
+    if(root && root.matches && root.matches('a[href]')) makeBlank(root);
+    (root || document).querySelectorAll('a[href]').forEach(makeBlank);
+  }
+  forceBlankLinks(document);
+  document.addEventListener('click',function(e){
+    var link=e.target && e.target.closest ? e.target.closest('a[href]') : null;
+    if(link) makeBlank(link);
+  },true);
+  new MutationObserver(function(mutations){
+    mutations.forEach(function(m){
+      m.addedNodes.forEach(function(node){
+        if(node.nodeType===1) forceBlankLinks(node);
+      });
+    });
+  }).observe(document.documentElement,{childList:true,subtree:true});
+})();
+</script>
 </body>
 </html>
