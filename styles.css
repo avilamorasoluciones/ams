@@ -358,7 +358,7 @@ nav.compact {
 .mobile-panel a:hover { background: rgba(255, 255, 255, 0.06); }
 
 /* ===== Hero ===== */
-header.hero { min-height: 100svh; min-height: calc(var(--app-height, 1vh) * 100); padding: calc(var(--navH) + 32px + var(--safe-top)) 0 calc(72px + var(--safe-bottom)); display: grid; align-items: center; position: relative; overflow: clip; }
+header.hero { min-height: 100vh; min-height: 100svh; padding: calc(var(--navH) + 32px + var(--safe-top)) 0 calc(72px + var(--safe-bottom)); display: grid; align-items: center; position: relative; overflow: clip; }
 .hero-grid { display: grid; grid-template-columns: 1.05fr 0.95fr; gap: 40px; align-items: center; }
 .badge-row { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 18px; }
 .badge { display: inline-flex; align-items: center; gap: 8px; padding: 8px 12px; border-radius: 999px; border: 1px solid rgba(255, 255, 255, 0.12); background: rgba(255, 255, 255, 0.04); color: rgba(248, 250, 252, 0.92); font-weight: 800; font-size: 12px; max-width: 100%; }
