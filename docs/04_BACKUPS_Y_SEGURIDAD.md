@@ -26,12 +26,12 @@ Hacer respaldos periódicos usando **Respaldo completo** desde Gestión.
 Mantener al menos una copia fuera del equipo principal.
 Conservar además los PDFs finales y los archivos que resulten importantes para la operación.
 
-## Cambio de dominio
-Antes de pasar de `avilamorasoluciones.github.io/ams` a `avilamorasoluciones.com`:
+## Operación en el dominio oficial
+El sitio público opera en `https://avilamorasoluciones.com/`. Como el `localStorage` pertenece al origen del navegador, los datos internos de Gestión deben respaldarse antes de cambiar de dispositivo, reinstalar el entorno o restaurarlos en otro origen:
 1. Exportar el respaldo completo de Gestión.
 2. Guardar los PDFs finales.
-3. Confirmar que el dominio funciona.
-4. Restaurar el respaldo en el nuevo origen.
+3. Confirmar que el dominio oficial funciona.
+4. Restaurar el respaldo cuando se cambie de dispositivo u origen.
 5. Generar un documento de prueba y verificar enlaces/PDF.
 
 ## Regla 3-2-1
