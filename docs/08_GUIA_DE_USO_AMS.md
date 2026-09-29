@@ -1,4 +1,4 @@
-# Guía de uso de AMS
+# Guía de uso de Avila Mora Soluciones
 
 ## 1. Entrada principal
 
@@ -55,7 +55,7 @@ El generador permite seleccionar el cliente existente, seleccionar una plantilla
 Ruta dentro de Gestión:
 `/gestion/calculadora/`
 
-Sirve para estimar precios de desarrollo y mensualidades. El resultado es una referencia comercial y debe reflejar el alcance real del proyecto. Los precios base actuales priorizan una relación precio/servicio competitiva, con dominio y alojamiento gestionados por AMS incluidos en la mensualidad.
+Sirve para estimar precios de desarrollo y mensualidades. El resultado es una referencia comercial y debe reflejar el alcance real del proyecto. Los precios base actuales priorizan una relación precio/servicio competitiva, con dominio y alojamiento gestionados por Avila Mora Soluciones incluidos en la mensualidad.
 
 ## 5.1 Referencia de precios
 
