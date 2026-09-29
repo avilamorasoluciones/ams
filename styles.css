@@ -625,6 +625,26 @@ footer { background: #050811; border-top: 1px solid rgba(255,255,255,0.10); padd
 
 html:not(.aos-ready) [data-aos] { opacity: 1 !important; transform: none !important; }
 
+/* ===== Accesibilidad · acentos con contraste en ambos temas ===== */
+.accent-heading{font-weight:inherit}
+.accent-primary{color:var(--primary)!important}
+.accent-secondary{color:var(--secondary)!important}
+.accent-tertiary{color:var(--tertiary)!important}
+.accent-gold{color:var(--gold)!important}
+
+body.light-theme .accent-primary{color:#4338ca!important}
+body.light-theme .accent-secondary{color:#be185d!important}
+body.light-theme .accent-tertiary{color:#047857!important}
+body.light-theme .accent-gold{color:#a16207!important}
+
+.ams-pwa-note{margin-bottom:12px;font-size:.82rem;color:#cbd5e1;line-height:1.45}
+body.light-theme .ams-pwa-note{color:#334155}
+body.light-theme .ams-story-signature{color:#475569}
+
+@media(max-width:740px){
+  .loader{transition:opacity .28s cubic-bezier(.2,.8,.2,1),visibility .28s}
+}
+
 /* ===== Tema claro ===== */
 body.light-theme {
   --dark: #f1f5f9;
