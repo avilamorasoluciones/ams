@@ -5,8 +5,9 @@
 Este archivo sirve como lista interna de preparación. No afirma que AMS tenga una inscripción, sociedad, certificación o condición jurídica determinada.
 
 ## 1. Situación pública
+- Avila Mora Soluciones opera como emprendimiento y marca comercial de servicios digitales.
 - No publicar registros, certificaciones o datos legales que todavía no existan o no estén verificados.
-- Mientras AMS sea una iniciativa en desarrollo, mantener los textos públicos descriptivos y honestos.
+- Mantener los textos públicos claros, verificables y coherentes con los servicios que realmente ofrece Avila Mora Soluciones.
 - Antes de iniciar una operación comercial estable, completar los datos reales del titular y canales de atención.
 
 ## 2. Datos personales — Colombia
