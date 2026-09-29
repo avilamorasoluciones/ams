@@ -1,4 +1,4 @@
-const CACHE_NAME = "ams-main-v7";
+const CACHE_NAME = "ams-main-v8";
 const APP_SHELL = [
   "./",
   "./index.html",
