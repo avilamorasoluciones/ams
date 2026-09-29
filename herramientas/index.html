@@ -1987,7 +1987,7 @@
             const loader=document.getElementById('ams-loader');
             if(!loader)return;
             const started=performance.now();
-            const minimum=700;
+            const minimum=350;
             function finishEntry(){
                 const wait=Math.max(0,minimum-(performance.now()-started));
                 setTimeout(function(){
@@ -1995,8 +1995,8 @@
                     setTimeout(function(){loader.classList.remove('active');loader.setAttribute('aria-hidden','true');loader.classList.remove('leaving');},380);
                 },wait);
             }
-            if(document.readyState==='complete') finishEntry();
-            else window.addEventListener('load',finishEntry,{once:true});
+            if(document.readyState==="loading") document.addEventListener("DOMContentLoaded",finishEntry,{once:true});
+            else finishEntry();
         })();
 
         // Loader visual AMS para operaciones que requieren procesamiento
