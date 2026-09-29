@@ -1,4 +1,4 @@
-# Checklist de pre-lanzamiento AMS
+# Checklist de pre-lanzamiento Avila Mora Soluciones
 
 ## Antes de comprar/configurar el dominio
 - [x] Web principal preparada.
