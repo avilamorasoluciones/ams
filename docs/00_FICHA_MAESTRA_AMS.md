@@ -2,7 +2,7 @@
 
 ## Identidad del proyecto
 - Nombre comercial: Avila Mora Soluciones
-- Tipo de operación actual: iniciativa/marca en desarrollo.
+- Tipo de operación actual: emprendimiento y marca comercial de servicios digitales.
 - País de operación previsto: Colombia.
 - Titular operativo: [POR COMPLETAR INTERNAMENTE]
 - Domicilio/canal legal público: [POR DEFINIR ANTES DE ACTIVIDAD COMERCIAL ESTABLE]
@@ -12,12 +12,13 @@ No guardar en este repositorio documentos de identidad completos, RUT, datos ban
 ## Contacto público previsto
 - Correo: equipo@avilamorasoluciones.com
 - WhatsApp: +57 305 254 7072
-- Web actual de prueba: https://avilamorasoluciones.github.io/ams/
-- Dominio previsto: https://avilamorasoluciones.com/
+- Web oficial: https://avilamorasoluciones.com/
+- URL heredada de prueba/compatibilidad: https://avilamorasoluciones.github.io/ams/
+- Dominio oficial: https://avilamorasoluciones.com/
 
 ## Infraestructura
 - Estado actual: GitHub Pages.
-- Dominio propio: pendiente de compra/configuración.
+- Dominio propio: configurado.
 - Correo del dominio: pendiente de configuración.
 - Wompi: pendiente de alta e integración.
 - Backend seguro: pendiente para pagos/webhooks y herramientas internas que necesiten protección real.
