@@ -76,45 +76,73 @@ section, header, nav, footer {
   scroll-margin-top: calc(var(--navH) + 18px);
 }
 
-/* ===== Intro AM · Avila Mora Soluciones ===== */
+/* ===== Intro · experiencia de carga ===== */
 .loader{
-  position:fixed;
-  inset:0;
+  position:fixed;inset:0;z-index:5000;display:grid;place-items:center;overflow:hidden;isolation:isolate;
   background:
-    radial-gradient(circle at 50% 42%, rgba(99,102,241,.16), transparent 23%),
-    radial-gradient(circle at 24% 72%, rgba(236,72,153,.10), transparent 25%),
-    radial-gradient(circle at 78% 28%, rgba(16,185,129,.08), transparent 25%),
-    #03050b;
-  z-index:5000;
-  display:grid;
-  place-items:center;
-  overflow:hidden;
-  isolation:isolate;
-  transition:opacity .85s cubic-bezier(.2,.8,.2,1), visibility .85s;
+    radial-gradient(circle at 50% 50%,rgba(104,70,255,.20),transparent 16%),
+    radial-gradient(circle at 22% 78%,rgba(255,78,185,.13),transparent 25%),
+    radial-gradient(circle at 82% 22%,rgba(34,211,238,.10),transparent 26%),
+    #02040b;
+  opacity:1;visibility:visible;
+  transition:opacity .7s cubic-bezier(.2,.8,.2,1),visibility .7s;
 }
 .loader::before{
-  content:"";
-  position:absolute;
-  inset:0;
+  content:"";position:absolute;inset:-30%;
   background:
-    linear-gradient(rgba(255,255,255,.018) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255,255,255,.018) 1px, transparent 1px);
-  background-size:38px 38px;
-  mask-image:radial-gradient(circle at center, black 0%, transparent 72%);
-  opacity:.65;
+    linear-gradient(rgba(255,255,255,.025) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);
+  background-size:44px 44px;
+  transform:perspective(900px) rotateX(58deg) translateY(18%);
+  transform-origin:center bottom;
+  mask-image:linear-gradient(to bottom,transparent 0%,black 30%,black 78%,transparent 100%);
+  opacity:.55;animation:amsLoadGrid 8s linear infinite;
 }
 .loader::after{
-  content:"";
-  position:absolute;
-  inset:0;
-  background:radial-gradient(circle at center, transparent 0 46%, rgba(0,0,0,.42) 100%);
-  pointer-events:none;
+  content:"";position:absolute;inset:0;pointer-events:none;
+  background:
+    radial-gradient(circle at center,transparent 0 24%,rgba(2,4,11,.12) 40%,rgba(2,4,11,.78) 100%),
+    repeating-radial-gradient(circle at center,rgba(123,109,255,.08) 0 1px,transparent 1px 80px);
+  opacity:.9;
 }
-.loader.hidden{
-  opacity:0;
-  visibility:hidden;
+.loader.hidden{opacity:0;visibility:hidden}
+.ams-loading-scene{position:relative;width:min(82vw,680px);height:min(82vw,680px);display:grid;place-items:center}
+.ams-loading-core{position:relative;width:min(25vw,180px);height:min(25vw,180px);min-width:88px;min-height:88px;border-radius:50%;
+  background:radial-gradient(circle,rgba(255,255,255,.14) 0 3%,rgba(123,109,255,.20) 13%,rgba(123,109,255,.08) 36%,transparent 67%);
+  box-shadow:0 0 60px rgba(123,109,255,.24),0 0 140px rgba(236,72,153,.12);
+  animation:amsCorePulse 1.8s ease-in-out infinite;
 }
-
+.ams-loading-core::before,.ams-loading-core::after{content:"";position:absolute;inset:18%;border-radius:50%;border:1px solid rgba(255,255,255,.10)}
+.ams-loading-core::after{inset:31%;border-color:rgba(123,109,255,.26);box-shadow:0 0 25px rgba(123,109,255,.20)}
+.ams-loading-ring{position:absolute;border-radius:50%;border:1px solid;mix-blend-mode:screen}
+.ams-loading-ring.r1{inset:9%;border-color:rgba(105,76,255,.34);animation:amsRing1 4.5s linear infinite}
+.ams-loading-ring.r2{inset:18%;border-color:rgba(255,78,185,.27);transform:rotateX(66deg) rotateZ(18deg);animation:amsRing2 5.2s linear infinite}
+.ams-loading-ring.r3{inset:28%;border-color:rgba(34,211,238,.26);transform:rotateY(68deg) rotateZ(-16deg);animation:amsRing3 3.8s linear infinite}
+.ams-loading-ring.r4{inset:-1%;border-color:rgba(255,255,255,.08);transform:rotateX(71deg) rotateZ(-12deg);animation:amsRing4 8s linear infinite}
+.ams-loading-node{position:absolute;width:9px;height:9px;border-radius:50%;background:#fff;box-shadow:0 0 10px #fff,0 0 24px currentColor}
+.ams-loading-node.n1{top:7%;left:28%;color:#7b6dff;animation:amsNode1 3.2s ease-in-out infinite}
+.ams-loading-node.n2{right:15%;top:31%;color:#ff4eb9;animation:amsNode2 2.9s ease-in-out infinite}
+.ams-loading-node.n3{bottom:14%;left:22%;color:#22d3ee;animation:amsNode3 3.7s ease-in-out infinite}
+.ams-loading-node.n4{right:23%;bottom:8%;color:#a78bfa;animation:amsNode4 3.4s ease-in-out infinite}
+.ams-loading-trail{position:absolute;left:50%;top:50%;width:42%;height:2px;transform-origin:left center;background:linear-gradient(90deg,rgba(123,109,255,.0),rgba(123,109,255,.6),rgba(255,78,185,0));filter:blur(.2px);animation:amsTrail 1.45s ease-in-out infinite}
+.ams-loading-bar{position:absolute;left:50%;bottom:13%;transform:translateX(-50%);width:min(58vw,360px);height:4px;border-radius:999px;background:rgba(255,255,255,.08);overflow:hidden;box-shadow:0 0 24px rgba(123,109,255,.14)}
+.ams-loading-bar span{display:block;width:34%;height:100%;border-radius:inherit;background:linear-gradient(90deg,#22d3ee,#786fff,#ff4eb9);box-shadow:0 0 14px rgba(120,111,255,.85),0 0 28px rgba(255,78,185,.32);animation:amsBarSweep 1.05s cubic-bezier(.25,.8,.25,1) infinite}
+@keyframes amsLoadGrid{to{transform:perspective(900px) rotateX(58deg) translateY(18%) translateX(-44px)}}
+@keyframes amsCorePulse{0%,100%{transform:scale(.84);filter:brightness(.9)}50%{transform:scale(1.05);filter:brightness(1.3)}}
+@keyframes amsRing1{to{transform:rotate(360deg)}}
+@keyframes amsRing2{to{transform:rotateX(66deg) rotateZ(378deg)}}
+@keyframes amsRing3{to{transform:rotateY(68deg) rotateZ(-376deg)}}
+@keyframes amsRing4{to{transform:rotateX(71deg) rotateZ(348deg)}}
+@keyframes amsNode1{0%,100%{transform:translate(0,0) scale(.7);opacity:.35}50%{transform:translate(16px,10px) scale(1.35);opacity:1}}
+@keyframes amsNode2{0%,100%{transform:translate(0,0) scale(.8);opacity:.4}50%{transform:translate(-18px,8px) scale(1.3);opacity:1}}
+@keyframes amsNode3{0%,100%{transform:translate(0,0) scale(.75);opacity:.35}50%{transform:translate(10px,-13px) scale(1.4);opacity:1}}
+@keyframes amsNode4{0%,100%{transform:translate(0,0) scale(.8);opacity:.35}50%{transform:translate(-10px,-12px) scale(1.25);opacity:1}}
+@keyframes amsTrail{0%,100%{opacity:0;transform:rotate(18deg) scaleX(.45)}45%{opacity:.75}75%{opacity:0;transform:rotate(18deg) scaleX(1.15)}}
+@keyframes amsBarSweep{0%{transform:translateX(-150%)}100%{transform:translateX(430%)}}
+@media(prefers-reduced-motion:reduce){
+  .loader::before,.ams-loading-core,.ams-loading-ring,.ams-loading-node,.ams-loading-trail,.ams-loading-bar span{animation:none!important}
+  .ams-loading-bar span{width:100%}
+}
 /* ===== FX ===== */
 
 .fx-bg {
