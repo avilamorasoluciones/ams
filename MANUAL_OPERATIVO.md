@@ -1,4 +1,4 @@
-# Manual Operativo AMS
+# Manual Operativo Avila Mora Soluciones
 
 ## 1. Regla principal
 Avila Mora Soluciones opera actualmente con GitHub Pages y el dominio oficial `https://avilamorasoluciones.com/`. La URL heredada `https://avilamorasoluciones.github.io/ams/...` se conserva para compatibilidad y redirección. No migrar a OVHcloud/Coolify hasta que el flujo real de clientes y los requisitos técnicos justifiquen infraestructura propia.
@@ -30,7 +30,7 @@ El formulario debe conservarse como registro del proyecto.
 
 ## 5. Staging
 - No esperar al dominio.
-- GitHub Pages/demo mientras AMS arranca.
+- GitHub Pages/demo mientras Avila Mora Soluciones arranca.
 - No subir datos privados del cliente a demos públicas.
 - Con infraestructura propia: staging protegido y producción separada.
 - La URL de demo se comparte cuando el proyecto esté listo para revisión.
@@ -38,22 +38,22 @@ El formulario debe conservarse como registro del proyecto.
 ## 6. Dominio
 - Si el cliente ya tiene dominio: recopilar solo los datos DNS necesarios para publicar.
 - Si no tiene: comprar después de aceptación, pago y autorización.
-- Preferir registro/control del cliente y administración técnica por AMS cuando corresponda.
+- Preferir registro/control del cliente y administración técnica por Avila Mora Soluciones cuando corresponda.
 - Renovaciones deben quedar registradas en Operación/Suscripciones.
 
 ## 6.1 Tiendas virtuales
 
-Cuando el proyecto sea una tienda virtual, el enfoque base de AMS es catálogo + carrito + pedido por WhatsApp + gestión del pedido según el alcance. La parte de pagos en línea se evalúa por separado cuando el cliente ya tiene una integración que deba conservarse.
+Cuando el proyecto sea una tienda virtual, el enfoque base de Avila Mora Soluciones es catálogo + carrito + pedido por WhatsApp + gestión del pedido según el alcance. La parte de pagos en línea se evalúa por separado cuando el cliente ya tiene una integración que deba conservarse.
 
-## 7. Operación AMS
+## 7. Operación Avila Mora Soluciones
 La información operativa se administra desde `/gestion/`, en Operación. El cliente se guarda como registro maestro y los proyectos quedan vinculados a ese cliente.
 Etapas: Contacto inicial (Lead) → Calificado → Propuesta → Aceptado → Pago pendiente → Producción → Revisión cliente → Entrega → Mantenimiento → Cerrado.
 **Contacto inicial (Lead)** significa que una persona o negocio acaba de llegar, preguntar o mostrar interés; todavía no es una venta.
 
-## 8. Caja AMS
+## 8. Caja Avila Mora Soluciones
 - Ingreso: dinero que entra.
 - Gasto: dinero utilizado para operar.
-- Aporte: dinero personal puesto temporalmente en AMS.
+- Aporte: dinero personal puesto temporalmente en Avila Mora Soluciones.
 - Retiro: dinero que sale hacia los propietarios.
 La Caja es control interno para saber qué dinero entró, qué dinero salió y qué pagos quedan por atender.
 
@@ -88,11 +88,11 @@ Las pantallas internas publicadas en GitHub Pages no son seguridad real. Cuando 
 - Con infraestructura propia: backups automáticos y restauración probada.
 
 ## 14. Compras y movimientos
-1. Revisar Caja AMS.
+1. Revisar Caja Avila Mora Soluciones.
 2. Identificar el gasto.
 3. Registrar el movimiento.
 4. Si falta caja, registrar un aporte separado.
-5. No mezclar gasto personal con gasto de AMS.
+5. No mezclar gasto personal con gasto de Avila Mora Soluciones.
 
 ## 15. Cuando llegue OVHcloud/Coolify
 Debe incluir staging protegido, producción separada, variables de entorno, backups automáticos, monitorización, backend/base de datos cuando haga falta y autenticación real para herramientas internas.
