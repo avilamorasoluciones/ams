@@ -2,10 +2,10 @@
 
 ## Identidad del proyecto
 - Nombre comercial: Avila Mora Soluciones
-- Tipo de operación actual: emprendimiento y marca comercial de servicios digitales.
+- Tipo de operación actual: marca comercial y proveedor de servicios digitales.
 - País de operación previsto: Colombia.
 - Titular operativo: [POR COMPLETAR INTERNAMENTE]
-- Domicilio/canal legal público: [POR DEFINIR ANTES DE ACTIVIDAD COMERCIAL ESTABLE]
+- Domicilio/canal legal público: [POR DEFINIR Y VERIFICAR SEGÚN LA INFORMACIÓN LEGAL VIGENTE]
 
 No guardar en este repositorio documentos de identidad completos, RUT, datos bancarios ni otros datos que deban permanecer privados.
 
