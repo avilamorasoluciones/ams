@@ -1168,16 +1168,29 @@
   <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
   <script src="scripts.js?v=20260926-2"></script>
   <script src="contacto.js?v=20260928-4"></script>
-  <script>
-    // Navegación externa de AMS: abrir recursos, formularios y enlaces fuera de la sección actual en una pestaña nueva.
-    document.querySelectorAll('a[href]').forEach((link) => {
-      const href = link.getAttribute('href') || '';
-      if (href && !href.startsWith('#') && !href.startsWith('javascript:')) {
-        link.setAttribute('target', '_blank');
-        link.setAttribute('rel', 'noopener');
+<script id="ams-open-links-blank">
+(function(){
+  function forceBlankLinks(root){
+    (root || document).querySelectorAll('a[href]').forEach(function(link){
+      var href=link.getAttribute('href') || '';
+      if(href && !href.startsWith('javascript:')){
+        link.setAttribute('target','_blank');
+        var rel=new Set((link.getAttribute('rel') || '').split(/\s+/).filter(Boolean));
+        rel.add('noopener');
+        link.setAttribute('rel',Array.from(rel).join(' '));
       }
     });
-  </script>
+  }
+  forceBlankLinks(document);
+  new MutationObserver(function(mutations){
+    mutations.forEach(function(m){
+      m.addedNodes.forEach(function(node){
+        if(node.nodeType===1) forceBlankLinks(node);
+      });
+    });
+  }).observe(document.documentElement,{childList:true,subtree:true});
+})();
+</script>
   <script>
     document.getElementById("emailCta")?.addEventListener("click", () => {
       const panel = document.getElementById("emailQuick");
