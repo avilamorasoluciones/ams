@@ -1303,7 +1303,7 @@ function toggleTheme() {
   const html = document.documentElement; const currentTheme = html.getAttribute("data-theme");
   playUISound("toggle");
   const newTheme = currentTheme === "dark" ? "light" : "dark";
-  html.setAttribute("data-theme", newTheme); 
+  html.setAttribute("data-theme", newTheme); document.documentElement.style.colorScheme = newTheme === "light" ? "light" : "dark"; 
   $("themeBtn").textContent = newTheme === "dark" ? "🌙" : "☀️";
   $("themeColorMeta").setAttribute("content", newTheme === "dark" ? "#0f1714" : "#f4f9f5");
   localStorage.setItem("ayukcal_theme", newTheme); const s=state(); s.settings=s.settings||{}; s.settings.theme=newTheme; save(s); draw();
@@ -1311,7 +1311,7 @@ function toggleTheme() {
 
 function initTheme() {
   const savedTheme = state().settings?.theme || localStorage.getItem("ayukcal_theme") || "dark"; 
-  document.documentElement.setAttribute("data-theme", savedTheme);
+  document.documentElement.setAttribute("data-theme", savedTheme); document.documentElement.style.colorScheme = savedTheme === "light" ? "light" : "dark";
   $("themeBtn").textContent = savedTheme === "dark" ? "🌙" : "☀️"; 
   $("themeColorMeta").setAttribute("content", savedTheme === "dark" ? "#0f1714" : "#f4f9f5");
 }
