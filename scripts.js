@@ -1,29 +1,3 @@
-// ===== Intro AM · Boot sequence =====
-(() => {
-  const startedAt = performance.now();
-
-  const revealLoader = () => {
-    const loader = document.getElementById("loader");
-    if (!loader) return;
-
-    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const compactViewport = window.matchMedia("(max-width: 740px)").matches;
-    const minimumTime = reduced ? 300 : (compactViewport ? 700 : 900);
-    const elapsed = performance.now() - startedAt;
-    const wait = Math.max(0, minimumTime - elapsed);
-
-    window.setTimeout(() => {
-      loader.classList.add("hidden");
-      window.setTimeout(() => loader.remove(), 700);
-    }, wait);
-  };
-
-  if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", revealLoader, { once: true });
-  } else {
-    revealLoader();
-  }
-})();
 // ===== AOS =====
 const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
