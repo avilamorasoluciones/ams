@@ -432,6 +432,18 @@
 </head>
 
 <body>
+  <script id="ams-theme-boot">
+    (() => {
+      try {
+        const saved = localStorage.getItem("ams-theme-preference");
+        const theme = saved || ((new Date().getHours() >= 6 && new Date().getHours() < 18) ? "light" : "dark");
+        if (theme === "light") document.body.classList.add("light-theme");
+        document.documentElement.style.colorScheme = theme;
+        const meta = document.querySelector('meta[name="theme-color"]');
+        if (meta) meta.setAttribute("content", theme === "light" ? "#f1f5f9" : "#0f172a");
+      } catch (_) {}
+    })();
+  </script>
   <div class="loader" id="loader" role="status" aria-label="Preparando Avila Mora Soluciones">
     <div class="ams-loading-atelier" aria-hidden="true">
       <div class="ams-loading-topline">
@@ -1169,7 +1181,7 @@
   <button class="to-top" id="toTop" aria-label="Volver arriba" title="Volver arriba"><i class="fa-solid fa-arrow-up"></i></button>
 
 
-  <script src="scripts.js?v=20260929-5" defer></script>
+  <script src="scripts.js?v=20260929-6" defer></script>
   <script src="contacto.js?v=20260928-4" defer></script>
 <script id="ams-open-links-blank">
 (function(){
