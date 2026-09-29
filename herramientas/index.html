@@ -89,10 +89,10 @@
         .section-header hr { flex-grow: 1; border-color: var(--border-glass); opacity: 1; margin: 0; }
         .section-header i { color: var(--cyan); }
 
-        .tool-grid { display: grid; grid-template-columns: 1fr; gap: 15px; padding-bottom: 20px; }
-        @media (min-width: 576px) { .tool-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; } }
+        .tool-grid { display:grid; grid-template-columns:1fr; gap:20px; padding-bottom:24px; align-items:start; }
+        @media (min-width: 576px) { .tool-grid { grid-template-columns:repeat(2,minmax(0,1fr)); gap:20px; } }
         @media (min-width: 820px) { .tool-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
-        @media (min-width: 1100px) { .tool-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+        @media (min-width: 1100px) { .tool-grid { grid-template-columns:repeat(4,minmax(0,1fr)); gap:22px; } }
 
         .tool-card { background: var(--bg-card); border: 1px solid var(--border-glass); border-radius: 12px; padding: 18px; display: flex; flex-direction: column; transition: transform 0.3s, border-color 0.3s; position: relative; scroll-margin-top: 90px; }
         .tool-card:hover { transform: translateY(-3px); border-color: var(--border-hover); }
@@ -753,9 +753,9 @@
             <a href="#tool-compress" class="menu-link" data-bs-dismiss="offcanvas"><div class="menu-icon text-orange-ams"><i class="fa-solid fa-minimize"></i></div> Comprimir Imágenes</a>
             <a href="#tool-conv" class="menu-link" data-bs-dismiss="offcanvas"><div class="menu-icon text-green-ams"><i class="fa-solid fa-shuffle"></i></div> Convertir Formatos</a>
             <a href="#tool-circle" class="menu-link" data-bs-dismiss="offcanvas"><div class="menu-icon text-pink-ams"><i class="fa-solid fa-crop-simple"></i></div> Recorte Circular</a>
-            
+            <a href="#tool-resize" class="menu-link" data-bs-dismiss="offcanvas"><div class="menu-icon text-cyan-ams"><i class="fa-solid fa-up-right-and-down-left-from-center"></i></div> Redimensionar Imagen</a>
+
             <p class="text-muted small mt-4 mb-2 fw-bold" style="font-size: 0.75rem;">📄 DOCUMENTOS PDF</p>
-            <!-- NUEVA HERRAMIENTA EN EL MENÚ -->
             <a href="#tool-compress-pdf" class="menu-link" data-bs-dismiss="offcanvas"><div class="menu-icon text-orange-ams"><i class="fa-solid fa-file-zipper"></i></div> Comprimir PDF</a>
             <a href="#tool-merge" class="menu-link" data-bs-dismiss="offcanvas"><div class="menu-icon text-cyan-ams"><i class="fa-solid fa-layer-group"></i></div> Unir Documentos</a>
             <a href="#tool-img2pdf" class="menu-link" data-bs-dismiss="offcanvas"><div class="menu-icon text-purple-ams"><i class="fa-regular fa-image"></i></div> Imágenes a PDF</a>
@@ -765,27 +765,27 @@
             <a href="#tool-rotate" class="menu-link" data-bs-dismiss="offcanvas"><div class="menu-icon text-yellow-ams"><i class="fa-solid fa-arrows-rotate"></i></div> Girar Documento</a>
             <a href="#tool-watermark" class="menu-link" data-bs-dismiss="offcanvas"><div class="menu-icon text-blue-ams"><i class="fa-solid fa-fingerprint"></i></div> Marca de Agua</a>
 
-            <p class="text-muted small mt-4 mb-2 fw-bold" style="font-size: 0.75rem;">🛠️ UTILIDADES Y CÓDIGO</p>
+            <p class="text-muted small mt-4 mb-2 fw-bold" style="font-size: 0.75rem;">💻 WEB Y DESARROLLO</p>
             <a href="#tool-minify" class="menu-link" data-bs-dismiss="offcanvas"><div class="menu-icon text-yellow-ams"><i class="fa-solid fa-file-zipper"></i></div> Minificador de Código</a>
-            <a href="#tool-qr" class="menu-link" data-bs-dismiss="offcanvas"><div class="menu-icon text-green-ams"><i class="fa-solid fa-qrcode"></i></div> Generador QR</a>
-            <a href="#tool-pass" class="menu-link" data-bs-dismiss="offcanvas"><div class="menu-icon text-cyan-ams"><i class="fa-solid fa-key"></i></div> Generador Contraseñas</a>
-            <a href="#tool-json" class="menu-link" data-bs-dismiss="offcanvas"><div class="menu-icon text-purple-ams"><i class="fa-solid fa-file-code"></i></div> Formateador JSON</a>
-            <p class="text-muted small mt-4 mb-2 fw-bold" style="font-size: 0.75rem;">⚡ HERRAMIENTAS AMS</p>
-            <a href="#tool-resize" class="menu-link" data-bs-dismiss="offcanvas"><div class="menu-icon text-cyan-ams"><i class="fa-solid fa-up-right-and-down-left-from-center"></i></div> Redimensionar Imagen</a>
             <a href="#tool-base64" class="menu-link" data-bs-dismiss="offcanvas"><div class="menu-icon text-purple-ams"><i class="fa-solid fa-code"></i></div> Base64</a>
-            <a href="#tool-uuid" class="menu-link" data-bs-dismiss="offcanvas"><div class="menu-icon text-green-ams"><i class="fa-solid fa-fingerprint"></i></div> UUID v4</a>
-            <a href="#tool-timestamp" class="menu-link" data-bs-dismiss="offcanvas"><div class="menu-icon text-orange-ams"><i class="fa-solid fa-clock"></i></div> Timestamp / Fechas</a>
-            <a href="#tool-color" class="menu-link" data-bs-dismiss="offcanvas"><div class="menu-icon text-pink-ams"><i class="fa-solid fa-palette"></i></div> Colores HEX / RGB / HSL</a>
-            <a href="#tool-units" class="menu-link" data-bs-dismiss="offcanvas"><div class="menu-icon text-yellow-ams"><i class="fa-solid fa-scale-balanced"></i></div> Conversor de Unidades</a>
-            <a href="#tool-text" class="menu-link" data-bs-dismiss="offcanvas"><div class="menu-icon text-blue-ams"><i class="fa-solid fa-font"></i></div> Contador de Texto</a>
+            <a href="#tool-json" class="menu-link" data-bs-dismiss="offcanvas"><div class="menu-icon text-purple-ams"><i class="fa-solid fa-file-code"></i></div> Formateador JSON</a>
             <a href="#tool-regex" class="menu-link" data-bs-dismiss="offcanvas"><div class="menu-icon text-red-ams"><i class="fa-solid fa-code-compare"></i></div> Probador Regex</a>
             <a href="#tool-meta" class="menu-link" data-bs-dismiss="offcanvas"><div class="menu-icon text-cyan-ams"><i class="fa-solid fa-tags"></i></div> Generador Meta Tags</a>
             <a href="#tool-favicon" class="menu-link" data-bs-dismiss="offcanvas"><div class="menu-icon text-purple-ams"><i class="fa-solid fa-icons"></i></div> Generador Favicon</a>
             <a href="#tool-csv" class="menu-link" data-bs-dismiss="offcanvas"><div class="menu-icon text-green-ams"><i class="fa-solid fa-table"></i></div> CSV → JSON</a>
-            
+            <a href="#tool-uuid" class="menu-link" data-bs-dismiss="offcanvas"><div class="menu-icon text-green-ams"><i class="fa-solid fa-fingerprint"></i></div> UUID v4</a>
+
+            <p class="text-muted small mt-4 mb-2 fw-bold" style="font-size: 0.75rem;">🧰 UTILIDADES Y CONVERSIÓN</p>
+            <a href="#tool-timestamp" class="menu-link" data-bs-dismiss="offcanvas"><div class="menu-icon text-orange-ams"><i class="fa-solid fa-clock"></i></div> Timestamp / Fechas</a>
+            <a href="#tool-units" class="menu-link" data-bs-dismiss="offcanvas"><div class="menu-icon text-yellow-ams"><i class="fa-solid fa-scale-balanced"></i></div> Conversor de Unidades</a>
+            <a href="#tool-text" class="menu-link" data-bs-dismiss="offcanvas"><div class="menu-icon text-blue-ams"><i class="fa-solid fa-font"></i></div> Contador de Texto</a>
+            <a href="#tool-color" class="menu-link" data-bs-dismiss="offcanvas"><div class="menu-icon text-cyan-ams"><i class="fa-solid fa-palette"></i></div> Colores HEX / RGB / HSL</a>
+            <a href="#tool-qr" class="menu-link" data-bs-dismiss="offcanvas"><div class="menu-icon text-green-ams"><i class="fa-solid fa-qrcode"></i></div> Generador QR</a>
+            <a href="#tool-pass" class="menu-link" data-bs-dismiss="offcanvas"><div class="menu-icon text-purple-ams"><i class="fa-solid fa-key"></i></div> Generador de Contraseñas</a>
+
             <hr class="border-secondary my-4">
             <a href="../" class="btn btn-outline-light w-100 rounded-pill mb-4" style="font-size: 0.85rem; padding: 8px;">
-                <i class="fa-solid fa-globe me-2"></i> Web Principal AMS
+                <i class="fa-solid fa-globe me-2"></i> Web principal
             </a>
         </div>
     </div>
@@ -886,6 +886,22 @@
                         <button class="btn btn-sm btn-outline-danger mt-2 w-100" id="btn-cancel-crop">Quitar Foto</button>
                     </div>
                     <button class="btn btn-ams mt-auto" id="btn-circle" disabled>Recortar</button>
+                </div>
+
+                                <div class="tool-card" id="tool-resize">
+                    <div class="icon-box cyan"><i class="fa-solid fa-expand"></i></div>
+                    <h3 class="h4 fw-bold">Redimensionar Imagen</h3>
+                    <p class="text-muted small">Cambia ancho y alto manteniendo la proporción.</p>
+                    <label class="drop-zone" id="dz-resize"><i class="fa-regular fa-image text-info"></i><div class="small fw-bold mt-1">Seleccionar imagen</div><input type="file" id="inp-resize" accept="image/*"></label>
+                    <div id="resize-workspace" class="mt-2" style="display:none">
+                        <div class="d-flex gap-2 mb-2">
+                            <input id="resize-w" type="number" class="form-control" min="1" placeholder="Ancho">
+                            <input id="resize-h" type="number" class="form-control" min="1" placeholder="Alto">
+                        </div>
+                        <label class="small text-muted"><input id="resize-lock" type="checkbox" checked> Mantener proporción</label>
+                        <select id="resize-format" class="form-select mt-2"><option value="image/webp">WebP</option><option value="image/jpeg">JPG</option><option value="image/png">PNG</option></select>
+                        <button class="btn btn-ams w-100 mt-2" id="btn-resize">Redimensionar</button>
+                    </div>
                 </div>
             </div>
 
@@ -1049,15 +1065,13 @@
                 </div>
             </div>
 
-            <!-- SECCIÓN 3: UTILIDADES Y CÓDIGO -->
+            <!-- SECCIÓN 3: WEB Y DESARROLLO -->
             <div class="section-header">
-                <h2><i class="fa-solid fa-microchip me-2"></i> Utilidades y Código</h2>
+                <h2><i class="fa-solid fa-code me-2"></i> Web y Desarrollo</h2>
                 <hr>
             </div>
             <div class="tool-grid">
-                
-                <!-- Minificador -->
-                <div class="tool-card" id="tool-minify">
+                                <div class="tool-card" id="tool-minify">
                     <div class="icon-box yellow"><i class="fa-solid fa-file-zipper"></i></div>
                     <h3 class="h4 fw-bold">Minificador Código</h3>
                     <p class="text-muted small">Quita espacios de HTML, CSS o JS.</p>
@@ -1071,9 +1085,135 @@
 
                     <button class="btn btn-ams mt-auto" id="btn-minify" disabled>Minificar</button>
                 </div>
+                
+                                <div class="tool-card" id="tool-base64">
+                    <div class="icon-box purple"><i class="fa-solid fa-code"></i></div>
+                    <h3 class="h4 fw-bold">Base64</h3>
+                    <p class="text-muted small">Codifica texto o decodifica Base64 directamente en tu navegador.</p>
+                    <textarea id="base64-input" class="form-control mb-2" rows="3" placeholder="Texto o Base64..."></textarea>
+                    <div class="d-flex gap-2">
+                        <button class="btn btn-ams w-100" id="btn-b64-encode">Codificar</button>
+                        <button class="btn btn-outline-light w-100" id="btn-b64-decode">Decodificar</button>
+                    </div>
+                    <textarea id="base64-output" class="form-control mt-2" rows="3" readonly placeholder="Resultado..."></textarea>
+                    <button class="btn btn-sm btn-link text-info w-100" id="btn-b64-copy">Copiar resultado</button>
+                </div>
+                
+                                <div class="tool-card" id="tool-json">
+                    <div class="icon-box purple"><i class="fa-solid fa-file-code"></i></div>
+                    <h3 class="h4 fw-bold">Formateador JSON</h3>
+                    <p class="text-muted small">Pega un código JSON desordenado y organízalo con indentación perfecta.</p>
+                    
+                    <textarea class="form-control mb-2" id="json-input" rows="3" placeholder='{"ejemplo": "pega aquí"}'></textarea>
+                    
+                    <div class="d-flex gap-2 mb-2">
+                        <button class="btn btn-ams w-100" id="btn-format-json">Formatear</button>
+                        <button class="btn btn-outline-danger w-100" id="btn-minify-json" style="display:none; padding: 10px; font-size: 0.8rem; font-weight: bold;">Minificar</button>
+                    </div>
 
-                <!-- Generador QR -->
-                <div class="tool-card" id="tool-qr">
+                    <div id="json-output-container" style="display:none;">
+                        <label class="form-label d-flex justify-content-between">Resultado: <button class="btn btn-sm btn-link text-info p-0 text-decoration-none" id="btn-copy-json">Copiar</button></label>
+                        <textarea class="form-control bg-dark text-success" id="json-output" rows="3" readonly></textarea>
+                    </div>
+                </div>
+                
+                                <div class="tool-card" id="tool-regex">
+                    <div class="icon-box yellow"><i class="fa-solid fa-filter"></i></div>
+                    <h3 class="h4 fw-bold">Regex Tester</h3>
+                    <p class="text-muted small">Prueba expresiones regulares sobre texto local.</p>
+                    <input id="regex-pattern" class="form-control mb-2" placeholder="Ej: ^[A-Z].*$">
+                    <textarea id="regex-text" class="form-control mb-2" rows="3" placeholder="Texto de prueba..."></textarea>
+                    <div id="regex-output" class="result-box p-2 small">Escribe una expresión.</div>
+                </div>
+                
+                                <div class="tool-card" id="tool-meta">
+                    <div class="icon-box cyan"><i class="fa-solid fa-globe"></i></div>
+                    <h3 class="h4 fw-bold">Meta Tags</h3>
+                    <p class="text-muted small">Genera etiquetas SEO básicas para una página web.</p>
+                    <input id="meta-title" class="form-control mb-2" placeholder="Título">
+                    <input id="meta-desc" class="form-control mb-2" placeholder="Descripción">
+                    <input id="meta-url" class="form-control mb-2" placeholder="https://ejemplo.com/">
+                    <button class="btn btn-ams w-100" id="btn-meta">Generar código</button>
+                    <textarea id="meta-output" class="form-control mt-2" rows="5" readonly></textarea>
+                    <button class="btn btn-sm btn-link text-info w-100" id="btn-meta-copy">Copiar</button>
+                </div>
+                
+                                <div class="tool-card" id="tool-favicon">
+                    <div class="icon-box purple"><i class="fa-solid fa-icons"></i></div>
+                    <h3 class="h4 fw-bold">Generador Favicon</h3>
+                    <p class="text-muted small">Convierte una imagen cuadrada en un favicon PNG.</p>
+                    <label class="drop-zone" id="dz-favicon"><i class="fa-solid fa-image text-info"></i><div class="small fw-bold mt-1">Seleccionar imagen</div><input type="file" id="inp-favicon" accept="image/*"></label>
+                    <div id="favicon-preview" class="text-center mt-2" style="display:none"></div>
+                    <button class="btn btn-ams w-100 mt-2" id="btn-favicon" disabled>Generar favicon</button>
+                </div>
+                
+                                <div class="tool-card" id="tool-csv">
+                    <div class="icon-box green"><i class="fa-solid fa-table"></i></div>
+                    <h3 class="h4 fw-bold">CSV → JSON</h3>
+                    <p class="text-muted small">Convierte CSV simple con encabezados a JSON.</p>
+                    <textarea id="csv-input" class="form-control mb-2" rows="5" placeholder="nombre,edad,ciudad&#10;Diego,28,Bogotá"></textarea>
+                    <button class="btn btn-ams w-100" id="btn-csv">Convertir a JSON</button>
+                    <textarea id="csv-output" class="form-control mt-2" rows="5" readonly></textarea>
+                    <button class="btn btn-sm btn-link text-info w-100" id="btn-csv-copy">Copiar</button>
+                </div>
+                
+                                <div class="tool-card" id="tool-uuid">
+                    <div class="icon-box green"><i class="fa-solid fa-fingerprint"></i></div>
+                    <h3 class="h4 fw-bold">UUID</h3>
+                    <p class="text-muted small">Genera identificadores UUID v4 localmente.</p>
+                    <div id="uuid-output" class="result-box text-center py-3 mb-2 small text-break">Pulsa generar</div>
+                    <div class="d-flex gap-2">
+                        <button class="btn btn-ams w-100" id="btn-uuid">Generar UUID</button>
+                        <button class="btn btn-outline-light" id="btn-uuid-copy"><i class="fa-regular fa-copy"></i></button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECCIÓN 4: UTILIDADES Y CONVERSIÓN -->
+            <div class="section-header">
+                <h2><i class="fa-solid fa-wand-magic-sparkles me-2"></i> Utilidades y Conversión</h2>
+                <hr>
+            </div>
+            <div class="tool-grid">
+                                <div class="tool-card" id="tool-timestamp">
+                    <div class="icon-box yellow"><i class="fa-solid fa-clock"></i></div>
+                    <h3 class="h4 fw-bold">Timestamp</h3>
+                    <p class="text-muted small">Convierte fechas y timestamps Unix.</p>
+                    <input id="timestamp-input" class="form-control mb-2" placeholder="Ej: 2026-09-26 15:30">
+                    <div class="d-flex gap-2 mb-2"><button class="btn btn-ams w-100" id="btn-ts-now">Ahora</button><button class="btn btn-outline-light w-100" id="btn-ts-date">Convertir fecha</button></div>
+                    <div id="timestamp-output" class="result-box p-2 small text-break">—</div>
+                </div>
+                
+                                <div class="tool-card" id="tool-units">
+                    <div class="icon-box purple"><i class="fa-solid fa-right-left"></i></div>
+                    <h3 class="h4 fw-bold">Conversor de Unidades</h3>
+                    <p class="text-muted small">Longitud, peso y temperatura sin conexión.</p>
+                    <div class="d-flex gap-2 mb-2">
+                        <input id="unit-value" type="number" class="form-control" value="1">
+                        <select id="unit-type" class="form-select"><option value="km-mi">km → millas</option><option value="mi-km">millas → km</option><option value="kg-lb">kg → lb</option><option value="lb-kg">lb → kg</option><option value="c-f">°C → °F</option><option value="f-c">°F → °C</option></select>
+                    </div>
+                    <div id="unit-output" class="result-box text-center py-3 fw-bold">1</div>
+                </div>
+                
+                                <div class="tool-card" id="tool-text">
+                    <div class="icon-box green"><i class="fa-solid fa-align-left"></i></div>
+                    <h3 class="h4 fw-bold">Contador de Texto</h3>
+                    <p class="text-muted small">Caracteres, palabras, líneas y bytes.</p>
+                    <textarea id="text-counter-input" class="form-control mb-2" rows="5" placeholder="Escribe o pega tu texto..."></textarea>
+                    <div id="text-counter-output" class="result-box p-2 small">0 caracteres · 0 palabras · 0 líneas · 0 bytes</div>
+                </div>
+                
+                                <div class="tool-card" id="tool-color">
+                    <div class="icon-box cyan"><i class="fa-solid fa-palette"></i></div>
+                    <h3 class="h4 fw-bold">Color</h3>
+                    <p class="text-muted small">Convierte HEX, RGB y HSL para tus diseños.</p>
+                    <input id="color-picker" type="color" class="form-control form-control-color mb-2" value="#6366f1" title="Elegir color">
+                    <input id="color-hex" class="form-control mb-2" value="#6366F1" placeholder="#6366F1">
+                    <div id="color-values" class="result-box p-2 small">RGB: —<br>HSL: —</div>
+                    <button class="btn btn-outline-light w-100 mt-2" id="btn-copy-color">Copiar HEX</button>
+                </div>
+                
+                                <div class="tool-card" id="tool-qr">
                     <div class="icon-box green"><i class="fa-solid fa-qrcode"></i></div>
                     <h3 class="h4 fw-bold">Generador QR</h3>
                     <p class="text-muted small">Convierte cualquier texto o enlace en un código QR escaneable listo para compartir.</p>
@@ -1089,9 +1229,8 @@
                         <button class="btn btn-outline-light w-100" id="btn-dl-qr" style="display: none; padding: 10px; font-size: 0.8rem; font-weight: bold;">Descargar</button>
                     </div>
                 </div>
-
-                <!-- Generador de Contraseñas -->
-                <div class="tool-card" id="tool-pass">
+                
+                                <div class="tool-card" id="tool-pass">
                     <div class="icon-box cyan"><i class="fa-solid fa-key"></i></div>
                     <h3 class="h4 fw-bold">Contraseñas</h3>
                     <p class="text-muted small">Crea contraseñas ultraseguras generadas localmente en tu dispositivo.</p>
@@ -1112,154 +1251,8 @@
                     </div>
                     <button class="btn btn-ams mt-auto" id="btn-gen-pass">Generar Clave</button>
                 </div>
-
-                <!-- Formateador JSON -->
-                <div class="tool-card" id="tool-json">
-                    <div class="icon-box purple"><i class="fa-solid fa-file-code"></i></div>
-                    <h3 class="h4 fw-bold">Formateador JSON</h3>
-                    <p class="text-muted small">Pega un código JSON desordenado y organízalo con indentación perfecta.</p>
-                    
-                    <textarea class="form-control mb-2" id="json-input" rows="3" placeholder='{"ejemplo": "pega aquí"}'></textarea>
-                    
-                    <div class="d-flex gap-2 mb-2">
-                        <button class="btn btn-ams w-100" id="btn-format-json">Formatear</button>
-                        <button class="btn btn-outline-danger w-100" id="btn-minify-json" style="display:none; padding: 10px; font-size: 0.8rem; font-weight: bold;">Minificar</button>
-                    </div>
-
-                    <div id="json-output-container" style="display:none;">
-                        <label class="form-label d-flex justify-content-between">Resultado: <button class="btn btn-sm btn-link text-info p-0 text-decoration-none" id="btn-copy-json">Copiar</button></label>
-                        <textarea class="form-control bg-dark text-success" id="json-output" rows="3" readonly></textarea>
-                    </div>
-                </div>
-                
             </div>
         </div>
-
-            <!-- SECCIÓN 4: HERRAMIENTAS AMS -->
-            <div class="section-header">
-                <h2><i class="fa-solid fa-toolbox me-2"></i> Herramientas AMS</h2>
-                <hr>
-            </div>
-            <div class="tool-grid">
-
-                <div class="tool-card" id="tool-resize">
-                    <div class="icon-box cyan"><i class="fa-solid fa-expand"></i></div>
-                    <h3 class="h4 fw-bold">Redimensionar Imagen</h3>
-                    <p class="text-muted small">Cambia ancho y alto manteniendo la proporción.</p>
-                    <label class="drop-zone" id="dz-resize"><i class="fa-regular fa-image text-info"></i><div class="small fw-bold mt-1">Seleccionar imagen</div><input type="file" id="inp-resize" accept="image/*"></label>
-                    <div id="resize-workspace" class="mt-2" style="display:none">
-                        <div class="d-flex gap-2 mb-2">
-                            <input id="resize-w" type="number" class="form-control" min="1" placeholder="Ancho">
-                            <input id="resize-h" type="number" class="form-control" min="1" placeholder="Alto">
-                        </div>
-                        <label class="small text-muted"><input id="resize-lock" type="checkbox" checked> Mantener proporción</label>
-                        <select id="resize-format" class="form-select mt-2"><option value="image/webp">WebP</option><option value="image/jpeg">JPG</option><option value="image/png">PNG</option></select>
-                        <button class="btn btn-ams w-100 mt-2" id="btn-resize">Redimensionar</button>
-                    </div>
-                </div>
-
-                <div class="tool-card" id="tool-base64">
-                    <div class="icon-box purple"><i class="fa-solid fa-code"></i></div>
-                    <h3 class="h4 fw-bold">Base64</h3>
-                    <p class="text-muted small">Codifica texto o decodifica Base64 directamente en tu navegador.</p>
-                    <textarea id="base64-input" class="form-control mb-2" rows="3" placeholder="Texto o Base64..."></textarea>
-                    <div class="d-flex gap-2">
-                        <button class="btn btn-ams w-100" id="btn-b64-encode">Codificar</button>
-                        <button class="btn btn-outline-light w-100" id="btn-b64-decode">Decodificar</button>
-                    </div>
-                    <textarea id="base64-output" class="form-control mt-2" rows="3" readonly placeholder="Resultado..."></textarea>
-                    <button class="btn btn-sm btn-link text-info w-100" id="btn-b64-copy">Copiar resultado</button>
-                </div>
-
-                <div class="tool-card" id="tool-uuid">
-                    <div class="icon-box green"><i class="fa-solid fa-fingerprint"></i></div>
-                    <h3 class="h4 fw-bold">UUID</h3>
-                    <p class="text-muted small">Genera identificadores UUID v4 localmente.</p>
-                    <div id="uuid-output" class="result-box text-center py-3 mb-2 small text-break">Pulsa generar</div>
-                    <div class="d-flex gap-2">
-                        <button class="btn btn-ams w-100" id="btn-uuid">Generar UUID</button>
-                        <button class="btn btn-outline-light" id="btn-uuid-copy"><i class="fa-regular fa-copy"></i></button>
-                    </div>
-                </div>
-
-                <div class="tool-card" id="tool-timestamp">
-                    <div class="icon-box yellow"><i class="fa-solid fa-clock"></i></div>
-                    <h3 class="h4 fw-bold">Timestamp</h3>
-                    <p class="text-muted small">Convierte fechas y timestamps Unix.</p>
-                    <input id="timestamp-input" class="form-control mb-2" placeholder="Ej: 2026-09-26 15:30">
-                    <div class="d-flex gap-2 mb-2"><button class="btn btn-ams w-100" id="btn-ts-now">Ahora</button><button class="btn btn-outline-light w-100" id="btn-ts-date">Convertir fecha</button></div>
-                    <div id="timestamp-output" class="result-box p-2 small text-break">—</div>
-                </div>
-
-                <div class="tool-card" id="tool-color">
-                    <div class="icon-box cyan"><i class="fa-solid fa-palette"></i></div>
-                    <h3 class="h4 fw-bold">Color</h3>
-                    <p class="text-muted small">Convierte HEX, RGB y HSL para tus diseños.</p>
-                    <input id="color-picker" type="color" class="form-control form-control-color mb-2" value="#6366f1" title="Elegir color">
-                    <input id="color-hex" class="form-control mb-2" value="#6366F1" placeholder="#6366F1">
-                    <div id="color-values" class="result-box p-2 small">RGB: —<br>HSL: —</div>
-                    <button class="btn btn-outline-light w-100 mt-2" id="btn-copy-color">Copiar HEX</button>
-                </div>
-
-                <div class="tool-card" id="tool-units">
-                    <div class="icon-box purple"><i class="fa-solid fa-right-left"></i></div>
-                    <h3 class="h4 fw-bold">Conversor de Unidades</h3>
-                    <p class="text-muted small">Longitud, peso y temperatura sin conexión.</p>
-                    <div class="d-flex gap-2 mb-2">
-                        <input id="unit-value" type="number" class="form-control" value="1">
-                        <select id="unit-type" class="form-select"><option value="km-mi">km → millas</option><option value="mi-km">millas → km</option><option value="kg-lb">kg → lb</option><option value="lb-kg">lb → kg</option><option value="c-f">°C → °F</option><option value="f-c">°F → °C</option></select>
-                    </div>
-                    <div id="unit-output" class="result-box text-center py-3 fw-bold">1</div>
-                </div>
-
-                <div class="tool-card" id="tool-text">
-                    <div class="icon-box green"><i class="fa-solid fa-align-left"></i></div>
-                    <h3 class="h4 fw-bold">Contador de Texto</h3>
-                    <p class="text-muted small">Caracteres, palabras, líneas y bytes.</p>
-                    <textarea id="text-counter-input" class="form-control mb-2" rows="5" placeholder="Escribe o pega tu texto..."></textarea>
-                    <div id="text-counter-output" class="result-box p-2 small">0 caracteres · 0 palabras · 0 líneas · 0 bytes</div>
-                </div>
-
-                <div class="tool-card" id="tool-regex">
-                    <div class="icon-box yellow"><i class="fa-solid fa-filter"></i></div>
-                    <h3 class="h4 fw-bold">Regex Tester</h3>
-                    <p class="text-muted small">Prueba expresiones regulares sobre texto local.</p>
-                    <input id="regex-pattern" class="form-control mb-2" placeholder="Ej: ^[A-Z].*$">
-                    <textarea id="regex-text" class="form-control mb-2" rows="3" placeholder="Texto de prueba..."></textarea>
-                    <div id="regex-output" class="result-box p-2 small">Escribe una expresión.</div>
-                </div>
-
-                <div class="tool-card" id="tool-meta">
-                    <div class="icon-box cyan"><i class="fa-solid fa-globe"></i></div>
-                    <h3 class="h4 fw-bold">Meta Tags</h3>
-                    <p class="text-muted small">Genera etiquetas SEO básicas para una página web.</p>
-                    <input id="meta-title" class="form-control mb-2" placeholder="Título">
-                    <input id="meta-desc" class="form-control mb-2" placeholder="Descripción">
-                    <input id="meta-url" class="form-control mb-2" placeholder="https://ejemplo.com/">
-                    <button class="btn btn-ams w-100" id="btn-meta">Generar código</button>
-                    <textarea id="meta-output" class="form-control mt-2" rows="5" readonly></textarea>
-                    <button class="btn btn-sm btn-link text-info w-100" id="btn-meta-copy">Copiar</button>
-                </div>
-
-                <div class="tool-card" id="tool-favicon">
-                    <div class="icon-box purple"><i class="fa-solid fa-icons"></i></div>
-                    <h3 class="h4 fw-bold">Generador Favicon</h3>
-                    <p class="text-muted small">Convierte una imagen cuadrada en un favicon PNG.</p>
-                    <label class="drop-zone" id="dz-favicon"><i class="fa-solid fa-image text-info"></i><div class="small fw-bold mt-1">Seleccionar imagen</div><input type="file" id="inp-favicon" accept="image/*"></label>
-                    <div id="favicon-preview" class="text-center mt-2" style="display:none"></div>
-                    <button class="btn btn-ams w-100 mt-2" id="btn-favicon" disabled>Generar favicon</button>
-                </div>
-
-                <div class="tool-card" id="tool-csv">
-                    <div class="icon-box green"><i class="fa-solid fa-table"></i></div>
-                    <h3 class="h4 fw-bold">CSV → JSON</h3>
-                    <p class="text-muted small">Convierte CSV simple con encabezados a JSON.</p>
-                    <textarea id="csv-input" class="form-control mb-2" rows="5" placeholder="nombre,edad,ciudad&#10;Diego,28,Bogotá"></textarea>
-                    <button class="btn btn-ams w-100" id="btn-csv">Convertir a JSON</button>
-                    <textarea id="csv-output" class="form-control mt-2" rows="5" readonly></textarea>
-                    <button class="btn btn-sm btn-link text-info w-100" id="btn-csv-copy">Copiar</button>
-                </div>
-            </div>
 
     </main>
 
