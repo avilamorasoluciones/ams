@@ -1,4 +1,4 @@
-# Avila Mora Soluciones · AMS
+# Avila Mora Soluciones · Avila Mora Soluciones
 
 ## Documentación y operación
 El procedimiento operativo completo está en `MANUAL_OPERATIVO.md`. Las páginas públicas cuentan con privacidad, términos y cookies. Las demos de portafolio se identifican como demos y no se indexan. Actualmente el sitio no despliega analítica ni publicidad propia.
@@ -19,25 +19,25 @@ Avila Mora Soluciones es un emprendimiento de servicios digitales con sitio ofic
 ## Flujo de cliente
 Contacto → Formulario de proyecto → Calificación → Propuesta → Aceptación → Pago → Alta → Dominio → Staging/Demo → Producción → Revisión → Correcciones → Publicación → Entrega → Mantenimiento → Renovación.
 
-## Caja AMS
-La Caja AMS es una herramienta de **control interno del dinero**, no un sistema contable.
+## Caja Avila Mora Soluciones
+La Caja Avila Mora Soluciones es una herramienta de **control interno del dinero**, no un sistema contable.
 
-- **Ingreso:** dinero que entra a AMS.
+- **Ingreso:** dinero que entra a Avila Mora Soluciones.
 - **Gasto:** dinero utilizado para operar.
 - **Aporte:** dinero personal que entra temporalmente para sostener una compra u operación.
-- **Retiro:** dinero que sale de AMS hacia los propietarios.
+- **Retiro:** dinero que sale de Avila Mora Soluciones hacia los propietarios.
 
 Los aportes no son ventas y los retiros no son gastos.
 
 ### Regla práctica
 Antes de usar dinero personal para una compra:
-1. Revisar la Caja AMS.
+1. Revisar la Caja Avila Mora Soluciones.
 2. Registrar qué se necesita comprar.
-3. Definir si corresponde a AMS o a un cliente.
+3. Definir si corresponde a Avila Mora Soluciones o a un cliente.
 4. Si falta caja, registrar el aporte por separado.
-5. Cuando AMS tenga caja suficiente, decidir cómo reponerlo.
+5. Cuando Avila Mora Soluciones tenga caja suficiente, decidir cómo reponerlo.
 
-No mezclar dinero personal y dinero de AMS sin registrarlo.
+No mezclar dinero personal y dinero de Avila Mora Soluciones sin registrarlo.
 
 ## GitHub Pages y dominio oficial
 GitHub Pages sirve para el sitio público y las demos estáticas. El dominio oficial es `https://avilamorasoluciones.com/`. Las URLs `avilamorasoluciones.github.io/ams/...` se conservan para compatibilidad y pueden redirigir al dominio oficial.
@@ -73,7 +73,7 @@ La interfaz y el flujo de negocio no deberían cambiar.
 
 ## Antes de iniciar actividad comercial real
 Quedan fuera del código y requieren revisión de ustedes:
-1. Comprar/configurar el dominio AMS.
+1. Comprar/configurar el dominio Avila Mora Soluciones.
 2. Configurar Zoho Mail y `equipo@avilamorasoluciones.com`.
 3. Crear y probar el briefing en Microsoft Forms.
 4. Revisar la identificación pública real del titular antes de publicar datos legales definitivos.
