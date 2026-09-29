@@ -700,7 +700,7 @@
   <div class="ams-install-card">
     <div class="ams-install-icon"><img src="../img/ams-favicon.svg" alt=""></div>
     <div class="ams-install-copy">
-      <div class="ams-install-title" id="ams-install-title">Instala Herramientas AMS</div>
+      <div class="ams-install-title" id="ams-install-title">Instala Herramientas</div>
       <div class="ams-install-text" id="ams-install-text">Ten tus herramientas siempre a mano.</div>
     </div>
     <div class="ams-install-actions">
@@ -2040,10 +2040,10 @@
             close.addEventListener('click',()=>{sessionStorage.setItem(dismissedKey,'1');hide();});
             window.addEventListener('beforeinstallprompt',e=>{
                 e.preventDefault(); deferredPrompt=e;
-                if(canShow()) setTimeout(()=>show('Instala Herramientas AMS','Accede como una aplicación, sin buscarla cada vez.','Instalar'),500);
+                if(canShow()) setTimeout(()=>show('Instala Herramientas AMS','Ten tus herramientas a mano.','Instalar'),500);
             });
             if(canShow()) setTimeout(()=>{
-                if(!deferredPrompt && !isIOS) show('Instala Herramientas AMS','Desde el menú de Chrome puedes <strong>Instalar aplicación</strong> o <strong>Añadir a pantalla de inicio</strong>.','Cómo instalar');
+                if(!deferredPrompt && !isIOS) show('Instala Herramientas AMS','Disponible desde el menú de instalación de Chrome.','Cómo instalar');
             },1400);
             btn.addEventListener('click',async()=>{
                 if(deferredPrompt){
@@ -2052,12 +2052,12 @@
                     deferredPrompt=null; hide(); return;
                 }
                 if(isIOS){
-                    show('Añade Herramientas AMS','Toca <strong>Compartir</strong> <i class="fa-solid fa-arrow-up-from-bracket"></i> y luego <strong>Añadir a pantalla de inicio</strong>.','Entendido');
+                    show('Instala Herramientas','Añádela desde el menú de tu dispositivo.','Entendido');
                     btn.onclick=function(){sessionStorage.setItem(dismissedKey,'1');hide();};
                 }
             });
             window.addEventListener('appinstalled',()=>{sessionStorage.setItem(dismissedKey,'1');hide();deferredPrompt=null;manualHelp=false;});
-                        if(isIOS&&canShow()) setTimeout(()=>show('Añade Herramientas AMS','Instálala desde <strong>Compartir → Añadir a pantalla de inicio</strong>.','Cómo instalar'),1600);
+                        if(isIOS&&canShow()) setTimeout(()=>show('Añade Herramientas AMS','Añádela desde el menú de tu dispositivo.','Cómo instalar'),1600);
         })();
 
                 document.querySelectorAll('button').forEach(btn=>btn.addEventListener('click',()=>{if(btn.id.startsWith('btn-')&&!btn.disabled){btn.classList.add('button-pulse');setTimeout(()=>btn.classList.remove('button-pulse'),350)}}));
