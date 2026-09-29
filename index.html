@@ -83,7 +83,7 @@
   <link rel="icon" type="image/svg+xml" href="img/AMS-circle.svg?v=2" />
   <link rel="alternate icon" type="image/svg+xml" href="img/AMS-circle-192.svg?v=2" />
   <link rel="apple-touch-icon" href="img/AMS-circle-192.svg?v=2" />
-  <link rel="manifest" href="manifest.webmanifest?v=22" />
+  <link rel="manifest" href="manifest.webmanifest?v=23" />
   <meta name="mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
@@ -1259,7 +1259,7 @@
 <script id="ams-pwa-root-boot">
 (() => {
   if (!('serviceWorker' in navigator)) return;
-  window.addEventListener('load', () => navigator.serviceWorker.register('./sw.js?v=11').catch(() => {}));
+  window.addEventListener('load', () => navigator.serviceWorker.register('./sw.js?v=15').catch(() => {}));
 })();
 (() => {
   const banner = document.getElementById('amsPwaInstall');
@@ -1270,10 +1270,38 @@
   const isInstalled = () => window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
   const dismissedUntil = () => Number(localStorage.getItem('ams-pwa-dismissed-until') || 0);
   const hide = () => banner.classList.remove('is-visible');
-  const show = () => { if (!isInstalled() && Date.now() >= dismissedUntil() && deferredPrompt) banner.classList.add('is-visible'); };
-  window.addEventListener('beforeinstallprompt', event => { event.preventDefault(); deferredPrompt = event; setTimeout(show, 1400); });
+  const copy = banner.querySelector('.ams-pwa-copy span');
+  const show = () => {
+    if (isInstalled() || Date.now() < dismissedUntil()) return;
+    banner.classList.add('is-visible');
+  };
+  const showInstallPrompt = () => {
+    if (!deferredPrompt) return false;
+    if (copy) copy.textContent = 'Instálala directamente desde Chrome.';
+    installBtn.textContent = 'Instalar';
+    show();
+    return true;
+  };
+  window.addEventListener('beforeinstallprompt', event => {
+    event.preventDefault();
+    deferredPrompt = event;
+    window.setTimeout(showInstallPrompt, 300);
+  });
+  window.setTimeout(() => {
+    if (deferredPrompt) {
+      showInstallPrompt();
+      return;
+    }
+    if (copy) copy.textContent = 'En Chrome: toca ⋮ y elige “Instalar app” cuando esté disponible.';
+    installBtn.textContent = 'Cómo instalar';
+    show();
+  }, 1800);
   installBtn.addEventListener('click', async () => {
-    if (!deferredPrompt) return;
+    if (!deferredPrompt) {
+      if (copy) copy.textContent = 'Abre el menú ⋮ de Chrome y selecciona “Instalar app” o “Agregar a pantalla principal”.';
+      installBtn.textContent = 'Entendido';
+      return;
+    }
     deferredPrompt.prompt();
     try { await deferredPrompt.userChoice; } catch (_) {}
     deferredPrompt = null;
