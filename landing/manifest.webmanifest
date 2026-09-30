@@ -2,8 +2,8 @@
   "name": "BurgerX",
   "short_name": "BurgerX",
   "description": "Demo de landing para restaurante y pedidos.",
-  "start_url": "./",
-  "scope": "./",
+  "start_url": "/landing/",
+  "scope": "/landing/",
   "display": "standalone",
   "display_override": [
     "window-controls-overlay",
@@ -30,5 +30,6 @@
       "type": "image/svg+xml",
       "purpose": "any maskable"
     }
-  ]
+  ],
+  "id": "/landing/"
 }
