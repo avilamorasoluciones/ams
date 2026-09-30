@@ -83,10 +83,6 @@
   <link rel="icon" type="image/svg+xml" href="img/AMS-circle.svg?v=2" />
   <link rel="alternate icon" type="image/svg+xml" href="img/AMS-circle-192.svg?v=2" />
   <link rel="apple-touch-icon" href="img/AMS-circle-192.svg?v=2" />
-  <link rel="manifest" href="manifest.webmanifest?v=23" />
-  <meta name="mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -1240,76 +1236,5 @@
 
 
 
-<style id="ams-pwa-install-style">
-  #amsPwaInstall{position:fixed;left:18px;right:18px;bottom:18px;z-index:99999;display:none}
-  #amsPwaInstall.is-visible{display:block}
-  .ams-pwa-card{max-width:760px;margin:0 auto;padding:14px 16px;border:1px solid rgba(199,161,255,.28);border-radius:18px;background:rgba(7,11,24,.96);box-shadow:0 18px 60px rgba(0,0,0,.35);backdrop-filter:blur(16px);display:flex;align-items:center;gap:14px}
-  .ams-pwa-icon{width:42px;height:42px;flex:none;border-radius:50%;object-fit:cover}
-  .ams-pwa-copy{flex:1;min-width:0}.ams-pwa-copy strong{display:block;color:#fff;font-size:.9rem}.ams-pwa-copy span{display:none}
-  .ams-pwa-actions{display:flex;gap:7px;align-items:center;flex:none}.ams-pwa-actions button{border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.05);color:#fff;padding:9px 11px;border-radius:10px;font:800 .72rem/1 Arial,sans-serif;cursor:pointer}.ams-pwa-install{background:linear-gradient(135deg,#decaff,#8b5cf6)!important;color:#10151d!important;border:0!important}
-  @media(max-width:620px){#amsPwaInstall{left:10px;right:10px;bottom:10px}.ams-pwa-card{padding:12px;gap:10px}.ams-pwa-copy span{font-size:.71rem}.ams-pwa-actions{align-self:flex-end}.ams-pwa-actions button{padding:9px 10px}}
-</style>
-<div id="amsPwaInstall" aria-live="polite" aria-label="Instalar Avila Mora Soluciones">
-  <div class="ams-pwa-card">
-    <img class="ams-pwa-icon" src="img/AMS-circle-192.svg?v=2" alt="" aria-hidden="true">
-    <div class="ams-pwa-copy"><strong>Instala Avila Mora Soluciones</strong><span></span></div>
-    <div class="ams-pwa-actions"><button type="button" id="amsPwaDismiss">Ahora no</button><button type="button" class="ams-pwa-install" id="amsPwaInstallBtn">Instalar</button></div>
-  </div>
-</div>
-<script id="ams-pwa-root-boot">
-(() => {
-  if (!('serviceWorker' in navigator)) return;
-  window.addEventListener('load', () => navigator.serviceWorker.register('./sw.js?v=16').catch(() => {}));
-})();
-(() => {
-  const banner = document.getElementById('amsPwaInstall');
-  const installBtn = document.getElementById('amsPwaInstallBtn');
-  const dismissBtn = document.getElementById('amsPwaDismiss');
-  if (!banner || !installBtn || !dismissBtn) return;
-  let deferredPrompt = null;
-  const isInstalled = () => window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
-  const dismissedUntil = () => Number(localStorage.getItem('ams-pwa-dismissed-until') || 0);
-  const hide = () => banner.classList.remove('is-visible');
-  const copy = banner.querySelector('.ams-pwa-copy span');
-  const show = () => {
-    if (isInstalled() || Date.now() < dismissedUntil()) return;
-    banner.classList.add('is-visible');
-  };
-  const showInstallPrompt = () => {
-    if (!deferredPrompt) return false;
-    if (copy) copy.textContent = 'Instálala directamente desde Chrome.';
-    installBtn.textContent = 'Instalar';
-    show();
-    return true;
-  };
-  window.addEventListener('beforeinstallprompt', event => {
-    event.preventDefault();
-    deferredPrompt = event;
-    window.setTimeout(showInstallPrompt, 300);
-  });
-  window.setTimeout(() => {
-    if (deferredPrompt) {
-      showInstallPrompt();
-      return;
-    }
-    if (copy) copy.textContent = 'En Chrome: toca ⋮ y elige “Instalar app” cuando esté disponible.';
-    installBtn.textContent = 'Cómo instalar';
-    show();
-  }, 1800);
-  installBtn.addEventListener('click', async () => {
-    if (!deferredPrompt) {
-      if (copy) copy.textContent = 'Abre el menú ⋮ de Chrome y selecciona “Instalar app” o “Agregar a pantalla principal”.';
-      installBtn.textContent = 'Entendido';
-      return;
-    }
-    deferredPrompt.prompt();
-    try { await deferredPrompt.userChoice; } catch (_) {}
-    deferredPrompt = null;
-    hide();
-  });
-  dismissBtn.addEventListener('click', () => { localStorage.setItem('ams-pwa-dismissed-until', String(Date.now() + 7 * 86400000)); hide(); });
-  window.addEventListener('appinstalled', hide);
-})();
-</script>
 </body>
 </html>
