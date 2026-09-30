@@ -2,8 +2,8 @@
   "name": "KICKS",
   "short_name": "KICKS",
   "description": "Demo de tienda sneaker y streetwear.",
-  "start_url": "./",
-  "scope": "./",
+  "start_url": "/ecommerce/",
+  "scope": "/ecommerce/",
   "display": "standalone",
   "display_override": [
     "window-controls-overlay",
@@ -30,5 +30,6 @@
       "type": "image/svg+xml",
       "purpose": "any maskable"
     }
-  ]
+  ],
+  "id": "/ecommerce/"
 }
