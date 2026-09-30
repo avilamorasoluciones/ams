@@ -1,10 +1,10 @@
 {
   "name": "AyuKcal",
   "short_name": "AyuKcal",
-  "id": "https://avilamorasoluciones.com/ayukcal/",
+  "id": "/ayukcal/",
   "description": "Registra comidas, calorías, agua, actividad, ayuno y peso.",
-  "start_url": "https://avilamorasoluciones.com/ayukcal/",
-  "scope": "https://avilamorasoluciones.com/ayukcal/",
+  "start_url": "/ayukcal/",
+  "scope": "/ayukcal/",
   "display": "standalone",
   "display_override": [
     "window-controls-overlay",
