@@ -1,4 +1,5 @@
 const CACHE_NAME = 'ams-tools-v15';
+const CACHE_PREFIX = "ams-tools-";
 const APP_SHELL = ['./','./index.html','./manifest.webmanifest?v=14','./icon-192.svg?v=14','./icon-512.svg?v=14','../img/ams-favicon.svg'];
 
 self.addEventListener('install', event => {
@@ -12,7 +13,7 @@ self.addEventListener('install', event => {
 self.addEventListener('activate', event => {
   event.waitUntil(
     caches.keys()
-      .then(keys => Promise.all(keys.filter(key => key !== CACHE_NAME).map(key => caches.delete(key))))
+      .then(keys => Promise.all(keys.filter(key => key.startsWith(CACHE_PREFIX) && key !== CACHE_NAME).map(key => caches.delete(key))))
       .then(() => self.clients.claim())
   );
 });
