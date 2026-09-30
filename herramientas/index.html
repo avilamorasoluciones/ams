@@ -769,8 +769,8 @@
 <body class="d-flex flex-column min-vh-100">
     <div class="ams-loader active ams-entry-loader" id="ams-loader" aria-hidden="false" role="status" aria-live="polite">
         <div class="ams-loader-card" aria-label="Cargando">
-            <div class="ams-loader-title" id="ams-loader-title" style="display:none">Procesando</div>
-            <div class="ams-loader-message" id="ams-loader-message" style="display:none">Cargando</div>
+            <div class="ams-loader-title" id="ams-loader-title">Preparando herramientas</div>
+            <div class="ams-loader-message" id="ams-loader-message">Espera un momento, estamos preparando todo…</div>
             <div class="ams-loader-bar" aria-hidden="true"><span></span></div>
         </div>
     </div>
@@ -939,7 +939,7 @@
                     </div>
 
                     <div class="micro-options">
-                        <label class="form-label d-flex justify-content-between">Calidad: <span id="comp-val">60%</span></label>
+                        <label class="form-label d-flex justify-content-between">Calidad de compresión: <span id="comp-val">60%</span></label>
                         <input type="range" class="form-range" id="comp-quality" min="0.1" max="1" step="0.05" value="0.6" disabled>
                     </div>
                     <button class="btn btn-ams mt-auto" id="btn-compress" disabled>Reducir Peso</button>
@@ -1033,7 +1033,7 @@
                     <div class="workspace-container" id="ws-compress-pdf"><div class="file-grid" id="grid-compress-pdf"></div></div>
 
                     <div class="micro-options mb-2">
-                        <label class="form-label d-flex justify-content-between mb-0">Nivel Calidad: <span id="pdf-comp-val">60%</span></label>
+                        <label class="form-label d-flex justify-content-between mb-0">Calidad de compresión: <span id="pdf-comp-val">60%</span></label>
                         <input type="range" class="form-range" id="pdf-comp-quality" min="0.1" max="1" step="0.1" value="0.6" disabled>
                     </div>
                     <button class="btn btn-ams mt-auto" id="btn-compress-pdf" disabled>Comprimir Archivo</button>
@@ -1165,7 +1165,8 @@
                         <input type="text" class="form-control text-center mb-2" id="watermark-text" placeholder="Ej: CONFIDENCIAL" disabled>
                         <div class="d-flex gap-2">
                             <input type="color" class="form-control-color border-0 rounded w-25" id="watermark-color" value="#4a4a4a" disabled title="Color">
-                            <input type="range" class="form-range flex-grow-1 mt-1" id="watermark-opacity" min="0.1" max="1" step="0.1" value="0.3" disabled title="Transparencia">
+                            <div class="d-flex justify-content-between align-items-center mb-1"><label class="form-label mb-0" for="watermark-opacity">Transparencia: <span id="watermark-opacity-val">30%</span></label><span class="small text-muted">10–100%</span></div>
+                            <input type="range" class="form-range flex-grow-1 mt-1" id="watermark-opacity" min="0.1" max="1" step="0.1" value="0.3" disabled title="Transparencia de la marca de agua" aria-label="Transparencia de la marca de agua">
                         </div>
                     </div>
                     <button class="btn btn-ams mt-auto" id="btn-watermark" disabled>Sellar</button>
@@ -1846,6 +1847,15 @@
 
         // 11. Marca de Agua (SINGLE FILE)
         const wsWatermark = new WorkspaceManager('watermark', false, { instanceName: 'wsWatermark', fileIcon: 'fa-solid fa-file-pdf text-primary', controlsToToggle: ['watermark-text', 'watermark-color', 'watermark-opacity'] });
+        const watermarkOpacity = document.getElementById('watermark-opacity');
+        const watermarkOpacityVal = document.getElementById('watermark-opacity-val');
+        const updateWatermarkOpacity = () => {
+            if (watermarkOpacityVal && watermarkOpacity) {
+                watermarkOpacityVal.textContent = Math.round(parseFloat(watermarkOpacity.value) * 100) + '%';
+            }
+        };
+        watermarkOpacity?.addEventListener('input', updateWatermarkOpacity);
+        updateWatermarkOpacity();
         function hexToRgb(hex) { const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex); return result ? { r: parseInt(result[1], 16)/255, g: parseInt(result[2], 16)/255, b: parseInt(result[3], 16)/255 } : { r: 0, g: 0, b: 0 }; }
         document.getElementById('btn-watermark').addEventListener('click', async () => {
             const btn = document.getElementById('btn-watermark'); btn.innerHTML = 'Procesando...';
@@ -2142,7 +2152,7 @@
             const message=document.getElementById('ams-loader-message');
             window.amsLoading=function(show,msg,titleText){
                 if(!loader)return;
-                if(show){title.textContent=titleText||'Procesando';message.textContent=msg||'Estamos trabajando localmente en tu archivo…';loader.classList.add('active');loader.setAttribute('aria-hidden','false');document.body.style.overflow='hidden';}
+                if(show){title.textContent=titleText||'Operación en curso';message.textContent=msg||'Espera un momento, estamos haciendo los cambios…';loader.classList.add('active');loader.setAttribute('aria-hidden','false');document.body.style.overflow='hidden';}
                 else{loader.classList.remove('active');loader.setAttribute('aria-hidden','true');document.body.style.overflow='';}
             };
             const originalDownload=window.downloadFile;
@@ -2157,7 +2167,7 @@
                 const isProcess=id.startsWith('btn-') && !/format-json|minify-json|gen-qr|gen-pass|ts-now|ts-date|copy|meta|csv|uuid|b64/i.test(id);
                 const looksHeavy=/procesar|convertir|comprimir|unir|separar|eliminar|recortar|redimensionar|descargar|generar|sellar|minificar/i.test(label);
                 if(isProcess||looksHeavy){
-                    window.amsLoading(true,'Procesando localmente…','Un momento');
+                    window.amsLoading(true,'Estamos haciendo los cambios…','Operación en curso');
                     clearTimeout(window.__amsLoaderFallback);
                     window.__amsLoaderFallback=setTimeout(()=>window.amsLoading(false),15000);
                 }
