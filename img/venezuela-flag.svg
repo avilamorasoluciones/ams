@@ -6,21 +6,21 @@
       <stop offset=".5" stop-color="#fff" stop-opacity="0"/>
       <stop offset="1" stop-color="#000" stop-opacity=".07"/>
     </linearGradient>
-    <path id="star" d="M0,-1.45 L0.34,-0.47 L1.38,-0.45 L0.55,0.16 L0.82,1.17 L0,0.57 L-0.82,1.17 L-0.55,0.16 L-1.38,-0.45 L-0.34,-0.47 Z"/>
+    <path id="star" d="M0-1.05 0.235-.324 0.998-.324 0.381.123 0.617.85 0 .402-.617.85-.381.123-.998-.324-.235-.324Z"/>
   </defs>
   <g clip-path="url(#r)">
     <rect width="36" height="8" fill="#FCD116"/>
     <rect y="8" width="36" height="8" fill="#003893"/>
     <rect y="16" width="36" height="8" fill="#CE1126"/>
     <g fill="#fff">
-      <use href="#star" transform="translate(15.3 10.4)"/>
-      <use href="#star" transform="translate(17.6 9.2)"/>
-      <use href="#star" transform="translate(20.1 8.7)"/>
-      <use href="#star" transform="translate(22.6 9.0)"/>
-      <use href="#star" transform="translate(24.7 10.0)"/>
-      <use href="#star" transform="translate(26.1 11.9)"/>
-      <use href="#star" transform="translate(26.5 14.2)"/>
-      <use href="#star" transform="translate(25.5 16.2)"/>
+      <use href="#star" transform="translate(14.3 13.1)"/>
+      <use href="#star" transform="translate(16.1 11.8)"/>
+      <use href="#star" transform="translate(18.1 10.8)"/>
+      <use href="#star" transform="translate(20.2 10.35)"/>
+      <use href="#star" transform="translate(22.3 10.35)"/>
+      <use href="#star" transform="translate(24.4 10.8)"/>
+      <use href="#star" transform="translate(26.4 11.8)"/>
+      <use href="#star" transform="translate(28.2 13.1)"/>
     </g>
     <rect width="36" height="24" fill="url(#s)"/>
   </g>
