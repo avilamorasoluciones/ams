@@ -166,16 +166,19 @@
     .shortcut-herramientas{color:#22d3ee!important}
     .shortcut-herramientas:hover{border-color:rgba(34,211,238,.45)!important}
     /* Laptops compactas y tablets: conserva accesos rápidos visibles junto al menú. */
+    .nav-compact-payment{width:76px!important;height:34px!important;font-size:.70rem!important;gap:5px!important}
+    .nav-compact-payment i{font-size:.72rem!important}
+    .nav-compact-divider{margin:0!important}
     @media(max-width:740px){
       .nav-extra{display:none!important}
       .mobile-utilities{display:flex!important;align-items:center!important;gap:6px!important;margin-left:auto!important;flex-shrink:0!important}
       .mobile-utilities .nav-shortcut{width:32px!important;height:32px!important}
       .mobile-utilities .nav-shortcut i{font-size:.78rem!important}
-      .mobile-payment{display:flex!important;align-items:center!important;justify-content:center!important;gap:6px!important;min-height:32px!important;height:32px!important;padding:5px 9px!important;margin:0!important;border:1px solid rgba(34,197,94,.30)!important;border-radius:10px!important;background:rgba(34,197,94,.06)!important;color:#dcfce7!important;font-size:.68rem!important;font-weight:800!important;position:relative!important;text-decoration:none!important;white-space:nowrap!important}
-      .mobile-payment:hover{background:rgba(34,197,94,.11)!important;border-color:rgba(34,197,94,.48)!important}
-      .mobile-payment span{display:flex!important;align-items:center!important;gap:5px!important}
-      .mobile-payment i{color:#4ade80!important}
-      .mobile-payment b{display:none!important}
+      .nav-compact-resources,.nav-compact-divider{display:none!important}
+      .nav-compact-payment{display:inline-flex!important;width:56px!important;height:32px!important;padding:5px 8px!important;margin:0!important;border-radius:10px!important;font-size:.68rem!important;gap:5px!important}
+      .nav-compact-payment i{font-size:.72rem!important}
+      .nav-compact-payment span{display:inline!important}
+      .mobile-payment{display:none!important}
     }
     @media(min-width:1501px){
       .mobile-shortcuts,.mobile-utilities,.mobile-payment{display:none!important}
@@ -550,6 +553,23 @@
         <button class="nav-shortcut nav-utility-theme" type="button" id="themeToggleMobile" aria-label="Cambiar tema" title="Cambiar tema">
           <i class="fa-solid fa-circle-half-stroke" aria-hidden="true"></i>
         </button>
+        <span class="nav-divider nav-compact-divider" aria-hidden="true">—</span>
+        <div class="nav-shortcuts nav-compact-resources" aria-label="Recursos rápidos">
+          <a class="nav-shortcut shortcut-ayukcal" href="./ayukcal/" aria-label="AyuKcal" title="AyuKcal">
+            <i class="fa-solid fa-heart-pulse" aria-hidden="true"></i>
+          </a>
+          <a class="nav-shortcut shortcut-juegos" href="./juegos/" aria-label="Juegos" title="Juegos">
+            <i class="fa-solid fa-gamepad" aria-hidden="true"></i>
+          </a>
+          <a class="nav-shortcut shortcut-herramientas" href="./herramientas/" aria-label="Herramientas" title="Herramientas">
+            <i class="fa-solid fa-toolbox" aria-hidden="true"></i>
+          </a>
+        </div>
+        <span class="nav-divider nav-compact-divider" aria-hidden="true">—</span>
+        <a class="nav-payment nav-compact-payment" href="https://checkout.wompi.co/l/VPOS_pHYnEG" target="_blank" rel="noopener" aria-label="Pagar con Wompi" title="Pagar con Wompi">
+          <i class="fa-solid fa-credit-card" aria-hidden="true"></i>
+          <span>Pagar</span>
+        </a>
       </div>
       <button class="menu-btn" id="menuBtn" aria-label="Abrir menú" aria-expanded="false">
         <i class="fa-solid fa-bars"></i>
