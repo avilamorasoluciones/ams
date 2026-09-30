@@ -166,7 +166,7 @@
     .shortcut-herramientas{color:#22d3ee!important}
     .shortcut-herramientas:hover{border-color:rgba(34,211,238,.45)!important}
     /* Laptops compactas y tablets: conserva accesos rápidos visibles junto al menú. */
-    .nav-compact-payment{width:76px!important;height:34px!important;font-size:.70rem!important;gap:5px!important}
+    .nav-compact-payment{box-sizing:border-box!important;width:76px!important;height:34px!important;font-size:.70rem!important;gap:5px!important}
     .nav-compact-payment i{font-size:.72rem!important}
     .nav-compact-divider{margin:0!important}
     @media(max-width:740px){
@@ -175,8 +175,8 @@
       .mobile-utilities .nav-shortcut{width:32px!important;height:32px!important}
       .mobile-utilities .nav-shortcut i{font-size:.78rem!important}
       .nav-compact-resources,.nav-compact-divider{display:none!important}
-      .nav-compact-payment{display:inline-flex!important;width:56px!important;height:32px!important;padding:5px 8px!important;margin:0!important;border-radius:10px!important;font-size:.68rem!important;gap:5px!important}
-      .nav-compact-payment i{font-size:.72rem!important}
+      .nav-compact-payment{display:inline-flex!important;box-sizing:border-box!important;width:62px!important;min-width:62px!important;height:32px!important;padding:4px 7px!important;margin:0!important;border-radius:10px!important;font-size:.66rem!important;gap:4px!important}
+      .nav-compact-payment i{font-size:.68rem!important}
       .nav-compact-payment span{display:inline!important}
       .mobile-payment{display:none!important}
     }
