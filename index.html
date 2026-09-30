@@ -167,7 +167,7 @@
     .shortcut-herramientas:hover{border-color:rgba(34,211,238,.45)!important}
     /* Laptops compactas y tablets: conserva accesos rápidos visibles junto al menú. */
     .nav-compact-payment{box-sizing:border-box!important;width:76px!important;height:34px!important;font-size:.70rem!important;gap:5px!important}
-    .nav-compact-payment i{font-size:.72rem!important}
+    .nav-compact-payment i{font-size:.72rem!important}.nav-venezuela{color:#F87171!important}.nav-venezuela:hover{border-color:rgba(248,113,113,.5)!important;box-shadow:0 7px 18px rgba(248,113,113,.12)!important}.nav-venezuela .flag{font-size:1rem;line-height:1}.nav-venezuela-compact{width:38px!important;min-width:38px!important;padding:0!important;font-size:.95rem!important}.nav-venezuela-compact .flag{font-size:.95rem!important}.light-theme .nav-venezuela{color:#dc2626!important}.light-theme .nav-venezuela:hover{border-color:rgba(220,38,38,.35)!important}
     .nav-compact-divider{margin:0!important}
     @media(max-width:740px){
       .nav-extra{display:none!important}
@@ -538,6 +538,10 @@
           <span>Pagar</span>
           <b>Wompi</b>
         </a>
+        <span class="nav-divider" aria-hidden="true">—</span>
+        <a class="nav-shortcut nav-venezuela" href="./venezuela/" aria-label="Venezuela" title="Venezuela">
+          <span class="flag" aria-hidden="true">🇻🇪</span>
+        </a>
       </div>
 
       <div class="nav-cta">
@@ -569,6 +573,10 @@
         <a class="nav-payment nav-compact-payment" href="https://checkout.wompi.co/l/VPOS_pHYnEG" target="_blank" rel="noopener" aria-label="Pagar con Wompi" title="Pagar con Wompi">
           <i class="fa-solid fa-credit-card" aria-hidden="true"></i>
           <span>Pagar</span>
+        </a>
+        <span class="nav-divider nav-compact-divider" aria-hidden="true">—</span>
+        <a class="nav-shortcut nav-venezuela nav-venezuela-compact" href="./venezuela/" aria-label="Venezuela" title="Venezuela">
+          <span class="flag" aria-hidden="true">🇻🇪</span>
         </a>
       </div>
       <button class="menu-btn" id="menuBtn" aria-label="Abrir menú" aria-expanded="false">
