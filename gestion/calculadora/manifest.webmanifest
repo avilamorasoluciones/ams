@@ -2,8 +2,8 @@
   "name": "Calculadora AMS",
   "short_name": "Calculadora",
   "description": "Herramienta interna de cotización de Avila Mora Soluciones.",
-  "start_url": "./",
-  "scope": "./",
+  "start_url": "/gestion/calculadora/",
+  "scope": "/gestion/calculadora/",
   "display": "standalone",
   "display_override": [
     "window-controls-overlay",
@@ -30,5 +30,6 @@
       "type": "image/svg+xml",
       "purpose": "any maskable"
     }
-  ]
+  ],
+  "id": "/gestion/calculadora/"
 }
