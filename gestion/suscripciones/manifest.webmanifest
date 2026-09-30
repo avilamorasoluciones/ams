@@ -1,1 +1,17 @@
-{"name":"Suscripciones AMS","short_name":"AMS Suscripciones","start_url":"./","display":"standalone","background_color":"#070b12","theme_color":"#070b12","icons":[{"src":"icon-192.svg","sizes":"192x192","type":"image/svg+xml"}]}
+{
+  "name": "Suscripciones AMS",
+  "short_name": "AMS Suscripciones",
+  "start_url": "/gestion/suscripciones/",
+  "display": "standalone",
+  "background_color": "#070b12",
+  "theme_color": "#070b12",
+  "icons": [
+    {
+      "src": "icon-192.svg",
+      "sizes": "192x192",
+      "type": "image/svg+xml"
+    }
+  ],
+  "id": "/gestion/suscripciones/",
+  "scope": "/gestion/suscripciones/"
+}
