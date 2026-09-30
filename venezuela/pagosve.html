@@ -17,7 +17,7 @@
     a{color:inherit;text-decoration:none}.wrap{width:min(var(--max),100%);margin:auto}.top{display:flex;justify-content:space-between;align-items:center;gap:14px;margin-bottom:48px}.brand{display:flex;align-items:center;gap:10px}.mark{width:40px;height:40px;border-radius:13px;display:grid;place-items:center;background:linear-gradient(135deg,var(--primary),var(--pink));font-size:17px}.brand strong{display:block;font-size:.9rem}.brand small{display:block;color:var(--muted);font-size:.55rem;letter-spacing:.16em;font-weight:800}.back{padding:9px 12px;border:1px solid var(--line);border-radius:999px;background:rgba(255,255,255,.035);font-size:.68rem;font-weight:800}
     main{text-align:center}.eyebrow{display:inline-flex;padding:8px 12px;border:1px solid rgba(245,158,11,.25);border-radius:999px;background:rgba(245,158,11,.055);color:#FDE68A;font-size:.64rem;font-weight:900;letter-spacing:.1em;text-transform:uppercase}.eyebrow i{margin-right:7px}.hero h1{font-size:clamp(2.25rem,7vw,4.3rem);line-height:1;letter-spacing:-.055em;margin:20px auto 14px}.hero p{max-width:590px;margin:0 auto;color:var(--muted);font-size:.86rem}.card{margin:30px auto 18px;padding:28px;border:1px solid var(--line);border-radius:28px;background:linear-gradient(145deg,rgba(255,255,255,.065),rgba(255,255,255,.025));box-shadow:0 24px 70px rgba(0,0,0,.28)}.qr{width:min(310px,78vw);aspect-ratio:1;margin:0 auto 20px;border-radius:22px;border:1px dashed rgba(245,158,11,.4);display:grid;place-items:center;background:rgba(0,0,0,.18);overflow:hidden}.qr img{width:100%;height:100%;object-fit:contain;display:block}.qr-placeholder{padding:30px;color:var(--muted);font-size:.75rem;font-weight:700}.amount{display:inline-flex;align-items:center;gap:8px;padding:9px 13px;border-radius:999px;background:rgba(245,158,11,.08);border:1px solid rgba(245,158,11,.22);color:#FDE68A;font-size:.7rem;font-weight:900}.steps{text-align:left;display:grid;gap:10px;margin:22px auto 0;max-width:570px}.step{display:flex;gap:11px;align-items:flex-start;padding:12px 14px;border:1px solid rgba(255,255,255,.07);border-radius:15px;background:rgba(255,255,255,.025);font-size:.72rem;color:#CBD5E1}.step b{flex:none;width:23px;height:23px;border-radius:50%;display:grid;place-items:center;background:rgba(99,102,241,.18);color:#C7D2FE;font-size:.65rem}.actions{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin-top:20px}.btn{display:inline-flex;align-items:center;justify-content:center;min-height:46px;padding:0 17px;border-radius:14px;font-size:.72rem;font-weight:900;border:1px solid var(--line);background:rgba(255,255,255,.045)}.btn-primary{border:0;background:linear-gradient(135deg,var(--primary),var(--pink));box-shadow:0 14px 32px rgba(99,102,241,.2)}.note{max-width:600px;margin:18px auto 0;color:var(--muted);font-size:.65rem}.footer{margin:34px auto 8px;text-align:center;color:var(--muted);font-size:.62rem}.footer strong{color:#E2E8F0}
     @media(max-width:560px){body{padding:16px}.top{margin-bottom:38px}.back{font-size:.6rem;padding:8px 10px}.card{padding:20px;border-radius:23px}.qr{width:min(290px,82vw)}.actions{display:grid}.btn{width:100%}}
-  </style>
+  .report{margin:24px auto 0;max-width:570px;text-align:left;padding:20px;border:1px solid rgba(255,255,255,.08);border-radius:20px;background:rgba(255,255,255,.025)}.report h2{margin:0 0 6px;font-size:1rem}.report p{margin:0 0 15px;color:var(--muted);font-size:.68rem}.report-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.field{display:grid;gap:6px}.field label{font-size:.62rem;font-weight:800;color:#CBD5E1}.field input{width:100%;min-height:43px;border:1px solid rgba(255,255,255,.1);border-radius:12px;background:rgba(0,0,0,.18);color:var(--text);padding:0 11px;font:inherit;font-size:.7rem;outline:none}.field input:focus{border-color:rgba(99,102,241,.7);box-shadow:0 0 0 3px rgba(99,102,241,.12)}.report .btn{width:100%;margin-top:12px;cursor:pointer}.report-note{margin:10px 0 0!important;font-size:.6rem!important}@media(max-width:560px){.report-grid{grid-template-columns:1fr}.report{padding:16px}}</style>
 </head>
 <body>
   <div class="wrap">
@@ -36,15 +36,29 @@
       </section>
       <section class="card" aria-label="Pago con Binance Pay">
         <div class="qr">
-          <div class="qr-placeholder">Aquí irá el código QR de Binance Pay.</div>
+          <img src="binance-maria-qr.svg" alt="Código QR de Binance Pay de María José Mora Martínez" loading="eager" width="420" height="420" />
         </div>
-        <div class="amount">Monto: se indicará según tu servicio</div>
+        <div class="amount">Destinatario: María José Mora Martínez · Binance Pay: morammariaj</div>
         <div class="steps">
           <div class="step"><b>1</b><span>Abre Binance y entra al lector de <strong>QR</strong>.</span></div>
           <div class="step"><b>2</b><span>Escanea este código y verifica el nombre de la persona que recibirá el pago.</span></div>
           <div class="step"><b>3</b><span>Confirma el monto indicado por Avila Mora Soluciones y completa el pago.</span></div>
           <div class="step"><b>4</b><span>Envía el comprobante por WhatsApp o al correo indicado en tu cotización.</span></div>
         </div>
+        <section class="report" aria-labelledby="report-title">
+          <h2 id="report-title">¿Ya realizaste el pago?</h2>
+          <p>Registra los datos del pago y te abriremos WhatsApp con el mensaje listo para enviar. Allí puedes adjuntar la captura del comprobante.</p>
+          <form id="payment-report">
+            <div class="report-grid">
+              <div class="field"><label for="payment-date">Fecha</label><input id="payment-date" name="date" type="date" required /></div>
+              <div class="field"><label for="payment-time">Hora</label><input id="payment-time" name="time" type="time" required /></div>
+              <div class="field"><label for="payment-amount">Monto</label><input id="payment-amount" name="amount" type="text" inputmode="decimal" placeholder="Ej. 25 USDT" required /></div>
+              <div class="field"><label for="payment-reference">Referencia</label><input id="payment-reference" name="reference" type="text" placeholder="Referencia de Binance" required maxlength="120" /></div>
+            </div>
+            <button class="btn btn-primary" type="submit">Enviar confirmación por WhatsApp</button>
+          </form>
+          <p class="report-note">La fecha y hora se completan automáticamente, pero puedes corregirlas antes de enviar.</p>
+        </section>
         <div class="actions">
           <a class="btn btn-primary" href="https://pay.binance.com/es" target="_blank" rel="noopener noreferrer">Abrir Binance Pay</a>
           <a class="btn" href="https://wa.me/573052547072?text=Hola%20Avila%20Mora%20Soluciones!%20Quiero%20realizar%20un%20pago%20desde%20Venezuela." target="_blank" rel="noopener noreferrer">Consultar monto</a>
@@ -54,5 +68,33 @@
     </main>
     <footer class="footer"><p><strong>Avila Mora Soluciones</strong> · Tecnología accesible para negocios reales.</p><p>equipo@avilamorasoluciones.com</p></footer>
   </div>
+<script>
+      (() => {
+        const pad = n => String(n).padStart(2, '0');
+        const now = new Date();
+        document.getElementById('payment-date').value = `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}`;
+        document.getElementById('payment-time').value = `${pad(now.getHours())}:${pad(now.getMinutes())}`;
+
+        document.getElementById('payment-report').addEventListener('submit', event => {
+          event.preventDefault();
+          const date = document.getElementById('payment-date').value;
+          const time = document.getElementById('payment-time').value;
+          const amount = document.getElementById('payment-amount').value.trim();
+          const reference = document.getElementById('payment-reference').value.trim();
+          const message = [
+            'Hola Avila Mora Soluciones.',
+            '',
+            'Ya realicé el pago mediante Binance Pay.',
+            `Fecha: ${date}`,
+            `Hora: ${time}`,
+            `Monto: ${amount}`,
+            `Referencia: ${reference}`,
+            '',
+            'Adjunto el comprobante del pago.'
+          ].join('\\n');
+          window.open(`https://wa.me/573052547072?text=${encodeURIComponent(message)}`, '_blank', 'noopener,noreferrer');
+        });
+      })();
+    </script>
 </body>
 </html>
