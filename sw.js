@@ -1,104 +1,14 @@
-const CACHE_NAME = "ams-main-v16";
-
-const APP_SHELL = [
-  "./",
-  "./index.html",
-  "./styles.css",
-  "./scripts.js",
-  "./contacto.js",
-  "./manifest.webmanifest",
-  "./img/AMS.webp",
-  "./img/AMS.jpg",
-  "./img/AMS-circle.svg",
-  "./img/AMS-circle-192.svg",
-  "./img/AMS-circle-512.svg",
-  "./legal_privacidad.html",
-  "./legal_terminos.html",
-  "./legal_cookies.html"
-];
-
-// These paths belong to their own apps/tools. The root AMS worker must never
-// cache or provide fallback responses for them.
-const EXCLUDED_PATH_PREFIXES = [
-  "/ayukcal/",
-  "/ecommerce/",
-  "/gestion/",
-  "/herramientas/",
-  "/juegos/",
-  "/landing/",
-  "/multipages/",
-  "/venezuela/"
-];
-
-function isExcludedPath(pathname) {
-  return EXCLUDED_PATH_PREFIXES.some(prefix => pathname === prefix || pathname.startsWith(prefix));
-}
-
-self.addEventListener("install", event => {
-  event.waitUntil(
-    caches.open(CACHE_NAME)
-      .then(cache => cache.addAll(APP_SHELL))
-      .then(() => self.skipWaiting())
-  );
-});
+// AMS root service worker retired.
+// The public AMS site is intentionally not a PWA because nested paths host
+// independent PWAs (AyuKcal, Herramientas, Juegos, etc.). Keeping a root
+// service worker here could overlap their scopes on the same origin.
+self.addEventListener("install", () => self.skipWaiting());
 
 self.addEventListener("activate", event => {
-  event.waitUntil(
-    caches.keys()
-      .then(keys => Promise.all(
-        keys
-          .filter(key => key !== CACHE_NAME)
-          .map(key => caches.delete(key))
-      ))
-      .then(() => self.clients.claim())
-  );
-});
-
-self.addEventListener("fetch", event => {
-  if (event.request.method !== "GET") return;
-
-  const url = new URL(event.request.url);
-  if (url.origin !== self.location.origin) return;
-
-  // Let each nested app's own service worker/network handle its own scope.
-  if (isExcludedPath(url.pathname)) return;
-
-  const cachedFirst =
-    event.request.destination === "image" ||
-    event.request.destination === "font";
-
-  const fresh =
-    event.request.mode === "navigate" ||
-    ["script", "style", "manifest"].includes(event.request.destination);
-
-  event.respondWith((async () => {
-    const cached = await caches.match(event.request);
-
-    try {
-      if (cachedFirst && cached) return cached;
-
-      const request = fresh
-        ? new Request(event.request, { cache: "no-store" })
-        : event.request;
-
-      const response = await fetch(request);
-
-      if (response && response.ok) {
-        const cache = await caches.open(CACHE_NAME);
-        await cache.put(event.request, response.clone());
-      }
-
-      return response;
-    } catch {
-      if (cached) return cached;
-      if (event.request.mode === "navigate") {
-        return caches.match("./index.html");
-      }
-      return Response.error();
-    }
+  event.waitUntil((async () => {
+    const keys = await caches.keys();
+    await Promise.all(keys.map(key => caches.delete(key)));
+    await self.registration.unregister();
+    await self.clients.claim();
   })());
-});
-
-self.addEventListener("message", event => {
-  if (event.data === "SKIP_WAITING") self.skipWaiting();
 });
