@@ -1,4 +1,4 @@
-const CACHE_NAME = 'ams-tools-v14';
+const CACHE_NAME = 'ams-tools-v15';
 const APP_SHELL = ['./','./index.html','./manifest.webmanifest?v=14','./icon-192.svg?v=14','./icon-512.svg?v=14','../img/ams-favicon.svg'];
 
 self.addEventListener('install', event => {
