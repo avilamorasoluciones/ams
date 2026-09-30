@@ -1,4 +1,5 @@
-const CACHE_NAME = "ams-main-v15";
+const CACHE_NAME = "ams-main-v16";
+
 const APP_SHELL = [
   "./",
   "./index.html",
@@ -16,6 +17,23 @@ const APP_SHELL = [
   "./legal_cookies.html"
 ];
 
+// These paths belong to their own apps/tools. The root AMS worker must never
+// cache or provide fallback responses for them.
+const EXCLUDED_PATH_PREFIXES = [
+  "/ayukcal/",
+  "/ecommerce/",
+  "/gestion/",
+  "/herramientas/",
+  "/juegos/",
+  "/landing/",
+  "/multipages/",
+  "/venezuela/"
+];
+
+function isExcludedPath(pathname) {
+  return EXCLUDED_PATH_PREFIXES.some(prefix => pathname === prefix || pathname.startsWith(prefix));
+}
+
 self.addEventListener("install", event => {
   event.waitUntil(
     caches.open(CACHE_NAME)
@@ -27,33 +45,55 @@ self.addEventListener("install", event => {
 self.addEventListener("activate", event => {
   event.waitUntil(
     caches.keys()
-      .then(keys => Promise.all(keys.filter(key => key !== CACHE_NAME).map(key => caches.delete(key))))
+      .then(keys => Promise.all(
+        keys
+          .filter(key => key !== CACHE_NAME)
+          .map(key => caches.delete(key))
+      ))
       .then(() => self.clients.claim())
   );
 });
 
 self.addEventListener("fetch", event => {
   if (event.request.method !== "GET") return;
+
   const url = new URL(event.request.url);
   if (url.origin !== self.location.origin) return;
 
-  const cachedFirst = event.request.destination === "image" || event.request.destination === "font";
-  const fresh = event.request.mode === "navigate" || ["script", "style", "manifest"].includes(event.request.destination);
+  // Let each nested app's own service worker/network handle its own scope.
+  if (isExcludedPath(url.pathname)) return;
+
+  const cachedFirst =
+    event.request.destination === "image" ||
+    event.request.destination === "font";
+
+  const fresh =
+    event.request.mode === "navigate" ||
+    ["script", "style", "manifest"].includes(event.request.destination);
 
   event.respondWith((async () => {
     const cached = await caches.match(event.request);
+
     try {
       if (cachedFirst && cached) return cached;
-      const request = fresh ? new Request(event.request, { cache: "no-store" }) : event.request;
+
+      const request = fresh
+        ? new Request(event.request, { cache: "no-store" })
+        : event.request;
+
       const response = await fetch(request);
+
       if (response && response.ok) {
         const cache = await caches.open(CACHE_NAME);
         await cache.put(event.request, response.clone());
       }
+
       return response;
     } catch {
       if (cached) return cached;
-      if (event.request.mode === "navigate") return caches.match("./index.html");
+      if (event.request.mode === "navigate") {
+        return caches.match("./index.html");
+      }
       return Response.error();
     }
   })());
