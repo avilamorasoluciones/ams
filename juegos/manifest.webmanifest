@@ -2,8 +2,8 @@
   "name": "Avila Mora Soluciones - Juegos",
   "short_name": "Juegos",
   "description": "Colección de juegos para familia y amigos, directa, divertida y sin registro.",
-  "start_url": "./index.html",
-  "scope": "./",
+  "start_url": "/juegos/",
+  "scope": "/juegos/",
   "display": "standalone",
   "display_override": [
     "window-controls-overlay",
@@ -69,5 +69,6 @@
         }
       ]
     }
-  ]
+  ],
+  "id": "/juegos/"
 }
