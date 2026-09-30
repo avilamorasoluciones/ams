@@ -1,5 +1,3 @@
 User-agent: *
 Allow: /
-Disallow: /gestion/
-
 Sitemap: https://avilamorasoluciones.com/sitemap.xml
