@@ -2,8 +2,8 @@
   "name": "Aura Studio",
   "short_name": "Aura Studio",
   "description": "Demo multipágina de diseño y patronaje premium.",
-  "start_url": "./",
-  "scope": "./",
+  "start_url": "/multipages/",
+  "scope": "/multipages/",
   "display": "standalone",
   "display_override": [
     "window-controls-overlay",
@@ -30,5 +30,6 @@
       "type": "image/svg+xml",
       "purpose": "any maskable"
     }
-  ]
+  ],
+  "id": "/multipages/"
 }
