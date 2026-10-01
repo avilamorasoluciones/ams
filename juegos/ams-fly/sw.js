@@ -1,5 +1,5 @@
-const CACHE="ams-fly-v1";
-const ASSETS=["./","./index.html","./styles.css?v=1","./game.js?v=1","./manifest.webmanifest?v=1","./icon.svg"];
+const CACHE="ams-fly-v2";
+const ASSETS=["./","./index.html","./styles.css?v=2","./game.js?v=2","./manifest.webmanifest?v=2","./icon.svg"];
 self.addEventListener("install",event=>event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(ASSETS)).then(()=>self.skipWaiting())));
 self.addEventListener("activate",event=>event.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k!==CACHE).map(k=>caches.delete(k)))).then(()=>self.clients.claim())));
 self.addEventListener("fetch",event=>{
