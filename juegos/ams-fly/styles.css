@@ -123,3 +123,10 @@ button{cursor:pointer}
 .bird-mini .bird-shape{transform:scale(.38) rotate(-7deg)}
 .game-screen{touch-action:none}
 #gameCanvas{touch-action:none;display:block}
+
+
+/* Ajuste final del título AMS Fly */
+.hero-copy h1{line-height:1;padding-bottom:.14em;overflow:visible}
+@media(min-width:700px){.hero-copy h1{font-size:clamp(2.8rem,5vw,4rem)}}
+@media(min-width:1024px){.hero-copy h1{font-size:3.4rem;letter-spacing:-.05em}}
+@media(min-width:1440px){.hero-copy h1{font-size:3.6rem}}
