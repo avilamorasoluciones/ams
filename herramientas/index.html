@@ -10,7 +10,7 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="Avila Mora Soluciones - Herramientas" />
     <link rel="icon" href="icon-192.svg?v=16" type="image/svg+xml">
-    <link rel="apple-touch-icon" href="icon-192.svg?v=14">
+    <link rel="apple-touch-icon" href="icon-192.svg?v=16">
     <link rel="manifest" href="manifest.webmanifest?v=16">    <!-- Bootstrap 5 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- FontAwesome Icons -->
@@ -197,6 +197,12 @@
     .tool-search i { position:absolute; left:16px; top:50%; transform:translateY(-50%); color:#94a3b8; pointer-events:none; }
     .tool-search input { width:100%; padding:14px 46px; border-radius:16px; background:rgba(15,23,42,.78); border:1px solid rgba(255,255,255,.10); color:#f8fafc; outline:none; box-shadow:0 12px 35px rgba(0,0,0,.16); }
     .tool-search input:focus { border-color:rgba(99,102,241,.6); box-shadow:0 0 0 4px rgba(99,102,241,.10); }
+    .tool-search-clear{position:absolute;right:9px;top:50%;transform:translateY(-50%);width:32px;height:32px;border:0;border-radius:10px;display:grid;place-items:center;background:rgba(255,255,255,.06);color:#94a3b8;cursor:pointer}
+    .tool-search-clear:hover{background:rgba(255,255,255,.10);color:#fff}
+    .tool-search-clear:focus-visible{outline:3px solid rgba(99,102,241,.28);outline-offset:2px}
+    .tool-search.has-value input{padding-right:52px}
+    body.light-theme .tool-search-clear{background:rgba(15,23,42,.06);color:#64748b}
+    body.light-theme .tool-search-clear:hover{background:rgba(15,23,42,.10);color:#172033}
     .search-count { margin-top:8px; color:#64748b; font-size:.76rem; }
     .tool-card { background:linear-gradient(180deg,rgba(15,23,42,.92),rgba(9,14,28,.94)); border:1px solid rgba(255,255,255,.08); border-radius:18px; box-shadow:0 16px 45px rgba(0,0,0,.18); }
     .tool-card:hover { transform:translateY(-4px); border-color:rgba(99,102,241,.48); box-shadow:0 22px 55px rgba(0,0,0,.25),0 0 28px rgba(99,102,241,.07); }
@@ -909,6 +915,13 @@
                     <i class="fa-solid fa-wand-magic-sparkles" aria-hidden="true"></i><span>Utilidades</span><b>6</b>
                 </button>
             </div>
+            <div class="tool-search" role="search" aria-label="Buscar herramientas">
+                <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
+                <input id="tool-search-input" type="search" inputmode="search" autocomplete="off" placeholder="Buscar una herramienta…" aria-label="Buscar una herramienta" enterkeyhint="search">
+                <button id="tool-search-clear" type="button" class="tool-search-clear" aria-label="Limpiar búsqueda" title="Limpiar búsqueda" hidden>
+                    <i class="fa-solid fa-xmark" aria-hidden="true"></i>
+                </button>
+            </div>
             <div id="filter-count" class="search-count" aria-live="polite">26 herramientas disponibles</div>
         </section>
 
@@ -1421,65 +1434,86 @@
         const buttons = Array.from(document.querySelectorAll('.tool-filter'));
         const cards = Array.from(document.querySelectorAll('.tool-card'));
         const count = document.getElementById('filter-count');
-        if (!buttons.length || !cards.length) return;
+        const search = document.getElementById('tool-search-input');
+        const clearSearch = document.getElementById('tool-search-clear');
+        if (!cards.length) return;
 
-        const sections = cards.reduce((map, card) => {
+        cards.forEach(card => {
             const grid = card.closest('.tool-grid');
-            const header = grid?.previousElementSibling?.classList.contains('section-header')
-                ? grid.previousElementSibling
-                : null;
-            if (!header) return map;
-            const title = (header.querySelector('h2')?.textContent || '').toLocaleLowerCase('es');
-            const key = title.includes('pdf') ? 'pdf'
-                : title.includes('multimedia') || title.includes('imágenes') ? 'images'
-                : title.includes('web y desarrollo') ? 'web'
-                : 'utils';
+            const header = grid?.previousElementSibling?.classList.contains('section-header') ? grid.previousElementSibling : null;
+            const title = (header?.querySelector('h2')?.textContent || '').toLocaleLowerCase('es');
+            const key = title.includes('pdf') ? 'pdf' : title.includes('multimedia') || title.includes('imágenes') ? 'images' : title.includes('web y desarrollo') ? 'web' : 'utils';
             card.dataset.toolCategory = key;
-            if (!map[key]) map[key] = new Set();
-            map[key].add(header);
-            return map;
-        }, {});
+            card.dataset.searchText = [card.querySelector('h3,h4')?.textContent || '', card.querySelector('p')?.textContent || '', key].join(' ').toLocaleLowerCase('es');
+        });
 
         const noResults = document.createElement('div');
         noResults.className = 'no-results';
         noResults.setAttribute('aria-live', 'polite');
-        noResults.innerHTML = '<i class="fa-solid fa-filter-circle-xmark fa-2x mb-2"></i><br>No encontramos herramientas en esta categoría.';
+        noResults.innerHTML = '<i class="fa-solid fa-magnifying-glass fa-2x mb-2"></i><br>No encontramos herramientas con esa búsqueda.';
         const container = document.querySelector('main .container.pb-5');
         if (container) container.appendChild(noResults);
 
-        const filter = (key) => {
+        let activeFilter = 'all';
+
+        const render = () => {
+            const query = (search?.value || '').trim().toLocaleLowerCase('es');
             let visible = 0;
+
             cards.forEach(card => {
-                const show = key === 'all' || card.dataset.toolCategory === key;
+                const matchesFilter = activeFilter === 'all' || card.dataset.toolCategory === activeFilter;
+                const matchesSearch = !query || card.dataset.searchText.includes(query);
+                const show = matchesFilter && matchesSearch;
                 card.hidden = !show;
                 if (show) visible++;
             });
 
             document.querySelectorAll('.section-header').forEach(header => {
                 const grid = header.nextElementSibling?.classList.contains('tool-grid') ? header.nextElementSibling : null;
-                if (!grid) return;
-                const hasVisible = Array.from(grid.querySelectorAll('.tool-card')).some(card => !card.hidden);
-                header.hidden = !hasVisible;
+                if (grid) header.hidden = !Array.from(grid.querySelectorAll('.tool-card')).some(card => !card.hidden);
             });
 
             buttons.forEach(btn => {
-                const active = btn.dataset.filter === key;
+                const active = btn.dataset.filter === activeFilter;
                 btn.classList.toggle('active', active);
                 btn.setAttribute('aria-pressed', active ? 'true' : 'false');
             });
 
             if (count) {
-                count.textContent = visible + (visible === 1 ? ' herramienta disponible' : ' herramientas disponibles');
+                const suffix = visible === 1 ? ' herramienta disponible' : ' herramientas disponibles';
+                count.textContent = query ? visible + suffix + ' para “' + query + '”' : visible + suffix;
             }
             if (noResults) noResults.hidden = visible !== 0;
+            if (clearSearch) clearSearch.hidden = !query;
         };
 
-        buttons.forEach(btn => btn.addEventListener('click', () => filter(btn.dataset.filter || 'all')));
-        filter('all');
-    })();
-    </script>
+        buttons.forEach(btn => btn.addEventListener('click', () => {
+            activeFilter = btn.dataset.filter || 'all';
+            render();
+        }));
 
-    <script>
+        search?.addEventListener('input', render);
+        clearSearch?.addEventListener('click', () => {
+            if (!search) return;
+            search.value = '';
+            search.focus();
+            render();
+        });
+
+        document.addEventListener('keydown', event => {
+            if (event.key === '/' && !/input|textarea|select/i.test(document.activeElement?.tagName || '')) {
+                event.preventDefault();
+                search?.focus();
+            }
+            if (event.key === 'Escape' && document.activeElement === search && search.value) {
+                search.value = '';
+                render();
+            }
+        });
+
+        render();
+    })();
+    </script>    <script>
         document.getElementById('current-year').textContent = new Date().getFullYear();
         const { PDFDocument, rgb, degrees } = PDFLib;
 
@@ -1978,7 +2012,7 @@
         // PWA: registro del Service Worker para caché básica.
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
-                navigator.serviceWorker.register('./sw.js?v=15').catch(err => console.warn('AMS PWA:', err));
+                navigator.serviceWorker.register('./sw.js?v=16').catch(err => console.warn('AMS PWA:', err));
             });
         }
 
