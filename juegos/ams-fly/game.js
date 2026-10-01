@@ -119,10 +119,13 @@ function playTone(freq=440,duration=.08,type="sine"){
   if(!soundOn)return;
   try{
     audioCtx ||= new (window.AudioContext||window.webkitAudioContext)();
+    if(audioCtx.state==="suspended")audioCtx.resume().catch(()=>{});
+    const now=audioCtx.currentTime;
     const o=audioCtx.createOscillator(),g=audioCtx.createGain();
-    o.type=type;o.frequency.value=freq;g.gain.setValueAtTime(.035,audioCtx.currentTime);
-    g.gain.exponentialRampToValueAtTime(.001,audioCtx.currentTime+duration);
-    o.connect(g);g.connect(audioCtx.destination);o.start();o.stop(audioCtx.currentTime+duration);
+    o.type=type;o.frequency.setValueAtTime(freq,now);
+    g.gain.setValueAtTime(.0001,now);g.gain.exponentialRampToValueAtTime(.045,now+.012);
+    g.gain.exponentialRampToValueAtTime(.001,now+duration);
+    o.connect(g);g.connect(audioCtx.destination);o.start(now);o.stop(now+duration+.02);
   }catch(_){}
 }
 function resizeCanvas(){
