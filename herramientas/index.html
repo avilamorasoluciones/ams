@@ -1687,6 +1687,45 @@
         }
 
         /* ========================================================
+           ROBUSTEZ GLOBAL DE HERRAMIENTAS
+           ======================================================== */
+        function amsErrorText(error, fallback='No se pudo completar la operación.'){
+            const msg=String(error?.message||error||'').trim();
+            if(!msg)return fallback;
+            if(/password|encrypted|encryption|passwordexception/i.test(msg)){
+                return 'El PDF está protegido con contraseña o cifrado. Para esta herramienta necesitas un PDF sin contraseña.';
+            }
+            if(/invalid pdf|malformed|corrupt|xref|trailer|unexpected end|invalid object/i.test(msg)){
+                return 'El archivo parece estar dañado o no es un PDF válido. Intenta abrirlo en un lector de PDF y volver a guardarlo.';
+            }
+            if(/memory|out of memory|allocation|quota/i.test(msg)){
+                return 'El archivo es demasiado grande para procesarlo en este dispositivo. Prueba con un PDF más pequeño o divídelo en partes.';
+            }
+            if(/worker|pdf\.worker|setting up fake worker/i.test(msg)){
+                return 'No se pudo cargar el motor PDF. Comprueba tu conexión, recarga la página e inténtalo de nuevo.';
+            }
+            return msg.length>220 ? fallback : msg;
+        }
+        function amsToastError(error,fallback){
+            const message=amsErrorText(error,fallback);
+            if(window.amsToast) amsToast(message,'error'); else console.error(message,error);
+            if(window.amsLoading) window.amsLoading(false);
+        }
+        async function amsLoadEditablePdf(file){
+            if(!file) throw new Error('Selecciona un PDF primero.');
+            if(file.type && file.type!=='application/pdf' && !/\.pdf$/i.test(file.name||'')) throw new Error('El archivo "'+(file.name||'sin nombre')+'" no parece ser un PDF.');
+            try{
+                return await PDFDocument.load(await file.arrayBuffer());
+            }catch(error){
+                const name=file.name||'el PDF';
+                const wrapped=new Error('No se pudo abrir "'+name+'". '+amsErrorText(error,'El PDF puede estar protegido, dañado o usar una estructura no compatible.'));
+                wrapped.name=error?.name||'PDFLoadError';
+                wrapped.cause=error;
+                throw wrapped;
+            }
+        }
+
+        /* ========================================================
            INICIALIZACIÓN DE HERRAMIENTAS
            ======================================================== */
 
@@ -1729,7 +1768,7 @@
                     if (files.length > 1) zip.file(name, blob); else downloadFile(blob, name, 'image/jpeg');
                 }
                 if (files.length > 1) downloadFile(await zip.generateAsync({type: 'blob'}), 'AMS_Comprimidas.zip', 'application/zip');
-            } catch(e) { alert('Error'); } finally { btn.innerHTML = 'Reducir Peso'; }
+            } catch(e) { amsToastError(e,'No se pudieron comprimir las imágenes.'); } finally { btn.innerHTML = 'Reducir Peso'; if(window.amsLoading) window.amsLoading(false); }
         });
 
         // 2. Convertir Imágenes
@@ -1772,7 +1811,7 @@
                     if(isMultiple) zip.file(newName, blob); else downloadFile(blob, newName, targetFormat);
                 }
                 if(isMultiple) downloadFile(await zip.generateAsync({type: 'blob'}), 'AMS_Conversiones.zip', 'application/zip');
-            } catch(e) { alert('Error al convertir'); } finally { btn.innerHTML = 'Convertir'; }
+            } catch(e) { amsToastError(e,'No se pudieron convertir las imágenes.'); } finally { btn.innerHTML = 'Convertir'; if(window.amsLoading) window.amsLoading(false); }
         });
 
         // 3. Recorte Circular
@@ -1798,7 +1837,7 @@
             const canvas = cropperInstance.getCroppedCanvas(), circCanvas = document.createElement('canvas');
             circCanvas.width = canvas.width; circCanvas.height = canvas.height; const ctx = circCanvas.getContext('2d');
             ctx.beginPath(); ctx.arc(canvas.width/2, canvas.height/2, canvas.width/2, 0, Math.PI * 2); ctx.closePath(); ctx.clip(); ctx.drawImage(canvas, 0, 0);
-            circCanvas.toBlob((blob) => { downloadFile(blob, 'AMS_Circular.png', 'image/png'); circBtn.innerHTML = 'Recortar'; }, 'image/png');
+            circCanvas.toBlob((blob) => { if(!blob){amsToastError(new Error('No se pudo generar la imagen recortada.')); circBtn.innerHTML='Recortar'; if(window.amsLoading) window.amsLoading(false); return;} downloadFile(blob, 'AMS_Circular.png', 'image/png'); circBtn.innerHTML = 'Recortar'; if(window.amsLoading) window.amsLoading(false); }, 'image/png');
         });
 
         // 4. NUEVA HERRAMIENTA: Comprimir PDF
@@ -1839,9 +1878,17 @@
             const btn = document.getElementById('btn-merge'); btn.innerHTML = 'Uniendo...';
             try {
                 const doc = await PDFDocument.create(), files = wsMerge.getFiles();
-                for (let f of files) { const pdf = await PDFDocument.load(await f.arrayBuffer()); const pages = await doc.copyPages(pdf, pdf.getPageIndices()); pages.forEach(p => doc.addPage(p)); }
+                if(files.length < 2) throw new Error('Selecciona al menos dos PDFs para unirlos.');
+                for (let index=0; index<files.length; index++) {
+                    const f=files[index];
+                    let pdf;
+                    try{ pdf=await amsLoadEditablePdf(f); }
+                    catch(error){ throw new Error('No se pudo unir el archivo '+(index+1)+' ('+(f.name||'sin nombre')+'). '+amsErrorText(error,'El PDF no es compatible o está protegido.')); }
+                    const pages = await doc.copyPages(pdf, pdf.getPageIndices());
+                    pages.forEach(p => doc.addPage(p));
+                }
                 downloadFile(await doc.save(), 'AMS_Unidos.pdf');
-            } catch(e) { alert('Error'); } finally { btn.innerHTML = 'Unir Archivos'; }
+            } catch(e) { amsToastError(e,'No se pudieron unir los archivos.'); } finally { btn.innerHTML = 'Unir Archivos'; if(window.amsLoading) window.amsLoading(false); }
         });
 
         // 6. Organizador visual de PDF
@@ -1907,8 +1954,8 @@
                     }});
                 }
             }catch(e){
-                console.error(e); amsToast('No se pudo leer uno de los PDFs','error');
-            }finally{pdfOrganizerState.busy=false;pdfOrganizerUpdate();}
+                console.error(e); amsToastError(e,'No se pudo leer uno de los PDFs. Puede estar protegido, dañado o no ser compatible.');
+            }finally{pdfOrganizerState.busy=false;pdfOrganizerUpdate();if(window.amsLoading) window.amsLoading(false);}
         }
         function pdfOrganizerCreateItem(index,thumb,name,page,total){
             const item=document.createElement('article'); item.className='pdf-page-item'; item.dataset.pageIndex=index;
@@ -1967,7 +2014,7 @@
                 for(const p of pdfOrganizerState.pages){
                     const key=p.file;
                     let src=cache.get(key);
-                    if(!src){src=await PDFDocument.load(await p.file.arrayBuffer());cache.set(key,src);}
+                    if(!src){src=await amsLoadEditablePdf(p.file);cache.set(key,src);}
                     const [page]=await out.copyPages(src,[p.page-1]);
                     if(p.rotation) page.setRotation(PDFLib.degrees((page.getRotation().angle+p.rotation)%360));
                     out.addPage(page);
@@ -1998,7 +2045,7 @@
                     if (img) { const page = doc.addPage([img.width, img.height]); page.drawImage(img, { x: 0, y: 0, width: img.width, height: img.height }); }
                 }
                 downloadFile(await doc.save(), 'AMS_Fotos_a_PDF.pdf');
-            } catch(e) { console.error(e); alert('Error al convertir imágenes.'); } finally { btn.innerHTML = 'Generar PDF'; }
+            } catch(e) { console.error(e); amsToastError(e,'No se pudieron convertir las imágenes a PDF.'); } finally { btn.innerHTML = 'Generar PDF'; if(window.amsLoading) window.amsLoading(false); }
         });
 
         function parsePdfRanges(str) {
@@ -2018,12 +2065,12 @@
                 const file = wsSplit.getFile(), rng = document.getElementById('split-ranges').value;
                 const toExt = parsePdfRanges(rng).map(p=>p-1);
                 if (!toExt.length) { alert('Indica al menos una página válida. Ejemplo: 1, 3, 5-8'); return; }
-                const src = await PDFDocument.load(await file.arrayBuffer()); const doc = await PDFDocument.create();
+                const src = await amsLoadEditablePdf(file); const doc = await PDFDocument.create();
                 const validPages = toExt.filter(p => p >= 0 && p < src.getPageCount());
                 if (!validPages.length) { alert('Ninguna de las páginas indicadas existe en este PDF.'); return; }
                 const pages = await doc.copyPages(src, validPages); pages.forEach(p => doc.addPage(p));
                 downloadFile(await doc.save(), 'AMS_Extraido.pdf');
-            } catch(e) { alert('Error'); } finally { btn.innerHTML = 'Extraer'; }
+            } catch(e) { amsToastError(e,'No se pudieron extraer las páginas.'); } finally { btn.innerHTML = 'Extraer'; if(window.amsLoading) window.amsLoading(false); }
         });
 
         // 8. PDF a Imágenes (SINGLE FILE)
@@ -2039,7 +2086,7 @@
                     zip.file(`pagina_${i}.png`, await new Promise(res => canvas.toBlob(res, 'image/png')));
                 }
                 downloadFile(await zip.generateAsync({type: 'blob'}), file.name.replace(/\.pdf$/i, '_AMS_Fotos.zip'), 'application/zip');
-            } catch(e) { alert('Error al extraer'); } finally { btn.innerHTML = 'Extraer Fotos'; }
+            } catch(e) { amsToastError(e,'No se pudieron extraer las imágenes del PDF.'); } finally { btn.innerHTML = 'Extraer Fotos'; if(window.amsLoading) window.amsLoading(false); }
         });
 
         // 9. Borrar Páginas (SINGLE FILE)
@@ -2055,7 +2102,7 @@
                 if (!toKeep.length) { alert('Debes conservar al menos una página del PDF.'); return; }
                 const pages = await doc.copyPages(src, toKeep); pages.forEach(p => doc.addPage(p));
                 downloadFile(await doc.save(), 'AMS_Limpio.pdf');
-            } catch(e) { alert('Error'); } finally { btn.innerHTML = 'Eliminar Hojas'; }
+            } catch(e) { amsToastError(e,'No se pudieron eliminar las páginas.'); } finally { btn.innerHTML = 'Eliminar Hojas'; if(window.amsLoading) window.amsLoading(false); }
         });
 
         // 10. Girar PDF (SINGLE FILE)
@@ -2063,10 +2110,10 @@
         document.getElementById('btn-rotate').addEventListener('click', async () => {
             const btn = document.getElementById('btn-rotate'); btn.innerHTML = 'Procesando...';
             try {
-                const doc = await PDFDocument.load(await wsRotate.getFile().arrayBuffer()), ang = document.getElementById('rotate-angle').value;
+                const doc = await amsLoadEditablePdf(wsRotate.getFile()), ang = document.getElementById('rotate-angle').value;
                 doc.getPages().forEach(p => p.setRotation(degrees(parseInt(ang))));
                 downloadFile(await doc.save(), 'AMS_Girado.pdf');
-            } catch(e) { alert('Error'); } finally { btn.innerHTML = 'Aplicar Giro'; }
+            } catch(e) { amsToastError(e,'No se pudo girar el PDF.'); } finally { btn.innerHTML = 'Aplicar Giro'; if(window.amsLoading) window.amsLoading(false); }
         });
 
         // 11. Marca de Agua (SINGLE FILE)
@@ -2084,12 +2131,12 @@
         document.getElementById('btn-watermark').addEventListener('click', async () => {
             const btn = document.getElementById('btn-watermark'); btn.innerHTML = 'Procesando...';
             try {
-                const doc = await PDFDocument.load(await wsWatermark.getFile().arrayBuffer()); 
+                const doc = await amsLoadEditablePdf(wsWatermark.getFile()); 
                 const text = document.getElementById('watermark-text').value.trim() || "CONFIDENCIAL";
                 const c = hexToRgb(document.getElementById('watermark-color').value), op = parseFloat(document.getElementById('watermark-opacity').value);
                 doc.getPages().forEach(p => { const { width, height } = p.getSize(); p.drawText(text, { x: width/4, y: height/2, size: 50, color: rgb(c.r, c.g, c.b), opacity: op, rotate: degrees(45) }); });
                 downloadFile(await doc.save(), 'AMS_Sellado.pdf');
-            } catch(e) { alert('Error'); } finally { btn.innerHTML = 'Sellar'; }
+            } catch(e) { amsToastError(e,'No se pudo añadir la marca de agua.'); } finally { btn.innerHTML = 'Sellar'; if(window.amsLoading) window.amsLoading(false); }
         });
 
         // 12. Minificador (SINGLE FILE)
@@ -2103,7 +2150,7 @@
                 else if (ext === 'js') minified = text.replace(/\/\*[\s\S]*?\*\//g, '').replace(/\/\/.*$/gm, '').replace(/\n+/g, '\n').replace(/\s{2,}/g, ' ');
                 else { alert('Sube HTML, CSS o JS.'); return; }
                 const blob = new Blob([minified], { type: 'text/plain' }); downloadFile(blob, file.name.replace(`.${ext}`, `.min.${ext}`), 'text/plain');
-            } catch(e) { alert('Error.'); } finally { btn.innerHTML = 'Minificar'; }
+            } catch(e) { amsToastError(e,'No se pudo minificar el archivo.'); } finally { btn.innerHTML = 'Minificar'; if(window.amsLoading) window.amsLoading(false); }
         });
 
         // 13. Generador QR
@@ -2399,6 +2446,17 @@
             ams$('csv-output').value=JSON.stringify(data,null,2);
         });
         ams$('btn-csv-copy')?.addEventListener('click',function(){amsCopy(ams$('csv-output').value);});
+
+        window.addEventListener('error',function(event){
+            if(window.amsLoading) window.amsLoading(false);
+            if(event?.error) console.error('AMS error:',event.error);
+        });
+        window.addEventListener('unhandledrejection',function(event){
+            if(window.amsLoading) window.amsLoading(false);
+            const reason=event?.reason;
+            console.error('AMS promise rejection:',reason);
+            if(window.amsToast) amsToastError(reason,'La operación no pudo completarse. Inténtalo de nuevo.');
+        });
 
         // Loader visual AMS para operaciones que requieren procesamiento
         (function(){
