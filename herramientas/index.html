@@ -9,7 +9,7 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="Avila Mora Soluciones - Herramientas" />
-    <link rel="icon" href="icon-192.svg?v=16" type="image/svg+xml">
+    <link rel="icon" href="icon-192.svg?v=17" type="image/svg+xml">
     <link rel="apple-touch-icon" href="icon-192.svg?v=17">
     <link rel="manifest" href="manifest.webmanifest?v=17">    <!-- Bootstrap 5 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -913,10 +913,10 @@
             </p>
             <div class="tool-filters" aria-label="Filtrar herramientas por categoría">
                 <button class="tool-filter active" type="button" data-filter="all" aria-pressed="true">
-                    <i class="fa-solid fa-border-all" aria-hidden="true"></i><span>Todas</span><b>26</b>
+                    <i class="fa-solid fa-border-all" aria-hidden="true"></i><span>Todas</span><b>27</b>
                 </button>
                 <button class="tool-filter" type="button" data-filter="pdf" aria-pressed="false">
-                    <i class="fa-solid fa-file-pdf" aria-hidden="true"></i><span>PDF</span><b>8</b>
+                    <i class="fa-solid fa-file-pdf" aria-hidden="true"></i><span>PDF</span><b>9</b>
                 </button>
                 <button class="tool-filter" type="button" data-filter="images" aria-pressed="false">
                     <i class="fa-solid fa-images" aria-hidden="true"></i><span>Imágenes</span><b>4</b>
@@ -2183,7 +2183,7 @@
             btnFormatJson.textContent = 'Exitoso'; setTimeout(() => btnFormatJson.textContent = 'Formatear', 2000); } catch(e) { alert("JSON Inválido."); }
         });
         btnMinifyJson.addEventListener('click', () => { try { jsonOut.value = JSON.stringify(JSON.parse(jsonInp.value)); } catch(e) {} });
-        btnCopyJson.addEventListener('click', () => { navigator.clipboard.writeText(jsonOut.value); btnCopyJson.textContent = '¡Copiado!'; setTimeout(() => btnCopyJson.textContent = 'Copiar', 2000); });
+        btnCopyJson.addEventListener('click', () => { amsCopy(jsonOut.value); btnCopyJson.textContent = '¡Copiado!'; setTimeout(() => btnCopyJson.textContent = 'Copiar', 2000); });
 
 
         // PWA: registro del Service Worker para caché básica.
@@ -2257,9 +2257,21 @@
         ams$('btn-b64-copy')?.addEventListener('click',function(){amsCopy(ams$('base64-output').value);});
 
         ams$('btn-uuid')?.addEventListener('click',function(){
-            var value=window.crypto && window.crypto.randomUUID ? window.crypto.randomUUID() : 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g,function(c){
-                var r=new Uint8Array(1); window.crypto.getRandomValues(r); var n=r[0]%16; return (c==='x'?n:(n&3)|8).toString(16);
-            });
+            if(!window.crypto?.randomUUID && !window.crypto?.getRandomValues){
+                amsToast('Este navegador no admite generación segura de UUID.','error');
+                return;
+            }
+            var value;
+            if(window.crypto.randomUUID){
+                value=window.crypto.randomUUID();
+            }else{
+                var bytes=new Uint8Array(16);
+                window.crypto.getRandomValues(bytes);
+                bytes[6]=(bytes[6]&15)|64;
+                bytes[8]=(bytes[8]&63)|128;
+                value=Array.from(bytes).map(function(b){return b.toString(16).padStart(2,'0');}).join('');
+                value=value.slice(0,8)+'-'+value.slice(8,12)+'-'+value.slice(12,16)+'-'+value.slice(16,20)+'-'+value.slice(20);
+            }
             ams$('uuid-output').textContent=value;
         });
         ams$('btn-uuid-copy')?.addEventListener('click',function(){amsCopy(ams$('uuid-output').textContent);});
