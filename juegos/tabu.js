@@ -11,6 +11,7 @@ const TabuGame = (() => {
   
   let timerId = null;
   let secondsLeft = 0;
+  let timerEndsAt = 0;
   let currentWord = null;
   let turnStats = { correct: 0, taboo: 0, skip: 0 };
 
@@ -28,7 +29,7 @@ const TabuGame = (() => {
   }
 
   function saveSession(screen = document.querySelector(".im-screen.active")?.id || "t-scr-lobby") {
-    window.GameSession?.save("tabu", { players, teams, pool, currentRound, maxRounds, activeTeamIndex, timePerTurn, secondsLeft, currentWord, turnStats, screen, savedAt: Date.now() });
+    window.GameSession?.save("tabu", { players, teams, pool, currentRound, maxRounds, activeTeamIndex, timePerTurn, secondsLeft, timerEndsAt, currentWord, turnStats, screen, savedAt: Date.now() });
   }
 
   function changeScreen(id) {
@@ -137,25 +138,35 @@ const TabuGame = (() => {
     if (!resume) {
       loadWord();
       secondsLeft = timePerTurn;
+      timerEndsAt = Date.now() + (timePerTurn * 1000);
+    } else if (!timerEndsAt) {
+      timerEndsAt = Date.now() + (Math.max(0, secondsLeft) * 1000);
     }
-    updateTimerUI();
-    
+
     clearInterval(timerId);
+    updateTimerUI();
+    changeScreen("t-scr-game");
+
     timerId = setInterval(() => {
-      secondsLeft--;
-      saveSession("t-scr-game");
+      const remaining = Math.max(0, timerEndsAt - Date.now());
+      secondsLeft = Math.ceil(remaining / 1000);
       updateTimerUI();
-      
+
       if (secondsLeft > 0 && secondsLeft <= 10) {
         window.emitSound(1000, 0.03, "sine");
       }
-      if (secondsLeft <= 0) {
+
+      if (remaining <= 0) {
         clearInterval(timerId);
+        timerId = null;
+        secondsLeft = 0;
+        updateTimerUI();
+        saveSession("t-scr-game");
         finishTurn();
+      } else {
+        saveSession("t-scr-game");
       }
-    }, 1000);
-    
-    changeScreen("t-scr-game");
+    }, 250);
   }
 
   function updateTimerUI() {
@@ -163,7 +174,7 @@ const TabuGame = (() => {
     const secs = (secondsLeft % 60).toString().padStart(2, "0");
     const timerEl = $("t-uiTimer");
     timerEl.textContent = `${mins}:${secs}`;
-    
+
     if (secondsLeft <= 10) timerEl.classList.add("blinking");
     else timerEl.classList.remove("blinking");
   }
@@ -293,6 +304,7 @@ const TabuGame = (() => {
       activeTeamIndex = Number(saved.activeTeamIndex || 0);
       timePerTurn = Number(saved.timePerTurn || 60);
       secondsLeft = Number(saved.secondsLeft || 0);
+      timerEndsAt = Number(saved.timerEndsAt || 0);
       currentWord = saved.currentWord || null;
       turnStats = saved.turnStats || { correct: 0, taboo: 0, skip: 0 };
       renderPlayers();
@@ -308,10 +320,13 @@ const TabuGame = (() => {
       if (saved.screen === "t-scr-preturn") {
         setupTurn();
       } else if (saved.screen === "t-scr-game") {
-        updateTimerUI();
-        changeScreen("t-scr-game");
-        const elapsed = Math.max(0, Math.floor((Date.now() - Number(saved.savedAt || Date.now())) / 1000));
-        secondsLeft = Math.max(0, secondsLeft - elapsed);
+        if (!timerEndsAt) {
+          const elapsed = Math.max(0, Math.floor((Date.now() - Number(saved.savedAt || Date.now())) / 1000));
+          secondsLeft = Math.max(0, secondsLeft - elapsed);
+          timerEndsAt = Date.now() + (secondsLeft * 1000);
+        } else {
+          secondsLeft = Math.max(0, Math.ceil((timerEndsAt - Date.now()) / 1000));
+        }
         updateTimerUI();
         if (secondsLeft > 0) startTimer(true); else finishTurn();
       } else if (saved.screen === "t-scr-turn-summary") {
