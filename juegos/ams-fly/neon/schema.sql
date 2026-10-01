@@ -31,3 +31,40 @@ create index if not exists ams_fly_scores_created_idx
 -- 4. No permitir que el cliente envíe created_at.
 -- 5. Nunca aceptar una puntuación negativa.
 -- 6. El endpoint debe ser quien tenga DATABASE_URL.
+
+
+-- Configuración única del evento activo.
+create table if not exists ams_fly_event_config (
+  id integer primary key check (id = 1),
+  active boolean not null default false,
+  badge varchar(80) not null default '🏆 EVENTO ESPECIAL 2026',
+  title varchar(120) not null default 'AMS Fly',
+  description varchar(500) not null default '',
+  cta varchar(80) not null default 'VER DETALLES DEL EVENTO',
+  prize_title varchar(160) not null default '',
+  prize_description varchar(1000) not null default '',
+  condition_title varchar(160) not null default '',
+  condition_description varchar(1000) not null default '',
+  wa_template varchar(500) not null default '',
+  updated_at timestamptz not null default now()
+);
+
+insert into ams_fly_event_config (id)
+values (1)
+on conflict (id) do nothing;
+
+-- Datos privados de participantes. Nunca se exponen en el ranking público.
+create table if not exists ams_fly_participants (
+  id uuid primary key default gen_random_uuid(),
+  player_name varchar(18) not null,
+  country_code varchar(2) not null,
+  bird_id varchar(32) not null,
+  phone varchar(30) not null,
+  score integer not null default 0 check (score >= 0 and score <= 1000000),
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now(),
+  unique(player_name,country_code)
+);
+
+create index if not exists ams_fly_participants_score_idx
+  on ams_fly_participants (score desc, updated_at asc);
