@@ -1,1 +1,42 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192 192"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#7c3aed"/><stop offset="1" stop-color="#ec4899"/></linearGradient></defs><rect width="192" height="192" rx="48" fill="#090817"/><circle cx="96" cy="96" r="66" fill="url(#g)" opacity=".18"/><path d="M54 101c20-32 54-43 82-25-20 3-32 14-38 30 16-8 30-7 40 1-21 24-55 28-84 5z" fill="#fff"/><path d="M66 88c-19-12-31-8-40 1 16 1 25 8 31 18z" fill="#c4b5fd"/><path d="M130 83l27 5-24 10z" fill="#facc15"/><circle cx="125" cy="78" r="4" fill="#111827"/><text x="96" y="158" fill="#fff" font-family="Arial,sans-serif" font-weight="900" font-size="24" text-anchor="middle">AMS FLY</text></svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192 192">
+<defs>
+  <linearGradient id="bg" x1="18" y1="12" x2="174" y2="180" gradientUnits="userSpaceOnUse">
+    <stop stop-color="#17133a"/><stop offset=".55" stop-color="#0b0920"/><stop offset="1" stop-color="#060713"/>
+  </linearGradient>
+  <linearGradient id="wing" x1="36" y1="82" x2="157" y2="118" gradientUnits="userSpaceOnUse">
+    <stop stop-color="#f8fafc"/><stop offset=".52" stop-color="#c4b5fd"/><stop offset="1" stop-color="#8b5cf6"/>
+  </linearGradient>
+  <linearGradient id="wing2" x1="72" y1="63" x2="156" y2="119" gradientUnits="userSpaceOnUse">
+    <stop stop-color="#fff"/><stop offset="1" stop-color="#a78bfa"/>
+  </linearGradient>
+  <linearGradient id="flag" x1="83" y1="95" x2="108" y2="127" gradientUnits="userSpaceOnUse">
+    <stop stop-color="#facc15"/><stop offset=".5" stop-color="#facc15"/><stop offset=".51" stop-color="#2563eb"/><stop offset="1" stop-color="#2563eb"/>
+  </linearGradient>
+  <filter id="glow" x="-40%" y="-40%" width="180%" height="180%">
+    <feGaussianBlur stdDeviation="5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+  </filter>
+</defs>
+<rect width="192" height="192" rx="48" fill="url(#bg)"/>
+<circle cx="96" cy="91" r="67" fill="#8b5cf6" opacity=".08"/>
+<path d="M25 112c28-35 61-51 91-48 20 2 37 11 51 28-26-7-49-4-68 10-17 13-36 18-74 10z" fill="#8b5cf6" opacity=".14" filter="url(#glow)"/>
+<!-- cola y ala izquierda -->
+<path d="M88 103c-19-20-39-28-61-25 15 10 25 22 30 37-15-5-28-3-40 5 23 15 48 14 71-2z" fill="url(#wing)" stroke="#f8fafc" stroke-opacity=".18"/>
+<path d="M79 105c-18-9-34-10-48-5 13 5 22 12 29 22 7-5 13-10 19-17z" fill="#a78bfa" opacity=".65"/>
+<!-- ala derecha extendida -->
+<path d="M79 96c13-28 35-43 62-44 18 0 33 5 45 15-22 1-39 8-52 22 16-5 32-3 48 6-20 20-47 28-76 20z" fill="url(#wing2)" stroke="#fff" stroke-opacity=".2"/>
+<path d="M105 75c17-12 35-16 55-13-18 4-31 11-42 23z" fill="#c4b5fd" opacity=".7"/>
+<!-- cuerpo -->
+<path d="M69 100c9-15 25-23 43-21 13 2 22 9 28 20-7 15-20 24-36 25-16 1-28-7-35-24z" fill="#f8fafc"/>
+<path d="M77 102c9-10 21-15 35-14 9 1 17 5 23 11-10 7-21 12-33 13-10 0-18-3-25-10z" fill="url(#flag)"/>
+<!-- cabeza, pico y ojo -->
+<circle cx="123" cy="86" r="16" fill="#fff"/>
+<path d="M136 86l22 6-22 8z" fill="#facc15"/>
+<circle cx="128" cy="82" r="3.8" fill="#111827"/>
+<circle cx="129.2" cy="80.8" r="1.2" fill="#fff"/>
+<!-- plumas de cola -->
+<path d="M74 108l-27 20 32-11zM82 113l-17 26 27-22z" fill="#c4b5fd"/>
+<!-- detalle colombiano -->
+<path d="M73 122c8 6 18 8 29 7" fill="none" stroke="#facc15" stroke-width="3" stroke-linecap="round"/>
+<!-- nombre -->
+<text x="96" y="166" fill="#fff" font-family="Arial,sans-serif" font-weight="900" font-size="20" letter-spacing="2" text-anchor="middle">AMS FLY</text>
+</svg>
