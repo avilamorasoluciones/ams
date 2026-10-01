@@ -18,7 +18,7 @@ const ImpostorGame = (() => {
   let lastVoteIndex = null;
 
   function saveSession(screen = document.querySelector(".im-screen.active")?.id || "i-scr-lobby") {
-    window.GameSession?.save("impostor", { players, usedWords, roles, selectedCard, currentIndex, starterIndex, secondsLeft, timerRunning, lastVoteIndex, screen });
+    window.GameSession?.save("impostor", { players, usedWords, roles, selectedCard, currentIndex, starterIndex, secondsLeft, timerRunning, timerEndsAt, lastVoteIndex, screen });
   }
 
   function $(id) {
@@ -709,6 +709,7 @@ const ImpostorGame = (() => {
       starterIndex = Number(saved.starterIndex || 0);
       secondsLeft = Number(saved.secondsLeft || 0);
       timerRunning = Boolean(saved.timerRunning);
+      timerEndsAt = Number(saved.timerEndsAt || 0);
       lastVoteIndex = Number.isInteger(saved.lastVoteIndex) ? saved.lastVoteIndex : null;
       renderPlayers();
 
@@ -722,7 +723,14 @@ const ImpostorGame = (() => {
       } else if (saved.screen === "i-scr-result" && lastVoteIndex !== null) {
         finishGame(lastVoteIndex);
       } else if (saved.screen === "i-scr-game") {
-        secondsLeft = Math.max(0, secondsLeft - (saved.timerRunning ? elapsed : 0));
+        if (saved.timerRunning) {
+          if (timerEndsAt > 0) {
+            secondsLeft = Math.max(0, Math.ceil((timerEndsAt - Date.now()) / 1000));
+          } else {
+            secondsLeft = Math.max(0, secondsLeft - elapsed);
+            timerEndsAt = Date.now() + (secondsLeft * 1000);
+          }
+        }
         $("i-txtSpeaker").textContent = players[starterIndex] || "";
         changeScreen("i-scr-game");
         updateTimer();
