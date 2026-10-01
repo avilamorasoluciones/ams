@@ -64,8 +64,8 @@ const colombiaFacts = [
 
 const els = {};
 [
-  "loadingScreen","factLoading","homeScreen","profileScreen","factScreen","gameScreen","pauseScreen","gameOverScreen",
-  "homeBest","homeGames","startBtn","profileForm","playerName","playerCountry","playerPhone","birdGrid","selectedBirdInfo","profileError",
+  "loadingScreen","homeScreen","profileScreen","factScreen","gameScreen","pauseScreen","gameOverScreen",
+  "homeBest","homeGames","startBtn","changePilotHomeBtn","profileForm","playerName","playerCountry","playerPhone","birdGrid","selectedBirdInfo","profileError",
   "factTitle","factText","factSourceHint","factContinueBtn","gameCanvas","scoreValue","difficultyValue","pauseBtn","gameStartHint",
   "pauseScore","resumeBtn","quitBtn","resultBird","resultEyebrow","resultTitle","finalScore","resultBest","resultGames","newRecord",
   "againBtn","changePilotBtn","soundBtn","homeBirdArt","rankingBtn","rankingFromResultBtn","rankingBackBtn","rankingRefreshBtn","rankingList","rankingStatus","scoreMessage","submitScoreBtn","submitScoreStatus","rankingScreen"
