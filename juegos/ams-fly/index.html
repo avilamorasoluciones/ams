@@ -12,9 +12,9 @@
   <meta property="og:description" content="Un pequeño vuelo arcade de Avila Mora Soluciones. ¿Hasta dónde llegas?">
   <meta property="og:type" content="website">
   <link rel="canonical" href="https://avilamorasoluciones.com/juegos/ams-fly/">
-  <link rel="icon" href="icon.svg?v=3" type="image/svg+xml">
-  <link rel="manifest" href="manifest.webmanifest?v=3">
-  <link rel="stylesheet" href="styles.css?v=3">
+  <link rel="icon" href="icon.svg?v=4" type="image/svg+xml">
+  <link rel="manifest" href="manifest.webmanifest?v=4">
+  <link rel="stylesheet" href="styles.css?v=4">
   <title>AMS Fly · Avila Mora Soluciones</title>
 </head>
 <body>
@@ -29,7 +29,7 @@
   <main class="app-shell">
     <header class="game-header">
       <a class="brand" href="../index.html" aria-label="Volver a Juegos Avila Mora">
-        <span class="brand-dot"></span>
+        <span class="brand-condor" aria-hidden="true"><svg viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg" width="38" height="38"><rect width="44" height="44" rx="12" fill="#17133a"/><ellipse cx="22" cy="23" rx="8" ry="6" fill="#c084fc"/><ellipse cx="29" cy="17" rx="4" ry="3.5" fill="#7c3aed"/><ellipse cx="30.5" cy="14" rx="2" ry="1.4" fill="#ef4444"/><path d="M14 22Q8 18 4 22Q8 25 14 24Z" fill="#8b5cf6"/><path d="M30 22Q36 17 40 19Q37 24 30 23Z" fill="#8b5cf6"/><ellipse cx="26.5" cy="20" rx="3" ry="1.8" fill="#fff" fill-opacity=".55"/><path d="M33 17L36 16L34 19Z" fill="#fbbf24"/><circle cx="30.5" cy="16.5" r="1" fill="#111"/><path d="M18 27Q16 32 14 30Q17 28 18 27Z" fill="#7c3aed"/><path d="M22 28Q21 33 19 32Q21 29 22 28Z" fill="#7c3aed"/><path d="M26 27Q27 32 29 30Q26 28 26 27Z" fill="#7c3aed"/></svg></span>
         <span><b>Avila Mora</b><small>SOLUCIONES · AMS FLY</small></span>
       </a>
       <button id="soundBtn" class="icon-button" type="button" aria-label="Activar o desactivar sonido">♪</button>
@@ -56,6 +56,7 @@
       </div>
 
       <button id="startBtn" class="primary-button" type="button">ELEGIR AVE Y VOLAR <span>→</span></button>
+      <button id="changePilotHomeBtn" class="secondary-button home-change-button" type="button">CAMBIAR AVE / PAÍS</button>
       <button id="rankingBtn" class="secondary-button home-ranking-button" type="button">🏆 RANKING MUNDIAL</button>
       <p class="micro-copy">Toca, haz clic o presiona ESPACIO para volar.</p>
     </section>
@@ -162,7 +163,7 @@
     </footer>
   </main>
 
-  <script src="game.js?v=5"></script>
+  <script src="game.js?v=6"></script>
   <script>
     if ("serviceWorker" in navigator) {
       window.addEventListener("load", () => navigator.serviceWorker.register("./sw.js").catch(() => {}));
