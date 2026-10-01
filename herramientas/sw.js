@@ -1,4 +1,4 @@
-const CACHE_NAME = 'ams-tools-v18';
+const CACHE_NAME = 'ams-tools-v19';
 const CACHE_PREFIX = 'ams-tools-';
 
 const APP_SHELL = [
