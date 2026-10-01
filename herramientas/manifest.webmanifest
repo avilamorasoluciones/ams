@@ -41,7 +41,7 @@
       "url": "./#tool-merge",
       "icons": [
         {
-          "src": "./icon-192.svg",
+          "src": "./icon-192.svg?v=17",
           "sizes": "any",
           "type": "image/svg+xml"
         }
@@ -53,7 +53,7 @@
       "url": "./#tool-compress",
       "icons": [
         {
-          "src": "./icon-192.svg",
+          "src": "./icon-192.svg?v=17",
           "sizes": "any",
           "type": "image/svg+xml"
         }
