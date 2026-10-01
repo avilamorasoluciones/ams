@@ -24,26 +24,26 @@ const DEFAULT_EVENT = {
 };
 
 const countries = [
-  {code:"CO",name:"Colombia",flag:"🇨🇴",bird:"Cóndor de los Andes"},
-  {code:"VE",name:"Venezuela",flag:"🇻🇪",bird:"Turpial venezolano"},
-  {code:"EC",name:"Ecuador",flag:"🇪🇨",bird:"Cóndor de los Andes"},
-  {code:"US",name:"Estados Unidos",flag:"🇺🇸",bird:"Águila calva"},
-  {code:"MX",name:"México",flag:"🇲🇽",bird:"Águila real"},
-  {code:"AR",name:"Argentina",flag:"🇦🇷",bird:"Hornero"},
-  {code:"CL",name:"Chile",flag:"🇨🇱",bird:"Cóndor de los Andes"},
-  {code:"PE",name:"Perú",flag:"🇵🇪",bird:"Gallito de las rocas"},
-  {code:"BR",name:"Brasil",flag:"🇧🇷",bird:"Sabiá-laranjeira"},
-  {code:"PA",name:"Panamá",flag:"🇵🇦",bird:"Águila harpía"}
+  {code:"CO",name:"Colombia",flag:"🇨🇴",dial:"57",bird:"Cóndor de los Andes"},
+  {code:"VE",name:"Venezuela",flag:"🇻🇪",dial:"58",bird:"Turpial venezolano"},
+  {code:"EC",name:"Ecuador",flag:"🇪🇨",dial:"593",bird:"Tucán andino"},
+  {code:"US",name:"Estados Unidos",flag:"🇺🇸",dial:"1",bird:"Águila calva"},
+  {code:"MX",name:"México",flag:"🇲🇽",dial:"52",bird:"Águila real"},
+  {code:"AR",name:"Argentina",flag:"🇦🇷",dial:"54",bird:"Hornero"},
+  {code:"CL",name:"Chile",flag:"🇨🇱",dial:"56",bird:"Chucao"},
+  {code:"PE",name:"Perú",flag:"🇵🇪",dial:"51",bird:"Gallito de las rocas"},
+  {code:"BR",name:"Brasil",flag:"🇧🇷",dial:"55",bird:"Sabiá-laranjeira"},
+  {code:"PA",name:"Panamá",flag:"🇵🇦",dial:"507",bird:"Águila harpía"}
 ];
 
 const birds = [
-  {id:"condor-co",country:"CO",name:"Cóndor de los Andes",short:"Colombia",a:"#111827",b:"#475569",c:"#f8fafc",d:"#111827",info:"El cóndor de los Andes es el ave nacional de Colombia y uno de sus símbolos naturales más reconocibles."},
-  {id:"turpial",country:"VE",name:"Turpial venezolano",short:"Venezuela",a:"#f59e0b",b:"#111827",c:"#fbbf24",d:"#f59e0b",info:"El turpial es el ave nacional de Venezuela y destaca por su contraste de amarillo intenso y negro."},
-  {id:"condor-ec",country:"EC",name:"Cóndor de los Andes",short:"Ecuador",a:"#1f2937",b:"#64748b",c:"#f8fafc",d:"#111827",info:"El cóndor de los Andes también es un símbolo nacional de Ecuador y está asociado a sus paisajes andinos."},
-  {id:"eagle-us",country:"US",name:"Águila calva",short:"Estados Unidos",a:"#f8fafc",b:"#64748b",c:"#f8fafc",d:"#f59e0b",info:"El águila calva es el ave nacional y uno de los símbolos más conocidos de Estados Unidos."},
-  {id:"eagle-mx",country:"MX",name:"Águila real",short:"México",a:"#78350f",b:"#d97706",c:"#92400e",d:"#facc15",info:"El águila real ocupa un lugar central en la identidad mexicana y aparece en el escudo nacional."},
+  {id:"condor-co",country:"CO",name:"Cóndor de los Andes",short:"Colombia",a:"#111827",b:"#475569",c:"#f8fafc",d:"#111827",info:"El cóndor de los Andes es el ave insignia de Colombia y uno de sus símbolos naturales más reconocibles."},
+  {id:"turpial",country:"VE",name:"Turpial venezolano",short:"Venezuela",a:"#f59e0b",b:"#111827",c:"#fbbf24",d:"#f59e0b",info:"El turpial es el ave nacional de Venezuela y destaca por su plumaje amarillo, negro y naranja."},
+  {id:"tucan-ec",country:"EC",name:"Tucán andino",short:"Ecuador",a:"#111827",b:"#374151",c:"#f8fafc",d:"#f59e0b",info:"El tucán andino es una de las aves más llamativas de los bosques montanos de Ecuador, con un pico grande y colorido."},
+  {id:"eagle-us",country:"US",name:"Águila calva",short:"Estados Unidos",a:"#f8fafc",b:"#64748b",c:"#f8fafc",d:"#f59e0b",info:"El águila calva es el ave nacional de Estados Unidos y uno de sus símbolos más conocidos."},
+  {id:"eagle-mx",country:"MX",name:"Águila real",short:"México",a:"#78350f",b:"#d97706",c:"#92400e",d:"#facc15",info:"El águila real es una de las aves más representativas de México y aparece en su identidad nacional."},
   {id:"hornero",country:"AR",name:"Hornero",short:"Argentina",a:"#92400e",b:"#b45309",c:"#f59e0b",d:"#78350f",info:"El hornero es el ave nacional de Argentina y es famoso por construir nidos de barro con forma de horno."},
-  {id:"condor-cl",country:"CL",name:"Cóndor de los Andes",short:"Chile",a:"#1e293b",b:"#64748b",c:"#f8fafc",d:"#111827",info:"El cóndor forma parte de los símbolos naturales más representativos de Chile y de la cordillera de los Andes."},
+  {id:"chucao-cl",country:"CL",name:"Chucao",short:"Chile",a:"#334155",b:"#64748b",c:"#c2410c",d:"#f97316",info:"El chucao es una de las aves más características de los bosques templados del sur de Chile y destaca por su pecho anaranjado."},
   {id:"cock-rock",country:"PE",name:"Gallito de las rocas",short:"Perú",a:"#ef4444",b:"#b91c1c",c:"#f97316",d:"#facc15",info:"El gallito de las rocas es el ave nacional de Perú y destaca por su espectacular plumaje naranja."},
   {id:"sabia",country:"BR",name:"Sabiá-laranjeira",short:"Brasil",a:"#92400e",b:"#d97706",c:"#b45309",d:"#f59e0b",info:"El sabiá-laranjeira es el ave nacional de Brasil y es especialmente conocido por su canto."},
   {id:"harpia",country:"PA",name:"Águila harpía",short:"Panamá",a:"#475569",b:"#1e293b",c:"#94a3b8",d:"#facc15",info:"El águila harpía es el ave nacional de Panamá y una de las rapaces más grandes y poderosas de América."}
@@ -65,7 +65,7 @@ const colombiaFacts = [
 const els = {};
 [
   "loadingScreen","homeScreen","profileScreen","factScreen","gameScreen","pauseScreen","gameOverScreen",
-  "homeBest","homeGames","startBtn","changePilotHomeBtn","profileForm","playerName","playerCountry","playerPhone","birdGrid","selectedBirdInfo","profileError",
+  "homeBest","homeGames","startBtn","changePilotHomeBtn","profileForm","playerName","playerCountry","playerPhoneCountry","playerPhone","birdGrid","selectedBirdInfo","profileError",
   "factTitle","factText","factSourceHint","factContinueBtn","gameCanvas","scoreValue","difficultyValue","pauseBtn","gameStartHint",
   "pauseScore","resumeBtn","quitBtn","resultBird","resultEyebrow","resultTitle","finalScore","resultBest","resultGames","newRecord",
   "againBtn","changePilotBtn","soundBtn","homeBirdArt","rankingBtn","rankingFromResultBtn","rankingBackBtn","rankingRefreshBtn","rankingList","rankingStatus","scoreMessage","submitScoreBtn","submitScoreStatus","rankingScreen"
@@ -250,6 +250,8 @@ function hydrateStats(){
 function initCountries(){
   els.playerCountry.innerHTML=countries.map(c=>'<option value="'+c.code+'">'+c.flag+' '+c.name+'</option>').join("");
   els.playerCountry.value=profile?.country || "CO";
+  els.playerPhoneCountry.innerHTML=countries.map(c=>'<option value="'+c.dial+'">'+c.flag+" +"+c.dial+" · "+c.name+'</option>').join("");
+  els.playerPhoneCountry.value=profile?.phoneCountry || getCountry(profile?.country || "CO").dial;
 }
 function renderBirds(){
   els.birdGrid.innerHTML=birds.map(b=>{
@@ -268,8 +270,12 @@ function updateBirdInfo(){
 }
 function loadProfile(){
   profile=safeParse(STORAGE_KEY,null);
-  if(profile?.name && getBird(profile.birdId)){selectedBirdId=profile.birdId}
-  else profile=null;
+  if(profile?.name && getBird(profile.birdId)){
+    if(profile.birdId==="condor-ec")profile.birdId="tucan-ec";
+    if(profile.birdId==="condor-cl")profile.birdId="chucao-cl";
+    selectedBirdId=profile.birdId;
+    if(!profile.phoneCountry)profile.phoneCountry=getCountry(profile.country||"CO").dial;
+  }else profile=null;
 }
 function playTone(freq=440,duration=.08,type="sine"){
   if(!soundOn)return;
@@ -522,13 +528,24 @@ function submitProfile(e){
   e.preventDefault();
   const name=els.playerName.value.trim().replace(/\s+/g," ");
   if(name.length<2){els.profileError.textContent="Escribe al menos 2 caracteres para tu nombre.";els.profileError.hidden=false;els.playerName.focus();return}
-  profile={name:name.slice(0,18),country:els.playerCountry.value,birdId:selectedBirdId,phone:(els.playerPhone?.value||"").trim().slice(0,30)};
+  const phoneCountry=els.playerPhoneCountry?.value || getCountry(els.playerCountry.value).dial;
+  const phoneDigits=(els.playerPhone?.value||"").replace(/\D/g,"").slice(0,15);
+  profile={name:name.slice(0,18),country:els.playerCountry.value,birdId:selectedBirdId,phoneCountry,phone:phoneDigits?phoneCountry+phoneDigits:""};
   saveProfile();els.profileError.hidden=true;prepareFactThenGame();
 }
 function bootHome(){
   loadProfile();hydrateStats();initCountries();renderBirds();renderHomeBird();applyEventConfig();
   if(EVENT_API) loadRemoteEventConfig();
-  if(profile){els.playerName.value=profile.name;els.playerCountry.value=profile.country;if(els.playerPhone)els.playerPhone.value=profile.phone||"";selectedBirdId=profile.birdId;renderBirds()}
+  if(profile){
+    els.playerName.value=profile.name;els.playerCountry.value=profile.country;
+    if(els.playerPhoneCountry)els.playerPhoneCountry.value=profile.phoneCountry||getCountry(profile.country).dial;
+    if(els.playerPhone){
+      const dial=els.playerPhoneCountry?.value||getCountry(profile.country).dial;
+      const raw=String(profile.phone||"").replace(/\D/g,"");
+      els.playerPhone.value=raw.startsWith(dial)?raw.slice(dial.length):raw;
+    }
+    selectedBirdId=profile.birdId;renderBirds()
+  }
   els.homeBirdArt.innerHTML=birdMarkup(getBird(selectedBirdId),".95");
   setTimeout(()=>els.loadingScreen.classList.add("is-gone"),500);
 }
@@ -538,15 +555,15 @@ els.rankingBackBtn.addEventListener("click",()=>showOnly(els.homeScreen));
 els.rankingRefreshBtn.addEventListener("click",loadRanking);
 els.submitScoreBtn.addEventListener("click",()=>{saveCurrentLead((els.scoreMessage.value||"").trim().slice(0,90));publishScore();});
 els.birdGrid.addEventListener("click",e=>{const btn=e.target.closest("[data-bird]");if(!btn)return;selectedBirdId=btn.dataset.bird;renderBirds();playTone(350,.04)});
-els.startBtn.addEventListener("click",()=>{playTone(440,.07);startMusic();if(profile){els.playerName.value=profile.name;els.playerCountry.value=profile.country;selectedBirdId=profile.birdId;renderBirds()}showOnly(els.profileScreen)});
+els.startBtn.addEventListener("click",()=>{playTone(440,.07);startMusic();if(profile){els.playerName.value=profile.name;els.playerCountry.value=profile.country;if(els.playerPhoneCountry)els.playerPhoneCountry.value=profile.phoneCountry||getCountry(profile.country).dial;if(els.playerPhone){const dial=els.playerPhoneCountry?.value||getCountry(profile.country).dial;const raw=String(profile.phone||"").replace(/\D/g,"");els.playerPhone.value=raw.startsWith(dial)?raw.slice(dial.length):raw}selectedBirdId=profile.birdId;renderBirds()}showOnly(els.profileScreen)});
 els.profileForm.addEventListener("submit",submitProfile);
 els.factContinueBtn.addEventListener("click",()=>{playTone(560,.05);startMusic();startWithProfile()});
 els.pauseBtn.addEventListener("click",()=>{if(!game?.running)return;game.paused=true;stopMusic();cancelAnimationFrame(raf);els.pauseScore.textContent=game.score+" puntos";showOnly(els.pauseScreen);playTone(300,.05)});
 els.resumeBtn.addEventListener("click",()=>{if(!game?.running)return;game.paused=false;startMusic();game.last=performance.now();showOnly(els.gameScreen);playTone(420,.05);raf=requestAnimationFrame(loop)});
 els.quitBtn.addEventListener("click",()=>{if(game)game.running=false;stopMusic();cancelAnimationFrame(raf);showOnly(els.homeScreen);hydrateStats()});
 els.againBtn.addEventListener("click",()=>{prepareFactThenGame()});
-els.changePilotBtn.addEventListener("click",()=>{showOnly(els.profileScreen);if(profile){els.playerName.value=profile.name;els.playerCountry.value=profile.country;selectedBirdId=profile.birdId}renderBirds()});
-els.changePilotHomeBtn.addEventListener("click",()=>{playTone(440,.05);if(profile){els.playerName.value=profile.name;els.playerCountry.value=profile.country;selectedBirdId=profile.birdId}renderBirds();showOnly(els.profileScreen)});
+els.changePilotBtn.addEventListener("click",()=>{showOnly(els.profileScreen);if(profile){els.playerName.value=profile.name;els.playerCountry.value=profile.country;if(els.playerPhoneCountry)els.playerPhoneCountry.value=profile.phoneCountry||getCountry(profile.country).dial;if(els.playerPhone){const dial=els.playerPhoneCountry?.value||getCountry(profile.country).dial;const raw=String(profile.phone||"").replace(/\D/g,"");els.playerPhone.value=raw.startsWith(dial)?raw.slice(dial.length):raw}selectedBirdId=profile.birdId}renderBirds()});
+els.changePilotHomeBtn.addEventListener("click",()=>{playTone(440,.05);if(profile){els.playerName.value=profile.name;els.playerCountry.value=profile.country;if(els.playerPhoneCountry)els.playerPhoneCountry.value=profile.phoneCountry||getCountry(profile.country).dial;if(els.playerPhone){const dial=els.playerPhoneCountry?.value||getCountry(profile.country).dial;const raw=String(profile.phone||"").replace(/\D/g,"");els.playerPhone.value=raw.startsWith(dial)?raw.slice(dial.length):raw}selectedBirdId=profile.birdId}renderBirds();showOnly(els.profileScreen)});
 els.adminNavBtn?.addEventListener("click",openEventAdmin);
 els.soundBtn.addEventListener("click",()=>{soundOn=!soundOn;localStorage.setItem("amsFlySound",soundOn?"1":"0");els.soundBtn.textContent=soundOn?"♪":"×";if(soundOn){playTone(600,.05);startMusic()}else stopMusic()});
 function action(e){if(["BUTTON","INPUT","SELECT"].includes(e.target?.tagName))return;e.preventDefault();if(els.gameScreen.hidden)return;flap()}
