@@ -350,11 +350,11 @@ function difficultyFor(score){
 function resetGame(){
   resizeCanvas();
   const w=window.innerWidth,h=window.innerHeight;
-  const bird=getBird(profile?.birdId||selectedBirdId);
+  const birdData=getBird(profile?.birdId||selectedBirdId);
   game={
     running:true,paused:false,started:false,score:0,time:0,last:performance.now(),spawn:0,
     bird:{x:Math.max(75,w*.22),y:h*.48,vy:0,r:18},
-    pipes:[],bird,
+    pipes:[],birdData,
     worldSpeed:Math.max(170,Math.min(205,w*.29)),
     gravity:1180,flap:-405,
     gap:Math.max(165,Math.min(215,h*.26)),pipeW:58,
@@ -430,13 +430,13 @@ function drawPipe(p,h){
 function drawBird(){
   const b=game.bird;ctx.save();ctx.translate(b.x,b.y);ctx.rotate(clamp(b.vy/650,-.45,.65));
   ctx.shadowColor="rgba(139,92,246,.55)";ctx.shadowBlur=20;
-  const body=ctx.createLinearGradient(-22,-18,22,18);body.addColorStop(0,game.bird.a);body.addColorStop(1,game.bird.b);ctx.fillStyle=body;
+  const body=ctx.createLinearGradient(-22,-18,22,18);body.addColorStop(0,game.birdData.a);body.addColorStop(1,game.birdData.b);ctx.fillStyle=body;
   ctx.beginPath();ctx.ellipse(0,0,24,18,0,0,Math.PI*2);ctx.fill();
   ctx.strokeStyle="rgba(255,255,255,.32)";ctx.lineWidth=1.5;ctx.stroke();
-  ctx.fillStyle=game.bird.c;ctx.beginPath();ctx.ellipse(-8,7,16,9,-.25,0,Math.PI*2);ctx.fill();
-  ctx.fillStyle=game.bird.d;ctx.beginPath();ctx.moveTo(20,-2);ctx.lineTo(39,4);ctx.lineTo(20,8);ctx.closePath();ctx.fill();
+  ctx.fillStyle=game.birdData.c;ctx.beginPath();ctx.ellipse(-8,7,16,9,-.25,0,Math.PI*2);ctx.fill();
+  ctx.fillStyle=game.birdData.d;ctx.beginPath();ctx.moveTo(20,-2);ctx.lineTo(39,4);ctx.lineTo(20,8);ctx.closePath();ctx.fill();
   ctx.fillStyle="#111827";ctx.beginPath();ctx.arc(12,-9,4,0,Math.PI*2);ctx.fill();ctx.fillStyle="#fff";ctx.beginPath();ctx.arc(13,-10,1.3,0,Math.PI*2);ctx.fill();
-  ctx.fillStyle=game.bird.c;ctx.beginPath();ctx.moveTo(-18,-2);ctx.quadraticCurveTo(-39,-22,-31,5);ctx.quadraticCurveTo(-24,12,-11,7);ctx.closePath();ctx.fill();
+  ctx.fillStyle=game.birdData.c;ctx.beginPath();ctx.moveTo(-18,-2);ctx.quadraticCurveTo(-39,-22,-31,5);ctx.quadraticCurveTo(-24,12,-11,7);ctx.closePath();ctx.fill();
   ctx.strokeStyle="rgba(255,255,255,.28)";ctx.stroke();
   ctx.restore();
 }
@@ -512,7 +512,7 @@ function endGame(){
   els.finalScore.textContent=game.score;els.resultBest.textContent=stats.best;els.resultGames.textContent=stats.games;els.newRecord.hidden=!isNew;
   els.resultTitle.textContent=game.score>=80?"Vuelo legendario.":game.score>=40?"¡Muy buen vuelo!":game.score>=15?"Vas tomando altura.":"El cielo todavía tiene revancha.";
   els.resultEyebrow.textContent=isNew?"NUEVO RÉCORD":"VUELO TERMINADO";
-  els.resultBird.innerHTML=birdMarkup(game.bird,".9");
+  els.resultBird.innerHTML=birdMarkup(game.birdData,".9");
   els.scoreMessage.value="";els.submitScoreStatus.textContent="";
   showOnly(els.gameOverScreen);playTone(isNew?880:180,.16,isNew?"triangle":"sawtooth");
 }
