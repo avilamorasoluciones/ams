@@ -85,10 +85,9 @@ let raf = 0;
 let lastStage = 0;
 const stages = [
   {at:0,name:"CIELO ANDINO",top:"#07091a",mid:"#111536",bottom:"#17102b",pipe:"#6d42c9",glow:"#8b5cf6",particle:"#c4b5fd"},
-  {at:25,name:"ATARDECER COLOMBIANO",top:"#211329",mid:"#6b294d",bottom:"#1b1230",pipe:"#e16b8c",glow:"#f472b6",particle:"#facc15"},
-  {at:50,name:"SELVA VIVA",top:"#031b1b",mid:"#075e54",bottom:"#081f26",pipe:"#16a085",glow:"#34d399",particle:"#facc15"},
-  {at:75,name:"CIELO NEÓN",top:"#07102d",mid:"#1e2a78",bottom:"#2a1050",pipe:"#22d3ee",glow:"#22d3ee",particle:"#a78bfa"},
-  {at:100,name:"ÓRBITA AMS",top:"#02030b",mid:"#11133a",bottom:"#250d40",pipe:"#a855f7",glow:"#ec4899",particle:"#fff"}
+  {at:10,name:"ATARDECER COLOMBIANO",top:"#211329",mid:"#6b294d",bottom:"#1b1230",pipe:"#e16b8c",glow:"#f472b6",particle:"#facc15"},
+  {at:20,name:"SELVA VIVA",top:"#031b1b",mid:"#075e54",bottom:"#081f26",pipe:"#16a085",glow:"#34d399",particle:"#facc15"},
+  {at:30,name:"CIELO NEÓN",top:"#07102d",mid:"#1e2a78",bottom:"#2a1050",pipe:"#22d3ee",glow:"#22d3ee",particle:"#a78bfa"}
 ];
 
 
@@ -285,8 +284,8 @@ function playTone(freq=440,duration=.08,type="sine"){
     const now=audioCtx.currentTime;
     const o=audioCtx.createOscillator(),g=audioCtx.createGain();
     o.type=type;o.frequency.setValueAtTime(freq,now);
-    g.gain.setValueAtTime(.0001,now);g.gain.exponentialRampToValueAtTime(.045,now+.012);
-    g.gain.exponentialRampToValueAtTime(.001,now+duration);
+    g.gain.setValueAtTime(.0001,now);g.gain.exponentialRampToValueAtTime(.11,now+.012);
+    g.gain.exponentialRampToValueAtTime(.0015,now+duration);
     o.connect(g);g.connect(audioCtx.destination);o.start(now);o.stop(now+duration+.02);
   }catch(_){}
 }
@@ -305,7 +304,7 @@ function startMusic(){
         const now=audioCtx.currentTime;
         const o=audioCtx.createOscillator(),g=audioCtx.createGain();
         o.type="triangle";o.frequency.setValueAtTime(notes[musicStep%notes.length],now);
-        g.gain.setValueAtTime(.0001,now);g.gain.exponentialRampToValueAtTime(.012,now+.025);
+        g.gain.setValueAtTime(.0001,now);g.gain.exponentialRampToValueAtTime(.035,now+.025);
         g.gain.exponentialRampToValueAtTime(.0001,now+.36);
         o.connect(g);g.connect(audioCtx.destination);o.start(now);o.stop(now+.38);
       }catch(_){}
@@ -324,7 +323,10 @@ function resizeCanvas(){
 }
 function randomBetween(a,b){return a+Math.random()*(b-a)}
 function clamp(v,a,b){return Math.max(a,Math.min(b,v))}
-function currentStage(score){let stage=stages[0];for(const item of stages){if(score>=item.at)stage=item}return stage}
+function currentStage(score){
+  const cycle=Math.floor(Math.max(0,score)/10)%stages.length;
+  return stages[cycle];
+}
 function showStageBanner(stage){
   let banner=document.getElementById("stageBanner");
   if(!banner){banner=document.createElement("div");banner.id="stageBanner";banner.className="stage-banner";els.gameScreen.appendChild(banner)}
