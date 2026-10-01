@@ -62,6 +62,8 @@ let selectedBirdId = "condor-co";
 let currentFactIndex = Number(localStorage.getItem(FACT_INDEX_KEY) || 0);
 let soundOn = localStorage.getItem("amsFlySound") !== "0";
 let audioCtx = null;
+let musicTimer = 0;
+let musicStep = 0;
 let game = null;
 let raf = 0;
 let lastStage = 0;
@@ -126,6 +128,31 @@ function playTone(freq=440,duration=.08,type="sine"){
     g.gain.setValueAtTime(.0001,now);g.gain.exponentialRampToValueAtTime(.045,now+.012);
     g.gain.exponentialRampToValueAtTime(.001,now+duration);
     o.connect(g);g.connect(audioCtx.destination);o.start(now);o.stop(now+duration+.02);
+  }catch(_){}
+}
+function stopMusic(){
+  if(musicTimer){clearTimeout(musicTimer);musicTimer=0}
+}
+function startMusic(){
+  if(!soundOn||musicTimer)return;
+  try{
+    audioCtx ||= new (window.AudioContext||window.webkitAudioContext)();
+    if(audioCtx.state==="suspended")audioCtx.resume().catch(()=>{});
+    const notes=[196,220,247,262,247,220,196,165];
+    const tick=()=>{
+      if(!soundOn){stopMusic();return}
+      try{
+        const now=audioCtx.currentTime;
+        const o=audioCtx.createOscillator(),g=audioCtx.createGain();
+        o.type="triangle";o.frequency.setValueAtTime(notes[musicStep%notes.length],now);
+        g.gain.setValueAtTime(.0001,now);g.gain.exponentialRampToValueAtTime(.012,now+.025);
+        g.gain.exponentialRampToValueAtTime(.0001,now+.36);
+        o.connect(g);g.connect(audioCtx.destination);o.start(now);o.stop(now+.38);
+      }catch(_){}
+      musicStep++;
+      musicTimer=setTimeout(tick,420);
+    };
+    tick();
   }catch(_){}
 }
 function resizeCanvas(){
@@ -308,7 +335,7 @@ function loadRanking(){
 }
 function endGame(){
   if(!game?.running)return;
-  game.running=false;cancelAnimationFrame(raf);
+  game.running=false;stopMusic();cancelAnimationFrame(raf);
   stats.games++;const previous=stats.best;stats.best=Math.max(stats.best,game.score);saveStats();hydrateStats();
   const isNew=game.score>previous && game.score>0;
   els.finalScore.textContent=game.score;els.resultBest.textContent=stats.best;els.resultGames.textContent=stats.games;els.newRecord.hidden=!isNew;
@@ -345,16 +372,16 @@ els.rankingBackBtn.addEventListener("click",()=>showOnly(els.homeScreen));
 els.rankingRefreshBtn.addEventListener("click",loadRanking);
 els.submitScoreBtn.addEventListener("click",publishScore);
 els.birdGrid.addEventListener("click",e=>{const btn=e.target.closest("[data-bird]");if(!btn)return;selectedBirdId=btn.dataset.bird;renderBirds();playTone(350,.04)});
-els.startBtn.addEventListener("click",()=>{playTone(440,.07);if(profile){els.playerName.value=profile.name;els.playerCountry.value=profile.country;selectedBirdId=profile.birdId;renderBirds()}showOnly(els.profileScreen)});
+els.startBtn.addEventListener("click",()=>{playTone(440,.07);startMusic();if(profile){els.playerName.value=profile.name;els.playerCountry.value=profile.country;selectedBirdId=profile.birdId;renderBirds()}showOnly(els.profileScreen)});
 els.profileForm.addEventListener("submit",submitProfile);
-els.factContinueBtn.addEventListener("click",()=>{playTone(560,.05);startWithProfile()});
-els.pauseBtn.addEventListener("click",()=>{if(!game?.running)return;game.paused=true;cancelAnimationFrame(raf);els.pauseScore.textContent=game.score+" puntos";showOnly(els.pauseScreen);playTone(300,.05)});
-els.resumeBtn.addEventListener("click",()=>{if(!game?.running)return;game.paused=false;game.last=performance.now();showOnly(els.gameScreen);playTone(420,.05);raf=requestAnimationFrame(loop)});
-els.quitBtn.addEventListener("click",()=>{if(game)game.running=false;cancelAnimationFrame(raf);showOnly(els.homeScreen);hydrateStats()});
+els.factContinueBtn.addEventListener("click",()=>{playTone(560,.05);startMusic();startWithProfile()});
+els.pauseBtn.addEventListener("click",()=>{if(!game?.running)return;game.paused=true;stopMusic();cancelAnimationFrame(raf);els.pauseScore.textContent=game.score+" puntos";showOnly(els.pauseScreen);playTone(300,.05)});
+els.resumeBtn.addEventListener("click",()=>{if(!game?.running)return;game.paused=false;startMusic();game.last=performance.now();showOnly(els.gameScreen);playTone(420,.05);raf=requestAnimationFrame(loop)});
+els.quitBtn.addEventListener("click",()=>{if(game)game.running=false;stopMusic();cancelAnimationFrame(raf);showOnly(els.homeScreen);hydrateStats()});
 els.againBtn.addEventListener("click",()=>{prepareFactThenGame()});
 els.changePilotBtn.addEventListener("click",()=>{showOnly(els.profileScreen);if(profile){els.playerName.value=profile.name;els.playerCountry.value=profile.country;selectedBirdId=profile.birdId}renderBirds()});
 els.changePilotHomeBtn.addEventListener("click",()=>{playTone(440,.05);if(profile){els.playerName.value=profile.name;els.playerCountry.value=profile.country;selectedBirdId=profile.birdId}renderBirds();showOnly(els.profileScreen)});
-els.soundBtn.addEventListener("click",()=>{soundOn=!soundOn;localStorage.setItem("amsFlySound",soundOn?"1":"0");els.soundBtn.textContent=soundOn?"♪":"×";if(soundOn)playTone(600,.05)});
+els.soundBtn.addEventListener("click",()=>{soundOn=!soundOn;localStorage.setItem("amsFlySound",soundOn?"1":"0");els.soundBtn.textContent=soundOn?"♪":"×";if(soundOn){playTone(600,.05);startMusic()}else stopMusic()});
 function action(e){if(["BUTTON","INPUT","SELECT"].includes(e.target?.tagName))return;e.preventDefault();if(els.gameScreen.hidden)return;flap()}
 els.gameScreen.addEventListener("pointerdown",action,{passive:false});
 window.addEventListener("keydown",e=>{if(e.code==="Space"||e.code==="ArrowUp"){e.preventDefault();if(!els.gameScreen.hidden)flap()}if(e.code==="Escape"&&game?.running&&!game.paused){els.pauseBtn.click()}});
