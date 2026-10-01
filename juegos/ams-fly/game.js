@@ -4,7 +4,7 @@
 const STORAGE_KEY = "amsFlyProfileV1";
 const STATS_KEY = "amsFlyStatsV1";
 const FACT_INDEX_KEY = "amsFlyFactIndexV1";
-const RANKING_API = "";
+const RANKING_API = EVENT_API ? EVENT_API+"/ranking" : "";
 const RANKING_LIMIT = 50;
 const EVENT_API = "";
 const EVENT_TOKEN_STORAGE = "amsFlyAdminTokenV1";
@@ -169,9 +169,17 @@ function openEventAdmin(){
   panel.querySelector("#cfgPrizeTitle").value=cfg.prizeTitle;panel.querySelector("#cfgPrizeDesc").value=cfg.prizeDesc;panel.querySelector("#cfgConditionTitle").value=cfg.conditionTitle;panel.querySelector("#cfgConditionDesc").value=cfg.conditionDesc;panel.querySelector("#cfgWaTemplate").value=cfg.waTemplate;
   renderAdminParticipants();
 }
-function saveAdminConfig(){
-  const p=document.getElementById("amsFlyAdminPanel"),cfg={active:p.querySelector("#cfgActive").checked,badge:p.querySelector("#cfgBadge").value.trim()||DEFAULT_EVENT.badge,title:p.querySelector("#cfgTitle").value.trim()||DEFAULT_EVENT.title,cta:p.querySelector("#cfgCta").value.trim()||DEFAULT_EVENT.cta,desc:p.querySelector("#cfgDesc").value.trim()||DEFAULT_EVENT.desc,prizeTitle:p.querySelector("#cfgPrizeTitle").value.trim()||DEFAULT_EVENT.prizeTitle,prizeDesc:p.querySelector("#cfgPrizeDesc").value.trim()||DEFAULT_EVENT.prizeDesc,conditionTitle:p.querySelector("#cfgConditionTitle").value.trim()||DEFAULT_EVENT.conditionTitle,conditionDesc:p.querySelector("#cfgConditionDesc").value.trim()||DEFAULT_EVENT.conditionDesc,waTemplate:p.querySelector("#cfgWaTemplate").value.trim()||DEFAULT_EVENT.waTemplate};
-  saveEventConfig(cfg);sessionStorage.setItem(EVENT_TOKEN_STORAGE,p.querySelector("#adminToken").value.trim());applyEventConfig();openEventScreen();showOnly(els.homeScreen);
+async function saveAdminConfig(){
+  const p=document.getElementById("amsFlyAdminPanel"),status=p.querySelector("#adminStatus"),token=p.querySelector("#adminToken").value.trim(),cfg={active:p.querySelector("#cfgActive").checked,badge:p.querySelector("#cfgBadge").value.trim()||DEFAULT_EVENT.badge,title:p.querySelector("#cfgTitle").value.trim()||DEFAULT_EVENT.title,cta:p.querySelector("#cfgCta").value.trim()||DEFAULT_EVENT.cta,desc:p.querySelector("#cfgDesc").value.trim()||DEFAULT_EVENT.desc,prizeTitle:p.querySelector("#cfgPrizeTitle").value.trim()||DEFAULT_EVENT.prizeTitle,prizeDesc:p.querySelector("#cfgPrizeDesc").value.trim()||DEFAULT_EVENT.prizeDesc,conditionTitle:p.querySelector("#cfgConditionTitle").value.trim()||DEFAULT_EVENT.conditionTitle,conditionDesc:p.querySelector("#cfgConditionDesc").value.trim()||DEFAULT_EVENT.conditionDesc,waTemplate:p.querySelector("#cfgWaTemplate").value.trim()||DEFAULT_EVENT.waTemplate};
+  saveEventConfig(cfg);sessionStorage.setItem(EVENT_TOKEN_STORAGE,token);
+  if(EVENT_API){
+    try{
+      const res=await fetch(EVENT_API+"/event",{method:"PUT",headers:{"Content-Type":"application/json","Authorization":"Bearer "+token},body:JSON.stringify(cfg)});
+      if(!res.ok)throw new Error();
+      status.textContent="✓ Configuración guardada en el servidor.";
+    }catch(_){status.textContent="⚠️ No se pudo guardar en el servidor. Se conservó la configuración local.";}
+  }else status.textContent="✓ Configuración local guardada. Configura EVENT_API para sincronizarla.";
+  applyEventConfig();
 }
 function renderAdminParticipants(){
   const p=document.getElementById("amsFlyAdminPanel");if(!p)return;
@@ -417,7 +425,11 @@ function loop(now){
 }
 function saveCurrentLead(message=""){
   if(!profile||!game)return;
-  saveLocalLead({id:"lead_"+Date.now(),name:profile.name,country:profile.country,birdId:profile.birdId,score:game.score,message,phone:profile.phone||"",date:new Date().toISOString()});
+  const lead={id:"lead_"+Date.now(),name:profile.name,country:profile.country,birdId:profile.birdId,score:game.score,message,phone:profile.phone||"",date:new Date().toISOString()};
+  saveLocalLead(lead);
+  if(EVENT_API&&lead.phone){
+    fetch(EVENT_API+"/participants",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({name:lead.name,country:lead.country,birdId:lead.birdId,score:lead.score,phone:lead.phone})}).catch(()=>{});
+  }
 }
 function publishScore(){
   if(!profile||!game)return;
@@ -486,6 +498,7 @@ function submitProfile(e){
 }
 function bootHome(){
   loadProfile();hydrateStats();initCountries();renderBirds();renderHomeBird();applyEventConfig();
+  if(EVENT_API) loadRemoteEventConfig();
   if(profile){els.playerName.value=profile.name;els.playerCountry.value=profile.country;if(els.playerPhone)els.playerPhone.value=profile.phone||"";selectedBirdId=profile.birdId;renderBirds()}
   els.homeBirdArt.innerHTML=birdMarkup(getBird(selectedBirdId),".95");
   setTimeout(()=>els.loadingScreen.classList.add("is-gone"),500);
