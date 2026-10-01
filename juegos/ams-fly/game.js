@@ -262,7 +262,7 @@ els.birdGrid.addEventListener("click",e=>{const btn=e.target.closest("[data-bird
 els.startBtn.addEventListener("click",()=>{playTone(440,.07);if(profile){prepareFactThenGame()}else showOnly(els.profileScreen)});
 els.profileForm.addEventListener("submit",submitProfile);
 els.factContinueBtn.addEventListener("click",()=>{playTone(560,.05);startWithProfile()});
-els.pauseBtn.addEventListener("click",()=>{if(!game?.running)return;game.paused=true;els.pauseScore.textContent=game.score+" puntos";showOnly(els.pauseScreen);playTone(300,.05)});
+els.pauseBtn.addEventListener("click",()=>{if(!game?.running)return;game.paused=true;cancelAnimationFrame(raf);els.pauseScore.textContent=game.score+" puntos";showOnly(els.pauseScreen);playTone(300,.05)});
 els.resumeBtn.addEventListener("click",()=>{if(!game?.running)return;game.paused=false;game.last=performance.now();showOnly(els.gameScreen);playTone(420,.05);raf=requestAnimationFrame(loop)});
 els.quitBtn.addEventListener("click",()=>{if(game)game.running=false;cancelAnimationFrame(raf);showOnly(els.homeScreen);hydrateStats()});
 els.againBtn.addEventListener("click",()=>{prepareFactThenGame()});
@@ -272,7 +272,7 @@ function action(e){if(["BUTTON","INPUT","SELECT"].includes(e.target?.tagName))re
 els.gameScreen.addEventListener("pointerdown",action,{passive:false});
 window.addEventListener("keydown",e=>{if(e.code==="Space"||e.code==="ArrowUp"){e.preventDefault();if(!els.gameScreen.hidden)flap()}if(e.code==="Escape"&&game?.running&&!game.paused){els.pauseBtn.click()}});
 window.addEventListener("resize",()=>{if(!els.gameScreen.hidden){resizeCanvas();if(game?.bird)game.bird.x=clamp(game.bird.x,50,window.innerWidth*.32)}});
-window.addEventListener("visibilitychange",()=>{if(document.hidden&&game?.running&&!game.paused){game.paused=true;els.pauseScore.textContent=game.score+" puntos";showOnly(els.pauseScreen)}});
+window.addEventListener("visibilitychange",()=>{if(document.hidden&&game?.running&&!game.paused){game.paused=true;cancelAnimationFrame(raf);els.pauseScore.textContent=game.score+" puntos";showOnly(els.pauseScreen)}});
 els.soundBtn.textContent=soundOn?"♪":"×";
 bootHome();
 })();
