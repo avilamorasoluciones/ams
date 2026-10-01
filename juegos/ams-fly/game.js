@@ -4,7 +4,7 @@
 const STORAGE_KEY = "amsFlyProfileV1";
 const STATS_KEY = "amsFlyStatsV1";
 const FACT_INDEX_KEY = "amsFlyFactIndexV1";
-const RANKING_API = ""; // Endpoint HTTPS seguro que leerá/escribirá en Neon. Nunca pongas credenciales de Neon aquí.
+const RANKING_API = "";
 const RANKING_LIMIT = 50;
 
 const countries = [
@@ -65,7 +65,6 @@ let audioCtx = null;
 let game = null;
 let raf = 0;
 let lastStage = 0;
-let lastStageTone = 0;
 const stages = [
   {at:0,name:"CIELO ANDINO",top:"#07091a",mid:"#111536",bottom:"#17102b",pipe:"#6d42c9",glow:"#8b5cf6",particle:"#c4b5fd"},
   {at:25,name:"ATARDECER COLOMBIANO",top:"#211329",mid:"#6b294d",bottom:"#1b1230",pipe:"#e16b8c",glow:"#f472b6",particle:"#facc15"},
@@ -85,7 +84,7 @@ function birdMarkup(bird,scale="1"){
   return '<div class="bird-shape" style="--bird-a:'+bird.a+';--bird-b:'+bird.b+';--bird-c:'+bird.c+';--bird-d:'+bird.d+';transform:scale('+scale+') rotate(-7deg)"><i class="bird-eye"></i><i class="bird-tail"></i></div>';
 }
 function showOnly(target){
-  [els.homeScreen,els.profileScreen,els.factScreen,els.gameScreen,els.pauseScreen,els.gameOverScreen].forEach(x=>x.hidden=true);
+  [els.homeScreen,els.profileScreen,els.factScreen,els.gameScreen,els.pauseScreen,els.gameOverScreen,els.rankingScreen].forEach(x=>x.hidden=true);
   target.hidden=false;
 }
 function hydrateStats(){
@@ -136,24 +135,25 @@ function resizeCanvas(){
 }
 function randomBetween(a,b){return a+Math.random()*(b-a)}
 function clamp(v,a,b){return Math.max(a,Math.min(b,v))}
-function currentStage(score){let s=stages[0];for(const candidate of stages)if(score>=candidate.at)s=candidate;return s}
-function escapeHtml(value){return String(value??"").replace(/[&<>"']/g,ch=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[ch]))}
-function stageForScore(score){
-  const stage=currentStage(score);
-  if(stage.at!==lastStage){lastStage=stage.at;showStageBanner(stage);if(stage.at>0){playStageSound(stage);lastStageTone=stage.at}}
-  return stage;
-}
+function currentStage(score){let stage=stages[0];for(const item of stages){if(score>=item.at)stage=item}return stage}
 function showStageBanner(stage){
   let banner=document.getElementById("stageBanner");
   if(!banner){banner=document.createElement("div");banner.id="stageBanner";banner.className="stage-banner";els.gameScreen.appendChild(banner)}
-  banner.innerHTML="<strong>"+stage.name+"</strong><span>Has llegado a "+stage.at+" puntos.</span>";
+  banner.textContent=stage.name+" · "+stage.at+" PUNTOS";
   banner.classList.remove("show");void banner.offsetWidth;banner.classList.add("show");
-  clearTimeout(banner._timer);banner._timer=setTimeout(()=>banner.classList.remove("show"),1900);
+  clearTimeout(banner._timer);banner._timer=setTimeout(()=>banner.classList.remove("show"),1800);
 }
 function playStageSound(stage){
-  if(!soundOn)return;
   const notes=stage.at>=100?[392,523,659,784]:stage.at>=75?[330,440,554,660]:stage.at>=50?[294,392,494,587]:[262,330,392,523];
-  notes.forEach((n,i)=>setTimeout(()=>playTone(n,.12,"triangle"),i*75));
+  notes.forEach((note,index)=>setTimeout(()=>playTone(note,.11,"triangle"),index*70));
+}
+function updateStage(){
+  const stage=currentStage(game.score);
+  if(stage.at!==lastStage){
+    lastStage=stage.at;
+    if(stage.at>0){showStageBanner(stage);playStageSound(stage)}
+  }
+  game.stage=stage;
 }
 function difficultyFor(score){
   return 1 + Math.min(5,Math.floor(score/12)*.28);
@@ -172,7 +172,7 @@ function resetGame(){
     deathAt:0,
     stage:currentStage(0)
   };
-  lastStage=0;lastStageTone=0;
+  lastStage=0;
   els.scoreValue.textContent="0";els.difficultyValue.textContent="VUELO 1";els.gameStartHint.hidden=false;
   showOnly(els.gameScreen);
   cancelAnimationFrame(raf);
@@ -201,7 +201,7 @@ function update(dt){
   if(!game.started)return;
   game.time+=dt;
   const d=difficultyFor(game.score);
-  game.stage=stageForScore(game.score);
+  updateStage();
   game.worldSpeed=Math.min(285,Math.max(145,window.innerWidth*.23)+(d-1)*20);
   game.gravity=1250+(d-1)*42;
   game.bird.vy+=game.gravity*dt;game.bird.y+=game.bird.vy*dt;
@@ -264,34 +264,43 @@ function loop(now){
   draw();
   raf=requestAnimationFrame(loop);
 }
-async function publishScore(){
-  if(!profile || !game)return;
-  const message=(els.scoreMessage?.value||"").trim().slice(0,90);
-  if(!RANKING_API){els.submitScoreStatus.textContent="El ranking ya está diseñado. Falta conectar el endpoint seguro con Neon para publicar esta puntuación.";return}
+function publishScore(){
+  if(!profile||!game)return;
+  const message=(els.scoreMessage.value||"").trim().slice(0,90);
+  if(!RANKING_API){els.submitScoreStatus.textContent="El ranking está preparado; falta conectar el endpoint seguro con Neon.";return}
   els.submitScoreBtn.disabled=true;els.submitScoreStatus.textContent="Publicando...";
-  try{
-    const response=await fetch(RANKING_API,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({
-      name:profile.name,country:profile.country,birdId:profile.birdId,score:game.score,message
-    })});
-    if(!response.ok)throw new Error("No se pudo publicar la puntuación.");
-    els.submitScoreStatus.textContent="¡Puntuación publicada en el ranking mundial!";
-    playTone(880,.12,"triangle");
-  }catch(error){els.submitScoreStatus.textContent="No se pudo publicar ahora. Tu récord local sigue guardado."}
-  finally{els.submitScoreBtn.disabled=false}
+  fetch(RANKING_API,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({name:profile.name,country:profile.country,birdId:profile.birdId,score:game.score,message})})
+    .then(response=>{if(!response.ok)throw new Error("No se pudo publicar");els.submitScoreStatus.textContent="¡Puntuación publicada!";playTone(880,.12,"triangle")})
+    .catch(()=>{els.submitScoreStatus.textContent="No se pudo publicar ahora. Tu récord local sigue guardado."})
+    .finally(()=>{els.submitScoreBtn.disabled=false});
 }
-async function loadRanking(){
-  showOnly(els.rankingScreen);els.rankingList.innerHTML='<div class="ranking-loading">Cargando pilotos...</div>';els.rankingStatus.textContent="";
-  if(!RANKING_API){els.rankingList.innerHTML='<div class="ranking-empty"><strong>Ranking mundial preparado.</strong><br><span>Falta conectar el endpoint seguro con Neon. Mientras tanto, tus récords locales siguen funcionando.</span></div>';return}
-  try{
-    const response=await fetch(RANKING_API+"?limit="+RANKING_LIMIT,{headers:{"Accept":"application/json"}});
-    if(!response.ok)throw new Error("Ranking no disponible");
-    const data=await response.json();const rows=Array.isArray(data)?data:(data.rows||[]);
-    if(!rows.length){els.rankingList.innerHTML='<div class="ranking-empty">Aún no hay pilotos. ¡Sé el primero!</div>';return}
-    els.rankingList.innerHTML=rows.slice(0,RANKING_LIMIT).map((row,index)=>{
-      const b=getBird(row.birdId);const country=getCountry(row.country);
-      return '<article class="ranking-card"><div class="ranking-position '+(index<3?"top":"")+"'>#"+(index+1)+"</div><div class="ranking-avatar">'+birdMarkup(b,".43")+'</div><div class="ranking-main"><div class="ranking-name">'+escapeHtml(row.name||"Piloto")+'</div><div class="ranking-country">'+country.flag+" "+escapeHtml(country.name)+" · "+escapeHtml(b.name)+'</div><div class="ranking-message">“'+escapeHtml(row.message||"Sin mensaje")+'”</div></div><div class="ranking-score"><strong>'+Number(row.score||0)+'</strong><span>PUNTOS</span></div></article>';
-    }).join("");
-  }catch(_){els.rankingList.innerHTML='<div class="ranking-empty">No pudimos cargar el ranking en este momento.</div>';els.rankingStatus.textContent="Inténtalo de nuevo en unos segundos."}
+function loadRanking(){
+  showOnly(els.rankingScreen);
+  els.rankingList.innerHTML='<div class="ranking-loading">Cargando pilotos...</div>';
+  if(!RANKING_API){els.rankingList.innerHTML='<div class="ranking-empty"><strong>Ranking mundial preparado.</strong><br><span>Falta conectar el endpoint seguro con Neon.</span></div>';return}
+  fetch(RANKING_API+"?limit="+RANKING_LIMIT,{headers:{"Accept":"application/json"}})
+    .then(response=>{if(!response.ok)throw new Error("Ranking no disponible");return response.json()})
+    .then(data=>{
+      const rows=Array.isArray(data)?data:(data.rows||[]);
+      if(!rows.length){els.rankingList.innerHTML='<div class="ranking-empty">Aún no hay pilotos. ¡Sé el primero!</div>';return}
+      els.rankingList.innerHTML="";
+      rows.slice(0,RANKING_LIMIT).forEach((row,index)=>{
+        const b=getBird(row.birdId),country=getCountry(row.country);
+        const card=document.createElement("article");card.className="ranking-card";
+        const pos=document.createElement("div");pos.className="ranking-position "+(index<3?"top":"");pos.textContent="#"+(index+1);
+        const avatar=document.createElement("div");avatar.className="ranking-avatar";avatar.innerHTML=birdMarkup(b,".43");
+        const main=document.createElement("div");main.className="ranking-main";
+        const name=document.createElement("div");name.className="ranking-name";name.textContent=row.name||"Piloto";
+        const countryEl=document.createElement("div");countryEl.className="ranking-country";countryEl.textContent=country.flag+" "+country.name+" · "+b.name;
+        const message=document.createElement("div");message.className="ranking-message";message.textContent="“"+(row.message||"Sin mensaje")+"”";
+        main.append(name,countryEl,message);
+        const score=document.createElement("div");score.className="ranking-score";
+        const scoreValue=document.createElement("strong");scoreValue.textContent=String(Number(row.score||0));
+        const scoreLabel=document.createElement("span");scoreLabel.textContent="PUNTOS";score.append(scoreValue,scoreLabel);
+        card.append(pos,avatar,main,score);els.rankingList.appendChild(card);
+      });
+    })
+    .catch(()=>{els.rankingList.innerHTML='<div class="ranking-empty">No pudimos cargar el ranking en este momento.</div>';});
 }
 function endGame(){
   if(!game?.running)return;
@@ -302,8 +311,7 @@ function endGame(){
   els.resultTitle.textContent=game.score>=80?"Vuelo legendario.":game.score>=40?"¡Muy buen vuelo!":game.score>=15?"Vas tomando altura.":"El cielo todavía tiene revancha.";
   els.resultEyebrow.textContent=isNew?"NUEVO RÉCORD":"VUELO TERMINADO";
   els.resultBird.innerHTML=birdMarkup(game.bird,".9");
-  els.scoreMessage.value="";
-  els.submitScoreStatus.textContent="";
+  els.scoreMessage.value="";els.submitScoreStatus.textContent="";
   showOnly(els.gameOverScreen);playTone(isNew?880:180,.16,isNew?"triangle":"sawtooth");
 }
 function startWithProfile(){
@@ -327,8 +335,13 @@ function bootHome(){
   els.homeBirdArt.innerHTML=birdMarkup(getBird(selectedBirdId),".95");
   setTimeout(()=>els.loadingScreen.classList.add("is-gone"),500);
 }
+els.rankingBtn.addEventListener("click",loadRanking);
+els.rankingFromResultBtn.addEventListener("click",loadRanking);
+els.rankingBackBtn.addEventListener("click",()=>showOnly(els.homeScreen));
+els.rankingRefreshBtn.addEventListener("click",loadRanking);
+els.submitScoreBtn.addEventListener("click",publishScore);
 els.birdGrid.addEventListener("click",e=>{const btn=e.target.closest("[data-bird]");if(!btn)return;selectedBirdId=btn.dataset.bird;renderBirds();playTone(350,.04)});
-els.rankingBtn.addEventListener("click",loadRanking);\nels.rankingFromResultBtn.addEventListener("click",loadRanking);\nels.rankingBackBtn.addEventListener("click",()=>showOnly(els.homeScreen));\nels.rankingRefreshBtn.addEventListener("click",loadRanking);\nels.submitScoreBtn.addEventListener("click",publishScore);\nels.startBtn.addEventListener("click",()=>{playTone(440,.07);if(profile){prepareFactThenGame()}else showOnly(els.profileScreen)});
+els.startBtn.addEventListener("click",()=>{playTone(440,.07);if(profile){prepareFactThenGame()}else showOnly(els.profileScreen)});
 els.profileForm.addEventListener("submit",submitProfile);
 els.factContinueBtn.addEventListener("click",()=>{playTone(560,.05);startWithProfile()});
 els.pauseBtn.addEventListener("click",()=>{if(!game?.running)return;game.paused=true;cancelAnimationFrame(raf);els.pauseScore.textContent=game.score+" puntos";showOnly(els.pauseScreen);playTone(300,.05)});
