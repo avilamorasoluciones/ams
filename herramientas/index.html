@@ -954,7 +954,7 @@
                     <label class="drop-zone" id="dz-conv">
                         <i class="fa-regular fa-images text-success"></i>
                         <div class="small fw-bold mt-1">Soltar imágenes</div>
-                        <input type="file" id="inp-conv" accept="image/jpeg, image/png, image/webp, image/avif, image/x-icon, .ico" multiple>
+                        <input type="file" id="inp-conv" accept="image/jpeg, image/png, image/webp, image/avif" multiple>
                     </label>
 
                     <div class="workspace-container" id="ws-conv">
@@ -968,7 +968,6 @@
                             <option value="image/jpeg">A JPG</option>
                             <option value="image/png">A PNG</option>
                             <option value="image/avif">A AVIF</option>
-                            <option value="image/x-icon">A ICO</option>
                         </select>
                         <label class="form-label d-flex justify-content-between mb-0">Calidad: <span id="conv-val">85%</span></label>
                         <input type="range" class="form-range" id="conv-quality" min="0.1" max="1" step="0.05" value="0.85" disabled>
