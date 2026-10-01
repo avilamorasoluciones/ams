@@ -21,7 +21,7 @@ const VerdadRetoGame = (() => {
   }
 
   function saveSession(screen = document.querySelector(".im-screen.active")?.id || "vr-scr-lobby") {
-    window.GameSession?.save("verdadreto", { players, poolVerdad, poolReto, currentPlayerIndex, turnsPlayed, maxTurns, screen, actionText: $("vr-txtAction")?.textContent || "", actionBadge: $("vr-catBadge")?.textContent || "" });
+    window.GameSession?.save("verdadreto", { players, poolVerdad, poolReto, currentPlayerIndex, turnsPlayed, maxTurns, screen, actionText: $("vr-txtAction")?.textContent || "", actionBadge: $("vr-catBadge")?.innerHTML || "" });
   }
 
   function changeScreen(id) {
@@ -103,7 +103,7 @@ const VerdadRetoGame = (() => {
       colorClass = "color-danger";
     }
 
-    $("vr-catBadge").textContent = badge;
+    $("vr-catBadge").innerHTML = badge;
     $("vr-txtAction").textContent = text;
     saveSession("vr-scr-action");
     $("vr-txtAction").className = `prompt-main ${colorClass}`;
@@ -151,7 +151,7 @@ const VerdadRetoGame = (() => {
       renderPlayers();
       if (saved.screen === "vr-scr-action") {
         $("vr-txtCurrentPlayer").textContent = players[currentPlayerIndex] || "";
-        $("vr-catBadge").textContent = saved.actionBadge || "";
+        $("vr-catBadge").innerHTML = saved.actionBadge || "";
         $("vr-txtAction").textContent = saved.actionText || "";
       } else {
         $("vr-txtCurrentPlayer").textContent = players[currentPlayerIndex] || "";
