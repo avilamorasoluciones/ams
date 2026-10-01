@@ -4,6 +4,8 @@
 const STORAGE_KEY = "amsFlyProfileV1";
 const STATS_KEY = "amsFlyStatsV1";
 const FACT_INDEX_KEY = "amsFlyFactIndexV1";
+const RANKING_API = ""; // Endpoint HTTPS seguro que leerá/escribirá en Neon. Nunca pongas credenciales de Neon aquí.
+const RANKING_LIMIT = 50;
 
 const countries = [
   {code:"CO",name:"Colombia",flag:"🇨🇴",bird:"Cóndor de los Andes",host:true},
@@ -50,7 +52,7 @@ const els = {};
   "homeBest","homeGames","startBtn","profileForm","playerName","playerCountry","birdGrid","selectedBirdInfo","profileError",
   "factTitle","factText","factSourceHint","factContinueBtn","gameCanvas","scoreValue","difficultyValue","pauseBtn","gameStartHint",
   "pauseScore","resumeBtn","quitBtn","resultBird","resultEyebrow","resultTitle","finalScore","resultBest","resultGames","newRecord",
-  "againBtn","changePilotBtn","soundBtn","homeBirdArt"
+  "againBtn","changePilotBtn","soundBtn","homeBirdArt","rankingBtn","rankingFromResultBtn","rankingBackBtn","rankingRefreshBtn","rankingList","rankingStatus","scoreMessage","submitScoreBtn","submitScoreStatus","rankingScreen"
 ].forEach(id => els[id] = document.getElementById(id));
 
 const ctx = els.gameCanvas.getContext("2d", {alpha:false});
@@ -62,6 +64,15 @@ let soundOn = localStorage.getItem("amsFlySound") !== "0";
 let audioCtx = null;
 let game = null;
 let raf = 0;
+let lastStage = 0;
+let lastStageTone = 0;
+const stages = [
+  {at:0,name:"CIELO ANDINO",top:"#07091a",mid:"#111536",bottom:"#17102b",pipe:"#6d42c9",glow:"#8b5cf6",particle:"#c4b5fd"},
+  {at:25,name:"ATARDECER COLOMBIANO",top:"#211329",mid:"#6b294d",bottom:"#1b1230",pipe:"#e16b8c",glow:"#f472b6",particle:"#facc15"},
+  {at:50,name:"SELVA VIVA",top:"#031b1b",mid:"#075e54",bottom:"#081f26",pipe:"#16a085",glow:"#34d399",particle:"#facc15"},
+  {at:75,name:"CIELO NEÓN",top:"#07102d",mid:"#1e2a78",bottom:"#2a1050",pipe:"#22d3ee",glow:"#22d3ee",particle:"#a78bfa"},
+  {at:100,name:"ÓRBITA AMS",top:"#02030b",mid:"#11133a",bottom:"#250d40",pipe:"#a855f7",glow:"#ec4899",particle:"#fff"}
+];
 
 function safeParse(key, fallback){
   try{return JSON.parse(localStorage.getItem(key) || "") || fallback}catch(_){return fallback}
@@ -125,6 +136,25 @@ function resizeCanvas(){
 }
 function randomBetween(a,b){return a+Math.random()*(b-a)}
 function clamp(v,a,b){return Math.max(a,Math.min(b,v))}
+function currentStage(score){let s=stages[0];for(const candidate of stages)if(score>=candidate.at)s=candidate;return s}
+function escapeHtml(value){return String(value??"").replace(/[&<>"']/g,ch=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[ch]))}
+function stageForScore(score){
+  const stage=currentStage(score);
+  if(stage.at!==lastStage){lastStage=stage.at;showStageBanner(stage);if(stage.at>0){playStageSound(stage);lastStageTone=stage.at}}
+  return stage;
+}
+function showStageBanner(stage){
+  let banner=document.getElementById("stageBanner");
+  if(!banner){banner=document.createElement("div");banner.id="stageBanner";banner.className="stage-banner";els.gameScreen.appendChild(banner)}
+  banner.innerHTML="<strong>"+stage.name+"</strong><span>Has llegado a "+stage.at+" puntos.</span>";
+  banner.classList.remove("show");void banner.offsetWidth;banner.classList.add("show");
+  clearTimeout(banner._timer);banner._timer=setTimeout(()=>banner.classList.remove("show"),1900);
+}
+function playStageSound(stage){
+  if(!soundOn)return;
+  const notes=stage.at>=100?[392,523,659,784]:stage.at>=75?[330,440,554,660]:stage.at>=50?[294,392,494,587]:[262,330,392,523];
+  notes.forEach((n,i)=>setTimeout(()=>playTone(n,.12,"triangle"),i*75));
+}
 function difficultyFor(score){
   return 1 + Math.min(5,Math.floor(score/12)*.28);
 }
@@ -139,8 +169,10 @@ function resetGame(){
     worldSpeed:Math.max(145,Math.min(225,w*.23)),
     gravity:1250,flap:-390,
     gap:Math.max(145,Math.min(205,h*.23)),pipeW:62,
-    deathAt:0
+    deathAt:0,
+    stage:currentStage(0)
   };
+  lastStage=0;lastStageTone=0;
   els.scoreValue.textContent="0";els.difficultyValue.textContent="VUELO 1";els.gameStartHint.hidden=false;
   showOnly(els.gameScreen);
   cancelAnimationFrame(raf);
@@ -169,6 +201,7 @@ function update(dt){
   if(!game.started)return;
   game.time+=dt;
   const d=difficultyFor(game.score);
+  game.stage=stageForScore(game.score);
   game.worldSpeed=Math.min(285,Math.max(145,window.innerWidth*.23)+(d-1)*20);
   game.gravity=1250+(d-1)*42;
   game.bird.vy+=game.gravity*dt;game.bird.y+=game.bird.vy*dt;
@@ -186,17 +219,22 @@ function update(dt){
   }
 }
 function drawBackground(w,h){
-  const g=ctx.createLinearGradient(0,0,0,h);g.addColorStop(0,"#07091a");g.addColorStop(.55,"#111536");g.addColorStop(1,"#17102b");ctx.fillStyle=g;ctx.fillRect(0,0,w,h);
+  const stage=game.stage||currentStage(game.score);
+  const g=ctx.createLinearGradient(0,0,0,h);g.addColorStop(0,stage.top);g.addColorStop(.55,stage.mid);g.addColorStop(1,stage.bottom);ctx.fillStyle=g;ctx.fillRect(0,0,w,h);
   const glow=ctx.createRadialGradient(w*.5,h*.35,10,w*.5,h*.35,Math.max(w,h)*.7);glow.addColorStop(0,"rgba(139,92,246,.14)");glow.addColorStop(1,"rgba(139,92,246,0)");ctx.fillStyle=glow;ctx.fillRect(0,0,w,h);
+  ctx.globalAlpha=.7;
+  for(let i=0;i<18;i++){const x=((i*97+game.time*18)%w),y=(i*71+(game.time*(10+i%4)))%h;ctx.fillStyle=stage.particle;ctx.fillRect(x,y,1.5,1.5)}
+  ctx.globalAlpha=1;
   ctx.strokeStyle="rgba(255,255,255,.035)";ctx.lineWidth=1;
   const offset=(game?.time*game.worldSpeed*.13)%48;
   for(let x=-48+offset;x<w+48;x+=48){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,h);ctx.stroke()}
 }
 function drawPipe(p,h){
-  const grad=ctx.createLinearGradient(p.x,0,p.x+game.pipeW,0);grad.addColorStop(0,"#1f1741");grad.addColorStop(.5,"#6d42c9");grad.addColorStop(1,"#261943");
-  ctx.fillStyle=grad;ctx.shadowColor="rgba(139,92,246,.25)";ctx.shadowBlur=16;
+  const stage=game.stage||currentStage(game.score);
+  const grad=ctx.createLinearGradient(p.x,0,p.x+game.pipeW,0);grad.addColorStop(0,"#16132c");grad.addColorStop(.5,stage.pipe);grad.addColorStop(1,"#201636");
+  ctx.fillStyle=grad;ctx.shadowColor=stage.glow;ctx.shadowBlur=16;
   ctx.fillRect(p.x,0,game.pipeW,p.top);ctx.fillRect(p.x,p.bottom,game.pipeW,h-p.bottom);
-  ctx.shadowBlur=0;ctx.fillStyle="#a78bfa";
+  ctx.shadowBlur=0;ctx.fillStyle=stage.glow;
   ctx.fillRect(p.x-5,p.top-12,game.pipeW+10,12);ctx.fillRect(p.x-5,p.bottom,game.pipeW+10,12);
   ctx.fillStyle="rgba(255,255,255,.11)";ctx.fillRect(p.x+10,0,4,p.top);ctx.fillRect(p.x+10,p.bottom,4,h-p.bottom);
 }
@@ -226,7 +264,35 @@ function loop(now){
   draw();
   raf=requestAnimationFrame(loop);
 }
-function endGame(){
+async function publishScore(){
+  if(!profile || !game)return;
+  const message=(els.scoreMessage?.value||"").trim().slice(0,90);
+  if(!RANKING_API){els.submitScoreStatus.textContent="El ranking ya está diseñado. Falta conectar el endpoint seguro con Neon para publicar esta puntuación.";return}
+  els.submitScoreBtn.disabled=true;els.submitScoreStatus.textContent="Publicando...";
+  try{
+    const response=await fetch(RANKING_API,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({
+      name:profile.name,country:profile.country,birdId:profile.birdId,score:game.score,message
+    })});
+    if(!response.ok)throw new Error("No se pudo publicar la puntuación.");
+    els.submitScoreStatus.textContent="¡Puntuación publicada en el ranking mundial!";
+    playTone(880,.12,"triangle");
+  }catch(error){els.submitScoreStatus.textContent="No se pudo publicar ahora. Tu récord local sigue guardado."}
+  finally{els.submitScoreBtn.disabled=false}
+}
+async function loadRanking(){
+  showOnly(els.rankingScreen);els.rankingList.innerHTML='<div class="ranking-loading">Cargando pilotos...</div>';els.rankingStatus.textContent="";
+  if(!RANKING_API){els.rankingList.innerHTML='<div class="ranking-empty"><strong>Ranking mundial preparado.</strong><br><span>Falta conectar el endpoint seguro con Neon. Mientras tanto, tus récords locales siguen funcionando.</span></div>';return}
+  try{
+    const response=await fetch(RANKING_API+"?limit="+RANKING_LIMIT,{headers:{"Accept":"application/json"}});
+    if(!response.ok)throw new Error("Ranking no disponible");
+    const data=await response.json();const rows=Array.isArray(data)?data:(data.rows||[]);
+    if(!rows.length){els.rankingList.innerHTML='<div class="ranking-empty">Aún no hay pilotos. ¡Sé el primero!</div>';return}
+    els.rankingList.innerHTML=rows.slice(0,RANKING_LIMIT).map((row,index)=>{
+      const b=getBird(row.birdId);const country=getCountry(row.country);
+      return '<article class="ranking-card"><div class="ranking-position '+(index<3?"top":"")+"'>#"+(index+1)+"</div><div class="ranking-avatar">'+birdMarkup(b,".43")+'</div><div class="ranking-main"><div class="ranking-name">'+escapeHtml(row.name||"Piloto")+'</div><div class="ranking-country">'+country.flag+" "+escapeHtml(country.name)+" · "+escapeHtml(b.name)+'</div><div class="ranking-message">“'+escapeHtml(row.message||"Sin mensaje")+'”</div></div><div class="ranking-score"><strong>'+Number(row.score||0)+'</strong><span>PUNTOS</span></div></article>';
+    }).join("");
+  }catch(_){els.rankingList.innerHTML='<div class="ranking-empty">No pudimos cargar el ranking en este momento.</div>';els.rankingStatus.textContent="Inténtalo de nuevo en unos segundos."}
+}
   if(!game?.running)return;
   game.running=false;cancelAnimationFrame(raf);
   stats.games++;const previous=stats.best;stats.best=Math.max(stats.best,game.score);saveStats();hydrateStats();
@@ -235,6 +301,8 @@ function endGame(){
   els.resultTitle.textContent=game.score>=80?"Vuelo legendario.":game.score>=40?"¡Muy buen vuelo!":game.score>=15?"Vas tomando altura.":"El cielo todavía tiene revancha.";
   els.resultEyebrow.textContent=isNew?"NUEVO RÉCORD":"VUELO TERMINADO";
   els.resultBird.innerHTML=birdMarkup(game.bird,".9");
+  els.scoreMessage.value="";
+  els.submitScoreStatus.textContent="";
   showOnly(els.gameOverScreen);playTone(isNew?880:180,.16,isNew?"triangle":"sawtooth");
 }
 function startWithProfile(){
@@ -259,7 +327,7 @@ function bootHome(){
   setTimeout(()=>els.loadingScreen.classList.add("is-gone"),500);
 }
 els.birdGrid.addEventListener("click",e=>{const btn=e.target.closest("[data-bird]");if(!btn)return;selectedBirdId=btn.dataset.bird;renderBirds();playTone(350,.04)});
-els.startBtn.addEventListener("click",()=>{playTone(440,.07);if(profile){prepareFactThenGame()}else showOnly(els.profileScreen)});
+els.rankingBtn.addEventListener("click",loadRanking);\nels.rankingFromResultBtn.addEventListener("click",loadRanking);\nels.rankingBackBtn.addEventListener("click",()=>showOnly(els.homeScreen));\nels.rankingRefreshBtn.addEventListener("click",loadRanking);\nels.submitScoreBtn.addEventListener("click",publishScore);\nels.startBtn.addEventListener("click",()=>{playTone(440,.07);if(profile){prepareFactThenGame()}else showOnly(els.profileScreen)});
 els.profileForm.addEventListener("submit",submitProfile);
 els.factContinueBtn.addEventListener("click",()=>{playTone(560,.05);startWithProfile()});
 els.pauseBtn.addEventListener("click",()=>{if(!game?.running)return;game.paused=true;cancelAnimationFrame(raf);els.pauseScore.textContent=game.score+" puntos";showOnly(els.pauseScreen);playTone(300,.05)});
