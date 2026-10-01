@@ -2097,7 +2097,7 @@
                 const file = wsRemove.getFile(), rng = document.getElementById('remove-ranges').value;
                 const toRemove = parsePdfRanges(rng).map(p=>p-1);
                 if (!toRemove.length) { alert('Indica al menos una página válida. Ejemplo: 2, 4-6'); return; }
-                const src = await PDFDocument.load(await file.arrayBuffer()); const doc = await PDFDocument.create();
+                const src = await amsLoadEditablePdf(file); const doc = await PDFDocument.create();
                 const toKeep = Array.from({length: src.getPageCount()}, (_, i) => i).filter(i => !toRemove.includes(i));
                 if (!toKeep.length) { alert('Debes conservar al menos una página del PDF.'); return; }
                 const pages = await doc.copyPages(src, toKeep); pages.forEach(p => doc.addPage(p));
