@@ -293,6 +293,7 @@ async function loadRanking(){
     }).join("");
   }catch(_){els.rankingList.innerHTML='<div class="ranking-empty">No pudimos cargar el ranking en este momento.</div>';els.rankingStatus.textContent="Inténtalo de nuevo en unos segundos."}
 }
+function endGame(){
   if(!game?.running)return;
   game.running=false;cancelAnimationFrame(raf);
   stats.games++;const previous=stats.best;stats.best=Math.max(stats.best,game.score);saveStats();hydrateStats();
