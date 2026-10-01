@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192 192" role="img" aria-labelledby="title desc">
+<title id="title">Cóndor de los Andes de Colombia</title>
+<desc id="desc">Ilustración estilizada de un cóndor de los Andes con detalles inspirados en Colombia.</desc>
+<defs>
+  <linearGradient id="bg" x1="18" y1="12" x2="174" y2="180" gradientUnits="userSpaceOnUse">
+    <stop stop-color="#17133a"/><stop offset=".55" stop-color="#0b0920"/><stop offset="1" stop-color="#060713"/>
+  </linearGradient>
+  <linearGradient id="wing" x1="28" y1="70" x2="164" y2="128" gradientUnits="userSpaceOnUse">
+    <stop stop-color="#111827"/><stop offset=".55" stop-color="#475569"/><stop offset="1" stop-color="#94a3b8"/>
+  </linearGradient>
+  <linearGradient id="chest" x1="72" y1="92" x2="124" y2="142" gradientUnits="userSpaceOnUse">
+    <stop stop-color="#f8fafc"/><stop offset=".55" stop-color="#e2e8f0"/><stop offset="1" stop-color="#94a3b8"/>
+  </linearGradient>
+  <linearGradient id="flag" x1="82" y1="112" x2="113" y2="140" gradientUnits="userSpaceOnUse">
+    <stop stop-color="#facc15"/><stop offset=".48" stop-color="#facc15"/><stop offset=".49" stop-color="#2563eb"/><stop offset="1" stop-color="#2563eb"/>
+  </linearGradient>
+  <filter id="glow" x="-40%" y="-40%" width="180%" height="180%">
+    <feGaussianBlur stdDeviation="5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+  </filter>
+</defs>
+<rect width="192" height="192" rx="48" fill="url(#bg)"/>
+<circle cx="96" cy="94" r="67" fill="#8b5cf6" opacity=".08"/>
+<path d="M18 105c27-38 57-55 91-54 28 1 50 13 66 34-29-9-54-7-75 7-22 15-45 20-82 13z" fill="#8b5cf6" opacity=".13" filter="url(#glow)"/>
+<!-- ala izquierda -->
+<path d="M88 104C66 78 42 68 18 73c18 10 30 22 37 37-17-5-31-2-43 7 25 17 52 17 76 2z" fill="url(#wing)" stroke="#cbd5e1" stroke-opacity=".18"/>
+<path d="M76 105c-19-10-37-10-52-4 14 5 25 13 33 24 7-6 14-12 19-20z" fill="#64748b" opacity=".75"/>
+<!-- ala derecha -->
+<path d="M77 98c15-30 39-46 68-47 18 0 33 5 47 17-24 1-42 9-56 24 17-6 34-4 50 6-20 21-48 30-78 21z" fill="url(#wing)" stroke="#cbd5e1" stroke-opacity=".2"/>
+<path d="M105 75c18-12 38-16 58-12-19 5-33 12-45 25z" fill="#94a3b8" opacity=".72"/>
+<!-- cuerpo -->
+<path d="M65 103c10-18 28-27 47-24 16 2 27 11 34 25-8 19-24 30-43 31-19 1-32-9-38-32z" fill="url(#chest)"/>
+<path d="M73 107c11-11 25-16 39-15 10 1 19 5 26 12-11 9-23 14-36 15-11 0-21-4-29-12z" fill="url(#flag)" opacity=".9"/>
+<!-- cabeza y cuello -->
+<circle cx="119" cy="85" r="17" fill="#f8fafc"/>
+<path d="M108 72c-8 7-12 16-10 26 6-7 13-11 22-12z" fill="#e2e8f0"/>
+<path d="M132 85l25 7-25 9z" fill="#facc15"/>
+<circle cx="124" cy="81" r="3.8" fill="#111827"/>
+<circle cx="125.2" cy="79.8" r="1.2" fill="#fff"/>
+<!-- cuello característico -->
+<path d="M106 96c6 5 12 7 19 7 6 0 12-2 17-6-3 15-12 23-25 24-10 0-17-8-21-20z" fill="#111827"/>
+<!-- cola -->
+<path d="M70 111l-32 25 38-13zM78 118l-20 29 31-25zM87 122l-9 30 23-28z" fill="#475569"/>
+</svg>
