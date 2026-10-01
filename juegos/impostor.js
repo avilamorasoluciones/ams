@@ -13,6 +13,7 @@ const ImpostorGame = (() => {
 
   let timerId = null;
   let timerRunning = false;
+  let timerEndsAt = 0;
   let initialized = false;
 
   let lastVoteIndex = null;
@@ -443,24 +444,34 @@ const ImpostorGame = (() => {
 
     updateTimer();
     changeScreen("i-scr-game");
+    timerEndsAt = Date.now() + (Math.max(0, secondsLeft) * 1000);
     startTimer();
   }
 
   function startTimer() {
     clearInterval(timerId);
+
+    if (!timerEndsAt) {
+      timerEndsAt = Date.now() + (Math.max(0, secondsLeft) * 1000);
+    }
+
     timerRunning = true;
 
     timerId = setInterval(() => {
-      secondsLeft--;
+      const remaining = Math.max(0, timerEndsAt - Date.now());
+      secondsLeft = Math.ceil(remaining / 1000);
       updateTimer();
 
       if (secondsLeft > 0 && secondsLeft <= 10) {
         safeSound(1000, 0.03, "sine");
       }
 
-      if (secondsLeft <= 0) {
+      if (remaining <= 0) {
         clearInterval(timerId);
+        timerId = null;
         timerRunning = false;
+        timerEndsAt = 0;
+        secondsLeft = 0;
 
         const timer = $("i-uiTimer");
 
@@ -474,22 +485,33 @@ const ImpostorGame = (() => {
         setTimeout(() => {
           showVoteScreen();
         }, 700);
+      } else {
+        saveSession("i-scr-game");
       }
-    }, 1000);
+    }, 250);
   }
 
   function toggleTimer() {
     const btn = $("i-btnPause");
 
     if (timerRunning) {
+      secondsLeft = Math.max(0, Math.ceil((timerEndsAt - Date.now()) / 1000));
       clearInterval(timerId);
+      timerId = null;
       timerRunning = false;
+      timerEndsAt = 0;
+      updateTimer();
 
       if (btn) {
         btn.innerHTML = `${window.uiIcon("play")}<span>Reanudar</span>`;
       }
 
+      saveSession("i-scr-game");
       safeSound(380, 0.08, "triangle");
+      return;
+    }
+
+    if (secondsLeft <= 0) {
       return;
     }
 
@@ -498,6 +520,7 @@ const ImpostorGame = (() => {
     }
 
     safeSound(620, 0.08, "triangle");
+    timerEndsAt = Date.now() + (Math.max(0, secondsLeft) * 1000);
     startTimer();
   }
 
@@ -736,9 +759,12 @@ const ImpostorGame = (() => {
         updateTimer();
         if (saved.timerRunning && secondsLeft > 0) {
           startTimer();
+        } else if (saved.timerRunning && secondsLeft <= 0) {
+          showVoteScreen();
         } else {
           clearInterval(timerId);
           timerRunning = false;
+          timerEndsAt = 0;
           updateTimer();
         }
       } else {
