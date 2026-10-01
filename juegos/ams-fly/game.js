@@ -161,6 +161,7 @@ function openEventAdmin(){
     panel.querySelector("#adminLoadRemote").onclick=loadRemoteEventConfig;
     panel.querySelector("#adminExport").onclick=exportLocalLeads;
   }
+  showOnly(panel);panel.hidden=false;
   const cfg=getEventConfig(), token=sessionStorage.getItem(EVENT_TOKEN_STORAGE)||"";
   panel.querySelector("#adminToken").value=token;
   panel.querySelector("#cfgActive").checked=!!cfg.active;
