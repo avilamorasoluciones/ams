@@ -19,9 +19,36 @@ Juego arcade independiente de Avila Mora Soluciones.
 - Índice del dato colombiano mostrado entre partidas.
 - Preferencia de sonido.
 
-## Ranking online
+## Eventos y gestión
 
-La versión actual **no envía datos a Internet**. El punto de integración para Neon queda deliberadamente separado para una segunda etapa. Para el ranking se recomienda enviar únicamente nombre, país, personaje, puntaje y fecha, con validaciones y límites anti-spam.
+AMS Fly incluye una capa de gestión de eventos preparada para dos modos:
+
+1. **Local:** permite probar la configuración del evento y los participantes en el propio dispositivo.
+2. **Servidor:** si se configura `EVENT_API` en `game.js`, la aplicación sincroniza el evento y los participantes privados con la API incluida en `neon/`.
+
+El panel de gestión se abre desde el icono ⚙ del encabezado. La administración real utiliza un token de servidor; no se guarda ninguna contraseña administrativa dentro del código público.
+
+### Datos del evento
+
+- Evento activo/inactivo.
+- Badge.
+- Título y descripción.
+- CTA.
+- Premio.
+- Condiciones.
+- Plantilla de WhatsApp.
+- Participantes privados y puntajes.
+- Exportación local CSV.
+
+### Neon + API
+
+La arquitectura es:
+
+`AMS Fly → API HTTPS → Neon PostgreSQL`
+
+La carpeta `neon/` contiene el esquema y un servidor Node/Express listo para desplegar en un servicio como Coolify. Las credenciales de Neon permanecen exclusivamente en variables de entorno del servidor.
+
+La integración todavía necesita que se despliegue la API y se configure su URL pública en `EVENT_API`; no se debe poner `DATABASE_URL` en el frontend.
 
 ## Controles
 
