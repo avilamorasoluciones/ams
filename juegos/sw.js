@@ -1,4 +1,4 @@
-const CACHE_NAME = 'ams-games-20261001-46';
+const CACHE_NAME = 'ams-games-20261001-47';
 const CACHE_PREFIX = "ams-games-";
 const APP_SHELL = [
   "./",
@@ -10,10 +10,10 @@ const APP_SHELL = [
   "./tabu.html",
   "./verdadreto.html",
   "./yonunca.html",
-  "./styles.css?v=20261001-46",
-  "./scripts.js?v=20261001-46",
-  "./datos.js?v=20261001-46",
-  "./impostor.js?v=20261001-46",
+  "./styles.css?v=20261001-47",
+  "./scripts.js?v=20261001-47",
+  "./datos.js?v=20261001-47",
+  "./impostor.js?v=20261001-47",
   "./bomba.js?v=20260926-32",
   "./nosconocemos.js?v=20260926-32",
   "./rompehielo.js?v=20260926-32",
@@ -24,6 +24,7 @@ const APP_SHELL = [
   "./pwa-icon-192.svg?v=22",
   "./pwa-icon-512.svg?v=22",
   "./icon-games.svg",
+  "./ams-fly/condor-colombia.svg",
   "./game-impostor.svg",
   "./game-bomba.svg",
   "./game-nosconocemos.svg",
