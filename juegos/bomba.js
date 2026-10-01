@@ -4,9 +4,11 @@ const BombaGame = (() => {
   let tickInterval = null;
   let roundEndsAt = 0;
   let timeRemaining = 0;
+  let roundTotalTime = 0;
+  let halfWarningPlayed = false;
 
   function saveSession(screen = document.querySelector(".im-screen.active")?.id || "b-scr-lobby") {
-    window.GameSession?.save("bomba", { pool, word: $("b-txtWord")?.textContent || "", screen, timeRemaining, roundEndsAt });
+    window.GameSession?.save("bomba", { pool, word: $("b-txtWord")?.textContent || "", screen, timeRemaining, roundEndsAt, roundTotalTime, halfWarningPlayed });
   }
 
   function $(id) { return document.getElementById(id); }
@@ -29,6 +31,23 @@ const BombaGame = (() => {
     nextRound();
   }
 
+  function playHalfwayWarning() {
+    if (halfWarningPlayed) return;
+    halfWarningPlayed = true;
+
+    // Sirena de alerta: dos tonos alternados que suben y bajan rápidamente.
+    const sirenSteps = [
+      [700, 0.16], [1050, 0.16], [700, 0.16], [1050, 0.16],
+      [700, 0.16], [1050, 0.16], [700, 0.16], [1050, 0.16]
+    ];
+
+    sirenSteps.forEach(([frequency, duration], index) => {
+      setTimeout(() => window.emitSound(frequency, duration, "sawtooth", 0.65), index * 180);
+    });
+
+    saveSession("b-scr-game");
+  }
+
   function startTicks(totalTime) {
     const bombEmoji = $("b-bombEmoji");
     
@@ -36,6 +55,10 @@ const BombaGame = (() => {
       const remaining = Math.max(0, roundEndsAt - Date.now());
       timeRemaining = remaining;
       const elapsed = Math.max(0, totalTime - remaining);
+
+      if (!halfWarningPlayed && roundTotalTime > 0 && remaining <= roundTotalTime / 2) {
+        playHalfwayWarning();
+      }
 
       if (remaining <= 0) {
         clearInterval(tickInterval);
@@ -68,6 +91,8 @@ const BombaGame = (() => {
     const possibleTimes = [30, 60, 120, 180];
     const timeToBoom = possibleTimes[Math.floor(Math.random() * possibleTimes.length)] * 1000;
     timeRemaining = timeToBoom;
+    roundTotalTime = timeToBoom;
+    halfWarningPlayed = false;
     roundEndsAt = Date.now() + timeToBoom;
     
     clearTimeout(bombTimer);
@@ -112,6 +137,8 @@ const BombaGame = (() => {
       changeScreen("b-scr-boom");
       return true;
     }
+    roundTotalTime = Number(saved.roundTotalTime || 0);
+    halfWarningPlayed = Boolean(saved.halfWarningPlayed);
     const savedEndsAt = Number(saved.roundEndsAt || 0);
     const savedAt = Number(saved.savedAt || Date.now());
     const fallbackRemaining = Math.max(0, Number(saved.timeRemaining || 0) - Math.max(0, Date.now() - savedAt));
@@ -124,7 +151,7 @@ const BombaGame = (() => {
     if (remaining > 0) {
       clearTimeout(bombTimer);
       clearInterval(tickInterval);
-      startTicks(Math.max(remaining, 1000));
+      startTicks(roundTotalTime > 0 ? roundTotalTime : Math.max(remaining, 1000));
       bombTimer = setTimeout(explode, remaining);
     } else {
       explode();
