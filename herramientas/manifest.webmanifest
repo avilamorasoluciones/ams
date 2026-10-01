@@ -22,13 +22,13 @@
   "prefer_related_applications": false,
   "icons": [
     {
-      "src": "./icon-192.svg?v=18",
+      "src": "./icon-192.svg?v=19",
       "sizes": "192x192",
       "type": "image/svg+xml",
       "purpose": "any maskable"
     },
     {
-      "src": "./icon-512.svg?v=18",
+      "src": "./icon-512.svg?v=19",
       "sizes": "512x512",
       "type": "image/svg+xml",
       "purpose": "any maskable"
@@ -41,7 +41,7 @@
       "url": "./#tool-merge",
       "icons": [
         {
-          "src": "./icon-192.svg?v=18",
+          "src": "./icon-192.svg?v=19",
           "sizes": "any",
           "type": "image/svg+xml"
         }
@@ -53,7 +53,7 @@
       "url": "./#tool-compress",
       "icons": [
         {
-          "src": "./icon-192.svg?v=18",
+          "src": "./icon-192.svg?v=19",
           "sizes": "any",
           "type": "image/svg+xml"
         }
