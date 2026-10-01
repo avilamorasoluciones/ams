@@ -124,12 +124,17 @@ function applyEventConfig(){
   let banner=document.getElementById("amsFlyEventBanner");
   if(!banner){
     banner=document.createElement("section");banner.id="amsFlyEventBanner";banner.className="event-banner-card";
-    const home=els.homeScreen;const stats=home.querySelector(".home-stats");
-    home.insertBefore(banner,stats||home.querySelector("#startBtn"));
+    const home=els.homeScreen;const statsEl=home.querySelector(".home-stats");
+    home.insertBefore(banner,statsEl||home.querySelector("#startBtn"));
   }
   banner.hidden=!cfg.active;
-  banner.innerHTML='<span class="event-badge">'+cfg.badge+'</span><h3>'+cfg.title+'</h3><p>'+cfg.desc+'</p><button id="amsFlyEventOpen" class="event-cta-button" type="button">'+cfg.cta+' <span>→</span></button>';
-  banner.querySelector("#amsFlyEventOpen").onclick=()=>openEventScreen();
+  banner.replaceChildren();
+  const badge=document.createElement("span");badge.className="event-badge";badge.textContent=cfg.badge;
+  const title=document.createElement("h3");title.textContent=cfg.title;
+  const desc=document.createElement("p");desc.textContent=cfg.desc;
+  const button=document.createElement("button");button.id="amsFlyEventOpen";button.className="event-cta-button";button.type="button";button.textContent=cfg.cta+" →";
+  button.onclick=openEventScreen;
+  banner.append(badge,title,desc,button);
 }
 function openEventScreen(){
   let screen=document.getElementById("amsFlyEventScreen");
