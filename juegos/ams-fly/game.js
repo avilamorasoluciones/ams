@@ -4,9 +4,9 @@
 const STORAGE_KEY = "amsFlyProfileV1";
 const STATS_KEY = "amsFlyStatsV1";
 const FACT_INDEX_KEY = "amsFlyFactIndexV1";
+const EVENT_API = "";
 const RANKING_API = EVENT_API ? EVENT_API+"/ranking" : "";
 const RANKING_LIMIT = 50;
-const EVENT_API = "";
 const EVENT_TOKEN_STORAGE = "amsFlyAdminTokenV1";
 const EVENT_CONFIG_KEY = "amsFlyEventConfigV1";
 const LEADS_KEY = "amsFlyLeadsV1";
