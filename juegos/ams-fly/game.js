@@ -186,10 +186,31 @@ async function saveAdminConfig(){
   }else status.textContent="✓ Configuración local guardada. Configura EVENT_API para sincronizarla.";
   applyEventConfig();
 }
-function renderAdminParticipants(){
+async function renderAdminParticipants(){
   const p=document.getElementById("amsFlyAdminPanel");if(!p)return;
-  const rows=getLocalLeads().sort((a,b)=>Number(b.score||0)-Number(a.score||0));
-  p.querySelector("#adminParticipants").innerHTML=rows.length?rows.map((x,i)=>'<div class="admin-participant"><strong>#'+(i+1)+' '+String(x.name||"Piloto").replace(/[<>&]/g,"")+'</strong><span>'+getCountry(x.country).name+' · '+getBird(x.birdId).name+' · '+Number(x.score||0)+' pts</span><span>'+((x.phone||"Sin WhatsApp"))+'</span>'+(x.phone?'<a href="'+eventPhoneUrl(x.phone,x.name,x.score)+'" target="_blank" rel="noopener">WhatsApp ↗</a>':"")+'</div>').join(""):'<p class="admin-note">Todavía no hay participantes guardados en este dispositivo.</p>';
+  let rows=getLocalLeads().sort((a,b)=>Number(b.score||0)-Number(a.score||0));
+  const token=sessionStorage.getItem(EVENT_TOKEN_STORAGE)||"";
+  if(EVENT_API&&token){
+    try{
+      const res=await fetch(EVENT_API+"/participants",{headers:{Authorization:"Bearer "+token,Accept:"application/json"}});
+      if(res.ok)rows=await res.json();
+    }catch(_){}
+  }
+  p.querySelector("#adminParticipants").innerHTML="";
+  if(!rows.length){
+    const empty=document.createElement("p");empty.className="admin-note";empty.textContent="Todavía no hay participantes registrados.";p.querySelector("#adminParticipants").appendChild(empty);return;
+  }
+  rows.forEach((x,i)=>{
+    const item=document.createElement("div");item.className="admin-participant";
+    const name=document.createElement("strong");name.textContent="#"+(i+1)+" "+(x.name||"Piloto");
+    const info=document.createElement("span");info.textContent=getCountry(x.country).name+" · "+getBird(x.birdId).name+" · "+Number(x.score||0)+" pts";
+    const phone=document.createElement("span");phone.textContent=x.phone||"Sin WhatsApp";
+    item.append(name,info,phone);
+    if(x.phone){
+      const link=document.createElement("a");link.href=eventPhoneUrl(x.phone,x.name,x.score);link.target="_blank";link.rel="noopener noreferrer";link.textContent="WhatsApp ↗";item.appendChild(link);
+    }
+    p.querySelector("#adminParticipants").appendChild(item);
+  });
 }
 async function loadRemoteEventConfig(){
   const p=document.getElementById("amsFlyAdminPanel"),status=p.querySelector("#adminStatus");
