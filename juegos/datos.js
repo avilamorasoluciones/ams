@@ -368,8 +368,8 @@ const DB_IMPOSTOR = {
     ["🛰️","Sonda espacial"],["🛰️","Estación espacial"],["🌍","Planeta"],["🌙","Luna"],["🪐","Saturno"],["⭐","Estrella"],["☄️","Cometa"],["👨‍🚀","Cosmonauta"],
     ["✏️","Lápiz"],["✒️","Pluma"],["🖊️","Bolígrafo"],["🖍️","Crayón"],["🖌️","Pincel"],["📝","Nota"],["📁","Carpeta"],["📅","Calendario"],["📎","Clip"],["📌","Chincheta"],["✂️","Tijeras"],["📓","Cuaderno"]
   ],
-  "Tecnología y Videojuegos": [
-    ["🎮","PlayStation"],["❎","Xbox"],["🕹️","Nintendo"],["🏆","Platino"],["🗡️","Zelda"],["🧟","Resident Evil"],["💻","VS Code"],["📱","Android"],["🐕","Husky"],["🐶","Chihuahua"],
+  "Tecnología": [
+    ["💻","VS Code"],["📱","Android"],["🐕","Husky"],["🐶","Chihuahua"],
     ["🍜","Ramen"],["🥞","Crepes"],["🖥️","Frontend"],["🐛","Bug"],["🖱️","Scroll"],["🔌","Servidor"],["🌐","Hosting"],["⌨️","Teclado Mecánico"],["🔋","Pila"],["📁","Archivo"]
   ]
 };
