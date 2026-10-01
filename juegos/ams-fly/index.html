@@ -7,14 +7,14 @@
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="description" content="AMS Fly · El vuelo arcade de Avila Mora Soluciones. Elige tu ave, vuela, supera obstáculos y rompe tu récord.">
+  <meta name="description" content="AMS Fly · El vuelo arcade de Avila Mora Soluciones. Elige tu ave, vuela, supera obstáculos, compite en el ranking y gana premios en el Evento 2026.">
   <meta property="og:title" content="AMS Fly · Avila Mora Soluciones">
-  <meta property="og:description" content="Un pequeño vuelo arcade de Avila Mora Soluciones. ¿Hasta dónde llegas?">
+  <meta property="og:description" content="El vuelo arcade de Avila Mora Soluciones. Compite por una Landing Page Gratis y Hosting por $5 USD/mes.">
   <meta property="og:type" content="website">
   <link rel="canonical" href="https://avilamorasoluciones.com/juegos/ams-fly/">
-  <link rel="icon" href="icon.svg?v=3" type="image/svg+xml">
-  <link rel="manifest" href="manifest.webmanifest?v=3">
-  <link rel="stylesheet" href="styles.css?v=3">
+  <link rel="icon" href="icon.svg?v=10" type="image/svg+xml">
+  <link rel="manifest" href="manifest.webmanifest?v=10">
+  <link rel="stylesheet" href="styles.css?v=10">
   <title>AMS Fly · Avila Mora Soluciones</title>
 </head>
 <body>
@@ -29,141 +29,272 @@
   <main class="app-shell">
     <header class="game-header">
       <a class="brand" href="../index.html" aria-label="Volver a Juegos Avila Mora">
-        <span class="brand-dot"></span>
+        <span class="brand-condor" aria-hidden="true">
+          <svg viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg" width="44" height="44">
+            <rect width="44" height="44" rx="12" fill="url(#bg_g)"/>
+            <ellipse cx="22" cy="23" rx="8" ry="6" fill="#c084fc"/>
+            <ellipse cx="29" cy="17" rx="4" ry="3.5" fill="#7c3aed"/>
+            <ellipse cx="30.5" cy="14" rx="2" ry="1.4" fill="#ef4444"/>
+            <path d="M14 22 Q8 18 4 22 Q8 25 14 24Z" fill="#8b5cf6"/>
+            <path d="M30 22 Q36 17 40 19 Q37 24 30 23Z" fill="#8b5cf6"/>
+            <ellipse cx="26.5" cy="20" rx="3" ry="1.8" fill="rgba(255,255,255,.55)"/>
+            <path d="M33 17 L36 16 L34 19Z" fill="#fbbf24"/>
+            <circle cx="30.5" cy="16.5" r="1" fill="#111"/>
+            <path d="M18 27 Q16 32 14 30 Q17 28 18 27Z" fill="#7c3aed"/>
+            <path d="M22 28 Q21 33 19 32 Q21 29 22 28Z" fill="#7c3aed"/>
+            <path d="M26 27 Q27 32 29 30 Q26 28 26 27Z" fill="#7c3aed"/>
+            <defs><linearGradient id="bg_g" x1="0" y1="0" x2="44" y2="44" gradientUnits="userSpaceOnUse"><stop stop-color="#4c1d95"/><stop offset="1" stop-color="#7c3aed"/></linearGradient></defs>
+          </svg>
+        </span>
         <span><b>Avila Mora</b><small>SOLUCIONES · AMS FLY</small></span>
       </a>
-      <button id="soundBtn" class="icon-button" type="button" aria-label="Activar o desactivar sonido">♪</button>
+      <div class="header-actions">
+        <button id="soundBtn" class="icon-button" type="button" aria-label="Activar o desactivar sonido" title="Sonido y Música">♪</button>
+        <button id="adminNavBtn" class="icon-button admin-trigger-btn" type="button" aria-label="Acceso administrativo" title="Panel Secreto">🛡️</button>
+      </div>
     </header>
 
     <section id="homeScreen" class="screen app-screen active">
       <div class="hero-copy">
-        <span class="eyebrow">RECURSO · AMS GAMES</span>
-        <h1><span>AMS</span> Fly</h1>
+        <span class="eyebrow">ARCADE · AVILA MORA SOLUCIONES</span>
+        <h1><span>AMS</span>&nbsp;Fly</h1>
         <p>Un pequeño vuelo, una gran obsesión.<br>¿Cuántos puntos puedes conseguir?</p>
       </div>
-
+      <div class="event-banner-card" id="eventBannerCard">
+        <div class="event-badge" id="homeEventBadge">🏆 EVENTO ESPECIAL 2026</div>
+        <h3 id="homeEventTitle">¡Gana una Landing Page Gratis!</h3>
+        <p id="homeEventDesc">Participa en el reto por el desarrollo de tu web profesional y gestión de Hosting + Dominio .com por $5 USD/mes.</p>
+        <button id="viewEventBtn" class="event-cta-button" type="button"><span id="homeEventCtaText">DETALLES DEL EVENTO 2026</span> <span>🎁</span></button>
+      </div>
       <div class="home-flight-art" aria-hidden="true">
         <div class="art-glow"></div>
         <div class="art-bird" id="homeBirdArt"></div>
-        <div class="art-ring ring-a"></div>
-        <div class="art-ring ring-b"></div>
+        <div class="art-ring ring-a"></div><div class="art-ring ring-b"></div>
         <div class="art-particle p1"></div><div class="art-particle p2"></div><div class="art-particle p3"></div>
       </div>
-
+      <div id="currentPilotBadge" class="current-pilot-badge" hidden></div>
       <div class="home-stats">
         <div><span>RÉCORD</span><strong id="homeBest">0</strong></div>
         <div><span>PARTIDAS</span><strong id="homeGames">0</strong></div>
       </div>
+      <div class="action-stack">
+        <button id="startBtn" class="primary-button btn-large" type="button">VOLAR AHORA <span>✦</span></button>
+        <button id="changePilotHomeBtn" class="secondary-button" type="button">👤 CONFIGURAR PILOTO / AVE</button>
+        <button id="rankingBtn" class="secondary-button" type="button">🏆 RANKING MUNDIAL</button>
+      </div>
+      <p class="micro-copy">Toca la pantalla, haz clic o presiona ESPACIO para volar.</p>
+    </section>
 
-      <button id="startBtn" class="primary-button" type="button">ELEGIR AVE Y VOLAR <span>→</span></button>
-      <button id="rankingBtn" class="secondary-button home-ranking-button" type="button">🏆 RANKING MUNDIAL</button>
-      <p class="micro-copy">Toca, haz clic o presiona ESPACIO para volar.</p>
+    <section id="eventScreen" class="screen app-screen" hidden>
+      <div class="section-heading">
+        <span class="eyebrow" id="eventScreenEyebrow">PROMOCIÓN Y MARKETING</span>
+        <h2 id="eventScreenTitle">Reto AMS Fly 2026</h2>
+        <p id="eventScreenDesc">Vuela, rompe récords y haz crecer la presencia digital de tu negocio con Avila Mora Soluciones.</p>
+      </div>
+      <div class="event-details-card">
+        <div id="eventActiveContent">
+          <div class="prize-item highlight">
+            <span class="prize-badge">🥇 PREMIO — 1ER LUGAR</span>
+            <h4 id="eventPrize1Title">Desarrollo de Landing Page 100% GRATIS</h4>
+            <p id="eventPrize1Desc">El jugador con el puntaje más alto al cierre del evento gana el desarrollo completo y profesional de su Landing Page sin costo de diseño ni programación: diseño exclusivo y responsive adaptado a su negocio, estructura de alta conversión UX/UI, optimización SEO básica y conexión a sus canales de venta.</p>
+          </div>
+          <div class="prize-item terms-item">
+            <span class="prize-badge terms-badge">📋 TÉRMINOS Y CONDICIONES</span>
+            <h4 id="eventPrizeAllTitle">Condición de publicación: Hosting Cloud + Dominio .com por $5 USD/mes</h4>
+            <p id="eventPrizeAllDesc">El desarrollo de la Landing Page se entrega sin costo. Para mantenerla publicada y gestionada en la infraestructura de Avila Mora Soluciones, el ganador contrata el servicio de Hosting Cloud + Dominio .com por $5 USD/mes. La mensualidad cubre el alojamiento y la gestión técnica del sitio y del dominio; cualquier servicio adicional no incluido se cotiza por separado.</p>
+          </div>
+          <div class="prize-item">
+            <span class="prize-badge">📲 CÓMO PARTICIPAR</span>
+            <h4>Registra tu WhatsApp y compite</h4>
+            <p>Crea tu piloto, ingresa tu número de WhatsApp con código de área (ej: +57 300…) y vuela. Tu puntaje más alto queda registrado automáticamente. Al cierre del evento contactamos al ganador directamente por WhatsApp. Tu número es privado y nunca aparece en el ranking público.</p>
+          </div>
+          <div class="action-stack">
+            <button id="eventJoinBtn" class="primary-button" type="button">¡QUIERO PARTICIPAR Y VOLAR! <span>✦</span></button>
+            <button id="eventBackBtn" class="secondary-button" type="button">← VOLVER AL MENÚ</button>
+          </div>
+        </div>
+        <div id="eventInactiveContent" hidden>
+          <div class="prize-item">
+            <h4>No hay eventos activos en este momento</h4>
+            <p>Actualmente estamos preparando el próximo reto de Avila Mora Soluciones. ¡Sigue entrenando tus vuelos y superando tu récord personal!</p>
+          </div>
+          <div class="action-stack"><button id="eventBackInactiveBtn" class="secondary-button" type="button">← VOLVER AL MENÚ</button></div>
+        </div>
+      </div>
     </section>
 
     <section id="profileScreen" class="screen app-screen" hidden>
       <div class="section-heading">
-        <span class="eyebrow">ANTES DEL VUELO</span>
-        <h2>Presenta a tu piloto.</h2>
-        <p>Estos datos se guardan en este dispositivo. El ranking online llegará después.</p>
+        <span class="eyebrow" id="profileEyebrow">REGISTRO DE PILOTO</span>
+        <h2 id="profileScreenTitle">Configura a tu Piloto</h2>
+        <p id="profileScreenDesc">Personaliza tu nombre, país, ave y WhatsApp para participar en los eventos.</p>
       </div>
-
+      <div id="accountOverviewCard" class="account-overview-card" hidden>
+        <div class="account-overview-header">
+          <div id="accountBirdPreview" class="account-bird-preview"></div>
+          <div class="account-details">
+            <span class="account-status-pill">● PILOTO ACTIVO</span>
+            <h3 id="accountPilotName">Piloto</h3>
+            <p id="accountPilotSub">Colombia · Cóndor Andino</p>
+            <div id="accountPilotPhone" class="account-phone-badge">WhatsApp registrado</div>
+          </div>
+        </div>
+        <div class="account-stats-row">
+          <div><span>RÉCORD PERSONAL</span><strong id="accountBestScore">0</strong></div>
+          <div><span>PARTIDAS JUGADAS</span><strong id="accountGamesCount">0</strong></div>
+        </div>
+      </div>
       <form id="profileForm" class="profile-card" novalidate>
-        <label>Nombre
+        <div class="card-subtitle" id="profileFormSubtitle">Datos del Piloto</div>
+        <label>Nombre del Piloto
           <input id="playerName" name="name" maxlength="18" autocomplete="nickname" placeholder="¿Cómo te llamamos?" required>
         </label>
-
-        <label>País
-          <select id="playerCountry" name="country" required></select>
+        <label>País de Origen
+          <div class="country-select-wrapper"><span id="countryFlagPreview" class="flag-preview-box"></span><select id="playerCountry" name="country" required></select></div>
         </label>
-
-        <div class="field-label">Elige tu ave</div>
+        <label id="phoneProfileLabel">WhatsApp / Celular (con código de área)
+          <input id="playerPhone" name="phone" type="tel" placeholder="+57 300 1234567" autocomplete="tel">
+          <small class="field-hint">🔒 Privado: Tu número no se mostrará en el ranking público. Solo lo usaremos para contactarte por premios de eventos.</small>
+        </label>
+        <div class="field-label">Elige tu Ave Emblema</div>
         <div id="birdGrid" class="bird-grid" role="radiogroup" aria-label="Elegir personaje"></div>
-
         <div id="selectedBirdInfo" class="selected-bird-info"></div>
-
-        <button class="primary-button" type="submit">LISTO, A VOLAR <span>✦</span></button>
+        <div class="action-stack">
+          <button id="saveProfileBtn" class="primary-button" type="submit">GUARDAR CAMBIOS Y VOLAR <span>✦</span></button>
+          <button id="profileBackBtn" class="secondary-button" type="button">← VOLVER AL MENÚ</button>
+        </div>
         <p id="profileError" class="form-error" role="alert" hidden></p>
       </form>
+      <div id="accountDangerCard" class="account-danger-card" hidden>
+        <div class="danger-card-header"><span class="danger-header-icon">⚠️</span><div><h4>Gestión y Eliminación de Cuenta</h4><p>Puedes cambiar de piloto o borrar permanentemente tu cuenta y progreso de este dispositivo.</p></div></div>
+        <div class="action-stack danger-stack">
+          <button id="logoutProfileBtn" class="secondary-button" type="button">🚪 Cerrar Sesión / Cambiar de Piloto</button>
+          <button id="deleteAccountBtn" class="danger-button" type="button">🗑️ Borrar Mi Cuenta y Todo mi Progreso</button>
+        </div>
+      </div>
     </section>
 
     <section id="factScreen" class="screen fact-screen" hidden>
       <div class="fact-mark">✦</div>
-      <span class="eyebrow">PAUSA ENTRE VUELOS · COLOMBIA</span>
+      <span class="eyebrow">PAUSA CULTURAL · COLOMBIA</span>
       <h2 id="factTitle">¿Sabías que…?</h2>
       <p id="factText"></p>
-      <small id="factSourceHint">Un dato para volar sabiendo un poquito más.</small>
-      <button id="factContinueBtn" class="primary-button" type="button">SIGUIENTE VUELO <span>→</span></button>
+      <small id="factSourceHint">Un dato para volar conociendo más de nuestra tierra.</small>
+      <div class="action-stack">
+        <button id="factContinueBtn" class="primary-button" type="button">VOLAR AHORA <span>→</span></button>
+        <button id="factBackBtn" class="secondary-button" type="button">← MENÚ</button>
+      </div>
     </section>
 
     <section id="gameScreen" class="screen game-screen" hidden>
-      <canvas id="gameCanvas" aria-label="Juego AMS Fly"></canvas>
-      <div class="hud">
-        <div class="hud-pill"><span>PUNTOS</span><strong id="scoreValue">0</strong></div>
-        <div class="hud-center" id="difficultyValue">VUELO 1</div>
-        <button id="pauseBtn" class="hud-button" type="button" aria-label="Pausar juego">Ⅱ</button>
-      </div>
-      <div id="gameStartHint" class="game-start-hint">
-        <strong>TOCA PARA VOLAR</strong>
-        <span>Evita los portales y mantén el ritmo.</span>
+      <div class="canvas-container" id="canvasContainer">
+        <canvas id="gameCanvas" aria-label="Juego AMS Fly"></canvas>
+        <div class="hud">
+          <div class="hud-pill"><span>PUNTOS</span><strong id="scoreValue">0</strong></div>
+          <div class="hud-center" id="difficultyValue">FASE 1 · NEÓN</div>
+          <button id="pauseBtn" class="hud-button" type="button" aria-label="Pausar juego">Ⅱ</button>
+        </div>
+        <div id="gameStartHint" class="game-start-hint"><strong>TOCA PARA VOLAR</strong><span>Supera los portales y domina las alturas.</span></div>
       </div>
     </section>
 
     <section id="pauseScreen" class="screen overlay-screen" hidden>
       <div class="overlay-card">
-        <span class="eyebrow">VUELO EN PAUSA</span>
-        <h2>Respira. El cielo espera.</h2>
-        <p id="pauseScore">0 puntos</p>
-        <button id="resumeBtn" class="primary-button" type="button">CONTINUAR</button>
-        <button id="quitBtn" class="secondary-button" type="button">SALIR DEL VUELO</button>
+        <span class="eyebrow">VUELO EN PAUSA</span><h2>Respira. El cielo espera.</h2><p id="pauseScore">0 puntos</p>
+        <div class="action-stack">
+          <button id="resumeBtn" class="primary-button" type="button">CONTINUAR VUELO <span>▶</span></button>
+          <button id="restartBtn" class="secondary-button" type="button">REINICIAR VUELO <span>↻</span></button>
+          <button id="quitBtn" class="secondary-button" type="button">SALIR AL MENÚ <span>✕</span></button>
+        </div>
       </div>
     </section>
 
     <section id="gameOverScreen" class="screen overlay-screen" hidden>
       <div class="overlay-card result-card">
         <div id="resultBird" class="result-bird"></div>
-        <span class="eyebrow" id="resultEyebrow">VUELO TERMINADO</span>
-        <h2 id="resultTitle">Buen vuelo.</h2>
+        <span class="eyebrow" id="resultEyebrow">VUELO TERMINADO</span><h2 id="resultTitle">Buen vuelo.</h2>
         <div class="result-score"><span>PUNTOS</span><strong id="finalScore">0</strong></div>
-        <div class="result-grid">
-          <div><span>RÉCORD</span><strong id="resultBest">0</strong></div>
-          <div><span>PARTIDAS</span><strong id="resultGames">0</strong></div>
+        <div class="result-grid"><div><span>RÉCORD</span><strong id="resultBest">0</strong></div><div><span>PARTIDAS</span><strong id="resultGames">0</strong></div></div>
+        <p id="newRecord" class="new-record" hidden>🏆 ¡NUEVO RÉCORD PERSONAL!</p>
+        <div class="submit-score-section">
+          <label class="message-label"><span>MENSAJE PARA EL RANKING <b class="req-star">* Obligatorio</b></span><textarea id="scoreMessage" maxlength="90" placeholder="¡Escribe tus palabras para el muro del ranking! (Obligatorio)" required></textarea></label>
+          <label class="message-label" id="phoneGameOverWrap"><span>WHATSAPP PARA EL EVENTO <small>(Opcional si ya lo guardaste)</small></span><input id="scorePhone" type="tel" placeholder="+57 300 1234567" autocomplete="tel"></label>
+          <button id="submitScoreBtn" class="primary-button" type="button">PUBLICAR EN EL RANKING MUNDIAL <span>↑</span></button>
+          <p id="submitScoreStatus" class="submit-status" role="status"></p>
         </div>
-        <p id="newRecord" class="new-record" hidden>🏆 NUEVO RÉCORD</p>
-        <button id="againBtn" class="primary-button" type="button">OTRA PARTIDA <span>↻</span></button>
-        <label class="message-label">MENSAJE PARA EL RANKING
-          <textarea id="scoreMessage" maxlength="90" placeholder="Deja unas palabras para los demás pilotos..."></textarea>
-        </label>
-        <button id="submitScoreBtn" class="primary-button" type="button">PUBLICAR PUNTUACIÓN <span>↑</span></button>
-        <p id="submitScoreStatus" class="submit-status" role="status"></p>
-        <button id="rankingFromResultBtn" class="secondary-button" type="button">🏆 VER RANKING MUNDIAL</button>
-        <button id="changePilotBtn" class="secondary-button" type="button">CAMBIAR PILOTO</button>
+        <div class="action-stack">
+          <button id="againBtn" class="primary-button" type="button">OTRA PARTIDA <span>↻</span></button>
+          <button id="rankingFromResultBtn" class="secondary-button" type="button">🏆 VER RANKING MUNDIAL</button>
+          <button id="changePilotBtn" class="secondary-button" type="button">👤 CAMBIAR PILOTO / AVE</button>
+          <button id="homeFromResultBtn" class="secondary-button" type="button">🏠 MENÚ PRINCIPAL</button>
+        </div>
       </div>
     </section>
 
-
     <section id="rankingScreen" class="screen ranking-screen" hidden>
-      <div class="ranking-heading">
-        <span class="eyebrow">AMS FLY · MUNDO</span>
-        <h2>Ranking mundial</h2>
-        <p>Los pilotos, sus aves, sus puntos y las palabras que dejaron en el camino.</p>
-      </div>
-      <div class="ranking-toolbar">
-        <button id="rankingRefreshBtn" class="secondary-button" type="button">↻ ACTUALIZAR</button>
-        <button id="rankingBackBtn" class="secondary-button" type="button">← VOLVER</button>
-      </div>
-      <div id="rankingList" class="ranking-list" aria-live="polite">
-        <div class="ranking-loading">Cargando pilotos...</div>
-      </div>
+      <div class="ranking-heading"><span class="eyebrow">AMS FLY · TABLA MUNDIAL</span><h2>Ranking de Pilotos</h2><p>Los mejores aviadores, sus aves y los mensajes que dejaron en la cima.</p></div>
+      <div class="ranking-toolbar"><button id="rankingRefreshBtn" class="secondary-button" type="button">↻ ACTUALIZAR</button><button id="rankingBackBtn" class="secondary-button" type="button">← VOLVER AL MENÚ</button></div>
+      <div id="rankingList" class="ranking-list" aria-live="polite"><div class="ranking-loading">Cargando pilotos...</div></div>
       <p id="rankingStatus" class="ranking-status"></p>
     </section>
 
-    <footer class="game-footer">
-      <span>AMS Fly · Un juego de Avila Mora Soluciones</span>
-      <span>Hecho para jugar por jugar.</span>
-    </footer>
+    <section id="adminScreen" class="screen admin-screen" hidden>
+      <div id="adminLoginBox" class="admin-login-card">
+        <span class="eyebrow">SEGURIDAD AMS</span><h2>Acceso Administrativo</h2>
+        <p>Ingresa tus credenciales para gestionar los registros, WhatsApp y la configuración de eventos.</p>
+        <form id="adminLoginForm">
+          <label>Usuario<input id="adminUserInput" type="text" autocomplete="username" placeholder="admin" required></label>
+          <label>Contraseña<input id="adminPassInput" type="password" autocomplete="current-password" placeholder="••••" required></label>
+          <button class="primary-button" type="submit">ENTRAR AL PANEL <span>🔒</span></button>
+          <button id="adminCancelBtn" class="secondary-button" type="button">CANCELAR</button>
+          <p id="adminLoginError" class="form-error" hidden></p>
+        </form>
+      </div>
+      <div id="adminDashboardBox" class="admin-dashboard-card" hidden>
+        <div class="admin-header-row">
+          <div><span class="eyebrow">PANEL SECRETO</span><h2>Gestión AMS Fly</h2></div>
+          <div class="admin-top-btns"><button id="adminExportCsvBtn" class="secondary-button mini-btn" type="button">📥 Exportar CSV</button><button id="adminRefreshBtn" class="secondary-button mini-btn" type="button">↻ Actualizar</button><button id="adminLogoutBtn" class="secondary-button mini-btn danger" type="button">Cerrar Sesión</button><button id="adminExitBtn" class="secondary-button mini-btn" type="button">← Salir</button></div>
+        </div>
+        <div class="admin-tabs"><button id="adminTabLeads" class="admin-tab-btn active" type="button">👥 Leads y Participantes</button><button id="adminTabEvent" class="admin-tab-btn" type="button">⚙️ Configuración del Evento</button></div>
+        <div id="adminLeadsSection">
+          <div class="admin-stats-grid"><div class="admin-stat-card"><span>TOTAL PARTICIPANTES</span><strong id="adminTotalLeads">0</strong></div><div class="admin-stat-card"><span>CON TELÉFONO / WHATSAPP</span><strong id="adminTotalPhones">0</strong></div><div class="admin-stat-card"><span>RÉCORD MÁXIMO</span><strong id="adminMaxScore">0</strong></div></div>
+          <div class="admin-table-wrapper"><table class="admin-table"><thead><tr><th>Piloto</th><th>País</th><th>Ave</th><th>Puntos</th><th>Mensaje</th><th>WhatsApp / Celular</th><th>Fecha</th></tr></thead><tbody id="adminLeadsTableBody"><tr><td colspan="7" class="loading-cell">Cargando registros...</td></tr></tbody></table></div>
+        </div>
+        <div id="adminEventSection" hidden>
+          <form id="adminEventForm" class="admin-event-form">
+            <div class="event-toggle-row"><label class="switch-label"><input id="cfgEventActive" type="checkbox" checked><span class="switch-slider"></span><span class="switch-text"><strong>ACTIVAR / DESACTIVAR EVENTO</strong><small>Si se desactiva, el banner en el menú de inicio y las llamadas a la acción se ocultarán automáticamente.</small></span></label></div>
+            <div class="admin-form-grid"><label>Insignia / Badge<input id="cfgEventBadge" type="text" placeholder="🏆 EVENTO ESPECIAL 2026"></label><label>Título del Banner<input id="cfgEventTitle" type="text" placeholder="¡Gana una Landing Page Gratis!"></label></div>
+            <label>Descripción corta del Banner<textarea id="cfgEventDesc" rows="2" placeholder="Participa en el reto por el desarrollo de tu web profesional y gestión de Hosting + Dominio .com por $5 USD/mes."></textarea></label>
+            <label>Texto del Botón CTA<input id="cfgEventCta" type="text" placeholder="DETALLES DEL EVENTO 2026 🎁"></label>
+            <div class="admin-divider"><span>PREMIOS Y BASES DEL CONCURSO</span></div>
+            <label>Premio 1er Lugar - Título<input id="cfgPrize1Title" type="text" placeholder="Desarrollo de Landing Page 100% GRATIS"></label>
+            <label>Premio 1er Lugar - Descripción<textarea id="cfgPrize1Desc" rows="2" placeholder="Diseño exclusivo y responsive adaptado a tu negocio, estructura de alta conversión UX/UI, optimización SEO y conexión a tus canales de venta."></textarea></label>
+            <label>Condición del premio - Título<input id="cfgPrizeAllTitle" type="text" placeholder="Condición de publicación: Hosting Cloud + Dominio .com por $5 USD/mes"></label>
+            <label>Condición del premio - Descripción<textarea id="cfgPrizeAllDesc" rows="2" placeholder="Explica qué cubre la mensualidad de $5 USD/mes y qué debe contratar el ganador para mantener la Landing Page publicada."></textarea></label>
+            <div class="admin-divider"><span>PLANTILLA DE WHATSAPP DIRECTO</span></div>
+            <label>Mensaje automático para WhatsApp<textarea id="cfgWaTemplate" rows="3" placeholder="Hola {name}, te escribimos de Avila Mora Soluciones respecto a tu récord de {score} pts en el evento {event}..."></textarea><small class="field-hint">Variables dinámicas disponibles: <code>{name}</code> (nombre del jugador), <code>{score}</code> (puntuación), <code>{event}</code> (título del evento).</small></label>
+            <div class="action-stack" style="margin-top:16px;"><button class="primary-button" type="submit">💾 GUARDAR CONFIGURACIÓN DEL EVENTO</button><button id="cfgResetBtn" class="secondary-button" type="button">↻ RESTABLECER VALORES POR DEFECTO</button></div>
+            <p id="cfgSaveStatus" class="submit-status" role="status"></p>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <div id="confirmDeleteModal" class="modal-backdrop" hidden>
+      <div class="modal-card danger-modal-card" role="dialog" aria-modal="true" aria-labelledby="deleteModalTitle">
+        <div class="modal-header"><div class="danger-badge-icon">🗑️</div><h3 id="deleteModalTitle">¿Eliminar cuenta permanentemente?</h3></div>
+        <p class="modal-lead">Esta acción es irreversible y borrará todos tus datos guardados en este navegador:</p>
+        <div class="delete-summary-list"><div class="delete-item">❌ <span>Perfil de piloto (<strong id="delSumName">-</strong>)</span></div><div class="delete-item">❌ <span>Récord personal (<strong id="delSumBest">0 pts</strong>)</span></div><div class="delete-item">❌ <span>Historial de (<strong id="delSumGames">0</strong> partidas)</span></div><div class="delete-item">❌ <span>WhatsApp / Celular guardado para eventos</span></div></div>
+        <p class="delete-warning-note">⚠️ Tu dispositivo quedará completamente limpio como si instalaras el juego por primera vez. (Las marcas que ya hayas enviado al ranking público online permanecerán en la historia del servidor).</p>
+        <div class="action-stack"><button id="confirmDeleteBtn" class="danger-button-solid" type="button">SÍ, BORRAR TODO PERMANENTEMENTE</button><button id="cancelDeleteBtn" class="secondary-button" type="button">CANCELAR Y MANTENER MI CUENTA</button></div>
+      </div>
+    </div>
+
+    <div id="notificationToast" class="notification-toast" role="alert" aria-live="assertive" hidden></div>
+    <footer class="game-footer"><span>AMS Fly · Un juego de Avila Mora Soluciones</span><span>Hosting + Dominio .com por $5 USD/mes</span></footer>
   </main>
 
-  <script src="game.js?v=5"></script>
+  <script src="game.js?v=10"></script>
   <script>
     if ("serviceWorker" in navigator) {
       window.addEventListener("load", () => navigator.serviceWorker.register("./sw.js").catch(() => {}));
