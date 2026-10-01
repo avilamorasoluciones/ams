@@ -76,8 +76,11 @@
           <select id="playerCountry" name="country" required></select>
         </label>
         <label>WhatsApp <span class="optional-label">(para eventos, opcional)</span>
-          <input id="playerPhone" name="phone" type="tel" inputmode="tel" autocomplete="tel" maxlength="30" placeholder="+57 300 123 4567">
-          <small class="field-hint">Solo se usa para contactarte si ganas un evento. No se muestra en el ranking.</small>
+          <div class="phone-input-row">
+            <select id="playerPhoneCountry" name="phoneCountry" aria-label="Prefijo telefónico"></select>
+            <input id="playerPhone" name="phone" type="tel" inputmode="numeric" autocomplete="tel-national" maxlength="15" placeholder="300 123 4567">
+          </div>
+          <small class="field-hint">Elige el prefijo del país y escribe tu número sin el código. Solo se usa para contactarte si ganas un evento.</small>
         </label>
 
         <div class="field-label">Elige tu ave</div>
@@ -166,7 +169,7 @@
     </footer>
   </main>
 
-  <script src="game.js?v=9"></script>
+  <script src="game.js?v=10"></script>
   <script>
     if ("serviceWorker" in navigator) {
       window.addEventListener("load", () => navigator.serviceWorker.register("./sw.js").catch(() => {}));
