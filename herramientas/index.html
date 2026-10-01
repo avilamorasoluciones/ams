@@ -9,9 +9,9 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="Avila Mora Soluciones - Herramientas" />
-    <link rel="icon" href="icon-192.svg?v=14" type="image/svg+xml">
+    <link rel="icon" href="icon-192.svg?v=16" type="image/svg+xml">
     <link rel="apple-touch-icon" href="icon-192.svg?v=14">
-    <link rel="manifest" href="manifest.webmanifest?v=15">    <!-- Bootstrap 5 CSS -->
+    <link rel="manifest" href="manifest.webmanifest?v=16">    <!-- Bootstrap 5 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- FontAwesome Icons -->
     <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" as="style" />
@@ -1023,7 +1023,7 @@
                 <div class="tool-card" id="tool-compress-pdf">
                     <div class="icon-box orange"><i class="fa-solid fa-file-zipper"></i></div>
                     <h3 class="h4 fw-bold">Comprimir PDF</h3>
-                    <p class="text-muted small">Reduce el peso del PDF (convierte páginas a imágenes optimizadas).</p>
+                    <p class="text-muted small">Reduce el peso del PDF rasterizando sus páginas como imágenes optimizadas. Puede eliminar texto seleccionable, enlaces y elementos interactivos.</p>
                     
                     <label class="drop-zone" id="dz-compress-pdf">
                         <i class="fa-solid fa-file-arrow-down text-warning"></i>
@@ -1249,7 +1249,7 @@
                                 <div class="tool-card" id="tool-favicon">
                     <div class="icon-box purple"><i class="fa-solid fa-icons"></i></div>
                     <h3 class="h4 fw-bold">Generador Favicon</h3>
-                    <p class="text-muted small">Convierte una imagen cuadrada en un favicon PNG.</p>
+                    <p class="text-muted small">Crea un favicon PNG cuadrado recortando el centro de cualquier imagen.</p>
                     <label class="drop-zone" id="dz-favicon"><i class="fa-solid fa-image text-info"></i><div class="small fw-bold mt-1">Seleccionar imagen</div><input type="file" id="inp-favicon" accept="image/*"></label>
                     <div id="favicon-preview" class="text-center mt-2" style="display:none"></div>
                     <button class="btn btn-ams w-100 mt-2" id="btn-favicon" disabled>Generar favicon</button>
@@ -1485,11 +1485,17 @@
         const { PDFDocument, rgb, degrees } = PDFLib;
 
         // Utilidad global: Descargar
-        function downloadFile(byteData, fileName, mimeType = 'application/pdf') {
-            const blob = new Blob([byteData], { type: mimeType });
+        function downloadFile(byteData, fileName, mimeType = 'application/octet-stream') {
+            const blob = byteData instanceof Blob && (!mimeType || byteData.type === mimeType)
+                ? byteData
+                : new Blob([byteData], { type: mimeType });
             const url = URL.createObjectURL(blob);
-            const a = document.createElement('a'); a.href = url; a.download = fileName;
-            document.body.appendChild(a); a.click(); document.body.removeChild(a); URL.revokeObjectURL(url);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = fileName;
+            a.rel = 'noopener';
+            document.body.appendChild(a); a.click(); document.body.removeChild(a);
+            setTimeout(() => URL.revokeObjectURL(url), 1000);
         }
 
         // Utilidad global: Formatear Bytes
@@ -1649,12 +1655,29 @@
         // 2. Convertir Imágenes
         const wsConv = new WorkspaceManager('conv', true, { instanceName: 'wsConv', fileIcon: 'fa-solid fa-shuffle text-success', controlsToToggle: ['conv-format', 'conv-quality'] });
         document.getElementById('conv-quality').addEventListener('input', e => document.getElementById('conv-val').textContent = Math.round(e.target.value * 100) + '%');
+        (async () => {
+            const avifOption = document.querySelector('#conv-format option[value="image/avif"]');
+            if (!avifOption) return;
+            try {
+                const testCanvas = document.createElement('canvas');
+                testCanvas.width = testCanvas.height = 1;
+                const blob = await new Promise(resolve => testCanvas.toBlob(resolve, 'image/avif', 0.8));
+                if (!blob || blob.type !== 'image/avif') {
+                    avifOption.disabled = true;
+                    if (document.getElementById('conv-format').value === 'image/avif') document.getElementById('conv-format').value = 'image/webp';
+                    avifOption.textContent = 'AVIF (no disponible en este navegador)';
+                }
+            } catch {
+                avifOption.disabled = true;
+                avifOption.textContent = 'AVIF (no disponible en este navegador)';
+            }
+        })();
         
         document.getElementById('btn-conv').addEventListener('click', async () => {
             const btn = document.getElementById('btn-conv'); btn.innerHTML = 'Convirtiendo...';
             try {
                 const zip = new JSZip(), targetFormat = document.getElementById('conv-format').value;
-                const extMap = { 'image/webp': '.webp', 'image/jpeg': '.jpg', 'image/png': '.png', 'image/avif': '.avif', 'image/x-icon': '.ico' };
+                const extMap = { 'image/webp': '.webp', 'image/jpeg': '.jpg', 'image/png': '.png', 'image/avif': '.avif' };
                 const extension = extMap[targetFormat], quality = parseFloat(document.getElementById('conv-quality').value);
                 const files = wsConv.getFiles(), isMultiple = files.length > 1;
                 
@@ -1664,6 +1687,7 @@
                     const blob = await new Promise(res => canvas.toBlob(res, targetFormat, quality));
                     if (img.close) img.close();
                     if (!blob) throw new Error('El navegador no admite el formato de salida seleccionado.');
+                    if (!extension || blob.type !== targetFormat) throw new Error('El navegador no admite el formato de salida seleccionado.');
                     const newName = file.name.replace(/\.[^/.]+$/, "") + extension;
                     if(isMultiple) zip.file(newName, blob); else downloadFile(blob, newName, targetFormat);
                 }
@@ -1732,12 +1756,14 @@
                     await page.render({canvasContext: ctx, viewport: viewport}).promise;
 
                     // Comprime el canvas como JPEG
-                    const imgDataUrl = canvas.toDataURL('image/jpeg', quality);
-                    
-                    // Incrustar en el nuevo PDF
-                    const img = await newPdf.embedJpg(imgDataUrl);
+                    const jpegBlob = await new Promise(resolve => canvas.toBlob(resolve, 'image/jpeg', quality));
+                    if (!jpegBlob) throw new Error('No se pudo comprimir una página del PDF.');
+                    const jpegBytes = new Uint8Array(await jpegBlob.arrayBuffer());
+                    const img = await newPdf.embedJpg(jpegBytes);
                     const newPage = newPdf.addPage([viewport.width, viewport.height]);
                     newPage.drawImage(img, { x: 0, y: 0, width: viewport.width, height: viewport.height });
+                    page.cleanup();
+                    canvas.width = 1; canvas.height = 1;
                 }
                 
                 // Guardar y descargar
@@ -1805,7 +1831,9 @@
                 const toExt = parsePdfRanges(rng).map(p=>p-1);
                 if (!toExt.length) { alert('Indica al menos una página válida. Ejemplo: 1, 3, 5-8'); return; }
                 const src = await PDFDocument.load(await file.arrayBuffer()); const doc = await PDFDocument.create();
-                const pages = await doc.copyPages(src, toExt.filter(p => p>=0 && p<src.getPageCount())); pages.forEach(p => doc.addPage(p));
+                const validPages = toExt.filter(p => p >= 0 && p < src.getPageCount());
+                if (!validPages.length) { alert('Ninguna de las páginas indicadas existe en este PDF.'); return; }
+                const pages = await doc.copyPages(src, validPages); pages.forEach(p => doc.addPage(p));
                 downloadFile(await doc.save(), 'AMS_Extraido.pdf');
             } catch(e) { alert('Error'); } finally { btn.innerHTML = 'Extraer'; }
         });
@@ -1836,6 +1864,7 @@
                 if (!toRemove.length) { alert('Indica al menos una página válida. Ejemplo: 2, 4-6'); return; }
                 const src = await PDFDocument.load(await file.arrayBuffer()); const doc = await PDFDocument.create();
                 const toKeep = Array.from({length: src.getPageCount()}, (_, i) => i).filter(i => !toRemove.includes(i));
+                if (!toKeep.length) { alert('Debes conservar al menos una página del PDF.'); return; }
                 const pages = await doc.copyPages(src, toKeep); pages.forEach(p => doc.addPage(p));
                 downloadFile(await doc.save(), 'AMS_Limpio.pdf');
             } catch(e) { alert('Error'); } finally { btn.innerHTML = 'Eliminar Hojas'; }
@@ -1914,15 +1943,16 @@
                     do { window.crypto.getRandomValues(array); } while (array[0] >= limit);
                     return array[0] % max;
                 }
-                return Math.floor(Math.random() * max);
+                throw new Error('Generación criptográfica no disponible.');
             };
             const lower = 'abcdefghijklmnopqrstuvwxyz', upper = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', numbers = '0123456789', symbols = '!@#$%^&*()_+~`|}{[]:;?><,./-=';
             let chars = lower; if(passUp.checked) chars += upper; if(passNum.checked) chars += numbers; if(passSym.checked) chars += symbols;
+            if (!window.crypto?.getRandomValues) { amsToast('Este navegador no admite generación segura de contraseñas.','error'); return; }
             let pass = ''; for(let i = 0; i < Number(passLen.value); i++) pass += chars.charAt(secureRandomIndex(chars.length)); passOut.textContent = pass;
         }
         btnGenPass.addEventListener('click', generatePass);
         btnCopyPass.addEventListener('click', () => {
-            navigator.clipboard.writeText(passOut.textContent);
+            amsCopy(passOut.textContent);
             const icon = btnCopyPass.querySelector('i'); icon.className = 'fa-solid fa-check text-success'; setTimeout(() => icon.className = 'fa-regular fa-copy', 2000);
         });
         generatePass();
@@ -1965,17 +1995,20 @@
             window.__amsToast=setTimeout(function(){el.className='ams-toast';},2600);
         }
 
-        var resizeFile=null, resizeImg=null;
+        var resizeFile=null, resizeImg=null, resizeObjectUrl=null;
         ams$('inp-resize')?.addEventListener('change',function(e){
             resizeFile=e.target.files[0];
             if(!resizeFile)return;
+            if(resizeObjectUrl) URL.revokeObjectURL(resizeObjectUrl);
             resizeImg=new Image();
             resizeImg.onload=function(){
                 ams$('resize-w').value=resizeImg.naturalWidth;
                 ams$('resize-h').value=resizeImg.naturalHeight;
                 ams$('resize-workspace').style.display='block';
+                if(resizeObjectUrl){ URL.revokeObjectURL(resizeObjectUrl); resizeObjectUrl=null; }
             };
-            resizeImg.src=URL.createObjectURL(resizeFile);
+            resizeObjectUrl=URL.createObjectURL(resizeFile);
+            resizeImg.src=resizeObjectUrl;
         });
         ams$('resize-w')?.addEventListener('input',function(){
             if(ams$('resize-lock').checked && resizeImg) ams$('resize-h').value=Math.round(Number(ams$('resize-w').value)*resizeImg.naturalHeight/resizeImg.naturalWidth);
@@ -2113,18 +2146,26 @@
         var faviconImg=null, faviconFile=null;
         ams$('inp-favicon')?.addEventListener('change',function(e){
             faviconFile=e.target.files[0]; if(!faviconFile)return;
-            faviconImg=new Image();
-            faviconImg.onload=function(){
-                ams$('favicon-preview').style.display='block';
-                ams$('favicon-preview').innerHTML='<img src="'+faviconImg.src+'" alt="Vista previa" style="width:72px;height:72px;object-fit:cover;border-radius:14px">';
-                ams$('btn-favicon').disabled=false;
+            var reader=new FileReader();
+            reader.onload=function(event){
+                faviconImg=new Image();
+                faviconImg.onload=function(){
+                    ams$('favicon-preview').style.display='block';
+                    ams$('favicon-preview').innerHTML='<img src="'+event.target.result+'" alt="Vista previa" style="width:72px;height:72px;object-fit:cover;border-radius:14px">';
+                    ams$('btn-favicon').disabled=false;
+                };
+                faviconImg.src=event.target.result;
             };
-            faviconImg.src=URL.createObjectURL(faviconFile);
+            reader.readAsDataURL(faviconFile);
         });
         ams$('btn-favicon')?.addEventListener('click',function(){
             if(!faviconImg)return;
             var canvas=document.createElement('canvas'); canvas.width=512; canvas.height=512;
-            canvas.getContext('2d').drawImage(faviconImg,0,0,512,512);
+            var ctx=canvas.getContext('2d');
+            if(!ctx)return;
+            var size=Math.min(faviconImg.naturalWidth,faviconImg.naturalHeight);
+            var sx=(faviconImg.naturalWidth-size)/2, sy=(faviconImg.naturalHeight-size)/2;
+            ctx.drawImage(faviconImg,sx,sy,size,size,0,0,512,512);
             canvas.toBlob(function(blob){if(blob)downloadFile(blob,'AMS_Favicon_512.png','image/png');},'image/png');
         });
 
