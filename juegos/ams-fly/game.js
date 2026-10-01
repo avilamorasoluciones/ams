@@ -8,7 +8,7 @@ const RANKING_API = "";
 const RANKING_LIMIT = 50;
 
 const countries = [
-  {code:"CO",name:"Colombia",flag:"🇨🇴",bird:"Cóndor de los Andes",host:true},
+  {code:"CO",name:"Colombia",flag:"🇨🇴",bird:"Cóndor de los Andes"},
   {code:"VE",name:"Venezuela",flag:"🇻🇪",bird:"Turpial venezolano"},
   {code:"EC",name:"Ecuador",flag:"🇪🇨",bird:"Cóndor de los Andes"},
   {code:"US",name:"Estados Unidos",flag:"🇺🇸",bird:"Águila calva"},
@@ -34,16 +34,16 @@ const birds = [
 ];
 
 const colombiaFacts = [
-  "Colombia es reconocido como el país con mayor diversidad de aves del mundo, con más de 1.900 especies registradas.",
-  "Colombia reúne costas en el Caribe y el Pacífico, además de tres cordilleras andinas y grandes regiones de selva, llanura y montaña.",
-  "La Sierra Nevada de Santa Marta es una de las montañas costeras más altas del mundo y tiene ecosistemas únicos.",
+  "Colombia registra más de 1.900 especies de aves, una de las cifras más altas documentadas para un solo país.",
+  "Colombia reúne costas en el Caribe y el Pacífico, además de tres cordilleras andinas y regiones de selva, llanura y montaña.",
+  "La Sierra Nevada de Santa Marta combina distintos pisos térmicos en una distancia relativamente corta y alberga especies que no se encuentran en otros lugares.",
   "El río Amazonas atraviesa el sur de Colombia y forma parte de una de las regiones con mayor biodiversidad del planeta.",
-  "El cóndor de los Andes, nuestro personaje anfitrión, es el ave nacional de Colombia.",
-  "Colombia posee una enorme variedad de ecosistemas: páramos, bosques andinos, selvas tropicales, sabanas, manglares y arrecifes.",
-  "Los páramos colombianos son ecosistemas de alta montaña fundamentales para la regulación y producción de agua.",
-  "El Valle del Cocora, en Quindío, es famoso por sus enormes palmas de cera, el árbol nacional de Colombia.",
-  "La palma de cera puede superar varias decenas de metros de altura y forma uno de los paisajes más reconocibles de los Andes colombianos.",
-  "Colombia tiene territorios en ambos océanos y una geografía que cambia radicalmente en distancias relativamente cortas."
+  "El cóndor de los Andes es el ave nacional de Colombia y está estrechamente asociado con los paisajes de la cordillera.",
+  "El territorio colombiano incluye páramos, bosques andinos, selvas tropicales, sabanas, manglares, costas y arrecifes.",
+  "Los páramos son ecosistemas de alta montaña que ayudan a almacenar, regular y liberar agua hacia otras zonas.",
+  "El Valle del Cocora, en Quindío, es conocido por sus palmas de cera, una de las especies vegetales más características de los Andes colombianos.",
+  "La palma de cera puede alcanzar varias decenas de metros de altura y forma paisajes muy particulares en algunas zonas andinas.",
+  "Colombia tiene territorios sobre el Caribe y el Pacífico, además de una geografía con grandes cambios de clima y paisaje."
 ];
 
 const els = {};
@@ -92,15 +92,14 @@ function hydrateStats(){
   els.homeBest.textContent=stats.best||0;els.homeGames.textContent=stats.games||0;
 }
 function initCountries(){
-  els.playerCountry.innerHTML=countries.map(c=>'<option value="'+c.code+'">'+c.flag+' '+c.name+(c.host?" · ANFITRIÓN 🇨🇴":"")+'</option>').join("");
+  els.playerCountry.innerHTML=countries.map(c=>'<option value="'+c.code+'">'+c.flag+' '+c.name+'</option>').join("");
   els.playerCountry.value=profile?.country || "CO";
 }
 function renderBirds(){
   els.birdGrid.innerHTML=birds.map(b=>{
     const c=getCountry(b.country);
-    return '<button type="button" class="bird-option '+(b.id===selectedBirdId?"selected ":"")+(b.country==="CO"?"host":"")+'" data-bird="'+b.id+'" role="radio" aria-checked="'+(b.id===selectedBirdId)+'">'+
-      (b.country==="CO"?'<span class="host-badge">🇨🇴 ANFITRIÓN</span>':"")+
-      '<span class="bird-mini">'+birdMarkup(b,".52")+'</span><span><strong>'+b.name+'</strong><small>'+c.flag+" "+c.name+'</small></span></button>';
+    return '<button type="button" class="bird-option '+(b.id===selectedBirdId?"selected ":"")+'" data-bird="'+b.id+'" role="radio" aria-checked="'+(b.id===selectedBirdId)+'">'+
+      '<span class="bird-mini">'+birdMarkup(b,".43")+'</span><span class="bird-option-copy"><strong>'+b.name+'</strong><small>'+c.flag+" "+c.name+'</small></span></button>';
   }).join("");
   updateBirdInfo();
 }
@@ -166,9 +165,9 @@ function resetGame(){
     running:true,paused:false,started:false,score:0,time:0,last:performance.now(),spawn:0,
     bird:{x:Math.max(75,w*.22),y:h*.48,vy:0,r:18},
     pipes:[],bird,
-    worldSpeed:Math.max(145,Math.min(225,w*.23)),
-    gravity:1250,flap:-390,
-    gap:Math.max(145,Math.min(205,h*.23)),pipeW:62,
+    worldSpeed:Math.max(170,Math.min(205,w*.29)),
+    gravity:1180,flap:-405,
+    gap:Math.max(165,Math.min(215,h*.26)),pipeW:58,
     deathAt:0,
     stage:currentStage(0)
   };
@@ -188,7 +187,7 @@ function spawnPipe(){
   const h=window.innerHeight;
   const d=difficultyFor(game.score);
   const gap=clamp(game.gap-(d-1)*6,128,game.gap);
-  const margin=Math.max(72,h*.11);
+  const margin=Math.max(86,h*.12);
   const minTop=margin,maxTop=h-margin-gap;
   const top=randomBetween(minTop,Math.max(minTop+1,maxTop));
   game.pipes.push({x:window.innerWidth+35,top,bottom:top+gap,passed:false});
@@ -206,7 +205,7 @@ function update(dt){
   game.gravity=1250+(d-1)*42;
   game.bird.vy+=game.gravity*dt;game.bird.y+=game.bird.vy*dt;
   game.spawn-=dt;
-  if(game.spawn<=0){spawnPipe();game.spawn=Math.max(.88,1.28-(d-1)*.06)}
+  if(game.spawn<=0){spawnPipe();game.spawn=Math.max(1.18,1.48-(d-1)*.05)}
   for(let i=game.pipes.length-1;i>=0;i--){
     const p=game.pipes[i];p.x-=game.worldSpeed*dt;
     if(!p.passed && p.x+game.pipeW<game.bird.x){p.passed=true;game.score++;els.scoreValue.textContent=game.score;els.difficultyValue.textContent="VUELO "+Math.min(6,1+Math.floor(game.score/12));playTone(760,.055,"sine")}
@@ -243,10 +242,12 @@ function drawBird(){
   ctx.shadowColor="rgba(139,92,246,.55)";ctx.shadowBlur=20;
   const body=ctx.createLinearGradient(-22,-18,22,18);body.addColorStop(0,game.bird.a);body.addColorStop(1,game.bird.b);ctx.fillStyle=body;
   ctx.beginPath();ctx.ellipse(0,0,24,18,0,0,Math.PI*2);ctx.fill();
+  ctx.strokeStyle="rgba(255,255,255,.32)";ctx.lineWidth=1.5;ctx.stroke();
   ctx.fillStyle=game.bird.c;ctx.beginPath();ctx.ellipse(-8,7,16,9,-.25,0,Math.PI*2);ctx.fill();
   ctx.fillStyle=game.bird.d;ctx.beginPath();ctx.moveTo(20,-2);ctx.lineTo(39,4);ctx.lineTo(20,8);ctx.closePath();ctx.fill();
   ctx.fillStyle="#111827";ctx.beginPath();ctx.arc(12,-9,4,0,Math.PI*2);ctx.fill();ctx.fillStyle="#fff";ctx.beginPath();ctx.arc(13,-10,1.3,0,Math.PI*2);ctx.fill();
   ctx.fillStyle=game.bird.c;ctx.beginPath();ctx.moveTo(-18,-2);ctx.quadraticCurveTo(-39,-22,-31,5);ctx.quadraticCurveTo(-24,12,-11,7);ctx.closePath();ctx.fill();
+  ctx.strokeStyle="rgba(255,255,255,.28)";ctx.stroke();
   ctx.restore();
 }
 function draw(){
@@ -319,7 +320,7 @@ function startWithProfile(){
 }
 function prepareFactThenGame(){
   const fact=colombiaFacts[currentFactIndex%colombiaFacts.length];currentFactIndex=(currentFactIndex+1)%colombiaFacts.length;localStorage.setItem(FACT_INDEX_KEY,String(currentFactIndex));
-  els.factText.textContent=fact;els.factSourceHint.textContent="Colombia arriba. Un dato más antes de volver a volar.";
+  els.factText.textContent=fact;els.factSourceHint.textContent="Una curiosidad sobre Colombia antes de volver a volar.";
   showOnly(els.factScreen);
 }
 function submitProfile(e){
@@ -341,14 +342,15 @@ els.rankingBackBtn.addEventListener("click",()=>showOnly(els.homeScreen));
 els.rankingRefreshBtn.addEventListener("click",loadRanking);
 els.submitScoreBtn.addEventListener("click",publishScore);
 els.birdGrid.addEventListener("click",e=>{const btn=e.target.closest("[data-bird]");if(!btn)return;selectedBirdId=btn.dataset.bird;renderBirds();playTone(350,.04)});
-els.startBtn.addEventListener("click",()=>{playTone(440,.07);if(profile){prepareFactThenGame()}else showOnly(els.profileScreen)});
+els.startBtn.addEventListener("click",()=>{playTone(440,.07);if(profile){els.playerName.value=profile.name;els.playerCountry.value=profile.country;selectedBirdId=profile.birdId;renderBirds()}showOnly(els.profileScreen)});
 els.profileForm.addEventListener("submit",submitProfile);
 els.factContinueBtn.addEventListener("click",()=>{playTone(560,.05);startWithProfile()});
 els.pauseBtn.addEventListener("click",()=>{if(!game?.running)return;game.paused=true;cancelAnimationFrame(raf);els.pauseScore.textContent=game.score+" puntos";showOnly(els.pauseScreen);playTone(300,.05)});
 els.resumeBtn.addEventListener("click",()=>{if(!game?.running)return;game.paused=false;game.last=performance.now();showOnly(els.gameScreen);playTone(420,.05);raf=requestAnimationFrame(loop)});
 els.quitBtn.addEventListener("click",()=>{if(game)game.running=false;cancelAnimationFrame(raf);showOnly(els.homeScreen);hydrateStats()});
 els.againBtn.addEventListener("click",()=>{prepareFactThenGame()});
-els.changePilotBtn.addEventListener("click",()=>{showOnly(els.profileScreen);if(profile){els.playerName.value=profile.name;els.playerCountry.value=profile.country}renderBirds()});
+els.changePilotBtn.addEventListener("click",()=>{showOnly(els.profileScreen);if(profile){els.playerName.value=profile.name;els.playerCountry.value=profile.country;selectedBirdId=profile.birdId}renderBirds()});
+els.changePilotHomeBtn.addEventListener("click",()=>{playTone(440,.05);if(profile){els.playerName.value=profile.name;els.playerCountry.value=profile.country;selectedBirdId=profile.birdId}renderBirds();showOnly(els.profileScreen)});
 els.soundBtn.addEventListener("click",()=>{soundOn=!soundOn;localStorage.setItem("amsFlySound",soundOn?"1":"0");els.soundBtn.textContent=soundOn?"♪":"×";if(soundOn)playTone(600,.05)});
 function action(e){if(["BUTTON","INPUT","SELECT"].includes(e.target?.tagName))return;e.preventDefault();if(els.gameScreen.hidden)return;flap()}
 els.gameScreen.addEventListener("pointerdown",action,{passive:false});
