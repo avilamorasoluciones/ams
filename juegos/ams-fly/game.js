@@ -85,6 +85,11 @@ function getBird(id){return birds.find(b=>b.id===id) || birds[0]}
 function birdMarkup(bird,scale="1"){
   return '<div class="bird-shape" style="--bird-a:'+bird.a+';--bird-b:'+bird.b+';--bird-c:'+bird.c+';--bird-d:'+bird.d+';transform:scale('+scale+') rotate(-7deg)"><i class="bird-eye"></i><i class="bird-tail"></i></div>';
 }
+function renderHomeBird(){
+  if(!els.homeBirdArt) return;
+  const bird=getBird(profile?.birdId || selectedBirdId || "condor-co");
+  els.homeBirdArt.innerHTML=birdMarkup(bird,"1.25");
+}
 function showOnly(target){
   [els.homeScreen,els.profileScreen,els.factScreen,els.gameScreen,els.pauseScreen,els.gameOverScreen,els.rankingScreen].forEach(x=>x.hidden=true);
   target.hidden=false;
@@ -361,7 +366,7 @@ function submitProfile(e){
   saveProfile();els.profileError.hidden=true;prepareFactThenGame();
 }
 function bootHome(){
-  loadProfile();hydrateStats();initCountries();renderBirds();
+  loadProfile();hydrateStats();initCountries();renderBirds();renderHomeBird();
   if(profile){els.playerName.value=profile.name;els.playerCountry.value=profile.country;selectedBirdId=profile.birdId;renderBirds()}
   els.homeBirdArt.innerHTML=birdMarkup(getBird(selectedBirdId),".95");
   setTimeout(()=>els.loadingScreen.classList.add("is-gone"),500);
