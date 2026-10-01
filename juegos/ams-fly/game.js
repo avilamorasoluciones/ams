@@ -17,9 +17,9 @@ const DEFAULT_EVENT = {
   desc:"Vuela, consigue el mayor puntaje y participa por el desarrollo de una Landing Page.",
   cta:"VER DETALLES DEL EVENTO",
   prizeTitle:"Desarrollo de Landing Page 100% GRATIS",
-  prizeDesc:"El ganador recibe el desarrollo de una Landing Page responsive para su negocio.",
-  conditionTitle:"Publicación y alojamiento",
-  conditionDesc:"La publicación y gestión del sitio se contrata por separado según las condiciones vigentes de Avila Mora Soluciones.",
+  prizeDesc:"El ganador recibe el desarrollo completo y profesional de una Landing Page responsive, adaptada a su negocio, con diseño, estructura UX/UI, SEO básico y conexión a sus canales de venta.",
+  conditionTitle:"Hosting Cloud + Dominio .com por $5 USD/mes",
+  conditionDesc:"El desarrollo se entrega sin costo. Para mantener la Landing Page publicada y gestionada en la infraestructura de Avila Mora Soluciones, el ganador contrata Hosting Cloud + Dominio .com por $5 USD/mes. Servicios adicionales se cotizan por separado.",
   waTemplate:"Hola {name}, te escribimos de Avila Mora Soluciones sobre tu récord de {score} puntos en {event}."
 };
 
@@ -460,6 +460,9 @@ function saveCurrentLead(message=""){
 function publishScore(){
   if(!profile||!game)return;
   const message=(els.scoreMessage.value||"").trim().slice(0,90);
+  const phone=(profile.phone||"").trim();
+  if(getEventConfig().active&&phone.replace(/\D/g,"").length<7){els.submitScoreStatus.textContent="⚠️ Para participar en el evento necesitas registrar tu WhatsApp con código de área en tu perfil.";return}
+  if(message.length<2){els.submitScoreStatus.textContent="⚠️ Escribe un mensaje de al menos 2 caracteres para publicar tu puntuación.";els.scoreMessage.focus();return}
   if(!RANKING_API){els.submitScoreStatus.textContent="El ranking está preparado; falta conectar el endpoint seguro con Neon.";return}
   els.submitScoreBtn.disabled=true;els.submitScoreStatus.textContent="Publicando...";
   fetch(RANKING_API,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({name:profile.name,country:profile.country,birdId:profile.birdId,score:game.score,message})})
