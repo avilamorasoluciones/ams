@@ -1814,7 +1814,8 @@
                 if (!window.pdfjsLib) throw new Error('No se pudo cargar el motor PDF. Recarga la página e inténtalo de nuevo.');
                 const quality = Math.min(1, Math.max(0.1, parseFloat(pdfCompQuality.value) || 0.6));
                 const pdfjs = window.pdfjsLib;
-                const pdf = await pdfjs.getDocument({ data: await file.arrayBuffer() }).promise;
+                const loadingTask = pdfjs.getDocument({ data: await file.arrayBuffer() });
+                const pdf = await loadingTask.promise;
                 const newPdf = await PDFDocument.create();
                 for (let i = 1; i <= pdf.numPages; i++) {
                     const page = await pdf.getPage(i), viewport = page.getViewport({scale: 1.5});
@@ -1828,7 +1829,7 @@
                     page.cleanup(); canvas.width=1; canvas.height=1;
                 }
                 downloadFile(await newPdf.save(), file.name.replace(/\.pdf$/i,'_AMS_Comprimido.pdf'), 'application/pdf');
-            } catch(error) { console.error("Error al comprimir PDF:",error); amsToast(error?.message || "No se pudo comprimir el PDF.","error"); }
+            } catch(error) { console.error("Error al comprimir PDF:",error); var isPassword=error && (error.name==='PasswordException' || error.code===pdfjsLib.PasswordResponses?.NEED_PASSWORD || error.code===pdfjsLib.PasswordResponses?.INCORRECT_PASSWORD || /password/i.test(error.message||'')); amsToast(isPassword?'Este PDF está protegido con contraseña y no se puede comprimir sin la contraseña.':(error?.message||'No se pudo comprimir el PDF.'),'error'); }
             finally { btn.innerHTML='Comprimir Archivo'; btn.disabled=false; if(window.amsLoading) window.amsLoading(false); }
         });
 
@@ -2183,19 +2184,44 @@
         }
 
         var resizeFile=null, resizeImg=null, resizeObjectUrl=null;
-        function updateResizePreview(){
-            if(!resizeImg)return; var w=Math.max(1,Number(ams$('resize-w').value)||resizeImg.naturalWidth); var h=Math.max(1,Number(ams$('resize-h').value)||resizeImg.naturalHeight);
-            ams$('resize-dimensions').textContent=w+' × '+h+' px'; var scale=(w/resizeImg.naturalWidth)*100;
-            ams$('resize-scale-label').textContent=scale===100?'Tamaño original':(scale<100?'Reducido al ':'Ampliado al ')+Math.round(scale)+'%';
-            document.querySelectorAll('.resize-preset').forEach(function(b){b.classList.toggle('active',Number(b.dataset.width)===w && ams$('resize-lock').checked);});
-        }
-        ams$('inp-resize')?.addEventListener('change',function(e){ resizeFile=e.target.files[0]; if(!resizeFile)return; if(resizeObjectUrl)URL.revokeObjectURL(resizeObjectUrl); resizeImg=new Image(); resizeImg.onload=function(){ ams$('resize-w').value=resizeImg.naturalWidth; ams$('resize-h').value=resizeImg.naturalHeight; ams$('resize-preview').src=resizeImg.src; ams$('resize-workspace').style.display='block'; updateResizePreview(); if(resizeObjectUrl){URL.revokeObjectURL(resizeObjectUrl);resizeObjectUrl=null;} }; resizeImg.onerror=function(){amsToast('No se pudo leer esta imagen.','error');}; resizeObjectUrl=URL.createObjectURL(resizeFile); resizeImg.src=resizeObjectUrl; });
-        ams$('resize-w')?.addEventListener('input',function(){ if(ams$('resize-lock').checked && resizeImg) ams$('resize-h').value=Math.round(Number(ams$('resize-w').value)*resizeImg.naturalHeight/resizeImg.naturalWidth); updateResizePreview(); });
-        ams$('resize-h')?.addEventListener('input',function(){ if(ams$('resize-lock').checked && resizeImg) ams$('resize-w').value=Math.round(Number(ams$('resize-h').value)*resizeImg.naturalWidth/resizeImg.naturalHeight); updateResizePreview(); });
-        ams$('resize-lock')?.addEventListener('change',updateResizePreview);
-        document.querySelectorAll('.resize-preset').forEach(function(button){button.addEventListener('click',function(){if(!resizeImg)return;var target=Math.min(Number(button.dataset.width),resizeImg.naturalWidth);ams$('resize-w').value=target;if(ams$('resize-lock').checked)ams$('resize-h').value=Math.max(1,Math.round(target*resizeImg.naturalHeight/resizeImg.naturalWidth));updateResizePreview();});});
-        ams$('btn-resize')?.addEventListener('click',function(){ if(!resizeImg)return; var w=Math.max(1,Number(ams$('resize-w').value)),h=Math.max(1,Number(ams$('resize-h').value)); var canvas=document.createElement('canvas');canvas.width=w;canvas.height=h;canvas.getContext('2d').drawImage(resizeImg,0,0,w,h);var mime=ams$('resize-format').value;var ext=mime==='image/png'?'.png':mime==='image/jpeg'?'.jpg':'.webp';canvas.toBlob(function(blob){if(blob)downloadFile(blob,resizeFile.name.replace(/\.[^.]+$/,'')+'_AMS'+ext,mime);else amsToast('Formato no soportado','error');},mime,.9); });
-
+        (function initResizeTool(){
+            var input=ams$('inp-resize'), workspace=ams$('resize-workspace');
+            if(!input||!workspace)return;
+            function updateResizePreview(){
+                if(!resizeImg)return;
+                var w=Math.max(1,Number(ams$('resize-w').value)||resizeImg.naturalWidth), h=Math.max(1,Number(ams$('resize-h').value)||resizeImg.naturalHeight);
+                ams$('resize-dimensions').textContent=w+' × '+h+' px';
+                var scale=(w/resizeImg.naturalWidth)*100;
+                ams$('resize-scale-label').textContent=scale===100?'Tamaño original':(scale<100?'Reducido al ':'Ampliado al ')+Math.round(scale)+'%';
+                document.querySelectorAll('.resize-preset').forEach(function(btn){btn.classList.toggle('active',Number(btn.dataset.width)===w&&ams$('resize-lock').checked);});
+            }
+            input.addEventListener('change',function(e){
+                var file=e.target.files&&e.target.files[0]; if(!file)return;
+                resizeFile=file;
+                if(resizeObjectUrl)URL.revokeObjectURL(resizeObjectUrl);
+                resizeObjectUrl=URL.createObjectURL(file);
+                resizeImg=new Image();
+                resizeImg.onload=function(){
+                    ams$('resize-w').value=resizeImg.naturalWidth; ams$('resize-h').value=resizeImg.naturalHeight;
+                    ams$('resize-preview').src=resizeObjectUrl; workspace.style.display='block'; updateResizePreview();
+                };
+                resizeImg.onerror=function(){resizeImg=null;amsToast('No se pudo leer esta imagen.','error');};
+                resizeImg.src=resizeObjectUrl;
+            });
+            ams$('resize-w').addEventListener('input',function(){if(ams$('resize-lock').checked&&resizeImg)ams$('resize-h').value=Math.max(1,Math.round(Number(this.value)*resizeImg.naturalHeight/resizeImg.naturalWidth));updateResizePreview();});
+            ams$('resize-h').addEventListener('input',function(){if(ams$('resize-lock').checked&&resizeImg)ams$('resize-w').value=Math.max(1,Math.round(Number(this.value)*resizeImg.naturalWidth/resizeImg.naturalHeight));updateResizePreview();});
+            ams$('resize-lock').addEventListener('change',updateResizePreview);
+            document.querySelectorAll('.resize-preset').forEach(function(btn){btn.addEventListener('click',function(e){e.preventDefault();if(!resizeImg)return;var target=Math.min(Number(btn.dataset.width),resizeImg.naturalWidth);ams$('resize-w').value=target;if(ams$('resize-lock').checked)ams$('resize-h').value=Math.max(1,Math.round(target*resizeImg.naturalHeight/resizeImg.naturalWidth));updateResizePreview();});});
+            ams$('btn-resize').addEventListener('click',function(){
+                if(!resizeImg||!resizeFile){amsToast('Selecciona una imagen primero.','error');return;}
+                var w=Math.max(1,Math.round(Number(ams$('resize-w').value))),h=Math.max(1,Math.round(Number(ams$('resize-h').value)));
+                var canvas=document.createElement('canvas');canvas.width=w;canvas.height=h;
+                var ctx=canvas.getContext('2d');if(!ctx){amsToast('Tu navegador no puede procesar esta imagen.','error');return;}
+                ctx.drawImage(resizeImg,0,0,w,h);
+                var mime=ams$('resize-format').value,ext=mime==='image/png'?'.png':mime==='image/jpeg'?'.jpg':'.webp';
+                canvas.toBlob(function(blob){if(!blob){amsToast('No se pudo generar la imagen.','error');return;}downloadFile(blob,resizeFile.name.replace(/\.[^.]+$/,'')+'_AMS'+ext,mime);},mime,.9);
+            });
+        })();
         ams$('btn-b64-encode')?.addEventListener('click',function(){
             try{ ams$('base64-output').value=btoa(unescape(encodeURIComponent(ams$('base64-input').value))); }
             catch(e){ amsToast('No se pudo codificar','error'); }
