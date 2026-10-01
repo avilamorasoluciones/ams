@@ -1,0 +1,11 @@
+{
+  "name":"AMS Fly · Avila Mora Soluciones",
+  "short_name":"AMS Fly",
+  "start_url":"./",
+  "display":"standalone",
+  "background_color":"#090817",
+  "theme_color":"#090817",
+  "description":"El vuelo arcade de Avila Mora Soluciones.",
+  "lang":"es-CO",
+  "icons":[{"src":"icon.svg","sizes":"any","type":"image/svg+xml","purpose":"any maskable"}]
+}
