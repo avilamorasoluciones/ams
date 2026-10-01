@@ -17,7 +17,7 @@ Las herramientas internas publicadas en GitHub Pages no deben considerarse un si
 Cuando Avila Mora Soluciones maneje información sensible o necesite acceso multiusuario/multidispositivo, migrar la operación a backend/base de datos con autenticación real.
 
 ## Datos personales
-- Las rutas internas de Gestión se marcan como noindex y también se excluyen en robots.txt, pero esto **no constituye autenticación ni seguridad**.
+- Las rutas internas de Gestión se marcan como noindex; además, el acceso se limita mediante la lógica actual de la aplicación, pero esto **no constituye autenticación de servidor ni seguridad real**.
 - No guardar datos personales de clientes en el repositorio público.
 - El briefing se gestiona en Microsoft Forms; conservar sus respuestas en el entorno autorizado y restringir el acceso.
 - Mantener actualizada la Política de Privacidad cuando cambie el tipo de información que se recopila.
