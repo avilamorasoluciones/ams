@@ -113,3 +113,13 @@ button{cursor:pointer}
 @media(min-width:700px){.app-screen{padding-top:120px}.bird-grid{grid-template-columns:repeat(5,minmax(0,1fr))}.bird-option{display:block;padding:12px;min-height:150px}.bird-mini{margin-bottom:8px;width:60px;height:60px}.bird-mini .bird-shape{transform:scale(.62)}.bird-option small{min-height:28px}.bird-option strong{font-size:.67rem}.home-flight-art{height:280px}}
 @media(max-width:380px){.app-screen{padding-inline:14px}.profile-card{padding:15px}.bird-grid{gap:7px}.bird-option{padding:9px;min-height:77px}.bird-mini{width:42px;height:42px;flex-basis:42px}.bird-mini .bird-shape{transform:scale(.42)}.bird-option strong{font-size:.65rem}.bird-option small{font-size:.53rem}.host-badge{font-size:.39rem}}
 @media(prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:.001ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important}}
+
+/* Ajustes de usabilidad AMS Fly */
+.bird-option{overflow:hidden;min-width:0}
+.bird-mini{overflow:hidden;position:relative}
+.bird-option-copy{min-width:0;display:block;padding-right:2px}
+.bird-option strong{line-height:1.2;white-space:normal;overflow-wrap:anywhere}
+.bird-option small{white-space:normal}
+.bird-mini .bird-shape{transform:scale(.38) rotate(-7deg)}
+.game-screen{touch-action:none}
+#gameCanvas{touch-action:none;display:block}
