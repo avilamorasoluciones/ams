@@ -1528,6 +1528,7 @@ footer {
 
 .tool-modal-card {
   position: relative;
+  box-sizing: border-box;
   width: min(100%, 360px);
 }
 
@@ -4214,13 +4215,14 @@ html:focus-within {
 }
 .tool-modal-card > .btn-xl {
   box-sizing: border-box;
-  flex: 0 1 auto;
+  flex: 0 0 auto;
   min-width: 0;
   min-height: 54px;
   width: 100%;
   max-width: 100%;
   padding-inline: 14px;
   white-space: normal;
+  overflow-wrap: anywhere;
 }
 body.light-theme .btn.primary {
   background: linear-gradient(135deg, #7c3aed, #ec4899) !important;

@@ -1049,12 +1049,16 @@
 const sanitize = (str) => {
   if(!str) return "";
   const map = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#x27;', "/": '&#x2F;' };
-  return str.replace(/[&<>"'/]/ig, (match) => map[match]);
+  return String(str).replace(/[&<>"'/]/ig, (match) => map[match]);
 };
+
+const escapeHTML = (value) => String(value ?? "").replace(/[&<>"']/g, character => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[character]);
+
+const inlineArgument = (value) => escapeHTML(JSON.stringify(String(value ?? "")));
 
 const normalizeStr = (str) => {
   if(!str) return "";
-  return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+  return String(str).normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
 };
 
 const getLocalISODate = (d = new Date()) => {
@@ -1475,9 +1479,9 @@ function renderDaily() {
     </div>
   `;
 }
-function renderFoods(){const rawQ=$("q").value,q=normalizeStr(rawQ),s=state(),items=s.db.filter(f=>normalizeStr(`${f.name} ${f.brand}`).includes(q)).slice(0,30);$("foods").innerHTML=items.length?items.map(f=>`<div class="row food-row"><div class="food-row-info"><strong>${f.name}</strong><br><span class="badge">${f.brand}</span> <span class="badge">Porción: ${f.serv} ${f.unit||"g"}</span><div class="row-detail">P: ${f.p}g · C: ${f.c}g · G: ${f.f}g (${f.kcal} kcal)</div></div><button class="favorite-btn food-favorite-btn ${s.favorites.includes(f.id)?"active":""}" onclick="toggleFavorite('${f.id}')">${s.favorites.includes(f.id)?"★":"☆"}</button><button class="btn primary food-add-btn" onclick="openModal('${f.id}')" aria-label="Agregar ${f.name}" title="Agregar alimento">+</button></div>`).join(""):`<div style="text-align:center;padding:30px;"><p class="muted">¿No encuentras tu alimento? 🤔</p><button class="btn primary" onclick="go('db')">+ Agregar alimento</button></div>`;renderFavoriteFoods();}
+function renderFoods(){const rawQ=$("q").value,q=normalizeStr(rawQ),s=state(),items=s.db.filter(f=>normalizeStr(`${f.name} ${f.brand}`).includes(q)).slice(0,30);$("foods").innerHTML=items.length?items.map(f=>`<div class="row food-row"><div class="food-row-info"><strong>${escapeHTML(f.name)}</strong><br><span class="badge">${escapeHTML(f.brand)}</span> <span class="badge">Porción: ${escapeHTML(f.serv)} ${escapeHTML(f.unit||"g")}</span><div class="row-detail">P: ${escapeHTML(f.p)}g · C: ${escapeHTML(f.c)}g · G: ${escapeHTML(f.f)}g (${escapeHTML(f.kcal)} kcal)</div></div><button class="favorite-btn food-favorite-btn ${s.favorites.includes(f.id)?"active":""}" onclick="toggleFavorite(${inlineArgument(f.id)})">${s.favorites.includes(f.id)?"★":"☆"}</button><button class="btn primary food-add-btn" onclick="openModal(${inlineArgument(f.id)})" aria-label="Agregar ${escapeHTML(f.name)}" title="Agregar alimento">+</button></div>`).join(""):`<div style="text-align:center;padding:30px;"><p class="muted">¿No encuentras tu alimento? 🤔</p><button class="btn primary" onclick="go('db')">+ Agregar alimento</button></div>`;renderFavoriteFoods();}
 function toggleFavorite(id){const s=state(),i=s.favorites.indexOf(id);if(i>=0)s.favorites.splice(i,1);else s.favorites.unshift(id);save(s);toast(i>=0?"Quitado de favoritos.":"⭐ Añadido a favoritos.");}
-function renderFavoriteFoods(){const el=$("favoriteFoods");if(!el)return;const s=state(),fav=s.db.filter(f=>s.favorites.includes(f.id)).slice(0,8);const recent=[...s.foods].sort((a,b)=>(b.time||0)-(a.time||0)),ids=[];recent.forEach(x=>{if(x.dbId&&!ids.includes(x.dbId))ids.push(x.dbId)});const items=fav.length?fav:ids.map(id=>s.db.find(f=>f.id===id)).filter(Boolean).slice(0,8);el.innerHTML=items.length?items.map(f=>`<div class="row frequent-row"><div class="frequent-row-info"><b>${f.name}</b><br><span class="row-detail">${f.kcal} kcal · ${f.serv} ${f.unit||"g"}</span></div><button class="btn primary food-add-btn" onclick="openModal('${f.id}')" aria-label="Agregar ${f.name}" title="Agregar alimento">+</button></div>`).join(""):"<p class='muted'>Aún no hay frecuentes. Marca ☆ en tus alimentos.</p>";}
+function renderFavoriteFoods(){const el=$("favoriteFoods");if(!el)return;const s=state(),fav=s.db.filter(f=>s.favorites.includes(f.id)).slice(0,8);const recent=[...s.foods].sort((a,b)=>(b.time||0)-(a.time||0)),ids=[];recent.forEach(x=>{if(x.dbId&&!ids.includes(x.dbId))ids.push(x.dbId)});const items=fav.length?fav:ids.map(id=>s.db.find(f=>f.id===id)).filter(Boolean).slice(0,8);el.innerHTML=items.length?items.map(f=>`<div class="row frequent-row"><div class="frequent-row-info"><b>${escapeHTML(f.name)}</b><br><span class="row-detail">${escapeHTML(f.kcal)} kcal · ${escapeHTML(f.serv)} ${escapeHTML(f.unit||"g")}</span></div><button class="btn primary food-add-btn" onclick="openModal(${inlineArgument(f.id)})" aria-label="Agregar ${escapeHTML(f.name)}" title="Agregar alimento">+</button></div>`).join(""):"<p class='muted'>Aún no hay frecuentes. Marca ☆ en tus alimentos.</p>";}
 function repeatFood(uuid){const s=state(),x=s.foods.find(f=>f.uuid===uuid);if(!x)return;const b=s.db.find(f=>f.id===x.dbId)||x,r=(+x.serv||1)/(+b.serv||1);s.foods.unshift({...b,dbId:b.id,serv:+x.serv||b.serv,kcal:Math.round(b.kcal*r),p:+(b.p*r).toFixed(1),c:+(b.c*r).toFixed(1),f:+(b.f*r).toFixed(1),date:viewDate,time:Date.now(),uuid:Date.now()+""+Math.random()});save(s);playUISound("food");toast("🔁 Comida repetida.");}
 function estimatedLossGrams(deficitKcal){
   const deficit=Math.max(0,Number(deficitKcal)||0);
@@ -1525,7 +1529,7 @@ function renderSmartHome(){
   const lowCalWarning=g<1200;
   el.innerHTML = "<div class=\"smart-card\"><h3>🎯 Saldo de hoy</h3><p><b style=\"font-size:1.5rem;\">"+left+"</b> kcal aprox.</p><div class=\"row-detail\">"+consumed+" / "+g+" kcal · P "+Math.round(Number(t.p)||0)+"/"+m.protein+" g</div></div>"
     + "<div class=\"smart-card\"><h3>🍽️ Opciones rápidas</h3><div class=\"smart-actions\">"
-    + (cand.map(f => "<button class=\"btn\" onclick=\"openModal(\'"+f.id+"\')\">"+f.name+"<br><small>"+f.kcal+" kcal</small></button>").join("") || "<span class=\'muted\'>Registra más datos para activar sugerencias.</span>")
+    + (cand.map(f => "<button class=\"btn\" onclick=\"openModal("+inlineArgument(f.id)+")\">"+escapeHTML(f.name)+"<br><small>"+escapeHTML(f.kcal)+" kcal</small></button>").join("") || "<span class=\'muted\'>Registra más datos para activar sugerencias.</span>")
     + "</div></div>"
     + "<div class=\"smart-card\"><h3>💧 Agua</h3><p><b>"+water+"</b> / "+wg+" ml</p><div class=\"smart-actions\"><button class=\"btn\" data-sound=\"water\" onclick=\"addWater(250)\">+250 ml</button><button class=\"btn\" data-sound=\"water\" onclick=\"addWater(500)\">+500 ml</button></div></div>"
     + "<div class=\"smart-card\"><h3>📅 Últimos 7 días</h3><div class=\"smart-stat\"><span>Días con comidas</span><b>"+reg+"/7</b></div><div class=\"smart-stat\"><span>Promedio kcal</span><b>"+avg+"</b></div><div class=\"smart-stat\"><span>Ritmo teórico</span><b>"+lossGrams+" g/día</b></div><div class=\"smart-stat\"><span>Cambio de peso</span><b>"+(trend===null?"—":(trend>0?"+":"")+trend+" g")+"</b></div><div class=\"smart-stat\"><span>Agua registrada</span><b>"+ww.reduce((a,x) => a + (Number(x.ml)||0), 0)+" ml</b></div><div class=\"row-detail\" style=\"margin-top:8px;\">Estimación simple según el déficit de tu meta ("+deficit+" kcal/día). El peso real puede variar por agua, glucógeno y otros factores.</div></div>"
@@ -1534,17 +1538,17 @@ function renderSmartHome(){
     + "</div>";
 }
 function lastNDates(){const out=[],d=new Date();for(let i=0;i<7;i++){const x=new Date(d);x.setDate(x.getDate()-i);out.push(getLocalISODate(x))}return out}
-function addRecipeIngredient(){const sel=$("recipeFoodSelect"),db=state().db;if(!sel)return;sel.innerHTML=db.map(f=>`<option value="${f.id}">${f.name} — ${f.serv}${f.unit||"g"}</option>`).join("");const f=db[0];if(f){$("recipeFoodAmount").value=f.serv;$("recipeFoodUnit").textContent=f.unit||"g"}sel.onchange=()=>{const x=db.find(z=>z.id===sel.value);if(x){$("recipeFoodAmount").value=x.serv;$("recipeFoodUnit").textContent=x.unit||"g"}};$("recipeIngredientModal").classList.add("active")}
+function addRecipeIngredient(){const sel=$("recipeFoodSelect"),db=state().db;if(!sel)return;sel.innerHTML=db.map(f=>`<option value="${escapeHTML(f.id)}">${escapeHTML(f.name)} — ${escapeHTML(f.serv)}${escapeHTML(f.unit||"g")}</option>`).join("");const f=db[0];if(f){$("recipeFoodAmount").value=f.serv;$("recipeFoodUnit").textContent=f.unit||"g"}sel.onchange=()=>{const x=db.find(z=>z.id===sel.value);if(x){$("recipeFoodAmount").value=x.serv;$("recipeFoodUnit").textContent=x.unit||"g"}};$("recipeIngredientModal").classList.add("active")}
 function closeRecipeIngredient(){$("recipeIngredientModal").classList.remove("active")}
 function confirmRecipeIngredient(e){e.preventDefault();const id=$("recipeFoodSelect").value,a=+$("recipeFoodAmount").value,f=state().db.find(x=>x.id===id);if(!f||a<=0)return;window.recipeBuilder=window.recipeBuilder||[];window.recipeBuilder.push({id,amount:a});closeRecipeIngredient();renderRecipeBuilder()}
-function renderRecipeBuilder(){const el=$("recipeBuilder"),sum=$("recipeBuilderSummary"),list=window.recipeBuilder||[],s=state();if(!list.length){el.innerHTML="<p class='muted'>Agrega ingredientes para calcular la receta.</p>";sum.textContent="Sin ingredientes.";return}let k=0,p=0,c=0,fat=0;el.innerHTML=list.map((x,i)=>{const b=s.db.find(z=>z.id===x.id),r=x.amount/b.serv;k+=b.kcal*r;p+=b.p*r;c+=b.c*r;fat+=b.f*r;return `<div class="row"><div><b>${b.name}</b><br><span class="row-detail">${x.amount} ${b.unit||"g"} · ${Math.round(b.kcal*r)} kcal</span></div><button class="btn danger" onclick="removeRecipeIngredient(${i})">Quitar</button></div>`}).join("");sum.innerHTML=`<b>Receta completa</b><br>${Math.round(k)} kcal · P ${p.toFixed(1)}g · C ${c.toFixed(1)}g · G ${fat.toFixed(1)}g`}
+function renderRecipeBuilder(){const el=$("recipeBuilder"),sum=$("recipeBuilderSummary"),list=window.recipeBuilder||[],s=state();if(!list.length){el.innerHTML="<p class='muted'>Agrega ingredientes para calcular la receta.</p>";sum.textContent="Sin ingredientes.";return}let k=0,p=0,c=0,fat=0;el.innerHTML=list.map((x,i)=>{const b=s.db.find(z=>z.id===x.id),r=x.amount/b.serv;k+=b.kcal*r;p+=b.p*r;c+=b.c*r;fat+=b.f*r;return `<div class="row"><div><b>${escapeHTML(b.name)}</b><br><span class="row-detail">${escapeHTML(x.amount)} ${escapeHTML(b.unit||"g")} · ${Math.round(b.kcal*r)} kcal</span></div><button class="btn danger" onclick="removeRecipeIngredient(${i})">Quitar</button></div>`}).join("");sum.innerHTML=`<b>Receta completa</b><br>${Math.round(k)} kcal · P ${p.toFixed(1)}g · C ${c.toFixed(1)}g · G ${fat.toFixed(1)}g`}
 function removeRecipeIngredient(i){window.recipeBuilder.splice(i,1);renderRecipeBuilder()}
 let recipeEditingId=null;
 function clearRecipeBuilder(){recipeEditingId=null;window.recipeBuilder=[];$("recipeName").value="";if($("recipeSaveBtn"))$("recipeSaveBtn").textContent="💾 Guardar receta";if($("recipeCancelBtn"))$("recipeCancelBtn").style.display="none";if($("recipeEditHint"))$("recipeEditHint").style.display="none";renderRecipeBuilder()}
 function editRecipe(id){const s=state(),r=s.recipes.find(x=>x.id===id);if(!r)return;recipeEditingId=id;window.recipeBuilder=(r.ingredients||[]).map(x=>({...x}));$("recipeName").value=r.name||"";if($("recipeSaveBtn"))$("recipeSaveBtn").textContent="💾 Guardar cambios";if($("recipeCancelBtn"))$("recipeCancelBtn").style.display="inline-flex";if($("recipeEditHint"))$("recipeEditHint").style.display="block";renderRecipeBuilder();$("recipeName").focus();toast("✏️ Editando receta.")}
 function saveRecipe(){const s=state(),name=$("recipeName").value.trim(),list=window.recipeBuilder||[];if(!name||!list.length){toast("Pon nombre y agrega ingredientes.");return}if(recipeEditingId){const r=s.recipes.find(x=>x.id===recipeEditingId);if(!r)return;r.name=name;r.ingredients=list.map(x=>({...x}));r.editedAt=Date.now();toast("🍳 Receta actualizada ✔️");}else{s.recipes.unshift({id:"recipe_"+Date.now(),name,ingredients:list.map(x=>({...x})),createdAt:Date.now()});toast("🍳 Receta guardada.")}save(s);clearRecipeBuilder();renderRecipes()}
 function recipeTotals(r){const s=state();let k=0,p=0,c=0,f=0;(r.ingredients||[]).forEach(x=>{const b=s.db.find(z=>z.id===x.id);if(!b)return;const q=x.amount/b.serv;k+=b.kcal*q;p+=b.p*q;c+=b.c*q;f+=b.f*q});return{kcal:Math.round(k),p:+p.toFixed(1),c:+c.toFixed(1),f:+f.toFixed(1)}}
-function renderRecipes(){const el=$("recipesList");if(!el)return;const rs=state().recipes;el.innerHTML=rs.length?rs.map(r=>{const t=recipeTotals(r);return `<div class="recipe-item"><div><b>${r.name}</b><br><span class="row-detail">${t.kcal} kcal · P ${t.p}g · C ${t.c}g · G ${t.f}g</span></div><div class="actions"><button class="btn primary" onclick="addRecipeToDay('${r.id}')">➕ 1 porción</button><button class="btn" onclick="editRecipe('${r.id}')">✏️</button><button class="btn danger" onclick="deleteRecipe('${r.id}')">🗑️</button></div></div>`}).join(""):"<p class='muted'>Todavía no tienes recetas.</p>"}
+function renderRecipes(){const el=$("recipesList");if(!el)return;const rs=state().recipes;el.innerHTML=rs.length?rs.map(r=>{const t=recipeTotals(r);return `<div class="recipe-item"><div><b>${escapeHTML(r.name)}</b><br><span class="row-detail">${escapeHTML(t.kcal)} kcal · P ${escapeHTML(t.p)}g · C ${escapeHTML(t.c)}g · G ${escapeHTML(t.f)}g</span></div><div class="actions"><button class="btn primary" onclick="addRecipeToDay(${inlineArgument(r.id)})">➕ 1 porción</button><button class="btn" onclick="editRecipe(${inlineArgument(r.id)})">✏️</button><button class="btn danger" onclick="deleteRecipe(${inlineArgument(r.id)})">🗑️</button></div></div>`}).join(""):"<p class='muted'>Todavía no tienes recetas.</p>"}
 function addRecipeToDay(id){const r=state().recipes.find(x=>x.id===id);if(!r)return;const t=recipeTotals(r),s=state();s.foods.unshift({id:"recipe",name:r.name,brand:"Receta",serv:1,unit:"porción",kcal:t.kcal,p:t.p,c:t.c,f:t.f,foodSnapshot:{serv:1,unit:"porción",kcal:t.kcal,p:t.p,c:t.c,f:t.f},date:viewDate,time:Date.now(),uuid:Date.now()+""+Math.random()});save(s);playUISound("food");toast("🍳 Receta registrada.")}
 function deleteRecipe(id){const s=state(),r=s.recipes.find(x=>x.id===id);if(!r)return;if(!confirm(`¿Eliminar la receta “${r.name}”? Las comidas ya registradas con ella no se borrarán.`))return;s.recipes=s.recipes.filter(x=>x.id!==id);if(recipeEditingId===id)clearRecipeBuilder();save(s);toast("Receta eliminada.")}
 
@@ -1559,24 +1563,24 @@ function renderTodayLists() {
   
   $("todayFoods").innerHTML = todayFoods.map(x => `
     <div class="row">
-      <div><b style="font-size: 1rem;">${x.name}</b> <span class="badge">${x.serv} ${x.unit || 'g'}</span><br><div class="row-detail">${x.kcal} kcal | P: ${x.p}g · C: ${x.c}g · G: ${x.f}g</div></div>
-      <div style="display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end;"><button class="btn" style="padding: 8px 12px; font-size: 0.85rem;" onclick="repeatFood('${x.uuid}')" title="Repetir">🔁</button><button class="btn" style="padding: 8px 12px; font-size: 0.85rem;" onclick="openEntryEditor('food','${x.uuid}')" title="Editar">✏️ Editar</button><button class="btn danger" style="padding: 8px 12px; font-size: 0.85rem;" onclick="removeFood('${x.uuid}')" title="Eliminar">🗑️</button></div>
+      <div><b style="font-size: 1rem;">${escapeHTML(x.name)}</b> <span class="badge">${escapeHTML(x.serv)} ${escapeHTML(x.unit || 'g')}</span><br><div class="row-detail">${escapeHTML(x.kcal)} kcal | P: ${escapeHTML(x.p)}g · C: ${escapeHTML(x.c)}g · G: ${escapeHTML(x.f)}g</div></div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end;"><button class="btn" style="padding: 8px 12px; font-size: 0.85rem;" onclick="repeatFood(${inlineArgument(x.uuid)})" title="Repetir">🔁</button><button class="btn" style="padding: 8px 12px; font-size: 0.85rem;" onclick="openEntryEditor('food',${inlineArgument(x.uuid)})" title="Editar">✏️ Editar</button><button class="btn danger" style="padding: 8px 12px; font-size: 0.85rem;" onclick="removeFood(${inlineArgument(x.uuid)})" title="Eliminar">🗑️</button></div>
     </div>
   `).join("") || "<p class='muted'>Aún no has registrado comidas en este día.</p>";
 
   const exercisesEl = $("todayExercises");
   if(exercisesEl) exercisesEl.innerHTML = todayExercises.map(x => `
       <div class="row">
-        <div><b style="font-size: 1rem;">🏃 ${x.label}</b> <span class="badge">${x.mins} min</span><br><div class="row-detail" style="color: var(--danger)">🔥 ${x.kcal} kcal quemadas</div></div>
-        <div style="display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end;"><button class="btn" style="padding: 8px 12px; font-size: 0.85rem;" onclick="openEntryEditor('exercise','${x.uuid}')" title="Editar">✏️ Editar</button><button class="btn danger" style="padding: 8px 12px; font-size: 0.85rem;" onclick="removeExercise('${x.uuid}')" title="Eliminar">🗑️</button></div>
+        <div><b style="font-size: 1rem;">🏃 ${escapeHTML(x.label)}</b> <span class="badge">${escapeHTML(x.mins)} min</span><br><div class="row-detail" style="color: var(--danger)">🔥 ${escapeHTML(x.kcal)} kcal quemadas</div></div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end;"><button class="btn" style="padding: 8px 12px; font-size: 0.85rem;" onclick="openEntryEditor('exercise',${inlineArgument(x.uuid)})" title="Editar">✏️ Editar</button><button class="btn danger" style="padding: 8px 12px; font-size: 0.85rem;" onclick="removeExercise(${inlineArgument(x.uuid)})" title="Eliminar">🗑️</button></div>
       </div>
     `).join("") || "<p class='muted'>Aún no has registrado actividad en este día.</p>";
 
   const waterEl = $("todayWater");
   if(waterEl) waterEl.innerHTML = todayWater.map(x => `
       <div class="row">
-        <div><b style="font-size: 1rem;">💧 Vaso de Agua</b> <span class="badge" style="background: var(--water-bg); color: var(--water); border-color: transparent;">${x.ml} ml</span></div>
-        <div style="display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end;"><button class="btn" style="padding: 8px 12px; font-size: 0.85rem;" onclick="openEntryEditor('water','${x.uuid}')" title="Editar">✏️ Editar</button><button class="btn danger" style="padding: 8px 12px; font-size: 0.85rem;" onclick="removeWater('${x.uuid}')" title="Eliminar">🗑️</button></div>
+        <div><b style="font-size: 1rem;">💧 Vaso de Agua</b> <span class="badge" style="background: var(--water-bg); color: var(--water); border-color: transparent;">${escapeHTML(x.ml)} ml</span></div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end;"><button class="btn" style="padding: 8px 12px; font-size: 0.85rem;" onclick="openEntryEditor('water',${inlineArgument(x.uuid)})" title="Editar">✏️ Editar</button><button class="btn danger" style="padding: 8px 12px; font-size: 0.85rem;" onclick="removeWater(${inlineArgument(x.uuid)})" title="Eliminar">🗑️</button></div>
       </div>
     `).join("") || "<p class='muted'>Aún no has registrado agua en este día.</p>";
 }
@@ -1616,8 +1620,8 @@ function renderDBList() {
   const items = db.filter(f => normalizeStr(`${f.name} ${f.brand}`).includes(q));
   $("dbList").innerHTML = items.map(f => `
     <div class="row">
-      <div style="flex:1;"><strong style="font-size:0.95rem">${f.name}</strong> <span class="badge">${f.brand}</span><br><div class="row-detail">${f.serv} ${f.unit || 'g'} · ${f.kcal} kcal · P:${f.p}g · C:${f.c}g · G:${f.f}g</div></div>
-      <div style="display:flex; gap:6px;"><button class="btn" style="padding:8px 12px; font-size:0.85rem;" onclick="editDB('${f.id}')">✏️</button><button class="btn danger" style="padding:8px 12px; font-size:0.85rem;" onclick="deleteFromDB('${f.id}')">❌</button></div>
+      <div style="flex:1;"><strong style="font-size:0.95rem">${escapeHTML(f.name)}</strong> <span class="badge">${escapeHTML(f.brand)}</span><br><div class="row-detail">${escapeHTML(f.serv)} ${escapeHTML(f.unit || 'g')} · ${escapeHTML(f.kcal)} kcal · P:${escapeHTML(f.p)}g · C:${escapeHTML(f.c)}g · G:${escapeHTML(f.f)}g</div></div>
+      <div style="display:flex; gap:6px;"><button class="btn" style="padding:8px 12px; font-size:0.85rem;" onclick="editDB(${inlineArgument(f.id)})">✏️</button><button class="btn danger" style="padding:8px 12px; font-size:0.85rem;" onclick="deleteFromDB(${inlineArgument(f.id)})">❌</button></div>
     </div>
   `).join("") || "<p class='muted'>No hay resultados.</p>";
 }
@@ -2004,7 +2008,7 @@ function addWeight(e) {
   playUISound("success");
   toast("Peso guardado ⚖️");
 }
-function renderWeights(){const s=state();$("weights").innerHTML=s.weights.length?s.weights.slice(0,15).map((x,i)=>{const dateText=x.date?new Date(x.date).toLocaleDateString():"Fecha no registrada";return `<div class="row"><div><b style="font-size:1.1rem;">${x.w} kg</b><br><small class="muted">${dateText}</small></div><div style="display:flex;gap:6px;"><button class="btn" style="padding:8px 11px;font-size:.9rem;" onclick="openWeightEditor(${i})" aria-label="Editar registro de peso" title="Editar este registro">✏️</button><button class="btn danger" style="padding:8px 11px;font-size:.9rem;" onclick="deleteWeight(${i})" aria-label="Borrar registro de peso" title="Borrar este registro">🗑️</button></div></div>`}).join(""):"<p class='muted'>Aún no hay registros.</p>";draw()}
+function renderWeights(){const s=state();$("weights").innerHTML=s.weights.length?s.weights.slice(0,15).map((x,i)=>{const dateText=x.date?new Date(x.date).toLocaleDateString():"Fecha no registrada";return `<div class="row"><div><b style="font-size:1.1rem;">${escapeHTML(x.w)} kg</b><br><small class="muted">${dateText}</small></div><div style="display:flex;gap:6px;"><button class="btn" style="padding:8px 11px;font-size:.9rem;" onclick="openWeightEditor(${i})" aria-label="Editar registro de peso" title="Editar este registro">✏️</button><button class="btn danger" style="padding:8px 11px;font-size:.9rem;" onclick="deleteWeight(${i})" aria-label="Borrar registro de peso" title="Borrar este registro">🗑️</button></div></div>`}).join(""):"<p class='muted'>Aún no hay registros.</p>";draw()}
 
 function openWeightEditor(i){const s=state(),item=s.weights[i];if(!item)return;$("weightEditIndex").value=i;$("weightEditValue").value=Number(item.w)||"";$("weightEditDate").value=item.date?getLocalISODate(new Date(item.date)):getLocalISODate();$("weightEditModal").classList.add("active")}
 function closeWeightEditor(){$("weightEditModal").classList.remove("active")}
@@ -2019,14 +2023,14 @@ function draw() {
   const muted=css("--muted"),border=css("--border"),primary=css("--primary"),bg=css("--bg");
   ctx.fillStyle=bg;ctx.fillRect(0,0,width,height);
   const cap=$("chartCaption");
-  if(arr.length<2){ctx.fillStyle=muted;ctx.font="800 14px Nunito,sans-serif";ctx.textAlign="center";ctx.fillText(arr.length===1?"Registra un peso más para ver la tendencia":"Registra tu peso para empezar a ver tu evolución",width/2,height/2);if(cap)cap.innerHTML=arr.length?"<span>Último: <b>"+arr[0].w+" kg</b></span><span>1 medición</span>":"<span>Aún no hay mediciones</span>";return;}
+  if(arr.length<2){ctx.fillStyle=muted;ctx.font="800 14px Nunito,sans-serif";ctx.textAlign="center";ctx.fillText(arr.length===1?"Registra un peso más para ver la tendencia":"Registra tu peso para empezar a ver tu evolución",width/2,height/2);if(cap)cap.innerHTML=arr.length?"<span>Último: <b>"+escapeHTML(arr[0].w)+" kg</b></span><span>1 medición</span>":"<span>Aún no hay mediciones</span>";return;}
   const vals=arr.map(x=>Number(x.w)),min=Math.min(...vals),max=Math.max(...vals),range=Math.max(1,max-min),left=48,right=18,top=25,bottom=34,minY=min-Math.max(.5,range*.18),maxY=max+Math.max(.5,range*.18),pw=width-left-right,ph=height-top-bottom;
   ctx.strokeStyle=border;ctx.lineWidth=1;ctx.setLineDash([4,5]);[0,.5,1].forEach(t=>{const y=top+t*ph;ctx.beginPath();ctx.moveTo(left,y);ctx.lineTo(width-right,y);ctx.stroke();});ctx.setLineDash([]);
   ctx.fillStyle=muted;ctx.font="700 11px Nunito,sans-serif";ctx.textAlign="right";[maxY,(minY+maxY)/2,minY].forEach(v=>{const y=top+((maxY-v)/(maxY-minY))*ph;ctx.fillText(v.toFixed(1)+" kg",left-7,y+4);});
   const pts=arr.map((x,i)=>({x:left+(i/(arr.length-1))*pw,y:top+((maxY-x.w)/(maxY-minY))*ph}));
   ctx.strokeStyle=primary;ctx.lineWidth=4;ctx.lineCap="round";ctx.lineJoin="round";ctx.beginPath();pts.forEach((p,i)=>i?ctx.lineTo(p.x,p.y):ctx.moveTo(p.x,p.y));ctx.stroke();
   pts.forEach((p,i)=>{ctx.fillStyle=bg;ctx.beginPath();ctx.arc(p.x,p.y,6,0,Math.PI*2);ctx.fill();ctx.strokeStyle=primary;ctx.lineWidth=3;ctx.stroke();if(i===pts.length-1){ctx.fillStyle=primary;ctx.font="900 12px Nunito,sans-serif";ctx.textAlign="center";ctx.fillText(arr[i].w+" kg",p.x,Math.max(14,p.y-12));}});
-  const first=arr[0].w,last=arr[arr.length-1].w,diff=last-first;if(cap)cap.innerHTML="<span>"+arr.length+" mediciones</span><span>Último: <b>"+last+" kg</b> · Cambio: <b>"+(diff>0?"+":"")+diff.toFixed(1)+" kg</b></span>";
+  const first=arr[0].w,last=arr[arr.length-1].w,diff=last-first;if(cap)cap.innerHTML="<span>"+arr.length+" mediciones</span><span>Último: <b>"+escapeHTML(last)+" kg</b> · Cambio: <b>"+(diff>0?"+":"")+diff.toFixed(1)+" kg</b></span>";
 }
 
 function exportData() { const a = document.createElement("a"); a.href = URL.createObjectURL(new Blob([JSON.stringify(state(), null, 2)], { type: "application/json" })); a.download = `ayukcal-backup-${getLocalISODate()}.json`; a.click(); }

@@ -528,7 +528,6 @@ const ImpostorGame = (() => {
 
   function finishGame(index) {
     lastVoteIndex = index;
-    lastVoteIndex = index;
     const votedPlayer = players[index];
     const votedRole = roles[index];
 
@@ -741,7 +740,6 @@ const ImpostorGame = (() => {
       changeScreen("i-scr-lobby");
     }
 
-    console.log("ImpostorGame listo");
   }
 
   return {

@@ -1500,6 +1500,12 @@
             return `${parseFloat((bytes / Math.pow(k, i)).toFixed(dm))} ${sizes[i]}`;
         }
 
+        function escapeHtmlText(value) {
+            return String(value ?? '').replace(/[&<>"']/g, character => ({
+                '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+            })[character]);
+        }
+
         /* ========================================================
            EL CEREBRO: CLASE WORKSPACEMANAGER
            ======================================================== */
@@ -1584,13 +1590,14 @@
                 this.filesArray.forEach((file, index) => {
                     const card = document.createElement('div');
                     card.className = `file-card ${this.isMultiple ? '' : 'single-file'}`;
+                    const safeFileName = escapeHtmlText(file.name);
                     
                     let sizeHtml = showSize ? `<div class="file-sizes"><span class="size-original">${formatBytes(file.size)}</span><span class="size-estimated est-size-${index}" data-original="${file.size}"></span></div>` : '';
                     
                     card.innerHTML = `
                         <button class="remove-btn" onclick="${this.extraConfig.instanceName}.removeFile(${index})"><i class="fa-solid fa-xmark"></i></button>
                         <i class="${iconClass}"></i>
-                        <div class="file-name" title="${file.name}">${file.name}</div>
+                        <div class="file-name" title="${safeFileName}">${safeFileName}</div>
                         ${sizeHtml}
                     `;
                     this.grid.appendChild(card);
@@ -2187,7 +2194,7 @@
                         const canShow=()=>!isStandalone()&&!sessionStorage.getItem(dismissedKey);
             function show(title,text,action){
                 document.getElementById('ams-install-title').textContent=title;
-                document.getElementById('ams-install-text').innerHTML=text;
+                document.getElementById('ams-install-text').textContent=text;
                 btn.textContent=action||'Instalar';
                 banner.classList.add('show');
             }
