@@ -1894,22 +1894,20 @@
             pdfOrganizerCreate.disabled=count===0 || pdfOrganizerState.busy;
             pdfOrganizerCreate.innerHTML='<i class="fa-solid fa-file-arrow-down me-1"></i>'+(pdfOrganizerState.busy?'Creando...':'Crear PDF');
         }
-        async function pdfOrganizerRenderPage(file,pageNumber){
-            const bytes=await file.arrayBuffer();
-            const pdf=await pdfjsLib.getDocument({data:bytes}).promise;
+        async function pdfOrganizerRenderPage(pdf,pageNumber){
             const page=await pdf.getPage(pageNumber);
             const base=page.getViewport({scale:1});
-            const maxWidth=170;
-            const scale=Math.min(maxWidth/base.width,.72);
+            const maxWidth=150;
+            const scale=Math.min(maxWidth/base.width,.62);
             const viewport=page.getViewport({scale});
             const canvas=document.createElement('canvas');
             canvas.width=Math.max(1,Math.ceil(viewport.width));
             canvas.height=Math.max(1,Math.ceil(viewport.height));
             const ctx=canvas.getContext('2d',{alpha:false});
             await page.render({canvasContext:ctx,viewport}).promise;
-            const dataUrl=canvas.toDataURL('image/jpeg',.72);
+            const dataUrl=canvas.toDataURL('image/jpeg',.65);
             page.cleanup();
-            pdf.cleanup?.();
+            canvas.width=1; canvas.height=1;
             return dataUrl;
         }
         async function pdfOrganizerAddFiles(fileList){
@@ -1922,12 +1920,12 @@
                     const bytes=await file.arrayBuffer();
                     const pdf=await pdfjsLib.getDocument({data:bytes}).promise;
                     for(let n=1;n<=pdf.numPages;n++){
-                        const thumb=await pdfOrganizerRenderPage(file,n);
+                        const thumb=await pdfOrganizerRenderPage(pdf,n);
                         pdfOrganizerState.pages.push({file,page:n,thumb,name:file.name});
                         const item=pdfOrganizerCreateItem(pdfOrganizerState.pages.length-1,thumb,file.name,n,pdf.numPages);
                         pdfOrganizerGrid.appendChild(item);
                     }
-                    pdf.destroy();
+                    await pdf.destroy();
                 }
                 if(typeof Sortable!=='undefined' && !pdfOrganizerGrid._amsSortable){
                     pdfOrganizerGrid._amsSortable=new Sortable(pdfOrganizerGrid,{animation:160,delay:60,delayOnTouchOnly:true,onEnd(){
@@ -2000,7 +1998,7 @@
                     let src=cache.get(key);
                     if(!src){src=await PDFDocument.load(await p.file.arrayBuffer());cache.set(key,src);}
                     const [page]=await out.copyPages(src,[p.page-1]);
-                    if(p.rotation) page.setRotation((page.getRotation().angle+p.rotation)%360);
+                    if(p.rotation) page.setRotation(PDFLib.degrees((page.getRotation().angle+p.rotation)%360));
                     out.addPage(page);
                 }
                 downloadFile(await out.save(), 'AMS_PDF_Organizado.pdf','application/pdf');
