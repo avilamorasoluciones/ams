@@ -80,9 +80,10 @@ let soundOn = localStorage.getItem("amsFlySound") !== "0";
 let audioCtx = null;
 let musicTimer = 0;
 let musicStep = 0;
+let musicStarting = false;
 let game = null;
 let raf = 0;
-let lastStage = 0;
+let lastStage = -1;
 const stages = [
   {at:0,name:"CIELO ANDINO",top:"#07091a",mid:"#111536",bottom:"#17102b",pipe:"#6d42c9",glow:"#8b5cf6",particle:"#c4b5fd"},
   {at:10,name:"ATARDECER COLOMBIANO",top:"#211329",mid:"#6b294d",bottom:"#1b1230",pipe:"#e16b8c",glow:"#f472b6",particle:"#facc15"},
@@ -293,26 +294,41 @@ function stopMusic(){
   if(musicTimer){clearTimeout(musicTimer);musicTimer=0}
 }
 function startMusic(){
-  if(!soundOn||musicTimer)return;
+  if(!soundOn||musicTimer||musicStarting)return;
   try{
     audioCtx ||= new (window.AudioContext||window.webkitAudioContext)();
-    if(audioCtx.state==="suspended")audioCtx.resume().catch(()=>{});
-    const notes=[196,220,247,262,247,220,196,165];
-    const tick=()=>{
-      if(!soundOn){stopMusic();return}
-      try{
-        const now=audioCtx.currentTime;
-        const o=audioCtx.createOscillator(),g=audioCtx.createGain();
-        o.type="triangle";o.frequency.setValueAtTime(notes[musicStep%notes.length],now);
-        g.gain.setValueAtTime(.0001,now);g.gain.exponentialRampToValueAtTime(.035,now+.025);
-        g.gain.exponentialRampToValueAtTime(.0001,now+.36);
-        o.connect(g);g.connect(audioCtx.destination);o.start(now);o.stop(now+.38);
-      }catch(_){}
-      musicStep++;
-      musicTimer=setTimeout(tick,420);
+    const begin=()=>{
+      musicStarting=false;
+      if(!soundOn||musicTimer||!audioCtx)return;
+      const notes=[196,220,247,262,247,220,196,165];
+      const tick=()=>{
+        if(!soundOn){stopMusic();return}
+        try{
+          const now=audioCtx.currentTime;
+          const note=notes[musicStep%notes.length];
+          const o=audioCtx.createOscillator(),g=audioCtx.createGain();
+          o.type="triangle";o.frequency.setValueAtTime(note,now);
+          g.gain.setValueAtTime(.0001,now);
+          g.gain.exponentialRampToValueAtTime(.065,now+.035);
+          g.gain.exponentialRampToValueAtTime(.0001,now+.38);
+          o.connect(g);g.connect(audioCtx.destination);o.start(now);o.stop(now+.4);
+          const bass=audioCtx.createOscillator(),bg=audioCtx.createGain();
+          bass.type="sine";bass.frequency.setValueAtTime(note/2,now);
+          bg.gain.setValueAtTime(.0001,now);
+          bg.gain.exponentialRampToValueAtTime(.028,now+.04);
+          bg.gain.exponentialRampToValueAtTime(.0001,now+.32);
+          bass.connect(bg);bg.connect(audioCtx.destination);bass.start(now);bass.stop(now+.35);
+        }catch(_){}
+        musicStep++;
+        musicTimer=setTimeout(tick,420);
+      };
+      tick();
     };
-    tick();
-  }catch(_){}
+    if(audioCtx.state==="suspended"||audioCtx.state==="interrupted"){
+      musicStarting=true;
+      audioCtx.resume().then(begin).catch(()=>{musicStarting=false});
+    }else begin();
+  }catch(_){musicStarting=false}
 }
 function resizeCanvas(){
   const dpr=Math.min(window.devicePixelRatio||1,2);
@@ -323,26 +339,30 @@ function resizeCanvas(){
 }
 function randomBetween(a,b){return a+Math.random()*(b-a)}
 function clamp(v,a,b){return Math.max(a,Math.min(b,v))}
-function currentStage(score){
-  const cycle=Math.floor(Math.max(0,score)/10)%stages.length;
-  return stages[cycle];
+function currentStageIndex(score){
+  return Math.floor(Math.max(0,score)/10)%stages.length;
 }
-function showStageBanner(stage){
+function currentStage(score){
+  return stages[currentStageIndex(score)];
+}
+function showStageBanner(stage,index){
   let banner=document.getElementById("stageBanner");
   if(!banner){banner=document.createElement("div");banner.id="stageBanner";banner.className="stage-banner";els.gameScreen.appendChild(banner)}
-  banner.textContent=stage.name+" · "+stage.at+" PUNTOS";
+  banner.textContent=stage.name+" · MUNDO "+(index+1);
   banner.classList.remove("show");void banner.offsetWidth;banner.classList.add("show");
   clearTimeout(banner._timer);banner._timer=setTimeout(()=>banner.classList.remove("show"),1800);
 }
-function playStageSound(stage){
-  const notes=stage.at>=100?[392,523,659,784]:stage.at>=75?[330,440,554,660]:stage.at>=50?[294,392,494,587]:[262,330,392,523];
-  notes.forEach((note,index)=>setTimeout(()=>playTone(note,.11,"triangle"),index*70));
+function playStageSound(index){
+  const notes=[[262,330,392,523],[294,392,494,587],[330,440,554,660],[392,523,659,784]][index%4];
+  notes.forEach((note,i)=>setTimeout(()=>playTone(note,.14,"triangle"),i*75));
 }
 function updateStage(){
-  const stage=currentStage(game.score);
-  if(stage.at!==lastStage){
-    lastStage=stage.at;
-    if(stage.at>0){showStageBanner(stage);playStageSound(stage)}
+  const index=currentStageIndex(game.score);
+  const stage=stages[index];
+  if(index!==lastStage){
+    lastStage=index;
+    showStageBanner(stage,index);
+    playStageSound(index);
   }
   game.stage=stage;
 }
