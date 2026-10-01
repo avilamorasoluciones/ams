@@ -283,7 +283,7 @@ const TabuGame = (() => {
 
     $("t-btnStart").onclick = startGame;
     $("t-btnConfirmTeams").onclick = setupTurn;
-    $("t-btnStartTurn").onclick = startTimer;
+    $("t-btnStartTurn").onclick = () => startTimer();
     
     $("t-btnCorrect").onclick = () => recordAction('correct');
     $("t-btnTaboo").onclick = () => recordAction('taboo');
