@@ -1642,9 +1642,16 @@
                 for (let file of files) {
                     const img = await createImageBitmap(file), canvas = document.createElement('canvas');
                     let w = img.width, h = img.height;
-                    if (w > 1920 || h > 1920) { const ratio = Math.min(1920/w, 1920/h); w *= ratio; h *= ratio; }
-                    canvas.width = w; canvas.height = h; canvas.getContext('2d').drawImage(img, 0, 0, w, h);
-                    const blob = await new Promise(res => canvas.toBlob(res, 'image/jpeg', q)); 
+                    if (w > 1920 || h > 1920) { const ratio = Math.min(1920/w, 1920/h); w = Math.max(1, Math.round(w * ratio)); h = Math.max(1, Math.round(h * ratio)); }
+                    canvas.width = w; canvas.height = h;
+                    const ctx = canvas.getContext('2d');
+                    if (!ctx) throw new Error('No se pudo preparar la imagen.');
+                    ctx.fillStyle = '#fff';
+                    ctx.fillRect(0, 0, w, h);
+                    ctx.drawImage(img, 0, 0, w, h);
+                    const blob = await new Promise(res => canvas.toBlob(res, 'image/jpeg', q));
+                    if (img.close) img.close();
+                    if (!blob) throw new Error('No se pudo generar la imagen comprimida.'); 
                     const name = file.name.replace(/\.[^/.]+$/, "") + "_AMS.jpg";
                     if (files.length > 1) zip.file(name, blob); else downloadFile(blob, name, 'image/jpeg');
                 }
@@ -2116,13 +2123,15 @@
         ams$('regex-text')?.addEventListener('input',testAmsRegex);
 
         ams$('btn-meta')?.addEventListener('click',function(){
-            var title=ams$('meta-title').value.trim(), desc=ams$('meta-desc').value.trim(), url=ams$('meta-url').value.trim();
-            function esc(v){return v.replace(/"/g,'&quot;');}
+            var title=ams$('meta-title').value.trim() || 'Herramientas online gratis | Avila Mora Soluciones',
+                desc=ams$('meta-desc').value.trim() || 'Herramientas online gratuitas para trabajar con PDF, imágenes, texto, archivos y utilidades prácticas directamente desde el navegador.',
+                url=ams$('meta-url').value.trim() || 'https://avilamorasoluciones.com/herramientas/';
+            function esc(v){return String(v).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
             ams$('meta-output').value=[
                 '<meta property="og:type" content="website" />',
-                '<meta property="og:title" content="Herramientas online gratis | Avila Mora Soluciones" />',
-                '<meta property="og:description" content="Herramientas online gratuitas para trabajar con PDF, imágenes, texto, archivos y utilidades prácticas directamente desde el navegador." />',
-                '<meta property="og:url" content="https://avilamorasoluciones.com/herramientas/" />',
+                '<meta property="og:title" content="'+esc(title)+'" />',
+                '<meta property="og:description" content="'+esc(desc)+'" />',
+                '<meta property="og:url" content="'+esc(url)+'" />',
                 '<meta property="og:site_name" content="Avila Mora Soluciones" />',
                 '<meta property="og:locale" content="es_CO" />',
                 '<meta property="og:image" content="https://avilamorasoluciones.com/img/AMS.webp?v=1" />',
@@ -2131,8 +2140,8 @@
                 '<meta property="og:image:height" content="640" />',
                 '<meta property="og:image:alt" content="Avila Mora Soluciones" />',
                 '<meta name="twitter:card" content="summary_large_image" />',
-                '<meta name="twitter:title" content="Herramientas online gratis | Avila Mora Soluciones" />',
-                '<meta name="twitter:description" content="Herramientas online gratuitas para trabajar con PDF, imágenes, texto, archivos y utilidades prácticas directamente desde el navegador." />',
+                '<meta name="twitter:title" content="'+esc(title)+'" />',
+                '<meta name="twitter:description" content="'+esc(desc)+'" />',
                 '<meta name="twitter:image" content="https://avilamorasoluciones.com/img/AMS.webp?v=1" />',
                 '<title>Herramientas online gratis | Avila Mora Soluciones</title>',
                 '<meta name="description" content="Herramientas online gratuitas para trabajar con PDF, imágenes, texto, archivos y utilidades prácticas directamente desde el navegador.">',
