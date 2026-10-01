@@ -163,12 +163,18 @@ const NosConocemosGame = (() => {
     
     for (const [name, guess] of Object.entries(guesses)) {
       const isCorrect = guess === mainAnswer;
-      resultsContainer.innerHTML += `
-        <div class="res-item ${isCorrect ? 'correct' : 'incorrect'}">
-          <span>${window.Utils.escapeHTML(name)}</span>
-          <span>${isCorrect ? '${window.uiIcon("check")} Acertó' : '${window.uiIcon("close")} Falló'}</span>
-        </div>
-      `;
+      const row = document.createElement("div");
+      row.className = `res-item ${isCorrect ? "correct" : "incorrect"}`;
+
+      const nameSpan = document.createElement("span");
+      nameSpan.textContent = name;
+
+      const resultSpan = document.createElement("span");
+      resultSpan.innerHTML = `${isCorrect ? window.uiIcon("check") : window.uiIcon("close")} ${isCorrect ? "Acertó" : "Falló"}`;
+
+      row.appendChild(nameSpan);
+      row.appendChild(resultSpan);
+      resultsContainer.appendChild(row);
     }
     
     window.emitSound(1000, 0.3, "triangle");
