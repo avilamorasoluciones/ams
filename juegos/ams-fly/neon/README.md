@@ -1,36 +1,89 @@
-# Neon · AMS Fly
+# AMS Fly · API + Neon
 
-Esta carpeta contiene el esquema de PostgreSQL para el ranking mundial.
+Esta carpeta contiene el backend opcional para convertir el ranking y la gestión de eventos en un servicio real.
 
-## Arquitectura segura
+## Arquitectura
 
-AMS Fly está publicado como frontend estático/PWA. Por eso no debe conectarse directamente a Neon: la cadena de conexión de Neon contiene credenciales y no puede estar en game.js.
+`AMS Fly (GitHub Pages) → HTTPS API → Neon PostgreSQL`
 
-La arquitectura prevista es:
+El navegador **nunca** recibe `DATABASE_URL`.
 
-AMS Fly (GitHub Pages) → HTTPS API → Neon PostgreSQL
+## 1. Neon
 
-El frontend ya tiene dos puntos de integración:
+Ejecuta `schema.sql` en tu proyecto Neon.
 
-- GET RANKING_API?limit=50 para consultar el ranking.
-- POST RANKING_API con { name, country, birdId, score, message } para publicar.
+Crea estas tablas:
 
-En game.js existe:
+- `ams_fly_scores`: ranking público.
+- `ams_fly_event_config`: configuración del evento activo.
+- `ams_fly_participants`: datos privados de participantes, incluido WhatsApp.
 
-const RANKING_API = "";
+## 2. Servidor
 
-Cuando exista el endpoint seguro, se coloca allí su URL pública HTTPS. La URL pública del endpoint sí puede estar en el frontend; las credenciales de Neon no.
+Esta carpeta incluye:
 
-## Tabla
+- `server.js`
+- `package.json`
+- `.env.example`
 
-Ejecuta schema.sql en el proyecto Neon.
+En un servidor Node/Coolify configura las variables:
 
-## Respuesta esperada del GET
+- `DATABASE_URL`: cadena privada de Neon.
+- `ADMIN_TOKEN`: secreto largo y aleatorio para administración.
+- `CORS_ORIGIN`: dominio del frontend, por ejemplo `https://avilamorasoluciones.com`.
+- `PORT`: normalmente lo proporciona Coolify.
 
-Puede ser un array de objetos con name, country, birdId, score, message; o un objeto { rows: [...] }.
+Después:
 
-## POST
+```bash
+npm install
+npm start
+```
 
-El endpoint debe validar y guardar nombre, país, personaje, puntuación y mensaje, y devolver HTTP 200/201 cuando el registro sea correcto.
+## Endpoints
 
-El juego no confía en la base de datos para el récord local: el récord local continúa funcionando aunque Neon esté caído.
+### Públicos
+
+- `GET /health`
+- `GET /event`
+- `GET /ranking?limit=50`
+- `POST /ranking`
+- `POST /participants`
+
+### Administrativos
+
+Requieren:
+
+`Authorization: Bearer TU_ADMIN_TOKEN`
+
+- `PUT /event`
+- `GET /participants`
+
+## 3. Conectar el juego
+
+En `game.js`:
+
+```js
+const EVENT_API = "https://api.tu-dominio.com";
+```
+
+Al definirlo, AMS Fly utiliza automáticamente:
+
+- `EVENT_API/event`
+- `EVENT_API/ranking`
+- `EVENT_API/participants`
+
+El frontend conserva un respaldo local si el servidor no está disponible.
+
+## Seguridad
+
+- `DATABASE_URL` solo existe en el servidor.
+- El token administrativo solo se guarda temporalmente en `sessionStorage`.
+- WhatsApp está separado de la tabla pública del ranking.
+- Los campos reciben límites de longitud y listas permitidas de países/aves.
+- No se acepta `created_at` desde el navegador.
+- El ranking público nunca devuelve teléfonos.
+
+### Importante sobre concursos
+
+El servidor valida el formato de la puntuación, pero un juego ejecutado en el navegador no puede demostrar por sí solo que un puntaje sea legítimo. Para un premio real conviene tratar el ranking como registro de participación y revisar manualmente el récord ganador o implementar posteriormente un sistema anti-cheat más fuerte.
