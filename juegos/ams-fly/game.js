@@ -6,6 +6,22 @@ const STATS_KEY = "amsFlyStatsV1";
 const FACT_INDEX_KEY = "amsFlyFactIndexV1";
 const RANKING_API = "";
 const RANKING_LIMIT = 50;
+const EVENT_API = "";
+const EVENT_TOKEN_STORAGE = "amsFlyAdminTokenV1";
+const EVENT_CONFIG_KEY = "amsFlyEventConfigV1";
+const LEADS_KEY = "amsFlyLeadsV1";
+const DEFAULT_EVENT = {
+  active:true,
+  badge:"🏆 EVENTO ESPECIAL 2026",
+  title:"¡Gana una Landing Page Gratis!",
+  desc:"Vuela, consigue el mayor puntaje y participa por el desarrollo de una Landing Page.",
+  cta:"VER DETALLES DEL EVENTO",
+  prizeTitle:"Desarrollo de Landing Page 100% GRATIS",
+  prizeDesc:"El ganador recibe el desarrollo de una Landing Page responsive para su negocio.",
+  conditionTitle:"Publicación y alojamiento",
+  conditionDesc:"La publicación y gestión del sitio se contrata por separado según las condiciones vigentes de Avila Mora Soluciones.",
+  waTemplate:"Hola {name}, te escribimos de Avila Mora Soluciones sobre tu récord de {score} puntos en {event}."
+};
 
 const countries = [
   {code:"CO",name:"Colombia",flag:"🇨🇴",bird:"Cóndor de los Andes"},
@@ -75,6 +91,102 @@ const stages = [
   {at:100,name:"ÓRBITA AMS",top:"#02030b",mid:"#11133a",bottom:"#250d40",pipe:"#a855f7",glow:"#ec4899",particle:"#fff"}
 ];
 
+
+function getEventConfig(){
+  return safeParse(EVENT_CONFIG_KEY, DEFAULT_EVENT);
+}
+function saveEventConfig(config){
+  localStorage.setItem(EVENT_CONFIG_KEY, JSON.stringify(config));
+}
+function getLocalLeads(){
+  return safeParse(LEADS_KEY, []);
+}
+function saveLocalLead(lead){
+  const rows=getLocalLeads();
+  const key=(lead.name||"").toLowerCase()+"|"+(lead.country||"");
+  const existing=rows.findIndex(x=>((x.name||"").toLowerCase()+"|"+(x.country||""))===key);
+  if(existing>=0){
+    rows[existing]={...rows[existing],...lead,score:Math.max(Number(rows[existing].score||0),Number(lead.score||0)),updatedAt:new Date().toISOString()};
+  }else rows.unshift({...lead,createdAt:new Date().toISOString(),updatedAt:new Date().toISOString()});
+  localStorage.setItem(LEADS_KEY,JSON.stringify(rows));
+}
+function eventTemplate(template,lead){
+  return String(template||"").replaceAll("{name}",lead.name||"").replaceAll("{score}",String(lead.score||0)).replaceAll("{event}",getEventConfig().title||"AMS Fly");
+}
+function eventPhoneUrl(phone,name,score){
+  let digits=String(phone||"").replace(/\\D/g,"");
+  if(digits.length===10&&digits.startsWith("3"))digits="57"+digits;
+  if(digits.length<8)return "";
+  return "https://wa.me/"+digits+"?text="+encodeURIComponent(eventTemplate(getEventConfig().waTemplate,{name,score}));
+}
+function applyEventConfig(){
+  const cfg=getEventConfig();
+  let banner=document.getElementById("amsFlyEventBanner");
+  if(!banner){
+    banner=document.createElement("section");banner.id="amsFlyEventBanner";banner.className="event-banner-card";
+    const home=els.homeScreen;const stats=home.querySelector(".home-stats");
+    home.insertBefore(banner,stats||home.querySelector("#startBtn"));
+  }
+  banner.hidden=!cfg.active;
+  banner.innerHTML='<span class="event-badge">'+cfg.badge+'</span><h3>'+cfg.title+'</h3><p>'+cfg.desc+'</p><button id="amsFlyEventOpen" class="event-cta-button" type="button">'+cfg.cta+' <span>→</span></button>';
+  banner.querySelector("#amsFlyEventOpen").onclick=()=>openEventScreen();
+}
+function openEventScreen(){
+  let screen=document.getElementById("amsFlyEventScreen");
+  if(!screen){
+    screen=document.createElement("section");screen.id="amsFlyEventScreen";screen.className="screen app-screen";screen.hidden=true;
+    screen.innerHTML='<div class="section-heading"><span class="eyebrow">AMS FLY · EVENTO</span><h2 id="eventTitle"></h2><p id="eventDesc"></p></div><div class="event-details-card"><div class="event-detail-block"><span class="event-badge">🏆 PREMIO</span><h3 id="eventPrizeTitle"></h3><p id="eventPrizeDesc"></p></div><div class="event-detail-block"><span class="event-badge">📋 CONDICIONES</span><h3 id="eventConditionTitle"></h3><p id="eventConditionDesc"></p></div><button id="eventJoinButton" class="primary-button" type="button">PARTICIPAR Y VOLAR <span>✦</span></button><button id="eventBackButton" class="secondary-button" type="button">← VOLVER</button></div>';
+    document.querySelector(".app-shell").insertBefore(screen,els.profileScreen);
+    screen.querySelector("#eventBackButton").onclick=()=>showOnly(els.homeScreen);
+    screen.querySelector("#eventJoinButton").onclick=()=>{if(profile)prepareFactThenGame();else showOnly(els.profileScreen)};
+  }
+  const cfg=getEventConfig();
+  screen.querySelector("#eventTitle").textContent=cfg.title;
+  screen.querySelector("#eventDesc").textContent=cfg.desc;
+  screen.querySelector("#eventPrizeTitle").textContent=cfg.prizeTitle;
+  screen.querySelector("#eventPrizeDesc").textContent=cfg.prizeDesc;
+  screen.querySelector("#eventConditionTitle").textContent=cfg.conditionTitle;
+  screen.querySelector("#eventConditionDesc").textContent=cfg.conditionDesc;
+  showOnly(screen);
+}
+function openEventAdmin(){
+  let panel=document.getElementById("amsFlyAdminPanel");
+  if(!panel){
+    panel=document.createElement("section");panel.id="amsFlyAdminPanel";panel.className="admin-panel";
+    panel.innerHTML='<div class="admin-card"><div class="admin-head"><div><span class="eyebrow">AMS FLY · GESTIÓN</span><h2>Gestión del evento</h2></div><button id="adminClose" class="secondary-button" type="button">Cerrar</button></div><p class="admin-note">La configuración local sirve para pruebas. Para gestión real multi-dispositivo usa EVENT_API con el servidor seguro de Neon.</p><label>Token de administrador<input id="adminToken" type="password" autocomplete="off" placeholder="Token del servidor"></label><div class="admin-grid"><label>Evento activo<input id="cfgActive" type="checkbox"></label><label>Badge<input id="cfgBadge" type="text"></label><label>Título<input id="cfgTitle" type="text"></label><label>CTA<input id="cfgCta" type="text"></label></div><label>Descripción<textarea id="cfgDesc"></textarea></label><label>Premio - título<input id="cfgPrizeTitle" type="text"></label><label>Premio - descripción<textarea id="cfgPrizeDesc"></textarea></label><label>Condición - título<input id="cfgConditionTitle" type="text"></label><label>Condición - descripción<textarea id="cfgConditionDesc"></textarea></label><label>Plantilla WhatsApp<textarea id="cfgWaTemplate"></textarea></label><div class="admin-actions"><button id="adminSave" class="primary-button" type="button">GUARDAR CONFIGURACIÓN</button><button id="adminLoadRemote" class="secondary-button" type="button">CARGAR DESDE SERVIDOR</button><button id="adminExport" class="secondary-button" type="button">EXPORTAR PARTICIPANTES CSV</button></div><p id="adminStatus" class="submit-status"></p><div id="adminParticipants" class="admin-participants"></div></div>';
+    document.body.appendChild(panel);
+    panel.querySelector("#adminClose").onclick=()=>panel.remove();
+    panel.querySelector("#adminSave").onclick=saveAdminConfig;
+    panel.querySelector("#adminLoadRemote").onclick=loadRemoteEventConfig;
+    panel.querySelector("#adminExport").onclick=exportLocalLeads;
+  }
+  const cfg=getEventConfig(), token=sessionStorage.getItem(EVENT_TOKEN_STORAGE)||"";
+  panel.querySelector("#adminToken").value=token;
+  panel.querySelector("#cfgActive").checked=!!cfg.active;
+  panel.querySelector("#cfgBadge").value=cfg.badge;panel.querySelector("#cfgTitle").value=cfg.title;panel.querySelector("#cfgCta").value=cfg.cta;panel.querySelector("#cfgDesc").value=cfg.desc;
+  panel.querySelector("#cfgPrizeTitle").value=cfg.prizeTitle;panel.querySelector("#cfgPrizeDesc").value=cfg.prizeDesc;panel.querySelector("#cfgConditionTitle").value=cfg.conditionTitle;panel.querySelector("#cfgConditionDesc").value=cfg.conditionDesc;panel.querySelector("#cfgWaTemplate").value=cfg.waTemplate;
+  renderAdminParticipants();
+}
+function saveAdminConfig(){
+  const p=document.getElementById("amsFlyAdminPanel"),cfg={active:p.querySelector("#cfgActive").checked,badge:p.querySelector("#cfgBadge").value.trim()||DEFAULT_EVENT.badge,title:p.querySelector("#cfgTitle").value.trim()||DEFAULT_EVENT.title,cta:p.querySelector("#cfgCta").value.trim()||DEFAULT_EVENT.cta,desc:p.querySelector("#cfgDesc").value.trim()||DEFAULT_EVENT.desc,prizeTitle:p.querySelector("#cfgPrizeTitle").value.trim()||DEFAULT_EVENT.prizeTitle,prizeDesc:p.querySelector("#cfgPrizeDesc").value.trim()||DEFAULT_EVENT.prizeDesc,conditionTitle:p.querySelector("#cfgConditionTitle").value.trim()||DEFAULT_EVENT.conditionTitle,conditionDesc:p.querySelector("#cfgConditionDesc").value.trim()||DEFAULT_EVENT.conditionDesc,waTemplate:p.querySelector("#cfgWaTemplate").value.trim()||DEFAULT_EVENT.waTemplate};
+  saveEventConfig(cfg);sessionStorage.setItem(EVENT_TOKEN_STORAGE,p.querySelector("#adminToken").value.trim());applyEventConfig();openEventScreen();showOnly(els.homeScreen);
+}
+function renderAdminParticipants(){
+  const p=document.getElementById("amsFlyAdminPanel");if(!p)return;
+  const rows=getLocalLeads().sort((a,b)=>Number(b.score||0)-Number(a.score||0));
+  p.querySelector("#adminParticipants").innerHTML=rows.length?rows.map((x,i)=>'<div class="admin-participant"><strong>#'+(i+1)+' '+String(x.name||"Piloto").replace(/[<>&]/g,"")+'</strong><span>'+getCountry(x.country).name+' · '+getBird(x.birdId).name+' · '+Number(x.score||0)+' pts</span><span>'+((x.phone||"Sin WhatsApp"))+'</span>'+(x.phone?'<a href="'+eventPhoneUrl(x.phone,x.name,x.score)+'" target="_blank" rel="noopener">WhatsApp ↗</a>':"")+'</div>').join(""):'<p class="admin-note">Todavía no hay participantes guardados en este dispositivo.</p>';
+}
+async function loadRemoteEventConfig(){
+  const p=document.getElementById("amsFlyAdminPanel"),status=p.querySelector("#adminStatus");
+  if(!EVENT_API){status.textContent="No hay EVENT_API configurada todavía. La gestión local está disponible para pruebas.";return}
+  try{const res=await fetch(EVENT_API+"/event");if(!res.ok)throw new Error();const cfg=await res.json();saveEventConfig({...DEFAULT_EVENT,...cfg});applyEventConfig();status.textContent="✓ Configuración cargada desde servidor."}catch(_){status.textContent="No se pudo cargar la configuración remota."}
+}
+function exportLocalLeads(){
+  const rows=getLocalLeads();if(!rows.length)return;
+  const header="Nombre,País,Ave,Puntaje,WhatsApp,Mensaje,Fecha\n";
+  const csv=header+rows.map(x=>[x.name,x.country,x.birdId,x.score,x.phone||"",x.message||"",x.updatedAt||x.createdAt||""].map(v=>'"'+String(v).replaceAll('"','""')+'"').join(",")).join("\n");
+  const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([csv],{type:"text/csv;charset=utf-8"}));a.download="ams-fly-participantes.csv";a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000);
+}
 function safeParse(key, fallback){
   try{return JSON.parse(localStorage.getItem(key) || "") || fallback}catch(_){return fallback}
 }
