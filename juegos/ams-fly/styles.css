@@ -71,6 +71,10 @@ button{cursor:pointer}
 .profile-card{width:min(560px,100%);padding:20px;border:1px solid var(--line);border-radius:24px;background:linear-gradient(145deg,rgba(255,255,255,.055),rgba(255,255,255,.018));box-shadow:var(--shadow)}
 .profile-card label{display:block;color:#dfe1ec;font-size:.72rem;font-weight:900;margin-bottom:15px}
 .profile-card input,.profile-card select{width:100%;margin-top:7px;height:50px;border:1px solid var(--line);border-radius:14px;background:rgba(0,0,0,.2);color:#fff;padding:0 14px;outline:none}
+.phone-input-row{display:grid;grid-template-columns:minmax(138px,.82fr) minmax(0,1.5fr);gap:8px}
+.phone-input-row select,.phone-input-row input{margin-top:7px}
+.phone-input-row select{padding-inline:10px;font-size:.67rem}
+@media(max-width:380px){.phone-input-row{grid-template-columns:minmax(124px,.8fr) minmax(0,1.4fr)}.phone-input-row select{font-size:.61rem;padding-inline:8px}}
 .profile-card input:focus,.profile-card select:focus{border-color:#8b5cf6;box-shadow:0 0 0 3px rgba(139,92,246,.12)}
 .field-label{color:#dfe1ec;font-size:.72rem;font-weight:900;margin:6px 0 9px}
 .bird-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
