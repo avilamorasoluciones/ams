@@ -130,3 +130,23 @@ button{cursor:pointer}
 @media(min-width:700px){.hero-copy h1{font-size:clamp(2.8rem,5vw,4rem)}}
 @media(min-width:1024px){.hero-copy h1{font-size:3.4rem;letter-spacing:-.05em}}
 @media(min-width:1440px){.hero-copy h1{font-size:3.6rem}}
+
+
+/* AMS Fly · eventos y gestión */
+.header-actions{display:flex;gap:8px;align-items:center}
+.event-banner-card{width:min(560px,100%);margin:0 auto 14px;padding:16px;border:1px solid rgba(250,204,21,.18);border-radius:22px;background:linear-gradient(145deg,rgba(250,204,21,.07),rgba(139,92,246,.08));box-shadow:0 14px 35px rgba(0,0,0,.16)}
+.event-banner-card h3{margin:7px 0 5px;font-size:1rem}.event-banner-card p{margin:0;color:#aeb1c5;font-size:.67rem;line-height:1.5}
+.event-badge{display:inline-flex;padding:5px 8px;border-radius:999px;background:rgba(250,204,21,.1);border:1px solid rgba(250,204,21,.18);color:#fde68a;font-size:.48rem;font-weight:950;letter-spacing:.08em}
+.event-cta-button{margin-top:11px;border:0;border-radius:12px;padding:10px 13px;background:rgba(255,255,255,.06);color:#fff;font-size:.62rem;font-weight:900}
+.event-details-card{width:min(600px,100%);padding:20px;border:1px solid var(--line);border-radius:24px;background:linear-gradient(145deg,rgba(255,255,255,.045),rgba(255,255,255,.015));box-shadow:var(--shadow)}
+.event-detail-block{padding:15px 0;border-bottom:1px solid var(--line)}.event-detail-block:first-child{padding-top:0}.event-detail-block:last-of-type{border-bottom:0}
+.event-detail-block h3{margin:9px 0 5px;font-size:.9rem}.event-detail-block p{margin:0;color:#aeb1c5;font-size:.7rem;line-height:1.55}
+.admin-panel{position:fixed;inset:0;z-index:200;background:rgba(4,4,12,.78);backdrop-filter:blur(18px);overflow:auto;padding:calc(18px + var(--safe-top)) 15px calc(24px + var(--safe-bottom))}
+.admin-card{width:min(760px,100%);margin:auto;padding:22px;border:1px solid rgba(167,139,250,.22);border-radius:26px;background:linear-gradient(145deg,#17152d,#0a0a18);box-shadow:0 25px 80px rgba(0,0,0,.4)}
+.admin-head{display:flex;align-items:flex-start;justify-content:space-between;gap:15px}.admin-head h2{margin:6px 0 0;font-size:1.7rem}.admin-head .secondary-button{width:auto;margin:0;padding:0 16px;min-height:42px}
+.admin-note{color:#8d91aa;font-size:.65rem;line-height:1.5;padding:10px 12px;border-radius:12px;background:rgba(255,255,255,.03)}
+.admin-card label{display:block;color:#dfe1ec;font-size:.65rem;font-weight:900;margin:12px 0}.admin-card input,.admin-card textarea{display:block;width:100%;margin-top:6px;border:1px solid var(--line);border-radius:12px;background:rgba(0,0,0,.2);color:#fff;padding:10px 12px;outline:none}.admin-card textarea{min-height:72px;resize:vertical}
+.admin-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.admin-actions{display:grid;gap:8px;margin-top:15px}.admin-actions .secondary-button,.admin-actions .primary-button{width:100%;margin:0}
+.admin-participants{display:grid;gap:7px;margin-top:14px}.admin-participant{display:grid;grid-template-columns:1fr auto;gap:3px 12px;padding:10px 12px;border:1px solid var(--line);border-radius:13px;background:rgba(255,255,255,.025);font-size:.62rem}.admin-participant span{color:#858aa4}.admin-participant a{grid-column:2;color:#86efac;text-decoration:none;font-weight:900}
+.optional-label{color:#777b99;font-size:.55rem;font-weight:700}.field-hint{display:block;color:#6f748e;font-size:.52rem;font-weight:600;line-height:1.4;margin-top:5px}
+@media(max-width:520px){.admin-grid{grid-template-columns:1fr}.admin-participant{grid-template-columns:1fr}.admin-participant a{grid-column:1}.event-banner-card{padding:14px}.admin-card{padding:17px}}
