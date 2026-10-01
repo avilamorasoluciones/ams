@@ -1,6 +1,22 @@
-const CACHE_NAME = 'ams-tools-v15';
-const CACHE_PREFIX = "ams-tools-";
-const APP_SHELL = ['./','./index.html','./manifest.webmanifest?v=14','./icon-192.svg?v=14','./icon-512.svg?v=14','../img/ams-favicon.svg'];
+const CACHE_NAME = 'ams-tools-v16';
+const CACHE_PREFIX = 'ams-tools-';
+
+const APP_SHELL = [
+  './',
+  './index.html',
+  './manifest.webmanifest?v=16',
+  './icon-192.svg?v=16',
+  './icon-512.svg?v=16',
+  '../img/ams-favicon.svg'
+];
+
+const EXTERNAL_HOSTS = new Set([
+  'cdn.jsdelivr.net',
+  'cdnjs.cloudflare.com',
+  'unpkg.com',
+  'fonts.googleapis.com',
+  'fonts.gstatic.com'
+]);
 
 self.addEventListener('install', event => {
   event.waitUntil(
@@ -13,7 +29,11 @@ self.addEventListener('install', event => {
 self.addEventListener('activate', event => {
   event.waitUntil(
     caches.keys()
-      .then(keys => Promise.all(keys.filter(key => key.startsWith(CACHE_PREFIX) && key !== CACHE_NAME).map(key => caches.delete(key))))
+      .then(keys => Promise.all(
+        keys
+          .filter(key => key.startsWith(CACHE_PREFIX) && key !== CACHE_NAME)
+          .map(key => caches.delete(key))
+      ))
       .then(() => self.clients.claim())
   );
 });
@@ -22,23 +42,38 @@ self.addEventListener('fetch', event => {
   if (event.request.method !== 'GET') return;
 
   const url = new URL(event.request.url);
-  if (url.origin !== self.location.origin) return;
+  const sameOrigin = url.origin === self.location.origin;
+  const trustedExternal = EXTERNAL_HOSTS.has(url.hostname);
 
-  const fresh = event.request.mode === 'navigate' ||
-    ['script','style','manifest'].includes(event.request.destination);
+  // Solo cacheamos recursos externos que esta aplicación carga de forma conocida.
+  // Esto permite que PDF.js, pdf-lib, JSZip, Cropper, QRCode, Bootstrap y fuentes
+  // queden disponibles offline después de haber sido cargados al menos una vez.
+  if (!sameOrigin && !trustedExternal) return;
 
   event.respondWith((async () => {
     const cached = await caches.match(event.request);
+
+    // Los recursos externos son estáticos: cache-first evita depender de la red
+    // una vez que ya fueron descargados.
+    if (cached && trustedExternal) return cached;
+
     try {
-      const request = fresh ? new Request(event.request, { cache: 'no-store' }) : event.request;
+      const request = sameOrigin
+        ? new Request(event.request, { cache: 'no-store' })
+        : event.request;
       const response = await fetch(request);
-      if (response?.ok) {
+
+      if (response && (response.ok || response.type === 'opaque')) {
         const cache = await caches.open(CACHE_NAME);
         await cache.put(event.request, response.clone());
       }
       return response;
     } catch {
-      return cached || (event.request.mode === 'navigate' ? caches.match('./index.html') : Response.error());
+      if (cached) return cached;
+      if (sameOrigin && event.request.mode === 'navigate') {
+        return caches.match('./index.html');
+      }
+      return Response.error();
     }
   })());
 });
