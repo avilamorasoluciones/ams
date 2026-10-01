@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+  <meta name="theme-color" content="#090817">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="description" content="AMS Fly · El vuelo arcade de Avila Mora Soluciones. Elige tu ave, vuela, supera obstáculos y rompe tu récord.">
+  <meta property="og:title" content="AMS Fly · Avila Mora Soluciones">
+  <meta property="og:description" content="Un pequeño vuelo arcade de Avila Mora Soluciones. ¿Hasta dónde llegas?">
+  <meta property="og:type" content="website">
+  <link rel="canonical" href="https://avilamorasoluciones.com/juegos/ams-fly/">
+  <link rel="icon" href="icon.svg" type="image/svg+xml">
+  <link rel="manifest" href="manifest.webmanifest?v=1">
+  <link rel="stylesheet" href="styles.css?v=1">
+  <title>AMS Fly · Avila Mora Soluciones</title>
+</head>
+<body>
+  <div id="loadingScreen" class="screen loading-screen">
+    <div class="loading-orbit"></div>
+    <div class="ams-mark">AMS</div>
+    <div class="loading-bird" id="loadingBird">✦</div>
+    <p>PREPARANDO EL VUELO</p>
+    <small id="factLoading">Colombia tiene una de las mayores diversidades de aves del planeta.</small>
+  </div>
+
+  <main class="app-shell">
+    <header class="game-header">
+      <a class="brand" href="../index.html" aria-label="Volver a Juegos Avila Mora">
+        <span class="brand-dot"></span>
+        <span><b>Avila Mora</b><small>SOLUCIONES · AMS FLY</small></span>
+      </a>
+      <button id="soundBtn" class="icon-button" type="button" aria-label="Activar o desactivar sonido">♪</button>
+    </header>
+
+    <section id="homeScreen" class="screen app-screen active">
+      <div class="hero-copy">
+        <span class="eyebrow">RECURSO · AMS GAMES</span>
+        <h1><span>AMS</span> Fly</h1>
+        <p>Un pequeño vuelo, una gran obsesión.<br>¿Cuántos puntos puedes conseguir?</p>
+      </div>
+
+      <div class="home-flight-art" aria-hidden="true">
+        <div class="art-glow"></div>
+        <div class="art-bird" id="homeBirdArt"></div>
+        <div class="art-ring ring-a"></div>
+        <div class="art-ring ring-b"></div>
+        <div class="art-particle p1"></div><div class="art-particle p2"></div><div class="art-particle p3"></div>
+      </div>
+
+      <div class="home-stats">
+        <div><span>RÉCORD</span><strong id="homeBest">0</strong></div>
+        <div><span>PARTIDAS</span><strong id="homeGames">0</strong></div>
+      </div>
+
+      <button id="startBtn" class="primary-button" type="button">EMPEZAR A VOLAR <span>→</span></button>
+      <p class="micro-copy">Toca, haz clic o presiona ESPACIO para volar.</p>
+    </section>
+
+    <section id="profileScreen" class="screen app-screen" hidden>
+      <div class="section-heading">
+        <span class="eyebrow">ANTES DEL VUELO</span>
+        <h2>Presenta a tu piloto.</h2>
+        <p>Estos datos se guardan en este dispositivo. El ranking online llegará después.</p>
+      </div>
+
+      <form id="profileForm" class="profile-card" novalidate>
+        <label>Nombre
+          <input id="playerName" name="name" maxlength="18" autocomplete="nickname" placeholder="¿Cómo te llamamos?" required>
+        </label>
+
+        <label>País
+          <select id="playerCountry" name="country" required></select>
+        </label>
+
+        <div class="field-label">Elige tu ave</div>
+        <div id="birdGrid" class="bird-grid" role="radiogroup" aria-label="Elegir personaje"></div>
+
+        <div id="selectedBirdInfo" class="selected-bird-info"></div>
+
+        <button class="primary-button" type="submit">LISTO, A VOLAR <span>✦</span></button>
+        <p id="profileError" class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <section id="factScreen" class="screen fact-screen" hidden>
+      <div class="fact-mark">✦</div>
+      <span class="eyebrow">PAUSA ENTRE VUELOS · COLOMBIA</span>
+      <h2 id="factTitle">¿Sabías que…?</h2>
+      <p id="factText"></p>
+      <small id="factSourceHint">Un dato para volar sabiendo un poquito más.</small>
+      <button id="factContinueBtn" class="primary-button" type="button">SIGUIENTE VUELO <span>→</span></button>
+    </section>
+
+    <section id="gameScreen" class="screen game-screen" hidden>
+      <canvas id="gameCanvas" aria-label="Juego AMS Fly"></canvas>
+      <div class="hud">
+        <div class="hud-pill"><span>PUNTOS</span><strong id="scoreValue">0</strong></div>
+        <div class="hud-center" id="difficultyValue">VUELO 1</div>
+        <button id="pauseBtn" class="hud-button" type="button" aria-label="Pausar juego">Ⅱ</button>
+      </div>
+      <div id="gameStartHint" class="game-start-hint">
+        <strong>TOCA PARA VOLAR</strong>
+        <span>Evita los portales y mantén el ritmo.</span>
+      </div>
+    </section>
+
+    <section id="pauseScreen" class="screen overlay-screen" hidden>
+      <div class="overlay-card">
+        <span class="eyebrow">VUELO EN PAUSA</span>
+        <h2>Respira. El cielo espera.</h2>
+        <p id="pauseScore">0 puntos</p>
+        <button id="resumeBtn" class="primary-button" type="button">CONTINUAR</button>
+        <button id="quitBtn" class="secondary-button" type="button">SALIR DEL VUELO</button>
+      </div>
+    </section>
+
+    <section id="gameOverScreen" class="screen overlay-screen" hidden>
+      <div class="overlay-card result-card">
+        <div id="resultBird" class="result-bird"></div>
+        <span class="eyebrow" id="resultEyebrow">VUELO TERMINADO</span>
+        <h2 id="resultTitle">Buen vuelo.</h2>
+        <div class="result-score"><span>PUNTOS</span><strong id="finalScore">0</strong></div>
+        <div class="result-grid">
+          <div><span>RÉCORD</span><strong id="resultBest">0</strong></div>
+          <div><span>PARTIDAS</span><strong id="resultGames">0</strong></div>
+        </div>
+        <p id="newRecord" class="new-record" hidden>🏆 NUEVO RÉCORD</p>
+        <button id="againBtn" class="primary-button" type="button">OTRA PARTIDA <span>↻</span></button>
+        <button id="changePilotBtn" class="secondary-button" type="button">CAMBIAR PILOTO</button>
+      </div>
+    </section>
+
+    <footer class="game-footer">
+      <span>AMS Fly · Un juego de Avila Mora Soluciones</span>
+      <span>Hecho para jugar por jugar. 🇨🇴</span>
+    </footer>
+  </main>
+
+  <script src="game.js?v=1"></script>
+</body>
+</html>
