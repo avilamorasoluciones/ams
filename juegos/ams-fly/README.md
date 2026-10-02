@@ -40,16 +40,22 @@ El panel de gestión se abre desde el icono ⚙ del encabezado y pide iniciar se
 - Participantes privados y puntajes.
 - Exportación local CSV.
 
-### Neon + API
+### Neon + Data API (producción)
 
-La arquitectura es:
+La versión actual usa directamente **Neon Auth + Neon Data API** desde el frontend estático de GitHub Pages. No se necesita el servidor Express legado para el flujo público.
 
-`AMS Fly → API HTTPS → Neon PostgreSQL`
+- neon-config.js: contiene únicamente las URL públicas de Neon Auth y Data API.
+- neon-client.js: crea el cliente Neon con acceso anónimo para las consultas públicas.
+- neon/schema.sql: tablas de ranking, evento y participantes.
+- neon/rls-migration.sql: RLS, políticas y permisos de los roles anonymous/authenticated.
+- El ranking público lee ams_fly_scores.
+- Publicar una puntuación inserta en ams_fly_scores.
+- El registro del participante usa la función ams_fly_register_participant.
+- La gestión exige sesión Neon Auth, correo confirmado y role = admin.
 
-La carpeta `neon/` contiene el esquema y un servidor Node/Express listo para desplegar en Coolify. Configura en el servicio `DATABASE_URL`, `NEON_AUTH_JWKS_URL` y `CORS_ORIGIN`. No pongas `DATABASE_URL` en el frontend.
+**Paso único después de crear las tablas:** ejecuta neon/rls-migration.sql completo en el SQL Editor del branch production. La migración es idempotente y debe ejecutarse también si ya habías ejecutado una versión anterior, porque incluye los GRANT necesarios para el Data API.
 
-Para conectar la aplicación, configura la URL pública de Neon Auth y la URL HTTPS de la API en `admin-auth.js`. Para habilitar ranking y sincronización del evento, configura también `EVENT_API` en `game.js`. Crea tu cuenta en Neon Auth, confirma el correo y asigna el rol `admin` antes de iniciar sesión. La API autoriza solo sesiones válidas de Neon con ese rol.
-
+El servidor neon/server.js queda como referencia/legado y no es necesario para GitHub Pages.
 ## Controles
 
 - Móvil: tocar la pantalla.
