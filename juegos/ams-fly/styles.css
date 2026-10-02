@@ -411,3 +411,68 @@ button{cursor:pointer}
 @media(max-width:430px){
   .ranking-date{font-size:.5rem}
 }
+
+
+/* AMS Fly · identidad única con Neon Auth */
+.auth-card{
+  margin:0 0 22px;
+  padding:20px;
+  border:1px solid rgba(196,181,253,.18);
+  border-radius:24px;
+  background:linear-gradient(145deg,rgba(24,20,53,.92),rgba(14,12,32,.88));
+  box-shadow:0 18px 50px rgba(0,0,0,.18);
+}
+.auth-card.is-authenticated{
+  border-color:rgba(52,211,153,.28);
+}
+.auth-card-head{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:16px;
+}
+.auth-card-head h3{
+  margin:4px 0 0;
+  font-size:1.25rem;
+}
+.auth-lock{
+  width:42px;
+  height:42px;
+  display:grid;
+  place-items:center;
+  border-radius:14px;
+  background:rgba(124,58,237,.14);
+  font-size:1.1rem;
+}
+.auth-copy{
+  margin:12px 0 16px;
+  color:#bfc2d2;
+  line-height:1.6;
+}
+.auth-actions{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+  margin-top:12px;
+}
+.auth-actions .primary-button,
+.auth-actions .secondary-button{
+  min-height:48px;
+}
+.auth-identity{
+  margin:12px 0 0;
+  padding:10px 12px;
+  border-radius:12px;
+  background:rgba(52,211,153,.08);
+  color:#b7f7dc;
+  font-size:.9rem;
+  overflow-wrap:anywhere;
+}
+.auth-status,.auth-card .field-hint{
+  display:block;
+  margin-top:10px;
+}
+@media (max-width:560px){
+  .auth-card{padding:16px;border-radius:20px}
+  .auth-actions{grid-template-columns:1fr}
+}
