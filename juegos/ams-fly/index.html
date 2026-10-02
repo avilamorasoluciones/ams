@@ -138,10 +138,10 @@
         <p id="newRecord" class="new-record" hidden>🏆 NUEVO RÉCORD</p>
         <button id="againBtn" class="primary-button" type="button">OTRA PARTIDA <span>↻</span></button>
         <label class="message-label">MENSAJE PARA EL RANKING
-          <textarea id="scoreMessage" maxlength="90" placeholder="Deja unas palabras para los demás pilotos..."></textarea>
+          <textarea id="scoreMessage" maxlength="90" minlength="3" required placeholder="Escribe algo antes de publicar, por ejemplo: ¡Buen vuelo!"></textarea>
         </label>
         <button id="submitScoreBtn" class="primary-button" type="button">PUBLICAR PUNTUACIÓN <span>↑</span></button>
-        <p id="submitScoreStatus" class="submit-status" role="status"></p>
+        <p id="submitScoreStatus" class="submit-status" role="status">Tu mensaje es obligatorio para confirmar la publicación.</p>
         <button id="rankingFromResultBtn" class="secondary-button" type="button">🏆 VER RANKING MUNDIAL</button>
         <button id="changePilotBtn" class="secondary-button" type="button">CAMBIAR PILOTO</button>
       </div>
@@ -171,8 +171,8 @@
 
   <script src="neon-config.js?v=1"></script>
   <script src="neon-client.js?v=3"></script>
-  <script src="admin-auth.js?v=4"></script>
-  <script src="game.js?v=21"></script>
+  <script src="admin-auth.js?v=5"></script>
+  <script src="game.js?v=22"></script>
   <script>
     if ("serviceWorker" in navigator) {
       window.addEventListener("load", () => navigator.serviceWorker.register("./sw.js").catch(() => {}));
