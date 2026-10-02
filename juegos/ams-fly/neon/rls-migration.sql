@@ -11,7 +11,7 @@ as $$
   select exists (
     select 1
     from neon_auth."user" u
-    where u.id = auth.user_id()
+    where u.id::text = auth.user_id()
       and u.role = 'admin'
       and u."emailVerified" = true
   );
