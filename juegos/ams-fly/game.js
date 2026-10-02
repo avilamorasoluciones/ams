@@ -5,11 +5,6 @@ const STORAGE_KEY = "amsFlyProfileV2";
 const STATS_KEY = "amsFlyStatsV1";
 const FACT_INDEX_KEY = "amsFlyFactIndexV1";
 const NEON_DATA_READY = () => !!window.AMS_FLY_NEON_CONFIG?.dataApiUrl;
-const PHONE_API_URL = String(window.AMS_FLY_NEON_CONFIG?.phoneApiUrl || "").replace(/\/$/,"");
-const INTERNAL_PILOTS = Object.freeze([
-  {name:"Diego Andrés",phone:"+573043344962",prizeEligible:false},
-  {name:"María José",phone:"+573043343619",prizeEligible:false}
-]);
 function formatRankingDate(value){
   const date=new Date(value);
   if(!Number.isFinite(date.getTime()))return "";
@@ -25,6 +20,12 @@ async function getNeonClient(){
 async function getPublicNeonClient(){
   if(!window.AMS_FLY_NEON?.getPublicClient) throw new Error("Cliente público Neon no disponible.");
   return window.AMS_FLY_NEON.getPublicClient();
+}
+async function getCurrentAuthUser(){
+  const client=await getNeonClient();
+  const result=await client.auth.getSession();
+  if(result?.error) throw new Error(result.error.message||"No se pudo consultar la sesión.");
+  return result?.data?.user || result?.data?.session?.user || null;
 }
 const RANKING_LIMIT = 50;
 function escapeHtml(value){
@@ -89,7 +90,7 @@ const colombiaFacts = [
 const els = {};
 [
   "loadingScreen","homeScreen","profileScreen","factScreen","gameScreen","pauseScreen","gameOverScreen",
-  "homeBest","homeGames","startBtn","changePilotHomeBtn","profileForm","playerName","playerCountry","playerPhoneCountry","playerPhone","phoneVerificationBox","sendPhoneCodeBtn","phoneCodeRow","phoneCode","verifyPhoneCodeBtn","phoneVerifyStatus","birdGrid","selectedBirdInfo","profileError",
+  "homeBest","homeGames","startBtn","changePilotHomeBtn","profileForm","authBox","authEmail","authPassword","authSignInBtn","authSignUpBtn","authSignOutBtn","authStatus","authIdentity","playerName","playerCountry","birdGrid","selectedBirdInfo","profileError",
   "factTitle","factText","factSourceHint","factContinueBtn","gameCanvas","scoreValue","difficultyValue","pauseBtn","gameStartHint",
   "pauseScore","resumeBtn","quitBtn","resultBird","resultEyebrow","resultTitle","finalScore","resultBest","resultGames","newRecord",
   "againBtn","changePilotBtn","soundBtn","backBtn","adminNavBtn","homeBirdArt","rankingBtn","rankingFromResultBtn","rankingBackBtn","rankingRefreshBtn","rankingList","rankingStatus","scoreMessage","submitScoreBtn","submitScoreStatus","shareResultBtn","termsConsent","rankingScreen"
@@ -99,7 +100,6 @@ const ctx = els.gameCanvas.getContext("2d", {alpha:false});
 let profile = null;
 let stats = {games:0,best:0};
 let selectedBirdId = "condor-co";
-let pendingPhoneProfile = null;
 let currentFactIndex = Number(localStorage.getItem(FACT_INDEX_KEY) || 0);
 let soundOn = localStorage.getItem("amsFlySound") !== "0";
 let audioCtx = null;
@@ -306,8 +306,6 @@ function hydrateStats(){
 function initCountries(){
   els.playerCountry.innerHTML=countries.map(c=>'<option value="'+c.code+'">'+c.flag+' '+c.name+'</option>').join("");
   els.playerCountry.value=profile?.country || "CO";
-  els.playerPhoneCountry.innerHTML=countries.map(c=>'<option value="'+c.dial+'">'+c.flag+" +"+c.dial+" · "+c.name+'</option>').join("");
-  els.playerPhoneCountry.value=profile?.phoneCountry || getCountry(profile?.country || "CO").dial;
 }
 function renderBirds(){
   els.birdGrid.innerHTML=birds.map(b=>{
@@ -330,7 +328,6 @@ function loadProfile(){
     if(profile.birdId==="condor-ec")profile.birdId="tucan-ec";
     if(profile.birdId==="condor-cl")profile.birdId="chucao-cl";
     selectedBirdId=profile.birdId;
-    if(!profile.phoneCountry)profile.phoneCountry=getCountry(profile.country||"CO").dial;
   }else profile=null;
 }
 function playTone(freq=440,duration=.08,type="sine"){
@@ -585,11 +582,11 @@ function endGame(){
 
 async function saveCurrentLead(message=""){
   if(!profile||!game||!NEON_DATA_READY())return null;
-  const lead={id:"lead_"+Date.now(),name:profile.name,country:profile.country,birdId:profile.birdId,score:game.score,message,phone:profile.phone||"",date:new Date().toISOString()};
+  const lead={id:"lead_"+Date.now(),name:profile.name,country:profile.country,birdId:profile.birdId,score:game.score,message,date:new Date().toISOString()};
   saveLocalLead(lead);
   try{
     const client=await getPublicNeonClient();
-    const result=await client.rpc("ams_fly_register_participant",{p_name:lead.name,p_country:lead.country,p_bird_id:lead.birdId,p_phone:lead.phone,p_score:0});
+    const result=await client.rpc("ams_fly_register_participant",{p_name:lead.name,p_country:lead.country,p_bird_id:lead.birdId,p_phone:null,p_score:0});
     if(result.error)throw result.error;
     return result.data||null;
   }catch(error){console.warn("AMS Fly: no se pudo registrar el participante",error);return null}
@@ -620,7 +617,7 @@ async function publishScore(){
   try{
     const participant=await saveCurrentLead(message);
     const participantId=participant?.participant_id||profile.participantId||null;
-    if(!participantId) throw new Error("No se pudo identificar tu piloto. Vuelve a registrar tu número antes de publicar.");
+    if(!participantId) throw new Error("No se pudo identificar tu piloto. Inicia sesión y vuelve a registrar tu piloto antes de publicar.");
     profile.participantId=participantId;saveProfile();
     const client=await getPublicNeonClient();
     const result=await client.rpc("ams_fly_submit_score",{
@@ -714,89 +711,100 @@ function prepareFactThenGame(){
   els.factText.textContent=fact;els.factSourceHint.textContent="Una curiosidad sobre Colombia antes de volver a volar.";
   showOnly(els.factScreen);
 }
+async function refreshAuthUI(){
+  if(!els.authBox)return;
+  try{
+    const user=await getCurrentAuthUser();
+    const signedIn=!!user;
+    els.authEmail.value=signedIn?(user.email||""):"";
+    els.authPassword.value="";
+    els.authIdentity.textContent=signedIn?"Sesión activa · "+(user.email||"Cuenta Neon"):"";
+    els.authIdentity.hidden=!signedIn;
+    els.authSignInBtn.hidden=signedIn;
+    els.authSignUpBtn.hidden=signedIn;
+    els.authSignOutBtn.hidden=!signedIn;
+    els.authPassword.disabled=signedIn;
+    els.authStatus.textContent=signedIn
+      ?"✓ Cuenta identificada. Esta cuenta solo puede tener un piloto en el ranking."
+      :"Inicia sesión o crea una cuenta. La cuenta Neon será la identidad única de tu piloto.";
+    els.authBox.classList.toggle("is-authenticated",signedIn);
+    return user;
+  }catch(_){
+    els.authStatus.textContent="No se pudo consultar la sesión de Neon.";
+    return null;
+  }
+}
+async function signInPlayer(){
+  const email=(els.authEmail.value||"").trim().toLowerCase(),password=els.authPassword.value||"";
+  if(!email||!password){els.authStatus.textContent="Escribe tu correo y contraseña.";return}
+  els.authSignInBtn.disabled=true;els.authSignUpBtn.disabled=true;els.authStatus.textContent="Iniciando sesión…";
+  try{
+    const client=await getNeonClient();
+    const result=await client.auth.signIn.email({email,password,rememberMe:true});
+    if(result?.error)throw new Error(result.error.message||"No se pudo iniciar sesión.");
+    if(!await getCurrentAuthUser())throw new Error("Neon no devolvió una sesión válida.");
+    await refreshAuthUI();
+  }catch(error){els.authStatus.textContent=error?.message||"No se pudo iniciar sesión. Revisa el correo y la contraseña."}
+  finally{els.authSignInBtn.disabled=false;els.authSignUpBtn.disabled=false}
+}
+async function signUpPlayer(){
+  const email=(els.authEmail.value||"").trim().toLowerCase(),password=els.authPassword.value||"";
+  if(!email||!/^S+@S+.S+$/.test(email)){els.authStatus.textContent="Escribe un correo electrónico válido.";return}
+  if(password.length<8){els.authStatus.textContent="La contraseña debe tener al menos 8 caracteres.";return}
+  els.authSignInBtn.disabled=true;els.authSignUpBtn.disabled=true;els.authStatus.textContent="Creando tu cuenta…";
+  try{
+    const client=await getNeonClient();
+    const result=await client.auth.signUp.email({email,password,name:(els.playerName.value||"").trim()||"Piloto AMS Fly"});
+    if(result?.error)throw new Error(result.error.message||"No se pudo crear la cuenta.");
+    const user=await getCurrentAuthUser();
+    if(user)await refreshAuthUI();
+    else els.authStatus.textContent="✓ Cuenta creada. Si Neon solicita verificar el correo, completa ese paso y luego inicia sesión.";
+  }catch(error){els.authStatus.textContent=error?.message||"No se pudo crear la cuenta."}
+  finally{els.authSignInBtn.disabled=false;els.authSignUpBtn.disabled=false}
+}
+async function signOutPlayer(){
+  try{
+    const client=await getNeonClient();await client.auth.signOut();
+    profile=null;localStorage.removeItem(STORAGE_KEY);renderHomeBird();await refreshAuthUI();
+  }catch(error){els.authStatus.textContent=error?.message||"No se pudo cerrar la sesión."}
+}
 async function submitProfile(e){
   e.preventDefault();
-  const name=els.playerName.value.trim().replace(/\s+/g," ");
+  const authUser=await refreshAuthUI();
+  if(!authUser){els.profileError.textContent="Primero inicia sesión o crea una cuenta Neon. Una cuenta = un piloto en el ranking.";els.profileError.hidden=false;els.authEmail.focus();return}
+  const name=els.playerName.value.trim().replace(/s+/g," ");
   if(name.length<2){els.profileError.textContent="Escribe al menos 2 caracteres para tu nombre.";els.profileError.hidden=false;els.playerName.focus();return}
   if(els.termsConsent && !els.termsConsent.checked){els.profileError.textContent="Debes aceptar los Términos y Condiciones y la Política de Privacidad para participar.";els.profileError.hidden=false;els.termsConsent.focus();return}
-  const phoneCountry=els.playerPhoneCountry?.value || getCountry(els.playerCountry.value).dial;
-  const rawPhone=(els.playerPhone?.value||"").replace(/\D/g,"");
-  if(rawPhone.length<7){els.profileError.textContent="El número de celular es obligatorio para identificar tu piloto.";els.profileError.hidden=false;els.playerPhone?.focus();return}
   if(!NEON_DATA_READY()){els.profileError.textContent="No podemos registrar el piloto todavía porque Neon no está conectado.";els.profileError.hidden=false;return}
-  const candidate={name:name.slice(0,18),country:els.playerCountry.value,birdId:selectedBirdId,phoneCountry,phone:"+"+phoneCountry+rawPhone,phoneVerified:false};
+  const candidate={name:name.slice(0,18),country:els.playerCountry.value,birdId:selectedBirdId};
   try{
     const client=await getPublicNeonClient();
-    const result=await client.rpc("ams_fly_register_participant",{p_name:candidate.name,p_country:candidate.country,p_bird_id:candidate.birdId,p_phone:candidate.phone,p_score:0});
+    const result=await client.rpc("ams_fly_register_participant",{p_name:candidate.name,p_country:candidate.country,p_bird_id:candidate.birdId,p_phone:null,p_score:0});
     if(result.error)throw result.error;
-    const remote=result.data;
-    candidate.participantId=remote?.participant_id||candidate.participantId||null;
-    if(remote?.existing){
-      if(remote.name && remote.name.toLowerCase()!==candidate.name.toLowerCase())throw new Error("Este celular ya está asociado a otro piloto. Usa el número del piloto correcto.");
-      candidate.name=remote.name||candidate.name;candidate.country=remote.country||candidate.country;candidate.birdId=remote.bird_id||candidate.birdId;candidate.phoneVerified=!!remote.phone_verified;candidate.participantId=remote.participant_id||candidate.participantId||null;
-    }
-    if(PHONE_API_URL && !candidate.phoneVerified){
-      pendingPhoneProfile=candidate;
-      els.phoneVerificationBox.hidden=false;
-      els.phoneCodeRow.hidden=true;
-      els.phoneVerifyStatus.textContent="Este número necesita una verificación. Te enviaremos un código SMS.";
-      els.profileError.hidden=true;
-      await sendPhoneCode();
-      return;
-    }
+    const remote=result.data||{};
+    candidate.participantId=remote.participant_id||null;
+    candidate.prizeEligible=remote.prize_eligible!==false;
+    if(remote.name)candidate.name=remote.name;
+    if(remote.country)candidate.country=remote.country;
+    if(remote.bird_id)candidate.birdId=remote.bird_id;
     finishProfile(candidate);
   }catch(error){
     console.error("AMS Fly: no se pudo registrar el piloto",error);
-    els.profileError.textContent=error?.message||"No pudimos registrar este piloto. Inténtalo de nuevo.";els.profileError.hidden=false;
+    const detail=String(error?.message||"No pudimos registrar este piloto.");
+    els.profileError.textContent=detail.includes("auth_required")?"La sesión de Neon venció. Inicia sesión de nuevo para continuar.":detail;
+    els.profileError.hidden=false;
   }
 }
 function finishProfile(candidate){
-  profile=candidate;selectedBirdId=profile.birdId;saveProfile();renderBirds();
-  els.phoneVerificationBox.hidden=true;prepareFactThenGame();
-}
-async function sendPhoneCode(){
-  if(!PHONE_API_URL||!pendingPhoneProfile)return;
-  els.sendPhoneCodeBtn.disabled=true;els.phoneVerifyStatus.textContent="Enviando código…";
-  try{
-    const response=await fetch(PHONE_API_URL+"/phone/send",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({phone:pendingPhoneProfile.phone})});
-    const data=await response.json().catch(()=>({}));
-    if(!response.ok)throw new Error(data.error||"No pudimos enviar el código.");
-    els.phoneCodeRow.hidden=false;els.phoneVerifyStatus.textContent="Código enviado. Revisa tus SMS.";els.phoneCode.focus();
-  }catch(error){els.phoneVerifyStatus.textContent=error.message||"No pudimos enviar el código.";}
-  finally{els.sendPhoneCodeBtn.disabled=false}
-}
-async function verifyPhoneCode(){
-  if(!PHONE_API_URL||!pendingPhoneProfile)return;
-  const code=(els.phoneCode.value||"").trim();
-  if(!/^\d{4,10}$/.test(code)){els.phoneVerifyStatus.textContent="Escribe el código recibido por SMS.";return}
-  els.verifyPhoneCodeBtn.disabled=true;els.phoneVerifyStatus.textContent="Verificando…";
-  try{
-    const response=await fetch(PHONE_API_URL+"/phone/verify",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({phone:pendingPhoneProfile.phone,code})});
-    const data=await response.json().catch(()=>({}));
-    if(!response.ok)throw new Error(data.error||"Código incorrecto.");
-    pendingPhoneProfile.phoneVerified=true;els.phoneVerifyStatus.textContent="✓ Celular verificado.";finishProfile(pendingPhoneProfile);pendingPhoneProfile=null;
-  }catch(error){els.phoneVerifyStatus.textContent=error.message||"No pudimos verificar el código."}
-  finally{els.verifyPhoneCodeBtn.disabled=false}
+  profile=candidate;selectedBirdId=profile.birdId;saveProfile();renderBirds();els.profileError.hidden=true;prepareFactThenGame();
 }
 function bootHome(){
   loadProfile();hydrateStats();initCountries();renderBirds();renderHomeBird();applyEventConfig();
   if(NEON_DATA_READY()) loadRemoteEventConfig();
-  if(profile){
-    els.playerName.value=profile.name;els.playerCountry.value=profile.country;
-    if(els.playerPhoneCountry)els.playerPhoneCountry.value=profile.phoneCountry||getCountry(profile.country).dial;
-    if(els.playerPhone){
-      const dial=els.playerPhoneCountry?.value||getCountry(profile.country).dial;
-      const raw=String(profile.phone||"").replace(/\D/g,"");
-      els.playerPhone.value=raw.startsWith(dial)?raw.slice(dial.length):raw;
-    }
-    selectedBirdId=profile.birdId;renderBirds()
-  }
-  els.homeBirdArt.innerHTML=birdMarkup(getBird(selectedBirdId),".95");
+  if(profile){els.playerName.value=profile.name;els.playerCountry.value=profile.country;selectedBirdId=profile.birdId;renderBirds()}
+  refreshAuthUI();els.homeBirdArt.innerHTML=birdMarkup(getBird(selectedBirdId),".95");
   setTimeout(()=>els.loadingScreen.classList.add("is-gone"),500);
-  if(soundOn){
-    startMusic();
-    window.addEventListener("pointerdown",unlockMenuMusic,{once:true,passive:true});
-    window.addEventListener("keydown",unlockMenuMusic,{once:true});
-  }
+  if(soundOn){startMusic();window.addEventListener("pointerdown",unlockMenuMusic,{once:true,passive:true});window.addEventListener("keydown",unlockMenuMusic,{once:true})}
 }
 els.rankingBtn.addEventListener("click",loadRanking);
 els.rankingFromResultBtn.addEventListener("click",loadRanking);
@@ -806,17 +814,19 @@ els.rankingRefreshBtn.addEventListener("click",loadRanking);
 els.submitScoreBtn.addEventListener("click",()=>{publishScore();});
 els.shareResultBtn?.addEventListener("click",shareResult);
 els.birdGrid.addEventListener("click",e=>{const btn=e.target.closest("[data-bird]");if(!btn)return;selectedBirdId=btn.dataset.bird;renderBirds();playTone(350,.04)});
-els.startBtn.addEventListener("click",()=>{playTone(440,.07);startMusic();if(profile){els.playerName.value=profile.name;els.playerCountry.value=profile.country;if(els.playerPhoneCountry)els.playerPhoneCountry.value=profile.phoneCountry||getCountry(profile.country).dial;if(els.playerPhone){const dial=els.playerPhoneCountry?.value||getCountry(profile.country).dial;const raw=String(profile.phone||"").replace(/\D/g,"");els.playerPhone.value=raw.startsWith(dial)?raw.slice(dial.length):raw}selectedBirdId=profile.birdId;renderBirds()}showOnly(els.profileScreen)});
+els.startBtn.addEventListener("click",()=>{playTone(440,.07);startMusic();if(profile){els.playerName.value=profile.name;els.playerCountry.value=profile.country;selectedBirdId=profile.birdId;renderBirds()}refreshAuthUI();showOnly(els.profileScreen)});
 els.profileForm.addEventListener("submit",submitProfile);
-els.sendPhoneCodeBtn?.addEventListener("click",sendPhoneCode);
-els.verifyPhoneCodeBtn?.addEventListener("click",verifyPhoneCode);
+els.authSignInBtn?.addEventListener("click",signInPlayer);
+els.authSignUpBtn?.addEventListener("click",signUpPlayer);
+els.authSignOutBtn?.addEventListener("click",signOutPlayer);
+els.authPassword?.addEventListener("keydown",e=>{if(e.key==="Enter"){e.preventDefault();if(!els.authSignInBtn.hidden)signInPlayer()}});
 els.factContinueBtn.addEventListener("click",()=>{playTone(560,.05);startMusic();startWithProfile()});
 els.pauseBtn.addEventListener("click",()=>{if(!game?.running)return;game.paused=true;stopMusic();cancelAnimationFrame(raf);els.pauseScore.textContent=game.score+" puntos";showOnly(els.pauseScreen);playTone(300,.05)});
 els.resumeBtn.addEventListener("click",()=>{if(!game?.running)return;game.paused=false;startMusic();game.last=performance.now();showOnly(els.gameScreen);playTone(420,.05);raf=requestAnimationFrame(loop)});
 els.quitBtn.addEventListener("click",()=>{if(game)game.running=false;stopMusic();cancelAnimationFrame(raf);showOnly(els.homeScreen);hydrateStats();startMusic()});
 els.againBtn.addEventListener("click",()=>{prepareFactThenGame()});
-els.changePilotBtn.addEventListener("click",()=>{showOnly(els.profileScreen);if(profile){els.playerName.value=profile.name;els.playerCountry.value=profile.country;if(els.playerPhoneCountry)els.playerPhoneCountry.value=profile.phoneCountry||getCountry(profile.country).dial;if(els.playerPhone){const dial=els.playerPhoneCountry?.value||getCountry(profile.country).dial;const raw=String(profile.phone||"").replace(/\D/g,"");els.playerPhone.value=raw.startsWith(dial)?raw.slice(dial.length):raw}selectedBirdId=profile.birdId}renderBirds()});
-els.changePilotHomeBtn.addEventListener("click",()=>{playTone(440,.05);if(profile){els.playerName.value=profile.name;els.playerCountry.value=profile.country;if(els.playerPhoneCountry)els.playerPhoneCountry.value=profile.phoneCountry||getCountry(profile.country).dial;if(els.playerPhone){const dial=els.playerPhoneCountry?.value||getCountry(profile.country).dial;const raw=String(profile.phone||"").replace(/\D/g,"");els.playerPhone.value=raw.startsWith(dial)?raw.slice(dial.length):raw}selectedBirdId=profile.birdId}renderBirds();showOnly(els.profileScreen)});
+els.changePilotBtn.addEventListener("click",()=>{showOnly(els.profileScreen);if(profile){els.playerName.value=profile.name;els.playerCountry.value=profile.country;selectedBirdId=profile.birdId}refreshAuthUI();renderBirds()});
+els.changePilotHomeBtn.addEventListener("click",()=>{playTone(440,.05);if(profile){els.playerName.value=profile.name;els.playerCountry.value=profile.country;selectedBirdId=profile.birdId}refreshAuthUI();renderBirds();showOnly(els.profileScreen)});
 els.adminNavBtn?.addEventListener("click",()=>window.dispatchEvent(new Event("ams-fly-admin-open")));
 window.addEventListener("ams-fly-event-updated",event=>{if(!event.detail)return;saveEventConfig({...DEFAULT_EVENT,...event.detail});applyEventConfig()});
 els.soundBtn.addEventListener("click",()=>{soundOn=!soundOn;localStorage.setItem("amsFlySound",soundOn?"1":"0");els.soundBtn.textContent=soundOn?"♪":"×";if(soundOn){playTone(600,.05);startMusic()}else stopMusic()});
