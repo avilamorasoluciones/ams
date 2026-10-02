@@ -152,6 +152,16 @@ function applyEventConfig(){
   button.onclick=openEventScreen;
   banner.append(badge,title,desc,button);
 }
+function renderEventRichText(target,text){
+  target.replaceChildren();
+  const blocks=String(text||"").split(/\\n\\s*\\n/).map(x=>x.trim()).filter(Boolean);
+  blocks.forEach(block=>{
+    const p=document.createElement("p");
+    p.className="event-rich-paragraph";
+    p.textContent=block;
+    target.appendChild(p);
+  });
+}
 function openEventScreen(){
   let screen=document.getElementById("amsFlyEventScreen");
   if(!screen){
@@ -165,9 +175,9 @@ function openEventScreen(){
   screen.querySelector("#eventTitle").textContent=cfg.title;
   screen.querySelector("#eventDesc").textContent=cfg.desc;
   screen.querySelector("#eventPrizeTitle").textContent=cfg.prizeTitle;
-  screen.querySelector("#eventPrizeDesc").textContent=cfg.prizeDesc;
+  renderEventRichText(screen.querySelector("#eventPrizeDesc"),cfg.prizeDesc);
   screen.querySelector("#eventConditionTitle").textContent=cfg.conditionTitle;
-  screen.querySelector("#eventConditionDesc").textContent=cfg.conditionDesc;
+  renderEventRichText(screen.querySelector("#eventConditionDesc"),cfg.conditionDesc);
   showOnly(screen);
   screen.hidden=false;
 }
