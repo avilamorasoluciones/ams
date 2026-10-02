@@ -306,3 +306,96 @@ button{cursor:pointer}
 .consent-row input{width:18px;height:18px;margin:2px 0 0;accent-color:#8b5cf6}
 .consent-row a{color:#c4b5fd;text-decoration:underline;text-underline-offset:2px}
 @media(max-width:520px){.consent-row{font-size:.8rem;line-height:1.6}}
+
+
+/* AMS Fly · Evento · ajuste visual móvil final */
+.event-banner-card{
+  width:min(680px,100%);
+  margin:0 auto 20px;
+  padding:22px 20px 20px;
+  border-radius:24px;
+  text-align:left;
+}
+.event-banner-card .event-badge{
+  font-size:.56rem;
+  padding:6px 10px;
+}
+.event-banner-card h3{
+  margin:10px 0 8px;
+  font-size:clamp(1.2rem,5vw,1.45rem);
+  line-height:1.2;
+}
+.event-banner-card p{
+  font-size:clamp(.86rem,3.8vw,.98rem);
+  line-height:1.6;
+  margin:0;
+}
+.event-cta-button{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  width:100%;
+  min-height:50px;
+  margin-top:16px;
+  padding:0 16px;
+  border:1px solid rgba(255,255,255,.1);
+  border-radius:15px;
+  background:linear-gradient(110deg,#7c3aed,#ec4899);
+  color:#fff;
+  box-shadow:0 12px 28px rgba(139,92,246,.2);
+  font-size:.7rem;
+  font-weight:950;
+  letter-spacing:.04em;
+}
+.event-cta-button:active{transform:scale(.985)}
+.event-rich-item.is-bullet .event-rich-marker{
+  color:#fff;
+  font-size:1rem;
+  font-weight:900;
+}
+.event-rich-item.is-bullet{
+  grid-template-columns:24px minmax(0,1fr);
+  column-gap:10px;
+}
+.event-rich-item.is-bullet .event-rich-text{
+  font-size:.96rem;
+  line-height:1.65;
+}
+@media(max-width:520px){
+  .app-screen{
+    padding-top:164px;
+  }
+  .event-banner-card{
+    padding:22px 18px 20px;
+    margin-bottom:22px;
+  }
+  .event-banner-card h3{
+    font-size:1.3rem;
+  }
+  .event-banner-card p{
+    font-size:.9rem;
+    line-height:1.65;
+  }
+  .event-cta-button{
+    min-height:54px;
+    font-size:.72rem;
+  }
+  #amsFlyEventScreen .section-heading{
+    margin-bottom:24px;
+  }
+  #amsFlyEventScreen .section-heading h2{
+    font-size:clamp(2rem,9vw,2.65rem);
+  }
+  #amsFlyEventScreen .section-heading p{
+    font-size:.98rem;
+  }
+  #amsFlyEventScreen .event-details-card{
+    padding:26px 20px 30px;
+  }
+  #amsFlyEventScreen .event-detail-block{
+    padding:28px 0;
+  }
+  #amsFlyEventScreen .event-rich-content{
+    gap:18px;
+  }
+}
