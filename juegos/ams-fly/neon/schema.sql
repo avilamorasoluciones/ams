@@ -46,6 +46,8 @@ create table if not exists ams_fly_event_config (
   condition_title varchar(160) not null default '',
   condition_description varchar(1000) not null default '',
   wa_template varchar(500) not null default '',
+  event_start_at timestamptz,
+  event_end_at timestamptz,
   updated_at timestamptz not null default now()
 );
 
@@ -61,6 +63,8 @@ create table if not exists ams_fly_participants (
   bird_id varchar(32) not null,
   phone varchar(30) not null,
   phone_verified boolean not null default false,
+  prize_eligible boolean not null default true,
+  best_score_at timestamptz,
   score integer not null default 0 check (score >= 0 and score <= 1000000),
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now(),
