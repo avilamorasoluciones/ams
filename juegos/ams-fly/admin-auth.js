@@ -50,7 +50,9 @@ function createPanel() {
         '<label>Evento activo<input id="cfgActive" type="checkbox"></label>' +
         '<label>Badge<input id="cfgBadge" type="text" maxlength="80"></label>' +
         '<label>Título<input id="cfgTitle" type="text" maxlength="120"></label>' +
-        '<label>CTA<input id="cfgCta" type="text" maxlength="80"></label>' +
+        '<label>CTA<input id="cfgCta" type="text" maxlength="80"></label>
+      <label>Inicio del evento<input id="cfgStartAt" type="datetime-local" required></label>
+      <label>Fin del evento<input id="cfgEndAt" type="datetime-local" required></label>' +
       '</div>' +
       '<label>Descripción<textarea id="cfgDesc" maxlength="500"></textarea></label>' +
       '<label>Premio - título<input id="cfgPrizeTitle" type="text" maxlength="160"></label>' +
@@ -59,7 +61,7 @@ function createPanel() {
       '<label>Condición - descripción<textarea id="cfgConditionDesc" maxlength="1000"></textarea></label>' +
       '<label>Plantilla WhatsApp<textarea id="cfgWaTemplate" maxlength="500"></textarea></label>' +
       '<div class="admin-actions"><button id="adminSave" class="primary-button" type="button">GUARDAR CONFIGURACIÓN</button><button id="adminReload" class="secondary-button" type="button">↻ RECARGAR DESDE NEON</button><button id="adminExport" class="secondary-button" type="button">EXPORTAR PARTICIPANTES CSV</button></div>' +
-      '<p id="adminStatus" class="submit-status" role="status"></p><div id="adminParticipants" class="admin-participants"></div>' +
+      '<p id="adminStatus" class="submit-status" role="status"></p><div id="adminWinner" class="admin-winner"></div><div id="adminParticipants" class="admin-participants"></div>' +
     '</div>' +
   '</div>';
   document.body.appendChild(panel);
@@ -91,10 +93,24 @@ function readConfig() {
     prizeDesc: byId("cfgPrizeDesc").value.trim(),
     conditionTitle: byId("cfgConditionTitle").value.trim(),
     conditionDesc: byId("cfgConditionDesc").value.trim(),
-    waTemplate: byId("cfgWaTemplate").value.trim()
+    waTemplate: byId("cfgWaTemplate").value.trim(),
+    eventStartAt: localDateTimeToIso(byId("cfgStartAt").value),
+    eventEndAt: localDateTimeToIso(byId("cfgEndAt").value)
   };
 }
 
+function isoToLocalDateTime(value) {
+  if (!value) return "";
+  const d = new Date(value);
+  if (Number.isNaN(d.getTime())) return "";
+  const pad = n => String(n).padStart(2,"0");
+  return d.getFullYear()+"-"+pad(d.getMonth()+1)+"-"+pad(d.getDate())+"T"+pad(d.getHours())+":"+pad(d.getMinutes());
+}
+function localDateTimeToIso(value) {
+  if (!value) return null;
+  const d = new Date(value);
+  return Number.isNaN(d.getTime()) ? null : d.toISOString();
+}
 function displayConfig(config) {
   byId("cfgActive").checked = !!config.active;
   byId("cfgBadge").value = config.badge || "";
@@ -106,18 +122,20 @@ function displayConfig(config) {
   byId("cfgConditionTitle").value = config.conditionTitle || "";
   byId("cfgConditionDesc").value = config.conditionDesc || "";
   byId("cfgWaTemplate").value = config.waTemplate || "";
+  byId("cfgStartAt").value = isoToLocalDateTime(config.eventStartAt);
+  byId("cfgEndAt").value = isoToLocalDateTime(config.eventEndAt);
 }
 
 async function loadAdminData() {
   setStatus("Cargando configuración y participantes...");
   const client = await getNeon();
   const eventResult = await client.from("ams_fly_event_config")
-    .select("active,badge,title,description,cta,prize_title,prize_description,condition_title,condition_description,wa_template")
+    .select("active,badge,title,description,cta,prize_title,prize_description,condition_title,condition_description,wa_template,event_start_at,event_end_at")
     .eq("id", 1)
     .single();
   if (eventResult.error) throw eventResult.error;
   const participantsResult = await client.from("ams_fly_participants")
-    .select("player_name,country_code,bird_id,phone,score,created_at,updated_at")
+    .select("id,player_name,country_code,bird_id,phone,score,prize_eligible,best_score_at,created_at,updated_at")
     .order("score", {ascending:false})
     .order("updated_at", {ascending:true});
   if (participantsResult.error) throw participantsResult.error;
@@ -131,11 +149,13 @@ async function loadAdminData() {
     prizeDesc:eventResult.data?.prize_description,
     conditionTitle:eventResult.data?.condition_title,
     conditionDesc:eventResult.data?.condition_description,
-    waTemplate:eventResult.data?.wa_template
+    waTemplate:eventResult.data?.wa_template,
+    eventStartAt:eventResult.data?.event_start_at,
+    eventEndAt:eventResult.data?.event_end_at
   };
   participants = (participantsResult.data || []).map(row => ({
     name:row.player_name,country:row.country_code,birdId:row.bird_id,
-    phone:row.phone,score:row.score,created_at:row.created_at,updated_at:row.updated_at
+    id:row.id,phone:row.phone,score:row.score,prizeEligible:row.prize_eligible,bestScoreAt:row.best_score_at,created_at:row.created_at,updated_at:row.updated_at
   }));
   displayConfig(config);
   renderParticipants();
@@ -287,7 +307,9 @@ async function saveConfig() {
         prize_description:byId("cfgPrizeDesc").value.trim(),
         condition_title:byId("cfgConditionTitle").value.trim(),
         condition_description:byId("cfgConditionDesc").value.trim(),
-        wa_template:byId("cfgWaTemplate").value.trim()
+        wa_template:byId("cfgWaTemplate").value.trim(),
+        event_start_at:localDateTimeToIso(byId("cfgStartAt").value),
+        event_end_at:localDateTimeToIso(byId("cfgEndAt").value)
       })
       .eq("id", 1)
       .select("active,badge,title,description,cta,prize_title,prize_description,condition_title,condition_description,wa_template")
@@ -298,7 +320,9 @@ async function saveConfig() {
       active:row.active,badge:row.badge,title:row.title,desc:row.description,cta:row.cta,
       prizeTitle:row.prize_title,prizeDesc:row.prize_description,
       conditionTitle:row.condition_title,conditionDesc:row.condition_description,
-      waTemplate:row.wa_template
+      waTemplate:row.wa_template,
+    eventStartAt:row.event_start_at,
+    eventEndAt:row.event_end_at
     };
     displayConfig(config);
     window.dispatchEvent(new CustomEvent("ams-fly-event-updated",{detail:config}));
@@ -308,9 +332,48 @@ async function saveConfig() {
   }
 }
 
+async function updatePrizeEligibility(participant, eligible) {
+  try {
+    const client = await getNeon();
+    const result = await client.from("ams_fly_participants")
+      .update({prize_eligible: !!eligible})
+      .eq("id", participant.id)
+      .select("id,prize_eligible")
+      .single();
+    if (result.error) throw result.error;
+    participant.prizeEligible = !!result.data.prize_eligible;
+    renderParticipants();
+    setStatus(participant.prizeEligible
+      ? "Participante marcado como elegible para el premio."
+      : "Participante excluido del premio. Seguirá apareciendo en el ranking.");
+  } catch (error) {
+    setStatus(error.message || "No se pudo actualizar la elegibilidad.");
+    renderParticipants();
+  }
+}
+
+function renderWinner() {
+  const box = byId("adminWinner");
+  if (!box) return;
+  const eligible = participants
+    .filter(p => p.prizeEligible)
+    .sort((a,b) => Number(b.score||0)-Number(a.score||0) || new Date(a.bestScoreAt||a.created_at).getTime()-new Date(b.bestScoreAt||b.created_at).getTime());
+  box.replaceChildren();
+  const title=document.createElement("strong");
+  title.textContent="🏆 Ganador provisional según las reglas";
+  box.appendChild(title);
+  if (!eligible.length) {
+    const empty=document.createElement("p"); empty.textContent="No hay participantes elegibles todavía."; box.appendChild(empty); return;
+  }
+  const winner=eligible[0];
+  const detail=document.createElement("p");
+  detail.textContent=winner.name+" · "+Number(winner.score||0)+" puntos · "+(winner.prizeEligible ? "Elegible" : "No elegible");
+  box.appendChild(detail);
+}
 function renderParticipants() {
   const list = byId("adminParticipants");
   list.replaceChildren();
+  renderWinner();
   if (!participants.length) {
     const empty = document.createElement("p");
     empty.className = "admin-note";
@@ -327,7 +390,14 @@ function renderParticipants() {
     info.textContent = (participant.country || "") + " · " + (participant.birdId || "") + " · " + Number(participant.score || 0) + " pts";
     const phone = document.createElement("span");
     phone.textContent = participant.phone || "Sin WhatsApp";
-    item.append(name,info,phone);
+    const eligibility = document.createElement("label");
+    eligibility.className = "admin-eligibility";
+    const checkbox = document.createElement("input");
+    checkbox.type = "checkbox";
+    checkbox.checked = participant.prizeEligible !== false;
+    checkbox.addEventListener("change", () => updatePrizeEligibility(participant, checkbox.checked));
+    eligibility.append(checkbox, document.createTextNode(" Elegible para premio"));
+    item.append(name,info,phone,eligibility);
     if (participant.phone) {
       const link = document.createElement("a");
       link.href = "https://wa.me/" + String(participant.phone).replace(/\D/g,"");
