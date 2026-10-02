@@ -64,7 +64,7 @@
       <div class="section-heading">
         <span class="eyebrow">ANTES DEL VUELO</span>
         <h2>Presenta a tu piloto.</h2>
-        <p>Estos datos se guardan en este dispositivo. Si el servidor está conectado, el ranking y los eventos también pueden sincronizarse online.</p>
+        <p>Tu número de celular identifica a tu piloto. Así podemos reconocer el mismo piloto si vuelves desde otro dispositivo.</p>
       </div>
 
       <form id="profileForm" class="profile-card" novalidate>
@@ -75,12 +75,12 @@
         <label>País
           <select id="playerCountry" name="country" required></select>
         </label>
-        <label>WhatsApp <span class="optional-label">(para eventos, opcional)</span>
+        <label>Celular <span class="optional-label">(obligatorio para identificar tu piloto)</span>
           <div class="phone-input-row">
             <select id="playerPhoneCountry" name="phoneCountry" aria-label="Prefijo telefónico"></select>
-            <input id="playerPhone" name="phone" type="tel" inputmode="numeric" autocomplete="tel-national" maxlength="15" placeholder="300 123 4567">
+            <input id="playerPhone" name="phone" type="tel" inputmode="numeric" autocomplete="tel-national" maxlength="15" placeholder="300 123 4567" required>
           </div>
-          <small class="field-hint">Elige el prefijo del país y escribe tu número sin el código. Solo se usa para contactarte si ganas un evento.</small>
+          <small class="field-hint">Elige el prefijo del país y escribe tu número sin el código. Se guarda de forma privada y se usa para reconocer tu piloto. No aparece en el ranking.</small>
         </label>
 
         <div class="field-label">Elige tu ave</div>
