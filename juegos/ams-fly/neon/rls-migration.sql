@@ -1,4 +1,5 @@
 -- AMS Fly · Neon Data API / RLS migration
+-- Identidad de piloto: el celular es único y se mantiene privado.
 -- Ejecutar UNA vez en production después del schema.sql.
 -- No contiene secretos.
 
@@ -136,3 +137,17 @@ $$;
 
 revoke all on function public.ams_fly_register_participant(varchar(18),varchar(2),varchar(32),varchar(30),integer) from public;
 grant execute on function public.ams_fly_register_participant(varchar(18),varchar(2),varchar(32),varchar(30),integer) to anonymous, authenticated;
+
+
+-- Identidad de piloto entre dispositivos.
+alter table public.ams_fly_participants
+  add column if not exists phone_verified boolean not null default false;
+
+create unique index if not exists ams_fly_participants_phone_uidx
+  on public.ams_fly_participants (phone);
+
+alter table public.ams_fly_scores
+  add column if not exists participant_id uuid references public.ams_fly_participants(id);
+
+create index if not exists ams_fly_scores_participant_idx
+  on public.ams_fly_scores (participant_id);
