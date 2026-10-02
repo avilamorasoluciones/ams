@@ -7,9 +7,9 @@ const port=Number(process.env.PORT||3000);
 const sql=neon(process.env.DATABASE_URL);
 const NEON_AUTH_JWKS_URL=process.env.NEON_AUTH_JWKS_URL||"";
 const ADMIN_JWKS=NEON_AUTH_JWKS_URL?createRemoteJWKSet(new URL(NEON_AUTH_JWKS_URL)):null;
-const CORS_ORIGINS=new Set((process.env.CORS_ORIGIN||"https://avilamorasoluciones.com").split(",").map(origin=>origin.trim()).filter(Boolean));
+const CORS_ORIGINS=new Set((process.env.CORS_ORIGIN||"https://avilamorasoluciones.com").split(",").map(origin=>origin.trim().replace(/\/$/,"")).filter(Boolean));
 const allowedCountries=new Set(["CO","VE","EC","US","MX","AR","CL","PE","BR","PA"]);
-const allowedBirds=new Set(["condor-co","turpial","condor-ec","eagle-us","eagle-mx","hornero","condor-cl","cock-rock","sabia","harpia"]);
+const allowedBirds=new Set(["condor-co","turpial","tucan-ec","eagle-us","eagle-mx","hornero","chucao-cl","cock-rock","sabia","harpia"]);
 
 app.use(express.json({limit:"16kb"}));
 app.use((req,res,next)=>{
