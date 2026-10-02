@@ -1,5 +1,5 @@
-const CACHE="ams-fly-v39";
-const ASSETS=["./","./index.html","./styles.css?v=10","./game.js?v=33","./neon-client.js?v=5","./admin-auth.js?v=7","./manifest.webmanifest?v=6","./icon.svg?v=6","./terminos.html","./privacidad.html","./og-ams-fly.svg"];
+const CACHE="ams-fly-v40";
+const ASSETS=["./","./index.html","./styles.css?v=11","./game.js?v=34","./neon-client.js?v=5","./admin-auth.js?v=7","./manifest.webmanifest?v=6","./icon.svg?v=6","./terminos.html","./privacidad.html","./og-ams-fly.svg"];
 self.addEventListener("install",event=>event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(ASSETS)).then(()=>self.skipWaiting())));
 self.addEventListener("message",event=>{if(event.data?.type==="SKIP_WAITING")self.skipWaiting()});
 self.addEventListener("activate",event=>event.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k.startsWith("ams-fly-")&&k!==CACHE).map(k=>caches.delete(k)))).then(()=>self.clients.claim())));
