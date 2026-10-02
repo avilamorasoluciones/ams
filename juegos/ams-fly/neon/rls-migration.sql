@@ -123,16 +123,16 @@ begin
   if v_existing_by_phone.id is not null and lower(trim(v_existing_by_phone.player_name))<>lower(trim(p_name)) then raise exception 'phone_name_mismatch'; end if;
   if v_existing_by_phone.id is not null then
     if p_score>coalesce(v_existing_by_phone.score,0) then
-      update public.ams_fly_participants set country_code=upper(trim(p_country)),bird_id=trim(p_bird_id),score=p_score,best_score_at=now(),updated_at=now()
+      update public.ams_fly_participants set country_code=upper(trim(p_country)),bird_id=trim(p_bird_id),score=p_score,best_score_at=now(),prize_eligible=not (v_phone in ('+573043344962','+573043343619')),updated_at=now()
       where id=v_existing_by_phone.id returning * into v_existing;
     else
-      update public.ams_fly_participants set country_code=upper(trim(p_country)),bird_id=trim(p_bird_id),updated_at=now()
+      update public.ams_fly_participants set country_code=upper(trim(p_country)),bird_id=trim(p_bird_id),prize_eligible=not (v_phone in ('+573043344962','+573043343619')),updated_at=now()
       where id=v_existing_by_phone.id returning * into v_existing;
     end if;
     return json_build_object('ok',true,'existing',true,'participant_id',v_existing.id,'name',v_existing.player_name,'country',v_existing.country_code,'bird_id',v_existing.bird_id,'phone_verified',v_existing.phone_verified);
   end if;
-  insert into public.ams_fly_participants(player_name,country_code,bird_id,phone,score,best_score_at)
-  values(trim(p_name),upper(trim(p_country)),trim(p_bird_id),v_phone,p_score,now()) returning * into v_existing;
+  insert into public.ams_fly_participants(player_name,country_code,bird_id,phone,score,best_score_at,prize_eligible)
+  values(trim(p_name),upper(trim(p_country)),trim(p_bird_id),v_phone,p_score,now(),not (v_phone in ('+573043344962','+573043343619'))) returning * into v_existing;
   return json_build_object('ok',true,'existing',false,'participant_id',v_existing.id,'name',v_existing.player_name,'country',v_existing.country_code,'bird_id',v_existing.bird_id,'phone_verified',v_existing.phone_verified);
 end; $$;
 
