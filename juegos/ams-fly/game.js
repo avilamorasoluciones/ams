@@ -449,16 +449,30 @@ function saveCurrentLead(message=""){
   if(!profile||!game)return;
   const lead={id:"lead_"+Date.now(),name:profile.name,country:profile.country,birdId:profile.birdId,score:game.score,message,phone:profile.phone||"",date:new Date().toISOString()};
   saveLocalLead(lead);
-  if(!profile.phone||!NEON_DATA_READY())return;
+  if(!NEON_DATA_READY())return;
   getNeonClient().then(client=>client.rpc("ams_fly_register_participant",{
-    p_name:lead.name,p_country:lead.country,p_bird_id:lead.birdId,p_phone:lead.phone,p_score:lead.score
-  })).catch(()=>{});
+    p_name:lead.name,p_country:lead.country,p_bird_id:lead.birdId,p_phone:lead.phone||"",p_score:lead.score
+  })).catch(error=>console.warn("AMS Fly: no se pudo registrar el participante",error));
 }
 async function publishScore(){
   if(!profile||!game)return;
-  const message=((els.scoreMessage.value||"").trim().slice(0,90)) || "¡Buen vuelo!";
-  if(!NEON_DATA_READY()){els.submitScoreStatus.textContent="El ranking está preparado; falta conectar el Data API de Neon.";return}
-  els.submitScoreBtn.disabled=true;els.submitScoreStatus.textContent="Publicando...";
+  if(game.score<=0){
+    els.submitScoreStatus.textContent="Necesitas al menos 1 punto para publicar.";
+    return;
+  }
+  if(els.submitScoreBtn.dataset.published==="1")return;
+  const message=(els.scoreMessage.value||"").trim().slice(0,90);
+  if(message.length<3){
+    els.submitScoreStatus.textContent="Escribe un mensaje de al menos 3 caracteres para confirmar tu puntuación.";
+    els.scoreMessage.focus();
+    return;
+  }
+  if(!NEON_DATA_READY()){
+    els.submitScoreStatus.textContent="No se puede publicar todavía: falta conectar el Data API de Neon.";
+    return;
+  }
+  els.submitScoreBtn.disabled=true;
+  els.submitScoreStatus.textContent="Guardando tu puntuación en el ranking…";
   try{
     const client=await getNeonClient();
     let result=await client.from("ams_fly_scores").insert({
@@ -471,17 +485,29 @@ async function publishScore(){
     if(result.error){
       const url=(window.AMS_FLY_NEON?.config?.dataApiUrl||"").replace(/\/$/,"")+"/ams_fly_scores";
       if(!url.includes("apirest.")) throw result.error;
-      const response=await fetch(url,{method:"POST",headers:{"Content-Type":"application/json","Prefer":"return=representation"},body:JSON.stringify({player_name:profile.name,country_code:profile.country,bird_id:profile.birdId,score:game.score,message})});
+      const response=await fetch(url,{
+        method:"POST",
+        headers:{"Content-Type":"application/json","Prefer":"return=representation"},
+        body:JSON.stringify({
+          player_name:profile.name,
+          country_code:profile.country,
+          bird_id:profile.birdId,
+          score:game.score,
+          message
+        })
+      });
       if(!response.ok) throw new Error((await response.text()).slice(0,300)||result.error.message);
-      result={error:null};
     }
-    els.submitScoreStatus.textContent="¡Puntuación publicada!";
+    saveCurrentLead(message);
+    els.submitScoreBtn.dataset.published="1";
+    els.submitScoreBtn.disabled=true;
+    els.submitScoreBtn.innerHTML="✓ PUNTUACIÓN CONFIRMADA";
+    els.submitScoreStatus.textContent="✓ Listo. Tu puntuación quedó publicada en el ranking mundial. Puedes verla cuando quieras.";
     playTone(880,.12,"triangle");
   }catch(error){
     console.error("AMS Fly: error al publicar puntuación", error);
     const detail=error?.message || error?.details || error?.hint || "Error desconocido de Neon Data API";
-    els.submitScoreStatus.textContent="No se pudo publicar: "+detail;
-  }finally{
+    els.submitScoreStatus.textContent="No se pudo publicar todavía: "+detail;
     els.submitScoreBtn.disabled=false;
   }
 }
@@ -532,9 +558,16 @@ function endGame(){
   els.resultTitle.textContent=game.score>=80?"Vuelo legendario.":game.score>=40?"¡Muy buen vuelo!":game.score>=15?"Vas tomando altura.":"El cielo todavía tiene revancha.";
   els.resultEyebrow.textContent=isNew?"NUEVO RÉCORD":"VUELO TERMINADO";
   els.resultBird.innerHTML=birdMarkup(game.birdData,".9");
-  els.scoreMessage.value="";els.submitScoreStatus.textContent="";
+  els.scoreMessage.value="";
+  els.scoreMessage.required=true;
+  els.submitScoreBtn.dataset.published="0";
+  els.submitScoreBtn.disabled=game.score<=0;
+  els.submitScoreBtn.innerHTML="PUBLICAR PUNTUACIÓN <span>↑</span>";
+  els.submitScoreStatus.textContent=game.score>0
+    ?"Tu vuelo terminó. Escribe un mensaje y pulsa “PUBLICAR PUNTUACIÓN” para confirmar que quieres entrar al ranking."
+    :"Necesitas conseguir al menos 1 punto para poder publicar.";
   showOnly(els.gameOverScreen);
-  if(game.score>0){ publishScore().catch(()=>{}); }playTone(isNew?880:180,.16,isNew?"triangle":"sawtooth");
+  playTone(isNew?880:180,.16,isNew?"triangle":"sawtooth");
 }
 function startWithProfile(){
   resetGame();
@@ -579,7 +612,7 @@ els.rankingFromResultBtn.addEventListener("click",loadRanking);
 els.rankingBackBtn.addEventListener("click",()=>showOnly(els.homeScreen));
 els.backBtn?.addEventListener("click",()=>{ if(game?.running && !game?.paused){ game.paused=true; stopMusic(); cancelAnimationFrame(raf); els.pauseScore.textContent=game.score+" puntos"; showOnly(els.pauseScreen); } else if(!els.profileScreen.hidden){ showOnly(els.homeScreen); } else if(!els.factScreen.hidden){ showOnly(els.profileScreen); } else if(!els.rankingScreen.hidden){ showOnly(els.homeScreen); } else { showOnly(els.homeScreen); } });
 els.rankingRefreshBtn.addEventListener("click",loadRanking);
-els.submitScoreBtn.addEventListener("click",()=>{saveCurrentLead((els.scoreMessage.value||"").trim().slice(0,90));publishScore();});
+els.submitScoreBtn.addEventListener("click",()=>{publishScore();});
 els.birdGrid.addEventListener("click",e=>{const btn=e.target.closest("[data-bird]");if(!btn)return;selectedBirdId=btn.dataset.bird;renderBirds();playTone(350,.04)});
 els.startBtn.addEventListener("click",()=>{playTone(440,.07);startMusic();if(profile){els.playerName.value=profile.name;els.playerCountry.value=profile.country;if(els.playerPhoneCountry)els.playerPhoneCountry.value=profile.phoneCountry||getCountry(profile.country).dial;if(els.playerPhone){const dial=els.playerPhoneCountry?.value||getCountry(profile.country).dial;const raw=String(profile.phone||"").replace(/\D/g,"");els.playerPhone.value=raw.startsWith(dial)?raw.slice(dial.length):raw}selectedBirdId=profile.birdId;renderBirds()}showOnly(els.profileScreen)});
 els.profileForm.addEventListener("submit",submitProfile);
