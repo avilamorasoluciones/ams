@@ -591,23 +591,35 @@ async function loadRanking(){
   try{
     const client=await getPublicNeonClient();
     const result=await client.from("ams_fly_scores")
-      .select("player_name,country_code,bird_id,score,message,created_at")
+      .select("participant_id,player_name,country_code,bird_id,score,message,created_at")
       .order("score",{ascending:false})
       .order("created_at",{ascending:true})
-      .limit(RANKING_LIMIT);
+      .limit(1000);
     if(result.error)throw result.error;
-    const rows=(result.data||[]).map(row=>({
-      name:row.player_name,country:row.country_code,birdId:row.bird_id,score:row.score,message:row.message,created_at:row.created_at
-    }));
+
+    const bestByParticipant=new Map();
+    (result.data||[]).forEach(row=>{
+      const key=row.participant_id||((row.player_name||"").trim().toLowerCase()+"|"+(row.country_code||""));
+      const current=bestByParticipant.get(key);
+      if(!current || Number(row.score||0)>Number(current.score||0) ||
+        (Number(row.score||0)===Number(current.score||0) && new Date(row.created_at).getTime()<new Date(current.created_at).getTime())){
+        bestByParticipant.set(key,row);
+      }
+    });
+
+    const rows=[...bestByParticipant.values()]
+      .sort((a,b)=>Number(b.score||0)-Number(a.score||0) || new Date(a.created_at).getTime()-new Date(b.created_at).getTime())
+      .slice(0,RANKING_LIMIT);
+
     if(!rows.length){els.rankingList.innerHTML='<div class="ranking-empty">Aún no hay pilotos. ¡Sé el primero!</div>';return}
     els.rankingList.innerHTML="";
     rows.forEach((row,index)=>{
-      const b=getBird(row.birdId),country=getCountry(row.country);
+      const b=getBird(row.bird_id),country=getCountry(row.country_code);
       const card=document.createElement("article");card.className="ranking-card";
       const pos=document.createElement("div");pos.className="ranking-position "+(index<3?"top":"");pos.textContent="#"+(index+1);
       const avatar=document.createElement("div");avatar.className="ranking-avatar";avatar.innerHTML=birdMarkup(b,".43");
       const main=document.createElement("div");main.className="ranking-main";
-      const name=document.createElement("div");name.className="ranking-name";name.textContent=row.name||"Piloto";
+      const name=document.createElement("div");name.className="ranking-name";name.textContent=row.player_name||"Piloto";
       const countryEl=document.createElement("div");countryEl.className="ranking-country";countryEl.textContent=country.flag+" "+country.name+" · "+b.name;
       const message=document.createElement("div");message.className="ranking-message";message.textContent="“"+(row.message||"Sin mensaje")+"”";
       main.append(name,countryEl,message);
@@ -618,29 +630,9 @@ async function loadRanking(){
     });
   }catch(error){
     console.error("AMS Fly: no se pudo cargar el ranking", error);
-    const detail=error?.message || error?.details || error?.hint || "Error desconocido de Neon Data API";
-    els.rankingList.innerHTML='<div class="ranking-empty"><strong>No pudimos cargar el ranking.</strong><br><span>'+escapeHtml(detail)+'</span><br><small>Revisa los permisos/RLS de Neon y vuelve a actualizar.</small></div>';
+    const detail=error?.message || "No se pudo cargar el ranking.";
+    els.rankingList.innerHTML='<div class="ranking-empty"><strong>No pudimos cargar el ranking.</strong><br><span>'+escapeHtml(detail)+'</span></div>';
   }
-}
-function endGame(){
-  if(!game?.running)return;
-  game.running=false;stopMusic();cancelAnimationFrame(raf);
-  stats.games++;const previous=stats.best;stats.best=Math.max(stats.best,game.score);saveStats();hydrateStats();
-  const isNew=game.score>previous && game.score>0;
-  els.finalScore.textContent=game.score;els.resultBest.textContent=stats.best;els.resultGames.textContent=stats.games;els.newRecord.hidden=!isNew;
-  els.resultTitle.textContent=game.score>=80?"Vuelo legendario.":game.score>=40?"¡Muy buen vuelo!":game.score>=15?"Vas tomando altura.":"El cielo todavía tiene revancha.";
-  els.resultEyebrow.textContent=isNew?"NUEVO RÉCORD":"VUELO TERMINADO";
-  els.resultBird.innerHTML=birdMarkup(game.birdData,".9");
-  els.scoreMessage.value="";
-  els.scoreMessage.required=true;
-  els.submitScoreBtn.dataset.published="0";
-  els.submitScoreBtn.disabled=game.score<=0;
-  els.submitScoreBtn.innerHTML="PUBLICAR PUNTUACIÓN <span>↑</span>";
-  els.submitScoreStatus.textContent=game.score>0
-    ?"Tu vuelo terminó. Escribe un mensaje y pulsa “PUBLICAR PUNTUACIÓN” para confirmar que quieres entrar al ranking."
-    :"Necesitas conseguir al menos 1 punto para poder publicar.";
-  showOnly(els.gameOverScreen);
-  playTone(isNew?880:180,.16,isNew?"triangle":"sawtooth");
 }
 async function shareResult(){
   if(!game)return;
