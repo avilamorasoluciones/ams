@@ -34,8 +34,10 @@ grant update on public.ams_fly_event_config
 grant update on public.ams_fly_participants
   to authenticated;
 
-grant insert on public.ams_fly_participants
-  to anonymous, authenticated;
+-- La tabla no acepta INSERT directo desde Data API.
+-- El registro público pasa únicamente por ams_fly_register_participant().
+revoke insert on public.ams_fly_participants
+  from anonymous, authenticated;
 
 grant select on public.ams_fly_participants
   to authenticated;
