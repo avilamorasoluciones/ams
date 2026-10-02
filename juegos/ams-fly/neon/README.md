@@ -37,7 +37,7 @@ Nunca colocar en ese archivo:
 - API keys
 - tokens privados
 
-El SDK oficial `@neondatabase/neon-js` se carga en el navegador y gestiona Auth + Data API. Neon documenta este flujo para aplicaciones browser/SPA y el uso de `allowAnonymous` para consultas públicas protegidas con RLS. citeturn11search0turn13search0
+El SDK oficial `@neondatabase/neon-js` se carga en el navegador y gestiona Auth + Data API. Neon documenta este flujo para aplicaciones browser/SPA y el uso de `allowAnonymous` para consultas públicas protegidas con RLS.
 
 ## Neon Data API
 
@@ -63,7 +63,7 @@ La intención es:
 - Participantes: registro público mediante función controlada.
 - Participantes: lectura únicamente para administrador.
 
-El Data API usa JWT + RLS para aplicar estas reglas desde el navegador. citeturn3search5turn9search0
+El Data API usa JWT + RLS para aplicar estas reglas desde el navegador.
 
 ## Seguridad del ranking
 
