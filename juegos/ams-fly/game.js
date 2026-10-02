@@ -180,6 +180,7 @@ function openEventScreen(){
   renderEventRichText(screen.querySelector("#eventConditionDesc"),cfg.conditionDesc);
   showOnly(screen);
   screen.hidden=false;
+  screen.scrollTop=0;
 }
 async function loadRemoteEventConfig(){
   if(!NEON_DATA_READY())return;
