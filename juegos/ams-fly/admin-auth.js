@@ -216,7 +216,7 @@ async function requestPasswordReset() {
   setLoginStatus("Enviando el enlace de recuperación...");
   try {
     const client = await getNeon();
-    const result = await client.auth.forgetPassword({
+    const result = await client.auth.requestPasswordReset({
       email,
       redirectTo: window.location.origin + window.location.pathname
     });
