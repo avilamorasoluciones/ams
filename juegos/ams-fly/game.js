@@ -5,6 +5,7 @@ const STORAGE_KEY = "amsFlyProfileV1";
 const STATS_KEY = "amsFlyStatsV1";
 const FACT_INDEX_KEY = "amsFlyFactIndexV1";
 const NEON_DATA_READY = () => !!window.AMS_FLY_NEON_CONFIG?.dataApiUrl;
+const PHONE_API_URL = String(window.AMS_FLY_NEON_CONFIG?.phoneApiUrl || "").replace(/\/$/,"");
 async function getNeonClient(){
   if(!window.AMS_FLY_NEON?.getClient) throw new Error("Cliente Neon no disponible.");
   return window.AMS_FLY_NEON.getClient();
@@ -70,7 +71,7 @@ const colombiaFacts = [
 const els = {};
 [
   "loadingScreen","homeScreen","profileScreen","factScreen","gameScreen","pauseScreen","gameOverScreen",
-  "homeBest","homeGames","startBtn","changePilotHomeBtn","profileForm","playerName","playerCountry","playerPhoneCountry","playerPhone","birdGrid","selectedBirdInfo","profileError",
+  "homeBest","homeGames","startBtn","changePilotHomeBtn","profileForm","playerName","playerCountry","playerPhoneCountry","playerPhone","phoneVerificationBox","sendPhoneCodeBtn","phoneCodeRow","phoneCode","verifyPhoneCodeBtn","phoneVerifyStatus","birdGrid","selectedBirdInfo","profileError",
   "factTitle","factText","factSourceHint","factContinueBtn","gameCanvas","scoreValue","difficultyValue","pauseBtn","gameStartHint",
   "pauseScore","resumeBtn","quitBtn","resultBird","resultEyebrow","resultTitle","finalScore","resultBest","resultGames","newRecord",
   "againBtn","changePilotBtn","soundBtn","backBtn","adminNavBtn","homeBirdArt","rankingBtn","rankingFromResultBtn","rankingBackBtn","rankingRefreshBtn","rankingList","rankingStatus","scoreMessage","submitScoreBtn","submitScoreStatus","rankingScreen"
@@ -80,6 +81,7 @@ const ctx = els.gameCanvas.getContext("2d", {alpha:false});
 let profile = null;
 let stats = {games:0,best:0};
 let selectedBirdId = "condor-co";
+let pendingPhoneProfile = null;
 let currentFactIndex = Number(localStorage.getItem(FACT_INDEX_KEY) || 0);
 let soundOn = localStorage.getItem("amsFlySound") !== "0";
 let audioCtx = null;
@@ -589,7 +591,7 @@ async function submitProfile(e){
   const rawPhone=(els.playerPhone?.value||"").replace(/\D/g,"");
   if(rawPhone.length<7){els.profileError.textContent="El número de celular es obligatorio para identificar tu piloto.";els.profileError.hidden=false;els.playerPhone?.focus();return}
   if(!NEON_DATA_READY()){els.profileError.textContent="No podemos registrar el piloto todavía porque Neon no está conectado.";els.profileError.hidden=false;return}
-  const candidate={name:name.slice(0,18),country:els.playerCountry.value,birdId:selectedBirdId,phoneCountry,phone:phoneCountry+rawPhone};
+  const candidate={name:name.slice(0,18),country:els.playerCountry.value,birdId:selectedBirdId,phoneCountry,phone:"+"+phoneCountry+rawPhone,phoneVerified:false};
   try{
     const client=await getNeonClient();
     const result=await client.rpc("ams_fly_register_participant",{p_name:candidate.name,p_country:candidate.country,p_bird_id:candidate.birdId,p_phone:candidate.phone,p_score:0});
@@ -597,21 +599,50 @@ async function submitProfile(e){
     const remote=result.data;
     if(remote?.existing){
       if(remote.name && remote.name.toLowerCase()!==candidate.name.toLowerCase())throw new Error("Este celular ya está asociado a otro piloto. Usa el número del piloto correcto.");
-      candidate.name=remote.name||candidate.name;
-      candidate.country=remote.country||candidate.country;
-      candidate.birdId=remote.bird_id||candidate.birdId;
-      candidate.phoneVerified=!!remote.phone_verified;
-      els.profileError.textContent="Encontramos tu piloto en Neon y lo vinculamos a este dispositivo.";
-      els.profileError.hidden=false;
-    }else{
-      candidate.phoneVerified=false;
-      els.profileError.hidden=true;
+      candidate.name=remote.name||candidate.name;candidate.country=remote.country||candidate.country;candidate.birdId=remote.bird_id||candidate.birdId;candidate.phoneVerified=!!remote.phone_verified;
     }
-    profile=candidate;selectedBirdId=profile.birdId;saveProfile();renderBirds();prepareFactThenGame();
+    if(PHONE_API_URL && !candidate.phoneVerified){
+      pendingPhoneProfile=candidate;
+      els.phoneVerificationBox.hidden=false;
+      els.phoneCodeRow.hidden=true;
+      els.phoneVerifyStatus.textContent="Este número necesita una verificación. Te enviaremos un código SMS.";
+      els.profileError.hidden=true;
+      await sendPhoneCode();
+      return;
+    }
+    finishProfile(candidate);
   }catch(error){
     console.error("AMS Fly: no se pudo registrar el piloto",error);
     els.profileError.textContent=error?.message||"No pudimos registrar este piloto. Inténtalo de nuevo.";els.profileError.hidden=false;
   }
+}
+function finishProfile(candidate){
+  profile=candidate;selectedBirdId=profile.birdId;saveProfile();renderBirds();
+  els.phoneVerificationBox.hidden=true;prepareFactThenGame();
+}
+async function sendPhoneCode(){
+  if(!PHONE_API_URL||!pendingPhoneProfile)return;
+  els.sendPhoneCodeBtn.disabled=true;els.phoneVerifyStatus.textContent="Enviando código…";
+  try{
+    const response=await fetch(PHONE_API_URL+"/phone/send",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({phone:pendingPhoneProfile.phone})});
+    const data=await response.json().catch(()=>({}));
+    if(!response.ok)throw new Error(data.error||"No pudimos enviar el código.");
+    els.phoneCodeRow.hidden=false;els.phoneVerifyStatus.textContent="Código enviado. Revisa tus SMS.";els.phoneCode.focus();
+  }catch(error){els.phoneVerifyStatus.textContent=error.message||"No pudimos enviar el código.";}
+  finally{els.sendPhoneCodeBtn.disabled=false}
+}
+async function verifyPhoneCode(){
+  if(!PHONE_API_URL||!pendingPhoneProfile)return;
+  const code=(els.phoneCode.value||"").trim();
+  if(!/^\d{4,10}$/.test(code)){els.phoneVerifyStatus.textContent="Escribe el código recibido por SMS.";return}
+  els.verifyPhoneCodeBtn.disabled=true;els.phoneVerifyStatus.textContent="Verificando…";
+  try{
+    const response=await fetch(PHONE_API_URL+"/phone/verify",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({phone:pendingPhoneProfile.phone,code})});
+    const data=await response.json().catch(()=>({}));
+    if(!response.ok)throw new Error(data.error||"Código incorrecto.");
+    pendingPhoneProfile.phoneVerified=true;els.phoneVerifyStatus.textContent="✓ Celular verificado.";finishProfile(pendingPhoneProfile);pendingPhoneProfile=null;
+  }catch(error){els.phoneVerifyStatus.textContent=error.message||"No pudimos verificar el código."}
+  finally{els.verifyPhoneCodeBtn.disabled=false}
 }
 function bootHome(){
   loadProfile();hydrateStats();initCountries();renderBirds();renderHomeBird();applyEventConfig();
@@ -643,6 +674,8 @@ els.submitScoreBtn.addEventListener("click",()=>{publishScore();});
 els.birdGrid.addEventListener("click",e=>{const btn=e.target.closest("[data-bird]");if(!btn)return;selectedBirdId=btn.dataset.bird;renderBirds();playTone(350,.04)});
 els.startBtn.addEventListener("click",()=>{playTone(440,.07);startMusic();if(profile){els.playerName.value=profile.name;els.playerCountry.value=profile.country;if(els.playerPhoneCountry)els.playerPhoneCountry.value=profile.phoneCountry||getCountry(profile.country).dial;if(els.playerPhone){const dial=els.playerPhoneCountry?.value||getCountry(profile.country).dial;const raw=String(profile.phone||"").replace(/\D/g,"");els.playerPhone.value=raw.startsWith(dial)?raw.slice(dial.length):raw}selectedBirdId=profile.birdId;renderBirds()}showOnly(els.profileScreen)});
 els.profileForm.addEventListener("submit",submitProfile);
+els.sendPhoneCodeBtn?.addEventListener("click",sendPhoneCode);
+els.verifyPhoneCodeBtn?.addEventListener("click",verifyPhoneCode);
 els.factContinueBtn.addEventListener("click",()=>{playTone(560,.05);startMusic();startWithProfile()});
 els.pauseBtn.addEventListener("click",()=>{if(!game?.running)return;game.paused=true;stopMusic();cancelAnimationFrame(raf);els.pauseScore.textContent=game.score+" puntos";showOnly(els.pauseScreen);playTone(300,.05)});
 els.resumeBtn.addEventListener("click",()=>{if(!game?.running)return;game.paused=false;startMusic();game.last=performance.now();showOnly(els.gameScreen);playTone(420,.05);raf=requestAnimationFrame(loop)});
