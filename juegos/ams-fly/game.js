@@ -5,7 +5,18 @@ const STORAGE_KEY = "amsFlyProfileV2";
 const STATS_KEY = "amsFlyStatsV1";
 const FACT_INDEX_KEY = "amsFlyFactIndexV1";
 const NEON_DATA_READY = () => !!window.AMS_FLY_NEON_CONFIG?.dataApiUrl;
-const PHONE_API_URL = String(window.AMS_FLY_NEON_CONFIG?.phoneApiUrl || "").replace(/\/$/,"");
+const PHONE_API_URL = String(window.AMS_FLY_NEON_CONFIG?.phoneApiUrl || "").replace(/\/$/,"");\nconst INTERNAL_PILOTS = Object.freeze([
+  {name:"Diego Andrés",phone:"+573043344962",prizeEligible:false},
+  {name:"María José",phone:"+573043343619",prizeEligible:false}
+]);
+function formatRankingDate(value){
+  const date=new Date(value);
+  if(!Number.isFinite(date.getTime()))return "";
+  return new Intl.DateTimeFormat("es-CO",{
+    day:"2-digit",month:"short",year:"numeric",
+    hour:"numeric",minute:"2-digit",hour12:true
+  }).format(date);
+}
 async function getNeonClient(){
   if(!window.AMS_FLY_NEON?.getClient) throw new Error("Cliente Neon no disponible.");
   return window.AMS_FLY_NEON.getClient();
@@ -621,8 +632,9 @@ async function loadRanking(){
       const main=document.createElement("div");main.className="ranking-main";
       const name=document.createElement("div");name.className="ranking-name";name.textContent=row.player_name||"Piloto";
       const countryEl=document.createElement("div");countryEl.className="ranking-country";countryEl.textContent=country.flag+" "+country.name+" · "+b.name;
+      const dateEl=document.createElement("div");dateEl.className="ranking-date";dateEl.textContent="Mejor puntuación · "+formatRankingDate(row.created_at);
       const message=document.createElement("div");message.className="ranking-message";message.textContent="“"+(row.message||"Sin mensaje")+"”";
-      main.append(name,countryEl,message);
+      main.append(name,countryEl,dateEl,message);
       const score=document.createElement("div");score.className="ranking-score";
       const scoreValue=document.createElement("strong");scoreValue.textContent=String(Number(row.score||0));
       const scoreLabel=document.createElement("span");scoreLabel.textContent="PUNTOS";score.append(scoreValue,scoreLabel);
