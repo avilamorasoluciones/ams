@@ -1,4 +1,4 @@
-const CACHE="ams-fly-v45";
+const CACHE="ams-fly-v46";
 const ASSETS=["./","./index.html","./styles.css?v=12","./game.js?v=39","./neon-client.js?v=6","./admin-auth.js?v=7","./manifest.webmanifest?v=6","./icon.svg?v=6","./terminos.html","./privacidad.html","./og-ams-fly.svg"];
 self.addEventListener("install",event=>event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(ASSETS)).then(()=>self.skipWaiting())));
 self.addEventListener("message",event=>{if(event.data?.type==="SKIP_WAITING")self.skipWaiting()});
