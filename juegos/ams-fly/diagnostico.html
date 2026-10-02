@@ -104,7 +104,7 @@ async function run(){
   });
 
   await test("Archivos del juego",async()=>{
-    const paths=["game.js?v=40","styles.css?v=12","manifest.webmanifest?v=6","terminos.html","privacidad.html"];
+    const paths=["game.js?v=41","styles.css?v=12","manifest.webmanifest?v=6","terminos.html","privacidad.html"];
     const bad=[];
     for(const p of paths){const r=await fetch(p,{cache:"no-store"});if(!r.ok)bad.push(p+" ("+r.status+")")}
     if(bad.length)throw new Error("No cargaron: "+bad.join(", "));
