@@ -158,63 +158,6 @@ function openEventScreen(){
   showOnly(screen);
   screen.hidden=false;
 }
-function openEventAdmin(){
-  let panel=document.getElementById("amsFlyAdminPanel");
-  if(!panel){
-    panel=document.createElement("section");panel.id="amsFlyAdminPanel";panel.className="admin-panel";
-    panel.innerHTML='<div class="admin-card"><div class="admin-head"><div><span class="eyebrow">AMS FLY · GESTIÓN</span><h2>Gestión del evento</h2></div><button id="adminClose" class="secondary-button" type="button">Cerrar</button></div><p class="admin-note">La configuración local sirve para pruebas. Para gestión real multi-dispositivo usa EVENT_API con el servidor seguro de Neon.</p><label>Token de administrador<input id="adminToken" type="password" autocomplete="off" placeholder="Token del servidor"></label><div class="admin-grid"><label>Evento activo<input id="cfgActive" type="checkbox"></label><label>Badge<input id="cfgBadge" type="text"></label><label>Título<input id="cfgTitle" type="text"></label><label>CTA<input id="cfgCta" type="text"></label></div><label>Descripción<textarea id="cfgDesc"></textarea></label><label>Premio - título<input id="cfgPrizeTitle" type="text"></label><label>Premio - descripción<textarea id="cfgPrizeDesc"></textarea></label><label>Condición - título<input id="cfgConditionTitle" type="text"></label><label>Condición - descripción<textarea id="cfgConditionDesc"></textarea></label><label>Plantilla WhatsApp<textarea id="cfgWaTemplate"></textarea></label><div class="admin-actions"><button id="adminSave" class="primary-button" type="button">GUARDAR CONFIGURACIÓN</button><button id="adminLoadRemote" class="secondary-button" type="button">CARGAR DESDE SERVIDOR</button><button id="adminExport" class="secondary-button" type="button">EXPORTAR PARTICIPANTES CSV</button></div><p id="adminStatus" class="submit-status"></p><div id="adminParticipants" class="admin-participants"></div></div>';
-    document.body.appendChild(panel);
-    panel.querySelector("#adminClose").onclick=()=>panel.remove();
-    panel.querySelector("#adminSave").onclick=saveAdminConfig;
-    panel.querySelector("#adminLoadRemote").onclick=loadRemoteEventConfig;
-    panel.querySelector("#adminExport").onclick=exportLocalLeads;
-  }
-  showOnly(panel);panel.hidden=false;
-  const cfg=getEventConfig(), token=sessionStorage.getItem(EVENT_TOKEN_STORAGE)||"";
-  panel.querySelector("#adminToken").value=token;
-  panel.querySelector("#cfgActive").checked=!!cfg.active;
-  panel.querySelector("#cfgBadge").value=cfg.badge;panel.querySelector("#cfgTitle").value=cfg.title;panel.querySelector("#cfgCta").value=cfg.cta;panel.querySelector("#cfgDesc").value=cfg.desc;
-  panel.querySelector("#cfgPrizeTitle").value=cfg.prizeTitle;panel.querySelector("#cfgPrizeDesc").value=cfg.prizeDesc;panel.querySelector("#cfgConditionTitle").value=cfg.conditionTitle;panel.querySelector("#cfgConditionDesc").value=cfg.conditionDesc;panel.querySelector("#cfgWaTemplate").value=cfg.waTemplate;
-  renderAdminParticipants();
-}
-async function saveAdminConfig(){
-  const p=document.getElementById("amsFlyAdminPanel"),status=p.querySelector("#adminStatus"),token=p.querySelector("#adminToken").value.trim(),cfg={active:p.querySelector("#cfgActive").checked,badge:p.querySelector("#cfgBadge").value.trim()||DEFAULT_EVENT.badge,title:p.querySelector("#cfgTitle").value.trim()||DEFAULT_EVENT.title,cta:p.querySelector("#cfgCta").value.trim()||DEFAULT_EVENT.cta,desc:p.querySelector("#cfgDesc").value.trim()||DEFAULT_EVENT.desc,prizeTitle:p.querySelector("#cfgPrizeTitle").value.trim()||DEFAULT_EVENT.prizeTitle,prizeDesc:p.querySelector("#cfgPrizeDesc").value.trim()||DEFAULT_EVENT.prizeDesc,conditionTitle:p.querySelector("#cfgConditionTitle").value.trim()||DEFAULT_EVENT.conditionTitle,conditionDesc:p.querySelector("#cfgConditionDesc").value.trim()||DEFAULT_EVENT.conditionDesc,waTemplate:p.querySelector("#cfgWaTemplate").value.trim()||DEFAULT_EVENT.waTemplate};
-  saveEventConfig(cfg);sessionStorage.setItem(EVENT_TOKEN_STORAGE,token);
-  if(EVENT_API){
-    try{
-      const res=await fetch(EVENT_API+"/event",{method:"PUT",headers:{"Content-Type":"application/json","Authorization":"Bearer "+token},body:JSON.stringify(cfg)});
-      if(!res.ok)throw new Error();
-      status.textContent="✓ Configuración guardada en el servidor.";
-    }catch(_){status.textContent="⚠️ No se pudo guardar en el servidor. Se conservó la configuración local.";}
-  }else status.textContent="✓ Configuración local guardada. Configura EVENT_API para sincronizarla.";
-  applyEventConfig();
-}
-async function renderAdminParticipants(){
-  const p=document.getElementById("amsFlyAdminPanel");if(!p)return;
-  let rows=getLocalLeads().sort((a,b)=>Number(b.score||0)-Number(a.score||0));
-  const token=sessionStorage.getItem(EVENT_TOKEN_STORAGE)||"";
-  if(EVENT_API&&token){
-    try{
-      const res=await fetch(EVENT_API+"/participants",{headers:{Authorization:"Bearer "+token,Accept:"application/json"}});
-      if(res.ok)rows=await res.json();
-    }catch(_){}
-  }
-  p.querySelector("#adminParticipants").innerHTML="";
-  if(!rows.length){
-    const empty=document.createElement("p");empty.className="admin-note";empty.textContent="Todavía no hay participantes registrados.";p.querySelector("#adminParticipants").appendChild(empty);return;
-  }
-  rows.forEach((x,i)=>{
-    const item=document.createElement("div");item.className="admin-participant";
-    const name=document.createElement("strong");name.textContent="#"+(i+1)+" "+(x.name||"Piloto");
-    const info=document.createElement("span");info.textContent=getCountry(x.country).name+" · "+getBird(x.birdId).name+" · "+Number(x.score||0)+" pts";
-    const phone=document.createElement("span");phone.textContent=x.phone||"Sin WhatsApp";
-    item.append(name,info,phone);
-    if(x.phone){
-      const link=document.createElement("a");link.href=eventPhoneUrl(x.phone,x.name,x.score);link.target="_blank";link.rel="noopener noreferrer";link.textContent="WhatsApp ↗";item.appendChild(link);
-    }
-    p.querySelector("#adminParticipants").appendChild(item);
-  });
-}
 async function loadRemoteEventConfig(){
   if(!NEON_DATA_READY())return;
   try{
