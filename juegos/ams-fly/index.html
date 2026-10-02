@@ -22,7 +22,7 @@
   <link rel="canonical" href="https://avilamorasoluciones.com/juegos/ams-fly/">
   <link rel="icon" href="icon.svg?v=6" type="image/svg+xml">
   <link rel="manifest" href="manifest.webmanifest?v=6">
-  <link rel="stylesheet" href="styles.css?v=11">
+  <link rel="stylesheet" href="styles.css?v=12">
   <title>AMS Fly · Avila Mora Soluciones</title>
 </head>
 <body>
@@ -72,7 +72,7 @@
       <div class="section-heading">
         <span class="eyebrow">ANTES DEL VUELO</span>
         <h2>Presenta a tu piloto.</h2>
-        <p>Tu número de celular identifica a tu piloto. Así podemos reconocer el mismo piloto si vuelves desde otro dispositivo.</p>
+        <p>Tu cuenta Neon identifica de forma única a tu piloto, incluso si vuelves desde otro dispositivo.</p>
       </div>
 
       <form id="profileForm" class="profile-card" novalidate>
@@ -83,13 +83,29 @@
         <label>País
           <select id="playerCountry" name="country" required></select>
         </label>
-        <label>Celular <span class="optional-label">(obligatorio para identificar tu piloto)</span>
-          <div class="phone-input-row">
-            <select id="playerPhoneCountry" name="phoneCountry" aria-label="Prefijo telefónico"></select>
-            <input id="playerPhone" name="phone" type="tel" inputmode="numeric" autocomplete="tel-national" maxlength="15" placeholder="300 123 4567" required>
+        <div id="authBox" class="auth-card">
+          <div class="auth-card-head">
+            <div>
+              <span class="eyebrow">IDENTIDAD DEL PILOTO</span>
+              <h3>Una cuenta, un piloto.</h3>
+            </div>
+            <span class="auth-lock" aria-hidden="true">🔐</span>
           </div>
-          <small class="field-hint">Elige el prefijo del país y escribe tu número sin el código. Se guarda de forma privada y se usa para reconocer tu piloto. No aparece en el ranking.</small>          <div id="phoneVerificationBox" class="phone-verification-box" hidden>            <button id="sendPhoneCodeBtn" class="secondary-button" type="button">ENVIAR CÓDIGO SMS</button>            <div id="phoneCodeRow" hidden>              <input id="phoneCode" type="text" inputmode="numeric" autocomplete="one-time-code" maxlength="10" placeholder="Código de verificación">              <button id="verifyPhoneCodeBtn" class="primary-button" type="button">VERIFICAR CELULAR</button>            </div>            <small id="phoneVerifyStatus" class="field-hint" role="status"></small>          </div>
-        </label>
+          <p class="auth-copy">Inicia sesión o crea una cuenta Neon. La cuenta queda vinculada de forma única a tu piloto para evitar duplicados que alteren el ranking.</p>
+          <label>Correo electrónico
+            <input id="authEmail" type="email" autocomplete="email" inputmode="email" placeholder="tu@correo.com">
+          </label>
+          <label>Contraseña
+            <input id="authPassword" type="password" autocomplete="current-password" minlength="8" placeholder="Mínimo 8 caracteres">
+          </label>
+          <div class="auth-actions">
+            <button id="authSignInBtn" class="secondary-button" type="button">INICIAR SESIÓN</button>
+            <button id="authSignUpBtn" class="primary-button" type="button">CREAR CUENTA</button>
+            <button id="authSignOutBtn" class="secondary-button" type="button" hidden>CERRAR SESIÓN</button>
+          </div>
+          <p id="authIdentity" class="auth-identity" role="status" hidden></p>
+          <small id="authStatus" class="field-hint" role="status">Inicia sesión o crea una cuenta. La cuenta Neon será la identidad única de tu piloto.</small>
+        </div>
 
         <div class="field-label">Elige tu ave</div>
         <div id="birdGrid" class="bird-grid" role="radiogroup" aria-label="Elegir personaje"></div>
@@ -98,7 +114,7 @@
 
         <label class="consent-row">
           <input id="termsConsent" type="checkbox" required>
-          <span>Acepto los <a href="terminos.html" target="_blank" rel="noopener noreferrer">Términos y Condiciones</a> y la <a href="privacidad.html" target="_blank" rel="noopener noreferrer">Política de Privacidad</a>. Entiendo que las puntuaciones son provisionales hasta su verificación.</span>
+          <span>Acepto los <a href="terminos.html" target="_blank" rel="noopener noreferrer">Términos y Condiciones</a> y la <a href="privacidad.html" target="_blank" rel="noopener noreferrer">Política de Privacidad</a>. Entiendo que mi cuenta identifica una sola participación en el ranking y que las puntuaciones quedan sujetas a verificación.</span>
         </label>
 
         <button class="primary-button" type="submit">LISTO, A VOLAR <span>✦</span></button>
@@ -183,10 +199,10 @@
     </footer>
   </main>
 
-  <script src="neon-config.js?v=2"></script>
-  <script src="neon-client.js?v=5"></script>
+  <script src="neon-config.js?v=3"></script>
+  <script src="neon-client.js?v=6"></script>
   <script src="admin-auth.js?v=7"></script>
-  <script src="game.js?v=36"></script>
+  <script src="game.js?v=37"></script>
   <script>
     if ("serviceWorker" in navigator) {
       window.addEventListener("load", () => navigator.serviceWorker.register("./sw.js").catch(() => {}));
