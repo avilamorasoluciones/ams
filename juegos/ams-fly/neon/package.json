@@ -4,5 +4,5 @@
   "version":"1.0.0",
   "type":"module",
   "scripts":{"start":"node server.js"},
-  "dependencies":{"@neondatabase/serverless":"^1.2.0","express":"^5.2.1"}
+  "dependencies":{"@neondatabase/serverless":"^1.2.0","express":"^5.2.1","jose":"^6.2.5"}
 }
