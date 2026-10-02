@@ -5,7 +5,8 @@ const STORAGE_KEY = "amsFlyProfileV2";
 const STATS_KEY = "amsFlyStatsV1";
 const FACT_INDEX_KEY = "amsFlyFactIndexV1";
 const NEON_DATA_READY = () => !!window.AMS_FLY_NEON_CONFIG?.dataApiUrl;
-const PHONE_API_URL = String(window.AMS_FLY_NEON_CONFIG?.phoneApiUrl || "").replace(/\/$/,"");\nconst INTERNAL_PILOTS = Object.freeze([
+const PHONE_API_URL = String(window.AMS_FLY_NEON_CONFIG?.phoneApiUrl || "").replace(/\/$/,"");
+const INTERNAL_PILOTS = Object.freeze([
   {name:"Diego Andrés",phone:"+573043344962",prizeEligible:false},
   {name:"María José",phone:"+573043343619",prizeEligible:false}
 ]);
