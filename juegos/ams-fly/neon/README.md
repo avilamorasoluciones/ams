@@ -1,85 +1,84 @@
-# AMS Fly · API + Neon
+# AMS Fly · Neon
 
-Esta carpeta contiene el backend opcional para convertir el ranking y la gestión de eventos en un servicio real.
+AMS Fly está pensado para funcionar como **frontend estático en GitHub Pages**, usando Neon como backend gestionado:
 
-## Arquitectura
+`GitHub Pages → Neon Auth + Neon Data API → PostgreSQL`
 
-`AMS Fly (GitHub Pages) → HTTPS API → Neon PostgreSQL`
+No se necesita Coolify ni un servidor Node para el flujo normal del juego.
 
-El navegador **nunca** recibe `DATABASE_URL`.
+## Estado actual
 
-## 1. Neon
+En Neon `production` ya existen:
 
-Ejecuta `schema.sql` en tu proyecto Neon.
+- `ams_fly_scores`
+- `ams_fly_event_config`
+- `ams_fly_participants`
+- Neon Auth / Better Auth
+- Usuario administrador configurado
 
-Crea estas tablas:
+## Archivos
 
-- `ams_fly_scores`: ranking público.
-- `ams_fly_event_config`: configuración del evento activo.
-- `ams_fly_participants`: datos privados de participantes, incluido WhatsApp.
+- `schema.sql` — estructura inicial de las tablas.
+- `rls-migration.sql` — políticas RLS y funciones necesarias para exponer las tablas de forma segura mediante Neon Data API.
+- `server.js` — backend Express anterior; queda como referencia/alternativa y **no forma parte de la arquitectura GitHub Pages actual**.
+- `package.json` — dependencias del backend anterior.
 
-## 2. Servidor
+## Configuración de GitHub Pages
 
-Esta carpeta incluye:
+`juegos/ams-fly/neon-config.js` contiene únicamente URLs públicas:
 
-- `server.js`
-- `package.json`
-- `.env.example`
+- Neon Auth URL.
+- Neon Data API URL.
 
-En un servidor Node/Coolify configura las variables:
+Nunca colocar en ese archivo:
 
-- `DATABASE_URL`: cadena privada de Neon.
-- `NEON_AUTH_JWKS_URL`: URL JWKS de Neon Auth para validar las sesiones administrativas.
-- `CORS_ORIGIN`: dominio del frontend, por ejemplo `https://avilamorasoluciones.com`.
-- `PORT`: normalmente lo proporciona Coolify.
+- `DATABASE_URL`
+- contraseñas
+- API keys
+- tokens privados
 
-Después:
+El SDK oficial `@neondatabase/neon-js` se carga en el navegador y gestiona Auth + Data API. Neon documenta este flujo para aplicaciones browser/SPA y el uso de `allowAnonymous` para consultas públicas protegidas con RLS. citeturn11search0turn13search0
 
-```bash
-npm install
-npm start
-```
+## Neon Data API
 
-## Endpoints
+En Neon Console:
 
-### Públicos
+1. Branch: `production`.
+2. Habilitar **Data API**.
+3. Copiar la URL que termina en `/neondb/rest/v1`.
+4. Pegar esa URL en `juegos/ams-fly/neon-config.js` como `dataApiUrl`.
 
-- `GET /health`
-- `GET /event`
-- `GET /ranking?limit=50`
-- `POST /ranking`
-- `POST /participants`
+La URL de Auth ya está configurada en ese archivo.
 
-### Administrativos
+## RLS
 
-Requieren una sesión JWT válida de Neon Auth con correo confirmado y rol `admin`:
+Ejecutar **una sola vez** `rls-migration.sql` en SQL Editor de Neon `production`.
 
-`Authorization: Bearer <Neon Auth JWT>`
+La intención es:
 
-- `PUT /event`
-- `GET /participants`
+- Ranking: lectura pública.
+- Puntuaciones: inserción pública validada por la base.
+- Configuración del evento: lectura pública.
+- Configuración del evento: modificación solo para administrador.
+- Participantes: registro público mediante función controlada.
+- Participantes: lectura únicamente para administrador.
 
-## 3. Conectar el juego
+El Data API usa JWT + RLS para aplicar estas reglas desde el navegador. citeturn3search5turn9search0
 
-En `game.js` y `admin-auth.js`, configura la URL HTTPS pública de la API. La `DATABASE_URL` y las credenciales de Neon Auth permanecen únicamente en el servidor.
+## Seguridad del ranking
 
-Al definirlo, AMS Fly utiliza automáticamente:
+El navegador todavía envía la puntuación, por lo que un usuario técnicamente puede manipular el cliente. Las restricciones SQL evitan datos fuera de rango y valores inválidos, pero **no convierten un juego JavaScript en un sistema anti-cheat**.
 
-- `EVENT_API/event`
-- `EVENT_API/ranking`
-- `EVENT_API/participants`
+Si el premio depende de una puntuación, el récord ganador debe poder revisarse manualmente. Una fase posterior puede implementar validación/anti-cheat más fuerte.
 
-El frontend conserva un respaldo local si el servidor no está disponible.
+## Flujo de administración
 
-## Seguridad
+La gestión usa Neon Auth:
 
-- `DATABASE_URL` solo existe en el servidor.
-- El token administrativo solo se guarda temporalmente en `sessionStorage`.
-- WhatsApp está separado de la tabla pública del ranking.
-- Los campos reciben límites de longitud y listas permitidas de países/aves.
-- No se acepta `created_at` desde el navegador.
-- El ranking público nunca devuelve teléfonos.
+1. Usuario inicia sesión.
+2. Neon Auth devuelve la sesión/JWT.
+3. Neon Data API recibe el JWT.
+4. RLS comprueba la autorización.
+5. Solo el usuario con correo verificado y rol `admin` puede leer participantes o modificar el evento.
 
-### Importante sobre concursos
-
-El servidor valida el formato de la puntuación, pero un juego ejecutado en el navegador no puede demostrar por sí solo que un puntaje sea legítimo. Para un premio real conviene tratar el ranking como registro de participación y revisar manualmente el récord ganador o implementar posteriormente un sistema anti-cheat más fuerte.
+No existe un token administrativo escrito en el frontend.
