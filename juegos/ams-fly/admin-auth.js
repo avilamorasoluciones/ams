@@ -24,7 +24,7 @@ function createPanel() {
   panel.className = "admin-panel";
   panel.hidden = true;
   panel.innerHTML = '<div class="admin-card">' +
-    '<div class="admin-head"><div><span class="eyebrow">AMS FLY · GESTIÓN</span><h2>Iniciar sesión</h2></div><button id="adminClose" class="secondary-button" type="button">Cerrar</button></div>' +
+    '<div class="admin-head"><div><span class="eyebrow">AMS FLY · ACCESO PRIVADO</span><h2>Gestión</h2></div><button id="adminClose" class="secondary-button" type="button">Cerrar</button></div>' +
     '<div id="adminLoginView">' +
       '<form id="adminLoginForm">' +
         '<label>Correo electrónico<input id="adminEmail" type="email" autocomplete="username" required></label>' +
@@ -58,7 +58,7 @@ function createPanel() {
       '<label>Condición - título<input id="cfgConditionTitle" type="text" maxlength="160"></label>' +
       '<label>Condición - descripción<textarea id="cfgConditionDesc" maxlength="1000"></textarea></label>' +
       '<label>Plantilla WhatsApp<textarea id="cfgWaTemplate" maxlength="500"></textarea></label>' +
-      '<div class="admin-actions"><button id="adminSave" class="primary-button" type="button">GUARDAR CONFIGURACIÓN</button><button id="adminExport" class="secondary-button" type="button">EXPORTAR PARTICIPANTES CSV</button></div>' +
+      '<div class="admin-actions"><button id="adminSave" class="primary-button" type="button">GUARDAR CONFIGURACIÓN</button><button id="adminReload" class="secondary-button" type="button">↻ RECARGAR DESDE NEON</button><button id="adminExport" class="secondary-button" type="button">EXPORTAR PARTICIPANTES CSV</button></div>' +
       '<p id="adminStatus" class="submit-status" role="status"></p><div id="adminParticipants" class="admin-participants"></div>' +
     '</div>' +
   '</div>';
@@ -70,6 +70,7 @@ function createPanel() {
   byId("adminResetBack").addEventListener("click", () => { showLogin(); setLoginStatus(""); });
   byId("adminSignOut").addEventListener("click", signOut);
   byId("adminSave").addEventListener("click", saveConfig);
+  byId("adminReload").addEventListener("click", loadAdminData);
   byId("adminExport").addEventListener("click", exportParticipants);
 }
 
@@ -150,7 +151,8 @@ async function signIn(event) {
     const client = await getNeon();
     const result = await client.auth.signIn.email({
       email: byId("adminEmail").value.trim(),
-      password: byId("adminPassword").value
+      password: byId("adminPassword").value,
+      rememberMe: true
     });
     if (result?.error) throw new Error(result.error.message || "No se pudo iniciar sesión.");
     const sessionResult = await client.auth.getSession();
