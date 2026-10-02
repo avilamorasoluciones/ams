@@ -10,7 +10,6 @@ async function getNeonClient(){
   return window.AMS_FLY_NEON.getClient();
 }
 const RANKING_LIMIT = 50;
-const EVENT_TOKEN_STORAGE = "amsFlyAdminTokenV1";
 const EVENT_CONFIG_KEY = "amsFlyEventConfigV1";
 const LEADS_KEY = "amsFlyLeadsV1";
 const DEFAULT_EVENT = {
