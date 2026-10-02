@@ -4,8 +4,11 @@
 const STORAGE_KEY = "amsFlyProfileV1";
 const STATS_KEY = "amsFlyStatsV1";
 const FACT_INDEX_KEY = "amsFlyFactIndexV1";
-const EVENT_API = window.AMS_FLY_API_URL || "";
-const RANKING_API = EVENT_API ? EVENT_API+"/ranking" : "";
+const NEON_DATA_READY = () => !!window.AMS_FLY_NEON_CONFIG?.dataApiUrl;
+async function getNeonClient(){
+  if(!window.AMS_FLY_NEON?.getClient) throw new Error("Cliente Neon no disponible.");
+  return window.AMS_FLY_NEON.getClient();
+}
 const RANKING_LIMIT = 50;
 const EVENT_TOKEN_STORAGE = "amsFlyAdminTokenV1";
 const EVENT_CONFIG_KEY = "amsFlyEventConfigV1";
@@ -213,9 +216,24 @@ async function renderAdminParticipants(){
   });
 }
 async function loadRemoteEventConfig(){
-  const p=document.getElementById("amsFlyAdminPanel"),status=p?.querySelector("#adminStatus");
-  if(!EVENT_API){if(status)status.textContent="No hay EVENT_API configurada todavía.";return}
-  try{const res=await fetch(EVENT_API+"/event");if(!res.ok)throw new Error();const cfg=await res.json();saveEventConfig({...DEFAULT_EVENT,...cfg});applyEventConfig();if(status)status.textContent="✓ Configuración cargada desde servidor."}catch(_){if(status)status.textContent="No se pudo cargar la configuración remota."}
+  if(!NEON_DATA_READY())return;
+  try{
+    const client=await getNeonClient();
+    const result=await client.from("ams_fly_event_config")
+      .select("active,badge,title,description,cta,prize_title,prize_description,condition_title,condition_description,wa_template")
+      .eq("id",1)
+      .single();
+    if(result.error)throw result.error;
+    const row=result.data;
+    saveEventConfig({
+      ...DEFAULT_EVENT,
+      active:!!row.active,badge:row.badge,title:row.title,desc:row.description,cta:row.cta,
+      prizeTitle:row.prize_title,prizeDesc:row.prize_description,
+      conditionTitle:row.condition_title,conditionDesc:row.condition_description,
+      waTemplate:row.wa_template
+    });
+    applyEventConfig();
+  }catch(_){}
 }
 function exportLocalLeads(){
   const rows=getLocalLeads();if(!rows.length)return;
@@ -486,50 +504,72 @@ function saveCurrentLead(message=""){
   if(!profile||!game)return;
   const lead={id:"lead_"+Date.now(),name:profile.name,country:profile.country,birdId:profile.birdId,score:game.score,message,phone:profile.phone||"",date:new Date().toISOString()};
   saveLocalLead(lead);
-  if(EVENT_API&&lead.phone){
-    fetch(EVENT_API+"/participants",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({name:lead.name,country:lead.country,birdId:lead.birdId,score:lead.score,phone:lead.phone})}).catch(()=>{});
-  }
+  if(!profile.phone||!NEON_DATA_READY())return;
+  getNeonClient().then(client=>client.rpc("ams_fly_register_participant",{
+    p_name:lead.name,p_country:lead.country,p_bird_id:lead.birdId,p_phone:lead.phone,p_score:lead.score
+  })).catch(()=>{});
 }
-function publishScore(){
+async function publishScore(){
   if(!profile||!game)return;
   const message=(els.scoreMessage.value||"").trim().slice(0,90);
   const phone=(profile.phone||"").trim();
   if(getEventConfig().active&&phone.replace(/\D/g,"").length<7){els.submitScoreStatus.textContent="⚠️ Para participar en el evento necesitas registrar tu WhatsApp con código de área en tu perfil.";return}
   if(message.length<2){els.submitScoreStatus.textContent="⚠️ Escribe un mensaje de al menos 2 caracteres para publicar tu puntuación.";els.scoreMessage.focus();return}
-  if(!RANKING_API){els.submitScoreStatus.textContent="El ranking está preparado; falta conectar el endpoint seguro con Neon.";return}
+  if(!NEON_DATA_READY()){els.submitScoreStatus.textContent="El ranking está preparado; falta conectar el Data API de Neon.";return}
   els.submitScoreBtn.disabled=true;els.submitScoreStatus.textContent="Publicando...";
-  fetch(RANKING_API,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({name:profile.name,country:profile.country,birdId:profile.birdId,score:game.score,message})})
-    .then(response=>{if(!response.ok)throw new Error("No se pudo publicar");els.submitScoreStatus.textContent="¡Puntuación publicada!";playTone(880,.12,"triangle")})
-    .catch(()=>{els.submitScoreStatus.textContent="No se pudo publicar ahora. Tu récord local sigue guardado."})
-    .finally(()=>{els.submitScoreBtn.disabled=false});
+  try{
+    const client=await getNeonClient();
+    const result=await client.from("ams_fly_scores").insert({
+      player_name:profile.name,
+      country_code:profile.country,
+      bird_id:profile.birdId,
+      score:game.score,
+      message
+    });
+    if(result.error)throw result.error;
+    els.submitScoreStatus.textContent="¡Puntuación publicada!";
+    playTone(880,.12,"triangle");
+  }catch(_){
+    els.submitScoreStatus.textContent="No se pudo publicar ahora. Tu récord local sigue guardado.";
+  }finally{
+    els.submitScoreBtn.disabled=false;
+  }
 }
-function loadRanking(){
+async function loadRanking(){
   showOnly(els.rankingScreen);
   els.rankingList.innerHTML='<div class="ranking-loading">Cargando pilotos...</div>';
-  if(!RANKING_API){els.rankingList.innerHTML='<div class="ranking-empty"><strong>Ranking mundial preparado.</strong><br><span>Falta conectar el endpoint seguro con Neon.</span></div>';return}
-  fetch(RANKING_API+"?limit="+RANKING_LIMIT,{headers:{"Accept":"application/json"}})
-    .then(response=>{if(!response.ok)throw new Error("Ranking no disponible");return response.json()})
-    .then(data=>{
-      const rows=Array.isArray(data)?data:(data.rows||[]);
-      if(!rows.length){els.rankingList.innerHTML='<div class="ranking-empty">Aún no hay pilotos. ¡Sé el primero!</div>';return}
-      els.rankingList.innerHTML="";
-      rows.slice(0,RANKING_LIMIT).forEach((row,index)=>{
-        const b=getBird(row.birdId),country=getCountry(row.country);
-        const card=document.createElement("article");card.className="ranking-card";
-        const pos=document.createElement("div");pos.className="ranking-position "+(index<3?"top":"");pos.textContent="#"+(index+1);
-        const avatar=document.createElement("div");avatar.className="ranking-avatar";avatar.innerHTML=birdMarkup(b,".43");
-        const main=document.createElement("div");main.className="ranking-main";
-        const name=document.createElement("div");name.className="ranking-name";name.textContent=row.name||"Piloto";
-        const countryEl=document.createElement("div");countryEl.className="ranking-country";countryEl.textContent=country.flag+" "+country.name+" · "+b.name;
-        const message=document.createElement("div");message.className="ranking-message";message.textContent="“"+(row.message||"Sin mensaje")+"”";
-        main.append(name,countryEl,message);
-        const score=document.createElement("div");score.className="ranking-score";
-        const scoreValue=document.createElement("strong");scoreValue.textContent=String(Number(row.score||0));
-        const scoreLabel=document.createElement("span");scoreLabel.textContent="PUNTOS";score.append(scoreValue,scoreLabel);
-        card.append(pos,avatar,main,score);els.rankingList.appendChild(card);
-      });
-    })
-    .catch(()=>{els.rankingList.innerHTML='<div class="ranking-empty">No pudimos cargar el ranking en este momento.</div>';});
+  if(!NEON_DATA_READY()){els.rankingList.innerHTML='<div class="ranking-empty"><strong>Ranking mundial preparado.</strong><br><span>Falta conectar el Data API de Neon.</span></div>';return}
+  try{
+    const client=await getNeonClient();
+    const result=await client.from("ams_fly_scores")
+      .select("player_name,country_code,bird_id,score,message,created_at")
+      .order("score",{ascending:false})
+      .order("created_at",{ascending:true})
+      .limit(RANKING_LIMIT);
+    if(result.error)throw result.error;
+    const rows=(result.data||[]).map(row=>({
+      name:row.player_name,country:row.country_code,birdId:row.bird_id,score:row.score,message:row.message,created_at:row.created_at
+    }));
+    if(!rows.length){els.rankingList.innerHTML='<div class="ranking-empty">Aún no hay pilotos. ¡Sé el primero!</div>';return}
+    els.rankingList.innerHTML="";
+    rows.forEach((row,index)=>{
+      const b=getBird(row.birdId),country=getCountry(row.country);
+      const card=document.createElement("article");card.className="ranking-card";
+      const pos=document.createElement("div");pos.className="ranking-position "+(index<3?"top":"");pos.textContent="#"+(index+1);
+      const avatar=document.createElement("div");avatar.className="ranking-avatar";avatar.innerHTML=birdMarkup(b,".43");
+      const main=document.createElement("div");main.className="ranking-main";
+      const name=document.createElement("div");name.className="ranking-name";name.textContent=row.name||"Piloto";
+      const countryEl=document.createElement("div");countryEl.className="ranking-country";countryEl.textContent=country.flag+" "+country.name+" · "+b.name;
+      const message=document.createElement("div");message.className="ranking-message";message.textContent="“"+(row.message||"Sin mensaje")+"”";
+      main.append(name,countryEl,message);
+      const score=document.createElement("div");score.className="ranking-score";
+      const scoreValue=document.createElement("strong");scoreValue.textContent=String(Number(row.score||0));
+      const scoreLabel=document.createElement("span");scoreLabel.textContent="PUNTOS";score.append(scoreValue,scoreLabel);
+      card.append(pos,avatar,main,score);els.rankingList.appendChild(card);
+    });
+  }catch(_){
+    els.rankingList.innerHTML='<div class="ranking-empty">No pudimos cargar el ranking en este momento.</div>';
+  }
 }
 function endGame(){
   if(!game?.running)return;
@@ -562,7 +602,7 @@ function submitProfile(e){
 }
 function bootHome(){
   loadProfile();hydrateStats();initCountries();renderBirds();renderHomeBird();applyEventConfig();
-  if(EVENT_API) loadRemoteEventConfig();
+  if(NEON_DATA_READY()) loadRemoteEventConfig();
   if(profile){
     els.playerName.value=profile.name;els.playerCountry.value=profile.country;
     if(els.playerPhoneCountry)els.playerPhoneCountry.value=profile.phoneCountry||getCountry(profile.country).dial;
