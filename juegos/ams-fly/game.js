@@ -1,7 +1,7 @@
 (() => {
 "use strict";
 
-const STORAGE_KEY = "amsFlyProfileV1";
+const STORAGE_KEY = "amsFlyProfileV2";
 const STATS_KEY = "amsFlyStatsV1";
 const FACT_INDEX_KEY = "amsFlyFactIndexV1";
 const NEON_DATA_READY = () => !!window.AMS_FLY_NEON_CONFIG?.dataApiUrl;
@@ -80,7 +80,7 @@ const els = {};
   "homeBest","homeGames","startBtn","changePilotHomeBtn","profileForm","playerName","playerCountry","playerPhoneCountry","playerPhone","phoneVerificationBox","sendPhoneCodeBtn","phoneCodeRow","phoneCode","verifyPhoneCodeBtn","phoneVerifyStatus","birdGrid","selectedBirdInfo","profileError",
   "factTitle","factText","factSourceHint","factContinueBtn","gameCanvas","scoreValue","difficultyValue","pauseBtn","gameStartHint",
   "pauseScore","resumeBtn","quitBtn","resultBird","resultEyebrow","resultTitle","finalScore","resultBest","resultGames","newRecord",
-  "againBtn","changePilotBtn","soundBtn","backBtn","adminNavBtn","homeBirdArt","rankingBtn","rankingFromResultBtn","rankingBackBtn","rankingRefreshBtn","rankingList","rankingStatus","scoreMessage","submitScoreBtn","submitScoreStatus","rankingScreen"
+  "againBtn","changePilotBtn","soundBtn","backBtn","adminNavBtn","homeBirdArt","rankingBtn","rankingFromResultBtn","rankingBackBtn","rankingRefreshBtn","rankingList","rankingStatus","scoreMessage","submitScoreBtn","submitScoreStatus","shareResultBtn","termsConsent","rankingScreen"
 ].forEach(id => els[id] = document.getElementById(id));
 
 const ctx = els.gameCanvas.getContext("2d", {alpha:false});
@@ -521,36 +521,20 @@ async function publishScore(){
   els.submitScoreStatus.textContent="Guardando tu puntuación en el ranking…";
   try{
     const participant=await saveCurrentLead(message);
+    const participantId=participant?.participant_id||profile.participantId||null;
+    if(!participantId) throw new Error("No se pudo identificar tu piloto. Vuelve a registrar tu número antes de publicar.");
+    profile.participantId=participantId;saveProfile();
     const client=await getPublicNeonClient();
-    let result=await client.from("ams_fly_scores").insert({
-      participant_id:participant?.participant_id||null,
-      player_name:profile.name,
-      country_code:profile.country,
-      bird_id:profile.birdId,
-      score:game.score,
-      message
+    const result=await client.rpc("ams_fly_submit_score",{
+      p_participant_id:participantId,p_name:profile.name,p_country:profile.country,
+      p_bird_id:profile.birdId,p_score:game.score,p_message:message,
+      p_duration_ms:Math.round((game.time||0)*1000)
     });
-    if(result.error){
-      const url=(window.AMS_FLY_NEON?.config?.dataApiUrl||"").replace(/\/$/,"")+"/ams_fly_scores";
-      if(!url.includes("apirest.")) throw result.error;
-      const response=await fetch(url,{
-        method:"POST",
-        headers:{"Content-Type":"application/json","Prefer":"return=representation"},
-        body:JSON.stringify({
-          player_name:profile.name,
-          country_code:profile.country,
-          bird_id:profile.birdId,
-          score:game.score,
-          message
-        })
-      });
-      if(!response.ok) throw new Error((await response.text()).slice(0,300)||result.error.message);
-    }
-    saveCurrentLead(message);
+    if(result.error) throw result.error;
     els.submitScoreBtn.dataset.published="1";
     els.submitScoreBtn.disabled=true;
     els.submitScoreBtn.innerHTML="✓ PUNTUACIÓN CONFIRMADA";
-    els.submitScoreStatus.textContent="✓ Listo. Tu puntuación quedó publicada en el ranking mundial. Puedes verla cuando quieras.";
+    els.submitScoreStatus.textContent=(result.data?.provisional===true)?"✓ Puntuación publicada. Quedó como provisional hasta verificar la identidad del participante.":"✓ Listo. Tu puntuación quedó publicada en el ranking mundial. Puedes verla cuando quieras.";
     playTone(880,.12,"triangle");
   }catch(error){
     console.error("AMS Fly: error al publicar puntuación", error);
@@ -617,6 +601,20 @@ function endGame(){
   showOnly(els.gameOverScreen);
   playTone(isNew?880:180,.16,isNew?"triangle":"sawtooth");
 }
+async function shareResult(){
+  if(!game)return;
+  const cfg=getEventConfig();
+  const score=Number(game.score||0);
+  const url=new URL("./",window.location.href).href;
+  const text="🦅 Hice "+score+" puntos en AMS Fly. ¿Puedes superarme?\n"+(cfg.title||"Participa en el evento de AMS Fly.")+"\n"+url;
+  try{
+    if(navigator.share){await navigator.share({title:"AMS Fly",text,url});return;}
+    await navigator.clipboard.writeText(text);
+    els.submitScoreStatus.textContent="✓ Resultado copiado. Pégalo en WhatsApp o donde quieras compartirlo.";
+  }catch(error){
+    if(error?.name!=="AbortError") els.submitScoreStatus.textContent="No pudimos abrir el menú de compartir. Copia el enlace de AMS Fly y compártelo manualmente.";
+  }
+}
 function startWithProfile(){
   resetGame();
 }
@@ -629,6 +627,7 @@ async function submitProfile(e){
   e.preventDefault();
   const name=els.playerName.value.trim().replace(/\s+/g," ");
   if(name.length<2){els.profileError.textContent="Escribe al menos 2 caracteres para tu nombre.";els.profileError.hidden=false;els.playerName.focus();return}
+  if(els.termsConsent && !els.termsConsent.checked){els.profileError.textContent="Debes aceptar los Términos y Condiciones y la Política de Privacidad para participar.";els.profileError.hidden=false;els.termsConsent.focus();return}
   const phoneCountry=els.playerPhoneCountry?.value || getCountry(els.playerCountry.value).dial;
   const rawPhone=(els.playerPhone?.value||"").replace(/\D/g,"");
   if(rawPhone.length<7){els.profileError.textContent="El número de celular es obligatorio para identificar tu piloto.";els.profileError.hidden=false;els.playerPhone?.focus();return}
@@ -641,7 +640,7 @@ async function submitProfile(e){
     const remote=result.data;
     if(remote?.existing){
       if(remote.name && remote.name.toLowerCase()!==candidate.name.toLowerCase())throw new Error("Este celular ya está asociado a otro piloto. Usa el número del piloto correcto.");
-      candidate.name=remote.name||candidate.name;candidate.country=remote.country||candidate.country;candidate.birdId=remote.bird_id||candidate.birdId;candidate.phoneVerified=!!remote.phone_verified;
+      candidate.name=remote.name||candidate.name;candidate.country=remote.country||candidate.country;candidate.birdId=remote.bird_id||candidate.birdId;candidate.phoneVerified=!!remote.phone_verified;candidate.participantId=remote.participant_id||candidate.participantId||null;
     }
     if(PHONE_API_URL && !candidate.phoneVerified){
       pendingPhoneProfile=candidate;
@@ -652,6 +651,7 @@ async function submitProfile(e){
       await sendPhoneCode();
       return;
     }
+    candidate.participantId=remote?.participant_id||candidate.participantId||null;
     finishProfile(candidate);
   }catch(error){
     console.error("AMS Fly: no se pudo registrar el piloto",error);
@@ -713,6 +713,7 @@ els.rankingBackBtn.addEventListener("click",()=>showOnly(els.homeScreen));
 els.backBtn?.addEventListener("click",()=>{ if(game?.running && !game?.paused){ game.paused=true; stopMusic(); cancelAnimationFrame(raf); els.pauseScore.textContent=game.score+" puntos"; showOnly(els.pauseScreen); } else if(!els.profileScreen.hidden){ showOnly(els.homeScreen); } else if(!els.factScreen.hidden){ showOnly(els.profileScreen); } else if(!els.rankingScreen.hidden){ showOnly(els.homeScreen); } else { showOnly(els.homeScreen); } });
 els.rankingRefreshBtn.addEventListener("click",loadRanking);
 els.submitScoreBtn.addEventListener("click",()=>{publishScore();});
+els.shareResultBtn?.addEventListener("click",shareResult);
 els.birdGrid.addEventListener("click",e=>{const btn=e.target.closest("[data-bird]");if(!btn)return;selectedBirdId=btn.dataset.bird;renderBirds();playTone(350,.04)});
 els.startBtn.addEventListener("click",()=>{playTone(440,.07);startMusic();if(profile){els.playerName.value=profile.name;els.playerCountry.value=profile.country;if(els.playerPhoneCountry)els.playerPhoneCountry.value=profile.phoneCountry||getCountry(profile.country).dial;if(els.playerPhone){const dial=els.playerPhoneCountry?.value||getCountry(profile.country).dial;const raw=String(profile.phone||"").replace(/\D/g,"");els.playerPhone.value=raw.startsWith(dial)?raw.slice(dial.length):raw}selectedBirdId=profile.birdId;renderBirds()}showOnly(els.profileScreen)});
 els.profileForm.addEventListener("submit",submitProfile);
