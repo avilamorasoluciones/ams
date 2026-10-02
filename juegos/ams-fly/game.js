@@ -10,6 +10,10 @@ async function getNeonClient(){
   if(!window.AMS_FLY_NEON?.getClient) throw new Error("Cliente Neon no disponible.");
   return window.AMS_FLY_NEON.getClient();
 }
+async function getPublicNeonClient(){
+  if(!window.AMS_FLY_NEON?.getPublicClient) throw new Error("Cliente público Neon no disponible.");
+  return window.AMS_FLY_NEON.getPublicClient();
+}
 const RANKING_LIMIT = 50;
 function escapeHtml(value){
   return String(value ?? "").replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
@@ -199,7 +203,7 @@ function openEventScreen(){
 async function loadRemoteEventConfig(){
   if(!NEON_DATA_READY())return;
   try{
-    const client=await getNeonClient();
+    const client=await getPublicNeonClient();
     const result=await client.from("ams_fly_event_config")
       .select("active,badge,title,description,cta,prize_title,prize_description,condition_title,condition_description,wa_template,event_start_at,event_end_at")
       .eq("id",1)
@@ -486,7 +490,7 @@ async function saveCurrentLead(message=""){
   const lead={id:"lead_"+Date.now(),name:profile.name,country:profile.country,birdId:profile.birdId,score:game.score,message,phone:profile.phone||"",date:new Date().toISOString()};
   saveLocalLead(lead);
   try{
-    const client=await getNeonClient();
+    const client=await getPublicNeonClient();
     const result=await client.rpc("ams_fly_register_participant",{p_name:lead.name,p_country:lead.country,p_bird_id:lead.birdId,p_phone:lead.phone,p_score:lead.score});
     if(result.error)throw result.error;
     return result.data||null;
@@ -517,7 +521,7 @@ async function publishScore(){
   els.submitScoreStatus.textContent="Guardando tu puntuación en el ranking…";
   try{
     const participant=await saveCurrentLead(message);
-    const client=await getNeonClient();
+    const client=await getPublicNeonClient();
     let result=await client.from("ams_fly_scores").insert({
       participant_id:participant?.participant_id||null,
       player_name:profile.name,
@@ -560,7 +564,7 @@ async function loadRanking(){
   els.rankingList.innerHTML='<div class="ranking-loading">Cargando pilotos...</div>';
   if(!NEON_DATA_READY()){els.rankingList.innerHTML='<div class="ranking-empty"><strong>Ranking mundial preparado.</strong><br><span>Falta conectar el Data API de Neon.</span></div>';return}
   try{
-    const client=await getNeonClient();
+    const client=await getPublicNeonClient();
     const result=await client.from("ams_fly_scores")
       .select("player_name,country_code,bird_id,score,message,created_at")
       .order("score",{ascending:false})
@@ -631,7 +635,7 @@ async function submitProfile(e){
   if(!NEON_DATA_READY()){els.profileError.textContent="No podemos registrar el piloto todavía porque Neon no está conectado.";els.profileError.hidden=false;return}
   const candidate={name:name.slice(0,18),country:els.playerCountry.value,birdId:selectedBirdId,phoneCountry,phone:"+"+phoneCountry+rawPhone,phoneVerified:false};
   try{
-    const client=await getNeonClient();
+    const client=await getPublicNeonClient();
     const result=await client.rpc("ams_fly_register_participant",{p_name:candidate.name,p_country:candidate.country,p_bird_id:candidate.birdId,p_phone:candidate.phone,p_score:0});
     if(result.error)throw result.error;
     const remote=result.data;
