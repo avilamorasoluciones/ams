@@ -114,25 +114,31 @@ create policy "ams_fly_participants_admin_update"
 create or replace function public.ams_fly_register_participant(
   p_name varchar(18), p_country varchar(2), p_bird_id varchar(32), p_phone varchar(30), p_score integer)
 returns json language plpgsql security definer set search_path=public as $$
-declare v_existing public.ams_fly_participants%ROWTYPE; v_phone text:=regexp_replace(trim(coalesce(p_phone,'')),'[^0-9+]','','g'); v_existing_by_phone public.ams_fly_participants%ROWTYPE;
+declare
+  v_existing public.ams_fly_participants%ROWTYPE;
+  v_phone text:=regexp_replace(trim(coalesce(p_phone,'')),'[^0-9+]','','g');
+  v_existing_by_phone public.ams_fly_participants%ROWTYPE;
+  v_internal boolean:=v_phone in ('+573043344962','+573043343619');
 begin
-  if char_length(trim(p_name)) not between 2 and 18 or p_country not in ('CO','VE','EC','US','MX','AR','CL','PE','BR','PA')
+  if char_length(trim(p_name)) not between 2 and 18
+     or p_country not in ('CO','VE','EC','US','MX','AR','CL','PE','BR','PA')
      or p_bird_id not in ('condor-co','turpial','tucan-ec','eagle-us','eagle-mx','hornero','chucao-cl','cock-rock','sabia','harpia')
-     or v_phone !~ '^\+[1-9][0-9]{7,14}$' or p_score is null or p_score<0 or p_score>1000000 then raise exception 'invalid_participant'; end if;
+     or v_phone !~ '^\+[1-9][0-9]{7,14}$'
+     or p_score is null or p_score<0 or p_score>1000000 then raise exception 'invalid_participant'; end if;
   select * into v_existing_by_phone from public.ams_fly_participants where phone=v_phone limit 1;
   if v_existing_by_phone.id is not null and lower(trim(v_existing_by_phone.player_name))<>lower(trim(p_name)) then raise exception 'phone_name_mismatch'; end if;
   if v_existing_by_phone.id is not null then
     if p_score>coalesce(v_existing_by_phone.score,0) then
-      update public.ams_fly_participants set country_code=upper(trim(p_country)),bird_id=trim(p_bird_id),score=p_score,best_score_at=now(),prize_eligible=not (v_phone in ('+573043344962','+573043343619')),updated_at=now()
+      update public.ams_fly_participants set country_code=upper(trim(p_country)),bird_id=trim(p_bird_id),score=p_score,best_score_at=now(),prize_eligible=not v_internal,updated_at=now()
       where id=v_existing_by_phone.id returning * into v_existing;
     else
-      update public.ams_fly_participants set country_code=upper(trim(p_country)),bird_id=trim(p_bird_id),prize_eligible=not (v_phone in ('+573043344962','+573043343619')),updated_at=now()
+      update public.ams_fly_participants set country_code=upper(trim(p_country)),bird_id=trim(p_bird_id),prize_eligible=not v_internal,updated_at=now()
       where id=v_existing_by_phone.id returning * into v_existing;
     end if;
     return json_build_object('ok',true,'existing',true,'participant_id',v_existing.id,'name',v_existing.player_name,'country',v_existing.country_code,'bird_id',v_existing.bird_id,'phone_verified',v_existing.phone_verified);
   end if;
   insert into public.ams_fly_participants(player_name,country_code,bird_id,phone,score,best_score_at,prize_eligible)
-  values(trim(p_name),upper(trim(p_country)),trim(p_bird_id),v_phone,p_score,now(),not (v_phone in ('+573043344962','+573043343619'))) returning * into v_existing;
+  values(trim(p_name),upper(trim(p_country)),trim(p_bird_id),v_phone,p_score,now(),not v_internal) returning * into v_existing;
   return json_build_object('ok',true,'existing',false,'participant_id',v_existing.id,'name',v_existing.player_name,'country',v_existing.country_code,'bird_id',v_existing.bird_id,'phone_verified',v_existing.phone_verified);
 end; $$;
 
