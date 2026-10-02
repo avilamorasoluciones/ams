@@ -638,6 +638,7 @@ async function submitProfile(e){
     const result=await client.rpc("ams_fly_register_participant",{p_name:candidate.name,p_country:candidate.country,p_bird_id:candidate.birdId,p_phone:candidate.phone,p_score:0});
     if(result.error)throw result.error;
     const remote=result.data;
+    candidate.participantId=remote?.participant_id||candidate.participantId||null;
     if(remote?.existing){
       if(remote.name && remote.name.toLowerCase()!==candidate.name.toLowerCase())throw new Error("Este celular ya está asociado a otro piloto. Usa el número del piloto correcto.");
       candidate.name=remote.name||candidate.name;candidate.country=remote.country||candidate.country;candidate.birdId=remote.bird_id||candidate.birdId;candidate.phoneVerified=!!remote.phone_verified;candidate.participantId=remote.participant_id||candidate.participantId||null;
@@ -651,7 +652,6 @@ async function submitProfile(e){
       await sendPhoneCode();
       return;
     }
-    candidate.participantId=remote?.participant_id||candidate.participantId||null;
     finishProfile(candidate);
   }catch(error){
     console.error("AMS Fly: no se pudo registrar el piloto",error);
