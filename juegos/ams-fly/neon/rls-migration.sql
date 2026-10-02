@@ -31,6 +31,9 @@ grant select on public.ams_fly_event_config
 grant update on public.ams_fly_event_config
   to authenticated;
 
+grant update on public.ams_fly_participants
+  to authenticated;
+
 grant insert on public.ams_fly_participants
   to anonymous, authenticated;
 
@@ -97,6 +100,13 @@ create policy "ams_fly_participants_admin_read"
   to authenticated
   using ((select public.ams_fly_is_admin()));
 
+create policy "ams_fly_participants_admin_update"
+  on public.ams_fly_participants
+  for update
+  to authenticated
+  using ((select public.ams_fly_is_admin()))
+  with check ((select public.ams_fly_is_admin()));
+
 -- Public registration/update helper. It is intentionally limited to the
 -- AMS Fly participant fields and does not expose the participant table.
 create or replace function public.ams_fly_register_participant(
@@ -151,3 +161,9 @@ alter table public.ams_fly_scores
 
 create index if not exists ams_fly_scores_participant_idx
   on public.ams_fly_scores (participant_id);
+
+
+-- event_start_at/event_end_at controlan la vigencia real del evento.
+-- prize_eligible permite excluir al equipo organizador sin ocultarlo del ranking.
+-- best_score_at registra cuándo se alcanzó el mejor puntaje.
+-- El trigger ams_fly_score_event_guard bloquea nuevas puntuaciones fuera de la vigencia.
