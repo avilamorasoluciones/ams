@@ -491,7 +491,7 @@ async function saveCurrentLead(message=""){
   saveLocalLead(lead);
   try{
     const client=await getPublicNeonClient();
-    const result=await client.rpc("ams_fly_register_participant",{p_name:lead.name,p_country:lead.country,p_bird_id:lead.birdId,p_phone:lead.phone,p_score:lead.score});
+    const result=await client.rpc("ams_fly_register_participant",{p_name:lead.name,p_country:lead.country,p_bird_id:lead.birdId,p_phone:lead.phone,p_score:0});
     if(result.error)throw result.error;
     return result.data||null;
   }catch(error){console.warn("AMS Fly: no se pudo registrar el participante",error);return null}
