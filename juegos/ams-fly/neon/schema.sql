@@ -44,7 +44,7 @@ create table if not exists ams_fly_event_config (
   prize_title varchar(160) not null default '',
   prize_description varchar(1000) not null default '',
   condition_title varchar(160) not null default '',
-  condition_description varchar(3000) not null default '',
+  condition_description text not null default '',
   wa_template varchar(500) not null default '',
   event_start_at timestamptz,
   event_end_at timestamptz,
