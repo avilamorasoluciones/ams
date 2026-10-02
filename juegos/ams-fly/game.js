@@ -159,23 +159,64 @@ function applyEventConfig(){
 function renderEventRichText(target,text){
   target.replaceChildren();
   const blocks=String(text||"").split(/\n\s*\n/).map(x=>x.trim()).filter(Boolean);
+
   blocks.forEach(block=>{
+    const lines=block.split("\n").map(x=>x.trim()).filter(Boolean);
+    const first=lines[0]||"";
+    const headingMatch=first.match(/^((?:\p{Extended_Pictographic}|\p{Emoji_Presentation}|\uFE0F|\u200D)+)\s+([\s\S]*)$/u);
+
+    if(headingMatch && lines.length===1){
+      const item=document.createElement("div");
+      item.className="event-rich-item is-heading";
+      const marker=document.createElement("span");
+      marker.className="event-rich-marker";
+      marker.textContent=headingMatch[1];
+      const content=document.createElement("p");
+      content.className="event-rich-text";
+      content.textContent=headingMatch[2].trim();
+      item.append(marker,content);
+      target.appendChild(item);
+      return;
+    }
+
+    const bulletLines=lines.filter(line=>/^•\s*/.test(line));
+    const plainLines=lines.filter(line=>!/^•\s*/.test(line));
+
+    if(bulletLines.length){
+      bulletLines.forEach(line=>{
+        const item=document.createElement("div");
+        item.className="event-rich-item is-bullet";
+        const marker=document.createElement("span");
+        marker.className="event-rich-marker";
+        marker.textContent="•";
+        const content=document.createElement("p");
+        content.className="event-rich-text";
+        content.textContent=line.replace(/^•\s*/,"").trim();
+        item.append(marker,content);
+        target.appendChild(item);
+      });
+      plainLines.forEach(line=>{
+        const item=document.createElement("div");
+        item.className="event-rich-item";
+        const marker=document.createElement("span");
+        marker.className="event-rich-marker";
+        const content=document.createElement("p");
+        content.className="event-rich-text";
+        content.textContent=line;
+        item.append(marker,content);
+        target.appendChild(item);
+      });
+      return;
+    }
+
     const item=document.createElement("div");
     item.className="event-rich-item";
     const marker=document.createElement("span");
     marker.className="event-rich-marker";
+    marker.textContent="";
     const content=document.createElement("p");
     content.className="event-rich-text";
-
-    const match=block.match(/^((?:\p{Extended_Pictographic}|\p{Emoji_Presentation}|\uFE0F|\u200D)+)\s+([\s\S]*)$/u);
-    if(match){
-      item.classList.add("is-heading");
-      marker.textContent=match[1];
-      content.textContent=match[2].trim();
-    }else{
-      marker.textContent="•";
-      content.textContent=block;
-    }
+    content.textContent=block;
     item.append(marker,content);
     target.appendChild(item);
   });
