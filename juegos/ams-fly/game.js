@@ -313,7 +313,7 @@ function currentStage(score){
 function showStageBanner(stage,index){
   let banner=document.getElementById("stageBanner");
   if(!banner){banner=document.createElement("div");banner.id="stageBanner";banner.className="stage-banner";els.gameScreen.appendChild(banner)}
-  banner.textContent=stage.name+" · MUNDO "+(index+1);
+  banner.textContent=stage.name;
   banner.classList.remove("show");void banner.offsetWidth;banner.classList.add("show");
   clearTimeout(banner._timer);banner._timer=setTimeout(()=>banner.classList.remove("show"),1800);
 }
