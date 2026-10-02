@@ -1,26 +1,50 @@
 import express from "express";
 import { neon } from "@neondatabase/serverless";
+import { createRemoteJWKSet, jwtVerify } from "jose";
 
 const app=express();
 const port=Number(process.env.PORT||3000);
 const sql=neon(process.env.DATABASE_URL);
-const ADMIN_TOKEN=process.env.ADMIN_TOKEN||"";
-const CORS_ORIGIN=process.env.CORS_ORIGIN||"*";
+const NEON_AUTH_JWKS_URL=process.env.NEON_AUTH_JWKS_URL||"";
+const ADMIN_JWKS=NEON_AUTH_JWKS_URL?createRemoteJWKSet(new URL(NEON_AUTH_JWKS_URL)):null;
+const CORS_ORIGINS=new Set((process.env.CORS_ORIGIN||"https://avilamorasoluciones.com").split(",").map(origin=>origin.trim()).filter(Boolean));
 const allowedCountries=new Set(["CO","VE","EC","US","MX","AR","CL","PE","BR","PA"]);
 const allowedBirds=new Set(["condor-co","turpial","condor-ec","eagle-us","eagle-mx","hornero","condor-cl","cock-rock","sabia","harpia"]);
 
 app.use(express.json({limit:"16kb"}));
 app.use((req,res,next)=>{
-  res.setHeader("Access-Control-Allow-Origin",CORS_ORIGIN);
-  res.setHeader("Access-Control-Allow-Headers","Content-Type, Authorization");
-  res.setHeader("Access-Control-Allow-Methods","GET,POST,PUT,OPTIONS");
-  if(req.method==="OPTIONS")return res.sendStatus(204);
+  const origin=req.get("origin");
+  if(origin&&CORS_ORIGINS.has(origin)){
+    res.setHeader("Access-Control-Allow-Origin",origin);
+    res.setHeader("Vary","Origin");
+    res.setHeader("Access-Control-Allow-Headers","Content-Type, Authorization");
+    res.setHeader("Access-Control-Allow-Methods","GET,POST,PUT,OPTIONS");
+  }
+  if(req.method==="OPTIONS"){
+    if(!origin||!CORS_ORIGINS.has(origin))return res.sendStatus(403);
+    return res.sendStatus(204);
+  }
   next();
 });
 
-function admin(req,res,next){
+async function admin(req,res,next){
   const token=(req.get("authorization")||"").replace(/^Bearer\s+/i,"");
-  if(!ADMIN_TOKEN||token!==ADMIN_TOKEN)return res.status(401).json({error:"Unauthorized"});
+  if(!ADMIN_JWKS)return res.status(503).json({error:"auth_not_configured"});
+  if(!token)return res.status(401).json({error:"Unauthorized"});
+  let payload;
+  try{
+    ({payload}=await jwtVerify(token,ADMIN_JWKS,{requiredClaims:["exp","sub"]}));
+  }catch(_){return res.status(401).json({error:"Unauthorized"});}
+  if(typeof payload.sub!=="string")return res.status(401).json({error:"Unauthorized"});
+  let rows;
+  try{
+    rows=await sql`select id,email,role,"emailVerified" from neon_auth."user" where id=${payload.sub} limit 1`;
+  }catch(_){return res.status(503).json({error:"auth_database_unavailable"});}
+  const user=rows[0];
+  if(!user)return res.status(401).json({error:"Unauthorized"});
+  const roles=Array.isArray(user.role)?user.role.map(String):String(user.role||"").split(/[,\s]+/);
+  if(user.emailVerified!==true||!roles.includes("admin"))return res.status(403).json({error:"admin_role_required"});
+  req.admin={id:user.id,email:user.email};
   next();
 }
 function text(value,max){
@@ -32,6 +56,7 @@ function validScore(value){
 }
 
 app.get("/health",(req,res)=>res.json({ok:true,service:"ams-fly-neon-api"}));
+app.get("/admin/me",admin,(req,res)=>res.json({user:{id:req.admin.id,email:req.admin.email}}));
 
 app.get("/event",async(req,res)=>{
   try{
