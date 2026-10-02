@@ -10,6 +10,9 @@ async function getNeonClient(){
   return window.AMS_FLY_NEON.getClient();
 }
 const RANKING_LIMIT = 50;
+function escapeHtml(value){
+  return String(value ?? "").replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+}
 const EVENT_CONFIG_KEY = "amsFlyEventConfigV1";
 const LEADS_KEY = "amsFlyLeadsV1";
 const DEFAULT_EVENT = {
@@ -471,8 +474,10 @@ async function publishScore(){
     if(result.error)throw result.error;
     els.submitScoreStatus.textContent="¡Puntuación publicada!";
     playTone(880,.12,"triangle");
-  }catch(_){
-    els.submitScoreStatus.textContent="No se pudo publicar ahora. Tu récord local sigue guardado.";
+  }catch(error){
+    console.error("AMS Fly: error al publicar puntuación", error);
+    const detail=error?.message || error?.details || error?.hint || "Error desconocido de Neon Data API";
+    els.submitScoreStatus.textContent="No se pudo publicar: "+detail;
   }finally{
     els.submitScoreBtn.disabled=false;
   }
@@ -511,7 +516,8 @@ async function loadRanking(){
     });
   }catch(error){
     console.error("AMS Fly: no se pudo cargar el ranking", error);
-    els.rankingList.innerHTML='<div class="ranking-empty">No pudimos cargar el ranking en este momento. Intenta actualizar.</div>';
+    const detail=error?.message || error?.details || error?.hint || "Error desconocido de Neon Data API";
+    els.rankingList.innerHTML='<div class="ranking-empty"><strong>No pudimos cargar el ranking.</strong><br><span>'+escapeHtml(detail)+'</span><br><small>Revisa los permisos/RLS de Neon y vuelve a actualizar.</small></div>';
   }
 }
 function endGame(){
