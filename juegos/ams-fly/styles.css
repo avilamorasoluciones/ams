@@ -187,8 +187,14 @@ button{cursor:pointer}
 .event-rich-content{
   display:flex;
   flex-direction:column;
-  gap:24px;
+  gap:16px;
   margin-top:4px;
+}
+.event-rich-item:not(.is-heading):not(.is-bullet){
+  grid-template-columns:minmax(0,1fr);
+}
+.event-rich-item:not(.is-heading):not(.is-bullet) .event-rich-marker{
+  display:none;
 }
 .event-rich-item{
   display:grid;
@@ -265,7 +271,7 @@ button{cursor:pointer}
   .event-detail-block{
     padding:26px 0;
   }
-  .event-rich-content{gap:28px}
+  .event-rich-content{gap:18px}
   .event-rich-item{
     grid-template-columns:28px minmax(0,1fr);
     column-gap:9px;
