@@ -24,14 +24,23 @@ function createPanel() {
   panel.className = "admin-panel";
   panel.hidden = true;
   panel.innerHTML = '<div class="admin-card">' +
-    '<div class="admin-head"><div><span class="eyebrow">AMS FLY · GESTIÓN</span><h2>Acceso de administración</h2></div><button id="adminClose" class="secondary-button" type="button">Cerrar</button></div>' +
+    '<div class="admin-head"><div><span class="eyebrow">AMS FLY · GESTIÓN</span><h2>Iniciar sesión</h2></div><button id="adminClose" class="secondary-button" type="button">Cerrar</button></div>' +
     '<div id="adminLoginView">' +
-      '<p class="admin-note">Inicia sesión con tu cuenta de Neon Auth. Solo una cuenta con correo verificado y rol administrador puede gestionar el evento.</p>' +
       '<form id="adminLoginForm">' +
         '<label>Correo electrónico<input id="adminEmail" type="email" autocomplete="username" required></label>' +
         '<label>Contraseña<input id="adminPassword" type="password" autocomplete="current-password" required></label>' +
         '<button id="adminLoginSubmit" class="primary-button" type="submit">INICIAR SESIÓN</button>' +
+        '<button id="adminForgotPassword" class="admin-reset-link" type="button">¿Olvidaste tu contraseña?</button>' +
         '<p id="adminLoginStatus" class="submit-status" role="status"></p>' +
+      '</form>' +
+    '</div>' +
+    '<div id="adminResetView" hidden>' +
+      '<form id="adminResetForm">' +
+        '<label>Nueva contraseña<input id="adminNewPassword" type="password" autocomplete="new-password" minlength="8" required></label>' +
+        '<label>Repetir contraseña<input id="adminConfirmPassword" type="password" autocomplete="new-password" minlength="8" required></label>' +
+        '<button id="adminResetSubmit" class="primary-button" type="submit">GUARDAR CONTRASEÑA</button>' +
+        '<button id="adminResetBack" class="admin-reset-link" type="button">VOLVER AL LOGIN</button>' +
+        '<p id="adminResetStatus" class="submit-status" role="status"></p>' +
       '</form>' +
     '</div>' +
     '<div id="adminEditor" hidden>' +
@@ -56,6 +65,9 @@ function createPanel() {
   document.body.appendChild(panel);
   byId("adminClose").addEventListener("click", () => { panel.hidden = true; });
   byId("adminLoginForm").addEventListener("submit", signIn);
+  byId("adminForgotPassword").addEventListener("click", requestPasswordReset);
+  byId("adminResetForm").addEventListener("submit", completePasswordReset);
+  byId("adminResetBack").addEventListener("click", () => { showLogin(); setLoginStatus(""); });
   byId("adminSignOut").addEventListener("click", signOut);
   byId("adminSave").addEventListener("click", saveConfig);
   byId("adminExport").addEventListener("click", exportParticipants);
@@ -155,9 +167,10 @@ async function signIn(event) {
     await showAdmin(user);
   } catch (error) {
     showLogin();
+    console.warn("AMS Fly: error al iniciar sesión", error);
     setLoginStatus(error.status === 403
-      ? "La cuenta inició sesión, pero no tiene permisos de administrador."
-      : error.message || "No se pudo iniciar sesión. Revisa los datos y vuelve a intentar.");
+      ? "Esta cuenta no tiene acceso de administrador."
+      : "No se pudo iniciar sesión. Revisa el correo y la contraseña.");
   } finally {
     button.disabled = false;
   }
@@ -166,8 +179,14 @@ async function signIn(event) {
 async function showAdmin(user) {
   byId("adminIdentity").textContent = user?.email || "Administrador";
   byId("adminLoginView").hidden = true;
+  byId("adminResetView").hidden = true;
   byId("adminEditor").hidden = false;
-  await loadAdminData();
+  try {
+    await loadAdminData();
+  } catch (error) {
+    console.error("AMS Fly: sesión iniciada, pero no cargaron los datos de administración", error);
+    setStatus("Sesión iniciada, pero no se pudieron cargar los datos. Intenta actualizar.");
+  }
 }
 
 async function signOut() {
@@ -181,7 +200,74 @@ async function signOut() {
 
 function showLogin() {
   byId("adminLoginView").hidden = false;
+  byId("adminResetView").hidden = true;
   byId("adminEditor").hidden = true;
+}
+
+async function requestPasswordReset() {
+  const email = byId("adminEmail").value.trim();
+  if (!email) {
+    setLoginStatus("Escribe tu correo electrónico.");
+    byId("adminEmail").focus();
+    return;
+  }
+  const button = byId("adminForgotPassword");
+  button.disabled = true;
+  setLoginStatus("Enviando el enlace...");
+  try {
+    const client = await getNeon();
+    const result = await client.auth.requestPasswordReset({
+      email,
+      redirectTo: window.location.origin + window.location.pathname
+    });
+    if (result?.error) throw result.error;
+    setLoginStatus("Si el correo corresponde a una cuenta, recibirás un enlace para cambiar la contraseña.");
+  } catch (error) {
+    console.warn("AMS Fly: error al solicitar cambio de contraseña", error);
+    setLoginStatus("No se pudo enviar el enlace. Intenta de nuevo más tarde.");
+  } finally {
+    button.disabled = false;
+  }
+}
+
+function showPasswordReset() {
+  byId("adminLoginView").hidden = true;
+  byId("adminResetView").hidden = false;
+  byId("adminEditor").hidden = true;
+  byId("adminResetStatus").textContent = "Elige una contraseña nueva.";
+}
+
+async function completePasswordReset(event) {
+  event.preventDefault();
+  const password = byId("adminNewPassword").value;
+  if (password !== byId("adminConfirmPassword").value) {
+    byId("adminResetStatus").textContent = "Las contraseñas no coinciden.";
+    byId("adminConfirmPassword").focus();
+    return;
+  }
+  const token = new URLSearchParams(window.location.search).get("token");
+  if (!token) {
+    byId("adminResetStatus").textContent = "El enlace venció. Solicita uno nuevo desde el login.";
+    return;
+  }
+  const button = byId("adminResetSubmit");
+  button.disabled = true;
+  byId("adminResetStatus").textContent = "Guardando...";
+  try {
+    const client = await getNeon();
+    const result = await client.auth.resetPassword({ newPassword: password, token });
+    if (result?.error) throw result.error;
+    byId("adminNewPassword").value = "";
+    byId("adminConfirmPassword").value = "";
+    history.replaceState(null, "", window.location.pathname);
+    showLogin();
+    setLoginStatus("Contraseña actualizada. Ya puedes iniciar sesión.");
+  } catch (error) {
+    console.warn("AMS Fly: error al cambiar la contraseña", error);
+    byId("adminResetStatus").textContent = "El enlace venció o no se pudo usar. Solicita uno nuevo.";
+  } finally {
+    button.disabled = false;
+  }
 }
 
 async function saveConfig() {
@@ -273,24 +359,27 @@ async function openAdmin() {
   panel.hidden = false;
   showLogin();
   setLoginStatus("");
+  if (new URLSearchParams(window.location.search).has("token")) {
+    showPasswordReset();
+    return;
+  }
   try {
     const client = await getNeon();
     const sessionResult = await client.auth.getSession();
     const user = sessionResult?.data?.user || sessionResult?.data?.session?.user;
-    if (!user) {
-      setLoginStatus("Inicia sesión con la cuenta administradora.");
-      return;
-    }
+    if (!user) return;
     if (user.emailVerified !== true || user.role !== "admin") {
       await client.auth.signOut().catch(() => {});
-      setLoginStatus("La cuenta actual no tiene permisos de administrador.");
+      setLoginStatus("Esta cuenta no tiene acceso de administrador.");
       return;
     }
     await showAdmin(user);
   } catch (error) {
-    setLoginStatus(error.message || "Neon todavía no está configurado en esta versión.");
+    console.warn("AMS Fly: no se pudo abrir la gestión", error);
+    setLoginStatus("No se pudo conectar al inicio de sesión. Intenta de nuevo.");
   }
 }
 
 window.addEventListener("ams-fly-admin-open", openAdmin);
+if (new URLSearchParams(window.location.search).has("token")) openAdmin();
 })();

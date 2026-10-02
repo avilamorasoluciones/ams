@@ -509,8 +509,9 @@ async function loadRanking(){
       const scoreLabel=document.createElement("span");scoreLabel.textContent="PUNTOS";score.append(scoreValue,scoreLabel);
       card.append(pos,avatar,main,score);els.rankingList.appendChild(card);
     });
-  }catch(_){
-    els.rankingList.innerHTML='<div class="ranking-empty">No pudimos cargar el ranking en este momento.</div>';
+  }catch(error){
+    console.error("AMS Fly: no se pudo cargar el ranking", error);
+    els.rankingList.innerHTML='<div class="ranking-empty">No pudimos cargar el ranking en este momento. Intenta actualizar.</div>';
   }
 }
 function endGame(){
