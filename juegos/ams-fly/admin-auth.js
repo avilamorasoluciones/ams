@@ -213,10 +213,10 @@ async function requestPasswordReset() {
   }
   const button = byId("adminForgotPassword");
   button.disabled = true;
-  setLoginStatus("Enviando el enlace...");
+  setLoginStatus("Enviando el enlace de recuperación...");
   try {
     const client = await getNeon();
-    const result = await client.auth.requestPasswordReset({
+    const result = await client.auth.forgetPassword({
       email,
       redirectTo: window.location.origin + window.location.pathname
     });
@@ -224,7 +224,7 @@ async function requestPasswordReset() {
     setLoginStatus("Si el correo corresponde a una cuenta, recibirás un enlace para cambiar la contraseña.");
   } catch (error) {
     console.warn("AMS Fly: error al solicitar cambio de contraseña", error);
-    setLoginStatus("No se pudo enviar el enlace. Intenta de nuevo más tarde.");
+    setLoginStatus(error?.message || "No se pudo enviar el enlace. Revisa el correo o inténtalo de nuevo.");
   } finally {
     button.disabled = false;
   }
@@ -264,7 +264,7 @@ async function completePasswordReset(event) {
     setLoginStatus("Contraseña actualizada. Ya puedes iniciar sesión.");
   } catch (error) {
     console.warn("AMS Fly: error al cambiar la contraseña", error);
-    byId("adminResetStatus").textContent = "El enlace venció o no se pudo usar. Solicita uno nuevo.";
+    byId("adminResetStatus").textContent = error?.message || "El enlace venció o no se pudo usar. Solicita uno nuevo.";
   } finally {
     button.disabled = false;
   }
