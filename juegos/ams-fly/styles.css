@@ -293,3 +293,10 @@ button{cursor:pointer}
     min-height:52px;
   }
 }
+
+
+/* Concurso: consentimiento y compartir */
+.consent-row{display:grid;grid-template-columns:22px minmax(0,1fr);gap:10px;align-items:start;margin:6px 0 4px;color:#bfc2d2;font-size:.82rem;line-height:1.55}
+.consent-row input{width:18px;height:18px;margin:2px 0 0;accent-color:#8b5cf6}
+.consent-row a{color:#c4b5fd;text-decoration:underline;text-underline-offset:2px}
+@media(max-width:520px){.consent-row{font-size:.8rem;line-height:1.6}}
