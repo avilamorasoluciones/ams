@@ -20,8 +20,8 @@ main{width:min(760px,100%);margin:auto}.brand{font-weight:900;font-size:1.5rem;m
 <div id="results" class="card"></div>
 <p class="small">Esta página no forma parte de la navegación pública y está marcada <span class="code">noindex</span>.</p>
 </main>
-<script src="neon-config.js?v=2"></script>
-<script src="neon-client.js?v=5"></script>
+<script src="neon-config.js?v=3"></script>
+<script src="neon-client.js?v=6"></script>
 <script>
 "use strict";
 const $=id=>document.getElementById(id);
@@ -81,7 +81,7 @@ async function run(){
       p_name:"Q",
       p_country:"CO",
       p_bird_id:"condor-co",
-      p_phone:"+570000000000",
+      p_phone:"",
       p_score:0
     });
     if(!r.error)throw new Error("El RPC aceptó datos inválidos; revisar validaciones.");
@@ -104,7 +104,7 @@ async function run(){
   });
 
   await test("Archivos del juego",async()=>{
-    const paths=["game.js?v=36","styles.css?v=11","manifest.webmanifest?v=6","terminos.html","privacidad.html"];
+    const paths=["game.js?v=37","styles.css?v=12","manifest.webmanifest?v=6","terminos.html","privacidad.html"];
     const bad=[];
     for(const p of paths){const r=await fetch(p,{cache:"no-store"});if(!r.ok)bad.push(p+" ("+r.status+")")}
     if(bad.length)throw new Error("No cargaron: "+bad.join(", "));
