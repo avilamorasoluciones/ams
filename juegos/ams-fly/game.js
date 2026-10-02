@@ -4,7 +4,7 @@
 const STORAGE_KEY = "amsFlyProfileV1";
 const STATS_KEY = "amsFlyStatsV1";
 const FACT_INDEX_KEY = "amsFlyFactIndexV1";
-const EVENT_API = "";
+const EVENT_API = window.AMS_FLY_API_URL || "";
 const RANKING_API = EVENT_API ? EVENT_API+"/ranking" : "";
 const RANKING_LIMIT = 50;
 const EVENT_TOKEN_STORAGE = "amsFlyAdminTokenV1";
@@ -213,9 +213,9 @@ async function renderAdminParticipants(){
   });
 }
 async function loadRemoteEventConfig(){
-  const p=document.getElementById("amsFlyAdminPanel"),status=p.querySelector("#adminStatus");
-  if(!EVENT_API){status.textContent="No hay EVENT_API configurada todavía. La gestión local está disponible para pruebas.";return}
-  try{const res=await fetch(EVENT_API+"/event");if(!res.ok)throw new Error();const cfg=await res.json();saveEventConfig({...DEFAULT_EVENT,...cfg});applyEventConfig();status.textContent="✓ Configuración cargada desde servidor."}catch(_){status.textContent="No se pudo cargar la configuración remota."}
+  const p=document.getElementById("amsFlyAdminPanel"),status=p?.querySelector("#adminStatus");
+  if(!EVENT_API){if(status)status.textContent="No hay EVENT_API configurada todavía.";return}
+  try{const res=await fetch(EVENT_API+"/event");if(!res.ok)throw new Error();const cfg=await res.json();saveEventConfig({...DEFAULT_EVENT,...cfg});applyEventConfig();if(status)status.textContent="✓ Configuración cargada desde servidor."}catch(_){if(status)status.textContent="No se pudo cargar la configuración remota."}
 }
 function exportLocalLeads(){
   const rows=getLocalLeads();if(!rows.length)return;
@@ -596,7 +596,8 @@ els.quitBtn.addEventListener("click",()=>{if(game)game.running=false;stopMusic()
 els.againBtn.addEventListener("click",()=>{prepareFactThenGame()});
 els.changePilotBtn.addEventListener("click",()=>{showOnly(els.profileScreen);if(profile){els.playerName.value=profile.name;els.playerCountry.value=profile.country;if(els.playerPhoneCountry)els.playerPhoneCountry.value=profile.phoneCountry||getCountry(profile.country).dial;if(els.playerPhone){const dial=els.playerPhoneCountry?.value||getCountry(profile.country).dial;const raw=String(profile.phone||"").replace(/\D/g,"");els.playerPhone.value=raw.startsWith(dial)?raw.slice(dial.length):raw}selectedBirdId=profile.birdId}renderBirds()});
 els.changePilotHomeBtn.addEventListener("click",()=>{playTone(440,.05);if(profile){els.playerName.value=profile.name;els.playerCountry.value=profile.country;if(els.playerPhoneCountry)els.playerPhoneCountry.value=profile.phoneCountry||getCountry(profile.country).dial;if(els.playerPhone){const dial=els.playerPhoneCountry?.value||getCountry(profile.country).dial;const raw=String(profile.phone||"").replace(/\D/g,"");els.playerPhone.value=raw.startsWith(dial)?raw.slice(dial.length):raw}selectedBirdId=profile.birdId}renderBirds();showOnly(els.profileScreen)});
-els.adminNavBtn?.addEventListener("click",openEventAdmin);
+els.adminNavBtn?.addEventListener("click",()=>window.dispatchEvent(new Event("ams-fly-admin-open")));
+window.addEventListener("ams-fly-event-updated",event=>{if(!event.detail)return;saveEventConfig({...DEFAULT_EVENT,...event.detail});applyEventConfig()});
 els.soundBtn.addEventListener("click",()=>{soundOn=!soundOn;localStorage.setItem("amsFlySound",soundOn?"1":"0");els.soundBtn.textContent=soundOn?"♪":"×";if(soundOn){playTone(600,.05);startMusic()}else stopMusic()});
 function action(e){if(["BUTTON","INPUT","SELECT"].includes(e.target?.tagName))return;e.preventDefault();if(els.gameScreen.hidden)return;flap()}
 els.gameScreen.addEventListener("pointerdown",action,{passive:false});
