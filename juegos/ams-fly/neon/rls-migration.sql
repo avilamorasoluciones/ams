@@ -19,6 +19,23 @@ $$;
 
 revoke all on function public.ams_fly_is_admin() from public;
 grant execute on function public.ams_fly_is_admin() to authenticated;
+grant usage on schema public to anonymous, authenticated;
+
+grant select, insert on public.ams_fly_scores
+  to anonymous, authenticated;
+
+grant select on public.ams_fly_event_config
+  to anonymous, authenticated;
+
+grant update on public.ams_fly_event_config
+  to authenticated;
+
+grant insert on public.ams_fly_participants
+  to anonymous, authenticated;
+
+grant select on public.ams_fly_participants
+  to authenticated;
+
 
 alter table public.ams_fly_scores enable row level security;
 alter table public.ams_fly_participants enable row level security;
