@@ -161,15 +161,7 @@ app.get("/ranking",async(req,res)=>{
 
 app.post("/ranking",(req,res)=>res.status(410).json({error:"public_score_write_disabled",message:"Las puntuaciones se publican mediante el flujo seguro de AMS Fly."}));
 
-app.post("/participants",async(req,res)=>{
-  const b=req.body||{},name=text(b.name,18),country=text(b.country,2),bird=text(b.birdId,32),phone=text(b.phone,30),score=validScore(b.score);
-  if(name.length<2||!allowedCountries.has(country)||!allowedBirds.has(bird)||phone.replace(/\D/g,"").length<7)return res.status(400).json({error:"invalid_participant"});
-  try{
-    await sql`insert into ams_fly_participants(player_name,country_code,bird_id,phone,score) values(${name},${country},${bird},${phone},${score??0})
-      on conflict(player_name,country_code) do update set bird_id=excluded.bird_id,phone=excluded.phone,score=greatest(ams_fly_participants.score,excluded.score),updated_at=now()`;
-    res.status(201).json({ok:true});
-  }catch(e){res.status(500).json({error:"participant_write_failed"});}
-});
+app.post("/participants",(req,res)=>res.status(410).json({error:"public_participant_write_disabled",message:"Los participantes se registran mediante el flujo seguro de AMS Fly."}));
 
 app.get("/participants",admin,async(req,res)=>{
   try{
