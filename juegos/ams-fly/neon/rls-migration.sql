@@ -25,15 +25,21 @@ grant usage on schema public to anonymous, authenticated;
 
 grant select on public.ams_fly_scores
   to anonymous, authenticated;
+revoke insert, update, delete on public.ams_fly_scores
+  from authenticated;
 
 grant select on public.ams_fly_event_config
   to anonymous, authenticated;
 
 grant update on public.ams_fly_event_config
   to authenticated;
+revoke insert, delete on public.ams_fly_event_config
+  from authenticated;
 
 grant update on public.ams_fly_participants
   to authenticated;
+revoke insert, delete on public.ams_fly_participants
+  from authenticated;
 
 -- La tabla no acepta INSERT directo desde Data API.
 -- El registro público pasa únicamente por ams_fly_register_participant().
@@ -56,18 +62,6 @@ create policy "ams_fly_scores_public_read"
   to anonymous, authenticated
   using (true);
 
-create policy "ams_fly_scores_public_insert"
-  on public.ams_fly_scores
-  for insert
-  to anonymous, authenticated
-  with check (
-    char_length(player_name) between 2 and 18
-    and country_code in ('CO','VE','EC','US','MX','AR','CL','PE','BR','PA')
-    and bird_id in ('condor-co','turpial','tucan-ec','eagle-us','eagle-mx','hornero','chucao-cl','cock-rock','sabia','harpia')
-    and char_length(message) between 2 and 90
-    and score between 0 and 1000000
-  );
-
 drop policy if exists "ams_fly_event_public_read" on public.ams_fly_event_config;
 drop policy if exists "ams_fly_event_admin_update" on public.ams_fly_event_config;
 create policy "ams_fly_event_public_read"
@@ -85,18 +79,6 @@ create policy "ams_fly_event_admin_update"
 
 drop policy if exists "ams_fly_participants_public_insert" on public.ams_fly_participants;
 drop policy if exists "ams_fly_participants_admin_read" on public.ams_fly_participants;
-create policy "ams_fly_participants_public_insert"
-  on public.ams_fly_participants
-  for insert
-  to anonymous, authenticated
-  with check (
-    char_length(player_name) between 2 and 18
-    and country_code in ('CO','VE','EC','US','MX','AR','CL','PE','BR','PA')
-    and bird_id in ('condor-co','turpial','tucan-ec','eagle-us','eagle-mx','hornero','chucao-cl','cock-rock','sabia','harpia')
-    and char_length(phone) between 7 and 30
-    and score between 0 and 1000000
-  );
-
 create policy "ams_fly_participants_admin_read"
   on public.ams_fly_participants
   for select
