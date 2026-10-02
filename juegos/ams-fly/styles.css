@@ -399,3 +399,15 @@ button{cursor:pointer}
     gap:18px;
   }
 }
+
+
+/* Ranking · fecha de la mejor puntuación */
+.ranking-date{
+  color:#777b99;
+  font-size:.53rem;
+  line-height:1.35;
+  margin-top:4px;
+}
+@media(max-width:430px){
+  .ranking-date{font-size:.5rem}
+}
