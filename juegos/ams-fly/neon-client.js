@@ -9,17 +9,26 @@ async function getClient() {
   if (!config.authUrl || !config.dataApiUrl) {
     throw new Error("Neon Auth/Data API todavía no está configurado.");
   }
+
   if (!clientPromise) {
-    clientPromise = import(SDK_URL).then(({createClient}) => createClient({
-      auth: {
-        url: config.authUrl,
-        allowAnonymous: true
-      },
-      dataApi: {
-        url: config.dataApiUrl
+    clientPromise = import(SDK_URL).then(({ createClient, BetterAuthVanillaAdapter }) => {
+      if (typeof BetterAuthVanillaAdapter !== "function") {
+        throw new Error("El SDK de Neon no cargó BetterAuthVanillaAdapter.");
       }
-    }));
+
+      return createClient({
+        auth: {
+          adapter: BetterAuthVanillaAdapter(),
+          url: config.authUrl,
+          allowAnonymous: true
+        },
+        dataApi: {
+          url: config.dataApiUrl
+        }
+      });
+    });
   }
+
   return clientPromise;
 }
 
@@ -27,4 +36,5 @@ window.AMS_FLY_NEON = Object.freeze({
   config,
   getClient
 });
+
 })();
