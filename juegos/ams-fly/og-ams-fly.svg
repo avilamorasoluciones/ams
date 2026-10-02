@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+<defs><linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#090817"/><stop offset=".55" stop-color="#17133a"/><stop offset="1" stop-color="#3b176d"/></linearGradient><radialGradient id="glow"><stop stop-color="#a78bfa" stop-opacity=".45"/><stop offset="1" stop-color="#a78bfa" stop-opacity="0"/></radialGradient></defs>
+<rect width="1200" height="630" fill="url(#bg)"/><circle cx="920" cy="210" r="300" fill="url(#glow)"/><circle cx="180" cy="520" r="230" fill="url(#glow)" opacity=".35"/>
+<g transform="translate(100 120)"><rect width="86" height="86" rx="24" fill="#17133a" stroke="#8b5cf6" stroke-opacity=".5"/><path d="M18 45Q5 35 0 45Q10 52 22 49M64 45Q76 33 84 39Q78 50 64 49" fill="#8b5cf6"/><ellipse cx="43" cy="45" rx="18" ry="14" fill="#c084fc"/><path d="M57 39l16-4-11 10z" fill="#fbbf24"/><circle cx="57" cy="37" r="2.5" fill="#111827"/></g>
+<text x="100" y="290" fill="#c4b5fd" font-family="Arial,sans-serif" font-size="30" font-weight="700" letter-spacing="6">AVILA MORA SOLUCIONES</text>
+<text x="100" y="385" fill="#ffffff" font-family="Arial,sans-serif" font-size="92" font-weight="900">AMS FLY</text>
+<text x="105" y="440" fill="#d8d5e8" font-family="Arial,sans-serif" font-size="34">Vuela · supera el ranking · comparte tu récord</text>
+<rect x="100" y="492" width="520" height="62" rx="31" fill="#8b5cf6"/><text x="132" y="533" fill="#ffffff" font-family="Arial,sans-serif" font-size="27" font-weight="800">🏆 EVENTO ESPECIAL 2026</text>
+<text x="1040" y="550" fill="#ffffff" opacity=".75" font-family="Arial,sans-serif" font-size="22" text-anchor="end">avilamorasoluciones.com</text>
+</svg>
