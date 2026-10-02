@@ -538,6 +538,51 @@ function loop(now){
   draw();
   raf=requestAnimationFrame(loop);
 }
+function endGame(){
+  if(!game || !game.running)return;
+  game.running=false;
+  game.deathAt=performance.now();
+  stopMusic();
+  cancelAnimationFrame(raf);
+
+  const finalScore=Math.max(0,Number(game.score||0));
+  const previousBest=Math.max(0,Number(stats.best||0));
+  const isRecord=finalScore>previousBest;
+
+  stats.games=Math.max(0,Number(stats.games||0))+1;
+  stats.best=Math.max(previousBest,finalScore);
+  saveStats();
+  hydrateStats();
+
+  els.finalScore.textContent=String(finalScore);
+  els.resultBest.textContent=String(stats.best);
+  els.resultGames.textContent=String(stats.games);
+  els.resultBird.innerHTML=birdMarkup(game.birdData,"1.15");
+  els.newRecord.hidden=!isRecord;
+
+  if(finalScore>=30){
+    els.resultEyebrow.textContent="VUELO EXTRAORDINARIO";
+    els.resultTitle.textContent="¡Qué vuelo!";
+  }else if(finalScore>=15){
+    els.resultEyebrow.textContent="VUELO DESTACADO";
+    els.resultTitle.textContent="Muy buen vuelo.";
+  }else if(finalScore>0){
+    els.resultEyebrow.textContent="VUELO TERMINADO";
+    els.resultTitle.textContent="Buen intento.";
+  }else{
+    els.resultEyebrow.textContent="VUELO TERMINADO";
+    els.resultTitle.textContent="Vamos de nuevo.";
+  }
+
+  els.scoreMessage.value="";
+  els.submitScoreBtn.dataset.published="0";
+  els.submitScoreBtn.disabled=false;
+  els.submitScoreBtn.innerHTML='PUBLICAR PUNTUACIÓN <span>↑</span>';
+  els.submitScoreStatus.textContent="Tu mensaje es obligatorio para confirmar la publicación.";
+  showOnly(els.gameOverScreen);
+  playTone(isRecord?880:220,.12,isRecord?"triangle":"sine");
+}
+
 async function saveCurrentLead(message=""){
   if(!profile||!game||!NEON_DATA_READY())return null;
   const lead={id:"lead_"+Date.now(),name:profile.name,country:profile.country,birdId:profile.birdId,score:game.score,message,phone:profile.phone||"",date:new Date().toISOString()};
