@@ -3,6 +3,7 @@ import { neon } from "@neondatabase/serverless";
 import { createRemoteJWKSet, jwtVerify } from "jose";
 
 const app=express();
+if(process.env.TRUST_PROXY==="true"||process.env.TRUST_PROXY==="1")app.set("trust proxy",true);
 const port=Number(process.env.PORT||3000);
 const sql=neon(process.env.DATABASE_URL);
 const NEON_AUTH_JWKS_URL=process.env.NEON_AUTH_JWKS_URL||"";
@@ -23,11 +24,13 @@ function validPhone(phone){
 function twilioReady(){
   return !!(TWILIO_ACCOUNT_SID&&TWILIO_API_KEY&&TWILIO_API_SECRET&&TWILIO_VERIFY_SERVICE_SID);
 }
-function allowPhoneSend(phone){
+function allowPhoneSend(phone,ip){
   const now=Date.now(),windowMs=60*1000;
-  const recent=(phoneSendAttempts.get(phone)||[]).filter(t=>now-t<windowMs);
-  if(recent.length>=3)return false;
-  recent.push(now);phoneSendAttempts.set(phone,recent);return true;
+  const key=phone+"|"+String(ip||"unknown");
+  const recent=(phoneSendAttempts.get(key)||[]).filter(t=>now-t<windowMs);
+  if(recent.length>=2)return false;
+  recent.push(now);phoneSendAttempts.set(key,recent);
+  return true;
 }
 async function twilioPost(path,params){
   const body=new URLSearchParams(params);
@@ -93,7 +96,7 @@ app.post("/phone/send",async(req,res)=>{
   const phone=validPhone(req.body?.phone);
   if(!phone)return res.status(400).json({error:"invalid_phone"});
   if(!twilioReady())return res.status(503).json({error:"phone_verification_not_configured"});
-  if(!allowPhoneSend(phone))return res.status(429).json({error:"too_many_requests"});
+  if(!allowPhoneSend(phone,req.ip))return res.status(429).json({error:"too_many_requests"});
   try{
     await twilioPost("Services/"+TWILIO_VERIFY_SERVICE_SID+"/Verifications",{To:phone,Channel:"sms"});
     res.json({ok:true});
@@ -156,14 +159,7 @@ app.get("/ranking",async(req,res)=>{
   }catch(e){res.status(500).json({error:"ranking_read_failed"});}
 });
 
-app.post("/ranking",async(req,res)=>{
-  const b=req.body||{},name=text(b.name,18),country=text(b.country,2),bird=text(b.birdId,32),message=text(b.message,90),score=validScore(b.score);
-  if(name.length<2||!allowedCountries.has(country)||!allowedBirds.has(bird)||score===null||message.length<2)return res.status(400).json({error:"invalid_score"});
-  try{
-    await sql`insert into ams_fly_scores(player_name,country_code,bird_id,score,message) values(${name},${country},${bird},${score},${message})`;
-    res.status(201).json({ok:true});
-  }catch(e){res.status(500).json({error:"score_write_failed"});}
-});
+app.post("/ranking",(req,res)=>res.status(410).json({error:"public_score_write_disabled",message:"Las puntuaciones se publican mediante el flujo seguro de AMS Fly."}));
 
 app.post("/participants",async(req,res)=>{
   const b=req.body||{},name=text(b.name,18),country=text(b.country,2),bird=text(b.birdId,32),phone=text(b.phone,30),score=validScore(b.score);
