@@ -158,50 +158,138 @@ button{cursor:pointer}
 
 .admin-winner{margin-top:14px;padding:12px 14px;border:1px solid rgba(167,139,250,.28);border-radius:14px;background:rgba(124,58,237,.08);color:#e9e7f5}.admin-winner strong{display:block}.admin-winner p{margin:6px 0 0;color:#aeb2c7}.admin-eligibility{display:flex!important;align-items:center;gap:6px;color:#c4b5fd!important;font-size:.62rem!important;margin:5px 0!important}.admin-eligibility input{width:auto!important;margin:0!important;display:inline-block!important}
 
-/* Evento: lectura cómoda en móvil */
+/* Evento · lectura cómoda y separada */
 .event-details-card{
-  width:min(640px,100%);
-  padding:clamp(22px,5vw,34px);
+  width:min(680px,100%);
+  padding:clamp(24px,5vw,38px);
   border-radius:28px;
   text-align:left;
   box-sizing:border-box;
 }
-.event-detail-block{padding:22px 0}
+.event-detail-block{
+  padding:24px 0;
+  border-bottom:1px solid var(--line);
+}
+.event-detail-block:first-child{padding-top:0}
+.event-detail-block:last-of-type{border-bottom:0}
 .event-detail-block h3{
-  margin:12px 0 12px;
-  font-size:clamp(1.05rem,4.5vw,1.35rem);
-  line-height:1.25;
+  margin:12px 0 16px;
+  font-size:clamp(1.08rem,4.5vw,1.35rem);
+  line-height:1.3;
   letter-spacing:-.02em;
 }
-.event-detail-block p,
-.event-detail-block .event-rich-paragraph{
-  margin:0 0 16px;
-  color:#c4c7d6;
+.event-detail-block > p{
+  margin:0 0 20px;
+  color:#c9ccda;
   font-size:clamp(.94rem,3.9vw,1.04rem);
-  line-height:1.72;
-  letter-spacing:0;
+  line-height:1.75;
+}
+.event-rich-content{
+  display:flex;
+  flex-direction:column;
+  gap:24px;
+  margin-top:4px;
+}
+.event-rich-item{
+  display:grid;
+  grid-template-columns:30px minmax(0,1fr);
+  column-gap:10px;
+  align-items:start;
+  margin:0;
+}
+.event-rich-item + .event-rich-item{
+  padding-top:4px;
+}
+.event-rich-marker{
+  width:30px;
+  min-width:30px;
+  display:flex;
+  justify-content:center;
+  align-items:flex-start;
+  padding-top:2px;
+  font-size:1.2rem;
+  line-height:1.55;
+}
+.event-rich-text{
+  min-width:0;
+  margin:0;
+  color:#c9ccda;
+  font-size:clamp(.94rem,3.9vw,1.04rem);
+  line-height:1.78;
   overflow-wrap:anywhere;
 }
-.event-detail-block .event-rich-paragraph:last-child{margin-bottom:0}
-.event-detail-block .event-rich-paragraph + .event-rich-paragraph{margin-top:4px}
+.event-rich-item.is-heading{
+  grid-template-columns:30px minmax(0,1fr);
+  margin-top:2px;
+}
+.event-rich-item.is-heading .event-rich-text{
+  color:#f4f2ff;
+  font-size:clamp(1rem,4vw,1.12rem);
+  line-height:1.4;
+  font-weight:900;
+}
+.event-rich-item.is-heading + .event-rich-item{
+  margin-top:-7px;
+}
 .event-details-card>.primary-button,
-.event-details-card>.secondary-button{min-height:50px;font-size:.72rem}
+.event-details-card>.secondary-button{
+  min-height:52px;
+  font-size:.72rem;
+}
 @media(max-width:520px){
   .app-screen{
-    padding-top:112px;
-    padding-left:18px;
-    padding-right:18px;
+    padding-top:122px;
+    padding-left:16px;
+    padding-right:16px;
+    padding-bottom:96px;
     justify-content:flex-start;
     overflow-y:auto;
     overflow-x:hidden;
   }
-  .section-heading{width:100%;margin-bottom:20px}
-  .section-heading h2{font-size:clamp(1.8rem,8.5vw,2.45rem);line-height:1.08}
-  .section-heading p{font-size:.95rem;line-height:1.65}
-  .event-details-card{padding:22px 19px;margin-bottom:20px}
-  .event-detail-block{padding:22px 0}
-  .event-detail-block p,
-  .event-detail-block .event-rich-paragraph{font-size:.98rem;line-height:1.75;margin-bottom:17px}
-  .event-badge{font-size:.56rem;padding:6px 9px}
-  .event-detail-block h3{font-size:1.12rem;margin:12px 0 14px}
+  .section-heading{
+    width:100%;
+    margin-bottom:22px;
+  }
+  .section-heading h2{
+    font-size:clamp(1.85rem,8.5vw,2.45rem);
+    line-height:1.08;
+  }
+  .section-heading p{
+    font-size:.95rem;
+    line-height:1.65;
+  }
+  .event-details-card{
+    padding:24px 18px 28px;
+    margin-bottom:24px;
+  }
+  .event-detail-block{
+    padding:26px 0;
+  }
+  .event-rich-content{gap:28px}
+  .event-rich-item{
+    grid-template-columns:28px minmax(0,1fr);
+    column-gap:9px;
+  }
+  .event-rich-marker{
+    width:28px;
+    min-width:28px;
+    font-size:1.12rem;
+  }
+  .event-rich-text{
+    font-size:.96rem;
+    line-height:1.8;
+  }
+  .event-rich-item.is-heading .event-rich-text{
+    font-size:1.04rem;
+    line-height:1.4;
+  }
+  .event-detail-block h3{
+    font-size:1.12rem;
+    margin:12px 0 17px;
+  }
+  .event-details-card>.primary-button,
+  .event-details-card>.secondary-button{
+    width:100%;
+    min-height:52px;
+  }
 }
