@@ -13,11 +13,11 @@ Juego arcade independiente de Avila Mora Soluciones.
 
 ## Datos guardados localmente
 
-- Perfil: nombre, país y personaje.
-- Récord personal.
-- Partidas jugadas.
+- Perfil visual del piloto y estadísticas locales.
+- Récord personal y partidas jugadas.
 - Índice del dato colombiano mostrado entre partidas.
 - Preferencia de sonido.
+- La identidad de participación no se basa en LocalStorage: el piloto queda vinculado a su cuenta Neon Auth.
 
 ## Eventos y gestión
 
@@ -49,8 +49,11 @@ La versión actual usa directamente **Neon Auth + Neon Data API** desde el front
 - neon/schema.sql: tablas de ranking, evento y participantes.
 - neon/rls-migration.sql: RLS, políticas y permisos de los roles anonymous/authenticated.
 - El ranking público lee ams_fly_scores.
-- Publicar una puntuación inserta en ams_fly_scores.
-- El registro del participante usa la función ams_fly_register_participant.
+- Publicar una puntuación usa la función ams_fly_submit_score; no existe INSERT directo desde el navegador.
+- El registro del participante usa ams_fly_register_participant y deriva el `auth_user_id` directamente de `auth.user_id()`.
+- Un índice UNIQUE sobre `auth_user_id` impide que una misma cuenta tenga dos pilotos.
+- El envío de una puntuación comprueba que el participante pertenece a la cuenta autenticada.
+- El teléfono ya no es requisito para participar; las columnas antiguas pueden permanecer solo para transición de datos.
 - La gestión exige sesión Neon Auth, correo confirmado y role = admin.
 
 **Paso único después de crear las tablas:** ejecuta neon/rls-migration.sql completo en el SQL Editor del branch production. La migración es idempotente y debe ejecutarse también si ya habías ejecutado una versión anterior, porque incluye los GRANT necesarios para el Data API.
