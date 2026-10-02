@@ -99,6 +99,7 @@ const els = {};
 const ctx = els.gameCanvas.getContext("2d", {alpha:false});
 let profile = null;
 let stats = {games:0,best:0};
+let lastResult = null;
 let selectedBirdId = "condor-co";
 let currentFactIndex = Number(localStorage.getItem(FACT_INDEX_KEY) || 0);
 let soundOn = localStorage.getItem("amsFlySound") !== "0";
@@ -571,18 +572,23 @@ function endGame(){
     els.resultTitle.textContent="Vamos de nuevo.";
   }
 
+  lastResult={score:finalScore,durationMs:Math.max(0,Math.round((game.time||0)*1000)),birdId:game.birdData?.id||profile?.birdId||selectedBirdId};
   els.scoreMessage.value="";
   els.submitScoreBtn.dataset.published="0";
   els.submitScoreBtn.disabled=false;
   els.submitScoreBtn.innerHTML='PUBLICAR PUNTUACIÓN <span>↑</span>';
   els.submitScoreStatus.textContent="Tu mensaje es obligatorio para confirmar la publicación.";
   showOnly(els.gameOverScreen);
+  els.gameOverScreen.hidden=false;
+  window.scrollTo(0,0);
+  requestAnimationFrame(()=>{els.gameOverScreen.hidden=false;els.scoreMessage?.focus({preventScroll:true})});
   playTone(isRecord?880:220,.12,isRecord?"triangle":"sine");
 }
 
-async function saveCurrentLead(message=""){
-  if(!profile||!game||!NEON_DATA_READY())return null;
-  const lead={id:"lead_"+Date.now(),name:profile.name,country:profile.country,birdId:profile.birdId,score:game.score,message,date:new Date().toISOString()};
+async function saveCurrentLead(message="",scoreOverride=null){
+  if(!profile||!NEON_DATA_READY())return null;
+  const score=Number.isFinite(Number(scoreOverride))?Number(scoreOverride):Number(game?.score||0);
+  const lead={id:"lead_"+Date.now(),name:profile.name,country:profile.country,birdId:profile.birdId,score,message,date:new Date().toISOString()};
   saveLocalLead(lead);
   try{
     const client=await getPublicNeonClient();
@@ -597,7 +603,8 @@ async function publishScore(){
     els.submitScoreStatus.textContent="El evento ya no está vigente. Las puntuaciones solo pueden publicarse durante el periodo oficial del evento.";
     return;
   }
-  if(game.score<=0){
+  const resultScore=Number(lastResult?.score ?? game.score ?? 0);
+  if(resultScore<=0){
     els.submitScoreStatus.textContent="Necesitas al menos 1 punto para publicar.";
     return;
   }
@@ -615,15 +622,17 @@ async function publishScore(){
   els.submitScoreBtn.disabled=true;
   els.submitScoreStatus.textContent="Guardando tu puntuación en el ranking…";
   try{
-    const participant=await saveCurrentLead(message);
+    const resultScore=Number(lastResult?.score ?? game.score ?? 0);
+    const resultDuration=Number(lastResult?.durationMs ?? Math.round((game.time||0)*1000));
+    const participant=await saveCurrentLead(message,resultScore);
     const participantId=participant?.participant_id||profile.participantId||null;
     if(!participantId) throw new Error("No se pudo identificar tu piloto. Inicia sesión y vuelve a registrar tu piloto antes de publicar.");
     profile.participantId=participantId;saveProfile();
     const client=await getPublicNeonClient();
     const result=await client.rpc("ams_fly_submit_score",{
       p_participant_id:participantId,p_name:profile.name,p_country:profile.country,
-      p_bird_id:profile.birdId,p_score:game.score,p_message:message,
-      p_duration_ms:Math.round((game.time||0)*1000)
+      p_bird_id:profile.birdId,p_score:resultScore,p_message:message,
+      p_duration_ms:resultDuration
     });
     if(result.error) throw result.error;
     els.submitScoreBtn.dataset.published="1";
