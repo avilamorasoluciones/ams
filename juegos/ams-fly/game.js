@@ -154,19 +154,33 @@ function applyEventConfig(){
 }
 function renderEventRichText(target,text){
   target.replaceChildren();
-  const blocks=String(text||"").split(/\\n\\s*\\n/).map(x=>x.trim()).filter(Boolean);
+  const blocks=String(text||"").split(/\n\s*\n/).map(x=>x.trim()).filter(Boolean);
   blocks.forEach(block=>{
-    const p=document.createElement("p");
-    p.className="event-rich-paragraph";
-    p.textContent=block;
-    target.appendChild(p);
+    const item=document.createElement("div");
+    item.className="event-rich-item";
+    const marker=document.createElement("span");
+    marker.className="event-rich-marker";
+    const content=document.createElement("p");
+    content.className="event-rich-text";
+
+    const match=block.match(/^((?:\\p{Extended_Pictographic}|\\p{Emoji_Presentation}|\\uFE0F|\\u200D)+)\\s+([\\s\\S]*)$/u);
+    if(match){
+      item.classList.add("is-heading");
+      marker.textContent=match[1];
+      content.textContent=match[2].trim();
+    }else{
+      marker.textContent="•";
+      content.textContent=block;
+    }
+    item.append(marker,content);
+    target.appendChild(item);
   });
 }
 function openEventScreen(){
   let screen=document.getElementById("amsFlyEventScreen");
   if(!screen){
     screen=document.createElement("section");screen.id="amsFlyEventScreen";screen.className="screen app-screen";screen.hidden=true;
-    screen.innerHTML='<div class="section-heading"><span class="eyebrow">AMS FLY · EVENTO</span><h2 id="eventTitle"></h2><p id="eventDesc"></p></div><div class="event-details-card"><div class="event-detail-block"><span class="event-badge">🏆 PREMIO</span><h3 id="eventPrizeTitle"></h3><p id="eventPrizeDesc"></p></div><div class="event-detail-block"><span class="event-badge">📋 CONDICIONES</span><h3 id="eventConditionTitle"></h3><p id="eventConditionDesc"></p></div><button id="eventJoinButton" class="primary-button" type="button">PARTICIPAR Y VOLAR <span>✦</span></button><button id="eventBackButton" class="secondary-button" type="button">← VOLVER</button></div>';
+    screen.innerHTML='<div class="section-heading"><span class="eyebrow">AMS FLY · EVENTO</span><h2 id="eventTitle"></h2><p id="eventDesc"></p></div><div class="event-details-card"><div class="event-detail-block"><span class="event-badge">🏆 PREMIO</span><h3 id="eventPrizeTitle"></h3><div id="eventPrizeDesc" class="event-rich-content"></div></div><div class="event-detail-block"><span class="event-badge">📋 CONDICIONES</span><h3 id="eventConditionTitle"></h3><div id="eventConditionDesc" class="event-rich-content"></div></div><button id="eventJoinButton" class="primary-button" type="button">PARTICIPAR Y VOLAR <span>✦</span></button><button id="eventBackButton" class="secondary-button" type="button">← VOLVER</button></div>';
     document.querySelector(".app-shell").insertBefore(screen,els.profileScreen);
     screen.querySelector("#eventBackButton").onclick=()=>showOnly(els.homeScreen);
     screen.querySelector("#eventJoinButton").onclick=()=>{if(profile)prepareFactThenGame();else showOnly(els.profileScreen)};
