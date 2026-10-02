@@ -163,7 +163,7 @@ function renderEventRichText(target,text){
     const content=document.createElement("p");
     content.className="event-rich-text";
 
-    const match=block.match(/^((?:\\p{Extended_Pictographic}|\\p{Emoji_Presentation}|\\uFE0F|\\u200D)+)\\s+([\\s\\S]*)$/u);
+    const match=block.match(/^((?:\p{Extended_Pictographic}|\p{Emoji_Presentation}|\uFE0F|\u200D)+)\s+([\s\S]*)$/u);
     if(match){
       item.classList.add("is-heading");
       marker.textContent=match[1];
