@@ -20,13 +20,15 @@ const DEFAULT_EVENT = {
   active:true,
   badge:"🏆 EVENTO ESPECIAL 2026",
   title:"¡Gana una Landing Page Gratis!",
-  desc:"Vuela, consigue el mayor puntaje y participa por el desarrollo de una Landing Page.",
+  desc:"Vuela durante 2026, consigue la puntuación válida más alta y gana el desarrollo de una Landing Page profesional para estrenar en 2027.",
   cta:"VER DETALLES DEL EVENTO",
   prizeTitle:"Desarrollo de Landing Page 100% GRATIS",
   prizeDesc:"El ganador recibe el desarrollo completo y profesional de una Landing Page responsive, adaptada a su negocio, con diseño, estructura UX/UI, SEO básico y conexión a sus canales de venta.",
-  conditionTitle:"Hosting Cloud + Dominio .com por $5 USD/mes",
-  conditionDesc:"El desarrollo se entrega sin costo. Para mantener la Landing Page publicada y gestionada en la infraestructura de Avila Mora Soluciones, el ganador contrata Hosting Cloud + Dominio .com por $5 USD/mes. Servicios adicionales se cotizan por separado.",
-  waTemplate:"Hola {name}, te escribimos de Avila Mora Soluciones sobre tu récord de {score} puntos en {event}."
+  conditionTitle:"Reglas, vigencia y servicio posterior",
+  conditionDesc:"El evento termina el 31 de diciembre de 2026 a las 11:59 p. m. Ganará el participante elegible con la puntuación válida más alta. El equipo de Avila Mora Soluciones puede jugar, pero sus puntuaciones no son elegibles para el premio. En caso de empate, gana quien haya alcanzado primero esa puntuación. El desarrollo de la Landing Page es gratis; hosting y dominio gestionados por Avila Mora Soluciones: $10 USD/mes o $100 USD/año, con mantenimiento básico incluido. Servicios adicionales se cotizan por separado.",
+  waTemplate:"Hola {name}, te escribimos de Avila Mora Soluciones sobre tu récord de {score} puntos en {event}.",
+  eventStartAt:"2026-01-01T05:00:00.000Z",
+  eventEndAt:"2027-01-01T04:59:59.000Z"
 };
 
 const countries = [
@@ -105,6 +107,13 @@ function getEventConfig(){
 function saveEventConfig(config){
   localStorage.setItem(EVENT_CONFIG_KEY, JSON.stringify(config));
 }
+function eventIsOpen(){
+  const cfg=getEventConfig();
+  const now=Date.now();
+  const start=Date.parse(cfg.eventStartAt||"");
+  const end=Date.parse(cfg.eventEndAt||"");
+  return !!cfg.active && Number.isFinite(start) && Number.isFinite(end) && now>=start && now<=end;
+}
 function getLocalLeads(){
   return safeParse(LEADS_KEY, []);
 }
@@ -167,7 +176,7 @@ async function loadRemoteEventConfig(){
   try{
     const client=await getNeonClient();
     const result=await client.from("ams_fly_event_config")
-      .select("active,badge,title,description,cta,prize_title,prize_description,condition_title,condition_description,wa_template")
+      .select("active,badge,title,description,cta,prize_title,prize_description,condition_title,condition_description,wa_template,event_start_at,event_end_at")
       .eq("id",1)
       .single();
     if(result.error)throw result.error;
@@ -177,7 +186,7 @@ async function loadRemoteEventConfig(){
       active:!!row.active,badge:row.badge,title:row.title,desc:row.description,cta:row.cta,
       prizeTitle:row.prize_title,prizeDesc:row.prize_description,
       conditionTitle:row.condition_title,conditionDesc:row.condition_description,
-      waTemplate:row.wa_template
+      waTemplate:row.wa_template,eventStartAt:row.event_start_at,eventEndAt:row.event_end_at
     });
     applyEventConfig();
   }catch(_){}
@@ -460,6 +469,10 @@ async function saveCurrentLead(message=""){
 }
 async function publishScore(){
   if(!profile||!game)return;
+  if(!eventIsOpen()){
+    els.submitScoreStatus.textContent="El evento ya no está vigente. Las puntuaciones solo pueden publicarse durante el periodo oficial del evento.";
+    return;
+  }
   if(game.score<=0){
     els.submitScoreStatus.textContent="Necesitas al menos 1 punto para publicar.";
     return;
