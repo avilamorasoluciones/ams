@@ -146,8 +146,9 @@ begin
   if v_event.id is null or not v_event.active or v_event.event_start_at is null or v_event.event_end_at is null or v_now<v_event.event_start_at or v_now>v_event.event_end_at then raise exception 'event_closed'; end if;
   if p_participant_id is null or char_length(trim(p_name)) not between 2 and 18 or p_country not in ('CO','VE','EC','US','MX','AR','CL','PE','BR','PA')
      or p_bird_id not in ('condor-co','turpial','tucan-ec','eagle-us','eagle-mx','hornero','chucao-cl','cock-rock','sabia','harpia')
-     or p_message is null or char_length(trim(p_message)) not between 3 and 90 or p_score is null or p_score<1 or p_score>1000000 then raise exception 'invalid_score'; end if;
+     or p_message is null or char_length(trim(p_message)) not between 3 and 90 or p_score is null or p_score<1 or p_score>10000 then raise exception 'invalid_score'; end if;
   if p_duration_ms is not null and (p_duration_ms<500 or p_duration_ms>86400000) then raise exception 'invalid_duration'; end if;
+  if p_duration_ms is not null and p_score > floor(p_duration_ms/900.0)+3 then raise exception 'score_not_plausible'; end if;
   select * into v_participant from public.ams_fly_participants where id=p_participant_id limit 1;
   if v_participant.id is null then raise exception 'participant_not_found'; end if;
   if lower(trim(v_participant.player_name))<>lower(trim(p_name)) or v_participant.country_code<>upper(trim(p_country)) or v_participant.bird_id<>trim(p_bird_id) then raise exception 'participant_mismatch'; end if;
