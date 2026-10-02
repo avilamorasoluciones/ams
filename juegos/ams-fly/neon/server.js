@@ -10,6 +10,37 @@ const ADMIN_JWKS=NEON_AUTH_JWKS_URL?createRemoteJWKSet(new URL(NEON_AUTH_JWKS_UR
 const CORS_ORIGINS=new Set((process.env.CORS_ORIGIN||"https://avilamorasoluciones.com").split(",").map(origin=>origin.trim().replace(/\/$/,"")).filter(Boolean));
 const allowedCountries=new Set(["CO","VE","EC","US","MX","AR","CL","PE","BR","PA"]);
 const allowedBirds=new Set(["condor-co","turpial","tucan-ec","eagle-us","eagle-mx","hornero","chucao-cl","cock-rock","sabia","harpia"]);
+const TWILIO_ACCOUNT_SID=process.env.TWILIO_ACCOUNT_SID||"";
+const TWILIO_API_KEY=process.env.TWILIO_API_KEY||"";
+const TWILIO_API_SECRET=process.env.TWILIO_API_SECRET||"";
+const TWILIO_VERIFY_SERVICE_SID=process.env.TWILIO_VERIFY_SERVICE_SID||"";
+const phoneSendAttempts=new Map();
+
+function validPhone(phone){
+  const value=String(phone||"").trim();
+  return /^\+[1-9]\d{7,14}$/.test(value)?value:"";
+}
+function twilioReady(){
+  return !!(TWILIO_ACCOUNT_SID&&TWILIO_API_KEY&&TWILIO_API_SECRET&&TWILIO_VERIFY_SERVICE_SID);
+}
+function allowPhoneSend(phone){
+  const now=Date.now(),windowMs=60*1000;
+  const recent=(phoneSendAttempts.get(phone)||[]).filter(t=>now-t<windowMs);
+  if(recent.length>=3)return false;
+  recent.push(now);phoneSendAttempts.set(phone,recent);return true;
+}
+async function twilioPost(path,params){
+  const body=new URLSearchParams(params);
+  const auth=Buffer.from(TWILIO_API_KEY+":"+TWILIO_API_SECRET).toString("base64");
+  const response=await fetch("https://verify.twilio.com/v2/"+path,{
+    method:"POST",
+    headers:{"Authorization":"Basic "+auth,"Content-Type":"application/x-www-form-urlencoded"},
+    body
+  });
+  const data=await response.json().catch(()=>({}));
+  if(!response.ok)throw new Error(data.message||"twilio_request_failed");
+  return data;
+}
 
 app.use(express.json({limit:"16kb"}));
 app.use((req,res,next)=>{
@@ -57,6 +88,36 @@ function validScore(value){
 
 app.get("/health",(req,res)=>res.json({ok:true,service:"ams-fly-neon-api"}));
 app.get("/admin/me",admin,(req,res)=>res.json({user:{id:req.admin.id,email:req.admin.email}}));
+
+app.post("/phone/send",async(req,res)=>{
+  const phone=validPhone(req.body?.phone);
+  if(!phone)return res.status(400).json({error:"invalid_phone"});
+  if(!twilioReady())return res.status(503).json({error:"phone_verification_not_configured"});
+  if(!allowPhoneSend(phone))return res.status(429).json({error:"too_many_requests"});
+  try{
+    await twilioPost("Services/"+TWILIO_VERIFY_SERVICE_SID+"/Verifications",{To:phone,Channel:"sms"});
+    res.json({ok:true});
+  }catch(e){
+    console.error("AMS Fly phone send error",e);
+    res.status(502).json({error:"verification_send_failed"});
+  }
+});
+
+app.post("/phone/verify",async(req,res)=>{
+  const phone=validPhone(req.body?.phone);
+  const code=String(req.body?.code||"").trim();
+  if(!phone||!/^\d{4,10}$/.test(code))return res.status(400).json({error:"invalid_verification"});
+  if(!twilioReady())return res.status(503).json({error:"phone_verification_not_configured"});
+  try{
+    const result=await twilioPost("Services/"+TWILIO_VERIFY_SERVICE_SID+"/VerificationCheck",{To:phone,Code:code});
+    if(result.status!=="approved")return res.status(400).json({error:"invalid_code"});
+    await sql`update ams_fly_participants set phone_verified=true,updated_at=now() where phone=${phone}`;
+    res.json({ok:true,phone_verified:true});
+  }catch(e){
+    console.error("AMS Fly phone verify error",e);
+    res.status(502).json({error:"verification_check_failed"});
+  }
+});
 
 app.get("/event",async(req,res)=>{
   try{
