@@ -718,6 +718,8 @@ async function refreshAuthUI(){
     const signedIn=!!user;
     els.authEmail.value=signedIn?(user.email||""):"";
     els.authPassword.value="";
+    if(els.authEmail.parentElement)els.authEmail.parentElement.hidden=signedIn;
+    if(els.authPassword.parentElement)els.authPassword.parentElement.hidden=signedIn;
     els.authIdentity.textContent=signedIn?"Sesión activa · "+(user.email||"Cuenta Neon"):"";
     els.authIdentity.hidden=!signedIn;
     els.authSignInBtn.hidden=signedIn;
@@ -779,7 +781,12 @@ async function submitProfile(e){
   const candidate={name:name.slice(0,18),country:els.playerCountry.value,birdId:selectedBirdId};
   try{
     const client=await getPublicNeonClient();
-    const result=await client.rpc("ams_fly_register_participant",{p_name:candidate.name,p_country:candidate.country,p_bird_id:candidate.birdId,p_phone:null,p_score:0});
+    let result=await client.rpc("ams_fly_register_participant",{p_name:candidate.name,p_country:candidate.country,p_bird_id:candidate.birdId,p_phone:null,p_score:0});
+    if(result.error && String(result.error.message||"").includes("auth_required")){
+      await new Promise(resolve=>setTimeout(resolve,350));
+      await getCurrentAuthUser();
+      result=await client.rpc("ams_fly_register_participant",{p_name:candidate.name,p_country:candidate.country,p_bird_id:candidate.birdId,p_phone:null,p_score:0});
+    }
     if(result.error)throw result.error;
     const remote=result.data||{};
     candidate.participantId=remote.participant_id||null;
@@ -791,7 +798,7 @@ async function submitProfile(e){
   }catch(error){
     console.error("AMS Fly: no se pudo registrar el piloto",error);
     const detail=String(error?.message||"No pudimos registrar este piloto.");
-    els.profileError.textContent=detail.includes("auth_required")?"La sesión de Neon venció. Inicia sesión de nuevo para continuar.":detail;
+    els.profileError.textContent=detail.includes("auth_required")?"La sesión no quedó lista. Intenta de nuevo.":detail;
     els.profileError.hidden=false;
   }
 }
