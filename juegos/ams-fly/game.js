@@ -330,6 +330,11 @@ function startMusic(){
     }else begin();
   }catch(_){musicStarting=false}
 }
+function unlockMenuMusic(){
+  window.removeEventListener("pointerdown",unlockMenuMusic);
+  window.removeEventListener("keydown",unlockMenuMusic);
+  if(soundOn)startMusic();
+}
 function resizeCanvas(){
   const dpr=Math.min(window.devicePixelRatio||1,2);
   const w=Math.max(320,window.innerWidth),h=Math.max(500,window.innerHeight);
@@ -570,6 +575,11 @@ function bootHome(){
   }
   els.homeBirdArt.innerHTML=birdMarkup(getBird(selectedBirdId),".95");
   setTimeout(()=>els.loadingScreen.classList.add("is-gone"),500);
+  if(soundOn){
+    startMusic();
+    window.addEventListener("pointerdown",unlockMenuMusic,{once:true,passive:true});
+    window.addEventListener("keydown",unlockMenuMusic,{once:true});
+  }
 }
 els.rankingBtn.addEventListener("click",loadRanking);
 els.rankingFromResultBtn.addEventListener("click",loadRanking);
@@ -582,7 +592,7 @@ els.profileForm.addEventListener("submit",submitProfile);
 els.factContinueBtn.addEventListener("click",()=>{playTone(560,.05);startMusic();startWithProfile()});
 els.pauseBtn.addEventListener("click",()=>{if(!game?.running)return;game.paused=true;stopMusic();cancelAnimationFrame(raf);els.pauseScore.textContent=game.score+" puntos";showOnly(els.pauseScreen);playTone(300,.05)});
 els.resumeBtn.addEventListener("click",()=>{if(!game?.running)return;game.paused=false;startMusic();game.last=performance.now();showOnly(els.gameScreen);playTone(420,.05);raf=requestAnimationFrame(loop)});
-els.quitBtn.addEventListener("click",()=>{if(game)game.running=false;stopMusic();cancelAnimationFrame(raf);showOnly(els.homeScreen);hydrateStats()});
+els.quitBtn.addEventListener("click",()=>{if(game)game.running=false;stopMusic();cancelAnimationFrame(raf);showOnly(els.homeScreen);hydrateStats();startMusic()});
 els.againBtn.addEventListener("click",()=>{prepareFactThenGame()});
 els.changePilotBtn.addEventListener("click",()=>{showOnly(els.profileScreen);if(profile){els.playerName.value=profile.name;els.playerCountry.value=profile.country;if(els.playerPhoneCountry)els.playerPhoneCountry.value=profile.phoneCountry||getCountry(profile.country).dial;if(els.playerPhone){const dial=els.playerPhoneCountry?.value||getCountry(profile.country).dial;const raw=String(profile.phone||"").replace(/\D/g,"");els.playerPhone.value=raw.startsWith(dial)?raw.slice(dial.length):raw}selectedBirdId=profile.birdId}renderBirds()});
 els.changePilotHomeBtn.addEventListener("click",()=>{playTone(440,.05);if(profile){els.playerName.value=profile.name;els.playerCountry.value=profile.country;if(els.playerPhoneCountry)els.playerPhoneCountry.value=profile.phoneCountry||getCountry(profile.country).dial;if(els.playerPhone){const dial=els.playerPhoneCountry?.value||getCountry(profile.country).dial;const raw=String(profile.phone||"").replace(/\D/g,"");els.playerPhone.value=raw.startsWith(dial)?raw.slice(dial.length):raw}selectedBirdId=profile.birdId}renderBirds();showOnly(els.profileScreen)});
