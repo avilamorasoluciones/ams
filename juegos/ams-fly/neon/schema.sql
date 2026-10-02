@@ -69,3 +69,11 @@ create table if not exists ams_fly_participants (
 
 create index if not exists ams_fly_participants_score_idx
   on ams_fly_participants (score desc, updated_at asc);
+
+
+-- Vincula cada puntuación con el piloto cuando esté registrado.
+alter table if exists ams_fly_scores
+  add column if not exists participant_id uuid references ams_fly_participants(id);
+
+create index if not exists ams_fly_scores_participant_idx
+  on ams_fly_scores (participant_id);
