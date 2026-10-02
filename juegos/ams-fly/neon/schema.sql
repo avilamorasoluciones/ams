@@ -60,10 +60,11 @@ create table if not exists ams_fly_participants (
   country_code varchar(2) not null,
   bird_id varchar(32) not null,
   phone varchar(30) not null,
+  phone_verified boolean not null default false,
   score integer not null default 0 check (score >= 0 and score <= 1000000),
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now(),
-  unique(player_name,country_code)
+  unique(phone)
 );
 
 create index if not exists ams_fly_participants_score_idx
