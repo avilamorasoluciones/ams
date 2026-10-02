@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
   <meta name="theme-color" content="#090817">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -11,10 +11,17 @@
   <meta property="og:title" content="AMS Fly · Avila Mora Soluciones">
   <meta property="og:description" content="Un pequeño vuelo arcade de Avila Mora Soluciones. ¿Hasta dónde llegas?">
   <meta property="og:type" content="website">
+  <meta property="og:url" content="https://avilamorasoluciones.com/juegos/ams-fly/">
+  <meta property="og:image" content="https://avilamorasoluciones.com/juegos/ams-fly/og-ams-fly.svg">
+  <meta property="og:image:alt" content="AMS Fly · Juego arcade de Avila Mora Soluciones">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="AMS Fly · Avila Mora Soluciones">
+  <meta name="twitter:description" content="Vuela, supera el ranking y participa por el desarrollo de una Landing Page profesional.">
+  <meta name="twitter:image" content="https://avilamorasoluciones.com/juegos/ams-fly/og-ams-fly.svg">
   <link rel="canonical" href="https://avilamorasoluciones.com/juegos/ams-fly/">
-  <link rel="icon" href="icon.svg?v=5" type="image/svg+xml">
-  <link rel="manifest" href="manifest.webmanifest?v=5">
-  <link rel="stylesheet" href="styles.css?v=7">
+  <link rel="icon" href="icon.svg?v=6" type="image/svg+xml">
+  <link rel="manifest" href="manifest.webmanifest?v=6">
+  <link rel="stylesheet" href="styles.css?v=8">
   <title>AMS Fly · Avila Mora Soluciones</title>
 </head>
 <body>
@@ -88,6 +95,11 @@
 
         <div id="selectedBirdInfo" class="selected-bird-info"></div>
 
+        <label class="consent-row">
+          <input id="termsConsent" type="checkbox" required>
+          <span>Acepto los <a href="terminos.html" target="_blank" rel="noopener noreferrer">Términos y Condiciones</a> y la <a href="privacidad.html" target="_blank" rel="noopener noreferrer">Política de Privacidad</a>. Entiendo que las puntuaciones son provisionales hasta su verificación.</span>
+        </label>
+
         <button class="primary-button" type="submit">LISTO, A VOLAR <span>✦</span></button>
         <p id="profileError" class="form-error" role="alert" hidden></p>
       </form>
@@ -142,6 +154,7 @@
         </label>
         <button id="submitScoreBtn" class="primary-button" type="button">PUBLICAR PUNTUACIÓN <span>↑</span></button>
         <p id="submitScoreStatus" class="submit-status" role="status">Tu mensaje es obligatorio para confirmar la publicación.</p>
+        <button id="shareResultBtn" class="secondary-button" type="button">↗ COMPARTIR RESULTADO</button>
         <button id="rankingFromResultBtn" class="secondary-button" type="button">🏆 VER RANKING MUNDIAL</button>
         <button id="changePilotBtn" class="secondary-button" type="button">CAMBIAR PILOTO</button>
       </div>
@@ -165,14 +178,14 @@
 
     <footer class="game-footer">
       <span>AMS Fly · Un juego de Avila Mora Soluciones</span>
-      <span>Hecho para jugar por jugar.</span>
+      <span><a href="terminos.html" target="_blank" rel="noopener noreferrer">Términos</a> · <a href="privacidad.html" target="_blank" rel="noopener noreferrer">Privacidad</a></span>
     </footer>
   </main>
 
   <script src="neon-config.js?v=2"></script>
   <script src="neon-client.js?v=4"></script>
   <script src="admin-auth.js?v=7"></script>
-  <script src="game.js?v=29"></script>
+  <script src="game.js?v=30"></script>
   <script>
     if ("serviceWorker" in navigator) {
       window.addEventListener("load", () => navigator.serviceWorker.register("./sw.js").catch(() => {}));
