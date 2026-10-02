@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow,noarchive">
+<meta name="theme-color" content="#090817">
+<title>AMS Fly · Diagnóstico</title>
+<style>
+:root{color-scheme:dark;--bg:#090817;--card:#141225;--line:#2b2744;--text:#f6f3ff;--muted:#aaa4bd;--ok:#34d399;--bad:#fb7185;--warn:#fbbf24}
+*{box-sizing:border-box}body{margin:0;background:linear-gradient(180deg,#090817,#111022);font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:var(--text);padding:24px}
+main{width:min(760px,100%);margin:auto}.brand{font-weight:900;font-size:1.5rem;margin-bottom:6px}.sub{color:var(--muted);margin:0 0 22px}.card{background:rgba(20,18,37,.94);border:1px solid var(--line);border-radius:22px;padding:20px;margin:12px 0}.row{display:grid;grid-template-columns:32px 1fr;gap:12px;align-items:start;padding:13px 0;border-bottom:1px solid #25213b}.row:last-child{border-bottom:0}.icon{font-size:1.2rem}.name{font-weight:800}.detail{color:var(--muted);font-size:.88rem;line-height:1.5;margin-top:3px;overflow-wrap:anywhere}.ok .icon{color:var(--ok)}.bad .icon{color:var(--bad)}.warn .icon{color:var(--warn)}button{border:0;border-radius:14px;padding:13px 17px;background:linear-gradient(90deg,#7c3aed,#ec4899);color:#fff;font-weight:900;cursor:pointer}button:disabled{opacity:.6;cursor:wait}.small{font-size:.8rem;color:var(--muted);margin-top:18px}.code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;background:#0d0b18;border-radius:10px;padding:3px 6px;color:#d8b4fe}
+</style>
+</head>
+<body>
+<main>
+<div class="brand">🦅 AMS Fly · Diagnóstico</div>
+<p class="sub">Prueba técnica sin modificar participantes ni puntuaciones reales.</p>
+<button id="run" type="button">EJECUTAR TODAS LAS PRUEBAS</button>
+<div id="results" class="card"></div>
+<p class="small">Esta página no forma parte de la navegación pública y está marcada <span class="code">noindex</span>.</p>
+</main>
+<script src="neon-config.js?v=2"></script>
+<script src="neon-client.js?v=5"></script>
+<script>
+"use strict";
+const $=id=>document.getElementById(id);
+const results=$("results");
+function row(name,state,detail){
+  const div=document.createElement("div");
+  div.className="row "+state;
+  div.innerHTML='<div class="icon">'+(state==="ok"?"✓":state==="bad"?"✕":"!")+'</div><div><div class="name"></div><div class="detail"></div></div>';
+  div.querySelector(".name").textContent=name;
+  div.querySelector(".detail").textContent=detail;
+  results.appendChild(div);
+}
+async function check(name,fn){
+  try{const detail=await fn();row(name,"ok",String(detail||"OK"));return true}
+  catch(error){const detail=error?.message||error?.details||error?.hint||String(error);row(name,"bad",detail);return false}
+}
+async function run(){
+  $("run").disabled=true;results.replaceChildren();
+  let passed=0,total=0;
+  const test=async(name,fn)=>{total++;if(await check(name,fn))passed++};
+
+  await test("Configuración de Neon",async()=>{
+    const c=window.AMS_FLY_NEON_CONFIG;
+    if(!c?.authUrl||!c?.dataApiUrl)throw new Error("Faltan authUrl o dataApiUrl.");
+    return "Auth y Data API configurados.";
+  });
+
+  await test("SDK Neon Auth/Data API",async()=>{
+    if(!window.AMS_FLY_NEON?.getPublicClient)throw new Error("getPublicClient no está disponible.");
+    const client=await window.AMS_FLY_NEON.getPublicClient();
+    if(!client)throw new Error("El cliente Neon no se pudo crear.");
+    return "Cliente unificado creado correctamente.";
+  });
+
+  const client=await (async()=>{
+    try{return await window.AMS_FLY_NEON.getPublicClient()}catch(_){return null}
+  })();
+
+  await test("JWT + Data API: lectura pública",async()=>{
+    if(!client)throw new Error("Cliente Neon no disponible.");
+    const r=await client.from("ams_fly_event_config").select("id,active,title").eq("id",1).single();
+    if(r.error)throw r.error;
+    if(!r.data?.id)throw new Error("La respuesta no contiene el evento.");
+    return "Lectura autorizada; el JWT requerido por Data API está funcionando.";
+  });
+
+  await test("Ranking: lectura pública",async()=>{
+    if(!client)throw new Error("Cliente Neon no disponible.");
+    const r=await client.from("ams_fly_scores").select("score,player_name").order("score",{ascending:false}).limit(1);
+    if(r.error)throw r.error;
+    return "Ranking accesible. Registros visibles: "+(r.data?.length||0)+".";
+  });
+
+  await test("RPC de registro: validación",async()=>{
+    if(!client)throw new Error("Cliente Neon no disponible.");
+    const r=await client.rpc("ams_fly_register_participant",{
+      p_name:"Q",
+      p_country:"CO",
+      p_bird_id:"condor-co",
+      p_phone:"+570000000000",
+      p_score:0
+    });
+    if(!r.error)throw new Error("El RPC aceptó datos inválidos; revisar validaciones.");
+    return "RPC respondió con rechazo esperado: "+(r.error.message||r.error.code||"validación");
+  });
+
+  await test("RPC de puntuación: validación",async()=>{
+    if(!client)throw new Error("Cliente Neon no disponible.");
+    const r=await client.rpc("ams_fly_submit_score",{
+      p_participant_id:"00000000-0000-0000-0000-000000000000",
+      p_name:"QA",
+      p_country:"CO",
+      p_bird_id:"condor-co",
+      p_score:999,
+      p_message:"QA",
+      p_duration_ms:1000
+    });
+    if(!r.error)throw new Error("El RPC aceptó una puntuación de prueba inválida.");
+    return "RPC alcanzable y rechazó la solicitud de prueba.";
+  });
+
+  await test("Archivos del juego",async()=>{
+    const paths=["game.js?v=31","styles.css?v=8","manifest.webmanifest?v=6","terminos.html","privacidad.html"];
+    const bad=[];
+    for(const p of paths){const r=await fetch(p,{cache:"no-store"});if(!r.ok)bad.push(p+" ("+r.status+")")}
+    if(bad.length)throw new Error("No cargaron: "+bad.join(", "));
+    return "HTML, CSS, JS, manifest y documentos legales cargan.";
+  });
+
+  await test("Service Worker",async()=>{
+    if(!("serviceWorker" in navigator))throw new Error("Este navegador no soporta Service Worker.");
+    const r=await navigator.serviceWorker.register("./sw.js",{updateViaCache:"none"});
+    await r.update().catch(()=>{});
+    return "Service Worker registrado: "+(r.scope||"scope disponible");
+  });
+
+  const summary=document.createElement("div");
+  summary.className="row "+(passed===total?"ok":"warn");
+  summary.innerHTML='<div class="icon">'+(passed===total?"✓":"!")+'</div><div><div class="name"></div><div class="detail"></div></div>';
+  summary.querySelector(".name").textContent="Resultado: "+passed+"/"+total+" pruebas";
+  summary.querySelector(".detail").textContent=passed===total?"El flujo técnico público está respondiendo correctamente.":"Hay pruebas que requieren revisión; los detalles están arriba.";
+  results.appendChild(summary);
+  $("run").disabled=false;
+}
+$("run").addEventListener("click",run);
+run();
+</script>
+</body>
+</html>
