@@ -445,14 +445,16 @@ function loop(now){
   draw();
   raf=requestAnimationFrame(loop);
 }
-function saveCurrentLead(message=""){
-  if(!profile||!game)return;
+async function saveCurrentLead(message=""){
+  if(!profile||!game||!NEON_DATA_READY())return null;
   const lead={id:"lead_"+Date.now(),name:profile.name,country:profile.country,birdId:profile.birdId,score:game.score,message,phone:profile.phone||"",date:new Date().toISOString()};
   saveLocalLead(lead);
-  if(!NEON_DATA_READY())return;
-  getNeonClient().then(client=>client.rpc("ams_fly_register_participant",{
-    p_name:lead.name,p_country:lead.country,p_bird_id:lead.birdId,p_phone:lead.phone||"",p_score:lead.score
-  })).catch(error=>console.warn("AMS Fly: no se pudo registrar el participante",error));
+  try{
+    const client=await getNeonClient();
+    const result=await client.rpc("ams_fly_register_participant",{p_name:lead.name,p_country:lead.country,p_bird_id:lead.birdId,p_phone:lead.phone,p_score:lead.score});
+    if(result.error)throw result.error;
+    return result.data||null;
+  }catch(error){console.warn("AMS Fly: no se pudo registrar el participante",error);return null}
 }
 async function publishScore(){
   if(!profile||!game)return;
@@ -474,8 +476,10 @@ async function publishScore(){
   els.submitScoreBtn.disabled=true;
   els.submitScoreStatus.textContent="Guardando tu puntuación en el ranking…";
   try{
+    const participant=await saveCurrentLead(message);
     const client=await getNeonClient();
     let result=await client.from("ams_fly_scores").insert({
+      participant_id:participant?.participant_id||null,
       player_name:profile.name,
       country_code:profile.country,
       bird_id:profile.birdId,
@@ -577,14 +581,37 @@ function prepareFactThenGame(){
   els.factText.textContent=fact;els.factSourceHint.textContent="Una curiosidad sobre Colombia antes de volver a volar.";
   showOnly(els.factScreen);
 }
-function submitProfile(e){
+async function submitProfile(e){
   e.preventDefault();
   const name=els.playerName.value.trim().replace(/\s+/g," ");
   if(name.length<2){els.profileError.textContent="Escribe al menos 2 caracteres para tu nombre.";els.profileError.hidden=false;els.playerName.focus();return}
   const phoneCountry=els.playerPhoneCountry?.value || getCountry(els.playerCountry.value).dial;
-  const phoneDigits=(els.playerPhone?.value||"").replace(/\D/g,"").slice(0,15);
-  profile={name:name.slice(0,18),country:els.playerCountry.value,birdId:selectedBirdId,phoneCountry,phone:phoneDigits?phoneCountry+phoneDigits:""};
-  saveProfile();els.profileError.hidden=true;prepareFactThenGame();
+  const rawPhone=(els.playerPhone?.value||"").replace(/\D/g,"");
+  if(rawPhone.length<7){els.profileError.textContent="El número de celular es obligatorio para identificar tu piloto.";els.profileError.hidden=false;els.playerPhone?.focus();return}
+  if(!NEON_DATA_READY()){els.profileError.textContent="No podemos registrar el piloto todavía porque Neon no está conectado.";els.profileError.hidden=false;return}
+  const candidate={name:name.slice(0,18),country:els.playerCountry.value,birdId:selectedBirdId,phoneCountry,phone:phoneCountry+rawPhone};
+  try{
+    const client=await getNeonClient();
+    const result=await client.rpc("ams_fly_register_participant",{p_name:candidate.name,p_country:candidate.country,p_bird_id:candidate.birdId,p_phone:candidate.phone,p_score:0});
+    if(result.error)throw result.error;
+    const remote=result.data;
+    if(remote?.existing){
+      if(remote.name && remote.name.toLowerCase()!==candidate.name.toLowerCase())throw new Error("Este celular ya está asociado a otro piloto. Usa el número del piloto correcto.");
+      candidate.name=remote.name||candidate.name;
+      candidate.country=remote.country||candidate.country;
+      candidate.birdId=remote.bird_id||candidate.birdId;
+      candidate.phoneVerified=!!remote.phone_verified;
+      els.profileError.textContent="Encontramos tu piloto en Neon y lo vinculamos a este dispositivo.";
+      els.profileError.hidden=false;
+    }else{
+      candidate.phoneVerified=false;
+      els.profileError.hidden=true;
+    }
+    profile=candidate;selectedBirdId=profile.birdId;saveProfile();renderBirds();prepareFactThenGame();
+  }catch(error){
+    console.error("AMS Fly: no se pudo registrar el piloto",error);
+    els.profileError.textContent=error?.message||"No pudimos registrar este piloto. Inténtalo de nuevo.";els.profileError.hidden=false;
+  }
 }
 function bootHome(){
   loadProfile();hydrateStats();initCountries();renderBirds();renderHomeBird();applyEventConfig();
