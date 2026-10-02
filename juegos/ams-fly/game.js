@@ -240,7 +240,7 @@ function openEventScreen(){
     screen.innerHTML='<div class="section-heading"><span class="eyebrow">AMS FLY · EVENTO</span><h2 id="eventTitle"></h2><p id="eventDesc"></p></div><div class="event-details-card"><div class="event-detail-block"><span class="event-badge">🏆 PREMIO</span><h3 id="eventPrizeTitle"></h3><div id="eventPrizeDesc" class="event-rich-content"></div></div><div class="event-detail-block"><span class="event-badge">📋 CONDICIONES</span><h3 id="eventConditionTitle"></h3><div id="eventConditionDesc" class="event-rich-content"></div></div><button id="eventJoinButton" class="primary-button" type="button">PARTICIPAR Y VOLAR <span>✦</span></button><button id="eventBackButton" class="secondary-button" type="button">← VOLVER</button></div>';
     document.querySelector(".app-shell").insertBefore(screen,els.profileScreen);
     screen.querySelector("#eventBackButton").onclick=()=>showOnly(els.homeScreen);
-    screen.querySelector("#eventJoinButton").onclick=()=>{if(profile)prepareFactThenGame();else showOnly(els.profileScreen)};
+    screen.querySelector("#eventJoinButton").onclick=async()=>{const user=await getCurrentAuthUser().catch(()=>null);if(user&&profile)prepareFactThenGame();else{await refreshAuthUI();showOnly(els.profileScreen)}};
   }
   const cfg=getEventConfig();
   screen.querySelector("#eventTitle").textContent=cfg.title;
