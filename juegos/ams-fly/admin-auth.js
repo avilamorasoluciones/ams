@@ -1,14 +1,8 @@
 (() => {
 "use strict";
 
-const NEON_AUTH_URL = "";
-const ADMIN_API_URL = "";
-window.AMS_FLY_API_URL = ADMIN_API_URL;
-const AUTH_SDK_URL = "https://esm.sh/@neondatabase/neon-js@0.7.0-beta/auth?bundle";
-
-let neonAuth = null;
 let panel = null;
-let accessToken = "";
+let neon = null;
 let participants = [];
 
 function byId(id) {
@@ -32,7 +26,7 @@ function createPanel() {
   panel.innerHTML = '<div class="admin-card">' +
     '<div class="admin-head"><div><span class="eyebrow">AMS FLY · GESTIÓN</span><h2>Acceso de administración</h2></div><button id="adminClose" class="secondary-button" type="button">Cerrar</button></div>' +
     '<div id="adminLoginView">' +
-      '<p class="admin-note">Ingresa con tu cuenta autorizada. Solo el servidor confirma quién tiene permiso para gestionar el evento.</p>' +
+      '<p class="admin-note">Inicia sesión con tu cuenta de Neon Auth. Solo una cuenta con correo verificado y rol administrador puede gestionar el evento.</p>' +
       '<form id="adminLoginForm">' +
         '<label>Correo electrónico<input id="adminEmail" type="email" autocomplete="username" required></label>' +
         '<label>Contraseña<input id="adminPassword" type="password" autocomplete="current-password" required></label>' +
@@ -66,83 +60,13 @@ function createPanel() {
   byId("adminSave").addEventListener("click", saveConfig);
   byId("adminExport").addEventListener("click", exportParticipants);
 }
-async function initializeAuth() {
-  if (neonAuth) return true;
-  if (!NEON_AUTH_URL || !ADMIN_API_URL) {
-    byId("adminLoginSubmit").disabled = true;
-    setLoginStatus("Falta conectar la URL pública de Neon Auth y la URL segura de la API.");
-    return false;
-  }
-  const sdk = await import(AUTH_SDK_URL);
-  neonAuth = sdk.createInternalNeonAuth(NEON_AUTH_URL);
-  byId("adminLoginSubmit").disabled = false;
-  setLoginStatus("Ingresa con tu cuenta autorizada.");
-  return true;
+
+async function getNeon() {
+  if (!window.AMS_FLY_NEON?.getClient) throw new Error("Cliente Neon no disponible.");
+  if (!neon) neon = await window.AMS_FLY_NEON.getClient();
+  return neon;
 }
-async function getAccessToken() {
-  accessToken = await neonAuth.getJWTToken();
-  if (!accessToken) throw new Error("La sesión expiró. Inicia sesión de nuevo.");
-  return accessToken;
-}
-async function api(path, options = {}) {
-  const headers = new Headers(options.headers || {});
-  headers.set("Accept", "application/json");
-  if (options.body) headers.set("Content-Type", "application/json");
-  if (accessToken) headers.set("Authorization", "Bearer " + accessToken);
-  const response = await fetch(ADMIN_API_URL.replace(/\/$/, "") + path, {...options, headers});
-  const data = await response.json().catch(() => ({}));
-  if (!response.ok) {
-    const error = new Error(data.error || "No se pudo completar la solicitud.");
-    error.status = response.status;
-    throw error;
-  }
-  return data;
-}
-function showLogin() {
-  byId("adminLoginView").hidden = false;
-  byId("adminEditor").hidden = true;
-}
-async function showAdmin() {
-  await getAccessToken();
-  const identity = await api("/admin/me");
-  byId("adminIdentity").textContent = identity.user?.email || "Administrador";
-  byId("adminLoginView").hidden = true;
-  byId("adminEditor").hidden = false;
-  await loadAdminData();
-}
-async function signIn(event) {
-  event.preventDefault();
-  const button = byId("adminLoginSubmit");
-  button.disabled = true;
-  setLoginStatus("Conectando con Neon Auth...");
-  try {
-    if (!(await initializeAuth())) return;
-    const result = await neonAuth.adapter.signIn.email({
-      email: byId("adminEmail").value.trim(),
-      password: byId("adminPassword").value
-    });
-    if (result?.error) throw new Error(result.error.message || "No se pudo iniciar sesión.");
-    await showAdmin();
-    byId("adminPassword").value = "";
-    setStatus("Sesión iniciada.");
-  } catch (error) {
-    showLogin();
-    setLoginStatus(error.status === 403
-      ? "La cuenta inició sesión, pero todavía no tiene permiso de administrador."
-      : error.message || "No se pudo iniciar sesión. Revisa los datos y vuelve a intentar.");
-  } finally {
-    button.disabled = !NEON_AUTH_URL || !ADMIN_API_URL;
-  }
-}
-async function signOut() {
-  try {
-    if (neonAuth) await neonAuth.adapter.signOut();
-  } finally {
-    accessToken = "";
-    showLogin();
-    setLoginStatus("Sesión cerrada.");
-  }
-}
+
 function readConfig() {
   return {
     active: byId("cfgActive").checked,
@@ -157,6 +81,7 @@ function readConfig() {
     waTemplate: byId("cfgWaTemplate").value.trim()
   };
 }
+
 function displayConfig(config) {
   byId("cfgActive").checked = !!config.active;
   byId("cfgBadge").value = config.badge || "";
@@ -169,25 +94,132 @@ function displayConfig(config) {
   byId("cfgConditionDesc").value = config.conditionDesc || "";
   byId("cfgWaTemplate").value = config.waTemplate || "";
 }
+
 async function loadAdminData() {
   setStatus("Cargando configuración y participantes...");
-  const config = await api("/event");
-  participants = await api("/participants");
+  const client = await getNeon();
+  const eventResult = await client.from("ams_fly_event_config")
+    .select("active,badge,title,description,cta,prize_title,prize_description,condition_title,condition_description,wa_template")
+    .eq("id", 1)
+    .single();
+  if (eventResult.error) throw eventResult.error;
+  const participantsResult = await client.from("ams_fly_participants")
+    .select("player_name,country_code,bird_id,phone,score,created_at,updated_at")
+    .order("score", {ascending:false})
+    .order("updated_at", {ascending:true});
+  if (participantsResult.error) throw participantsResult.error;
+  const config = {
+    active:eventResult.data?.active,
+    badge:eventResult.data?.badge,
+    title:eventResult.data?.title,
+    desc:eventResult.data?.description,
+    cta:eventResult.data?.cta,
+    prizeTitle:eventResult.data?.prize_title,
+    prizeDesc:eventResult.data?.prize_description,
+    conditionTitle:eventResult.data?.condition_title,
+    conditionDesc:eventResult.data?.condition_description,
+    waTemplate:eventResult.data?.wa_template
+  };
+  participants = (participantsResult.data || []).map(row => ({
+    name:row.player_name,country:row.country_code,birdId:row.bird_id,
+    phone:row.phone,score:row.score,created_at:row.created_at,updated_at:row.updated_at
+  }));
   displayConfig(config);
   renderParticipants();
   setStatus("Datos cargados desde Neon.");
 }
+
+async function signIn(event) {
+  event.preventDefault();
+  const button = byId("adminLoginSubmit");
+  button.disabled = true;
+  setLoginStatus("Conectando con Neon Auth...");
+  try {
+    const client = await getNeon();
+    const result = await client.auth.signIn.email({
+      email: byId("adminEmail").value.trim(),
+      password: byId("adminPassword").value
+    });
+    if (result?.error) throw new Error(result.error.message || "No se pudo iniciar sesión.");
+    const sessionResult = await client.auth.getSession();
+    const user = sessionResult?.data?.user || sessionResult?.data?.session?.user;
+    if (!user) throw new Error("No se pudo obtener la sesión.");
+    if (user.emailVerified !== true || user.role !== "admin") {
+      await client.auth.signOut().catch(() => {});
+      const error = new Error("La cuenta no tiene permisos de administrador.");
+      error.status = 403;
+      throw error;
+    }
+    byId("adminEmail").value = user.email || "";
+    byId("adminPassword").value = "";
+    await showAdmin(user);
+  } catch (error) {
+    showLogin();
+    setLoginStatus(error.status === 403
+      ? "La cuenta inició sesión, pero no tiene permisos de administrador."
+      : error.message || "No se pudo iniciar sesión. Revisa los datos y vuelve a intentar.");
+  } finally {
+    button.disabled = false;
+  }
+}
+
+async function showAdmin(user) {
+  byId("adminIdentity").textContent = user?.email || "Administrador";
+  byId("adminLoginView").hidden = true;
+  byId("adminEditor").hidden = false;
+  await loadAdminData();
+}
+
+async function signOut() {
+  try {
+    if (neon) await neon.auth.signOut();
+  } finally {
+    showLogin();
+    setLoginStatus("Sesión cerrada.");
+  }
+}
+
+function showLogin() {
+  byId("adminLoginView").hidden = false;
+  byId("adminEditor").hidden = true;
+}
+
 async function saveConfig() {
   setStatus("Guardando...");
   try {
-    const config = await api("/event", {method: "PUT", body: JSON.stringify(readConfig())});
+    const client = await getNeon();
+    const result = await client.from("ams_fly_event_config")
+      .update({
+        active:byId("cfgActive").checked,
+        badge:byId("cfgBadge").value.trim(),
+        title:byId("cfgTitle").value.trim(),
+        cta:byId("cfgCta").value.trim(),
+        description:byId("cfgDesc").value.trim(),
+        prize_title:byId("cfgPrizeTitle").value.trim(),
+        prize_description:byId("cfgPrizeDesc").value.trim(),
+        condition_title:byId("cfgConditionTitle").value.trim(),
+        condition_description:byId("cfgConditionDesc").value.trim(),
+        wa_template:byId("cfgWaTemplate").value.trim()
+      })
+      .eq("id", 1)
+      .select("active,badge,title,description,cta,prize_title,prize_description,condition_title,condition_description,wa_template")
+      .single();
+    if (result.error) throw result.error;
+    const row = result.data;
+    const config = {
+      active:row.active,badge:row.badge,title:row.title,desc:row.description,cta:row.cta,
+      prizeTitle:row.prize_title,prizeDesc:row.prize_description,
+      conditionTitle:row.condition_title,conditionDesc:row.condition_description,
+      waTemplate:row.wa_template
+    };
     displayConfig(config);
-    window.dispatchEvent(new CustomEvent("ams-fly-event-updated", {detail: config}));
+    window.dispatchEvent(new CustomEvent("ams-fly-event-updated",{detail:config}));
     setStatus("Configuración guardada en Neon.");
   } catch (error) {
     setStatus(error.message || "No se pudo guardar la configuración.");
   }
 }
+
 function renderParticipants() {
   const list = byId("adminParticipants");
   list.replaceChildren();
@@ -198,7 +230,7 @@ function renderParticipants() {
     list.appendChild(empty);
     return;
   }
-  participants.forEach((participant, index) => {
+  participants.forEach((participant,index) => {
     const item = document.createElement("div");
     item.className = "admin-participant";
     const name = document.createElement("strong");
@@ -207,11 +239,10 @@ function renderParticipants() {
     info.textContent = (participant.country || "") + " · " + (participant.birdId || "") + " · " + Number(participant.score || 0) + " pts";
     const phone = document.createElement("span");
     phone.textContent = participant.phone || "Sin WhatsApp";
-    item.append(name, info, phone);
+    item.append(name,info,phone);
     if (participant.phone) {
       const link = document.createElement("a");
-      const digits = String(participant.phone).replace(/\D/g, "");
-      link.href = "https://wa.me/" + digits;
+      link.href = "https://wa.me/" + String(participant.phone).replace(/\D/g,"");
       link.target = "_blank";
       link.rel = "noopener noreferrer";
       link.textContent = "WhatsApp ↗";
@@ -220,39 +251,46 @@ function renderParticipants() {
     list.appendChild(item);
   });
 }
+
 function exportParticipants() {
   if (!participants.length) {
     setStatus("No hay participantes para exportar.");
     return;
   }
-  const header = ["Nombre", "País", "Ave", "Puntaje", "WhatsApp", "Fecha"];
-  const rows = participants.map(row => [row.name, row.country, row.birdId, row.score, row.phone, row.updated_at || row.created_at]);
-  const csv = [header, ...rows].map(row => row.map(escapeCsv).join(",")).join("\r\n");
-  const url = URL.createObjectURL(new Blob(["\uFEFF" + csv], {type: "text/csv;charset=utf-8"}));
+  const header = ["Nombre","País","Ave","Puntaje","WhatsApp","Fecha"];
+  const rows = participants.map(row => [row.name,row.country,row.birdId,row.score,row.phone,row.updated_at || row.created_at]);
+  const csv = [header,...rows].map(row => row.map(escapeCsv).join(",")).join("\r\n");
+  const url = URL.createObjectURL(new Blob(["\uFEFF" + csv],{type:"text/csv;charset=utf-8"}));
   const anchor = document.createElement("a");
   anchor.href = url;
   anchor.download = "ams-fly-participantes.csv";
   anchor.click();
-  setTimeout(() => URL.revokeObjectURL(url), 1000);
+  setTimeout(() => URL.revokeObjectURL(url),1000);
 }
+
 async function openAdmin() {
   createPanel();
   panel.hidden = false;
-  byId("adminLoginForm").reset();
   showLogin();
   setLoginStatus("");
   try {
-    if (!(await initializeAuth())) return;
-    const session = await neonAuth.adapter.getSession();
-    if (!session?.data?.session) return;
-    await showAdmin();
+    const client = await getNeon();
+    const sessionResult = await client.auth.getSession();
+    const user = sessionResult?.data?.user || sessionResult?.data?.session?.user;
+    if (!user) {
+      setLoginStatus("Inicia sesión con la cuenta administradora.");
+      return;
+    }
+    if (user.emailVerified !== true || user.role !== "admin") {
+      await client.auth.signOut().catch(() => {});
+      setLoginStatus("La cuenta actual no tiene permisos de administrador.");
+      return;
+    }
+    await showAdmin(user);
   } catch (error) {
-    accessToken = "";
-    showLogin();
-    setLoginStatus(error.status === 403
-      ? "La cuenta no tiene permiso de administrador."
-      : "No se pudo conectar. Inicia sesión o vuelve a intentar.");
+    setLoginStatus(error.message || "Neon todavía no está configurado en esta versión.");
   }
 }
+
 window.addEventListener("ams-fly-admin-open", openAdmin);
 })();
