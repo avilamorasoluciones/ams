@@ -58,7 +58,7 @@ function createPanel() {
       '<label>Premio - título<input id="cfgPrizeTitle" type="text" maxlength="160"></label>' +
       '<label>Premio - descripción<textarea id="cfgPrizeDesc" maxlength="1000"></textarea></label>' +
       '<label>Condición - título<input id="cfgConditionTitle" type="text" maxlength="160"></label>' +
-      '<label>Condición - descripción<textarea id="cfgConditionDesc" maxlength="1000"></textarea></label>' +
+      '<label>Condición - descripción<textarea id="cfgConditionDesc" maxlength="3000"></textarea></label>' +
       '<label>Plantilla WhatsApp<textarea id="cfgWaTemplate" maxlength="500"></textarea></label>' +
       '<div class="admin-actions"><button id="adminSave" class="primary-button" type="button">GUARDAR CONFIGURACIÓN</button><button id="adminReload" class="secondary-button" type="button">↻ RECARGAR DESDE NEON</button><button id="adminExport" class="secondary-button" type="button">EXPORTAR PARTICIPANTES CSV</button></div>' +
       '<p id="adminStatus" class="submit-status" role="status"></p><div id="adminWinner" class="admin-winner"></div><div id="adminParticipants" class="admin-participants"></div>' +
