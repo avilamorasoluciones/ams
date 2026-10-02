@@ -61,7 +61,8 @@ create table if not exists ams_fly_participants (
   player_name varchar(18) not null,
   country_code varchar(2) not null,
   bird_id varchar(32) not null,
-  phone varchar(30) not null,
+  auth_user_id text,
+  phone varchar(30),
   phone_verified boolean not null default false,
   prize_eligible boolean not null default true,
   best_score_at timestamptz,
@@ -81,3 +82,9 @@ alter table if exists ams_fly_scores
 
 create index if not exists ams_fly_scores_participant_idx
   on ams_fly_scores (participant_id);
+
+
+-- Una cuenta Neon puede tener un solo piloto en AMS Fly.
+create unique index if not exists ams_fly_participants_auth_user_uidx
+  on ams_fly_participants (auth_user_id)
+  where auth_user_id is not null;
