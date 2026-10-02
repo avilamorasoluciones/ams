@@ -50,9 +50,9 @@ function createPanel() {
         '<label>Evento activo<input id="cfgActive" type="checkbox"></label>' +
         '<label>Badge<input id="cfgBadge" type="text" maxlength="80"></label>' +
         '<label>Título<input id="cfgTitle" type="text" maxlength="120"></label>' +
-        '<label>CTA<input id="cfgCta" type="text" maxlength="80"></label>
-      <label>Inicio del evento<input id="cfgStartAt" type="datetime-local" required></label>
-      <label>Fin del evento<input id="cfgEndAt" type="datetime-local" required></label>' +
+        '<label>CTA<input id="cfgCta" type="text" maxlength="80"></label>' +
+      '<label>Inicio del evento<input id="cfgStartAt" type="datetime-local" required></label>' +
+      '<label>Fin del evento<input id="cfgEndAt" type="datetime-local" required></label>' +
       '</div>' +
       '<label>Descripción<textarea id="cfgDesc" maxlength="500"></textarea></label>' +
       '<label>Premio - título<input id="cfgPrizeTitle" type="text" maxlength="160"></label>' +
@@ -312,7 +312,7 @@ async function saveConfig() {
         event_end_at:localDateTimeToIso(byId("cfgEndAt").value)
       })
       .eq("id", 1)
-      .select("active,badge,title,description,cta,prize_title,prize_description,condition_title,condition_description,wa_template")
+      .select("active,badge,title,description,cta,prize_title,prize_description,condition_title,condition_description,wa_template,event_start_at,event_end_at")
       .single();
     if (result.error) throw result.error;
     const row = result.data;
