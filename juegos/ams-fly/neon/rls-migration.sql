@@ -216,7 +216,7 @@ create unique index if not exists ams_fly_participants_auth_user_uidx
   on public.ams_fly_participants (auth_user_id)
   where auth_user_id is not null;
 
-drop index if exists public.ams_fly_participants_player_name_country_code_key;
+alter table public.ams_fly_participants drop constraint if exists ams_fly_participants_player_name_country_code_key;
 
 alter table public.ams_fly_scores
   add column if not exists participant_id uuid references public.ams_fly_participants(id);
