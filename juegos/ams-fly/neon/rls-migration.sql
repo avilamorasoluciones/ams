@@ -1,5 +1,6 @@
 -- AMS Fly · Neon Data API / RLS migration
--- Identidad de piloto: el celular es único y se mantiene privado.
+-- Identidad de piloto: una cuenta Neon = un piloto.
+-- No se requiere backend propio ni verificación SMS.
 -- Ejecutar UNA vez en production después del schema.sql.
 -- No contiene secretos.
 
@@ -113,73 +114,109 @@ create policy "ams_fly_participants_admin_update"
 -- AMS Fly participant fields and does not expose the participant table.
 create or replace function public.ams_fly_register_participant(
   p_name varchar(18), p_country varchar(2), p_bird_id varchar(32), p_phone varchar(30), p_score integer)
-returns json language plpgsql security definer set search_path=public as $$
+returns json language plpgsql security definer set search_path=public,neon_auth as $$
 declare
+  v_auth_user_id text:=nullif(trim(auth.user_id()),'');
   v_existing public.ams_fly_participants%ROWTYPE;
-  v_phone text:=regexp_replace(trim(coalesce(p_phone,'')),'[^0-9+]','','g');
-  v_existing_by_phone public.ams_fly_participants%ROWTYPE;
-  v_internal boolean:=v_phone in ('+573043344962','+573043343619');
+  v_phone text:=nullif(regexp_replace(trim(coalesce(p_phone,'')),'[^0-9+]','','g'),'');
+  v_internal boolean:=false;
 begin
+  if v_auth_user_id is null then raise exception 'auth_required'; end if;
   if char_length(trim(p_name)) not between 2 and 18
      or p_country not in ('CO','VE','EC','US','MX','AR','CL','PE','BR','PA')
      or p_bird_id not in ('condor-co','turpial','tucan-ec','eagle-us','eagle-mx','hornero','chucao-cl','cock-rock','sabia','harpia')
-     or v_phone !~ '^\+[1-9][0-9]{7,14}$'
+     or (v_phone is not null and v_phone !~ '^\+[1-9][0-9]{7,14}$')
      or p_score is null or p_score<0 or p_score>1000000 then raise exception 'invalid_participant'; end if;
-  select * into v_existing_by_phone from public.ams_fly_participants where phone=v_phone limit 1;
-  if v_existing_by_phone.id is not null and lower(trim(v_existing_by_phone.player_name))<>lower(trim(p_name)) then raise exception 'phone_name_mismatch'; end if;
-  if v_existing_by_phone.id is not null then
-    if p_score>coalesce(v_existing_by_phone.score,0) then
-      update public.ams_fly_participants set country_code=upper(trim(p_country)),bird_id=trim(p_bird_id),score=p_score,best_score_at=now(),prize_eligible=not v_internal,updated_at=now()
-      where id=v_existing_by_phone.id returning * into v_existing;
+
+  select exists (
+    select 1 from neon_auth."user" u
+    where u.id::text=v_auth_user_id
+      and (u.role='admin' or lower(coalesce(u.email,'')) like '%@avilamorasoluciones.com')
+  ) into v_internal;
+
+  select * into v_existing from public.ams_fly_participants
+  where auth_user_id=v_auth_user_id limit 1;
+
+  if v_existing.id is not null then
+    if p_score>coalesce(v_existing.score,0) then
+      update public.ams_fly_participants
+      set player_name=trim(p_name),country_code=upper(trim(p_country)),bird_id=trim(p_bird_id),
+          phone=coalesce(v_phone,v_existing.phone),score=p_score,best_score_at=now(),
+          prize_eligible=case when v_internal then false else coalesce(v_existing.prize_eligible,true) end,
+          updated_at=now()
+      where id=v_existing.id returning * into v_existing;
     else
-      update public.ams_fly_participants set country_code=upper(trim(p_country)),bird_id=trim(p_bird_id),prize_eligible=not v_internal,updated_at=now()
-      where id=v_existing_by_phone.id returning * into v_existing;
+      update public.ams_fly_participants
+      set player_name=trim(p_name),country_code=upper(trim(p_country)),bird_id=trim(p_bird_id),
+          phone=coalesce(v_phone,v_existing.phone),
+          prize_eligible=case when v_internal then false else coalesce(v_existing.prize_eligible,true) end,
+          updated_at=now()
+      where id=v_existing.id returning * into v_existing;
     end if;
-    return json_build_object('ok',true,'existing',true,'participant_id',v_existing.id,'name',v_existing.player_name,'country',v_existing.country_code,'bird_id',v_existing.bird_id,'phone_verified',v_existing.phone_verified);
+    return json_build_object('ok',true,'existing',true,'participant_id',v_existing.id,'name',v_existing.player_name,'country',v_existing.country_code,'bird_id',v_existing.bird_id,'auth_user_id',v_existing.auth_user_id,'prize_eligible',v_existing.prize_eligible);
   end if;
-  insert into public.ams_fly_participants(player_name,country_code,bird_id,phone,score,best_score_at,prize_eligible)
-  values(trim(p_name),upper(trim(p_country)),trim(p_bird_id),v_phone,p_score,now(),not v_internal) returning * into v_existing;
-  return json_build_object('ok',true,'existing',false,'participant_id',v_existing.id,'name',v_existing.player_name,'country',v_existing.country_code,'bird_id',v_existing.bird_id,'phone_verified',v_existing.phone_verified);
+
+  insert into public.ams_fly_participants(auth_user_id,player_name,country_code,bird_id,phone,score,best_score_at,prize_eligible)
+  values(v_auth_user_id,trim(p_name),upper(trim(p_country)),trim(p_bird_id),v_phone,p_score,case when p_score>0 then now() else null end,not v_internal)
+  returning * into v_existing;
+
+  return json_build_object('ok',true,'existing',false,'participant_id',v_existing.id,'name',v_existing.player_name,'country',v_existing.country_code,'bird_id',v_existing.bird_id,'auth_user_id',v_existing.auth_user_id,'prize_eligible',v_existing.prize_eligible);
 end; $$;
 
 revoke all on function public.ams_fly_register_participant(varchar(18),varchar(2),varchar(32),varchar(30),integer) from public;
-grant execute on function public.ams_fly_register_participant(varchar(18),varchar(2),varchar(32),varchar(30),integer) to anonymous, authenticated;
+grant execute on function public.ams_fly_register_participant(varchar(18),varchar(2),varchar(32),varchar(30),integer) to authenticated;
 
 create or replace function public.ams_fly_submit_score(
   p_participant_id uuid,p_name varchar(18),p_country varchar(2),p_bird_id varchar(32),p_score integer,p_message varchar(90),p_duration_ms bigint default null)
-returns json language plpgsql security definer set search_path=public as $$
-declare v_event public.ams_fly_event_config%ROWTYPE; v_participant public.ams_fly_participants%ROWTYPE; v_now timestamptz:=now(); v_last timestamptz;
+returns json language plpgsql security definer set search_path=public,neon_auth as $$
+declare
+  v_event public.ams_fly_event_config%ROWTYPE;
+  v_participant public.ams_fly_participants%ROWTYPE;
+  v_now timestamptz:=now();
+  v_last timestamptz;
+  v_auth_user_id text:=nullif(trim(auth.user_id()),'');
 begin
+  if v_auth_user_id is null then raise exception 'auth_required'; end if;
   select * into v_event from public.ams_fly_event_config where id=1;
   if v_event.id is null or not v_event.active or v_event.event_start_at is null or v_event.event_end_at is null or v_now<v_event.event_start_at or v_now>v_event.event_end_at then raise exception 'event_closed'; end if;
   if p_participant_id is null or char_length(trim(p_name)) not between 2 and 18 or p_country not in ('CO','VE','EC','US','MX','AR','CL','PE','BR','PA')
      or p_bird_id not in ('condor-co','turpial','tucan-ec','eagle-us','eagle-mx','hornero','chucao-cl','cock-rock','sabia','harpia')
      or p_message is null or char_length(trim(p_message)) not between 3 and 90 or p_score is null or p_score<1 or p_score>10000 then raise exception 'invalid_score'; end if;
   if p_duration_ms is not null and (p_duration_ms<500 or p_duration_ms>86400000) then raise exception 'invalid_duration'; end if;
-  if p_duration_ms is not null and p_score > floor(p_duration_ms/900.0)+3 then raise exception 'score_not_plausible'; end if;
+  if p_duration_ms is not null and p_score>floor(p_duration_ms/900.0)+3 then raise exception 'score_not_plausible'; end if;
   select * into v_participant from public.ams_fly_participants where id=p_participant_id limit 1;
   if v_participant.id is null then raise exception 'participant_not_found'; end if;
+  if v_participant.auth_user_id is distinct from v_auth_user_id then raise exception 'participant_owner_mismatch'; end if;
   if lower(trim(v_participant.player_name))<>lower(trim(p_name)) or v_participant.country_code<>upper(trim(p_country)) or v_participant.bird_id<>trim(p_bird_id) then raise exception 'participant_mismatch'; end if;
   select max(created_at) into v_last from public.ams_fly_scores where participant_id=p_participant_id;
   if v_last is not null and v_last>v_now-interval '3 seconds' then raise exception 'score_rate_limited'; end if;
   insert into public.ams_fly_scores(participant_id,player_name,country_code,bird_id,score,message,created_at)
   values(p_participant_id,trim(p_name),upper(trim(p_country)),trim(p_bird_id),p_score,trim(p_message),v_now);
-  if p_score>coalesce(v_participant.score,0) then update public.ams_fly_participants set score=p_score,best_score_at=v_now,updated_at=v_now where id=p_participant_id;
-  else update public.ams_fly_participants set updated_at=v_now where id=p_participant_id; end if;
-  return json_build_object('ok',true,'participant_id',p_participant_id,'score',p_score,'provisional',not coalesce(v_participant.phone_verified,false));
+  if p_score>coalesce(v_participant.score,0) then
+    update public.ams_fly_participants set score=p_score,best_score_at=v_now,updated_at=v_now where id=p_participant_id;
+  else
+    update public.ams_fly_participants set updated_at=v_now where id=p_participant_id;
+  end if;
+  return json_build_object('ok',true,'participant_id',p_participant_id,'score',p_score,'provisional',false);
 end; $$;
 
 revoke all on function public.ams_fly_submit_score(uuid,varchar(18),varchar(2),varchar(32),integer,varchar(90),bigint) from public;
-grant execute on function public.ams_fly_submit_score(uuid,varchar(18),varchar(2),varchar(32),integer,varchar(90),bigint) to anonymous, authenticated;
+grant execute on function public.ams_fly_submit_score(uuid,varchar(18),varchar(2),varchar(32),integer,varchar(90),bigint) to authenticated;
 revoke insert on public.ams_fly_scores from anonymous, authenticated;
 
 
--- Identidad de piloto entre dispositivos.
+-- Identidad única de piloto entre dispositivos.
 alter table public.ams_fly_participants
-  add column if not exists phone_verified boolean not null default false;
+  add column if not exists auth_user_id text;
 
-create unique index if not exists ams_fly_participants_phone_uidx
-  on public.ams_fly_participants (phone);
+alter table public.ams_fly_participants
+  alter column phone drop not null;
+
+create unique index if not exists ams_fly_participants_auth_user_uidx
+  on public.ams_fly_participants (auth_user_id)
+  where auth_user_id is not null;
+
+drop index if exists public.ams_fly_participants_player_name_country_code_key;
 
 alter table public.ams_fly_scores
   add column if not exists participant_id uuid references public.ams_fly_participants(id);
