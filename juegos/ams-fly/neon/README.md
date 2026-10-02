@@ -29,7 +29,7 @@ Esta carpeta incluye:
 En un servidor Node/Coolify configura las variables:
 
 - `DATABASE_URL`: cadena privada de Neon.
-- `ADMIN_TOKEN`: secreto largo y aleatorio para administración.
+- `NEON_AUTH_JWKS_URL`: URL JWKS de Neon Auth para validar las sesiones administrativas.
 - `CORS_ORIGIN`: dominio del frontend, por ejemplo `https://avilamorasoluciones.com`.
 - `PORT`: normalmente lo proporciona Coolify.
 
@@ -52,20 +52,16 @@ npm start
 
 ### Administrativos
 
-Requieren:
+Requieren una sesión JWT válida de Neon Auth con correo confirmado y rol `admin`:
 
-`Authorization: Bearer TU_ADMIN_TOKEN`
+`Authorization: Bearer <Neon Auth JWT>`
 
 - `PUT /event`
 - `GET /participants`
 
 ## 3. Conectar el juego
 
-En `game.js`:
-
-```js
-const EVENT_API = "https://api.tu-dominio.com";
-```
+En `game.js` y `admin-auth.js`, configura la URL HTTPS pública de la API. La `DATABASE_URL` y las credenciales de Neon Auth permanecen únicamente en el servidor.
 
 Al definirlo, AMS Fly utiliza automáticamente:
 
