@@ -663,9 +663,14 @@ async function publishScore(options={}){
 
   const pending=readPendingScore();
   const currentResult=lastResult||pending;
-  const resultScore=Number(currentResult?.score||0);
+  const resultScore=Math.max(0,Number(currentResult?.score||0));
   const resultDuration=Number(currentResult?.durationMs||0);
-  if(resultScore<=0){
+  const localBest=Math.max(0,Number(stats.best||0));
+
+  // Una partida de 0 o 1 también puede servir para sincronizar un récord
+  // local antiguo. Solo rechazamos el intento si no existe ningún récord que
+  // sincronizar y tampoco hay una puntuación actual válida.
+  if(resultScore<=0 && localBest<=0){
     if(!automatic) els.submitScoreStatus.textContent="No hay una puntuación pendiente para publicar.";
     return false;
   }
@@ -730,7 +735,6 @@ async function publishScore(options={}){
       }
     }catch(_){}
 
-    const localBest=Math.max(0,Number(stats.best||0));
     const scoreToPublish=Math.max(resultScore,localBest);
     const isLocalRecordSync=scoreToPublish>resultScore;
     const durationToPublish=isLocalRecordSync ? null : resultDuration;
