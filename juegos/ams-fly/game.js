@@ -563,12 +563,12 @@ function restorePendingResult(){
   const score=Math.max(0,Number(pending.score||0));
   if(!Number.isFinite(score))return false;
   const birdData=getBird(pending.birdId||profile.birdId||selectedBirdId);
-  lastResult={score,durationMs:Math.max(0,Number(pending.durationMs||0)),birdId:birdData?.id||profile.birdId||selectedBirdId};
+  lastResult={score,durationMs:Math.max(0,Number(pending.durationMs||0)),birdId:birdData?.id||profile.birdId||selectedBirdId,best:Number(pending.best ?? stats.best ?? 0),games:Number(pending.games ?? stats.games ?? 0),isRecord:Boolean(pending.isRecord)};
   els.finalScore.textContent=String(score);
   els.resultBest.textContent=String(pending.best ?? stats.best ?? 0);
   els.resultGames.textContent=String(pending.games ?? stats.games ?? 0);
   els.resultBird.innerHTML=birdMarkup(birdData,"1.15");
-  els.newRecord.hidden=score!==Number(stats.best||0);
+  els.newRecord.hidden=!Boolean(pending.isRecord);
   els.submitScoreBtn.dataset.published="0";
   els.submitScoreBtn.disabled=false;
   els.submitScoreBtn.innerHTML='PUBLICAR PUNTUACIÓN <span>↑</span>';
