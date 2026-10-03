@@ -476,3 +476,7 @@ button{cursor:pointer}
   .auth-card{padding:16px;border-radius:20px}
   .auth-actions{grid-template-columns:1fr}
 }
+
+
+/* AMS Fly · recomendación no bloqueante para pantallas grandes */
+.ams-fly-large-screen-note{position:absolute;left:50%;bottom:calc(18px + var(--safe-bottom));transform:translateX(-50%);z-index:12;width:min(520px,calc(100% - 32px));padding:10px 14px;border:1px solid rgba(255,255,255,.1);border-radius:14px;background:rgba(7,8,18,.55);color:#aeb1c5;font-size:.58rem;line-height:1.45;text-align:center;backdrop-filter:blur(10px);pointer-events:none;box-sizing:border-box}
