@@ -593,12 +593,8 @@ const GamesMenu = (() => {
   let renderedListKey = "";
   let rafId = 0;
 
-  function isMobileLayout() {
-    return window.matchMedia("(max-width: 700px)").matches;
-  }
-
   function isAvailableOnCurrentDevice(slide) {
-    return isMobileLayout() || slide.dataset.mobileOnly !== "true";
+    return true;
   }
 
   function visibleSlides() {
