@@ -652,39 +652,53 @@ function endGame(){
   playTone(isRecord?880:220,.12,isRecord?"triangle":"sine");
 }
 
-async function publishScore(){
-  if(!profile)return;
+async function publishScore(options={}){
+  const automatic=options.automatic===true;
+  if(!profile)return false;
   if(!eventIsOpen()){
-    els.submitScoreStatus.textContent="El evento ya no está vigente. Las puntuaciones solo pueden publicarse durante el periodo oficial del evento.";
-    return;
+    if(!automatic) els.submitScoreStatus.textContent="El evento ya no está vigente. Las puntuaciones solo pueden publicarse durante el periodo oficial del evento.";
+    return false;
   }
-  if(els.submitScoreBtn.dataset.published==="1")return;
+  if(els.submitScoreBtn.dataset.published==="1")return true;
+
   const pending=readPendingScore();
   const currentResult=lastResult||pending;
   const resultScore=Number(currentResult?.score||0);
   const resultDuration=Number(currentResult?.durationMs||0);
   if(resultScore<=0){
-    els.submitScoreStatus.textContent="No hay una puntuación pendiente para publicar.";
-    return;
+    if(!automatic) els.submitScoreStatus.textContent="No hay una puntuación pendiente para publicar.";
+    return false;
   }
-  if(els.scoreMessage.value.trim().length<3){
-    els.submitScoreStatus.textContent="Escribe un mensaje de al menos 3 caracteres para confirmar tu puntuación.";
-    els.scoreMessage.focus();
-    return;
+
+  const message=(els.scoreMessage.value||currentResult?.message||"").trim().slice(0,90);
+  // La publicación automática solo puede ejecutarse cuando ya existe un
+  // mensaje válido. Si el jugador todavía no lo ha escrito, no bloqueamos
+  // el resultado: queda pendiente para el botón manual.
+  if(message.length<3){
+    if(!automatic){
+      els.submitScoreStatus.textContent="Escribe un mensaje de al menos 3 caracteres para confirmar tu puntuación.";
+      els.scoreMessage.focus();
+    }
+    return false;
   }
+
   if(!NEON_DATA_READY()){
-    els.submitScoreStatus.textContent="No se puede publicar todavía: falta conectar el Data API de Neon.";
-    return;
+    if(!automatic) els.submitScoreStatus.textContent="No se puede publicar todavía: falta conectar el Data API de Neon.";
+    return false;
   }
+
   els.submitScoreBtn.disabled=true;
-  els.submitScoreStatus.textContent="Guardando tu puntuación en el ranking…";
+  if(!automatic) els.submitScoreStatus.textContent="Guardando tu puntuación en el ranking…";
+
   try{
     const authUser=await getCurrentAuthUser();
     if(!authUser)throw new Error("auth_required");
+
     const client=await getPublicNeonClient();
     let participantResult=await client.rpc("ams_fly_register_participant",{
       p_name:profile.name,p_country:profile.country,p_bird_id:profile.birdId,p_phone:null,p_score:0
     });
+
     if(participantResult.error && String(participantResult.error.message||"").includes("auth_required")){
       await new Promise(resolve=>setTimeout(resolve,350));
       if(!await getCurrentAuthUser())throw new Error("auth_required");
@@ -692,33 +706,64 @@ async function publishScore(){
         p_name:profile.name,p_country:profile.country,p_bird_id:profile.birdId,p_phone:null,p_score:0
       });
     }
+
     if(participantResult.error)throw participantResult.error;
     const participant=participantResult.data||{};
     const participantId=participant.participant_id||profile.participantId||null;
     if(!participantId)throw new Error("No se pudo identificar tu piloto.");
-    profile.participantId=participantId;saveProfile();
-    const message=(els.scoreMessage.value||"").trim().slice(0,90);
+
+    profile.participantId=participantId;
+    saveProfile();
+
     const result=await client.rpc("ams_fly_submit_score",{
-      p_participant_id:participantId,p_name:profile.name,p_country:profile.country,
-      p_bird_id:profile.birdId,p_score:resultScore,p_message:message,
+      p_participant_id:participantId,
+      p_name:profile.name,
+      p_country:profile.country,
+      p_bird_id:profile.birdId,
+      p_score:resultScore,
+      p_message:message,
       p_duration_ms:resultDuration
     });
+
     if(result.error)throw result.error;
+
     els.submitScoreBtn.dataset.published="1";
     els.submitScoreBtn.disabled=true;
     els.submitScoreBtn.innerHTML="✓ PUNTUACIÓN CONFIRMADA";
-    els.submitScoreStatus.textContent="✓ Listo. Tu puntuación quedó publicada en el ranking mundial. Puedes verla cuando quieras.";
+    els.submitScoreStatus.textContent="✓ Listo. Tu puntuación quedó publicada en el ranking mundial.";
     clearPendingScore();
     lastResult=null;
     playTone(880,.12,"triangle");
+    return true;
   }catch(error){
     console.error("AMS Fly: error al publicar puntuación",error);
     const raw=String(error?.message||error?.details||error?.hint||"Error desconocido de Neon Data API");
-    const detail=raw.includes("auth_required")?"La sesión no está disponible. Inicia sesión de nuevo y vuelve a publicar.":raw;
-    els.submitScoreStatus.textContent="No se pudo publicar: "+detail;
+    const detail=raw.includes("auth_required")
+      ?"La sesión no está disponible. La puntuación quedó guardada y se reintentará cuando la sesión esté disponible."
+      :raw;
+
+    // Nunca eliminamos el resultado pendiente por un fallo de red, sesión o
+    // Data API. El juego puede volver a intentarlo más adelante.
     els.submitScoreBtn.disabled=false;
+    if(!automatic) els.submitScoreStatus.textContent="No se pudo publicar: "+detail;
+    else els.submitScoreStatus.textContent="Puntuación guardada localmente. Reintentaremos la publicación automáticamente.";
+    return false;
   }
 }
+
+async function tryAutoPublishPendingScore(){
+  if(!profile || !eventIsOpen() || !NEON_DATA_READY())return false;
+  const pending=readPendingScore();
+  if(!pending || Number(pending.score||0)<=0)return false;
+
+  // Evitar intentos automáticos repetidos mientras el usuario todavía está
+  // escribiendo el mensaje del resultado actual.
+  const message=(els.scoreMessage.value||pending.message||"").trim();
+  if(message.length<3)return false;
+
+  return publishScore({automatic:true});
+}
+
 async function loadRanking(){
   showOnly(els.rankingScreen);
   els.rankingList.innerHTML='<div class="ranking-loading">Cargando pilotos...</div>';
