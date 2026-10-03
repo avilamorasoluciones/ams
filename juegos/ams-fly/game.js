@@ -721,17 +721,31 @@ async function loadRanking(){
       .limit(1000);
     if(result.error)throw result.error;
 
+    // El ranking muestra el mejor puntaje del piloto, pero el mensaje debe ser
+    // siempre el de su publicación más reciente. Así un piloto puede actualizar
+    // su mensaje aunque la nueva partida tenga menos puntos.
     const bestByParticipant=new Map();
+    const latestByParticipant=new Map();
     (result.data||[]).forEach(row=>{
       const key=row.participant_id||((row.player_name||"").trim().toLowerCase()+"|"+(row.country_code||""));
-      const current=bestByParticipant.get(key);
-      if(!current || Number(row.score||0)>Number(current.score||0) ||
-        (Number(row.score||0)===Number(current.score||0) && new Date(row.created_at).getTime()>new Date(current.created_at).getTime())){
+      const currentBest=bestByParticipant.get(key);
+      const currentLatest=latestByParticipant.get(key);
+      const rowTime=new Date(row.created_at).getTime();
+      if(!currentLatest || rowTime>new Date(currentLatest.created_at).getTime()){
+        latestByParticipant.set(key,row);
+      }
+      if(!currentBest || Number(row.score||0)>Number(currentBest.score||0) ||
+        (Number(row.score||0)===Number(currentBest.score||0) && rowTime<new Date(currentBest.created_at).getTime())){
         bestByParticipant.set(key,row);
       }
     });
 
     const rows=[...bestByParticipant.values()]
+      .map(row=>{
+        const key=row.participant_id||((row.player_name||"").trim().toLowerCase()+"|"+(row.country_code||""));
+        const latest=latestByParticipant.get(key);
+        return latest ? {...row,message:latest.message||"",latestCreatedAt:latest.created_at} : row;
+      })
       .sort((a,b)=>Number(b.score||0)-Number(a.score||0) || new Date(a.created_at).getTime()-new Date(b.created_at).getTime())
       .slice(0,RANKING_LIMIT);
 
