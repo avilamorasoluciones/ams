@@ -536,6 +536,61 @@ function loop(now){
   draw();
   raf=requestAnimationFrame(loop);
 }
+function savePendingScore(result){
+  const payload={...result,savedAt:new Date().toISOString()};
+  try{localStorage.setItem("amsFlyPendingScoreV1",JSON.stringify(payload));return true}catch(_){}
+  try{sessionStorage.setItem("amsFlyPendingScoreV1",JSON.stringify(payload));return true}catch(_){}
+  return false;
+}
+function readPendingScore(){
+  for(const storage of [localStorage,sessionStorage]){
+    try{
+      const value=JSON.parse(storage.getItem("amsFlyPendingScoreV1")||"null");
+      if(value&&Number(value.score)>=0)return value;
+    }catch(_){}
+  }
+  return null;
+}
+function clearPendingScore(){
+  for(const storage of [localStorage,sessionStorage]){
+    try{storage.removeItem("amsFlyPendingScoreV1")}catch(_){}
+  }
+}
+function restorePendingResult(){
+  if(!profile || !els.gameOverScreen || !els.gameOverScreen.hidden)return false;
+  const pending=readPendingScore();
+  if(!pending)return false;
+  const score=Math.max(0,Number(pending.score||0));
+  if(!Number.isFinite(score))return false;
+  const birdData=getBird(pending.birdId||profile.birdId||selectedBirdId);
+  lastResult={score,durationMs:Math.max(0,Number(pending.durationMs||0)),birdId:birdData?.id||profile.birdId||selectedBirdId};
+  els.finalScore.textContent=String(score);
+  els.resultBest.textContent=String(stats.best||0);
+  els.resultGames.textContent=String(stats.games||0);
+  els.resultBird.innerHTML=birdMarkup(birdData,"1.15");
+  els.newRecord.hidden=score!==Number(stats.best||0);
+  els.submitScoreBtn.dataset.published="0";
+  els.submitScoreBtn.disabled=false;
+  els.submitScoreBtn.innerHTML='PUBLICAR PUNTUACIÓN <span>↑</span>';
+  els.submitScoreStatus.textContent="Tienes una puntuación pendiente de publicación. Tu resultado se conserva localmente.";
+  els.scoreMessage.value="";
+  showOnly(els.gameOverScreen);
+  els.gameOverScreen.hidden=false;
+  return true;
+}
+function updateLargeScreenRecommendation(){
+  const id="amsFlyLargeScreenNote";
+  let note=document.getElementById(id);
+  const largeDesktop=window.matchMedia("(min-width:1200px) and (hover:hover) and (pointer:fine)").matches;
+  if(!note){
+    note=document.createElement("div");
+    note.id=id;
+    note.className="ams-fly-large-screen-note";
+    note.textContent="Para una experiencia más cómoda, recomendamos jugar desde un celular.";
+    els.gameScreen.appendChild(note);
+  }
+  note.hidden=!largeDesktop;
+}
 function endGame(){
   if(!game || !game.running)return;
   game.running=false;
@@ -573,7 +628,7 @@ function endGame(){
   }
 
   lastResult={score:finalScore,durationMs:Math.max(0,Math.round((game.time||0)*1000)),birdId:game.birdData?.id||profile?.birdId||selectedBirdId};
-  try{localStorage.setItem("amsFlyPendingScoreV1",JSON.stringify(lastResult));}catch(_){ }
+  savePendingScore(lastResult);
   els.scoreMessage.value="";
   els.submitScoreBtn.dataset.published="0";
   els.submitScoreBtn.disabled=false;
@@ -593,8 +648,7 @@ async function publishScore(){
     return;
   }
   if(els.submitScoreBtn.dataset.published==="1")return;
-  let pending=null;
-  try{pending=JSON.parse(localStorage.getItem("amsFlyPendingScoreV1")||"null");}catch(_){pending=null}
+  const pending=readPendingScore();
   const currentResult=lastResult||pending;
   const resultScore=Number(currentResult?.score||0);
   const resultDuration=Number(currentResult?.durationMs||0);
@@ -643,7 +697,7 @@ async function publishScore(){
     els.submitScoreBtn.disabled=true;
     els.submitScoreBtn.innerHTML="✓ PUNTUACIÓN CONFIRMADA";
     els.submitScoreStatus.textContent="✓ Listo. Tu puntuación quedó publicada en el ranking mundial. Puedes verla cuando quieras.";
-    try{localStorage.removeItem("amsFlyPendingScoreV1");}catch(_){ }
+    clearPendingScore();
     lastResult=null;
     playTone(880,.12,"triangle");
   }catch(error){
@@ -826,7 +880,9 @@ function bootHome(){
   if(NEON_DATA_READY()) loadRemoteEventConfig();
   if(profile){els.playerName.value=profile.name;els.playerCountry.value=profile.country;selectedBirdId=profile.birdId;renderBirds()}
   refreshAuthUI();els.homeBirdArt.innerHTML=birdMarkup(getBird(selectedBirdId),".95");
+  updateLargeScreenRecommendation();
   setTimeout(()=>els.loadingScreen.classList.add("is-gone"),500);
+  if(restorePendingResult()) return;
   if(soundOn){startMusic();window.addEventListener("pointerdown",unlockMenuMusic,{once:true,passive:true});window.addEventListener("keydown",unlockMenuMusic,{once:true})}
 }
 els.rankingBtn.addEventListener("click",loadRanking);
@@ -856,7 +912,7 @@ els.soundBtn.addEventListener("click",()=>{soundOn=!soundOn;localStorage.setItem
 function action(e){if(["BUTTON","INPUT","SELECT"].includes(e.target?.tagName))return;e.preventDefault();if(els.gameScreen.hidden)return;flap()}
 els.gameScreen.addEventListener("pointerdown",action,{passive:false});
 window.addEventListener("keydown",e=>{if(e.code==="Space"||e.code==="ArrowUp"){e.preventDefault();if(!els.gameScreen.hidden)flap()}if(e.code==="Escape"&&game?.running&&!game.paused){els.pauseBtn.click()}});
-window.addEventListener("resize",()=>{if(!els.gameScreen.hidden){resizeCanvas();if(game?.bird)game.bird.x=clamp(game.bird.x,50,window.innerWidth*.32)}});
+window.addEventListener("resize",()=>{updateLargeScreenRecommendation();if(!els.gameScreen.hidden){resizeCanvas();if(game?.bird)game.bird.x=clamp(game.bird.x,50,window.innerWidth*.32)}});
 window.addEventListener("visibilitychange",()=>{if(document.hidden&&game?.running&&!game.paused){game.paused=true;cancelAnimationFrame(raf);els.pauseScore.textContent=game.score+" puntos";showOnly(els.pauseScreen)}});
 els.soundBtn.textContent=soundOn?"♪":"×";
 bootHome();
