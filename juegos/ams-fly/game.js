@@ -573,6 +573,7 @@ function endGame(){
   }
 
   lastResult={score:finalScore,durationMs:Math.max(0,Math.round((game.time||0)*1000)),birdId:game.birdData?.id||profile?.birdId||selectedBirdId};
+  try{localStorage.setItem("amsFlyPendingScoreV1",JSON.stringify(lastResult));}catch(_){ }
   els.scoreMessage.value="";
   els.submitScoreBtn.dataset.published="0";
   els.submitScoreBtn.disabled=false;
@@ -585,32 +586,23 @@ function endGame(){
   playTone(isRecord?880:220,.12,isRecord?"triangle":"sine");
 }
 
-async function saveCurrentLead(message="",scoreOverride=null){
-  if(!profile||!NEON_DATA_READY())return null;
-  const score=Number.isFinite(Number(scoreOverride))?Number(scoreOverride):Number(game?.score||0);
-  const lead={id:"lead_"+Date.now(),name:profile.name,country:profile.country,birdId:profile.birdId,score,message,date:new Date().toISOString()};
-  saveLocalLead(lead);
-  try{
-    const client=await getPublicNeonClient();
-    const result=await client.rpc("ams_fly_register_participant",{p_name:lead.name,p_country:lead.country,p_bird_id:lead.birdId,p_phone:null,p_score:0});
-    if(result.error)throw result.error;
-    return result.data||null;
-  }catch(error){console.warn("AMS Fly: no se pudo registrar el participante",error);return null}
-}
 async function publishScore(){
-  if(!profile||!game)return;
+  if(!profile)return;
   if(!eventIsOpen()){
     els.submitScoreStatus.textContent="El evento ya no está vigente. Las puntuaciones solo pueden publicarse durante el periodo oficial del evento.";
     return;
   }
-  const resultScore=Number(lastResult?.score ?? game.score ?? 0);
+  if(els.submitScoreBtn.dataset.published==="1")return;
+  let pending=null;
+  try{pending=JSON.parse(localStorage.getItem("amsFlyPendingScoreV1")||"null");}catch(_){pending=null}
+  const currentResult=lastResult||pending;
+  const resultScore=Number(currentResult?.score||0);
+  const resultDuration=Number(currentResult?.durationMs||0);
   if(resultScore<=0){
-    els.submitScoreStatus.textContent="Necesitas al menos 1 punto para publicar.";
+    els.submitScoreStatus.textContent="No hay una puntuación pendiente para publicar.";
     return;
   }
-  if(els.submitScoreBtn.dataset.published==="1")return;
-  const message=(els.scoreMessage.value||"").trim().slice(0,90);
-  if(message.length<3){
+  if(els.scoreMessage.value.trim().length<3){
     els.submitScoreStatus.textContent="Escribe un mensaje de al menos 3 caracteres para confirmar tu puntuación.";
     els.scoreMessage.focus();
     return;
@@ -622,28 +614,43 @@ async function publishScore(){
   els.submitScoreBtn.disabled=true;
   els.submitScoreStatus.textContent="Guardando tu puntuación en el ranking…";
   try{
-    const resultScore=Number(lastResult?.score ?? game.score ?? 0);
-    const resultDuration=Number(lastResult?.durationMs ?? Math.round((game.time||0)*1000));
-    const participant=await saveCurrentLead(message,resultScore);
-    const participantId=participant?.participant_id||profile.participantId||null;
-    if(!participantId) throw new Error("No se pudo identificar tu piloto. Inicia sesión y vuelve a registrar tu piloto antes de publicar.");
-    profile.participantId=participantId;saveProfile();
+    const authUser=await getCurrentAuthUser();
+    if(!authUser)throw new Error("auth_required");
     const client=await getPublicNeonClient();
+    let participantResult=await client.rpc("ams_fly_register_participant",{
+      p_name:profile.name,p_country:profile.country,p_bird_id:profile.birdId,p_phone:null,p_score:0
+    });
+    if(participantResult.error && String(participantResult.error.message||"").includes("auth_required")){
+      await new Promise(resolve=>setTimeout(resolve,350));
+      if(!await getCurrentAuthUser())throw new Error("auth_required");
+      participantResult=await client.rpc("ams_fly_register_participant",{
+        p_name:profile.name,p_country:profile.country,p_bird_id:profile.birdId,p_phone:null,p_score:0
+      });
+    }
+    if(participantResult.error)throw participantResult.error;
+    const participant=participantResult.data||{};
+    const participantId=participant.participant_id||profile.participantId||null;
+    if(!participantId)throw new Error("No se pudo identificar tu piloto.");
+    profile.participantId=participantId;saveProfile();
+    const message=(els.scoreMessage.value||"").trim().slice(0,90);
     const result=await client.rpc("ams_fly_submit_score",{
       p_participant_id:participantId,p_name:profile.name,p_country:profile.country,
       p_bird_id:profile.birdId,p_score:resultScore,p_message:message,
       p_duration_ms:resultDuration
     });
-    if(result.error) throw result.error;
+    if(result.error)throw result.error;
     els.submitScoreBtn.dataset.published="1";
     els.submitScoreBtn.disabled=true;
     els.submitScoreBtn.innerHTML="✓ PUNTUACIÓN CONFIRMADA";
-    els.submitScoreStatus.textContent=(result.data?.provisional===true)?"✓ Puntuación publicada. Quedó como provisional hasta verificar la identidad del participante.":"✓ Listo. Tu puntuación quedó publicada en el ranking mundial. Puedes verla cuando quieras.";
+    els.submitScoreStatus.textContent="✓ Listo. Tu puntuación quedó publicada en el ranking mundial. Puedes verla cuando quieras.";
+    try{localStorage.removeItem("amsFlyPendingScoreV1");}catch(_){ }
+    lastResult=null;
     playTone(880,.12,"triangle");
   }catch(error){
-    console.error("AMS Fly: error al publicar puntuación", error);
-    const detail=error?.message || error?.details || error?.hint || "Error desconocido de Neon Data API";
-    els.submitScoreStatus.textContent="No se pudo publicar todavía: "+detail;
+    console.error("AMS Fly: error al publicar puntuación",error);
+    const raw=String(error?.message||error?.details||error?.hint||"Error desconocido de Neon Data API");
+    const detail=raw.includes("auth_required")?"La sesión no está disponible. Inicia sesión de nuevo y vuelve a publicar.":raw;
+    els.submitScoreStatus.textContent="No se pudo publicar: "+detail;
     els.submitScoreBtn.disabled=false;
   }
 }
