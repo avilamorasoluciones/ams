@@ -562,11 +562,22 @@ function restorePendingResult(){
   if(!pending)return false;
   const score=Math.max(0,Number(pending.score||0));
   if(!Number.isFinite(score))return false;
+
+  // El récord local siempre vive en STATS_KEY. El resultado pendiente solo
+  // conserva la partida que falta por publicar y nunca puede bajar el récord.
+  const pendingBest=Math.max(0,Number(pending.best||0));
+  const pendingGames=Math.max(0,Number(pending.games||0));
+  const storedBest=Math.max(0,Number(stats.best||0));
+  const storedGames=Math.max(0,Number(stats.games||0));
+  stats.best=Math.max(storedBest,pendingBest,score);
+  stats.games=Math.max(storedGames,pendingGames);
+  if(stats.best!==storedBest || stats.games!==storedGames) saveStats();
+
   const birdData=getBird(pending.birdId||profile.birdId||selectedBirdId);
-  lastResult={score,durationMs:Math.max(0,Number(pending.durationMs||0)),birdId:birdData?.id||profile.birdId||selectedBirdId,best:Number(pending.best ?? stats.best ?? 0),games:Number(pending.games ?? stats.games ?? 0),isRecord:Boolean(pending.isRecord),message:String(pending.message||"").slice(0,90)};
+  lastResult={score,durationMs:Math.max(0,Number(pending.durationMs||0)),birdId:birdData?.id||profile.birdId||selectedBirdId,best:stats.best,games:stats.games,isRecord:Boolean(pending.isRecord),message:String(pending.message||"").slice(0,90)};
   els.finalScore.textContent=String(score);
-  els.resultBest.textContent=String(pending.best ?? stats.best ?? 0);
-  els.resultGames.textContent=String(pending.games ?? stats.games ?? 0);
+  els.resultBest.textContent=String(stats.best);
+  els.resultGames.textContent=String(stats.games);
   els.resultBird.innerHTML=birdMarkup(birdData,"1.15");
   els.newRecord.hidden=!Boolean(pending.isRecord);
   els.submitScoreBtn.dataset.published="0";
