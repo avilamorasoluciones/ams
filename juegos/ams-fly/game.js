@@ -627,7 +627,7 @@ function endGame(){
     els.resultTitle.textContent="Vamos de nuevo.";
   }
 
-  lastResult={score:finalScore,durationMs:Math.max(0,Math.round((game.time||0)*1000)),birdId:game.birdData?.id||profile?.birdId||selectedBirdId,best:stats.best,games:stats.games,isRecord};
+  lastResult={score:finalScore,durationMs:Math.max(0,Math.round((game.time||0)*1000)),birdId:game.birdData?.id||profile?.birdId||selectedBirdId,best:stats.best,games:stats.games,isRecord,message:""};
   savePendingScore(lastResult);
   els.scoreMessage.value="";
   els.submitScoreBtn.dataset.published="0";
@@ -726,7 +726,7 @@ async function loadRanking(){
       const key=row.participant_id||((row.player_name||"").trim().toLowerCase()+"|"+(row.country_code||""));
       const current=bestByParticipant.get(key);
       if(!current || Number(row.score||0)>Number(current.score||0) ||
-        (Number(row.score||0)===Number(current.score||0) && new Date(row.created_at).getTime()<new Date(current.created_at).getTime())){
+        (Number(row.score||0)===Number(current.score||0) && new Date(row.created_at).getTime()>new Date(current.created_at).getTime())){
         bestByParticipant.set(key,row);
       }
     });
@@ -890,7 +890,7 @@ els.rankingFromResultBtn.addEventListener("click",loadRanking);
 els.rankingBackBtn.addEventListener("click",()=>{ if(readPendingScore() || lastResult){ showOnly(els.gameOverScreen); els.gameOverScreen.hidden=false; } else showOnly(els.homeScreen); });
 els.backBtn?.addEventListener("click",()=>{ if(game?.running && !game?.paused){ game.paused=true; stopMusic(); cancelAnimationFrame(raf); els.pauseScore.textContent=game.score+" puntos"; showOnly(els.pauseScreen); } else if(!els.profileScreen.hidden){ showOnly(els.homeScreen); } else if(!els.factScreen.hidden){ showOnly(els.profileScreen); } else if(!els.rankingScreen.hidden){ showOnly(els.homeScreen); } else { showOnly(els.homeScreen); } });
 els.rankingRefreshBtn.addEventListener("click",loadRanking);
-els.submitScoreBtn.addEventListener("click",()=>{publishScore();});
+els.submitScoreBtn.addEventListener("click",()=>{publishScore();});\nels.scoreMessage?.addEventListener("input",()=>{\n  const pending=readPendingScore();\n  if(!pending)return;\n  pending.message=(els.scoreMessage.value||"").slice(0,90);\n  savePendingScore(pending);\n  if(lastResult)lastResult={...lastResult,message:pending.message};\n});
 els.shareResultBtn?.addEventListener("click",shareResult);
 els.birdGrid.addEventListener("click",e=>{const btn=e.target.closest("[data-bird]");if(!btn)return;selectedBirdId=btn.dataset.bird;renderBirds();playTone(350,.04)});
 els.startBtn.addEventListener("click",()=>{playTone(440,.07);startMusic();if(profile){els.playerName.value=profile.name;els.playerCountry.value=profile.country;selectedBirdId=profile.birdId;renderBirds()}refreshAuthUI();showOnly(els.profileScreen)});
