@@ -920,7 +920,7 @@ const DB_TABU = [
   {cat:"familia", word:"Policía", forbidden:["Ladrón","Arma","Arresto","Patrulla","Seguridad"]},
   {cat:"familia", word:"Bombero", forbidden:["Fuego","Agua","Apagar","Manguera","Emergencia"]},
   {cat:"familia", word:"Cama", forbidden:["Dormir","Noche","Descansar","Almohada","Cobija"]},
-  {cat:"familia", word:"Dinero", forbidden:["Billetes","Comprar","Pagar","Banco","Monedas"]}
+  {cat:"familia", word:"Dinero", forbidden:["Billetes","Comprar","Pagar","Banco","Monedas"]},
   // AMPLIACIÓN · GENERAL
   {cat:"general",word:"Mochila",forbidden:["Libros","Espalda","Viaje","Cargar","Cremallera"]},
   {cat:"general",word:"Paraguas",forbidden:["Lluvia","Agua","Abrir","Tormenta","Mojar"]},
