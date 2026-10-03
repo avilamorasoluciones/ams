@@ -961,12 +961,18 @@ els.rankingBackBtn.addEventListener("click",()=>{ if(readPendingScore() || lastR
 els.backBtn?.addEventListener("click",()=>{ if(game?.running && !game?.paused){ game.paused=true; stopMusic(); cancelAnimationFrame(raf); els.pauseScore.textContent=game.score+" puntos"; showOnly(els.pauseScreen); } else if(!els.profileScreen.hidden){ showOnly(els.homeScreen); } else if(!els.factScreen.hidden){ showOnly(els.profileScreen); } else if(!els.rankingScreen.hidden){ showOnly(els.homeScreen); } else { showOnly(els.homeScreen); } });
 els.rankingRefreshBtn.addEventListener("click",loadRanking);
 els.submitScoreBtn.addEventListener("click",()=>{publishScore();});
+let autoPublishTimer=0;
 els.scoreMessage?.addEventListener("input",()=>{
   const pending=readPendingScore();
   if(!pending)return;
   pending.message=(els.scoreMessage.value||"").slice(0,90);
   savePendingScore(pending);
   if(lastResult)lastResult={...lastResult,message:pending.message};
+
+  clearTimeout(autoPublishTimer);
+  if(pending.message.trim().length>=3){
+    autoPublishTimer=setTimeout(()=>{tryAutoPublishPendingScore().catch(()=>{});},650);
+  }
 });
 els.shareResultBtn?.addEventListener("click",shareResult);
 els.birdGrid.addEventListener("click",e=>{const btn=e.target.closest("[data-bird]");if(!btn)return;selectedBirdId=btn.dataset.bird;renderBirds();playTone(350,.04)});
