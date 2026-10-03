@@ -565,8 +565,8 @@ function restorePendingResult(){
   const birdData=getBird(pending.birdId||profile.birdId||selectedBirdId);
   lastResult={score,durationMs:Math.max(0,Number(pending.durationMs||0)),birdId:birdData?.id||profile.birdId||selectedBirdId};
   els.finalScore.textContent=String(score);
-  els.resultBest.textContent=String(stats.best||0);
-  els.resultGames.textContent=String(stats.games||0);
+  els.resultBest.textContent=String(pending.best ?? stats.best ?? 0);
+  els.resultGames.textContent=String(pending.games ?? stats.games ?? 0);
   els.resultBird.innerHTML=birdMarkup(birdData,"1.15");
   els.newRecord.hidden=score!==Number(stats.best||0);
   els.submitScoreBtn.dataset.published="0";
@@ -627,7 +627,7 @@ function endGame(){
     els.resultTitle.textContent="Vamos de nuevo.";
   }
 
-  lastResult={score:finalScore,durationMs:Math.max(0,Math.round((game.time||0)*1000)),birdId:game.birdData?.id||profile?.birdId||selectedBirdId};
+  lastResult={score:finalScore,durationMs:Math.max(0,Math.round((game.time||0)*1000)),birdId:game.birdData?.id||profile?.birdId||selectedBirdId,best:stats.best,games:stats.games,isRecord};
   savePendingScore(lastResult);
   els.scoreMessage.value="";
   els.submitScoreBtn.dataset.published="0";
@@ -887,7 +887,7 @@ function bootHome(){
 }
 els.rankingBtn.addEventListener("click",loadRanking);
 els.rankingFromResultBtn.addEventListener("click",loadRanking);
-els.rankingBackBtn.addEventListener("click",()=>showOnly(els.homeScreen));
+els.rankingBackBtn.addEventListener("click",()=>{ if(readPendingScore() || lastResult){ showOnly(els.gameOverScreen); els.gameOverScreen.hidden=false; } else showOnly(els.homeScreen); });
 els.backBtn?.addEventListener("click",()=>{ if(game?.running && !game?.paused){ game.paused=true; stopMusic(); cancelAnimationFrame(raf); els.pauseScore.textContent=game.score+" puntos"; showOnly(els.pauseScreen); } else if(!els.profileScreen.hidden){ showOnly(els.homeScreen); } else if(!els.factScreen.hidden){ showOnly(els.profileScreen); } else if(!els.rankingScreen.hidden){ showOnly(els.homeScreen); } else { showOnly(els.homeScreen); } });
 els.rankingRefreshBtn.addEventListener("click",loadRanking);
 els.submitScoreBtn.addEventListener("click",()=>{publishScore();});
