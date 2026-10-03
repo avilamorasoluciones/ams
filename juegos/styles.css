@@ -3451,12 +3451,7 @@ footer {
   display: none;
 }
 
-@media (min-width: 701px) {
-  .game-slide[data-mobile-only="true"],
-  .site-nav .nav-item[data-mobile-only="true"] {
-    display: none !important;
-  }
-
+@media (min-width: 1200px) and (hover: hover) and (pointer: fine) {
   .desktop-games-note {
     display: grid;
     grid-template-columns: auto minmax(0, 1fr);
@@ -3519,7 +3514,7 @@ footer {
   }
 }
 
-@media (max-width: 700px) {
+@media (max-width: 1199px), (hover: none), (pointer: coarse) {
   .desktop-games-note {
     display: none !important;
   }
