@@ -715,14 +715,46 @@ async function publishScore(options={}){
     profile.participantId=participantId;
     saveProfile();
 
+    // El dispositivo puede conservar un récord conseguido antes de que la
+    // publicación en Neon estuviera disponible. Al terminar una nueva partida,
+    // sincronizamos ese récord local si todavía supera el récord remoto.
+    let remoteBest=0;
+    try{
+      const remote=await client.from("ams_fly_scores")
+        .select("score")
+        .eq("participant_id",participantId)
+        .order("score",{ascending:false})
+        .limit(1);
+      if(!remote.error && remote.data?.length){
+        remoteBest=Math.max(0,Number(remote.data[0].score||0));
+      }
+    }catch(_){}
+
+    const localBest=Math.max(0,Number(stats.best||0));
+    const scoreToPublish=Math.max(resultScore,localBest);
+    const isLocalRecordSync=scoreToPublish>resultScore;
+    const durationToPublish=isLocalRecordSync ? null : resultDuration;
+
+    // Si el récord local ya está publicado, no volvemos a crear una fila solo
+    // por terminar otra partida menor.
+    if(scoreToPublish<=remoteBest){
+      els.submitScoreBtn.dataset.published="1";
+      els.submitScoreBtn.disabled=true;
+      els.submitScoreBtn.innerHTML="✓ PUNTUACIÓN YA SINCRONIZADA";
+      els.submitScoreStatus.textContent="✓ Tu récord local ya está registrado en el ranking mundial.";
+      clearPendingScore();
+      lastResult=null;
+      return true;
+    }
+
     const result=await client.rpc("ams_fly_submit_score",{
       p_participant_id:participantId,
       p_name:profile.name,
       p_country:profile.country,
       p_bird_id:profile.birdId,
-      p_score:resultScore,
+      p_score:scoreToPublish,
       p_message:message,
-      p_duration_ms:resultDuration
+      p_duration_ms:durationToPublish
     });
 
     if(result.error)throw result.error;
