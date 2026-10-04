@@ -115,7 +115,7 @@ const colombiaFacts = [
 const els = {};
 [
   "loadingScreen","homeScreen","profileScreen","factScreen","gameScreen","pauseScreen","gameOverScreen",
-  "homeBest","homeGames","startBtn","profileForm","authEmail","authPassword","authSignInBtn","authSignUpBtn","authSignOutBtn","authStatus",
+  "homeBest","homeGames","startBtn","authEmail","authPassword","authSignInBtn","authSignUpBtn","authSignOutBtn","authStatus",
   "registerFields","registerPassword","registerPasswordRepeat","registerStatus","backToLoginBtn","playerName","playerLastName","playerDialCode","playerPhone","playerCountry",
   "accountDetails","accountEmail","accountName","accountLastName","accountDialCode","accountPhone","accountCountry","saveAccountBtn","accountStatus","accountTitle","accountSubtitle",
   "birdGrid","selectedBirdInfo","factTitle","factText","factSourceHint","factContinueBtn","gameCanvas","scoreValue","difficultyValue","pauseBtn","gameStartHint",
@@ -467,10 +467,7 @@ function updateStage(){
 function difficultyFor(score){
   return 1 + Math.min(5,Math.floor(score/12)*.28);
 }
-function setHeaderGameActionsHidden(hidden){
-  if(els.accountBtn)els.accountBtn.hidden=hidden;
-  if(els.rankingHeaderBtn)els.rankingHeaderBtn.hidden=hidden;
-}
+function setHeaderGameActionsHidden(hidden){}
 function resetGame(){
   setHeaderGameActionsHidden(true);
   resizeCanvas();
@@ -1110,9 +1107,6 @@ async function saveAccount(){
 async function signOutPlayer(){
   try{const client=await getNeonClient();await client.auth.signOut();profile=null;localStorage.removeItem(STORAGE_KEY);renderHomeBird();await refreshAuthUI();navigateTo("play")}
   catch(error){setAuthStatus(els.accountStatus,error?.message||"No se pudo cerrar sesión.",true)}
-}
-function finishProfile(candidate){
-  profile=candidate;selectedBirdId=profile.birdId;saveProfile();renderBirds();els.profileError.hidden=true;prepareFactThenGame();
 }
 function bootHome(){
   loadProfile();hydrateStats();initCountries();renderBirds();renderHomeBird();applyEventConfig();
