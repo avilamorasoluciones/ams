@@ -22,7 +22,7 @@
   <link rel="canonical" href="https://avilamorasoluciones.com/juegos/ams-fly/">
   <link rel="icon" href="icon.svg?v=6" type="image/svg+xml">
   <link rel="manifest" href="manifest.webmanifest?v=6">
-  <link rel="stylesheet" href="styles.css?v=22">
+  <link rel="stylesheet" href="styles.css?v=23">
   <title>AMS Fly · Avila Mora Soluciones</title>
 </head>
 <body>
@@ -73,7 +73,7 @@
             <input id="authEmail" type="email" autocomplete="email" inputmode="email" placeholder="tu@correo.com">
           </label>
           <label>Contraseña
-            <input id="authPassword" type="password" autocomplete="current-password" minlength="8" placeholder="Mínimo 8 caracteres">
+            <input id="authPassword" type="password" autocomplete="current-password" minlength="8" maxlength="128" placeholder="Mínimo 8 caracteres">
           </label>
           <button id="authSignInBtn" class="primary-button" type="button">INICIAR SESIÓN <span>→</span></button>
           <button id="authCreateAccountBtn" class="secondary-button" type="button">CREAR UNA CUENTA</button>
@@ -102,10 +102,10 @@
             <select id="playerCountry" required></select>
           </label>
           <label>Crear contraseña
-            <input id="registerPassword" type="password" minlength="8" autocomplete="new-password" placeholder="Mínimo 8 caracteres">
+            <input id="registerPassword" type="password" minlength="8" maxlength="128" autocomplete="new-password" placeholder="Mínimo 8 caracteres">
           </label>
           <label>Repetir contraseña
-            <input id="registerPasswordRepeat" type="password" minlength="8" autocomplete="new-password" placeholder="Repite tu contraseña">
+            <input id="registerPasswordRepeat" type="password" minlength="8" maxlength="128" autocomplete="new-password" placeholder="Repite tu contraseña">
           </label>
           <button id="authSignUpBtn" class="primary-button" type="button">CREAR CUENTA <span>✓</span></button>
           <button id="backToLoginBtn" class="secondary-button" type="button">VOLVER AL INICIO DE SESIÓN</button>
@@ -222,7 +222,7 @@
 
   <script src="neon-config.js?v=3"></script>
   <script src="neon-client.js?v=6"></script>
-    <script src="game.js?v=63"></script>
+    <script src="game.js?v=64"></script>
   <script>
     if ("serviceWorker" in navigator) {
       window.addEventListener("load", () => navigator.serviceWorker.register("./sw.js").catch(() => {}));
