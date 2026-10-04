@@ -134,6 +134,7 @@ let musicTimer = 0;
 let musicStep = 0;
 let musicStarting = false;
 let autoPublishTimer = 0;
+let publishPromise = null;
 let game = null;
 let raf = 0;
 let lastStage = -1;
@@ -708,6 +709,16 @@ async function ensureResultPublishedBeforeLeaving(){
   return true;
 }
 async function publishScore(options={}){
+  if(publishPromise)return publishPromise;
+  const current=publishScoreInternal(options);
+  publishPromise=current;
+  try{
+    return await current;
+  }finally{
+    if(publishPromise===current)publishPromise=null;
+  }
+}
+async function publishScoreInternal(options={}){
   const automatic=options.automatic===true;
   if(!profile)return false;
   if(!eventIsOpen()){
@@ -1117,7 +1128,7 @@ els.authPassword?.addEventListener("keydown",e=>{if(e.key==="Enter"){e.preventDe
 els.factContinueBtn.addEventListener("click",()=>{playTone(560,.05);startMusic();startWithProfile()});
 els.pauseBtn.addEventListener("click",()=>{if(!game?.running)return;game.paused=true;stopMusic();cancelAnimationFrame(raf);els.pauseScore.textContent=game.score+" puntos";showOnly(els.pauseScreen);playTone(300,.05)});
 els.resumeBtn.addEventListener("click",()=>{if(!game?.running)return;game.paused=false;startMusic();game.last=performance.now();showOnly(els.gameScreen);playTone(420,.05);raf=requestAnimationFrame(loop)});
-els.quitBtn.addEventListener("click",()=>{if(game)game.running=false;stopMusic();cancelAnimationFrame(raf);showOnly(els.homeScreen);hydrateStats();startMusic()});
+els.quitBtn.addEventListener("click",()=>{if(game)game.running=false;setHeaderGameActionsHidden(false);stopMusic();cancelAnimationFrame(raf);showOnly(els.homeScreen);hydrateStats();startMusic()});
 els.againBtn.addEventListener("click",async()=>{
   const published=await ensureResultPublishedBeforeLeaving();
   if(published)prepareFactThenGame();
