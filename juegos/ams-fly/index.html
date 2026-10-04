@@ -35,90 +35,101 @@
 
   <main class="app-shell">
     <header class="game-header">
-      <a class="brand" href="./" aria-label="Volver a Juegos Avila Mora">
-        <span class="brand-condor" aria-hidden="true"><svg viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg" width="38" height="38"><rect width="44" height="44" rx="12" fill="#17133a"/><ellipse cx="22" cy="23" rx="8" ry="6" fill="#c084fc"/><ellipse cx="29" cy="17" rx="4" ry="3.5" fill="#7c3aed"/><ellipse cx="30.5" cy="14" rx="2" ry="1.4" fill="#ef4444"/><path d="M14 22Q8 18 4 22Q8 25 14 24Z" fill="#8b5cf6"/><path d="M30 22Q36 17 40 19Q37 24 30 23Z" fill="#8b5cf6"/><ellipse cx="26.5" cy="20" rx="3" ry="1.8" fill="#fff" fill-opacity=".55"/><path d="M33 17L36 16L34 19Z" fill="#fbbf24"/><circle cx="30.5" cy="16.5" r="1" fill="#111"/><path d="M18 27Q16 32 14 30Q17 28 18 27Z" fill="#7c3aed"/><path d="M22 28Q21 33 19 32Q21 29 22 28Z" fill="#7c3aed"/><path d="M26 27Q27 32 29 30Q26 28 26 27Z" fill="#7c3aed"/></svg></span>
-        <span><b>Avila Mora</b><small>SOLUCIONES · AMS FLY</small></span>
+      <a class="brand" href="./" aria-label="AMS Fly">
+        <span class="brand-condor" aria-hidden="true"><svg viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg" width="38" height="38"><rect width="44" height="44" rx="12" fill="#17133a"/><ellipse cx="22" cy="23" rx="8" ry="6" fill="#c084fc"/><ellipse cx="29" cy="17" rx="4" ry="3.5" fill="#7c3aed"/><path d="M14 22Q8 18 4 22Q8 25 14 24Z" fill="#8b5cf6"/><path d="M30 22Q36 17 40 19Q37 24 30 23Z" fill="#8b5cf6"/><path d="M33 17L36 16L34 19Z" fill="#fbbf24"/><circle cx="30.5" cy="16.5" r="1" fill="#111"/></svg></span>
+        <span><b>AMS Fly</b><small>AVILA MORA SOLUCIONES</small></span>
       </a>
-      <div class="header-actions"><button id="accountBtn" class="header-account-button" type="button" aria-label="Cuenta">CUENTA</button><button id="rankingHeaderBtn" class="icon-button" type="button" aria-label="Abrir ranking">🏆</button><button id="backBtn" class="icon-button" type="button" aria-label="Volver">←</button><button id="soundBtn" class="icon-button" type="button" aria-label="Activar o desactivar sonido">♪</button></div>
+      <div class="header-actions">
+        <button id="soundBtn" class="icon-button" type="button" aria-label="Activar o desactivar sonido">♪</button>
+      </div>
     </header>
 
     <section id="homeScreen" class="screen app-screen active">
-      <div class="hero-copy">
-        <span class="eyebrow">RECURSO · AMS GAMES</span>
-        <h1><span>AMS</span> Fly</h1>
-        <p>Un pequeño vuelo, una gran obsesión.<br>¿Cuántos puntos puedes conseguir?</p>
+      <div class="game-menu-heading">
+        <span class="eyebrow">AMS FLY</span>
+        <h1>Elige tu ave</h1>
+        <p>Selecciona tu personaje y entra directo al vuelo.</p>
       </div>
-
-      <div class="home-flight-art" aria-hidden="true">
-        <div class="art-glow"></div>
-        <div class="art-bird" id="homeBirdArt"></div>
-        <div class="art-ring ring-a"></div>
-        <div class="art-ring ring-b"></div>
-        <div class="art-particle p1"></div><div class="art-particle p2"></div><div class="art-particle p3"></div>
-      </div>
-
+      <div id="birdGrid" class="bird-grid game-bird-grid" role="radiogroup" aria-label="Elegir ave"></div>
+      <div id="selectedBirdInfo" class="selected-bird-info"></div>
+      <button id="startBtn" class="primary-button" type="button">EMPEZAR A JUGAR <span>✦</span></button>
       <div class="home-stats">
         <div><span>RÉCORD</span><strong id="homeBest">0</strong></div>
         <div><span>PARTIDAS</span><strong id="homeGames">0</strong></div>
       </div>
-
-      <button id="startBtn" class="primary-button" type="button">ELEGIR AVE Y VOLAR <span>→</span></button>
-      <button id="changePilotHomeBtn" class="secondary-button home-change-button" type="button">CAMBIAR AVE / PAÍS</button>
-      
     </section>
 
     <section id="profileScreen" class="screen app-screen" hidden>
       <div class="section-heading">
-        <span class="eyebrow">ANTES DEL VUELO</span>
-        <h2>Presenta a tu piloto.</h2>
-        <p>Tu cuenta identifica de forma única a tu piloto, incluso si vuelves desde otro dispositivo.</p>
+        <span class="eyebrow">CUENTA</span>
+        <h2 id="accountTitle">Inicia sesión</h2>
+        <p id="accountSubtitle">Usa tu correo y contraseña para participar en el evento y guardar tu piloto.</p>
       </div>
-
-      <form id="profileForm" class="profile-card" novalidate>
-        <label>Nombre
-          <input id="playerName" name="name" maxlength="18" autocomplete="nickname" placeholder="¿Cómo te llamamos?" required>
-        </label>
-
-        <label>País
-          <select id="playerCountry" name="country" required></select>
-        </label>
-        <div id="authBox" class="auth-card">
-          <div class="auth-card-head">
-            <div>
-              <span class="eyebrow">IDENTIDAD DEL PILOTO</span>
-              <h3>Una cuenta, un piloto.</h3>
-            </div>
-            <span class="auth-lock" aria-hidden="true">🔐</span>
-          </div>
-          <p class="auth-copy">Inicia sesión o crea una cuenta. Tu cuenta queda vinculada de forma única a tu piloto para evitar duplicados que alteren el ranking.</p>
+      <div class="profile-card account-card">
+        <div id="loginFields">
           <label>Correo electrónico
             <input id="authEmail" type="email" autocomplete="email" inputmode="email" placeholder="tu@correo.com">
           </label>
           <label>Contraseña
             <input id="authPassword" type="password" autocomplete="current-password" minlength="8" placeholder="Mínimo 8 caracteres">
           </label>
-          <div class="auth-actions">
-            <button id="authSignInBtn" class="secondary-button" type="button">INICIAR SESIÓN</button>
-            <button id="authSignUpBtn" class="primary-button" type="button">CREAR CUENTA</button>
-            <button id="authSignOutBtn" class="secondary-button" type="button" hidden>CERRAR SESIÓN</button>
-          </div>
-          <p id="authIdentity" class="auth-identity" role="status" hidden></p>
-          <small id="authStatus" class="field-hint" role="status">Inicia sesión o crea una cuenta. Tu cuenta será la identidad única de tu piloto.</small>
+          <button id="authSignInBtn" class="primary-button" type="button">INICIAR SESIÓN <span>→</span></button>
+          <p id="authStatus" class="auth-status" role="status"></p>
         </div>
 
-        <div class="field-label">Elige tu ave</div>
-        <div id="birdGrid" class="bird-grid" role="radiogroup" aria-label="Elegir personaje"></div>
+        <div id="registerFields" hidden>
+          <div class="account-mode-badge">CREAR CUENTA</div>
+          <p class="field-hint">No encontramos una cuenta con ese correo. Completa tus datos para registrarte.</p>
+          <label>Nombre
+            <input id="playerName" maxlength="30" autocomplete="given-name" placeholder="Tu nombre">
+          </label>
+          <label>Apellido
+            <input id="playerLastName" maxlength="40" autocomplete="family-name" placeholder="Tu apellido">
+          </label>
+          <label>Celular
+            <div class="phone-input-row">
+              <select id="playerDialCode" aria-label="Código de país"></select>
+              <input id="playerPhone" inputmode="tel" autocomplete="tel-national" placeholder="300 123 4567">
+            </div>
+          </label>
+          <label>País
+            <select id="playerCountry" required></select>
+          </label>
+          <label>Crear contraseña
+            <input id="registerPassword" type="password" minlength="8" autocomplete="new-password" placeholder="Mínimo 8 caracteres">
+          </label>
+          <label>Repetir contraseña
+            <input id="registerPasswordRepeat" type="password" minlength="8" autocomplete="new-password" placeholder="Repite tu contraseña">
+          </label>
+          <button id="authSignUpBtn" class="primary-button" type="button">CREAR CUENTA <span>✓</span></button>
+          <button id="backToLoginBtn" class="secondary-button" type="button">VOLVER AL INICIO DE SESIÓN</button>
+          <p id="registerStatus" class="auth-status" role="status"></p>
+        </div>
 
-        <div id="selectedBirdInfo" class="selected-bird-info"></div>
-
-        <label id="termsConsentRow" class="consent-row">
-          <input id="termsConsent" type="checkbox" required>
-          <span>Acepto los <a href="terminos.html" target="_blank" rel="noopener noreferrer">Términos y Condiciones</a> y la <a href="privacidad.html" target="_blank" rel="noopener noreferrer">Política de Privacidad</a>. Entiendo que mi cuenta identifica una sola participación en el ranking y que las puntuaciones quedan sujetas a verificación.</span>
-        </label>
-
-        <button class="primary-button" type="submit">LISTO, A VOLAR <span>✦</span></button>
-        <p id="profileError" class="form-error" role="alert" hidden></p>
-      </form>
+        <div id="accountDetails" hidden>
+          <div class="account-mode-badge">SESIÓN ACTIVA</div>
+          <div class="account-email-row"><span>Correo de la cuenta</span><strong id="accountEmail">—</strong></div>
+          <p class="field-hint">El correo no se puede cambiar por seguridad y para conservar la identidad de tu participación.</p>
+          <label>Nombre
+            <input id="accountName" maxlength="30" autocomplete="given-name">
+          </label>
+          <label>Apellido
+            <input id="accountLastName" maxlength="40" autocomplete="family-name">
+          </label>
+          <label>Celular
+            <div class="phone-input-row">
+              <select id="accountDialCode" aria-label="Código de país"></select>
+              <input id="accountPhone" inputmode="tel" autocomplete="tel-national">
+            </div>
+          </label>
+          <label>País
+            <select id="accountCountry"></select>
+          </label>
+          <button id="saveAccountBtn" class="primary-button" type="button">GUARDAR CAMBIOS <span>✓</span></button>
+          <button id="authSignOutBtn" class="secondary-button" type="button">CERRAR SESIÓN</button>
+          <p id="accountStatus" class="auth-status" role="status"></p>
+        </div>
+      </div>
     </section>
 
     <section id="factScreen" class="screen fact-screen" hidden>
@@ -171,8 +182,6 @@
         <button id="submitScoreBtn" class="primary-button" type="button">PUBLICAR PUNTUACIÓN <span>↑</span></button>
         <p id="submitScoreStatus" class="submit-status" role="status">Puedes publicar directamente o dejar un mensaje opcional.</p>
         <button id="shareResultBtn" class="secondary-button" type="button">↗ COMPARTIR RESULTADO</button>
-        
-        <button id="changePilotBtn" class="secondary-button" type="button">CAMBIAR PILOTO</button>
       </div>
     </section>
 
@@ -192,16 +201,20 @@
       <p id="rankingStatus" class="ranking-status"></p>
     </section>
 
+    <nav class="bottom-nav" id="bottomNav" aria-label="Navegación principal">
+      <button class="bottom-nav-item is-active" data-nav="play" type="button" aria-label="Jugar" title="Jugar"><span>🪽</span></button>
+      <button class="bottom-nav-item" data-nav="event" type="button" aria-label="Evento" title="Evento"><span>📅</span></button>
+      <button class="bottom-nav-item" data-nav="account" type="button" aria-label="Cuenta" title="Cuenta"><span>👤</span></button>
+    </nav>
     <footer class="game-footer">
-      <span>AMS Fly · Un juego de Avila Mora Soluciones</span>
+      <span>AMS Fly · Avila Mora Soluciones</span>
       <span><a href="terminos.html" target="_blank" rel="noopener noreferrer">Términos</a> · <a href="privacidad.html" target="_blank" rel="noopener noreferrer">Privacidad</a></span>
     </footer>
   </main>
 
   <script src="neon-config.js?v=3"></script>
   <script src="neon-client.js?v=6"></script>
-  <script src="admin-auth.js?v=7"></script>
-  <script src="game.js?v=58"></script>
+    <script src="game.js?v=59"></script>
   <script>
     if ("serviceWorker" in navigator) {
       window.addEventListener("load", () => navigator.serviceWorker.register("./sw.js").catch(() => {}));
