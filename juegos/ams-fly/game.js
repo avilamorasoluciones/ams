@@ -681,6 +681,7 @@ function endGame(){
   els.scoreMessage.value="";
   els.submitScoreBtn.dataset.published="0";
   els.submitScoreBtn.disabled=false;
+  els.scoreMessage.disabled=false;
   els.submitScoreBtn.innerHTML='PUBLICAR PUNTUACIÓN <span>↑</span>';
   els.submitScoreStatus.hidden=false;
   els.submitScoreStatus.textContent="Puedes dejar un mensaje o publicar directamente tu puntuación.";
@@ -732,6 +733,7 @@ async function publishScore(options={}){
   }
 
   els.submitScoreBtn.disabled=true;
+  els.scoreMessage.disabled=true;
   els.submitScoreStatus.hidden=false;
   if(!automatic) els.submitScoreStatus.textContent="Guardando tu puntuación en el ranking…";
 
@@ -791,6 +793,7 @@ async function publishScore(options={}){
     if(scoreToPublish<=remoteBest){
       els.submitScoreBtn.dataset.published="1";
       els.submitScoreBtn.disabled=true;
+      els.scoreMessage.disabled=true;
       els.submitScoreBtn.innerHTML="✓ PUNTUACIÓN PUBLICADA";
       els.submitScoreStatus.hidden=true;
       clearPendingScore();
@@ -829,6 +832,7 @@ async function publishScore(options={}){
     // Nunca eliminamos el resultado pendiente por un fallo de red, sesión o
     // Data API. El juego puede volver a intentarlo más adelante.
     els.submitScoreBtn.disabled=false;
+    els.scoreMessage.disabled=false;
     if(!automatic) els.submitScoreStatus.textContent="No se pudo publicar: "+detail;
     else els.submitScoreStatus.textContent="Puntuación guardada localmente. Reintentaremos la publicación automáticamente.";
     return false;
