@@ -63,8 +63,7 @@ const VerdadRetoGame = (() => {
   function startGame() {
     if (players.length < 2) return alert("Se necesitan al menos 2 jugadores.");
     
-    const limit = $("vr-selLimit").value;
-    maxTurns = limit === "all" ? 9999 : parseInt(limit);
+    maxTurns = 9999;
     turnsPlayed = 0;
     currentPlayerIndex = 0;
 
