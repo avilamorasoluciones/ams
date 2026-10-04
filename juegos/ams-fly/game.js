@@ -58,7 +58,6 @@ function escapeHtml(value){
   return String(value ?? "").replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
 }
 const EVENT_CONFIG_KEY = "amsFlyEventConfigV1";
-const LEADS_KEY = "amsFlyLeadsV1";
 const DEFAULT_EVENT = {
   active:true,
   badge:"🏆 EVENTO ESPECIAL 2026",
@@ -116,10 +115,12 @@ const colombiaFacts = [
 const els = {};
 [
   "loadingScreen","homeScreen","profileScreen","factScreen","gameScreen","pauseScreen","gameOverScreen",
-  "homeBest","homeGames","accountBtn","startBtn","changePilotHomeBtn","profileForm","authBox","authEmail","authPassword","authSignInBtn","authSignUpBtn","authSignOutBtn","authStatus","authIdentity","termsConsentRow","playerName","playerCountry","birdGrid","selectedBirdInfo","profileError",
-  "factTitle","factText","factSourceHint","factContinueBtn","gameCanvas","scoreValue","difficultyValue","pauseBtn","gameStartHint",
+  "homeBest","homeGames","startBtn","profileForm","authEmail","authPassword","authSignInBtn","authSignUpBtn","authSignOutBtn","authStatus",
+  "registerFields","registerPassword","registerPasswordRepeat","registerStatus","backToLoginBtn","playerName","playerLastName","playerDialCode","playerPhone","playerCountry",
+  "accountDetails","accountEmail","accountName","accountLastName","accountDialCode","accountPhone","accountCountry","saveAccountBtn","accountStatus","accountTitle","accountSubtitle",
+  "birdGrid","selectedBirdInfo","factTitle","factText","factSourceHint","factContinueBtn","gameCanvas","scoreValue","difficultyValue","pauseBtn","gameStartHint",
   "pauseScore","resumeBtn","quitBtn","resultBird","resultEyebrow","resultTitle","finalScore","resultBest","resultGames","newRecord",
-  "againBtn","changePilotBtn","soundBtn","backBtn","adminNavBtn","homeBirdArt","rankingBtn","rankingFromResultBtn","rankingHeaderBtn","rankingBackBtn","rankingRefreshBtn","rankingList","rankingStatus","scoreMessage","submitScoreBtn","submitScoreStatus","shareResultBtn","termsConsent","rankingScreen"
+  "againBtn","soundBtn","rankingBackBtn","rankingRefreshBtn","rankingList","rankingStatus","scoreMessage","submitScoreBtn","submitScoreStatus","shareResultBtn","rankingScreen"
 ].forEach(id => els[id] = document.getElementById(id));
 
 const ctx = els.gameCanvas.getContext("2d", {alpha:false});
@@ -158,27 +159,6 @@ function eventIsOpen(){
   const start=Date.parse(cfg.eventStartAt||"");
   const end=Date.parse(cfg.eventEndAt||"");
   return !!cfg.active && Number.isFinite(start) && Number.isFinite(end) && now>=start && now<=end;
-}
-function getLocalLeads(){
-  return safeParse(LEADS_KEY, []);
-}
-function saveLocalLead(lead){
-  const rows=getLocalLeads();
-  const key=(lead.name||"").toLowerCase()+"|"+(lead.country||"");
-  const existing=rows.findIndex(x=>((x.name||"").toLowerCase()+"|"+(x.country||""))===key);
-  if(existing>=0){
-    rows[existing]={...rows[existing],...lead,score:Math.max(Number(rows[existing].score||0),Number(lead.score||0)),updatedAt:new Date().toISOString()};
-  }else rows.unshift({...lead,createdAt:new Date().toISOString(),updatedAt:new Date().toISOString()});
-  localStorage.setItem(LEADS_KEY,JSON.stringify(rows));
-}
-function eventTemplate(template,lead){
-  return String(template||"").replaceAll("{name}",lead.name||"").replaceAll("{score}",String(lead.score||0)).replaceAll("{event}",getEventConfig().title||"AMS Fly");
-}
-function eventPhoneUrl(phone,name,score){
-  let digits=String(phone||"").replace(/\D/g,"");
-  if(digits.length===10&&digits.startsWith("3"))digits="57"+digits;
-  if(digits.length<8)return "";
-  return "https://wa.me/"+digits+"?text="+encodeURIComponent(eventTemplate(getEventConfig().waTemplate,{name,score}));
 }
 function applyEventConfig(){
   const cfg=getEventConfig();
@@ -262,14 +242,35 @@ function renderEventRichText(target,text){
     target.appendChild(item);
   });
 }
-function openEventScreen(){
+async function openEventScreen(){
   let screen=document.getElementById("amsFlyEventScreen");
   if(!screen){
-    screen=document.createElement("section");screen.id="amsFlyEventScreen";screen.className="screen app-screen";screen.hidden=true;
-    screen.innerHTML='<div class="section-heading"><span class="eyebrow">AMS FLY · EVENTO</span><h2 id="eventTitle"></h2><p id="eventDesc"></p></div><div class="event-details-card"><div class="event-detail-block"><span class="event-badge">🏆 PREMIO</span><h3 id="eventPrizeTitle"></h3><div id="eventPrizeDesc" class="event-rich-content"></div></div><div class="event-detail-block"><span class="event-badge">📋 CONDICIONES</span><h3 id="eventConditionTitle"></h3><div id="eventConditionDesc" class="event-rich-content"></div></div><button id="eventJoinButton" class="primary-button" type="button">PARTICIPAR Y VOLAR <span>✦</span></button><button id="eventBackButton" class="secondary-button" type="button">← VOLVER</button></div>';
-    document.querySelector(".app-shell").insertBefore(screen,els.profileScreen);
-    screen.querySelector("#eventBackButton").onclick=()=>showOnly(els.homeScreen);
-    screen.querySelector("#eventJoinButton").onclick=async()=>{const user=await getCurrentAuthUser().catch(()=>null);if(user&&profile)prepareFactThenGame();else{await refreshAuthUI();showOnly(els.profileScreen)}};
+    screen=document.createElement("section");
+    screen.id="amsFlyEventScreen";screen.className="screen app-screen";screen.hidden=true;
+    screen.innerHTML='<div class="section-heading"><span class="eyebrow">AMS FLY · EVENTO</span><h2 id="eventTitle"></h2><p id="eventDesc"></p></div><div class="event-details-card"><div class="event-detail-block"><span class="event-badge">🏆 PREMIO</span><h3 id="eventPrizeTitle"></h3><div id="eventPrizeDesc" class="event-rich-content"></div></div><div class="event-detail-block"><span class="event-badge">📋 CONDICIONES</span><h3 id="eventConditionTitle"></h3><div id="eventConditionDesc" class="event-rich-content"></div></div><label id="eventTermsRow" class="consent-row"><input id="eventTermsConsent" type="checkbox"><span>Acepto los <a href="terminos.html" target="_blank" rel="noopener noreferrer">Términos y Condiciones</a> y la <a href="privacidad.html" target="_blank" rel="noopener noreferrer">Política de Privacidad</a>.</span></label><p id="eventAuthHint" class="field-hint"></p><button id="eventJoinButton" class="primary-button" type="button">INICIAR SESIÓN PARA PARTICIPAR <span>→</span></button><button id="eventBackButton" class="secondary-button" type="button">VOLVER <span>←</span></button></div>';
+    document.querySelector(".app-shell").insertBefore(screen,document.getElementById("profileScreen"));
+    screen.querySelector("#eventBackButton").onclick=()=>navigateTo("play");
+    screen.querySelector("#eventJoinButton").onclick=async()=>{
+      const user=await getCurrentAuthUser().catch(()=>null);
+      if(!user){navigateTo("account");return}
+      const accepted=termsAcceptedFor(user);
+      const check=document.getElementById("eventTermsConsent");
+      if(!accepted && !check.checked){
+        document.getElementById("eventAuthHint").textContent="Marca la casilla para aceptar los términos y participar.";
+        return;
+      }
+      if(check.checked&&!accepted) await persistTermsAccepted(user);
+      await loadAccountProfile(user);
+      navigateTo("play");
+    };
+    screen.querySelector("#eventTermsConsent").addEventListener("change",async()=>{
+      const user=await getCurrentAuthUser().catch(()=>null);
+      if(!user){
+        document.getElementById("eventTermsConsent").checked=false;
+        document.getElementById("eventAuthHint").textContent="Debes iniciar sesión o registrarte para aceptar los términos y participar.";
+        return;
+      }
+    });
   }
   const cfg=getEventConfig();
   screen.querySelector("#eventTitle").textContent=cfg.title;
@@ -278,9 +279,25 @@ function openEventScreen(){
   renderEventRichText(screen.querySelector("#eventPrizeDesc"),cfg.prizeDesc);
   screen.querySelector("#eventConditionTitle").textContent=cfg.conditionTitle;
   renderEventRichText(screen.querySelector("#eventConditionDesc"),cfg.conditionDesc);
-  showOnly(screen);
-  screen.hidden=false;
-  screen.scrollTop=0;
+  const user=await getCurrentAuthUser().catch(()=>null);
+  const accepted=!!user&&termsAcceptedFor(user);
+  const check=screen.querySelector("#eventTermsConsent");
+  const row=screen.querySelector("#eventTermsRow");
+  const hint=screen.querySelector("#eventAuthHint");
+  check.checked=accepted;check.disabled=accepted;
+  row.classList.toggle("is-accepted",accepted);
+  hint.textContent=accepted?"✓ Términos aceptados para esta cuenta.":"Para participar necesitas una cuenta y aceptar los términos.";
+  screen.querySelector("#eventJoinButton").textContent=accepted?"PARTICIPAR Y VOLAR ✦":(user?"ACEPTAR Y PARTICIPAR ✦":"INICIAR SESIÓN PARA PARTICIPAR →");
+  showOnly(screen);screen.hidden=false;screen.scrollTop=0;
+}
+async function persistTermsAccepted(user){
+  if(!user?.email)return;
+  saveTermsAcceptedFor(user);
+  try{
+    const client=await getPublicNeonClient();
+    const id=user.id||user.user?.id;
+    if(id) await client.from("ams_fly_participants").update({terms_accepted_at:new Date().toISOString()}).eq("user_id",id);
+  }catch(_){}
 }
 async function loadRemoteEventConfig(){
   if(!NEON_DATA_READY())return;
@@ -302,12 +319,6 @@ async function loadRemoteEventConfig(){
     applyEventConfig();
   }catch(_){}
 }
-function exportLocalLeads(){
-  const rows=getLocalLeads();if(!rows.length)return;
-  const header="Nombre,País,Ave,Puntaje,WhatsApp,Mensaje,Fecha\n";
-  const csv=header+rows.map(x=>[x.name,x.country,x.birdId,x.score,x.phone||"",x.message||"",x.updatedAt||x.createdAt||""].map(v=>'"'+String(v).replaceAll('"','""')+'"').join(",")).join("\n");
-  const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([csv],{type:"text/csv;charset=utf-8"}));a.download="ams-fly-participantes.csv";a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000);
-}
 function safeParse(key, fallback){
   try{return JSON.parse(localStorage.getItem(key) || "") || fallback}catch(_){return fallback}
 }
@@ -324,9 +335,9 @@ function renderHomeBird(){
   els.homeBirdArt.innerHTML=birdMarkup(bird,"1.25");
 }
 function showOnly(target){
-  [els.homeScreen,els.profileScreen,els.factScreen,els.gameScreen,els.pauseScreen,els.gameOverScreen,els.rankingScreen].forEach(x=>x.hidden=true);
-  ["amsFlyEventScreen","amsFlyAdminPanel"].forEach(id=>{const x=document.getElementById(id);if(x)x.hidden=true;});
-  target.hidden=false;
+  [els.homeScreen,els.profileScreen,els.factScreen,els.gameScreen,els.pauseScreen,els.gameOverScreen,els.rankingScreen].forEach(x=>{if(x)x.hidden=true});
+  ["amsFlyEventScreen","amsFlyAdminPanel"].forEach(id=>{const x=document.getElementById(id);if(x)x.hidden=true});
+  if(target)target.hidden=false;
 }
 function hydrateStats(){
   stats=safeParse(STATS_KEY,{games:0,best:0});
@@ -353,10 +364,10 @@ function updateBirdInfo(){
 }
 function loadProfile(){
   profile=safeParse(STORAGE_KEY,null);
-  if(profile?.name && getBird(profile.birdId)){
+  if(profile?.email&&profile?.name&&getBird(profile.birdId||"condor-co")){
     if(profile.birdId==="condor-ec")profile.birdId="tucan-ec";
     if(profile.birdId==="condor-cl")profile.birdId="chucao-cl";
-    selectedBirdId=profile.birdId;
+    selectedBirdId=profile.birdId||"condor-co";
   }else profile=null;
 }
 function playTone(freq=440,duration=.08,type="sine"){
@@ -955,190 +966,175 @@ function prepareFactThenGame(){
   els.factText.textContent=fact;els.factSourceHint.textContent="Una curiosidad sobre Colombia antes de volver a volar.";
   showOnly(els.factScreen);
 }
+function setAuthStatus(target,message,error=false){
+  if(!target)return;target.textContent=message;target.classList.toggle("is-error",error);
+}
+function fillDialSelect(selectId,value="57"){
+  const select=els[selectId];if(!select)return;
+  select.innerHTML=countries.map(c=>'<option value="'+c.dial+'">'+c.flag+" +"+c.dial+" · "+c.name+'</option>').join("");
+  select.value=String(value||"57");
+}
+function fullPhone(dial,phone){
+  const digits=String(phone||"").replace(/\D/g,"");
+  const code=String(dial||"57").replace(/\D/g,"");
+  if(!digits)return "";
+  return "+"+code+digits.replace(new RegExp("^"+code),"");
+}
+function splitStoredName(name){
+  const parts=String(name||"").trim().split(/\s+/).filter(Boolean);
+  return {first:parts.shift()||"",last:parts.join(" ")};
+}
+async function loadAccountProfile(user){
+  if(!user)return null;
+  const local=safeParse(STORAGE_KEY,null);
+  let candidate=local&&local.email===String(user.email||"").toLowerCase()?local:null;
+  if(!candidate){
+    candidate={name:splitStoredName(user.name||"").first,lastName:splitStoredName(user.name||"").last,country:"CO",birdId:selectedBirdId,phone:"",dial:"57",participantId:null};
+  }
+  profile={...candidate,email:String(user.email||"").toLowerCase()};
+  selectedBirdId=profile.birdId||selectedBirdId;
+  return profile;
+}
+function populateAccountFields(){
+  const p=profile||{};
+  const parts=splitStoredName(p.name||"");
+  els.accountName.value=p.firstName||parts.first||"";
+  els.accountLastName.value=p.lastName||parts.last||"";
+  els.accountPhone.value=String(p.phone||"").replace(/^\+\d+/,"");
+  els.accountCountry.value=p.country||"CO";
+  els.accountEmail.textContent=p.email||"";
+  fillDialSelect("accountDialCode",p.dial||"57");
+}
 async function refreshAuthUI(){
-  if(!els.authBox)return;
   try{
     const user=await getCurrentAuthUser();
     const signedIn=!!user;
-    els.authEmail.value=signedIn?(user.email||""):"";
-    els.authPassword.value="";
-    if(els.authEmail.parentElement)els.authEmail.parentElement.hidden=signedIn;
-    if(els.authPassword.parentElement)els.authPassword.parentElement.hidden=signedIn;
-    els.authIdentity.textContent=signedIn?"Sesión activa · "+(user.email||"Cuenta Neon"):"";
-    els.authIdentity.hidden=!signedIn;
-    els.authSignInBtn.hidden=signedIn;
-    els.authSignUpBtn.hidden=signedIn;
-    els.authSignOutBtn.hidden=!signedIn;
-    if(els.accountBtn)els.accountBtn.textContent=signedIn?"CUENTA":"INICIAR SESIÓN";
-    els.authPassword.disabled=signedIn;
-    els.authStatus.classList.remove("is-error");
-    els.authStatus.textContent=signedIn
-      ?"✓ Cuenta identificada. Esta cuenta solo puede tener un piloto en el ranking."
-      :"Inicia sesión o crea una cuenta. Tu cuenta quedará vinculada de forma única a tu piloto.";
-    els.authBox.classList.toggle("is-authenticated",signedIn);
-    if(els.termsConsentRow){
-      const alreadyAccepted=signedIn && termsAcceptedFor(user);
-      els.termsConsentRow.hidden=alreadyAccepted;
-      if(alreadyAccepted && els.termsConsent)els.termsConsent.checked=true;
+    els.loginFields.hidden=signedIn;
+    els.registerFields.hidden=true;
+    els.accountDetails.hidden=!signedIn;
+    if(signedIn){
+      await loadAccountProfile(user);populateAccountFields();
+      els.accountTitle.textContent="Tu cuenta";
+      els.accountSubtitle.textContent="Tu identidad queda vinculada a tu participación. El correo es permanente.";
+      setAuthStatus(els.authStatus,"");
+    }else{
+      els.accountTitle.textContent="Inicia sesión";
+      els.accountSubtitle.textContent="Usa tu correo y contraseña para participar en el evento y guardar tu piloto.";
+      els.authEmail.value="";els.authPassword.value="";
     }
+    fillDialSelect("playerDialCode","57");
     return user;
   }catch(_){
-    els.authStatus.classList.add("is-error");els.authStatus.textContent="No se pudo consultar la sesión de Neon.";
-    return null;
+    setAuthStatus(els.authStatus,"No se pudo consultar la sesión de Neon.",true);return null;
   }
+}
+function showRegistrationMode(){
+  els.loginFields.hidden=true;els.registerFields.hidden=false;els.accountDetails.hidden=true;
+  els.playerName.focus();
 }
 async function signInPlayer(){
   const email=(els.authEmail.value||"").trim().toLowerCase(),password=els.authPassword.value||"";
-  if(!email||!password){els.authStatus.textContent="Escribe tu correo y contraseña.";els.authStatus.classList.add("is-error");return}
-  if(!VALID_EMAIL.test(email)){els.authStatus.textContent="Escribe un correo electrónico válido, por ejemplo: nombre@dominio.com";els.authStatus.classList.add("is-error");els.authEmail.focus();return}
-  els.authStatus.classList.remove("is-error");els.authSignInBtn.disabled=true;els.authSignUpBtn.disabled=true;els.authStatus.textContent="Iniciando sesión…";
+  if(!VALID_EMAIL.test(email)){setAuthStatus(els.authStatus,"Escribe un correo electrónico válido.",true);return}
+  if(password.length<8){setAuthStatus(els.authStatus,"La contraseña debe tener al menos 8 caracteres.",true);return}
+  els.authSignInBtn.disabled=true;setAuthStatus(els.authStatus,"Comprobando cuenta…");
   try{
     const client=await getNeonClient();
     const result=await client.auth.signIn.email({email,password,rememberMe:true});
     if(result?.error)throw new Error(result.error.message||"No se pudo iniciar sesión.");
-    if(!await getCurrentAuthUser())throw new Error("Neon no devolvió una sesión válida.");
-    await refreshAuthUI();
-  }catch(error){els.authStatus.classList.add("is-error");els.authStatus.textContent=friendlyAuthError(error,"No se pudo iniciar sesión. Revisa el correo y la contraseña.")}
-  finally{els.authSignInBtn.disabled=false;els.authSignUpBtn.disabled=false}
+    const user=await getCurrentAuthUser();if(!user)throw new Error("No se pudo crear la sesión.");
+    await loadAccountProfile(user);populateAccountFields();await refreshAuthUI();
+  }catch(error){
+    // Si el correo no existe, Better Auth devolverá un error al intentar entrar.
+    // Mostramos el registro con el correo ya escrito; si la cuenta sí existe,
+    // el intento de registro posterior devolverá "ya existe" y no crea duplicados.
+    const raw=String(error?.message||"").toLowerCase();
+    if(raw.includes("not found")||raw.includes("user")||raw.includes("credential")||raw.includes("invalid")){
+      els.authStatus.textContent="No pudimos iniciar sesión con esos datos. Si este correo aún no tiene cuenta, completa tus datos para registrarlo.";
+      els.authStatus.classList.add("is-error");
+      showRegistrationMode();
+      els.authEmail.dataset.registrationEmail=email;
+    }else setAuthStatus(els.authStatus,friendlyAuthError(error,"No se pudo iniciar sesión."),true);
+  }finally{els.authSignInBtn.disabled=false}
 }
 async function signUpPlayer(){
-  const email=(els.authEmail.value||"").trim().toLowerCase(),password=els.authPassword.value||"";
-  if(!VALID_EMAIL.test(email)){els.authStatus.textContent="Escribe un correo electrónico válido, por ejemplo: nombre@dominio.com";els.authStatus.classList.add("is-error");els.authEmail.focus();return}
-  els.authStatus.classList.remove("is-error");
-  if(password.length<8){els.authStatus.textContent="La contraseña debe tener al menos 8 caracteres.";return}
-  els.authSignInBtn.disabled=true;els.authSignUpBtn.disabled=true;els.authStatus.textContent="Creando tu cuenta…";
+  const email=(els.authEmail.dataset.registrationEmail||els.authEmail.value||"").trim().toLowerCase();
+  const first=(els.playerName.value||"").trim().replace(/\s+/g," ");
+  const last=(els.playerLastName.value||"").trim().replace(/\s+/g," ");
+  const dial=els.playerDialCode.value||"57",phone=els.playerPhone.value||"";
+  const country=els.playerCountry.value||"CO";
+  const password=els.registerPassword.value||"",repeat=els.registerPasswordRepeat.value||"";
+  if(!VALID_EMAIL.test(email)){setAuthStatus(els.registerStatus,"Correo inválido.",true);return}
+  if(first.length<2||last.length<2){setAuthStatus(els.registerStatus,"Escribe nombre y apellido.",true);return}
+  if(password.length<8){setAuthStatus(els.registerStatus,"La contraseña debe tener al menos 8 caracteres.",true);return}
+  if(password!==repeat){setAuthStatus(els.registerStatus,"Las contraseñas no coinciden.",true);return}
+  const full=fullPhone(dial,phone);
+  if(phone.replace(/\D/g,"").length<7){setAuthStatus(els.registerStatus,"Escribe un celular válido.",true);return}
+  els.authSignUpBtn.disabled=true;setAuthStatus(els.registerStatus,"Creando tu cuenta…");
   try{
     const client=await getNeonClient();
-    const result=await client.auth.signUp.email({email,password,name:(els.playerName.value||"").trim()||"Piloto AMS Fly"});
+    const result=await client.auth.signUp.email({email,password,name:first+" "+last});
     if(result?.error)throw new Error(result.error.message||"No se pudo crear la cuenta.");
     const user=await getCurrentAuthUser();
-    if(user)await refreshAuthUI();
-    else els.authStatus.textContent="✓ Cuenta creada. Si Neon solicita verificar el correo, completa ese paso y luego inicia sesión.";
-  }catch(error){els.authStatus.classList.add("is-error");els.authStatus.textContent=friendlyAuthError(error,"No se pudo crear la cuenta. Intenta de nuevo.")}
-  finally{els.authSignInBtn.disabled=false;els.authSignUpBtn.disabled=false}
+    if(!user){setAuthStatus(els.registerStatus,"Cuenta creada. Si Neon solicita verificar el correo, verifica y vuelve a iniciar sesión.",false);return}
+    profile={email,country,birdId:selectedBirdId,name:first+" "+last,firstName:first,lastName:last,phone:full,dial,participantId:null};
+    await syncParticipantProfile(user);
+    saveProfile();await refreshAuthUI();
+    navigateTo("play");
+  }catch(error){setAuthStatus(els.registerStatus,friendlyAuthError(error,"No se pudo crear la cuenta. Si el correo ya existe, vuelve al inicio de sesión."),true)}
+  finally{els.authSignUpBtn.disabled=false}
+}
+async function syncParticipantProfile(user){
+  if(!user||!NEON_DATA_READY()||!profile)return;
+  const client=await getPublicNeonClient();
+  const result=await client.rpc("ams_fly_register_participant",{
+    p_name:String(profile.name||"").slice(0,70),p_country:profile.country,p_bird_id:profile.birdId,p_phone:profile.phone||null,p_score:0
+  });
+  if(result.error)throw result.error;
+  const remote=result.data||{};
+  profile.participantId=remote.participant_id||profile.participantId||null;
+  profile.prizeEligible=remote.prize_eligible!==false;
+}
+async function saveAccount(){
+  const user=await getCurrentAuthUser().catch(()=>null);
+  if(!user){await refreshAuthUI();return}
+  const first=(els.accountName.value||"").trim().replace(/\s+/g," ");
+  const last=(els.accountLastName.value||"").trim().replace(/\s+/g," ");
+  const dial=els.accountDialCode.value||"57",phone=els.accountPhone.value||"";
+  if(first.length<2||last.length<2){setAuthStatus(els.accountStatus,"Escribe nombre y apellido.",true);return}
+  if(phone.replace(/\D/g,"").length<7){setAuthStatus(els.accountStatus,"Escribe un celular válido.",true);return}
+  profile={...profile,email:String(user.email||"").toLowerCase(),name:first+" "+last,firstName:first,lastName:last,dial,phone:fullPhone(dial,phone),country:els.accountCountry.value||"CO",birdId:profile?.birdId||selectedBirdId};
+  try{
+    await syncParticipantProfile(user);saveProfile();renderBirds();renderHomeBird();setAuthStatus(els.accountStatus,"✓ Datos actualizados.",false);
+  }catch(error){setAuthStatus(els.accountStatus,friendlyAuthError(error,"No se pudieron guardar los cambios."),true)}
 }
 async function signOutPlayer(){
-  try{
-    const client=await getNeonClient();await client.auth.signOut();
-    profile=null;localStorage.removeItem(STORAGE_KEY);renderHomeBird();await refreshAuthUI();
-  }catch(error){els.authStatus.classList.add("is-error");els.authStatus.textContent=error?.message||"No se pudo cerrar la sesión."}
-}
-async function submitProfile(e){
-  e.preventDefault();
-  const authUser=await refreshAuthUI();
-  if(!authUser){els.profileError.textContent="Primero inicia sesión o crea una cuenta. Una cuenta = un piloto en el ranking.";els.profileError.hidden=false;els.authEmail.focus();return}
-  const name=els.playerName.value.trim().replace(/\s+/g," ");
-  if(name.length<2){els.profileError.textContent="Escribe al menos 2 caracteres para tu nombre.";els.profileError.hidden=false;els.playerName.focus();return}
-  const termsAlreadyAccepted=termsAcceptedFor(authUser);
-  if(els.termsConsent && !termsAlreadyAccepted && !els.termsConsent.checked){els.profileError.textContent="Debes aceptar los Términos y Condiciones y la Política de Privacidad para participar.";els.profileError.hidden=false;els.termsConsent.focus();return}
-  if(!NEON_DATA_READY()){els.profileError.textContent="No podemos registrar el piloto todavía porque Neon no está conectado.";els.profileError.hidden=false;return}
-  const candidate={name:name.slice(0,18),country:els.playerCountry.value,birdId:selectedBirdId};
-  try{
-    const client=await getPublicNeonClient();
-    let result=await client.rpc("ams_fly_register_participant",{p_name:candidate.name,p_country:candidate.country,p_bird_id:candidate.birdId,p_phone:null,p_score:0});
-    if(result.error && String(result.error.message||"").includes("auth_required")){
-      await new Promise(resolve=>setTimeout(resolve,350));
-      await getCurrentAuthUser();
-      result=await client.rpc("ams_fly_register_participant",{p_name:candidate.name,p_country:candidate.country,p_bird_id:candidate.birdId,p_phone:null,p_score:0});
-    }
-    if(result.error)throw result.error;
-    const remote=result.data||{};
-    candidate.participantId=remote.participant_id||null;
-    candidate.prizeEligible=remote.prize_eligible!==false;
-    if(remote.name)candidate.name=remote.name;
-    if(remote.country)candidate.country=remote.country;
-    if(remote.bird_id)candidate.birdId=remote.bird_id;
-    if(els.termsConsent?.checked)saveTermsAcceptedFor(authUser);
-    finishProfile(candidate);
-  }catch(error){
-    console.error("AMS Fly: no se pudo registrar el piloto",error);
-    const detail=String(error?.message||"No pudimos registrar este piloto.");
-    els.profileError.textContent=detail.includes("auth_required")?"La sesión no quedó lista. Intenta de nuevo.":detail;
-    els.profileError.hidden=false;
-  }
+  try{const client=await getNeonClient();await client.auth.signOut();profile=null;localStorage.removeItem(STORAGE_KEY);renderHomeBird();await refreshAuthUI();navigateTo("play")}
+  catch(error){setAuthStatus(els.accountStatus,error?.message||"No se pudo cerrar sesión.",true)}
 }
 function finishProfile(candidate){
   profile=candidate;selectedBirdId=profile.birdId;saveProfile();renderBirds();els.profileError.hidden=true;prepareFactThenGame();
 }
 function bootHome(){
   loadProfile();hydrateStats();initCountries();renderBirds();renderHomeBird();applyEventConfig();
+  fillDialSelect("playerDialCode","57");fillDialSelect("accountDialCode","57");
   if(NEON_DATA_READY()) loadRemoteEventConfig();
-  if(profile){els.playerName.value=profile.name;els.playerCountry.value=profile.country;selectedBirdId=profile.birdId;renderBirds()}
-  refreshAuthUI();els.homeBirdArt.innerHTML=birdMarkup(getBird(selectedBirdId),".95");
-  updateLargeScreenRecommendation();
+  refreshAuthUI();updateLargeScreenRecommendation();
   setTimeout(()=>els.loadingScreen.classList.add("is-gone"),500);
-  if(restorePendingResult()){
-    scheduleAutoPublishPendingScore(1800);
-    return;
-  }
+  if(restorePendingResult()){scheduleAutoPublishPendingScore(1800);return}
   if(soundOn){startMusic();window.addEventListener("pointerdown",unlockMenuMusic,{once:true,passive:true});window.addEventListener("keydown",unlockMenuMusic,{once:true})}
 }
-els.rankingHeaderBtn?.addEventListener("click",async()=>{
-  const published=await ensureResultPublishedBeforeLeaving();
-  if(published)await loadRanking();
-});
-els.rankingBtn?.addEventListener("click",loadRanking);
-els.rankingFromResultBtn?.addEventListener("click",async()=>{
-  const published=await ensureResultPublishedBeforeLeaving();
-  if(published)await loadRanking();
-});
-els.rankingBackBtn.addEventListener("click",()=>{ if(readPendingScore() || lastResult){ showOnly(els.gameOverScreen); els.gameOverScreen.hidden=false; } else showOnly(els.homeScreen); });
-els.backBtn?.addEventListener("click",async()=>{
-  if(game?.running && !game?.paused){
-    game.paused=true;stopMusic();cancelAnimationFrame(raf);els.pauseScore.textContent=game.score+" puntos";showOnly(els.pauseScreen);return;
-  }
-  if(!els.gameOverScreen.hidden){
-    const published=await ensureResultPublishedBeforeLeaving();
-    if(published)showOnly(els.homeScreen);
-    return;
-  }
-  if(!els.profileScreen.hidden){showOnly(els.homeScreen);return}
-  if(!els.factScreen.hidden){showOnly(els.profileScreen);return}
-  if(!els.rankingScreen.hidden){showOnly(els.homeScreen);return}
-  showOnly(els.homeScreen);
-});
-els.rankingRefreshBtn.addEventListener("click",loadRanking);
-els.submitScoreBtn.addEventListener("click",()=>{publishScore();});
-els.scoreMessage?.addEventListener("input",()=>{
-  cancelAutoPublishPendingScore();
-  scheduleAutoPublishPendingScore(2500);
-  const pending=readPendingScore();
-  if(!pending)return;
-  // Guardamos lo que el usuario escribe tal cual, incluidos los espacios.
-  // La publicación manual ocurre al pulsar "PUBLICAR PUNTUACIÓN"; además,
-  // existe un reintento automático para proteger el resultado si el usuario
-  // abandona la pantalla sin pulsar el botón.
-  pending.message=(els.scoreMessage.value||"").slice(0,90);
-  savePendingScore(pending);
-  if(lastResult)lastResult={...lastResult,message:pending.message};
-});
-els.shareResultBtn?.addEventListener("click",shareResult);
-els.birdGrid.addEventListener("click",e=>{const btn=e.target.closest("[data-bird]");if(!btn)return;selectedBirdId=btn.dataset.bird;renderBirds();playTone(350,.04)});
-els.accountBtn?.addEventListener("click",async()=>{
-  await refreshAuthUI();
-  showOnly(els.profileScreen);
-  requestAnimationFrame(()=>els.authBox?.scrollIntoView({behavior:"smooth",block:"start"}));
-});
-els.startBtn.addEventListener("click",()=>{playTone(440,.07);startMusic();if(profile){els.playerName.value=profile.name;els.playerCountry.value=profile.country;selectedBirdId=profile.birdId;renderBirds()}refreshAuthUI();showOnly(els.profileScreen)});
-els.profileForm.addEventListener("submit",submitProfile);
-els.authSignInBtn?.addEventListener("click",signInPlayer);
-els.authSignUpBtn?.addEventListener("click",signUpPlayer);
-els.authSignOutBtn?.addEventListener("click",signOutPlayer);
-els.authPassword?.addEventListener("keydown",e=>{if(e.key==="Enter"){e.preventDefault();if(!els.authSignInBtn.hidden)signInPlayer()}});
-els.factContinueBtn.addEventListener("click",()=>{playTone(560,.05);startMusic();startWithProfile()});
-els.pauseBtn.addEventListener("click",()=>{if(!game?.running)return;game.paused=true;stopMusic();cancelAnimationFrame(raf);els.pauseScore.textContent=game.score+" puntos";showOnly(els.pauseScreen);playTone(300,.05)});
-els.resumeBtn.addEventListener("click",()=>{if(!game?.running)return;game.paused=false;startMusic();game.last=performance.now();showOnly(els.gameScreen);playTone(420,.05);raf=requestAnimationFrame(loop)});
-els.quitBtn.addEventListener("click",()=>{if(game)game.running=false;setHeaderGameActionsHidden(false);stopMusic();cancelAnimationFrame(raf);showOnly(els.homeScreen);hydrateStats();startMusic()});
-els.againBtn.addEventListener("click",async()=>{
-  const published=await ensureResultPublishedBeforeLeaving();
-  if(published)prepareFactThenGame();
-});
-els.changePilotBtn.addEventListener("click",async()=>{
-  const published=await ensureResultPublishedBeforeLeaving();
-  if(!published)return;
-  showOnly(els.profileScreen);if(profile){els.playerName.value=profile.name;els.playerCountry.value=profile.country;selectedBirdId=profile.birdId}refreshAuthUI();renderBirds()});
-els.changePilotHomeBtn.addEventListener("click",()=>{playTone(440,.05);if(profile){els.playerName.value=profile.name;els.playerCountry.value=profile.country;selectedBirdId=profile.birdId}refreshAuthUI();renderBirds();showOnly(els.profileScreen)});
-els.adminNavBtn?.addEventListener("click",()=>window.dispatchEvent(new Event("ams-fly-admin-open")));
+function navigateTo(target){
+  const eventScreen=document.getElementById("amsFlyEventScreen");
+  const map={play:els.homeScreen,event:eventScreen,account:els.profileScreen};
+  const screen=map[target]||els.homeScreen;
+  if(target==="event"){openEventScreen();return}
+  if(target==="account"){refreshAuthUI();showOnly(els.profileScreen)}
+  else {showOnly(screen);if(target==="play"){renderBirds();renderHomeBird();}}
+  document.querySelectorAll(".bottom-nav-item").forEach(btn=>btn.classList.toggle("is-active",btn.dataset.nav===target));
+}
+document.querySelectorAll(".bottom-nav-item").forEach(btn=>btn.addEventListener("click",()=>navigateTo(btn.dataset.nav)));
+els.rankingBackBtn?.addEventListener("click",()=>navigateTo("play"));
+els.rankingRefreshBtn?.addEventListener("click",loadRanking);
 window.addEventListener("ams-fly-event-updated",event=>{if(!event.detail)return;saveEventConfig({...DEFAULT_EVENT,...event.detail});applyEventConfig()});
 els.soundBtn.addEventListener("click",()=>{soundOn=!soundOn;localStorage.setItem("amsFlySound",soundOn?"1":"0");els.soundBtn.textContent=soundOn?"♪":"×";if(soundOn){playTone(600,.05);startMusic()}else stopMusic()});
 function action(e){if(["BUTTON","INPUT","SELECT"].includes(e.target?.tagName))return;e.preventDefault();if(els.gameScreen.hidden)return;flap()}
