@@ -329,8 +329,8 @@ const ImpostorGame = (() => {
     "Bolígrafo":"Instrumento de escritura de tinta con una punta metálica.",
     "Pincel":"Herramienta con cerdas que sirve para aplicar pintura.",
     "Calendario":"Objeto que muestra los días, semanas y meses del año.",
-    "Tijeras":"Herramienta de dos hojas afiladas que sirve para cortar."
-        "Cereza":"Fruta pequeña y redonda, normalmente roja, con una sola semilla grande en el centro.",
+    "Tijeras":"Herramienta de dos hojas afiladas que sirve para cortar.",
+    "Cereza":"Fruta pequeña y redonda, normalmente roja, con una sola semilla grande en el centro.",
     "Durazno":"Fruta de piel aterciopelada, pulpa jugosa y una pepa grande en el centro.",
     "Kiwi":"Fruta pequeña de piel marrón y pulpa verde con muchas semillas negras.",
     "Zanahoria":"Hortaliza alargada y generalmente naranja que crece bajo tierra.",
