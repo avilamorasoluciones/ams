@@ -3,6 +3,7 @@ const TabuGame = (() => {
   let players = [];
   let teams = [];
   let pool = [];
+  let usedWords = [];
   
   let currentRound = 1;
   let maxRounds = 3;
@@ -28,8 +29,12 @@ const TabuGame = (() => {
     try { localStorage.setItem(STORAGE_KEY, JSON.stringify(players)); } catch(e) {}
   }
 
+  function normalizeWord(word) {
+    return String(word || "").trim().toLocaleLowerCase("es");
+  }
+
   function saveSession(screen = document.querySelector(".im-screen.active")?.id || "t-scr-lobby") {
-    window.GameSession?.save("tabu", { players, teams, pool, currentRound, maxRounds, activeTeamIndex, timePerTurn, secondsLeft, timerEndsAt, currentWord, turnStats, screen, savedAt: Date.now() });
+    window.GameSession?.save("tabu", { players, teams, pool, usedWords, currentRound, maxRounds, activeTeamIndex, timePerTurn, secondsLeft, timerEndsAt, currentWord, turnStats, screen, savedAt: Date.now() });
   }
 
   function changeScreen(id) {
@@ -78,9 +83,20 @@ const TabuGame = (() => {
     timePerTurn = parseInt($("t-selTime").value);
     
     const limit = $("t-selLimit").value;
-    const shuffledPool = window.Utils.shuffleArray([...DB_TABU]);
+
+    // El mazo es único para toda la partida: ningún equipo puede volver
+    // a recibir una palabra que ya haya salido en una ronda anterior.
+    const seenWords = new Set();
+    const uniqueCards = DB_TABU.filter(card => {
+      const key = normalizeWord(card?.word);
+      if (!key || seenWords.has(key)) return false;
+      seenWords.add(key);
+      return true;
+    });
+    const shuffledPool = window.Utils.shuffleArray(uniqueCards);
     pool = limit === "all" ? shuffledPool : shuffledPool.slice(0, parseInt(limit));
-    
+    usedWords = [];
+
     if (pool.length === 0) return alert("Error cargando palabras.");
 
     const shuffledPlayers = window.Utils.shuffleArray([...players]);
@@ -180,14 +196,25 @@ const TabuGame = (() => {
   }
 
   function loadWord() {
-    if (pool.length === 0) {
+    let nextWord = null;
+
+    // Buscar explícitamente una palabra que jamás haya salido en esta partida.
+    while (pool.length > 0 && !nextWord) {
+      const candidate = pool.pop();
+      const key = normalizeWord(candidate?.word);
+      if (!key || usedWords.includes(key)) continue;
+      nextWord = candidate;
+      usedWords.push(key);
+    }
+
+    if (!nextWord) {
       clearInterval(timerId);
-      alert("¡Se acabaron las palabras del mazo!");
+      alert("¡Se acabaron las palabras nuevas del mazo!");
       finishTurn();
       return;
     }
-    
-    currentWord = pool.pop();
+
+    currentWord = nextWord;
     $("t-catBadge").textContent = currentWord.cat.toUpperCase();
     $("t-txtMainWord").textContent = currentWord.word;
     $("t-uiForbiddenList").innerHTML = currentWord.forbidden.map(w => `<li>${w}</li>`).join("");
@@ -206,6 +233,7 @@ const TabuGame = (() => {
     }
     updateLiveStats();
     loadWord();
+    saveSession("t-scr-game");
   }
 
   function finishTurn() {
@@ -299,6 +327,7 @@ const TabuGame = (() => {
       players = Array.isArray(saved.players) ? saved.players : players;
       teams = saved.teams;
       pool = Array.isArray(saved.pool) ? saved.pool : [];
+      usedWords = Array.isArray(saved.usedWords) ? saved.usedWords.map(normalizeWord).filter(Boolean) : [];
       currentRound = Number(saved.currentRound || 1);
       maxRounds = Number(saved.maxRounds || 3);
       activeTeamIndex = Number(saved.activeTeamIndex || 0);
@@ -306,6 +335,12 @@ const TabuGame = (() => {
       secondsLeft = Number(saved.secondsLeft || 0);
       timerEndsAt = Number(saved.timerEndsAt || 0);
       currentWord = saved.currentWord || null;
+      // Compatibilidad con partidas guardadas antes de añadir usedWords:
+      // la carta actualmente visible queda marcada como utilizada.
+      if (currentWord?.word) {
+        const currentKey = normalizeWord(currentWord.word);
+        if (currentKey && !usedWords.includes(currentKey)) usedWords.push(currentKey);
+      }
       turnStats = saved.turnStats || { correct: 0, taboo: 0, skip: 0 };
       renderPlayers();
       $("t-uiTeamsList").innerHTML = teams.map(t => `
