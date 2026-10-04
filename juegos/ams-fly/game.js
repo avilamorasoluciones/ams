@@ -163,19 +163,9 @@ function eventIsOpen(){
 function applyEventConfig(){
   const cfg=getEventConfig();
   let banner=document.getElementById("amsFlyEventBanner");
-  if(!banner){
-    banner=document.createElement("section");banner.id="amsFlyEventBanner";banner.className="event-banner-card";
-    const home=els.homeScreen;const statsEl=home.querySelector(".home-stats");
-    home.insertBefore(banner,statsEl||home.querySelector("#startBtn"));
-  }
-  banner.hidden=!cfg.active;
-  banner.replaceChildren();
-  const badge=document.createElement("span");badge.className="event-badge";badge.textContent=cfg.badge;
-  const title=document.createElement("h3");title.textContent=cfg.title;
-  const desc=document.createElement("p");desc.textContent=cfg.desc;
-  const button=document.createElement("button");button.id="amsFlyEventOpen";button.className="event-cta-button";button.type="button";button.textContent=cfg.cta+" →";
-  button.onclick=openEventScreen;
-  banner.append(badge,title,desc,button);
+  if(banner)banner.hidden=!cfg.active;
+  const navEvent=document.querySelector('.bottom-nav-item[data-nav="event"]');
+  if(navEvent){navEvent.disabled=!cfg.active;navEvent.setAttribute("aria-disabled",String(!cfg.active));navEvent.title=cfg.active?"Evento":"Evento no disponible";}
 }
 function renderEventRichText(target,text){
   target.replaceChildren();
@@ -263,6 +253,7 @@ async function openEventScreen(){
       await loadAccountProfile(user);
       navigateTo("play");
     };
+    document.querySelectorAll(".bottom-nav-item").forEach(btn=>btn.classList.toggle("is-active",btn.dataset.nav==="event"));
     screen.querySelector("#eventTermsConsent").addEventListener("change",async()=>{
       const user=await getCurrentAuthUser().catch(()=>null);
       if(!user){
@@ -344,8 +335,11 @@ function hydrateStats(){
   els.homeBest.textContent=stats.best||0;els.homeGames.textContent=stats.games||0;
 }
 function initCountries(){
-  els.playerCountry.innerHTML=countries.map(c=>'<option value="'+c.code+'">'+c.flag+' '+c.name+'</option>').join("");
-  els.playerCountry.value=profile?.country || "CO";
+  const options=countries.map(c=>'<option value="'+c.code+'">'+c.flag+" "+c.name+'</option>').join("");
+  if(els.playerCountry)els.playerCountry.innerHTML=options;
+  if(els.accountCountry)els.accountCountry.innerHTML=options;
+  if(els.playerCountry)els.playerCountry.value=profile?.country||"CO";
+  if(els.accountCountry)els.accountCountry.value=profile?.country||"CO";
 }
 function renderBirds(){
   els.birdGrid.innerHTML=birds.map(b=>{
@@ -1121,7 +1115,7 @@ function navigateTo(target){
   const eventScreen=document.getElementById("amsFlyEventScreen");
   const map={play:els.homeScreen,event:eventScreen,account:els.profileScreen};
   const screen=map[target]||els.homeScreen;
-  if(target==="event"){openEventScreen();return}
+  if(target==="event"){document.querySelectorAll(".bottom-nav-item").forEach(btn=>btn.classList.toggle("is-active",btn.dataset.nav==="event"));openEventScreen();return}
   if(target==="account"){refreshAuthUI();showOnly(els.profileScreen)}
   else {showOnly(screen);if(target==="play"){renderBirds();renderHomeBird();}}
   document.querySelectorAll(".bottom-nav-item").forEach(btn=>btn.classList.toggle("is-active",btn.dataset.nav===target));
