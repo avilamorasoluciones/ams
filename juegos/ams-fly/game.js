@@ -398,10 +398,10 @@ function updateBirdInfo(){
 }
 function loadProfile(){
   profile=safeParse(STORAGE_KEY,null);
-  if(profile?.email&&profile?.name&&getBird(profile.birdId||"condor-co")){
+  if(profile?.email&&profile?.name&&birds.some(b=>b.id===profile.birdId)){
     if(profile.birdId==="condor-ec")profile.birdId="tucan-ec";
     if(profile.birdId==="condor-cl")profile.birdId="chucao-cl";
-    selectedBirdId=profile.birdId||"condor-co";
+    selectedBirdId=profile.birdId;
   }else profile=null;
 }
 function playTone(freq=440,duration=.08,type="sine"){
@@ -1000,8 +1000,47 @@ async function shareResult(){
     if(error?.name!=="AbortError") els.submitScoreStatus.textContent="No pudimos abrir el menú de compartir. Copia el enlace de AMS Fly y compártelo manualmente.";
   }
 }
-function startWithProfile(){
-  resetGame();
+async function ensureParticipantReady(user){
+  if(!user)return false;
+  await loadAccountProfile(user);
+  const validName=String(profile?.name||"").trim().length>=2 && String(profile?.name||"").trim().length<=18;
+  const validPhone=/^\+[1-9]\d{7,14}$/.test(String(profile?.phone||""));
+  const validCountry=countries.some(c=>c.code===profile?.country);
+  const validBird=birds.some(b=>b.id===profile?.birdId);
+  if(!validName||!validPhone||!validCountry||!validBird)return false;
+  if(NEON_DATA_READY()){
+    await syncParticipantProfile(user);
+  }
+  saveProfile();
+  return true;
+}
+async function startWithProfile(){
+  const user=await getCurrentAuthUser().catch(()=>null);
+  if(!user){
+    navigateTo("account");
+    setAuthStatus(els.authStatus,"Inicia sesión o crea tu cuenta para participar.",true);
+    return;
+  }
+  if(eventIsOpen()){
+    const accepted=await getTermsAcceptedFor(user);
+    if(!accepted){
+      navigateTo("event");
+      return;
+    }
+  }
+  try{
+    const ready=await ensureParticipantReady(user);
+    if(!ready){
+      navigateTo("account");
+      setAuthStatus(els.accountStatus,"Completa tus datos de cuenta antes de iniciar el vuelo.",true);
+      return;
+    }
+    resetGame();
+  }catch(error){
+    console.error("AMS Fly: no se pudo preparar el piloto",error);
+    navigateTo("account");
+    setAuthStatus(els.accountStatus,"No pudimos preparar tu piloto. Revisa tus datos e inténtalo de nuevo.",true);
+  }
 }
 function prepareFactThenGame(){
   const fact=colombiaFacts[currentFactIndex%colombiaFacts.length];currentFactIndex=(currentFactIndex+1)%colombiaFacts.length;localStorage.setItem(FACT_INDEX_KEY,String(currentFactIndex));
@@ -1186,10 +1225,28 @@ async function saveAccount(){
   if((first+" "+last).length>18){setAuthStatus(els.accountStatus,"Nombre y apellido juntos deben tener máximo 18 caracteres para el piloto.",true);return}
   const full=fullPhone(dial,phone);
   if(!/^\+[1-9]\d{7,14}$/.test(full)){setAuthStatus(els.accountStatus,"Escribe un celular válido con código de país.",true);return}
-  profile={...profile,email:String(user.email||"").toLowerCase(),name:first+" "+last,firstName:first,lastName:last,dial,phone:full,country:els.accountCountry.value||"CO",birdId:profile?.birdId||selectedBirdId};
+  profile={
+    ...profile,
+    email:String(user.email||"").toLowerCase(),
+    name:first+" "+last,
+    firstName:first,
+    lastName:last,
+    dial,
+    phone:full,
+    country:els.accountCountry.value||"CO",
+    birdId:profile?.birdId||selectedBirdId
+  };
+  saveProfile();
+  renderBirds();
+  setAuthStatus(els.accountStatus,"Guardado en este dispositivo. Sincronizando con Neon…");
   try{
-    await syncParticipantProfile(user);saveProfile();renderBirds();renderHomeBird();setAuthStatus(els.accountStatus,"✓ Datos actualizados.",false);
-  }catch(error){setAuthStatus(els.accountStatus,friendlyAuthError(error,"No se pudieron guardar los cambios."),true)}
+    await syncParticipantProfile(user);
+    saveProfile();
+    setAuthStatus(els.accountStatus,"✓ Datos guardados y sincronizados.");
+  }catch(error){
+    console.error("AMS Fly: no se pudo sincronizar el perfil",error);
+    setAuthStatus(els.accountStatus,"✓ Datos guardados en este dispositivo. No pudimos sincronizarlos con Neon todavía.",true);
+  }
 }
 async function signOutPlayer(){
   try{const client=await getNeonClient();await client.auth.signOut();profile=null;localStorage.removeItem(STORAGE_KEY);renderHomeBird();await refreshAuthUI();navigateTo("play")}
@@ -1229,6 +1286,10 @@ els.birdGrid?.addEventListener("click",event=>{
 });
 
 els.startBtn?.addEventListener("click",()=>{
+  startWithProfile();
+});
+
+els.factContinueBtn?.addEventListener("click",()=>{
   startWithProfile();
 });
 
