@@ -582,3 +582,35 @@ button{cursor:pointer}
 .app-shell:has(#gameScreen:not([hidden])) .game-footer,
 .app-shell:has(#pauseScreen:not([hidden])) .game-footer,
 .app-shell:has(#gameOverScreen:not([hidden])) .game-footer{display:none}
+
+
+/* AMS Fly · gameplay fullscreen + fixed bottom dock */
+.game-screen{
+  position:fixed!important;
+  inset:0!important;
+  width:100vw;
+  height:100dvh;
+  min-height:100dvh;
+  z-index:30;
+  margin:0;
+  padding:0;
+  overflow:hidden;
+}
+#gameCanvas{
+  position:absolute;
+  inset:0;
+  width:100%!important;
+  height:100%!important;
+}
+.bottom-nav{
+  position:fixed!important;
+  left:50%!important;
+  bottom:max(10px,var(--safe-bottom))!important;
+  z-index:120!important;
+  transform:translateX(-50%)!important;
+}
+.app-shell:has(#gameScreen:not([hidden])) .bottom-nav,
+.app-shell:has(#pauseScreen:not([hidden])) .bottom-nav,
+.app-shell:has(#gameOverScreen:not([hidden])) .bottom-nav{
+  display:grid!important;
+}
