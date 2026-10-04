@@ -623,7 +623,7 @@ button{cursor:pointer}
 }
 .app-shell.game-active .game-screen,
 .app-shell.game-active .pause-screen,
-.app-shell.game-active .gameOverScreen{
+.app-shell.game-active #gameOverScreen{
   margin:0!important;
   padding:0!important;
 }
