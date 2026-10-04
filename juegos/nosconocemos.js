@@ -66,9 +66,8 @@ const NosConocemosGame = (() => {
   function startGame() {
     if (players.length < 3) return alert("Se necesitan al menos 3 jugadores.");
     
-    const limit = $("nc-selLimit").value;
     const shuffled = window.Utils.shuffleArray([...DB_NOS_CONOCEMOS]);
-    pool = limit === "all" ? shuffled : shuffled.slice(0, parseInt(limit));
+    pool = shuffled;
     
     if(pool.length === 0) return;
     currentMainIndex = 0;
