@@ -211,3 +211,38 @@ create index if not exists ams_fly_scores_participant_idx
 -- prize_eligible permite excluir al equipo organizador sin ocultarlo del ranking.
 -- best_score_at registra cuándo se alcanzó el mejor puntaje.
 -- El trigger ams_fly_score_event_guard bloquea nuevas puntuaciones fuera de la vigencia.
+
+
+-- Persist event terms acceptance against the authenticated Neon account.
+alter table public.ams_fly_participants
+  add column if not exists terms_accepted_at timestamptz;
+
+create or replace function public.ams_fly_accept_terms()
+returns json
+language plpgsql
+security definer
+set search_path=public,neon_auth
+as $$
+declare
+  v_auth_user_id text:=nullif(trim(auth.user_id()),'');
+  v_participant_id uuid;
+  v_accepted_at timestamptz:=now();
+begin
+  if v_auth_user_id is null then raise exception 'auth_required'; end if;
+
+  update public.ams_fly_participants
+  set terms_accepted_at=v_accepted_at,updated_at=v_accepted_at
+  where auth_user_id=v_auth_user_id
+  returning id into v_participant_id;
+
+  if v_participant_id is null then raise exception 'participant_not_found'; end if;
+
+  return json_build_object(
+    'ok',true,
+    'participant_id',v_participant_id,
+    'terms_accepted_at',v_accepted_at
+  );
+end; $$;
+
+revoke all on function public.ams_fly_accept_terms() from public;
+grant execute on function public.ams_fly_accept_terms() to authenticated;
