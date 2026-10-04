@@ -619,6 +619,7 @@ function restorePendingResult(){
   els.newRecord.hidden=!Boolean(pending.isRecord);
   els.submitScoreBtn.dataset.published="0";
   els.submitScoreBtn.disabled=false;
+  els.scoreMessage.disabled=false;
   els.submitScoreBtn.innerHTML='PUBLICAR PUNTUACIÓN <span>↑</span>';
   els.submitScoreStatus.textContent="Tienes una puntuación pendiente de publicación. Tu resultado se conserva localmente.";
   els.scoreMessage.value=String(pending.message||"").slice(0,90);
@@ -811,6 +812,7 @@ async function publishScore(options={}){
 
     els.submitScoreBtn.dataset.published="1";
     els.submitScoreBtn.disabled=true;
+    els.scoreMessage.disabled=true;
     els.submitScoreBtn.innerHTML="✓ PUNTUACIÓN PUBLICADA";
     els.submitScoreStatus.hidden=true;
     clearPendingScore();
