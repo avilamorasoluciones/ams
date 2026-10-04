@@ -128,6 +128,23 @@ const TabuGame = (() => {
     $("t-liveSkip").textContent = turnStats.skip;
   }
 
+  function setActionFeedback(button) {
+    if (!button) return;
+    button.classList.remove("tabu-action-feedback");
+    void button.offsetWidth;
+    button.classList.add("tabu-action-feedback");
+    setTimeout(() => button.classList.remove("tabu-action-feedback"), 140);
+  }
+
+  function getNextTurnLabel() {
+    const nextTeamIndex = (activeTeamIndex + 1) % teams.length;
+    const nextRound = activeTeamIndex === teams.length - 1 ? currentRound + 1 : currentRound;
+    if (nextRound > maxRounds) return "¡La partida termina después de este turno!";
+    const nextTeam = teams[nextTeamIndex];
+    const nextSpeaker = nextTeam?.members[nextTeam?.speakerIdx] || "";
+    return "Siguiente: " + (nextTeam?.name || "Equipo") + (nextSpeaker ? " · habla " + nextSpeaker : "");
+  }
+
   function setupTurn() {
     if (currentRound > maxRounds || pool.length === 0) {
       endGame();
@@ -146,6 +163,7 @@ const TabuGame = (() => {
     $("t-txtActiveTeam").textContent = activeTeam.name;
     $("t-txtSpeaker").textContent = speaker;
     $("t-txtWatcher").textContent = watcherTeam.name;
+    $("t-txtWatcherMembers").textContent = watcherTeam.members.join(" · ");
 
     changeScreen("t-scr-preturn");
   }
@@ -161,6 +179,8 @@ const TabuGame = (() => {
 
     clearInterval(timerId);
     updateTimerUI();
+    $("t-liveTeam").textContent = teams[activeTeamIndex]?.name || "Equipo";
+    $("t-liveRound").textContent = "Ronda " + currentRound + " de " + maxRounds;
     changeScreen("t-scr-game");
 
     timerId = setInterval(() => {
@@ -248,7 +268,8 @@ const TabuGame = (() => {
     activeTeam.stats.score += pointsEarned;
     activeTeam.speakerIdx = (activeTeam.speakerIdx + 1) % activeTeam.members.length;
 
-    $("t-txtSummaryTeam").textContent = `Puntaje de ${activeTeam.name}`;
+    $("t-txtSummaryTeam").textContent = "Puntaje de " + activeTeam.name;
+    $("t-txtNextTurn").textContent = getNextTurnLabel();
     $("t-statCorrect").textContent = turnStats.correct;
     $("t-statTaboo").textContent = turnStats.taboo;
     $("t-statPoints").textContent = pointsEarned > 0 ? `+${pointsEarned}` : pointsEarned;
@@ -275,11 +296,14 @@ const TabuGame = (() => {
 
   function endGame() {
     teams.sort((a, b) => b.stats.score - a.stats.score);
+    const topScore = teams[0]?.stats.score ?? 0;
+    const winners = teams.filter(t => t.stats.score === topScore);
+    $("t-scr-result").querySelector(".winner-title").textContent = winners.length > 1 ? "¡Empate!" : "¡Tenemos ganador!";
     $("t-uiFinalResults").innerHTML = teams.map((t, i) => `
       <div class="team-card" style="${i === 0 ? 'border-color:var(--warning); background: rgba(245,158,11,0.1);' : ''}">
         <div style="display:flex; justify-content:space-between; align-items:center;">
-          <h2 class="team-name" style="${i===0 ? 'color:var(--warning); font-size:1.5rem;' : ''}">
-            ${i===0 ? window.uiIcon("crown") + " " : ""}${t.name}
+          <h2 class="team-name" style="${t.stats.score === topScore ? 'color:var(--warning); font-size:1.5rem;' : ''}">
+            ${t.stats.score === topScore ? window.uiIcon("crown") + " " : ""}${t.name}
           </h2>
           <div class="giant-score" style="font-size:2rem; margin-top:0;">${t.stats.score} pts</div>
         </div>
@@ -314,9 +338,9 @@ const TabuGame = (() => {
     $("t-btnConfirmTeams").onclick = setupTurn;
     $("t-btnStartTurn").onclick = () => startTimer();
     
-    $("t-btnCorrect").onclick = () => recordAction('correct');
-    $("t-btnTaboo").onclick = () => recordAction('taboo');
-    $("t-btnSkip").onclick = () => recordAction('skip');
+    $("t-btnCorrect").onclick = () => { setActionFeedback($("t-btnCorrect")); recordAction("correct"); };
+    $("t-btnTaboo").onclick = () => { setActionFeedback($("t-btnTaboo")); recordAction("taboo"); };
+    $("t-btnSkip").onclick = () => { setActionFeedback($("t-btnSkip")); recordAction("skip"); };
     
     $("t-btnNextTurn").onclick = advanceNextTurn;
     $("t-btnRestart").onclick = () => { clearInterval(timerId); window.GameSession?.clear("tabu"); changeScreen("t-scr-lobby"); };
@@ -367,7 +391,8 @@ const TabuGame = (() => {
         if (secondsLeft > 0) startTimer(true); else finishTurn();
       } else if (saved.screen === "t-scr-turn-summary") {
         const activeTeam = teams[activeTeamIndex];
-        $("t-txtSummaryTeam").textContent = `Puntaje de ${activeTeam?.name || ""}`;
+        $("t-txtSummaryTeam").textContent = "Puntaje de " + (activeTeam?.name || "");
+        $("t-txtNextTurn").textContent = getNextTurnLabel();
         $("t-statCorrect").textContent = turnStats.correct;
         $("t-statTaboo").textContent = turnStats.taboo;
         $("t-statPoints").textContent = turnStats.correct - turnStats.taboo > 0 ? `+${turnStats.correct - turnStats.taboo}` : turnStats.correct - turnStats.taboo;
