@@ -102,6 +102,7 @@ const TabuGame = (() => {
     const shuffledPlayers = window.Utils.shuffleArray([...players]);
     teams = Array.from({length: numTeams}, (_, i) => ({
       name: `Equipo ${i + 1}`,
+      defaultName: `Equipo ${i + 1}`,
       members: [],
       speakerIdx: 0,
       stats: { score: 0, correct: 0, taboo: 0, skip: 0 }
@@ -109,17 +110,27 @@ const TabuGame = (() => {
 
     shuffledPlayers.forEach((p, i) => teams[i % numTeams].members.push(p));
 
-    $("t-uiTeamsList").innerHTML = teams.map(t => `
+    $("t-uiTeamsList").innerHTML = teams.map((t, i) => `
       <div class="team-card">
-        <div class="team-name">${t.name}</div>
+        <div class="team-name">Equipo ${i + 1}</div>
+        <input class="team-name-input" id="t-teamName-${i}" type="text" maxlength="24" autocomplete="off" placeholder="Nombre del equipo..." aria-label="Nombre del equipo ${i + 1}" />
         <div class="team-members">${t.members.map(window.Utils.escapeHTML).join(" · ")}</div>
       </div>
     `).join("");
 
     currentRound = 1;
     activeTeamIndex = 0;
-    
+
     changeScreen("t-scr-teams");
+  }
+
+  function confirmTeamNames() {
+    teams.forEach((team, i) => {
+      const input = $(`t-teamName-${i}`);
+      const name = input?.value.trim();
+      team.name = name || team.defaultName || ("Equipo " + (i + 1));
+    });
+    setupTurn();
   }
 
   function updateLiveStats() {
@@ -335,7 +346,7 @@ const TabuGame = (() => {
     };
 
     $("t-btnStart").onclick = startGame;
-    $("t-btnConfirmTeams").onclick = setupTurn;
+    $("t-btnConfirmTeams").onclick = confirmTeamNames;
     $("t-btnStartTurn").onclick = () => startTimer();
     
     $("t-btnCorrect").onclick = () => { setActionFeedback($("t-btnCorrect")); recordAction("correct"); };
@@ -368,8 +379,11 @@ const TabuGame = (() => {
       }
       turnStats = saved.turnStats || { correct: 0, taboo: 0, skip: 0 };
       renderPlayers();
-      $("t-uiTeamsList").innerHTML = teams.map(t => `
-        <div class="team-card"><div class="team-name">${t.name}</div><div class="team-members">${t.members.map(window.Utils.escapeHTML).join(" · ")}</div></div>
+      $("t-uiTeamsList").innerHTML = teams.map((t, i) => `
+        <div class="team-card">
+          <div class="team-name">${window.Utils.escapeHTML(t.name || t.defaultName || ("Equipo " + (i + 1)))}</div>
+          <div class="team-members">${t.members.map(window.Utils.escapeHTML).join(" · ")}</div>
+        </div>
       `).join("");
       if (currentWord) {
         $("t-catBadge").textContent = currentWord.cat?.toUpperCase() || "";
