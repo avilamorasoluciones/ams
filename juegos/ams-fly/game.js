@@ -249,15 +249,24 @@ async function openEventScreen(){
     screen.querySelector("#eventJoinButton").onclick=async()=>{
       const user=await getCurrentAuthUser().catch(()=>null);
       if(!user){navigateTo("account");return}
-      const accepted=termsAcceptedFor(user);
-      const check=document.getElementById("eventTermsConsent");
-      if(!accepted && !check.checked){
-        document.getElementById("eventAuthHint").textContent="Marca la casilla para aceptar los términos y participar.";
-        return;
+      try{
+        const accepted=await getTermsAcceptedFor(user);
+        const check=document.getElementById("eventTermsConsent");
+        if(!accepted && !check.checked){
+          document.getElementById("eventAuthHint").textContent="Marca la casilla para aceptar los términos y participar.";
+          return;
+        }
+        const ready=await ensureParticipantReady(user);
+        if(!ready){
+          navigateTo("account");
+          setAuthStatus(els.accountStatus,"Completa tus datos de cuenta antes de participar.",true);
+          return;
+        }
+        if(check.checked&&!accepted) await persistTermsAccepted(user);
+        navigateTo("play");
+      }catch(error){
+        document.getElementById("eventAuthHint").textContent=friendlyAuthError(error,"No pudimos preparar tu participación. Revisa tu cuenta e inténtalo de nuevo.");
       }
-      if(check.checked&&!accepted) await persistTermsAccepted(user);
-      await loadAccountProfile(user);
-      navigateTo("play");
     };
     document.querySelectorAll(".bottom-nav-item").forEach(btn=>btn.classList.toggle("is-active",btn.dataset.nav==="event"));
     screen.querySelector("#eventTermsConsent").addEventListener("change",async()=>{
@@ -272,8 +281,16 @@ async function openEventScreen(){
       }
       if(check.checked){
         check.disabled=true;
-        hint.textContent="Guardando tu aceptación…";
+        hint.textContent="Preparando tu participación…";
         try{
+          const ready=await ensureParticipantReady(user);
+          if(!ready){
+            check.checked=false;
+            check.disabled=false;
+            hint.textContent="Completa primero tus datos de cuenta.";
+            navigateTo("account");
+            return;
+          }
           await persistTermsAccepted(user);
           document.getElementById("eventTermsRow").classList.add("is-accepted");
           hint.textContent="✓ Términos aceptados para esta cuenta.";
