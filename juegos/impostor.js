@@ -1173,7 +1173,10 @@ const ImpostorGame = (() => {
 
   function showVoteScreen() {
     clearInterval(timerId);
+    timerId = null;
     timerRunning = false;
+    timerEndsAt = 0;
+    secondsLeft = 0;
 
     const list = $("i-uiVoteList");
 
