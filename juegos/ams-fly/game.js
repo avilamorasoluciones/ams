@@ -1147,9 +1147,14 @@ async function signUpPlayer(){
     if(!user){setAuthStatus(els.registerStatus,"Cuenta creada. Si Neon solicita verificar el correo, verifica y vuelve a iniciar sesión.",false);return}
     profile={email,country,birdId:selectedBirdId,name:first+" "+last,firstName:first,lastName:last,phone:full,dial,participantId:null};
     await syncParticipantProfile(user);
+    localStorage.removeItem(PENDING_REG_KEY);
     saveProfile();await refreshAuthUI();
     navigateTo("play");
-  }catch(error){setAuthStatus(els.registerStatus,friendlyAuthError(error,"No se pudo crear la cuenta. Si el correo ya existe, vuelve al inicio de sesión."),true)}
+  }catch(error){
+    const code=String(error?.code||"").toUpperCase();
+    if(code==="USER_ALREADY_EXISTS"||code==="EMAIL_ALREADY_EXISTS")localStorage.removeItem(PENDING_REG_KEY);
+    setAuthStatus(els.registerStatus,friendlyAuthError(error,"No se pudo crear la cuenta. Si el correo ya existe, vuelve al inicio de sesión."),true);
+  }
   finally{els.authSignUpBtn.disabled=false}
 }
 async function syncParticipantProfile(user){
