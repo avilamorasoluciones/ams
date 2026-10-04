@@ -2,6 +2,7 @@ const TabuGame = (() => {
   const STORAGE_KEY = "avila_mora_players"; // Llave compartida
   let players = [];
   let teams = [];
+  let teamNameDrafts = [];
   let pool = [];
   let usedWords = [];
   
@@ -35,7 +36,7 @@ const TabuGame = (() => {
   }
 
   function saveSession(screen = document.querySelector(".im-screen.active")?.id || "t-scr-lobby") {
-    window.GameSession?.save("tabu", { players, teams, pool, usedWords, currentRound, maxRounds, activeTeamIndex, timePerTurn, secondsLeft, timerEndsAt, currentWord, turnStats, screen, savedAt: Date.now() });
+    window.GameSession?.save("tabu", { players, teams, teamNameDrafts, pool, usedWords, currentRound, maxRounds, activeTeamIndex, timePerTurn, secondsLeft, timerEndsAt, currentWord, turnStats, screen, savedAt: Date.now() });
   }
 
   function changeScreen(id) {
@@ -111,6 +112,16 @@ const TabuGame = (() => {
 
     shuffledPlayers.forEach((p, i) => teams[i % numTeams].members.push(p));
 
+    teamNameDrafts = teams.map((t, i) => teamNameDrafts[i] || t.defaultName || ("Equipo " + (i + 1)));
+    renderTeamSetup();
+
+    currentRound = 1;
+    activeTeamIndex = 0;
+
+    changeScreen("t-scr-teams");
+  }
+
+  function renderTeamSetup() {
     $("t-uiTeamsList").innerHTML = teams.map((t, i) => `
       <div class="team-card">
         <div class="team-name">Equipo ${i + 1}</div>
@@ -119,10 +130,25 @@ const TabuGame = (() => {
       </div>
     `).join("");
 
-    currentRound = 1;
-    activeTeamIndex = 0;
+    teams.forEach((team, i) => {
+      const input = $(`t-teamName-${i}`);
+      if (input) input.value = teamNameDrafts[i] || "";
+    });
 
-    changeScreen("t-scr-teams");
+    teams.forEach((team, i) => {
+      const input = $(`t-teamName-${i}`);
+      if (!input) return;
+      input.addEventListener("input", () => {
+        teamNameDrafts[i] = input.value;
+        saveSession("t-scr-teams");
+      });
+      input.addEventListener("keydown", (e) => {
+        if (e.key === "Enter") {
+          e.preventDefault();
+          input.blur();
+        }
+      });
+    });
   }
 
   function confirmTeamNames() {
@@ -130,6 +156,7 @@ const TabuGame = (() => {
       const input = $(`t-teamName-${i}`);
       const name = input?.value.trim();
       team.name = name || team.defaultName || ("Equipo " + (i + 1));
+      teamNameDrafts[i] = name || "";
     });
     setupTurn();
   }
@@ -287,6 +314,15 @@ const TabuGame = (() => {
   }
 
   function recordAction(type) {
+    if (timerEndsAt && Date.now() >= timerEndsAt) {
+      clearInterval(timerId);
+      timerId = null;
+      secondsLeft = 0;
+      updateTimerUI();
+      finishTurn();
+      return;
+    }
+
     if (type === 'correct') {
       turnStats.correct++;
       window.emitSound(600, 0.1, "triangle");
@@ -345,10 +381,10 @@ const TabuGame = (() => {
     const winners = teams.filter(t => t.stats.score === topScore);
     $("t-scr-result").querySelector(".winner-title").textContent = winners.length > 1 ? "¡Empate!" : "¡Tenemos ganador!";
     $("t-uiFinalResults").innerHTML = teams.map((t, i) => `
-      <div class="team-card" style="${i === 0 ? 'border-color:var(--warning); background: rgba(245,158,11,0.1);' : ''}">
+      <div class="team-card" style="${t.stats.score === topScore ? 'border-color:var(--warning); background: rgba(245,158,11,0.1);' : ''}">
         <div style="display:flex; justify-content:space-between; align-items:center;">
           <h2 class="team-name" style="${t.stats.score === topScore ? 'color:var(--warning); font-size:1.5rem;' : ''}">
-            ${t.stats.score === topScore ? window.uiIcon("crown") + " " : ""}${t.name}
+            ${t.stats.score === topScore ? window.uiIcon("crown") + " " : ""}${window.Utils.escapeHTML(t.name)}
           </h2>
           <div class="giant-score" style="font-size:2rem; margin-top:0;">${t.stats.score} pts</div>
         </div>
@@ -396,6 +432,9 @@ const TabuGame = (() => {
     if (saved && saved.screen !== "t-scr-lobby" && Array.isArray(saved.teams) && saved.teams.length) {
       players = Array.isArray(saved.players) ? saved.players : players;
       teams = saved.teams;
+      teamNameDrafts = Array.isArray(saved.teamNameDrafts)
+        ? saved.teamNameDrafts.map(value => String(value || "").slice(0, 24))
+        : teams.map(t => t.name || "");
       pool = Array.isArray(saved.pool) ? saved.pool : [];
       usedWords = Array.isArray(saved.usedWords) ? saved.usedWords.map(normalizeWord).filter(Boolean) : [];
       currentRound = Number(saved.currentRound || 1);
@@ -413,12 +452,16 @@ const TabuGame = (() => {
       }
       turnStats = saved.turnStats || { correct: 0, taboo: 0, skip: 0 };
       renderPlayers();
-      $("t-uiTeamsList").innerHTML = teams.map((t, i) => `
-        <div class="team-card">
-          <div class="team-name">${window.Utils.escapeHTML(t.name || t.defaultName || ("Equipo " + (i + 1)))}</div>
-          <div class="team-members">${t.members.map(window.Utils.escapeHTML).join(" · ")}</div>
-        </div>
-      `).join("");
+      if (saved.screen === "t-scr-teams") {
+        renderTeamSetup();
+      } else {
+        $("t-uiTeamsList").innerHTML = teams.map((t, i) => `
+          <div class="team-card">
+            <div class="team-name">${window.Utils.escapeHTML(t.name || t.defaultName || ("Equipo " + (i + 1)))}</div>
+            <div class="team-members">${t.members.map(window.Utils.escapeHTML).join(" · ")}</div>
+          </div>
+        `).join("");
+      }
       if (currentWord) {
         $("t-catBadge").textContent = currentWord.cat?.toUpperCase() || "";
         $("t-txtMainWord").textContent = currentWord.word || "";
