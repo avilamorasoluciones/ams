@@ -6,9 +6,10 @@ const BombaGame = (() => {
   let timeRemaining = 0;
   let roundTotalTime = 0;
   let halfWarningPlayed = false;
+  let nextCategoryChangeAt = 0;
 
   function saveSession(screen = document.querySelector(".im-screen.active")?.id || "b-scr-lobby") {
-    window.GameSession?.save("bomba", { pool, word: $("b-txtWord")?.textContent || "", screen, timeRemaining, roundEndsAt, roundTotalTime, halfWarningPlayed });
+    window.GameSession?.save("bomba", { pool, word: $("b-txtWord")?.textContent || "", screen, timeRemaining, roundEndsAt, roundTotalTime, halfWarningPlayed, nextCategoryChangeAt });
   }
 
   function $(id) { return document.getElementById(id); }
@@ -47,6 +48,33 @@ const BombaGame = (() => {
     saveSession("b-scr-game");
   }
 
+  // Cambios automáticos con intervalos variables para que la presión se sienta natural.
+  function scheduleCategoryChange(remainingMs = roundTotalTime) {
+    const remaining = Math.max(0, Number(remainingMs) || 0);
+    if (remaining <= 18000 || pool.length === 0) {
+      nextCategoryChangeAt = 0;
+      return;
+    }
+
+    const minDelay = Math.min(10000, remaining * 0.28);
+    const maxDelay = Math.min(30000, remaining * 0.52);
+    const delay = minDelay + Math.random() * Math.max(0, maxDelay - minDelay);
+    nextCategoryChangeAt = Date.now() + delay;
+  }
+
+  function changeCategoryAutomatically() {
+    if (pool.length === 0) {
+      nextCategoryChangeAt = 0;
+      return;
+    }
+
+    $("b-txtWord").textContent = pool.pop();
+    window.emitSound(520, 0.08, "triangle", 0.45);
+    nextCategoryChangeAt = 0;
+    scheduleCategoryChange(Math.max(0, roundEndsAt - Date.now()));
+    saveSession("b-scr-game");
+  }
+
   function startTicks(totalTime) {
     const bombEmoji = $("b-bombEmoji");
     
@@ -68,6 +96,10 @@ const BombaGame = (() => {
         return;
       }
 
+      if (nextCategoryChangeAt > 0 && Date.now() >= nextCategoryChangeAt) {
+        changeCategoryAutomatically();
+      }
+
       saveSession("b-scr-game");
       const progress = Math.min(1, elapsed / totalTime);
       const freq = 400 + progress * 500;
@@ -87,12 +119,14 @@ const BombaGame = (() => {
     $("b-txtWord").textContent = pool.pop();
     $("b-bombEmoji").innerHTML = window.uiIcon("bomb");
     $("b-bombEmoji").style.transform = "scale(1)";
-    const possibleTimes = [30, 60, 120, 180];
+    const possibleTimes = [30, 60, 90, 120, 150, 180];
     const timeToBoom = possibleTimes[Math.floor(Math.random() * possibleTimes.length)] * 1000;
     timeRemaining = timeToBoom;
     roundTotalTime = timeToBoom;
     halfWarningPlayed = false;
     roundEndsAt = Date.now() + timeToBoom;
+    nextCategoryChangeAt = 0;
+    scheduleCategoryChange(timeToBoom);
     
     clearTimeout(bombTimer);
     clearInterval(tickInterval);
@@ -104,18 +138,9 @@ const BombaGame = (() => {
     changeScreen("b-scr-game");
   }
 
-  function skipWord() {
-    if (pool.length > 0) {
-      $("b-txtWord").textContent = pool.pop();
-      saveSession("b-scr-game");
-      window.emitSound(600, 0.1, "triangle");
-    } else {
-      alert("¡No hay más categorías!");
-    }
-  }
-
   function explode() {
     clearInterval(tickInterval);
+    nextCategoryChangeAt = 0;
     window.emitSound(150, 0.5, "sawtooth", 0.8);
     setTimeout(() => window.emitSound(100, 0.8, "sawtooth", 1), 100);
     changeScreen("b-scr-boom");
@@ -138,6 +163,7 @@ const BombaGame = (() => {
     }
     roundTotalTime = Number(saved.roundTotalTime || 0);
     halfWarningPlayed = Boolean(saved.halfWarningPlayed);
+    nextCategoryChangeAt = Number(saved.nextCategoryChangeAt || 0);
     const savedEndsAt = Number(saved.roundEndsAt || 0);
     const savedAt = Number(saved.savedAt || Date.now());
     const fallbackRemaining = Math.max(0, Number(saved.timeRemaining || 0) - Math.max(0, Date.now() - savedAt));
@@ -146,6 +172,11 @@ const BombaGame = (() => {
       : fallbackRemaining;
     timeRemaining = remaining;
     roundEndsAt = Date.now() + remaining;
+    if (remaining <= 0) {
+      nextCategoryChangeAt = 0;
+    } else if (!nextCategoryChangeAt || nextCategoryChangeAt <= Date.now()) {
+      scheduleCategoryChange(remaining);
+    }
     changeScreen("b-scr-game");
     if (remaining > 0) {
       clearTimeout(bombTimer);
@@ -160,7 +191,6 @@ const BombaGame = (() => {
 
   function init() {
     $("b-btnStart").onclick = startGame;
-    $("b-btnSkip").onclick = skipWord;
     $("b-btnStop").onclick = stopGame;
     $("b-btnNext").onclick = nextRound;
     $("b-btnBackLobby").onclick = stopGame;
