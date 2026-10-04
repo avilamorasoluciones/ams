@@ -320,14 +320,10 @@ function getBird(id){return birds.find(b=>b.id===id) || birds[0]}
 function birdMarkup(bird,scale="1"){
   return '<div class="bird-shape" style="--bird-a:'+bird.a+';--bird-b:'+bird.b+';--bird-c:'+bird.c+';--bird-d:'+bird.d+';transform:scale('+scale+') rotate(-7deg)"><i class="bird-eye"></i><i class="bird-tail"></i></div>';
 }
-function renderHomeBird(){
-  if(!els.homeBirdArt) return;
-  const bird=getBird(profile?.birdId || selectedBirdId || "condor-co");
-  els.homeBirdArt.innerHTML=birdMarkup(bird,"1.25");
-}
+function renderHomeBird(){return}
 function showOnly(target){
   [els.homeScreen,els.profileScreen,els.factScreen,els.gameScreen,els.pauseScreen,els.gameOverScreen,els.rankingScreen].forEach(x=>{if(x)x.hidden=true});
-  ["amsFlyEventScreen","amsFlyAdminPanel"].forEach(id=>{const x=document.getElementById(id);if(x)x.hidden=true});
+  ["amsFlyEventScreen"].forEach(id=>{const x=document.getElementById(id);if(x)x.hidden=true});
   if(target)target.hidden=false;
 }
 function hydrateStats(){
