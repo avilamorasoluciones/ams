@@ -48,6 +48,10 @@
     .tabu-game-context { display:flex; justify-content:space-between; align-items:center; gap:10px; flex-wrap:wrap; }
     .tabu-turn-badge { font-weight: 900; color: var(--primary); }
     .tabu-action-feedback { transform: scale(.97); filter: brightness(1.12); }
+    .tabu-countdown { position: fixed; inset: 0; z-index: 9999; display:flex; align-items:center; justify-content:center; background: rgba(0,0,0,.78); backdrop-filter: blur(5px); }
+    .tabu-countdown[hidden] { display:none; }
+    .tabu-countdown-number { font-size: clamp(5rem, 25vw, 10rem); line-height:1; font-weight:1000; color:#fff; text-shadow: 0 8px 30px rgba(0,0,0,.35); animation: tabu-count-pop .7s ease both; }
+    @keyframes tabu-count-pop { 0% { transform:scale(.55); opacity:.2; } 60% { transform:scale(1.08); opacity:1; } 100% { transform:scale(1); opacity:1; } }
     .tabu-next-note { margin: 0; }
     @media (max-width: 520px) {
       .tabu-controls { gap: 8px; }
@@ -73,6 +77,10 @@
       </div>
     </nav>
   </header>
+
+  <div id="t-countdown" class="tabu-countdown" hidden aria-live="assertive" aria-label="Cuenta regresiva para comenzar">
+    <div id="t-countdownNumber" class="tabu-countdown-number">3</div>
+  </div>
 
   <main id="mainContent">
     <div class="wrap">
