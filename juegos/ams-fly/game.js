@@ -6,7 +6,8 @@ const TERMS_KEY = "amsFlyTermsAcceptedV1";
 const STATS_KEY = "amsFlyStatsV1";
 const FACT_INDEX_KEY = "amsFlyFactIndexV1";
 const NEON_DATA_READY = () => !!window.AMS_FLY_NEON_CONFIG?.dataApiUrl;
-const VALID_EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;\nfunction friendlyAuthError(error, fallback){
+const VALID_EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+function friendlyAuthError(error, fallback){
   const raw=[error?.message,error?.details,error?.hint,error?.code,error?.status].filter(Boolean).map(String).join(" | ").trim();
   const key=raw.toLowerCase().replace(/[_-]+/g," ");
   if(key.includes("invalid email or password")||key.includes("invalid credentials")||key.includes("invalid password")||key.includes("incorrect email")||key.includes("incorrect password")||key.includes("invalid login")){
@@ -118,7 +119,7 @@ const els = {};
   "homeBest","homeGames","accountBtn","startBtn","changePilotHomeBtn","profileForm","authBox","authEmail","authPassword","authSignInBtn","authSignUpBtn","authSignOutBtn","authStatus","authIdentity","termsConsentRow","playerName","playerCountry","birdGrid","selectedBirdInfo","profileError",
   "factTitle","factText","factSourceHint","factContinueBtn","gameCanvas","scoreValue","difficultyValue","pauseBtn","gameStartHint",
   "pauseScore","resumeBtn","quitBtn","resultBird","resultEyebrow","resultTitle","finalScore","resultBest","resultGames","newRecord",
-  "againBtn","changePilotBtn","soundBtn","backBtn","adminNavBtn","homeBirdArt","rankingBtn","rankingFromResultBtn","rankingBackBtn","rankingRefreshBtn","rankingList","rankingStatus","scoreMessage","submitScoreBtn","submitScoreStatus","shareResultBtn","termsConsent","rankingScreen"
+  "againBtn","changePilotBtn","soundBtn","backBtn","adminNavBtn","homeBirdArt","rankingBtn","rankingFromResultBtn","rankingHeaderBtn","rankingBackBtn","rankingRefreshBtn","rankingList","rankingStatus","scoreMessage","submitScoreBtn","submitScoreStatus","shareResultBtn","termsConsent","rankingScreen"
 ].forEach(id => els[id] = document.getElementById(id));
 
 const ctx = els.gameCanvas.getContext("2d", {alpha:false});
@@ -132,6 +133,7 @@ let audioCtx = null;
 let musicTimer = 0;
 let musicStep = 0;
 let musicStarting = false;
+let autoPublishTimer = 0;
 let game = null;
 let raf = 0;
 let lastStage = -1;
@@ -172,7 +174,7 @@ function eventTemplate(template,lead){
   return String(template||"").replaceAll("{name}",lead.name||"").replaceAll("{score}",String(lead.score||0)).replaceAll("{event}",getEventConfig().title||"AMS Fly");
 }
 function eventPhoneUrl(phone,name,score){
-  let digits=String(phone||"").replace(/\\D/g,"");
+  let digits=String(phone||"").replace(/\D/g,"");
   if(digits.length===10&&digits.startsWith("3"))digits="57"+digits;
   if(digits.length<8)return "";
   return "https://wa.me/"+digits+"?text="+encodeURIComponent(eventTemplate(getEventConfig().waTemplate,{name,score}));
@@ -561,6 +563,16 @@ function loop(now){
   draw();
   raf=requestAnimationFrame(loop);
 }
+function scheduleAutoPublishPendingScore(delay=3500){
+  if(autoPublishTimer)clearTimeout(autoPublishTimer);
+  autoPublishTimer=setTimeout(()=>{
+    autoPublishTimer=0;
+    tryAutoPublishPendingScore().catch(()=>{});
+  },Math.max(500,Number(delay)||3500));
+}
+function cancelAutoPublishPendingScore(){
+  if(autoPublishTimer){clearTimeout(autoPublishTimer);autoPublishTimer=0}
+}
 function savePendingScore(result){
   const payload={...result,savedAt:new Date().toISOString()};
   try{localStorage.setItem("amsFlyPendingScoreV1",JSON.stringify(payload));return true}catch(_){}
@@ -673,6 +685,7 @@ function endGame(){
   els.submitScoreStatus.textContent="Puedes dejar un mensaje o publicar directamente tu puntuación.";
   showOnly(els.gameOverScreen);
   els.gameOverScreen.hidden=false;
+  scheduleAutoPublishPendingScore(3500);
   window.scrollTo(0,0);
   requestAnimationFrame(()=>{els.gameOverScreen.hidden=false;els.scoreMessage?.focus({preventScroll:true})});
   playTone(isRecord?880:220,.12,isRecord?"triangle":"sine");
@@ -827,9 +840,6 @@ async function tryAutoPublishPendingScore(){
 
   // Evitar intentos automáticos repetidos mientras el usuario todavía está
   // escribiendo el mensaje del resultado actual.
-  const message=(els.scoreMessage.value||pending.message||"").trim();
-  if(message.length<3)return false;
-
   return publishScore({automatic:true});
 }
 
@@ -1032,9 +1042,16 @@ function bootHome(){
   refreshAuthUI();els.homeBirdArt.innerHTML=birdMarkup(getBird(selectedBirdId),".95");
   updateLargeScreenRecommendation();
   setTimeout(()=>els.loadingScreen.classList.add("is-gone"),500);
-  if(restorePendingResult()) return;
+  if(restorePendingResult()){
+    scheduleAutoPublishPendingScore(1800);
+    return;
+  }
   if(soundOn){startMusic();window.addEventListener("pointerdown",unlockMenuMusic,{once:true,passive:true});window.addEventListener("keydown",unlockMenuMusic,{once:true})}
 }
+els.rankingHeaderBtn?.addEventListener("click",async()=>{
+  const published=await ensureResultPublishedBeforeLeaving();
+  if(published)await loadRanking();
+});
 els.rankingBtn?.addEventListener("click",loadRanking);
 els.rankingFromResultBtn?.addEventListener("click",async()=>{
   const published=await ensureResultPublishedBeforeLeaving();
@@ -1045,6 +1062,8 @@ els.backBtn?.addEventListener("click",()=>{ if(game?.running && !game?.paused){ 
 els.rankingRefreshBtn.addEventListener("click",loadRanking);
 els.submitScoreBtn.addEventListener("click",()=>{publishScore();});
 els.scoreMessage?.addEventListener("input",()=>{
+  cancelAutoPublishPendingScore();
+  scheduleAutoPublishPendingScore(2500);
   const pending=readPendingScore();
   if(!pending)return;
   // Guardamos lo que el usuario escribe tal cual, incluidos los espacios.
