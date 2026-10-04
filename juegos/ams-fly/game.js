@@ -1108,6 +1108,9 @@ async function signInPlayer(){
     const user=await getCurrentAuthUser();
     if(!user)throw new Error("No se pudo recuperar la sesión después de iniciar sesión.");
     await loadAccountProfile(user);
+    if(profile?.name&&profile.name.length>=2&&/^\+[1-9]\d{7,14}$/.test(String(profile.phone||""))){
+      try{await syncParticipantProfile(user);saveProfile();}catch(_){}
+    }
     populateAccountFields();
     await refreshAuthUI();
   }catch(error){
