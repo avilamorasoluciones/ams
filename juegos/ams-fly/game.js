@@ -670,7 +670,7 @@ function endGame(){
   els.submitScoreBtn.disabled=false;
   els.submitScoreBtn.innerHTML='PUBLICAR PUNTUACIÓN <span>↑</span>';
   els.submitScoreStatus.hidden=false;
-  els.submitScoreStatus.textContent="Escribe un mensaje de al menos 3 caracteres para publicar tu puntuación.";
+  els.submitScoreStatus.textContent="Puedes dejar un mensaje o publicar directamente tu puntuación.";
   showOnly(els.gameOverScreen);
   els.gameOverScreen.hidden=false;
   window.scrollTo(0,0);
@@ -715,17 +715,8 @@ async function publishScore(options={}){
     return false;
   }
 
-  const message=(els.scoreMessage.value||currentResult?.message||"").trim().slice(0,90);
-  // La publicación automática solo puede ejecutarse cuando ya existe un
-  // mensaje válido. Si el jugador todavía no lo ha escrito, no bloqueamos
-  // el resultado: queda pendiente para el botón manual.
-  if(message.length<3){
-    if(!automatic){
-      els.submitScoreStatus.textContent="Escribe un mensaje de al menos 3 caracteres para confirmar tu puntuación.";
-      els.scoreMessage.focus();
-    }
-    return false;
-  }
+  const typedMessage=(els.scoreMessage.value||currentResult?.message||"").trim();
+  const message=(typedMessage.length>=3?typedMessage:"¡Buen vuelo!").slice(0,90);
 
   if(!NEON_DATA_READY()){
     if(!automatic) els.submitScoreStatus.textContent="No se puede publicar todavía: falta conectar el Data API de Neon.";
@@ -942,6 +933,7 @@ async function refreshAuthUI(){
     els.authSignInBtn.hidden=signedIn;
     els.authSignUpBtn.hidden=signedIn;
     els.authSignOutBtn.hidden=!signedIn;
+    if(els.accountBtn)els.accountBtn.textContent=signedIn?"CUENTA":"INICIAR SESIÓN";
     els.authPassword.disabled=signedIn;
     els.authStatus.classList.remove("is-error");
     els.authStatus.textContent=signedIn
