@@ -2,6 +2,7 @@
 "use strict";
 
 const STORAGE_KEY = "amsFlyProfileV2";
+const TERMS_KEY = "amsFlyTermsAcceptedV1";
 const STATS_KEY = "amsFlyStatsV1";
 const FACT_INDEX_KEY = "amsFlyFactIndexV1";
 const NEON_DATA_READY = () => !!window.AMS_FLY_NEON_CONFIG?.dataApiUrl;
@@ -18,6 +19,17 @@ const VALID_EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;\nfunction friendlyAuthError(er
   return fallback;
 }
 
+function termsAcceptedFor(user){
+  if(!user?.email)return false;
+  const data=safeParse(TERMS_KEY,{});
+  return data[String(user.email).toLowerCase()]?.accepted===true;
+}
+function saveTermsAcceptedFor(user){
+  if(!user?.email)return;
+  const data=safeParse(TERMS_KEY,{});
+  data[String(user.email).toLowerCase()]={accepted:true,acceptedAt:new Date().toISOString()};
+  localStorage.setItem(TERMS_KEY,JSON.stringify(data));
+}
 function formatRankingDate(value){
   const date=new Date(value);
   if(!Number.isFinite(date.getTime()))return "";
@@ -103,7 +115,7 @@ const colombiaFacts = [
 const els = {};
 [
   "loadingScreen","homeScreen","profileScreen","factScreen","gameScreen","pauseScreen","gameOverScreen",
-  "homeBest","homeGames","startBtn","changePilotHomeBtn","profileForm","authBox","authEmail","authPassword","authSignInBtn","authSignUpBtn","authSignOutBtn","authStatus","authIdentity","playerName","playerCountry","birdGrid","selectedBirdInfo","profileError",
+  "homeBest","homeGames","accountBtn","startBtn","changePilotHomeBtn","profileForm","authBox","authEmail","authPassword","authSignInBtn","authSignUpBtn","authSignOutBtn","authStatus","authIdentity","termsConsentRow","playerName","playerCountry","birdGrid","selectedBirdInfo","profileError",
   "factTitle","factText","factSourceHint","factContinueBtn","gameCanvas","scoreValue","difficultyValue","pauseBtn","gameStartHint",
   "pauseScore","resumeBtn","quitBtn","resultBird","resultEyebrow","resultTitle","finalScore","resultBest","resultGames","newRecord",
   "againBtn","changePilotBtn","soundBtn","backBtn","adminNavBtn","homeBirdArt","rankingBtn","rankingFromResultBtn","rankingBackBtn","rankingRefreshBtn","rankingList","rankingStatus","scoreMessage","submitScoreBtn","submitScoreStatus","shareResultBtn","termsConsent","rankingScreen"
@@ -657,7 +669,8 @@ function endGame(){
   els.submitScoreBtn.dataset.published="0";
   els.submitScoreBtn.disabled=false;
   els.submitScoreBtn.innerHTML='PUBLICAR PUNTUACIÓN <span>↑</span>';
-  els.submitScoreStatus.textContent="Tu mensaje es obligatorio para confirmar la publicación.";
+  els.submitScoreStatus.hidden=false;
+  els.submitScoreStatus.textContent="Escribe un mensaje de al menos 3 caracteres para publicar tu puntuación.";
   showOnly(els.gameOverScreen);
   els.gameOverScreen.hidden=false;
   window.scrollTo(0,0);
@@ -665,6 +678,20 @@ function endGame(){
   playTone(isRecord?880:220,.12,isRecord?"triangle":"sine");
 }
 
+async function ensureResultPublishedBeforeLeaving(){
+  if(!lastResult && !readPendingScore())return true;
+  if(els.submitScoreBtn?.dataset.published==="1")return true;
+  const message=(els.scoreMessage?.value||"").trim();
+  if(message.length<3){
+    els.submitScoreStatus.textContent="Primero escribe un mensaje de al menos 3 caracteres y publica tu puntuación.";
+    els.scoreMessage?.focus();
+    return false;
+  }
+  els.submitScoreStatus.textContent="Guardando tu puntuación antes de abrir el ranking…";
+  const ok=await publishScore();
+  if(!ok)return false;
+  return true;
+}
 async function publishScore(options={}){
   const automatic=options.automatic===true;
   if(!profile)return false;
@@ -706,6 +733,7 @@ async function publishScore(options={}){
   }
 
   els.submitScoreBtn.disabled=true;
+  els.submitScoreStatus.hidden=false;
   if(!automatic) els.submitScoreStatus.textContent="Guardando tu puntuación en el ranking…";
 
   try{
@@ -757,8 +785,8 @@ async function publishScore(options={}){
     if(scoreToPublish<=remoteBest){
       els.submitScoreBtn.dataset.published="1";
       els.submitScoreBtn.disabled=true;
-      els.submitScoreBtn.innerHTML="✓ PUNTUACIÓN YA SINCRONIZADA";
-      els.submitScoreStatus.textContent="✓ Tu récord local ya está registrado en el ranking mundial.";
+      els.submitScoreBtn.innerHTML="✓ PUNTUACIÓN PUBLICADA";
+      els.submitScoreStatus.hidden=true;
       clearPendingScore();
       lastResult=null;
       return true;
@@ -778,8 +806,8 @@ async function publishScore(options={}){
 
     els.submitScoreBtn.dataset.published="1";
     els.submitScoreBtn.disabled=true;
-    els.submitScoreBtn.innerHTML="✓ PUNTUACIÓN CONFIRMADA";
-    els.submitScoreStatus.textContent="✓ Listo. Tu puntuación quedó publicada en el ranking mundial.";
+    els.submitScoreBtn.innerHTML="✓ PUNTUACIÓN PUBLICADA";
+    els.submitScoreStatus.hidden=true;
     clearPendingScore();
     lastResult=null;
     playTone(880,.12,"triangle");
@@ -915,10 +943,16 @@ async function refreshAuthUI(){
     els.authSignUpBtn.hidden=signedIn;
     els.authSignOutBtn.hidden=!signedIn;
     els.authPassword.disabled=signedIn;
+    els.authStatus.classList.remove("is-error");
     els.authStatus.textContent=signedIn
       ?"✓ Cuenta identificada. Esta cuenta solo puede tener un piloto en el ranking."
       :"Inicia sesión o crea una cuenta. Tu cuenta quedará vinculada de forma única a tu piloto.";
     els.authBox.classList.toggle("is-authenticated",signedIn);
+    if(els.termsConsentRow){
+      const alreadyAccepted=signedIn && termsAcceptedFor(user);
+      els.termsConsentRow.hidden=alreadyAccepted;
+      if(alreadyAccepted && els.termsConsent)els.termsConsent.checked=true;
+    }
     return user;
   }catch(_){
     els.authStatus.classList.add("is-error");els.authStatus.textContent="No se pudo consultar la sesión de Neon.";
@@ -967,7 +1001,8 @@ async function submitProfile(e){
   if(!authUser){els.profileError.textContent="Primero inicia sesión o crea una cuenta. Una cuenta = un piloto en el ranking.";els.profileError.hidden=false;els.authEmail.focus();return}
   const name=els.playerName.value.trim().replace(/\s+/g," ");
   if(name.length<2){els.profileError.textContent="Escribe al menos 2 caracteres para tu nombre.";els.profileError.hidden=false;els.playerName.focus();return}
-  if(els.termsConsent && !els.termsConsent.checked){els.profileError.textContent="Debes aceptar los Términos y Condiciones y la Política de Privacidad para participar.";els.profileError.hidden=false;els.termsConsent.focus();return}
+  const termsAlreadyAccepted=termsAcceptedFor(authUser);
+  if(els.termsConsent && !termsAlreadyAccepted && !els.termsConsent.checked){els.profileError.textContent="Debes aceptar los Términos y Condiciones y la Política de Privacidad para participar.";els.profileError.hidden=false;els.termsConsent.focus();return}
   if(!NEON_DATA_READY()){els.profileError.textContent="No podemos registrar el piloto todavía porque Neon no está conectado.";els.profileError.hidden=false;return}
   const candidate={name:name.slice(0,18),country:els.playerCountry.value,birdId:selectedBirdId};
   try{
@@ -985,6 +1020,7 @@ async function submitProfile(e){
     if(remote.name)candidate.name=remote.name;
     if(remote.country)candidate.country=remote.country;
     if(remote.bird_id)candidate.birdId=remote.bird_id;
+    if(els.termsConsent?.checked)saveTermsAcceptedFor(authUser);
     finishProfile(candidate);
   }catch(error){
     console.error("AMS Fly: no se pudo registrar el piloto",error);
@@ -1006,8 +1042,11 @@ function bootHome(){
   if(restorePendingResult()) return;
   if(soundOn){startMusic();window.addEventListener("pointerdown",unlockMenuMusic,{once:true,passive:true});window.addEventListener("keydown",unlockMenuMusic,{once:true})}
 }
-els.rankingBtn.addEventListener("click",loadRanking);
-els.rankingFromResultBtn.addEventListener("click",loadRanking);
+els.rankingBtn?.addEventListener("click",loadRanking);
+els.rankingFromResultBtn?.addEventListener("click",async()=>{
+  const published=await ensureResultPublishedBeforeLeaving();
+  if(published)await loadRanking();
+});
 els.rankingBackBtn.addEventListener("click",()=>{ if(readPendingScore() || lastResult){ showOnly(els.gameOverScreen); els.gameOverScreen.hidden=false; } else showOnly(els.homeScreen); });
 els.backBtn?.addEventListener("click",()=>{ if(game?.running && !game?.paused){ game.paused=true; stopMusic(); cancelAnimationFrame(raf); els.pauseScore.textContent=game.score+" puntos"; showOnly(els.pauseScreen); } else if(!els.profileScreen.hidden){ showOnly(els.homeScreen); } else if(!els.factScreen.hidden){ showOnly(els.profileScreen); } else if(!els.rankingScreen.hidden){ showOnly(els.homeScreen); } else { showOnly(els.homeScreen); } });
 els.rankingRefreshBtn.addEventListener("click",loadRanking);
@@ -1023,6 +1062,11 @@ els.scoreMessage?.addEventListener("input",()=>{
 });
 els.shareResultBtn?.addEventListener("click",shareResult);
 els.birdGrid.addEventListener("click",e=>{const btn=e.target.closest("[data-bird]");if(!btn)return;selectedBirdId=btn.dataset.bird;renderBirds();playTone(350,.04)});
+els.accountBtn?.addEventListener("click",async()=>{
+  await refreshAuthUI();
+  showOnly(els.profileScreen);
+  requestAnimationFrame(()=>els.authBox?.scrollIntoView({behavior:"smooth",block:"start"}));
+});
 els.startBtn.addEventListener("click",()=>{playTone(440,.07);startMusic();if(profile){els.playerName.value=profile.name;els.playerCountry.value=profile.country;selectedBirdId=profile.birdId;renderBirds()}refreshAuthUI();showOnly(els.profileScreen)});
 els.profileForm.addEventListener("submit",submitProfile);
 els.authSignInBtn?.addEventListener("click",signInPlayer);
