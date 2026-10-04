@@ -195,7 +195,7 @@ const TabuGame = (() => {
 
     countdownTimerId = setInterval(() => {
       count--;
-      if (count > 0) {
+      if (count >= 3) {
         number.textContent = count;
         number.style.animation = "none";
         void number.offsetWidth;
