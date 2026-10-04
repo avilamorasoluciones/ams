@@ -112,7 +112,8 @@ button{cursor:pointer}
 .new-record{color:#fde68a!important;font-weight:950;letter-spacing:.05em}.game-footer{position:fixed;z-index:5;bottom:0;left:0;right:0;padding:8px max(15px,4vw) calc(8px + var(--safe-bottom));display:flex;justify-content:center;gap:12px;flex-wrap:wrap;color:#676b86;font-size:.49rem;letter-spacing:.04em;pointer-events:none}
 .loading-screen{position:fixed;inset:0;z-index:999;background:#080715;display:grid;place-items:center;align-content:center;text-align:center;overflow:hidden}
 .loading-screen.is-gone{opacity:0;visibility:hidden;pointer-events:none;transition:opacity .35s ease,visibility .35s ease}.loading-screen{transition:opacity .35s ease,visibility .35s ease}
-.stage-banner{position:absolute;left:50%;top:23%;transform:translate(-50%,-20px);opacity:0;pointer-events:none;z-index:10;text-align:center;transition:opacity .45s ease,transform .45s ease}.stage-banner.show{opacity:1;transform:translate(-50%,0)}.stage-banner strong{display:block;font-size:1rem;letter-spacing:.08em}.stage-banner span{display:block;margin-top:4px;color:#b9b9cb;font-size:.58rem}\n.loading-screen:before{content:"";position:absolute;width:360px;height:360px;border-radius:50%;background:radial-gradient(circle,rgba(139,92,246,.13),transparent 65%);filter:blur(10px)}
+.stage-banner{position:absolute;left:50%;top:23%;transform:translate(-50%,-20px);opacity:0;pointer-events:none;z-index:10;text-align:center;transition:opacity .45s ease,transform .45s ease}.stage-banner.show{opacity:1;transform:translate(-50%,0)}.stage-banner strong{display:block;font-size:1rem;letter-spacing:.08em}.stage-banner span{display:block;margin-top:4px;color:#b9b9cb;font-size:.58rem}
+.loading-screen:before{content:"";position:absolute;width:360px;height:360px;border-radius:50%;background:radial-gradient(circle,rgba(139,92,246,.13),transparent 65%);filter:blur(10px)}
 .loading-orbit{position:absolute;width:190px;height:190px;border:1px solid rgba(139,92,246,.2);border-top-color:#22d3ee;border-radius:50%;animation:orbit 1.3s linear infinite}
 .ams-mark{font-weight:950;font-size:1.8rem;letter-spacing:-.08em;background:linear-gradient(110deg,#8b5cf6,#ec4899);-webkit-background-clip:text;background-clip:text;color:transparent}.loading-bird{font-size:2.3rem;margin:15px 0 2px;animation:float 1.7s ease-in-out infinite}.loading-screen p{font-size:.58rem;font-weight:950;letter-spacing:.2em;color:#a8abc1}.loading-screen small{width:min(300px,80vw);color:#686c87;font-size:.58rem;line-height:1.5}
 @keyframes orbit{to{transform:rotate(360deg)}}@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
@@ -484,7 +485,7 @@ button{cursor:pointer}
 .ams-fly-large-screen-note{position:absolute;left:50%;bottom:calc(18px + var(--safe-bottom));transform:translateX(-50%);z-index:12;width:min(520px,calc(100% - 32px));padding:10px 14px;border:1px solid rgba(255,255,255,.1);border-radius:14px;background:rgba(7,8,18,.55);color:#aeb1c5;font-size:.58rem;line-height:1.45;text-align:center;backdrop-filter:blur(10px);pointer-events:none;box-sizing:border-box}
 
 /* AMS Fly · QA UX final */
-.header-actions{gap:7px}
+.header-actions{gap:6px;align-items:center}
 .header-account-button{
   min-height:42px;
   padding:0 12px;
@@ -509,3 +510,6 @@ button{cursor:pointer}
   .header-account-button{min-width:42px;padding:0 9px;font-size:.5rem}
   .header-actions{gap:5px}
 }
+
+.header-account-button + .icon-button{min-width:42px}
+@media(max-width:560px){.header-account-button + .icon-button{min-width:40px}}
