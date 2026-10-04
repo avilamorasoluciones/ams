@@ -466,6 +466,7 @@ const TabuGame = (() => {
     $("t-btnConfirmTeams").onclick = confirmTeamNames;
     $("t-btnStartTurn").onclick = startCountdown;
     $("t-btnCancelGame").onclick = requestCancelGame;
+    $("t-btnCancelPreturn").onclick = requestCancelGame;
     $("t-btnKeepGame").onclick = keepGame;
     $("t-btnConfirmCancel").onclick = confirmCancelGame;
     
