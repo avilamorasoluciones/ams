@@ -255,12 +255,29 @@ async function openEventScreen(){
     };
     document.querySelectorAll(".bottom-nav-item").forEach(btn=>btn.classList.toggle("is-active",btn.dataset.nav==="event"));
     screen.querySelector("#eventTermsConsent").addEventListener("change",async()=>{
+      const check=document.getElementById("eventTermsConsent");
+      const hint=document.getElementById("eventAuthHint");
       const user=await getCurrentAuthUser().catch(()=>null);
       if(!user){
-        document.getElementById("eventTermsConsent").checked=false;
-        document.getElementById("eventAuthHint").textContent="Debes iniciar sesión o registrarte para aceptar los términos y participar.";
+        check.checked=false;
+        hint.textContent="Debes iniciar sesión o registrarte para aceptar los términos y participar.";
         navigateTo("account");
         return;
+      }
+      if(check.checked){
+        check.disabled=true;
+        hint.textContent="Guardando tu aceptación…";
+        try{
+          await persistTermsAccepted(user);
+          document.getElementById("eventTermsRow").classList.add("is-accepted");
+          hint.textContent="✓ Términos aceptados para esta cuenta.";
+          document.getElementById("eventJoinButton").textContent="PARTICIPAR Y VOLAR ✦";
+        }catch(error){
+          check.checked=false;
+          check.disabled=false;
+          hint.textContent=friendlyAuthError(error,"No pudimos guardar la aceptación. Inténtalo de nuevo.");
+          document.getElementById("eventTermsRow").classList.remove("is-accepted");
+        }
       }
     });
   }
