@@ -1079,7 +1079,7 @@ function showRegistrationMode(email=""){
 async function signInPlayer(){
   const email=(els.authEmail.value||"").trim().toLowerCase(),password=els.authPassword.value||"";
   if(!VALID_EMAIL.test(email)){setAuthStatus(els.authStatus,"Escribe un correo electrónico válido.",true);return}
-  if(password.length<8){setAuthStatus(els.authStatus,"La contraseña debe tener al menos 8 caracteres.",true);return}
+  if(password.length<8||password.length>128){setAuthStatus(els.authStatus,"La contraseña debe tener entre 8 y 128 caracteres.",true);return}
   els.authSignInBtn.disabled=true;setAuthStatus(els.authStatus,"Comprobando cuenta…");
   try{
     const client=await getNeonClient();
@@ -1115,7 +1115,7 @@ async function signUpPlayer(){
   if(!VALID_EMAIL.test(email)){setAuthStatus(els.registerStatus,"Correo inválido.",true);return}
   if(first.length<2||last.length<2){setAuthStatus(els.registerStatus,"Escribe nombre y apellido.",true);return}
   if((first+" "+last).length>18){setAuthStatus(els.registerStatus,"Nombre y apellido juntos deben tener máximo 18 caracteres para el registro del piloto.",true);return}
-  if(password.length<8){setAuthStatus(els.registerStatus,"La contraseña debe tener al menos 8 caracteres.",true);return}
+  if(password.length<8||password.length>128){setAuthStatus(els.registerStatus,"La contraseña debe tener entre 8 y 128 caracteres.",true);return}
   if(password!==repeat){setAuthStatus(els.registerStatus,"Las contraseñas no coinciden.",true);return}
   const full=fullPhone(dial,phone);
   if(!/^\+[1-9]\d{7,14}$/.test(full)){setAuthStatus(els.registerStatus,"Escribe un celular válido con código de país.",true);return}
