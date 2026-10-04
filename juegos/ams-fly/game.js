@@ -1128,7 +1128,12 @@ async function signUpPlayer(){
   try{
     const client=await getNeonClient();
     const result=await client.auth.signUp.email({email,password,name:first+" "+last});
-    if(result?.error)throw new Error(result.error.message||"No se pudo crear la cuenta.");
+    if(result?.error){
+      throw Object.assign(new Error(result.error.message||"No se pudo crear la cuenta."),{
+        code:result.error.code,
+        status:result.error.status
+      });
+    }
     const user=await getCurrentAuthUser();
     if(!user){setAuthStatus(els.registerStatus,"Cuenta creada. Si Neon solicita verificar el correo, verifica y vuelve a iniciar sesión.",false);return}
     profile={email,country,birdId:selectedBirdId,name:first+" "+last,firstName:first,lastName:last,phone:full,dial,participantId:null};
