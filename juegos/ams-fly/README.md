@@ -15,7 +15,6 @@ Juego arcade público de Avila Mora Soluciones, publicado como archivos estátic
 - Evento: muestra las condiciones cuando hay un evento activo y avisa cuando no hay uno abierto.
 - Ranking: consulta el ranking público en Neon.
 - Cuenta: login y datos del piloto para participar.
-- Gestión privada: icono de engranaje junto al sonido. Neon Auth y las políticas RLS protegen la configuración y los datos privados.
 
 ## Neon
 
@@ -27,20 +26,14 @@ Archivos principales:
 - neon-client.js: cliente Neon Auth + Data API.
 - neon/schema.sql: tablas del ranking, del evento y de participantes.
 - neon/rls-migration.sql: funciones, permisos y Row Level Security.
-- control-ams/index.html y control-ams/admin.js: login y panel privado de administración.
 
-### Preparación de administración
+### Preparación de Neon
 
-1. Habilita Neon Auth y Data API en el branch usado por el juego.
-2. Ejecuta neon/schema.sql y después neon/rls-migration.sql en el SQL Editor.
-3. Crea y verifica una cuenta de Neon Auth para administración.
-4. En Neon SQL Editor, asigna el rol de admin a ese correo verificado:
+1. Habilita Neon Auth y Data API en el branch que usa el juego.
+2. Ejecuta `neon/schema.sql` y después `neon/rls-migration.sql` en Neon SQL Editor.
+3. Crea una cuenta de jugador desde la sección **Cuenta** y verifica el correo si Neon lo solicita.
 
-   UPDATE neon_auth."user" SET role = 'admin' WHERE lower(email) = lower('tu-correo@dominio.com') AND "emailVerified" = true;
-
-5. Entra desde el engranaje de AMS Fly. El panel verifica el rol mediante ams_fly_is_admin() y Neon aplica las mismas reglas al leer o guardar información.
-
-La migración se puede volver a ejecutar para reparar o actualizar políticas. El archivo neon/server.js es un servidor Express legado; el flujo publicado en GitHub Pages usa Neon directamente.
+La migración se puede volver a ejecutar para reparar o actualizar políticas. `neon/server.js` es un servidor Express legado; el flujo publicado en GitHub Pages usa Neon directamente.
 
 ## Seguridad de puntajes
 
