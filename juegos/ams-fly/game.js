@@ -325,7 +325,7 @@ function showOnly(target){
   [els.homeScreen,els.profileScreen,els.factScreen,els.gameScreen,els.pauseScreen,els.gameOverScreen,els.rankingScreen].forEach(x=>{if(x)x.hidden=true});
   ["amsFlyEventScreen"].forEach(id=>{const x=document.getElementById(id);if(x)x.hidden=true});
   if(target)target.hidden=false;
-  if(els.bottomNav)els.bottomNav.hidden=target===els.gameScreen||target===els.pauseScreen||target===els.gameOverScreen;
+  if(els.bottomNav)els.bottomNav.hidden=false;
 }
 function hydrateStats(){
   stats=safeParse(STATS_KEY,{games:0,best:0});
