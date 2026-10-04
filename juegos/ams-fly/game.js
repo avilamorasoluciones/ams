@@ -115,7 +115,7 @@ const colombiaFacts = [
 const els = {};
 [
   "loadingScreen","homeScreen","profileScreen","factScreen","gameScreen","pauseScreen","gameOverScreen",
-  "homeBest","homeGames","startBtn","authEmail","authPassword","authSignInBtn","authSignUpBtn","authSignOutBtn","authStatus",
+  "homeBest","homeGames","startBtn","loginFields","authEmail","registerEmail","authPassword","authCreateAccountBtn","authPassword","authSignInBtn","authSignUpBtn","authSignOutBtn","authStatus",
   "registerFields","registerPassword","registerPasswordRepeat","registerStatus","backToLoginBtn","playerName","playerLastName","playerDialCode","playerPhone","playerCountry",
   "accountDetails","accountEmail","accountName","accountLastName","accountDialCode","accountPhone","accountCountry","saveAccountBtn","accountStatus","accountTitle","accountSubtitle",
   "birdGrid","selectedBirdInfo","factTitle","factText","factSourceHint","factContinueBtn","gameCanvas","scoreValue","difficultyValue","pauseBtn","gameStartHint",
@@ -1026,8 +1026,13 @@ async function refreshAuthUI(){
     setAuthStatus(els.authStatus,"No se pudo consultar la sesión de Neon.",true);return null;
   }
 }
-function showRegistrationMode(){
+function showRegistrationMode(email=""){
   els.loginFields.hidden=true;els.registerFields.hidden=false;els.accountDetails.hidden=true;
+  const value=(email||els.authEmail.value||els.authEmail.dataset.registrationEmail||"").trim().toLowerCase();
+  if(els.registerEmail)els.registerEmail.value=value;
+  if(value)els.authEmail.dataset.registrationEmail=value;
+  els.registerStatus.textContent="";
+  els.registerStatus.classList.remove("is-error");
   els.playerName.focus();
 }
 async function signInPlayer(){
@@ -1038,24 +1043,29 @@ async function signInPlayer(){
   try{
     const client=await getNeonClient();
     const result=await client.auth.signIn.email({email,password,rememberMe:true});
-    if(result?.error)throw new Error(result.error.message||"No se pudo iniciar sesión.");
-    const user=await getCurrentAuthUser();if(!user)throw new Error("No se pudo crear la sesión.");
-    await loadAccountProfile(user);populateAccountFields();await refreshAuthUI();
+    if(result?.error){
+      const code=String(result.error.code||"").toUpperCase();
+      const message=String(result.error.message||"");
+      if(code==="USER_NOT_FOUND"||code==="CREDENTIAL_ACCOUNT_NOT_FOUND"){
+        showRegistrationMode(email);
+        setAuthStatus(els.registerStatus,"No encontramos una cuenta con ese correo. Completa tus datos para crearla.",false);
+        return;
+      }
+      throw Object.assign(new Error(message||"No se pudo iniciar sesión."),{code,status:result.error.status});
+    }
+    const user=await getCurrentAuthUser();
+    if(!user)throw new Error("No se pudo recuperar la sesión después de iniciar sesión.");
+    await loadAccountProfile(user);
+    populateAccountFields();
+    await refreshAuthUI();
   }catch(error){
-    // Si el correo no existe, Better Auth devolverá un error al intentar entrar.
-    // Mostramos el registro con el correo ya escrito; si la cuenta sí existe,
-    // el intento de registro posterior devolverá "ya existe" y no crea duplicados.
-    const raw=String(error?.message||"").toLowerCase();
-    if(raw.includes("not found")||raw.includes("user")||raw.includes("credential")||raw.includes("invalid")){
-      els.authStatus.textContent="No pudimos iniciar sesión con esos datos. Si este correo aún no tiene cuenta, completa tus datos para registrarlo.";
-      els.authStatus.classList.add("is-error");
-      showRegistrationMode();
-      els.authEmail.dataset.registrationEmail=email;
-    }else setAuthStatus(els.authStatus,friendlyAuthError(error,"No se pudo iniciar sesión."),true);
-  }finally{els.authSignInBtn.disabled=false}
+    setAuthStatus(els.authStatus,friendlyAuthError(error,"No se pudo iniciar sesión. Revisa tu correo y contraseña."),true);
+  }finally{
+    els.authSignInBtn.disabled=false;
+  }
 }
 async function signUpPlayer(){
-  const email=(els.authEmail.dataset.registrationEmail||els.authEmail.value||"").trim().toLowerCase();
+  const email=(els.registerEmail?.value||els.authEmail.dataset.registrationEmail||els.authEmail.value||"").trim().toLowerCase();
   const first=(els.playerName.value||"").trim().replace(/\s+/g," ");
   const last=(els.playerLastName.value||"").trim().replace(/\s+/g," ");
   const dial=els.playerDialCode.value||"57",phone=els.playerPhone.value||"";
@@ -1063,6 +1073,7 @@ async function signUpPlayer(){
   const password=els.registerPassword.value||"",repeat=els.registerPasswordRepeat.value||"";
   if(!VALID_EMAIL.test(email)){setAuthStatus(els.registerStatus,"Correo inválido.",true);return}
   if(first.length<2||last.length<2){setAuthStatus(els.registerStatus,"Escribe nombre y apellido.",true);return}
+  if((first+" "+last).length>18){setAuthStatus(els.registerStatus,"Nombre y apellido juntos deben tener máximo 18 caracteres para el registro del piloto.",true);return}
   if(password.length<8){setAuthStatus(els.registerStatus,"La contraseña debe tener al menos 8 caracteres.",true);return}
   if(password!==repeat){setAuthStatus(els.registerStatus,"Las contraseñas no coinciden.",true);return}
   const full=fullPhone(dial,phone);
@@ -1099,6 +1110,7 @@ async function saveAccount(){
   const last=(els.accountLastName.value||"").trim().replace(/\s+/g," ");
   const dial=els.accountDialCode.value||"57",phone=els.accountPhone.value||"";
   if(first.length<2||last.length<2){setAuthStatus(els.accountStatus,"Escribe nombre y apellido.",true);return}
+  if((first+" "+last).length>18){setAuthStatus(els.accountStatus,"Nombre y apellido juntos deben tener máximo 18 caracteres para el piloto.",true);return}
   if(phone.replace(/\D/g,"").length<7){setAuthStatus(els.accountStatus,"Escribe un celular válido.",true);return}
   profile={...profile,email:String(user.email||"").toLowerCase(),name:first+" "+last,firstName:first,lastName:last,dial,phone:fullPhone(dial,phone),country:els.accountCountry.value||"CO",birdId:profile?.birdId||selectedBirdId};
   try{
@@ -1130,6 +1142,26 @@ function navigateTo(target){
 }
 document.querySelectorAll(".bottom-nav-item[data-nav]").forEach(btn=>btn.addEventListener("click",()=>navigateTo(btn.dataset.nav)));
 els.accountBtn?.addEventListener("click",()=>navigateTo("account"));
+els.authCreateAccountBtn?.addEventListener("click",()=>{
+  const email=(els.authEmail.value||"").trim().toLowerCase();
+  if(!VALID_EMAIL.test(email)){
+    setAuthStatus(els.authStatus,"Escribe primero un correo válido para crear la cuenta.",true);
+    els.authEmail.focus();
+    return;
+  }
+  showRegistrationMode(email);
+  setAuthStatus(els.registerStatus,"Completa los datos para crear tu cuenta.",false);
+});
+els.backToLoginBtn?.addEventListener("click",()=>{
+  els.registerFields.hidden=true;
+  els.loginFields.hidden=false;
+  els.accountDetails.hidden=true;
+  els.authPassword.value="";
+  els.authEmail.dataset.registrationEmail="";
+  els.registerStatus.textContent="";
+  els.registerStatus.classList.remove("is-error");
+  els.authEmail.focus();
+});
 els.rankingHeaderBtn?.addEventListener("click",()=>loadRanking());
 els.backBtn?.addEventListener("click",()=>navigateTo("play"));
 els.rankingBackBtn?.addEventListener("click",()=>navigateTo("play"));
