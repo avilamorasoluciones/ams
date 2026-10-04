@@ -152,7 +152,7 @@ const TabuGame = (() => {
 
   function startTimer(resume = false) {
     if (!resume) {
-      loadWord();
+      if (!loadWord()) return;
       secondsLeft = timePerTurn;
       timerEndsAt = Date.now() + (timePerTurn * 1000);
     } else if (!timerEndsAt) {
@@ -211,13 +211,14 @@ const TabuGame = (() => {
       clearInterval(timerId);
       alert("¡Se acabaron las palabras nuevas del mazo!");
       finishTurn();
-      return;
+      return false;
     }
 
     currentWord = nextWord;
     $("t-catBadge").textContent = currentWord.cat.toUpperCase();
     $("t-txtMainWord").textContent = currentWord.word;
     $("t-uiForbiddenList").innerHTML = currentWord.forbidden.map(w => `<li>${w}</li>`).join("");
+    return true;
   }
 
   function recordAction(type) {
