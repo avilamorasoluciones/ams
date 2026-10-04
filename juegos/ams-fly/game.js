@@ -272,7 +272,7 @@ async function openEventScreen(){
   screen.querySelector("#eventConditionTitle").textContent=cfg.conditionTitle;
   renderEventRichText(screen.querySelector("#eventConditionDesc"),cfg.conditionDesc);
   const user=await getCurrentAuthUser().catch(()=>null);
-  const accepted=!!user&&termsAcceptedFor(user);
+  const accepted=!!user&&await getTermsAcceptedFor(user);
   const check=screen.querySelector("#eventTermsConsent");
   const row=screen.querySelector("#eventTermsRow");
   const hint=screen.querySelector("#eventAuthHint");
@@ -282,14 +282,30 @@ async function openEventScreen(){
   screen.querySelector("#eventJoinButton").textContent=accepted?"PARTICIPAR Y VOLAR ✦":(user?"ACEPTAR Y PARTICIPAR ✦":"INICIAR SESIÓN PARA PARTICIPAR →");
   showOnly(screen);screen.hidden=false;screen.scrollTop=0;
 }
-async function persistTermsAccepted(user){
-  if(!user?.email)return;
-  saveTermsAcceptedFor(user);
+async function getTermsAcceptedFor(user){
+  if(!user?.email)return false;
+  const local=termsAcceptedFor(user);
+  if(!NEON_DATA_READY())return local;
   try{
     const client=await getPublicNeonClient();
-    const id=user.id||user.user?.id;
-    if(id) await client.from("ams_fly_participants").update({terms_accepted_at:new Date().toISOString()}).eq("user_id",id);
-  }catch(_){}
+    const result=await client.rpc("ams_fly_get_terms_status",{});
+    if(result?.error)throw result.error;
+    const data=result.data||{};
+    const accepted=data.accepted===true||data[0]?.accepted===true;
+    if(accepted)saveTermsAcceptedFor(user);
+    return accepted;
+  }catch(_){
+    return local;
+  }
+}
+async function persistTermsAccepted(user){
+  if(!user?.email)throw new Error("auth_required");
+  if(NEON_DATA_READY()){
+    const client=await getPublicNeonClient();
+    const result=await client.rpc("ams_fly_accept_terms",{});
+    if(result?.error)throw result.error;
+  }
+  saveTermsAcceptedFor(user);
 }
 async function loadRemoteEventConfig(){
   if(!NEON_DATA_READY())return;
