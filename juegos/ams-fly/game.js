@@ -1269,6 +1269,11 @@ els.shareResultBtn?.addEventListener("click",shareResult);
 
 document.querySelectorAll(".bottom-nav-item[data-nav]").forEach(btn=>btn.addEventListener("click",()=>navigateTo(btn.dataset.nav)));
 els.accountBtn?.addEventListener("click",()=>navigateTo("account"));
+els.authSignInBtn?.addEventListener("click",()=>signInPlayer());
+els.authSignUpBtn?.addEventListener("click",()=>signUpPlayer());
+els.saveAccountBtn?.addEventListener("click",()=>saveAccount());
+els.authSignOutBtn?.addEventListener("click",()=>signOutPlayer());
+
 els.authCreateAccountBtn?.addEventListener("click",()=>{
   const email=(els.authEmail.value||"").trim().toLowerCase();
   if(!VALID_EMAIL.test(email)){
