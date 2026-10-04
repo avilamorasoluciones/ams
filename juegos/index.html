@@ -66,7 +66,7 @@
       transition:opacity .12s ease,transform .18s cubic-bezier(.2,.9,.25,1);
     }
     .ams-game-art.swap{opacity:0;transform:scale(.72) rotate(-8deg)}
-    .ams-game-art svg{width:78px;height:78px;overflow:visible}
+    .ams-game-art img{width:78px;height:78px;display:block;object-fit:contain}
     .ams-games-dot{position:absolute;width:5px;height:5px;border-radius:50%;background:rgba(255,255,255,.75);box-shadow:0 0 10px rgba(255,255,255,.35)}
     .ams-games-dot.d1{left:7px;top:31px}.ams-games-dot.d2{right:4px;bottom:25px}.ams-games-dot.d3{left:22px;bottom:5px}
     @keyframes amsGamesSpin{to{transform:rotate(360deg)}}
@@ -356,51 +356,81 @@
 
 
   <script>
-    (() => {
-      const loader = document.getElementById("amsGamesLoader");
-      const art = document.getElementById("amsGameArt");
-      if (!loader || !art) return;
+  (() => {
+    const loader = document.getElementById("amsGamesLoader");
+    const art = document.getElementById("amsGameArt");
+    if (!loader || !art) return;
 
-      const icons = [
-        { color:"#22d3ee", svg:`<svg viewBox="0 0 80 80" fill="none"><circle cx="39" cy="37" r="22" fill="#111827" stroke="#22d3ee" stroke-width="4"/><path d="M21 28c4-14 31-19 40-5" stroke="#6366f1" stroke-width="7" stroke-linecap="round"/><path d="M24 37h12M44 37h12" stroke="#fff" stroke-width="5" stroke-linecap="round"/><path d="M49 48l10 8" stroke="#22d3ee" stroke-width="4" stroke-linecap="round"/></svg>` },
-        { color:"#fb7185", svg:`<svg viewBox="0 0 80 80" fill="none"><circle cx="40" cy="44" r="22" fill="#1f2937" stroke="#fb7185" stroke-width="4"/><path d="M40 22c0-9 7-12 12-15" stroke="#f59e0b" stroke-width="4" stroke-linecap="round"/><path d="M53 7c6 1 8 5 4 9" stroke="#fbbf24" stroke-width="4" stroke-linecap="round"/><path d="M31 43h18" stroke="#fff" stroke-width="4" stroke-linecap="round"/></svg>` },
-        { color:"#fbbf24", svg:`<svg viewBox="0 0 80 80" fill="none"><path d="M27 53c-11-5-14-19-6-27 7-7 17-5 19 3 2-9 12-12 20-5 9 9 4 25-7 30" fill="#312e81" stroke="#fbbf24" stroke-width="4"/><circle cx="30" cy="39" r="3" fill="#fff"/><circle cx="50" cy="39" r="3" fill="#fff"/><path d="M33 49c4 4 10 4 14 0" stroke="#fff" stroke-width="3" stroke-linecap="round"/></svg>` },
-        { color:"#60a5fa", svg:`<svg viewBox="0 0 80 80" fill="none"><path d="M40 12 59 31 40 68 21 31 40 12Z" fill="#bfdbfe" stroke="#60a5fa" stroke-width="4"/><path d="m40 12 0 56M21 31h38" stroke="#3b82f6" stroke-width="3" opacity=".8"/><path d="m28 24 8 7" stroke="#fff" stroke-width="3" stroke-linecap="round" opacity=".8"/></svg>` },
-        { color:"#a78bfa", svg:`<svg viewBox="0 0 80 80" fill="none"><path d="M40 13c17 0 29 11 29 27S57 67 40 67 11 57 11 40 23 13 40 13Z" fill="#312e81" stroke="#a78bfa" stroke-width="4"/><path d="M25 31h10M45 31h10M25 48c8 7 12 7 20 0" stroke="#fff" stroke-width="4" stroke-linecap="round"/></svg>` },
-        { color:"#f472b6", svg:`<svg viewBox="0 0 80 80" fill="none"><path d="M44 16c11 7 16 18 10 31-5 10-16 18-28 18-9 0-15-6-12-14 3-8 12-12 18-17 7-6 5-12 12-18Z" fill="#f43f5e" stroke="#f9a8d4" stroke-width="4"/><path d="M45 18c2-6 7-9 12-10" stroke="#f59e0b" stroke-width="4" stroke-linecap="round"/></svg>` },
-        { color:"#34d399", svg:`<svg viewBox="0 0 80 80" fill="none"><path d="M20 27c0-9 8-15 18-15s22 5 22 16v24c0 10-9 17-20 17H25l-10 7 3-12c-6-5-7-11-7-18 0-9 3-14 9-19Z" fill="#064e3b" stroke="#34d399" stroke-width="4"/><path d="M25 39h2M39 39h2M53 39h2" stroke="#fff" stroke-width="5" stroke-linecap="round"/></svg>` }
-      ];
+    // Los 3 juegos protagonistas de la pantalla de carga.
+    const games = [
+      { src: "game-tabu.svg", alt: "Tabú", color: "#fbbf24" },
+      { src: "game-impostor.svg?v=20260926-2", alt: "El Impostor", color: "#22d3ee" },
+      { src: "game-bomba.svg", alt: "La Bomba", color: "#fb7185" }
+    ];
 
-      let index = 0;
-      const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-      const started = performance.now();
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const started = performance.now();
+    const minimumTime = 1800;
+    const frameTime = 600;
+    let index = 0;
+    let cycle = null;
 
-      function showNext(){
-        if(reduced) return;
-        art.classList.add("swap");
-        setTimeout(()=>{
-          index=(index+1)%icons.length;
-          art.innerHTML=icons[index].svg;
-          art.style.filter=`drop-shadow(0 10px 22px rgba(0,0,0,.35)) drop-shadow(0 0 10px ${icons[index].color}33)`;
-          art.classList.remove("swap");
-        },120);
-      }
+    // Precarga las tres ilustraciones para evitar parpadeos o imágenes incorrectas.
+    games.forEach((game) => {
+      const img = new Image();
+      img.src = game.src;
+    });
 
-      art.innerHTML=icons[0].svg;
-      const cycle=setInterval(showNext,430);
+    function renderGame(game) {
+      art.innerHTML = "";
+      const img = document.createElement("img");
+      img.src = game.src;
+      img.alt = game.alt;
+      img.width = 78;
+      img.height = 78;
+      img.decoding = "async";
+      img.setAttribute("aria-hidden", "true");
+      art.appendChild(img);
+      art.style.filter =
+        "drop-shadow(0 10px 22px rgba(0,0,0,.35)) " +
+        "drop-shadow(0 0 12px " + game.color + "55)";
+    }
 
-      const hide=()=>{
-        const wait=Math.max(0,360-(performance.now()-started));
-        setTimeout(()=>{
-          clearInterval(cycle);
-          loader.classList.add("is-hidden");
-          setTimeout(()=>loader.remove(),450);
-        },wait);
-      };
-      if(document.readyState==="loading") document.addEventListener("DOMContentLoaded",hide,{once:true});
-      else hide();
-    })();
-  </script>
+    function showNext() {
+      if (reduced) return;
+
+      art.classList.add("swap");
+      window.setTimeout(() => {
+        index = (index + 1) % games.length;
+        renderGame(games[index]);
+        art.classList.remove("swap");
+      }, 140);
+    }
+
+    renderGame(games[0]);
+
+    if (!reduced) {
+      cycle = window.setInterval(showNext, frameTime);
+    }
+
+    const hide = () => {
+      const elapsed = performance.now() - started;
+      const wait = Math.max(0, minimumTime - elapsed);
+
+      window.setTimeout(() => {
+        if (cycle) window.clearInterval(cycle);
+        loader.classList.add("is-hidden");
+        window.setTimeout(() => loader.remove(), 450);
+      }, wait);
+    };
+
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", hide, { once: true });
+    } else {
+      hide();
+    }
+  })();
+</script>
 
   <script src="scripts.js?v=20261001-46" defer></script><script>
   // Al llegar al final en móvil, los controles flotantes de Juegos se atenúan para no cubrir el footer.
