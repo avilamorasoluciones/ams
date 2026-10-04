@@ -8,6 +8,11 @@ const FACT_INDEX_KEY = "amsFlyFactIndexV1";
 const NEON_DATA_READY = () => !!window.AMS_FLY_NEON_CONFIG?.authUrl && !!window.AMS_FLY_NEON_CONFIG?.dataApiUrl;
 const VALID_EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 function friendlyAuthError(error, fallback){
+  const code=String(error?.code||"").toUpperCase();
+  if(code==="USER_ALREADY_EXISTS"||code==="EMAIL_ALREADY_EXISTS") return "Ese correo ya tiene una cuenta. Vuelve al inicio de sesión.";
+  if(code==="EMAIL_NOT_VERIFIED") return "Tu correo todavía no está verificado. Revisa tu bandeja de entrada.";
+  if(code==="INVALID_PASSWORD"||code==="INVALID_EMAIL_OR_PASSWORD"||code==="INVALID_CREDENTIALS") return "Correo o contraseña incorrectos. Revisa los datos e inténtalo de nuevo.";
+  if(code==="USER_NOT_FOUND"||code==="CREDENTIAL_ACCOUNT_NOT_FOUND") return "No encontramos una cuenta con ese correo.";
   const raw=[error?.message,error?.details,error?.hint,error?.code,error?.status].filter(Boolean).map(String).join(" | ").trim();
   const key=raw.toLowerCase().replace(/[_-]+/g," ");
   if(key.includes("invalid email or password")||key.includes("invalid credentials")||key.includes("invalid password")||key.includes("incorrect email")||key.includes("incorrect password")||key.includes("invalid login")){
