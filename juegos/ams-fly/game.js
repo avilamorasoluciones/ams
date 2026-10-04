@@ -2,6 +2,7 @@
 "use strict";
 
 const STORAGE_KEY = "amsFlyProfileV2";
+const PENDING_REG_KEY = "amsFlyPendingRegistrationV1";
 const TERMS_KEY = "amsFlyTermsAcceptedV1";
 const STATS_KEY = "amsFlyStatsV1";
 const FACT_INDEX_KEY = "amsFlyFactIndexV1";
@@ -1024,7 +1025,12 @@ async function loadAccountProfile(user){
   if(!user)return null;
   const email=String(user.email||"").toLowerCase();
   const local=safeParse(STORAGE_KEY,null);
+  const pending=safeParse(PENDING_REG_KEY,null);
   let candidate=local&&local.email===email?{...local}:null;
+  if(!candidate&&pending&&pending.email===email){
+    candidate={...pending};
+    localStorage.removeItem(PENDING_REG_KEY);
+  }
   if(!candidate){
     const parsed=splitStoredName(user.name||"");
     candidate={name:String(user.name||"").trim(),firstName:parsed.first,lastName:parsed.last,country:"CO",birdId:selectedBirdId,phone:"",dial:"57",participantId:null};
@@ -1124,6 +1130,9 @@ async function signUpPlayer(){
   if(password!==repeat){setAuthStatus(els.registerStatus,"Las contraseñas no coinciden.",true);return}
   const full=fullPhone(dial,phone);
   if(!/^\+[1-9]\d{7,14}$/.test(full)){setAuthStatus(els.registerStatus,"Escribe un celular válido con código de país.",true);return}
+  localStorage.setItem(PENDING_REG_KEY,JSON.stringify({
+    email,firstName:first,lastName:last,name:first+" "+last,phone:full,dial,country,birdId:selectedBirdId,participantId:null
+  }));
   els.authSignUpBtn.disabled=true;setAuthStatus(els.registerStatus,"Creando tu cuenta…");
   try{
     const client=await getNeonClient();
