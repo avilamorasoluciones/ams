@@ -1316,9 +1316,20 @@ const ImpostorGame = (() => {
       .join("");
 
     const voteSummary = ranking
-      .filter(item => item.count > 0)
       .map(item => `
-        <div class="row" style="justify-content:space-between;width:100%;gap:12px;">
+        <div class="box compact-surface" style="display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:8px;">
+          <span><strong>${escapeHTML(item.player)}</strong></span>
+          <strong>${item.count} ${item.count === 1 ? "voto" : "votos"}</strong>
+        </div>
+      `)
+      .join("");
+
+    const innocentSummary = players
+      .map((player, playerIndex) => ({ player, playerIndex, count: counts[playerIndex] || 0 }))
+      .filter(item => roles[item.playerIndex] !== "impostor")
+      .sort((a, b) => b.count - a.count || a.playerIndex - b.playerIndex)
+      .map(item => `
+        <div class="row" style="justify-content:space-between;width:100%;gap:12px;margin-top:6px;">
           <span>${escapeHTML(item.player)}</span>
           <strong>${item.count} ${item.count === 1 ? "voto" : "votos"}</strong>
         </div>
@@ -1327,13 +1338,27 @@ const ImpostorGame = (() => {
 
     const voteResults = `
       <div class="box panel-soft full-width">
-        <div class="label-muted">Quién votó por quién</div>
-        <p class="muted" style="margin:4px 0 8px;">Cada línea muestra: <strong>quién votó → a quién votó</strong>.</p>
+        <div class="label-muted">Historia de la votación</div>
+        <p class="muted" style="margin:4px 0 8px;">Así votó cada jugador: <strong>quién votó → a quién votó</strong>.</p>
         ${voteDetails || '<p class="muted">Sin votos registrados.</p>'}
       </div>
+
       <div class="box panel-soft full-width">
-        <div class="label-muted">Conteo final</div>
-        ${voteSummary || '<p class="muted">Sin votos registrados.</p>'}
+        <div class="label-muted">Votos recibidos</div>
+        <p class="muted" style="margin:4px 0 8px;">Este es el total que recibió cada jugador.</p>
+        ${voteSummary}
+      </div>
+
+      <div class="box panel-soft full-width">
+        <div class="label-muted">El impostor era</div>
+        <h2 class="big-player-name" style="font-size:1.8rem;margin:8px 0;">${impostors.map(escapeHTML).join(" · ")}</h2>
+        <p class="muted strong-copy">${impostors.length === 1 ? "El impostor fue descubierto al final de la votación." : "Estos eran los impostores de la partida."}</p>
+      </div>
+
+      <div class="box panel-soft full-width">
+        <div class="label-muted">Los inocentes</div>
+        <p class="muted" style="margin:4px 0 8px;">Se salvaron de ser el impostor. Estos fueron los votos que recibió cada uno:</p>
+        ${innocentSummary || '<p class="muted">No hay inocentes registrados.</p>'}
       </div>
     `;
 
