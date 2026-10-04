@@ -25,7 +25,7 @@ const ImpostorGame = (() => {
   let voteWinnerIndex = null;
 
   function saveSession(screen = document.querySelector(".im-screen.active")?.id || "i-scr-lobby") {
-    window.GameSession?.save("impostor", { players, usedWords, roles, selectedCard, currentIndex, starterIndex, secondsLeft, timerRunning, timerEndsAt, lastVoteIndex, impostorCounts, impostorHintsEnabled, voteQueue, currentVoterIndex, votes, voteWinnerIndex, screen });
+    window.GameSession?.save("impostor", { players, usedWords, roles, selectedCard, currentIndex, starterIndex, secondsLeft, timerRunning, timerEndsAt, lastVoteIndex, impostorCounts, impostorHintsEnabled, voteQueue, currentVoterIndex, votes, voteWinnerIndex, voteCounts: Array.isArray(window.__impostorVoteCounts) ? window.__impostorVoteCounts : null, voteTied: Boolean(window.__impostorVoteTied), screen });
   }
 
   function $(id) {
@@ -1277,6 +1277,8 @@ const ImpostorGame = (() => {
 
     lastVoteIndex = index;
     voteWinnerIndex = index;
+    window.__impostorVoteCounts = counts.slice();
+    window.__impostorVoteTied = Boolean(tied);
 
     const votedPlayer = players[index];
     const votedRole = roles[index];
@@ -1432,7 +1434,7 @@ const ImpostorGame = (() => {
     }
 
     changeScreen("i-scr-result");
-    window.GameSession?.clear("impostor");
+    saveSession("i-scr-result");
   }
 
   function restartGame() {
@@ -1449,6 +1451,8 @@ const ImpostorGame = (() => {
     currentVoterIndex = 0;
     votes = {};
     voteWinnerIndex = null;
+    window.__impostorVoteCounts = null;
+    window.__impostorVoteTied = false;
     window.GameSession?.clear("impostor");
 
     document.body.classList.remove("playing");
