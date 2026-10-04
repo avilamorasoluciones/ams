@@ -54,6 +54,7 @@
     @keyframes tabu-count-pop { 0% { transform:scale(.55); opacity:.2; } 60% { transform:scale(1.08); opacity:1; } 100% { transform:scale(1); opacity:1; } }
     .tabu-next-note { margin: 0; }
     .tabu-cancel-btn { position:absolute; top:10px; right:10px; width:42px; height:42px; border-radius:50%; z-index:2; }
+    .tabu-game-cancel-btn { width:100%; min-height:52px; margin-bottom:10px; border-radius:12px; font-weight:900; }
     #t-scr-game { position:relative; }
     .tabu-confirm-actions { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
     @media (max-width: 520px) {
@@ -180,7 +181,7 @@
 
               <!-- JUEGO ACTIVO -->
               <div id="t-scr-game" class="im-screen center">
-                <button type="button" class="btn ghost tabu-cancel-btn" id="t-btnCancelGame" aria-label="Cancelar partida" title="Cancelar partida"><svg class="ui-icon" aria-hidden="true"><use href="ui-icons.svg#close"></use></svg></button>
+                <button type="button" class="btn danger tabu-game-cancel-btn" id="t-btnCancelGame" aria-label="Cancelar partida" title="Cancelar partida"><svg class="ui-icon" aria-hidden="true"><use href="ui-icons.svg#close"></use></svg><span>Cancelar partida</span></button>
                 <div class="box stack compact">
                   <div class="tabu-game-context">
                     <span class="tabu-turn-badge" id="t-liveTeam">Equipo 1</span>
