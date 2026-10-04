@@ -1181,7 +1181,7 @@ const DB_TABU = [
   {cat:"colombia",word:"Carriel",forbidden:["Paisa","Bolso","Cuero","Antioquia","Hombre"]},
   {cat:"colombia",word:"Mochila Wayuu",forbidden:["La Guajira","Tejida","Bolso","Indígena","Colores"]},
   {cat:"colombia",word:"Parcero",forbidden:["Amigo","Paisa","Amistad","Compañero","Medellín"]},
-  {cat:"colombia",word:"Bacano",forbidden:["Bueno","Genial"," chévere","Expresión","Colombia"]},
+  {cat:"colombia",word:"Bacano",forbidden:["Bueno","Genial","chévere","Expresión","Colombia"]},
   {cat:"colombia",word:"Dar papaya",forbidden:["Descuidarse","Oportunidad","Expresión","Cuidado","Colombia"]},
   {cat:"colombia",word:"Ñapa",forbidden:["Extra","Regalo","Tienda","Vendedor","Gratis"]},
   {cat:"colombia",word:"Vaina",forbidden:["Cosa","Problema","Palabra","Expresión","Objeto"]},
