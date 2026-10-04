@@ -69,6 +69,7 @@ create table if not exists ams_fly_participants (
   score integer not null default 0 check (score >= 0 and score <= 1000000),
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now(),
+  terms_accepted_at timestamptz,
   unique(phone)
 );
 
