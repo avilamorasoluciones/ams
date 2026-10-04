@@ -5,6 +5,7 @@ const STORAGE_KEY = "amsFlyProfileV2";
 const STATS_KEY = "amsFlyStatsV1";
 const FACT_INDEX_KEY = "amsFlyFactIndexV1";
 const NEON_DATA_READY = () => !!window.AMS_FLY_NEON_CONFIG?.dataApiUrl;
+const VALID_EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 function formatRankingDate(value){
   const date=new Date(value);
   if(!Number.isFinite(date.getTime()))return "";
@@ -908,26 +909,28 @@ async function refreshAuthUI(){
     els.authBox.classList.toggle("is-authenticated",signedIn);
     return user;
   }catch(_){
-    els.authStatus.textContent="No se pudo consultar la sesión de Neon.";
+    els.authStatus.classList.add("is-error");els.authStatus.textContent="No se pudo consultar la sesión de Neon.";
     return null;
   }
 }
 async function signInPlayer(){
   const email=(els.authEmail.value||"").trim().toLowerCase(),password=els.authPassword.value||"";
-  if(!email||!password){els.authStatus.textContent="Escribe tu correo y contraseña.";return}
-  els.authSignInBtn.disabled=true;els.authSignUpBtn.disabled=true;els.authStatus.textContent="Iniciando sesión…";
+  if(!email||!password){els.authStatus.textContent="Escribe tu correo y contraseña.";els.authStatus.classList.add("is-error");return}
+  if(!VALID_EMAIL.test(email)){els.authStatus.textContent="Escribe un correo electrónico válido, por ejemplo: nombre@dominio.com";els.authStatus.classList.add("is-error");els.authEmail.focus();return}
+  els.authStatus.classList.remove("is-error");els.authSignInBtn.disabled=true;els.authSignUpBtn.disabled=true;els.authStatus.textContent="Iniciando sesión…";
   try{
     const client=await getNeonClient();
     const result=await client.auth.signIn.email({email,password,rememberMe:true});
     if(result?.error)throw new Error(result.error.message||"No se pudo iniciar sesión.");
     if(!await getCurrentAuthUser())throw new Error("Neon no devolvió una sesión válida.");
     await refreshAuthUI();
-  }catch(error){els.authStatus.textContent=error?.message||"No se pudo iniciar sesión. Revisa el correo y la contraseña."}
+  }catch(error){els.authStatus.classList.add("is-error");els.authStatus.textContent=error?.message||"No se pudo iniciar sesión. Revisa el correo y la contraseña."}
   finally{els.authSignInBtn.disabled=false;els.authSignUpBtn.disabled=false}
 }
 async function signUpPlayer(){
   const email=(els.authEmail.value||"").trim().toLowerCase(),password=els.authPassword.value||"";
-  if(!email||!/^S+@S+.S+$/.test(email)){els.authStatus.textContent="Escribe un correo electrónico válido.";return}
+  if(!VALID_EMAIL.test(email)){els.authStatus.textContent="Escribe un correo electrónico válido, por ejemplo: nombre@dominio.com";els.authStatus.classList.add("is-error");els.authEmail.focus();return}
+  els.authStatus.classList.remove("is-error");
   if(password.length<8){els.authStatus.textContent="La contraseña debe tener al menos 8 caracteres.";return}
   els.authSignInBtn.disabled=true;els.authSignUpBtn.disabled=true;els.authStatus.textContent="Creando tu cuenta…";
   try{
@@ -937,20 +940,20 @@ async function signUpPlayer(){
     const user=await getCurrentAuthUser();
     if(user)await refreshAuthUI();
     else els.authStatus.textContent="✓ Cuenta creada. Si Neon solicita verificar el correo, completa ese paso y luego inicia sesión.";
-  }catch(error){els.authStatus.textContent=error?.message||"No se pudo crear la cuenta."}
+  }catch(error){els.authStatus.classList.add("is-error");els.authStatus.textContent=error?.message||"No se pudo crear la cuenta."}
   finally{els.authSignInBtn.disabled=false;els.authSignUpBtn.disabled=false}
 }
 async function signOutPlayer(){
   try{
     const client=await getNeonClient();await client.auth.signOut();
     profile=null;localStorage.removeItem(STORAGE_KEY);renderHomeBird();await refreshAuthUI();
-  }catch(error){els.authStatus.textContent=error?.message||"No se pudo cerrar la sesión."}
+  }catch(error){els.authStatus.classList.add("is-error");els.authStatus.textContent=error?.message||"No se pudo cerrar la sesión."}
 }
 async function submitProfile(e){
   e.preventDefault();
   const authUser=await refreshAuthUI();
   if(!authUser){els.profileError.textContent="Primero inicia sesión o crea una cuenta. Una cuenta = un piloto en el ranking.";els.profileError.hidden=false;els.authEmail.focus();return}
-  const name=els.playerName.value.trim().replace(/s+/g," ");
+  const name=els.playerName.value.trim().replace(/\s+/g," ");
   if(name.length<2){els.profileError.textContent="Escribe al menos 2 caracteres para tu nombre.";els.profileError.hidden=false;els.playerName.focus();return}
   if(els.termsConsent && !els.termsConsent.checked){els.profileError.textContent="Debes aceptar los Términos y Condiciones y la Política de Privacidad para participar.";els.profileError.hidden=false;els.termsConsent.focus();return}
   if(!NEON_DATA_READY()){els.profileError.textContent="No podemos registrar el piloto todavía porque Neon no está conectado.";els.profileError.hidden=false;return}
