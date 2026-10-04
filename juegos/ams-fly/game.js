@@ -726,25 +726,32 @@ async function publishScore(options={}){
     if(!authUser)throw new Error("auth_required");
 
     const client=await getPublicNeonClient();
-    let participantResult=await client.rpc("ams_fly_register_participant",{
-      p_name:profile.name,p_country:profile.country,p_bird_id:profile.birdId,p_phone:null,p_score:0
-    });
+    let participantId=profile.participantId||null;
 
-    if(participantResult.error && String(participantResult.error.message||"").includes("auth_required")){
-      await new Promise(resolve=>setTimeout(resolve,350));
-      if(!await getCurrentAuthUser())throw new Error("auth_required");
-      participantResult=await client.rpc("ams_fly_register_participant",{
+    // El piloto ya quedó registrado al configurar su perfil. No repetimos esa
+    // RPC en cada publicación: evita una llamada de red y acelera el guardado.
+    if(!participantId){
+      let participantResult=await client.rpc("ams_fly_register_participant",{
         p_name:profile.name,p_country:profile.country,p_bird_id:profile.birdId,p_phone:null,p_score:0
       });
+
+      if(participantResult.error && String(participantResult.error.message||"").includes("auth_required")){
+        await new Promise(resolve=>setTimeout(resolve,350));
+        if(!await getCurrentAuthUser())throw new Error("auth_required");
+        participantResult=await client.rpc("ams_fly_register_participant",{
+          p_name:profile.name,p_country:profile.country,p_bird_id:profile.birdId,p_phone:null,p_score:0
+        });
+      }
+
+      if(participantResult.error)throw participantResult.error;
+      participantId=participantResult.data?.participant_id||null;
+      if(participantId){
+        profile.participantId=participantId;
+        saveProfile();
+      }
     }
 
-    if(participantResult.error)throw participantResult.error;
-    const participant=participantResult.data||{};
-    const participantId=participant.participant_id||profile.participantId||null;
     if(!participantId)throw new Error("No se pudo identificar tu piloto.");
-
-    profile.participantId=participantId;
-    saveProfile();
 
     // El dispositivo puede conservar un récord conseguido antes de que la
     // publicación en Neon estuviera disponible. Al terminar una nueva partida,
