@@ -1297,6 +1297,24 @@ const ImpostorGame = (() => {
       .map((player, playerIndex) => ({ player, playerIndex, count: counts[playerIndex] || 0 }))
       .sort((a, b) => b.count - a.count || a.playerIndex - b.playerIndex);
 
+    const voteDetails = voteQueue
+      .map((voterIndex) => {
+        const targetIndex = Number(votes[String(voterIndex)]);
+        if (!Number.isInteger(voterIndex) || !Number.isInteger(targetIndex) || !players[voterIndex] || !players[targetIndex]) {
+          return "";
+        }
+
+        return `
+          <div class="box compact-surface" style="display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);align-items:center;gap:8px;margin-top:8px;">
+            <strong style="text-align:right;">${escapeHTML(players[voterIndex])}</strong>
+            <span class="muted" aria-hidden="true">→</span>
+            <strong>${escapeHTML(players[targetIndex])}</strong>
+          </div>
+        `;
+      })
+      .filter(Boolean)
+      .join("");
+
     const voteSummary = ranking
       .filter(item => item.count > 0)
       .map(item => `
@@ -1306,6 +1324,18 @@ const ImpostorGame = (() => {
         </div>
       `)
       .join("");
+
+    const voteResults = `
+      <div class="box panel-soft full-width">
+        <div class="label-muted">Quién votó por quién</div>
+        <p class="muted" style="margin:4px 0 8px;">Cada línea muestra: <strong>quién votó → a quién votó</strong>.</p>
+        ${voteDetails || '<p class="muted">Sin votos registrados.</p>'}
+      </div>
+      <div class="box panel-soft full-width">
+        <div class="label-muted">Conteo final</div>
+        ${voteSummary || '<p class="muted">Sin votos registrados.</p>'}
+      </div>
+    `;
 
     const resultWasCatch = !tied && votedRole === "impostor";
 
@@ -1317,10 +1347,7 @@ const ImpostorGame = (() => {
         <div class="pass-art">${window.uiIcon("impostor")}</div>
         <h2 class="big-player-name" style="font-size:1.9rem;">${escapeHTML(votedPlayer)}</h2>
         <p class="muted strong-copy">Sí era impostor.</p>
-        <div class="box panel-soft full-width">
-          <div class="label-muted">Votación</div>
-          ${voteSummary || '<p class="muted">Sin votos registrados.</p>'}
-        </div>
+        ${voteResults}
         <div class="box panel-soft full-width">
           <div class="label-muted">Palabra real</div>
           <div class="big-player-name" style="font-size:1.8rem;">
@@ -1344,10 +1371,7 @@ const ImpostorGame = (() => {
         <div class="pass-art">${window.uiIcon("impostor")}</div>
         <h2 class="big-player-name" style="font-size:1.9rem;">${escapeHTML(votedPlayer)}</h2>
         <p class="muted strong-copy">${tied ? "Hubo empate en la votación." : "La persona con más votos era inocente."}</p>
-        <div class="box panel-soft full-width">
-          <div class="label-muted">Votación</div>
-          ${voteSummary || '<p class="muted">Sin votos registrados.</p>'}
-        </div>
+        ${voteResults}
         <div class="box panel-soft full-width">
           <div class="label-muted">Impostor(es)</div>
           <p class="muted strong-copy">${impostors.map(escapeHTML).join(" · ")}</p>
