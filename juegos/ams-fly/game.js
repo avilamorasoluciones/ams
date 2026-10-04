@@ -1210,7 +1210,18 @@ async function signUpPlayer(){
     const user=await getCurrentAuthUser();
     if(!user){setAuthStatus(els.registerStatus,"Cuenta creada. Si Neon solicita verificar el correo, verifica y vuelve a iniciar sesión.",false);return}
     profile={email,country,birdId:selectedBirdId,name:first+" "+last,firstName:first,lastName:last,phone:full,dial,participantId:null};
-    await syncParticipantProfile(user);
+    // Guardar primero localmente para no perder el registro si la Data API
+    // tarda, falla temporalmente o aún no tiene aplicada la migración.
+    saveProfile();
+    try{
+      await syncParticipantProfile(user);
+    }catch(syncError){
+      console.error("AMS Fly: cuenta creada, pero el piloto aún no se pudo sincronizar",syncError);
+      setAuthStatus(els.registerStatus,"✓ Cuenta creada y datos guardados. La sincronización con Neon quedó pendiente.",true);
+      await refreshAuthUI();
+      navigateTo("play");
+      return;
+    }
     localStorage.removeItem(PENDING_REG_KEY);
     saveProfile();await refreshAuthUI();
     navigateTo("play");
