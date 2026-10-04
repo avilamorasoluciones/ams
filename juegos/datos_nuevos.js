@@ -1,37 +1,90 @@
-/* DB independiente para Batalla de Palabras, Duelo y Apuesta.
-   Se mantiene separada de datos.js para poder ampliar estos 3 juegos sin tocar la DB histórica. */
+/* DB independiente para Batalla de Palabras, Duelo y Apuesta. */
 const AMS_NEW_GAMES_DB = {
-  batalla: {
-    categories: {
-      "Animales":["perro","gato","elefante","tigre","león","águila","delfín","caballo","jirafa","mono","cocodrilo","mariposa","conejo","tortuga","pingüino","ballena","zorro","oso","serpiente","rana"],
-      "Comida":["arepa","pizza","hamburguesa","pasta","arroz","sopa","ensalada","empanada","taco","sandwich","pollo","pescado","queso","helado","chocolate","pan","frijoles","lentejas","tamales","buñuelos"],
-      "Países":["Colombia","México","Argentina","Brasil","Chile","Perú","Ecuador","Venezuela","España","Francia","Italia","Japón","China","Canadá","Australia","India","Egipto","Portugal","Alemania","Estados Unidos"],
-      "Ciudades":["Bogotá","Medellín","Cali","Cartagena","Barranquilla","Bucaramanga","Pereira","Manizales","Armenia","Santa Marta","Ibagué","Tunja","Popayán","Cúcuta","Neiva","Villavicencio","Pasto","Valledupar","Montería","Riohacha"],
-      "Lugares de Colombia":["Guatapé","Monserrate","Tayrona","San Andrés","Caño Cristales","Villa de Leyva","Salento","Cartagena","Amazonas","Eje Cafetero","Ciudad Perdida","Desierto de la Tatacoa","Catedral de Sal","Nuquí","Barichara","Leticia","Guatavita","Minca","Palomino","El Cocuy"],
-      "Comida colombiana":["arepa","bandeja paisa","ajiaco","sancocho","lechona","tamales","mute","changua","frijoles","empanadas","buñuelos","pandebono","oblea","cholado","fritanga","arroz con pollo","carne oreada","ab||||adejo","almojábana","mazamorra"],
-      "Deportes":["fútbol","baloncesto","tenis","ciclismo","natación","atletismo","boxeo","voleibol","gimnasia","béisbol","patinaje","esgrima","judo","surf","golf","ajedrez","rugby","skate","karate","escalada"],
-      "Tecnología":["celular","computador","tablet","teclado","mouse","monitor","servidor","internet","router","cámara","micrófono","audífonos","robot","dron","consola","aplicación","web","programa","batería","cargador"],
-      "Videojuegos":["Minecraft","Fortnite","Tetris","Mario","Zelda","Pokémon","FIFA","Roblox","Pac-Man","Sonic","Halo","Overwatch","Among Us","Terraria","GTA","Fall Guys","Cuphead","Doom","Celeste","Kirby"],
-      "Objetos de la casa":["mesa","silla","cama","sofá","nevera","televisor","lámpara","espejo","escoba","almohada","toalla","vaso","plato","cuchara","armario","puerta","ventana","reloj","ventilador","microondas"],
-      "Profesiones":["médico","ingeniero","profesor","abogado","chef","piloto","arquitecto","periodista","fotógrafo","diseñador","programador","veterinario","enfermero","bombero","policía","mecánico","electricista","agricultor","contador","músico"],
-      "Naturaleza":["montaña","río","mar","bosque","volcán","isla","cascada","desierto","playa","lago","nube","lluvia","trueno","arcoíris","árbol","flor","piedra","cueva","selva","glaciar"]
-    }
-  },
-  duelo: {
-    categories: {
-      "Cultura general":["¿Cuál es el planeta más grande del sistema solar?","¿Cuántos lados tiene un hexágono?","¿Cuál es la capital de Colombia?","¿Qué animal es conocido como el rey de la selva?","¿Cuál es el océano más grande?","¿Cuántos días tiene un año normal?","¿Qué planeta es conocido como el planeta rojo?","¿Cuál es el metal cuyo símbolo es Au?","¿Cuántos continentes se suelen reconocer?","¿Cuál es el idioma más hablado por número de hablantes nativos?"],
-      "Colombia":["¿Cuál es la capital de Antioquia?","¿Qué ciudad es conocida como la Ciudad de la Eterna Primavera?","¿Cuál es la flor nacional de Colombia?","¿Qué ave es el ave nacional de Colombia?","¿En qué región está el Amazonas colombiano?","¿Cuál es la capital del Valle del Cauca?","¿Qué ciudad es famosa por su ciudad amurallada?","¿Cuál es la moneda oficial de Colombia?","¿Qué cordillera atraviesa gran parte del país?","¿Cuál es el nombre del río más importante de Colombia?"],
-      "Ciencia":["¿Qué gas respiramos principalmente del aire?","¿Cuántos huesos tiene aproximadamente un adulto?","¿Qué órgano bombea la sangre?","¿Qué fuerza nos mantiene sobre el suelo?","¿Cuál es la unidad básica de la vida?","¿Qué planeta está más cerca del Sol?","¿Qué parte de la planta absorbe agua del suelo?","¿Qué estado del agua es el hielo?","¿Qué sentido usamos principalmente para escuchar?","¿Qué vitamina se relaciona con la exposición solar?"],
-      "Entretenimiento":["¿Cómo se llama el fontanero más famoso de Nintendo?","¿Qué saga tiene un personaje llamado Pikachu?","¿Cómo se llama el mago protagonista de una famosa saga británica?","¿Qué superhéroe usa un escudo con una estrella?","¿Qué película animada tiene una familia Madrigal?","¿Qué videojuego usa bloques que caen para completar líneas?","¿Qué personaje vive en una piña debajo del mar?","¿Qué saga tiene un anillo único?","¿Qué héroe lleva una armadura tecnológica roja y dorada?","¿Qué princesa de Disney tiene una larga cabellera mágica?"]
-    }
-  },
-  apuesta: {
-    categories: {
-      "Colombia":["¿Qué ciudad tiene el apodo de Ciudad de la Eterna Primavera?","¿Cuál es la capital de Colombia?","¿Cuál es la flor nacional de Colombia?","¿Cuál es el ave nacional de Colombia?","¿Cuál es la moneda de Colombia?","¿En qué ciudad está Monserrate?","¿Qué ciudad es famosa por su ciudad amurallada?","¿Qué región es famosa por el café?","¿Cuál es la capital del Atlántico?","¿Cuál es la capital del Valle del Cauca?"],
-      "Mundo":["¿Cuál es el océano más grande?","¿Cuál es el planeta más grande?","¿Cuál es el país más grande por territorio?","¿Qué continente tiene más países?","¿Cuál es la capital de Francia?","¿Cuál es la capital de Japón?","¿Qué país tiene forma de bota?","¿Dónde están las pirámides de Guiza?","¿Qué idioma tiene más hablantes nativos?","¿Cuál es el desierto cálido más grande?"],
-      "Ciencia":["¿Qué planeta es conocido como el planeta rojo?","¿Qué órgano bombea la sangre?","¿Cuál es la unidad básica de la vida?","¿Qué gas necesitamos para respirar?","¿Cuántos planetas hay en el sistema solar?","¿Qué parte de la planta absorbe agua?","¿Qué fuerza atrae los objetos hacia la Tierra?","¿Qué estado tiene el agua congelada?","¿Qué estrella está más cerca de la Tierra?","¿Cuántos lados tiene un triángulo?"],
-      "Entretenimiento":["¿Qué personaje vive en una piña bajo el mar?","¿Qué videojuego tiene bloques que caen?","¿Qué saga tiene a Pikachu?","¿Cómo se llama el héroe de Hyrule?","¿Qué familia protagoniza Encanto?","¿Qué superhéroe es conocido como el Hombre Araña?","¿Qué juego popular tiene impostores?","¿Qué personaje usa un martillo llamado Mjolnir?","¿Qué fontanero protagoniza Super Mario?","¿Qué película tiene a Woody y Buzz?"],
-      "Decisiones":["¿Qué escogería la mayoría: playa o montaña?","¿Qué escogería la mayoría: pizza o hamburguesa?","¿Qué escogería la mayoría: perro o gato?","¿Qué escogería la mayoría: día o noche?","¿Qué escogería la mayoría: verano o invierno?","¿Qué escogería la mayoría: dulce o salado?","¿Qué escogería la mayoría: cine o concierto?","¿Qué escogería la mayoría: viajar o ahorrar?","¿Qué escogería la mayoría: celular nuevo o vacaciones?","¿Qué escogería la mayoría: madrugar o trasnochar?"]
-    }
-  }
+  batalla:{categories:{
+    "Animales":["perro","gato","elefante","tigre","león","águila","delfín","caballo","jirafa","mono","cocodrilo","mariposa","conejo","tortuga","pingüino","ballena","zorro","oso","serpiente","rana"],
+    "Comida":["arepa","pizza","hamburguesa","pasta","arroz","sopa","ensalada","empanada","taco","sándwich","pollo","pescado","queso","helado","chocolate","pan","frijoles","lentejas","tamales","buñuelos"],
+    "Países":["Colombia","México","Argentina","Brasil","Chile","Perú","Ecuador","Venezuela","España","Francia","Italia","Japón","China","Canadá","Australia","India","Egipto","Portugal","Alemania","Estados Unidos"],
+    "Ciudades":["Bogotá","Medellín","Cali","Cartagena","Barranquilla","Bucaramanga","Pereira","Manizales","Armenia","Santa Marta","Ibagué","Tunja","Popayán","Cúcuta","Neiva","Villavicencio","Pasto","Valledupar","Montería","Riohacha"],
+    "Lugares de Colombia":["Guatapé","Monserrate","Tayrona","San Andrés","Caño Cristales","Villa de Leyva","Salento","Cartagena","Amazonas","Eje Cafetero","Ciudad Perdida","Desierto de la Tatacoa","Catedral de Sal","Nuquí","Barichara","Leticia","Guatavita","Minca","Palomino","El Cocuy"],
+    "Comida colombiana":["arepa","bandeja paisa","ajiaco","sancocho","lechona","tamales","mute","changua","frijoles","empanadas","buñuelos","pandebono","oblea","cholado","fritanga","arroz con pollo","carne oreada","ab||||adejo","almojábana","mazamorra"],
+    "Deportes":["fútbol","baloncesto","tenis","ciclismo","natación","atletismo","boxeo","voleibol","gimnasia","béisbol","patinaje","esgrima","judo","surf","golf","ajedrez","rugby","skate","karate","escalada"],
+    "Tecnología":["celular","computador","tablet","teclado","mouse","monitor","servidor","internet","router","cámara","micrófono","audífonos","robot","dron","consola","aplicación","web","programa","batería","cargador"],
+    "Videojuegos":["Minecraft","Fortnite","Tetris","Mario","Zelda","Pokémon","FIFA","Roblox","Pac-Man","Sonic","Halo","Overwatch","Among Us","Terraria","GTA","Fall Guys","Cuphead","Doom","Celeste","Kirby"],
+    "Objetos de la casa":["mesa","silla","cama","sofá","nevera","televisor","lámpara","espejo","escoba","almohada","toalla","vaso","plato","cuchara","armario","puerta","ventana","reloj","ventilador","microondas"],
+    "Profesiones":["médico","ingeniero","profesor","abogado","chef","piloto","arquitecto","periodista","fotógrafo","diseñador","programador","veterinario","enfermero","bombero","policía","mecánico","electricista","agricultor","contador","músico"],
+    "Naturaleza":["montaña","río","mar","bosque","volcán","isla","cascada","desierto","playa","lago","nube","lluvia","trueno","arcoíris","árbol","flor","piedra","cueva","selva","glaciar"]
+  }},
+  duelo:{questions:[
+    ["¿Cuál es el planeta más grande del sistema solar?",["Mercurio","Júpiter","Marte","Venus"],1],
+    ["¿Cuántos lados tiene un hexágono?",["5","6","7","8"],1],
+    ["¿Cuál es la capital de Colombia?",["Medellín","Cali","Bogotá","Cartagena"],2],
+    ["¿Cuál es el océano más grande?",["Atlántico","Índico","Pacífico","Ártico"],2],
+    ["¿Qué planeta es conocido como el planeta rojo?",["Venus","Marte","Júpiter","Saturno"],1],
+    ["¿Cuál es el símbolo químico del oro?",["Ag","Au","Fe","O"],1],
+    ["¿Qué órgano bombea la sangre?",["Pulmón","Cerebro","Corazón","Hígado"],2],
+    ["¿Cuál es la unidad básica de la vida?",["Átomo","Célula","Tejido","Órgano"],1],
+    ["¿Qué fuerza atrae los objetos hacia la Tierra?",["Fricción","Gravedad","Magnetismo","Presión"],1],
+    ["¿Cuántos planetas hay en el sistema solar?",["7","8","9","10"],1],
+    ["¿Cuál es la flor nacional de Colombia?",["Rosa","Orquídea","Girasol","Clavel"],1],
+    ["¿Cuál es el ave nacional de Colombia?",["Cóndor de los Andes","Águila","Guacamaya","Tucán"],0],
+    ["¿Cuál es la capital de Antioquia?",["Cali","Medellín","Pereira","Manizales"],1],
+    ["¿Qué ciudad colombiana es famosa por su ciudad amurallada?",["Cartagena","Bogotá","Cúcuta","Ibagué"],0],
+    ["¿Cuál es la capital del Valle del Cauca?",["Palmira","Buenaventura","Cali","Tuluá"],2],
+    ["¿Qué personaje vive en una piña debajo del mar?",["Mickey","Bob Esponja","Shrek","Garfield"],1],
+    ["¿Qué saga tiene a Pikachu?",["Mario","Pokémon","Zelda","Sonic"],1],
+    ["¿Cómo se llama el héroe de Hyrule?",["Link","Mario","Kirby","Samus"],0],
+    ["¿Qué videojuego usa bloques que caen para completar líneas?",["Tetris","Minecraft","FIFA","Roblox"],0],
+    ["¿Qué familia protagoniza Encanto?",["Los Madrigal","Los Increíbles","Los Parr","Los Rivera"],0],
+    ["¿Qué superhéroe es conocido como el Hombre Araña?",["Batman","Superman","Spider-Man","Flash"],2],
+    ["¿Qué juego popular tiene impostores?",["Among Us","Fortnite","Tetris","Pong"],0],
+    ["¿Qué personaje usa el martillo Mjolnir?",["Thor","Hulk","Iron Man","Flash"],0],
+    ["¿Qué fontanero protagoniza Super Mario?",["Luigi","Mario","Wario","Toad"],1],
+    ["¿Qué película tiene a Woody y Buzz?",["Toy Story","Coco","Up","Cars"],0],
+    ["¿Qué gas necesitamos principalmente para respirar?",["Oxígeno","Helio","Hidrógeno","Neón"],0],
+    ["¿Qué parte de la planta absorbe agua del suelo?",["Flor","Raíz","Fruto","Hoja"],1],
+    ["¿Qué estado del agua es el hielo?",["Líquido","Gas","Sólido","Plasma"],2],
+    ["¿Qué planeta está más cerca del Sol?",["Venus","Mercurio","Marte","Tierra"],1],
+    ["¿Qué sentido usamos para escuchar?",["Vista","Oído","Tacto","Gusto"],1]
+  ]},
+  apuesta:{questions:[
+    ["¿Cuál es la capital de Colombia?",["Bogotá","Medellín"],0],
+    ["¿Cuál es la flor nacional de Colombia?",["Orquídea","Rosa"],0],
+    ["¿Cuál es el ave nacional de Colombia?",["Cóndor de los Andes","Águila"],0],
+    ["¿Qué ciudad tiene el apodo de Ciudad de la Eterna Primavera?",["Medellín","Cali"],0],
+    ["¿Dónde está Monserrate?",["Bogotá","Cartagena"],0],
+    ["¿Cuál es la capital del Atlántico?",["Barranquilla","Santa Marta"],0],
+    ["¿Cuál es la capital del Valle del Cauca?",["Cali","Pereira"],0],
+    ["¿Qué océano es el más grande?",["Pacífico","Atlántico"],0],
+    ["¿Cuál es el planeta más grande?",["Júpiter","Saturno"],0],
+    ["¿Cuál es el país más grande por territorio?",["Rusia","Canadá"],0],
+    ["¿Cuál es la capital de Francia?",["París","Roma"],0],
+    ["¿Cuál es la capital de Japón?",["Tokio","Kioto"],0],
+    ["¿Qué país tiene forma de bota?",["Italia","Grecia"],0],
+    ["¿Dónde están las pirámides de Guiza?",["Egipto","México"],0],
+    ["¿Qué planeta es conocido como el planeta rojo?",["Marte","Venus"],0],
+    ["¿Qué órgano bombea la sangre?",["Corazón","Pulmón"],0],
+    ["¿Cuántos planetas hay en el sistema solar?",["8","9"],0],
+    ["¿Qué fuerza atrae los objetos hacia la Tierra?",["Gravedad","Fricción"],0],
+    ["¿Qué estado tiene el agua congelada?",["Sólido","Líquido"],0],
+    ["¿Qué estrella está más cerca de la Tierra?",["El Sol","Sirio"],0],
+    ["¿Cuántos lados tiene un triángulo?",["3","4"],0],
+    ["¿Qué personaje vive en una piña bajo el mar?",["Bob Esponja","Mickey"],0],
+    ["¿Qué saga tiene a Pikachu?",["Pokémon","Mario"],0],
+    ["¿Cómo se llama el héroe de Hyrule?",["Link","Mario"],0],
+    ["¿Qué familia protagoniza Encanto?",["Los Madrigal","Los Increíbles"],0],
+    ["¿Qué superhéroe es conocido como el Hombre Araña?",["Spider-Man","Batman"],0],
+    ["¿Qué juego popular tiene impostores?",["Among Us","Tetris"],0],
+    ["¿Qué fontanero protagoniza Super Mario?",["Mario","Luigi"],0],
+    ["¿Qué película tiene a Woody y Buzz?",["Toy Story","Cars"],0],
+    ["¿Qué escogería la mayoría: playa o montaña?",["Playa","Montaña"],0],
+    ["¿Qué escogería la mayoría: pizza o hamburguesa?",["Pizza","Hamburguesa"],0],
+    ["¿Qué escogería la mayoría: perro o gato?",["Perro","Gato"],0],
+    ["¿Qué escogería la mayoría: día o noche?",["Día","Noche"],0],
+    ["¿Qué escogería la mayoría: dulce o salado?",["Dulce","Salado"],0],
+    ["¿Qué escogería la mayoría: cine o concierto?",["Cine","Concierto"],0],
+    ["¿Qué escogería la mayoría: viajar o ahorrar?",["Viajar","Ahorrar"],0],
+    ["¿Qué escogería la mayoría: celular nuevo o vacaciones?",["Vacaciones","Celular nuevo"],0],
+    ["¿Qué escogería la mayoría: madrugar o trasnochar?",["Trasnochar","Madrugar"],0],
+    ["¿Qué escogería la mayoría: cocinar o pedir domicilio?",["Pedir domicilio","Cocinar"],0]
+  ]}
 };
