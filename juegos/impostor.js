@@ -93,7 +93,8 @@ const ImpostorGame = (() => {
 
         cards.push({
           category: category,
-          word: item[1]
+          word: item[1],
+          hint: getImpostorHint({ category, word: item[1] })
         });
       });
     });
@@ -546,7 +547,10 @@ const ImpostorGame = (() => {
 
     roles = createRoles(players.length, impostors);
     currentIndex = 0;
-    starterIndex = Math.floor(Math.random() * players.length);
+    const civilIndexes = roles
+      .map((role, index) => role === "civil" ? index : -1)
+      .filter(index => index >= 0);
+    starterIndex = civilIndexes[Math.floor(Math.random() * civilIndexes.length)];
     secondsLeft = debateTime;
     timerRunning = false;
 
@@ -592,6 +596,10 @@ const ImpostorGame = (() => {
         <h2 class="game-title" style="margin-top:6px;color:var(--danger);">ERES EL IMPOSTOR</h2>
         <p class="muted strong-copy">No conoces la palabra exacta.</p>
         <p class="muted strong-copy">Categoría: <strong>${escapeHTML(selectedCard.category)}</strong></p>
+        <div class="box panel-soft full-width">
+          <div class="label-muted color-warning">Pista para ti</div>
+          <p class="muted strong-copy">${escapeHTML(getImpostorHint(selectedCard))}</p>
+        </div>
         <div class="box panel-soft full-width">
           <div class="label-muted">Tu misión</div>
           <p class="muted strong-copy">Escucha las pistas, improvisa y trata de parecer inocente.</p>
