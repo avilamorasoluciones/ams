@@ -7,6 +7,7 @@ const ImpostorGame = (() => {
   let roles = [];
   let selectedCard = null;
   let impostorCounts = {};
+  let impostorHintsEnabled = true;
 
   let currentIndex = 0;
   let starterIndex = 0;
@@ -20,7 +21,7 @@ const ImpostorGame = (() => {
   let lastVoteIndex = null;
 
   function saveSession(screen = document.querySelector(".im-screen.active")?.id || "i-scr-lobby") {
-    window.GameSession?.save("impostor", { players, usedWords, roles, selectedCard, currentIndex, starterIndex, secondsLeft, timerRunning, timerEndsAt, lastVoteIndex, impostorCounts, screen });
+    window.GameSession?.save("impostor", { players, usedWords, roles, selectedCard, currentIndex, starterIndex, secondsLeft, timerRunning, timerEndsAt, lastVoteIndex, impostorCounts, impostorHintsEnabled, screen });
   }
 
   function $(id) {
@@ -886,6 +887,7 @@ const ImpostorGame = (() => {
   function startGame() {
     const impostorsSelect = $("i-selImposters");
     const timeSelect = $("i-selTime");
+    const hintModeSelect = $("i-selHintMode");
 
     if (!impostorsSelect) {
       alert("No encontré el selector i-selImposters.");
@@ -897,8 +899,14 @@ const ImpostorGame = (() => {
       return;
     }
 
+    if (!hintModeSelect) {
+      alert("No encontré el selector i-selHintMode.");
+      return;
+    }
+
     const impostors = parseInt(impostorsSelect.value, 10);
     const debateTime = parseInt(timeSelect.value, 10);
+    impostorHintsEnabled = hintModeSelect.value !== "no-hints";
     const minimum = getMinimumPlayers(impostors);
 
     if (players.length < minimum) {
@@ -982,10 +990,15 @@ const ImpostorGame = (() => {
         <h2 class="game-title" style="margin-top:6px;color:var(--danger);">ERES EL IMPOSTOR</h2>
         <p class="muted strong-copy">No conoces la palabra exacta.</p>
         <p class="muted strong-copy">Categoría: <strong>${escapeHTML(selectedCard.category)}</strong></p>
-        <div class="box panel-soft full-width">
-          <div class="label-muted color-warning">Pista para ti</div>
-          <p class="muted strong-copy">${escapeHTML(getImpostorHint(selectedCard))}</p>
-        </div>
+        ${impostorHintsEnabled
+          ? `<div class="box panel-soft full-width">
+              <div class="label-muted color-warning">Pista para ti</div>
+              <p class="muted strong-copy">${escapeHTML(getImpostorHint(selectedCard))}</p>
+            </div>`
+          : `<div class="box panel-soft full-width">
+              <div class="label-muted color-warning">Sin pistas</div>
+              <p class="muted strong-copy">No recibirás ninguna pista. Tendrás que descubrir la palabra a partir de lo que digan los demás.</p>
+            </div>`}
         <div class="box panel-soft full-width">
           <div class="label-muted">Tu misión</div>
           <p class="muted strong-copy">Escucha las pistas, improvisa y trata de parecer inocente.</p>
@@ -1362,6 +1375,7 @@ const ImpostorGame = (() => {
       usedWords = Array.isArray(saved.usedWords) ? saved.usedWords : usedWords;
       roles = Array.isArray(saved.roles) ? saved.roles : [];
       impostorCounts = saved.impostorCounts && typeof saved.impostorCounts === "object" ? saved.impostorCounts : {};
+      impostorHintsEnabled = saved.impostorHintsEnabled !== false;
       selectedCard = saved.selectedCard;
       currentIndex = Number(saved.currentIndex || 0);
       starterIndex = Number(saved.starterIndex || 0);
