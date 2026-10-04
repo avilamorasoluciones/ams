@@ -15,8 +15,8 @@ button{cursor:pointer}
  radial-gradient(circle at 88% 24%,rgba(236,72,153,.09),transparent 25%),
  linear-gradient(180deg,#080715 0%,#0c0b20 52%,#070812 100%)}
 .app-shell:before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.18;background-image:linear-gradient(rgba(255,255,255,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.03) 1px,transparent 1px);background-size:48px 48px;mask-image:linear-gradient(to bottom,black,transparent 90%)}
-.game-header{position:sticky;z-index:100;top:0;min-height:76px;padding:calc(10px + var(--safe-top)) max(16px,4vw) 10px;display:flex;justify-content:space-between;align-items:center;pointer-events:none;background:linear-gradient(180deg,rgba(8,7,21,.97) 0%,rgba(8,7,21,.88) 78%,rgba(8,7,21,.55) 100%);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border-bottom:1px solid rgba(255,255,255,.05)}
-.game-header>*{pointer-events:auto}
+
+
 .brand{display:inline-flex;align-items:center;gap:10px;color:var(--text);text-decoration:none}
 .brand-dot{width:35px;height:35px;border-radius:12px;background:linear-gradient(135deg,var(--purple),var(--pink));box-shadow:0 0 28px rgba(139,92,246,.28);position:relative}
 .brand-dot:after{content:"";position:absolute;width:9px;height:9px;border-radius:50%;background:#f8fafc;left:13px;top:13px;box-shadow:0 0 13px #fff}
@@ -544,9 +544,9 @@ button{cursor:pointer}
 
 
 /* AMS Fly · layout safety + character visibility */
-.game-header .brand-condor{display:grid;place-items:center;width:38px;height:38px;flex:0 0 38px}
-.game-header .brand b{font-size:.9rem;letter-spacing:-.02em}
-.game-header .brand small{font-size:.52rem}
+
+
+
 .game-bird-grid .bird-option,
 .game-bird-grid .bird-mini,
 .game-bird-grid .bird-mini .bird-shape{overflow:visible}
@@ -576,9 +576,7 @@ button{cursor:pointer}
 }
 .game-footer a{color:#7f76b8}
 .game-footer{padding-bottom:calc(92px + var(--safe-bottom))}
-.app-shell:has(#gameScreen:not([hidden])) .game-header,
-.app-shell:has(#pauseScreen:not([hidden])) .game-header,
-.app-shell:has(#gameOverScreen:not([hidden])) .game-header{display:none}
+.app-shell:has(#gameScreen:not([hidden])) 
 .app-shell:has(#gameScreen:not([hidden])) .game-footer,
 .app-shell:has(#pauseScreen:not([hidden])) .game-footer,
 .app-shell:has(#gameOverScreen:not([hidden])) .game-footer{display:none}
@@ -617,10 +615,7 @@ button{cursor:pointer}
 
 
 /* Regla autoritativa: mientras el juego está activo, arriba no existe ningún chrome. */
-.app-shell.game-active .game-header,
-.app-shell.game-active .game-footer{
-  display:none!important;
-}
+.app-shell.game-active 
 .app-shell.game-active .game-screen,
 .app-shell.game-active .pause-screen,
 .app-shell.game-active #gameOverScreen{
