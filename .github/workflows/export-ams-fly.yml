@@ -6,6 +6,7 @@ on:
 
 jobs:
   export:
+    if: !contains(github.event.head_commit.message, '[skip export]')
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -74,6 +75,20 @@ La IA que reciba este paquete debe probar primero el flujo real completo antes d
 EOF
           cd export
           zip -r ../AMS-Fly-aislado.zip AMS-Fly
+          mkdir -p ../export-chunks
+          base64 -w 0 ../AMS-Fly-aislado.zip > ../export-chunks/ams-fly.zip.b64
+          split -b 900k ../export-chunks/ams-fly.zip.b64 ../export-chunks/part-
+          rm ../export-chunks/ams-fly.zip.b64
+          cd ..
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          rm -rf .ams-fly-export
+          mkdir .ams-fly-export
+          cp export-chunks/part-* .ams-fly-export/
+          printf '%s\n' 'AMS Fly isolated export chunks. Reassemble in lexical order, concatenate, base64-decode.' > .ams-fly-export/README.txt
+          git add .ams-fly-export
+          git commit -m '[skip export] Add AMS Fly isolated export chunks' || true
+          git push
       - uses: actions/upload-artifact@v4
         with:
           name: AMS-Fly-aislado
