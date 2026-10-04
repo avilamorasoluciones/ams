@@ -15,10 +15,9 @@ const YoNuncaGame = (() => {
   }
 
   function startGame() {
-    const limit = $("yn-selLimit").value;
     const shuffled = window.Utils.shuffleArray([...DB_YONUNCA]);
     
-    pool = limit === "all" ? shuffled : shuffled.slice(0, parseInt(limit));
+    pool = shuffled;
     if(pool.length === 0) return;
     
     window.emitSound(450, 0.1, "square");
