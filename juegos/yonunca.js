@@ -27,6 +27,7 @@ const YoNuncaGame = (() => {
   function nextTurn() {
     if (pool.length === 0) {
       alert("¡Se acabaron las frases! Volviendo al menú.");
+      window.GameSession?.clear("yonunca");
       changeScreen("yn-scr-lobby");
       return;
     }
