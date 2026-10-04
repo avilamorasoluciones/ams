@@ -42,6 +42,16 @@
     .team-members { color: var(--text); font-weight: 800; font-size: 0.95rem;}
     .tabu-controls { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 15px;}
     .tabu-controls .btn-full { grid-column: span 2; }
+    .tabu-round-note { font-size: .88rem; line-height: 1.45; margin: 0; }
+    .tabu-watchers { margin: 0; font-weight: 800; }
+    .tabu-game-context { display:flex; justify-content:space-between; align-items:center; gap:10px; flex-wrap:wrap; }
+    .tabu-turn-badge { font-weight: 900; color: var(--primary); }
+    .tabu-action-feedback { transform: scale(.97); filter: brightness(1.12); }
+    .tabu-next-note { margin: 0; }
+    @media (max-width: 520px) {
+      .tabu-controls { gap: 8px; }
+      .tabu-controls .btn { min-height: 54px; }
+    }
   </style>
 <meta name="description" content="Tabú es un juego gratuito de palabras y rondas para jugar en grupo desde el navegador.">
     <meta name="robots" content="index,follow">
@@ -143,7 +153,9 @@
                   <h2 class="big-player-name" id="t-txtActiveTeam">-</h2>
                   <p class="muted strong-copy">Habla: <span id="t-txtSpeaker" class="color-primary"></span></p>
                   <div class="box panel-soft">
-                    <p class="muted"><strong>Atención:</strong> Un jugador del <span id="t-txtWatcher" class="color-danger"></span> debe mirar la pantalla para vigilar que no diga palabras prohibidas.</p>
+                    <p class="muted"><strong>👀 Equipo que vigila:</strong> <span id="t-txtWatcher" class="color-danger"></span></p>
+                    <p class="tabu-watchers muted" id="t-txtWatcherMembers"></p>
+                    <p class="tabu-round-note muted">Todo el equipo contrario puede vigilar. Si son muchos jugadores, todos pueden estar pendientes o repartirse la vigilancia.</p>
                   </div>
                 </div>
                 <button type="button" class="btn primary btn-xl" id="t-btnStartTurn"><svg class="ui-icon" aria-hidden="true"><use href="ui-icons.svg#play"></use></svg><span>Iniciar Temporizador</span></button>
@@ -182,6 +194,7 @@
                 <div class="box stack">
                   <h2 class="game-title">¡Tiempo! ⏳</h2>
                   <p class="muted" id="t-txtSummaryTeam">-</p>
+                  <p class="tabu-next-note muted" id="t-txtNextTurn">-</p>
                   <div class="turn-mini-stats">
                     <div class="mini-stat"><span>Aciertos</span><strong class="color-green" id="t-statCorrect">0</strong></div>
                     <div class="mini-stat"><span>Tabús</span><strong class="color-danger" id="t-statTaboo">0</strong></div>
