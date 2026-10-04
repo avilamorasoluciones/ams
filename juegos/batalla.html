@@ -27,7 +27,7 @@
 <body class="game-batalla">
 <header class="topbar"><div class="topbar-inner">
   <a class="brand brand-link" href="index.html"><span class="logo brand-logo-svg"><img src="game-batalla.svg" alt=""></span><span class="txt"><span class="name">Avila Mora Soluciones</span><small>Juegos · Batalla de Palabras</small></span></a>
-  <div class="topbar-actions"><button type="button" class="icon-btn theme-switch-btn" data-theme-toggle aria-label="Cambiar tema"><svg class="ui-icon"><use href="ui-icons.svg#theme"></use></svg></button><a class="game-back-btn" href="index.html"><svg class="ui-icon"><use href="ui-icons.svg#home"></use></svg><span>Menú</span></a></div>
+  <div class="topbar-actions"><button type="button" class="icon-btn theme-switch-btn" data-theme-toggle aria-label="Cambiar tema"><svg class="ui-icon"><use href="ui-icons.svg#theme"></use></svg></button><a id="bp-top-menu" class="game-back-btn" href="index.html"><svg class="ui-icon"><use href="ui-icons.svg#home"></use></svg><span>Menú</span></a></div>
 </div></header>
 <main id="mainContent"><div class="wrap"><section class="section active"><div class="stack">
   <div id="bp-scr-lobby" class="box narrow stack">
@@ -47,7 +47,7 @@
     </div>
     <div class="box panel-soft"><h2 class="section-title">3. Prepara los equipos</h2><p class="muted">No necesitas registrar personas. Pueden usar Equipo 1, Equipo 2 o poner nombres.</p><div id="bp-team-inputs" class="stack"></div></div>
     <button id="bp-start" class="btn primary btn-full" type="button">Comenzar batalla</button>
-    <a class="btn ghost btn-full" href="index.html">Volver al menú</a>
+    <a id="bp-lobby-menu" class="btn ghost btn-full" href="index.html">Volver al menú</a>
   </div>
 
   <div id="bp-scr-game" class="box narrow stack" hidden>
