@@ -53,6 +53,9 @@
     .tabu-countdown-number { font-size: clamp(5rem, 25vw, 10rem); line-height:1; font-weight:1000; color:#fff; text-shadow: 0 8px 30px rgba(0,0,0,.35); animation: tabu-count-pop .7s ease both; }
     @keyframes tabu-count-pop { 0% { transform:scale(.55); opacity:.2; } 60% { transform:scale(1.08); opacity:1; } 100% { transform:scale(1); opacity:1; } }
     .tabu-next-note { margin: 0; }
+    .tabu-cancel-btn { position:absolute; top:10px; right:10px; width:42px; height:42px; border-radius:50%; z-index:2; }
+    #t-scr-game { position:relative; }
+    .tabu-confirm-actions { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
     @media (max-width: 520px) {
       .tabu-controls { gap: 8px; }
       .tabu-controls .btn { min-height: 54px; }
@@ -176,6 +179,7 @@
 
               <!-- JUEGO ACTIVO -->
               <div id="t-scr-game" class="im-screen center">
+                <button type="button" class="btn ghost tabu-cancel-btn" id="t-btnCancelGame" aria-label="Cancelar partida" title="Cancelar partida"><svg class="ui-icon" aria-hidden="true"><use href="ui-icons.svg#close"></use></svg></button>
                 <div class="box stack compact">
                   <div class="tabu-game-context">
                     <span class="tabu-turn-badge" id="t-liveTeam">Equipo 1</span>
@@ -203,6 +207,18 @@
                   <button type="button" class="btn success" id="t-btnCorrect"><svg class="ui-icon" aria-hidden="true"><use href="ui-icons.svg#check"></use></svg><span>Acierto</span></button>
                   <button type="button" class="btn danger" id="t-btnTaboo"><svg class="ui-icon" aria-hidden="true"><use href="ui-icons.svg#close"></use></svg><span>Tabú</span></button>
                   <button type="button" class="btn ghost btn-full" id="t-btnSkip"><svg class="ui-icon" aria-hidden="true"><use href="ui-icons.svg#next"></use></svg><span>Saltar</span></button>
+                </div>
+              </div>
+
+              <!-- CONFIRMACIÓN DE CANCELACIÓN -->
+              <div id="t-scr-cancel" class="im-screen center">
+                <div class="box stack">
+                  <h2 class="game-title">¿Cancelar partida?</h2>
+                  <p class="muted">Si cancelas, se perderá el progreso de esta partida y volverás al menú de configuración.</p>
+                </div>
+                <div class="tabu-confirm-actions">
+                  <button type="button" class="btn ghost" id="t-btnKeepGame">No, continuar</button>
+                  <button type="button" class="btn danger" id="t-btnConfirmCancel"><svg class="ui-icon" aria-hidden="true"><use href="ui-icons.svg#close"></use></svg><span>Sí, cancelar</span></button>
                 </div>
               </div>
 
