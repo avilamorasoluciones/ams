@@ -6,6 +6,7 @@ const ImpostorGame = (() => {
   let usedWords = [];
   let roles = [];
   let selectedCard = null;
+  let impostorCounts = {};
 
   let currentIndex = 0;
   let starterIndex = 0;
@@ -19,7 +20,7 @@ const ImpostorGame = (() => {
   let lastVoteIndex = null;
 
   function saveSession(screen = document.querySelector(".im-screen.active")?.id || "i-scr-lobby") {
-    window.GameSession?.save("impostor", { players, usedWords, roles, selectedCard, currentIndex, starterIndex, secondsLeft, timerRunning, timerEndsAt, lastVoteIndex, screen });
+    window.GameSession?.save("impostor", { players, usedWords, roles, selectedCard, currentIndex, starterIndex, secondsLeft, timerRunning, timerEndsAt, lastVoteIndex, impostorCounts, screen });
   }
 
   function $(id) {
@@ -329,6 +330,149 @@ const ImpostorGame = (() => {
     "Pincel":"Herramienta con cerdas que sirve para aplicar pintura.",
     "Calendario":"Objeto que muestra los días, semanas y meses del año.",
     "Tijeras":"Herramienta de dos hojas afiladas que sirve para cortar."
+        "Cereza":"Fruta pequeña y redonda, normalmente roja, con una sola semilla grande en el centro.",
+    "Durazno":"Fruta de piel aterciopelada, pulpa jugosa y una pepa grande en el centro.",
+    "Kiwi":"Fruta pequeña de piel marrón y pulpa verde con muchas semillas negras.",
+    "Zanahoria":"Hortaliza alargada y generalmente naranja que crece bajo tierra.",
+    "Brócoli":"Verdura verde formada por pequeños ramilletes que parecen arbolitos.",
+    "Maíz":"Cereal que crece en mazorcas y cuyos granos pueden ser amarillos, blancos o de otros colores.",
+    "Pepino":"Hortaliza alargada, verde y muy crujiente, común en ensaladas.",
+    "Lechuga":"Vegetal de hojas verdes y crujientes que se usa mucho en ensaladas.",
+    "Coco":"Fruto tropical de cáscara dura que contiene agua y pulpa blanca.",
+    "Melón":"Fruta grande y dulce de pulpa jugosa, normalmente de color claro o anaranjado.",
+    "Pera":"Fruta dulce con forma característica de lágrima y pulpa jugosa.",
+    "Berenjena":"Hortaliza de piel normalmente morada y forma alargada, usada en muchos platos.",
+    "Calabaza":"Fruto grande de cáscara dura, asociado también con decoraciones de Halloween.",
+    "Maní":"Semilla comestible que crece bajo tierra y se consume tostada, salada o en crema.",
+    "Oso":"Mamífero grande de cuerpo robusto que puede hibernar y vive en distintos hábitats.",
+    "Mono":"Primate ágil que suele trepar árboles y tiene manos adaptadas para agarrarse.",
+    "Gorila":"Primate grande y muy fuerte que vive en los bosques de África.",
+    "Rinoceronte":"Mamífero enorme de piel gruesa que tiene uno o dos cuernos sobre el hocico.",
+    "Hipopótamo":"Mamífero enorme que pasa mucho tiempo en el agua y tiene una boca muy grande.",
+    "Ciervo":"Mamífero de patas delgadas; los machos de muchas especies tienen astas.",
+    "Jabalí":"Cerdo salvaje de cuerpo robusto, hocico fuerte y colmillos visibles.",
+    "Camello":"Animal del desierto famoso por sus jorobas y su capacidad para soportar largos periodos sin agua.",
+    "Llama":"Camélido sudamericano de cuello largo y abundante lana.",
+    "Leopardo":"Felino ágil de pelaje con manchas que puede trepar árboles con facilidad.",
+    "Cerdo":"Animal de granja de hocico corto que también es conocido por su afición a revolcarse en el barro.",
+    "Oveja":"Animal de granja cubierto de lana que suele vivir en rebaños.",
+    "Cabra":"Animal de granja ágil, con cuernos en muchas especies y conocido por comer gran variedad de plantas.",
+    "Conejo":"Mamífero pequeño de orejas largas y patas traseras fuertes.",
+    "Ratón":"Pequeño roedor de cuerpo diminuto, orejas redondas y cola larga.",
+    "Tejón":"Mamífero de patas cortas y cuerpo robusto, conocido por excavar madrigueras.",
+    "Ardilla":"Roedor pequeño y ágil que suele trepar árboles y almacenar alimento.",
+    "Erizo":"Pequeño mamífero cubierto de púas que puede hacerse una bola cuando se siente amenazado.",
+    "Pato":"Ave acuática con pico ancho y patas adaptadas para nadar.",
+    "Pingüino":"Ave que no vuela y está adaptada para nadar en aguas frías.",
+    "Pájaro":"Animal con plumas, alas y pico que pertenece al grupo de las aves.",
+    "Gallo":"Ave doméstica macho conocida por su cresta y por cantar al amanecer.",
+    "Paloma":"Ave común que suele verse en plazas y ciudades y puede orientarse a grandes distancias.",
+    "Flamenco":"Ave de patas largas y plumaje rosado que suele vivir cerca de aguas poco profundas.",
+    "Tiburón":"Pez marino de cuerpo alargado, varias filas de dientes y gran capacidad para detectar presas.",
+    "Calamar":"Animal marino de cuerpo alargado y tentáculos que se desplaza expulsando agua.",
+    "Langosta":"Crustáceo marino de caparazón duro y grandes pinzas.",
+    "Cocodrilo":"Reptil grande de hocico alargado que vive cerca de ríos, lagos y zonas pantanosas.",
+    "Murciélago":"Mamífero capaz de volar que suele descansar colgado boca abajo.",
+    "Mariquita":"Pequeño escarabajo redondo, muchas veces rojo con puntos negros.",
+    "Hormiga":"Insecto social que vive en colonias y puede transportar objetos mucho más pesados que ella.",
+    "Mosquito":"Insecto pequeño que zumba y cuya hembra de algunas especies se alimenta de sangre.",
+    "Escorpión":"Arácnido con pinzas delanteras y una cola curvada terminada en aguijón.",
+    "Caracol":"Molusco de movimiento lento que lleva una concha en espiral sobre su cuerpo.",
+    "Tronco":"Parte gruesa y principal del tallo de un árbol, normalmente cubierta de corteza.",
+    "Pino":"Árbol de hojas en forma de agujas que produce piñas y suele mantenerse verde todo el año.",
+    "Hoja":"Parte generalmente plana y verde de una planta que ayuda a producir su alimento.",
+    "Trébol":"Planta pequeña cuyas hojas suelen tener tres partes; algunas variedades tienen cuatro.",
+    "Planta":"Ser vivo que normalmente produce su propio alimento usando luz, agua y dióxido de carbono.",
+    "Béisbol":"Deporte de bate y pelota en el que los jugadores corren por bases después de golpear.",
+    "Sóftbol":"Deporte parecido al béisbol que usa una pelota más grande y se juega en un campo diferente.",
+    "Rugby":"Deporte de contacto en el que se avanza con un balón ovalado y se puede llevar con las manos.",
+    "Frisbee":"Disco plástico que se lanza por el aire y se atrapa con las manos.",
+    "Hockey":"Deporte en el que se usa un palo para mover un disco o una pelota hacia una portería.",
+    "Pesca":"Actividad que consiste en capturar peces usando herramientas como caña, anzuelo o redes.",
+    "Buceo":"Actividad de sumergirse bajo el agua usando técnicas y, muchas veces, equipo especial.",
+    "Esquí":"Deporte de nieve en el que se baja o se avanza sobre dos tablas largas sujetas a los pies.",
+    "Ciclismo":"Actividad o deporte que se practica desplazándose sobre una bicicleta.",
+    "Escalada":"Actividad de subir paredes, rocas o estructuras usando manos y pies.",
+    "Gimnasia":"Deporte basado en movimientos corporales, equilibrio, flexibilidad, fuerza y acrobacias.",
+    "Bolos":"Juego en el que se lanza una bola pesada por una pista para derribar pinos.",
+    "Dardos":"Juego en el que se lanzan pequeños proyectiles con punta hacia una diana.",
+    "Vela":"Deporte o actividad náutica que utiliza el viento para impulsar una embarcación.",
+    "Caja":"Recipiente con forma normalmente rectangular que sirve para guardar o transportar objetos.",
+    "Cuadro":"Obra visual que suele estar pintada o impresa y se coloca en una pared.",
+    "Alarma":"Dispositivo que emite un sonido o aviso para despertar o alertar.",
+    "Peineta":"Accesorio con dientes que se coloca en el cabello para peinarlo o sujetarlo.",
+    "Timbre":"Dispositivo que produce un sonido cuando alguien lo pulsa para avisar que ha llegado.",
+    "Camioneta":"Vehículo más grande que un automóvil, normalmente con espacio para carga o varias personas.",
+    "Autobús":"Vehículo grande que transporta a muchos pasajeros y sigue rutas determinadas.",
+    "Patrulla":"Vehículo utilizado por la policía para recorrer una zona y atender situaciones.",
+    "Ambulancia":"Vehículo equipado para trasladar y atender personas enfermas o heridas.",
+    "Tractor":"Vehículo de trabajo agrícola diseñado para mover herramientas, remolques y maquinaria.",
+    "Scooter":"Vehículo pequeño, normalmente de dos ruedas, que puede ser eléctrico o impulsado con el pie.",
+    "Velero":"Embarcación que se desplaza principalmente aprovechando la fuerza del viento sobre sus velas.",
+    "Yate":"Embarcación destinada principalmente a paseos, recreación o viajes privados.",
+    "Crucero":"Gran barco de pasajeros diseñado para viajes turísticos con alojamiento y entretenimiento.",
+    "Canoa":"Embarcación estrecha y ligera que normalmente se mueve con remos.",
+    "OVNI":"Objeto visto en el cielo que no ha sido identificado en el momento de observarlo.",
+    "Patineta":"Tabla con ruedas sobre la que una persona se desplaza manteniendo el equilibrio.",
+    "Panqueque":"Preparación redonda y plana hecha con una mezcla que se cocina en una sartén.",
+    "Waffle":"Masa cocinada en una plancha que deja un patrón de cuadros y suele servirse dulce.",
+    "Costilla":"Corte de carne que contiene hueso y suele cocinarse asado, al horno o a la parrilla.",
+    "Filete":"Porción de carne o pescado cortada en una pieza que suele cocinarse a la plancha o parrilla.",
+    "Tocino":"Tiras de carne de cerdo curada que suelen freírse hasta quedar crujientes.",
+    "Dulce":"Alimento de sabor azucarado que normalmente se come como golosina o postre.",
+    "Té":"Bebida caliente preparada al infusionar hojas o hierbas en agua.",
+    "Saxofón":"Instrumento de viento metálico con una boquilla y una forma curva característica.",
+    "Trompeta":"Instrumento de viento metálico que produce sonidos al hacer vibrar los labios en una boquilla.",
+    "Banjo":"Instrumento de cuerda con cuerpo circular y un mástil largo, asociado a la música folclórica.",
+    "Campana":"Objeto que produce un sonido fuerte y resonante al ser golpeado o moverse su badajo.",
+    "Megáfono":"Aparato que amplifica la voz para que se escuche a distancia.",
+    "Campamento":"Lugar o actividad de pasar tiempo al aire libre, normalmente usando carpas o refugios.",
+    "Monumento":"Construcción o escultura creada para recordar a una persona, hecho o acontecimiento.",
+    "Circo":"Espectáculo que puede incluir payasos, acrobacias, malabaristas y otros artistas.",
+    "Montaña rusa":"Atracción de parque de diversiones formada por un recorrido de rieles con subidas, bajadas y curvas.",
+    "Fuente":"Estructura que hace brotar o circular agua, normalmente con una función decorativa.",
+    "Edificio":"Construcción grande con espacios interiores destinados a vivienda, trabajo u otros usos.",
+    "Barrio":"Zona de una ciudad formada por calles, viviendas y servicios cercanos.",
+    "Puerto":"Lugar junto al mar o un río donde embarcaciones llegan, salen o cargan mercancías.",
+    "Obrero":"Trabajador que realiza labores manuales, especialmente en construcción o industria.",
+    "Oficinista":"Persona que realiza tareas administrativas y de escritorio en una oficina.",
+    "Científico":"Persona que estudia fenómenos del mundo mediante investigación, observación y experimentos.",
+    "Cantante":"Persona que utiliza su voz para interpretar canciones.",
+    "Pintor":"Artista que crea imágenes aplicando pintura sobre una superficie.",
+    "Astronauta":"Persona entrenada para viajar y trabajar fuera de la Tierra en el espacio.",
+    "Guardia":"Persona encargada de vigilar y proteger un lugar o personas.",
+    "Constructor":"Trabajador o profesional que participa en la construcción de edificios y otras estructuras.",
+    "Mesero":"Persona que atiende a los clientes y lleva comida y bebidas en un restaurante.",
+    "Peluquero":"Profesional que corta, peina, arregla y estiliza el cabello.",
+    "Diseñador":"Persona que crea la apariencia y la solución visual o funcional de productos y proyectos.",
+    "Carpintero":"Profesional que trabaja principalmente con madera para fabricar o reparar objetos y estructuras.",
+    "Albañil":"Trabajador especializado en construir paredes y estructuras usando materiales como ladrillo y cemento.",
+    "Conserje":"Persona encargada del mantenimiento, cuidado o vigilancia de un edificio.",
+    "Salvavidas":"Persona entrenada para prevenir accidentes y rescatar a quienes tienen problemas en el agua.",
+    "Locutor":"Persona que habla frente a un micrófono en radio, televisión o eventos.",
+    "Blusa":"Prenda de vestir para la parte superior del cuerpo, normalmente asociada a ropa femenina.",
+    "Pantaloneta":"Prenda corta que cubre desde la cintura hasta parte de las piernas y se usa mucho para deporte.",
+    "Abrigo":"Prenda gruesa que se usa encima de la ropa para protegerse del frío.",
+    "Maletín":"Bolso estructurado que se usa para transportar documentos, computador u objetos de trabajo.",
+    "Abanico":"Objeto que se mueve con la mano para producir una corriente de aire.",
+    "Pico":"Herramienta de metal con una punta fuerte que sirve para romper o excavar tierra y roca.",
+    "Serrucho":"Herramienta con una hoja dentada que se mueve a mano para cortar madera.",
+    "Llave inglesa":"Herramienta ajustable que sirve para apretar o aflojar tuercas y piezas metálicas.",
+    "Caja de herramientas":"Recipiente donde se guardan organizadas herramientas para reparar o construir.",
+    "Escuadra":"Instrumento con forma de ángulo que se usa para medir o dibujar líneas rectas y perpendiculares.",
+    "Gancho":"Objeto curvo diseñado para sujetar, colgar o enganchar cosas.",
+    "Tubo":"Objeto largo y hueco por dentro que puede servir para transportar líquidos, aire o cables.",
+    "Bolsa":"Recipiente flexible con asas o abertura que se usa para transportar objetos.",
+    "Buzón":"Compartimento donde se reciben cartas y otros envíos postales.",
+    "Vasija":"Recipiente generalmente de barro, cerámica u otro material, usado para contener líquidos u objetos.",
+    "Rosario":"Objeto formado por cuentas que se utiliza tradicionalmente para rezar ciertas oraciones.",
+    "Moño":"Lazo hecho con una cinta que se usa como adorno o para sujetar el cabello.",
+    "Crayón":"Barra de cera o material similar que se usa principalmente para colorear y dibujar.",
+    "Nota":"Mensaje breve escrito para recordar algo, comunicar información o acompañar un objeto.",
+    "Carpeta":"Objeto o archivo destinado a guardar y organizar documentos.",
+    "Clip":"Pequeña pieza de metal que sirve para mantener varias hojas de papel juntas.",
+    "Chincheta":"Pequeño objeto con punta que se usa para fijar papeles en una pared o tablero.",
+    "Cuaderno":"Conjunto de hojas encuadernadas que se utiliza para escribir, tomar apuntes o dibujar.",
   };
 
   function getImpostorHint(card) {
@@ -545,7 +689,26 @@ const ImpostorGame = (() => {
       return;
     }
 
-    roles = createRoles(players.length, impostors);
+    Object.keys(impostorCounts).forEach((name) => {
+      if (!players.includes(name)) delete impostorCounts[name];
+    });
+    players.forEach((name) => {
+      if (!Number.isFinite(Number(impostorCounts[name]))) {
+        impostorCounts[name] = 0;
+      }
+    });
+
+    roles = Array(players.length).fill("civil");
+    const candidates = players
+      .map((name, index) => ({ name, index, count: Number(impostorCounts[name] || 0) }))
+      .sort((a, b) => a.count - b.count || Math.random() - 0.5);
+
+    for (let i = 0; i < impostors; i++) {
+      const candidate = candidates[i];
+      roles[candidate.index] = "impostor";
+      impostorCounts[candidate.name] = Number(impostorCounts[candidate.name] || 0) + 1;
+    }
+
     currentIndex = 0;
     const civilIndexes = roles
       .map((role, index) => role === "civil" ? index : -1)
@@ -975,6 +1138,7 @@ const ImpostorGame = (() => {
       players = saved.players;
       usedWords = Array.isArray(saved.usedWords) ? saved.usedWords : usedWords;
       roles = Array.isArray(saved.roles) ? saved.roles : [];
+      impostorCounts = saved.impostorCounts && typeof saved.impostorCounts === "object" ? saved.impostorCounts : {};
       selectedCard = saved.selectedCard;
       currentIndex = Number(saved.currentIndex || 0);
       starterIndex = Number(saved.starterIndex || 0);
