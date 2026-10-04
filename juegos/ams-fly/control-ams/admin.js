@@ -269,7 +269,9 @@ $("reloadParticipantsButton").addEventListener("click", async function () {
   }
 });
 function csvCell(value) {
-  return '"' + String(value ?? "").replace(/"/g, '""') + '"';
+  let text = String(value ?? "");
+  if (/^[\u0000-\u0020]*[=+\-@]/.test(text)) text = "'" + text;
+  return '"' + text.replace(/"/g, '""') + '"';
 }
 $("exportButton").addEventListener("click", function () {
   const columns = ["Nombre","País","Ave","WhatsApp","Puntuación","Elegible","Mejor puntuación","Términos aceptados"];
