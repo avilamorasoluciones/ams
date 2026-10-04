@@ -3,7 +3,7 @@ const modes=[{id:"normal",name:"Normal",desc:"Responde cualquier palabra válida
 const letters="ABCDEFGHIJKLMNÑOPQRSTUVWXYZ".split(""),DB=window.AMS_NEW_GAMES_DB?.batalla?.categories||{},categories=Object.keys(DB);
 const esc=s=>window.Utils?.escapeHTML?window.Utils.escapeHTML(s):String(s).replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]));
 function save(screen="bp-scr-lobby"){window.GameSession?.save("batalla",{mode,teams,round,rounds,time,goal,active,score,endsAt,current,lastAnswer,categoryFilter,screen,savedAt:Date.now()})}
-function screen(id){["bp-scr-lobby","bp-scr-game","bp-scr-result"].forEach(x=>$(x).hidden=x!==id);save(id);renderScore()}
+function screen(id){["bp-scr-lobby","bp-scr-game","bp-scr-result"].forEach(x=>$(x).classList.toggle("active",x===id));document.body.classList.toggle("playing",id!=="bp-scr-lobby");save(id);renderScore()}
 function renderModes(){$("bp-modes").innerHTML=modes.map(m=>`<button type="button" class="bp-mode ${m.id===mode?"selected":""}" data-mode="${m.id}"><strong>${m.name}</strong><small>${m.desc}</small></button>`).join("")}
 function renderCategories(){$("bp-category-filter").innerHTML=[`<option value="Todas">Todas las categorías</option>`,...categories.map(c=>`<option value="${esc(c)}">${esc(c)}</option>`)].join("");$("bp-category-filter").value=categoryFilter}
 function renderTeamInputs(){const n=Number($("bp-teams").value);$("bp-team-inputs").innerHTML=Array.from({length:n},(_,i)=>`<label>Equipo ${i+1}<input id="bp-team-${i}" maxlength="22" value="${esc(teams[i]||"Equipo "+(i+1))}" placeholder="Nombre del equipo"></label>`).join("")}
