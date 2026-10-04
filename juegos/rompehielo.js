@@ -15,10 +15,9 @@ const RompehieloGame = (() => {
   }
 
   function startGame() {
-    const limit = $("r-selLimit").value;
     const shuffled = window.Utils.shuffleArray([...DB_ROMPEHIELO]);
     
-    pool = limit === "all" ? shuffled : shuffled.slice(0, parseInt(limit));
+    pool = shuffled;
     if(pool.length === 0) return;
     
     window.emitSound(450, 0.1, "square");
