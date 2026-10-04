@@ -597,7 +597,7 @@ const ImpostorGame = (() => {
       ]
     },
     {
-      words: new Set("Hospital Escuela Banco Hotel Supermercado Fábrica Castillo Iglesia Estadio Playa Campamento Montaña Volcán Desierto Isla Parque Monumento Circo Montaña rusa Cine Fuente Edificio Barrio Puerto Aeropuerto".split(" ")),
+      words: new Set(["Hospital", "Escuela", "Banco", "Hotel", "Supermercado", "Fábrica", "Castillo", "Iglesia", "Estadio", "Playa", "Campamento", "Montaña", "Volcán", "Desierto", "Isla", "Parque", "Monumento", "Circo", "Montaña rusa", "Cine", "Fuente", "Edificio", "Barrio", "Puerto", "Aeropuerto", "Barbería"]),
       clues: [
         "Es un lugar que puedes visitar por una razón específica.",
         "Su función suele depender mucho de las personas que van allí.",
