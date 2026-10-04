@@ -1017,12 +1017,19 @@ function splitStoredName(name){
 }
 async function loadAccountProfile(user){
   if(!user)return null;
+  const email=String(user.email||"").toLowerCase();
   const local=safeParse(STORAGE_KEY,null);
-  let candidate=local&&local.email===String(user.email||"").toLowerCase()?local:null;
+  let candidate=local&&local.email===email?{...local}:null;
   if(!candidate){
-    candidate={name:splitStoredName(user.name||"").first,lastName:splitStoredName(user.name||"").last,country:"CO",birdId:selectedBirdId,phone:"",dial:"57",participantId:null};
+    const parsed=splitStoredName(user.name||"");
+    candidate={name:String(user.name||"").trim(),firstName:parsed.first,lastName:parsed.last,country:"CO",birdId:selectedBirdId,phone:"",dial:"57",participantId:null};
+  }else{
+    const parts=splitStoredName(candidate.name||"");
+    candidate.firstName=candidate.firstName||parts.first;
+    candidate.lastName=candidate.lastName||parts.last||"";
+    candidate.name=String(candidate.name||[candidate.firstName,candidate.lastName].filter(Boolean).join(" ")).trim();
   }
-  profile={...candidate,email:String(user.email||"").toLowerCase()};
+  profile={...candidate,email};
   selectedBirdId=profile.birdId||selectedBirdId;
   return profile;
 }
@@ -1031,7 +1038,8 @@ function populateAccountFields(){
   const parts=splitStoredName(p.name||"");
   els.accountName.value=p.firstName||parts.first||"";
   els.accountLastName.value=p.lastName||parts.last||"";
-  els.accountPhone.value=String(p.phone||"").replace(/^\+\d+/,"");
+  const dialDigits=String(p.dial||"57").replace(/\D/g,"");
+  els.accountPhone.value=String(p.phone||"").replace(new RegExp("^\\+"+dialDigits),"");
   els.accountCountry.value=p.country||"CO";
   els.accountEmail.textContent=p.email||"";
   fillDialSelect("accountDialCode",p.dial||"57");
@@ -1110,7 +1118,7 @@ async function signUpPlayer(){
   if(password.length<8){setAuthStatus(els.registerStatus,"La contraseña debe tener al menos 8 caracteres.",true);return}
   if(password!==repeat){setAuthStatus(els.registerStatus,"Las contraseñas no coinciden.",true);return}
   const full=fullPhone(dial,phone);
-  if(phone.replace(/\D/g,"").length<7){setAuthStatus(els.registerStatus,"Escribe un celular válido.",true);return}
+  if(!/^\+[1-9]\d{7,14}$/.test(full)){setAuthStatus(els.registerStatus,"Escribe un celular válido con código de país.",true);return}
   els.authSignUpBtn.disabled=true;setAuthStatus(els.registerStatus,"Creando tu cuenta…");
   try{
     const client=await getNeonClient();
@@ -1144,8 +1152,9 @@ async function saveAccount(){
   const dial=els.accountDialCode.value||"57",phone=els.accountPhone.value||"";
   if(first.length<2||last.length<2){setAuthStatus(els.accountStatus,"Escribe nombre y apellido.",true);return}
   if((first+" "+last).length>18){setAuthStatus(els.accountStatus,"Nombre y apellido juntos deben tener máximo 18 caracteres para el piloto.",true);return}
-  if(phone.replace(/\D/g,"").length<7){setAuthStatus(els.accountStatus,"Escribe un celular válido.",true);return}
-  profile={...profile,email:String(user.email||"").toLowerCase(),name:first+" "+last,firstName:first,lastName:last,dial,phone:fullPhone(dial,phone),country:els.accountCountry.value||"CO",birdId:profile?.birdId||selectedBirdId};
+  const full=fullPhone(dial,phone);
+  if(!/^\+[1-9]\d{7,14}$/.test(full)){setAuthStatus(els.accountStatus,"Escribe un celular válido con código de país.",true);return}
+  profile={...profile,email:String(user.email||"").toLowerCase(),name:first+" "+last,firstName:first,lastName:last,dial,phone:full,country:els.accountCountry.value||"CO",birdId:profile?.birdId||selectedBirdId};
   try{
     await syncParticipantProfile(user);saveProfile();renderBirds();renderHomeBird();setAuthStatus(els.accountStatus,"✓ Datos actualizados.",false);
   }catch(error){setAuthStatus(els.accountStatus,friendlyAuthError(error,"No se pudieron guardar los cambios."),true)}
