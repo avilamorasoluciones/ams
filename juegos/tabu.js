@@ -494,6 +494,7 @@ const TabuGame = (() => {
     
     $("t-btnNextTurn").onclick = advanceNextTurn;
     $("t-btnRestart").onclick = () => { clearInterval(timerId); clearInterval(countdownTimerId); $("t-countdown").hidden = true; window.GameSession?.clear("tabu"); changeScreen("t-scr-lobby"); };
+    $("t-btnBackLobby").onclick = returnToLobby;
     
     renderPlayers();
     window.GameSession?.register(saveSession);
