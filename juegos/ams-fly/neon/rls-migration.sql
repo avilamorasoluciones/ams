@@ -85,6 +85,7 @@ create policy "ams_fly_participants_admin_read"
   to authenticated
   using ((select public.ams_fly_is_admin()));
 
+drop policy if exists "ams_fly_participants_admin_update" on public.ams_fly_participants;
 create policy "ams_fly_participants_admin_update"
   on public.ams_fly_participants
   for update

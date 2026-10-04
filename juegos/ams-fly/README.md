@@ -1,68 +1,52 @@
 # AMS Fly
 
-Juego arcade independiente de Avila Mora Soluciones.
+Juego arcade público de Avila Mora Soluciones, publicado como archivos estáticos desde GitHub Pages y conectado a Neon para eventos y ranking.
 
-## Estructura
+## Cómo se juega
 
-- `index.html`: interfaz y pantallas.
-- `styles.css`: identidad visual responsive AMS.
-- `game.js`: juego, personajes, dificultad, puntuación y LocalStorage.
-- `manifest.webmanifest`: instalación PWA.
-- `sw.js`: caché offline después de la primera carga.
-- `icon.svg`: icono propio del juego.
+- El juego puede iniciarse y jugarse sin crear una cuenta.
+- Los récords personales y las partidas se guardan en el navegador.
+- Para competir y publicar un puntaje durante un evento activo, el piloto debe iniciar sesión, completar sus datos y aceptar las condiciones del evento.
+- Móvil: tocar la pantalla. PC: clic, barra espaciadora o flecha arriba. ESC pausa.
 
-## Datos guardados localmente
+## Navegación
 
-- Perfil visual del piloto y estadísticas locales.
-- Récord personal y partidas jugadas.
-- Índice del dato colombiano mostrado entre partidas.
-- Preferencia de sonido.
-- La identidad de participación no se basa en LocalStorage: el piloto queda vinculado a su cuenta Neon Auth.
+- Jugar: seleccionar ave, iniciar vuelo, pausar, continuar y volver al menú.
+- Evento: muestra las condiciones cuando hay un evento activo y avisa cuando no hay uno abierto.
+- Ranking: consulta el ranking público en Neon.
+- Cuenta: login y datos del piloto para participar.
+- Gestión privada: icono de engranaje junto al sonido. Neon Auth y las políticas RLS protegen la configuración y los datos privados.
 
-## Eventos y gestión
+## Neon
 
-AMS Fly incluye una capa de gestión de eventos preparada para dos modos:
+El frontend usa URLs públicas de Neon Auth y Neon Data API. Nunca se debe publicar DATABASE_URL, contraseñas, claves privadas ni tokens en GitHub.
 
-1. **Local:** permite probar la configuración del evento y los participantes en el propio dispositivo.
-2. **Servidor:** si se configura `EVENT_API` en `game.js`, la aplicación sincroniza el evento y los participantes privados con la API incluida en `neon/`.
+Archivos principales:
 
-El panel de gestión se abre desde el icono ⚙ del encabezado y pide iniciar sesión con Neon Auth. La API verifica el JWT de Neon y exige que la cuenta tenga el rol `admin` y el correo confirmado. No se guarda ninguna contraseña ni token compartido en el código público.
+- neon-config.js: URLs públicas del proyecto.
+- neon-client.js: cliente Neon Auth + Data API.
+- neon/schema.sql: tablas del ranking, del evento y de participantes.
+- neon/rls-migration.sql: funciones, permisos y Row Level Security.
+- control-ams/index.html y control-ams/admin.js: login y panel privado de administración.
 
-### Datos del evento
+### Preparación de administración
 
-- Evento activo/inactivo.
-- Badge.
-- Título y descripción.
-- CTA.
-- Premio.
-- Condiciones.
-- Plantilla de WhatsApp.
-- Participantes privados y puntajes.
-- Exportación local CSV.
+1. Habilita Neon Auth y Data API en el branch usado por el juego.
+2. Ejecuta neon/schema.sql y después neon/rls-migration.sql en el SQL Editor.
+3. Crea y verifica una cuenta de Neon Auth para administración.
+4. En Neon SQL Editor, asigna el rol de admin a ese correo verificado:
 
-### Neon + Data API (producción)
+   UPDATE neon_auth."user" SET role = 'admin' WHERE lower(email) = lower('tu-correo@dominio.com') AND "emailVerified" = true;
 
-La versión actual usa directamente **Neon Auth + Neon Data API** desde el frontend estático de GitHub Pages. No se necesita el servidor Express legado para el flujo público.
+5. Entra desde el engranaje de AMS Fly. El panel verifica el rol mediante ams_fly_is_admin() y Neon aplica las mismas reglas al leer o guardar información.
 
-- neon-config.js: contiene únicamente las URL públicas de Neon Auth y Data API.
-- neon-client.js: crea el cliente Neon con acceso anónimo para las consultas públicas.
-- neon/schema.sql: tablas de ranking, evento y participantes.
-- neon/rls-migration.sql: RLS, políticas y permisos de los roles anonymous/authenticated.
-- El ranking público lee ams_fly_scores.
-- Publicar una puntuación usa la función ams_fly_submit_score; no existe INSERT directo desde el navegador.
-- El registro del participante usa ams_fly_register_participant y deriva el `auth_user_id` directamente de `auth.user_id()`.
-- Un índice UNIQUE sobre `auth_user_id` impide que una misma cuenta tenga dos pilotos.
-- El envío de una puntuación comprueba que el participante pertenece a la cuenta autenticada.
-- El teléfono ya no es requisito para participar; las columnas antiguas pueden permanecer solo para transición de datos.
-- La gestión exige sesión Neon Auth, correo confirmado y role = admin.
+La migración se puede volver a ejecutar para reparar o actualizar políticas. El archivo neon/server.js es un servidor Express legado; el flujo publicado en GitHub Pages usa Neon directamente.
 
-**Paso único después de crear las tablas:** ejecuta neon/rls-migration.sql completo en el SQL Editor del branch production. La migración es idempotente y debe ejecutarse también si ya habías ejecutado una versión anterior, porque incluye los GRANT necesarios para el Data API.
+## Seguridad de puntajes
 
-El servidor neon/server.js queda como referencia/legado y no es necesario para GitHub Pages.
-## Controles
+La base valida la cuenta del piloto, la vigencia del evento, los valores y la frecuencia de publicación. Como la partida se ejecuta en el navegador, el puntaje sigue necesitando revisión manual si entrega un premio real.
 
-- Móvil: tocar la pantalla.
-- PC: clic, ESPACIO o flecha arriba.
-- ESC: pausa.
+## Archivos legales
 
-Las ilustraciones de las aves se generan con CSS/Canvas; no dependen de imágenes externas.
+- terminos.html
+- privacidad.html

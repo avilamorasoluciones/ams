@@ -154,7 +154,7 @@ const stages = [
 
 
 function getEventConfig(){
-  return safeParse(EVENT_CONFIG_KEY, DEFAULT_EVENT);
+  return safeParse(EVENT_CONFIG_KEY, {...DEFAULT_EVENT,active:false});
 }
 function saveEventConfig(config){
   localStorage.setItem(EVENT_CONFIG_KEY, JSON.stringify(config));
@@ -171,7 +171,7 @@ function applyEventConfig(){
   let banner=document.getElementById("amsFlyEventBanner");
   if(banner)banner.hidden=!cfg.active;
   const navEvent=document.querySelector('.bottom-nav-item[data-nav="event"]');
-  if(navEvent){navEvent.disabled=!cfg.active;navEvent.setAttribute("aria-disabled",String(!cfg.active));navEvent.title=cfg.active?"Evento":"Evento no disponible";}
+  if(navEvent){navEvent.disabled=false;navEvent.setAttribute("aria-disabled","false");navEvent.title=cfg.active?"Ver evento":"Consultar evento";}
 }
 function renderEventRichText(target,text){
   target.replaceChildren();
@@ -243,7 +243,7 @@ async function openEventScreen(){
   if(!screen){
     screen=document.createElement("section");
     screen.id="amsFlyEventScreen";screen.className="screen app-screen";screen.hidden=true;
-    screen.innerHTML='<div class="section-heading"><span class="eyebrow">AMS FLY · EVENTO</span><h2 id="eventTitle"></h2><p id="eventDesc"></p></div><div class="event-details-card"><div class="event-detail-block"><span class="event-badge">🏆 PREMIO</span><h3 id="eventPrizeTitle"></h3><div id="eventPrizeDesc" class="event-rich-content"></div></div><div class="event-detail-block"><span class="event-badge">📋 CONDICIONES</span><h3 id="eventConditionTitle"></h3><div id="eventConditionDesc" class="event-rich-content"></div></div><label id="eventTermsRow" class="consent-row"><input id="eventTermsConsent" type="checkbox"><span>Acepto los <a href="terminos.html" target="_blank" rel="noopener noreferrer">Términos y Condiciones</a> y la <a href="privacidad.html" target="_blank" rel="noopener noreferrer">Política de Privacidad</a>.</span></label><p id="eventAuthHint" class="field-hint"></p><button id="eventJoinButton" class="primary-button" type="button">INICIAR SESIÓN PARA PARTICIPAR <span>→</span></button><button id="eventBackButton" class="secondary-button" type="button">VOLVER <span>←</span></button></div>';
+    screen.innerHTML='<div class="section-heading"><span id="eventBadge" class="eyebrow"></span><h2 id="eventTitle"></h2><p id="eventDesc"></p><p id="eventStatus" class="field-hint" role="status"></p></div><div class="event-details-card"><div class="event-detail-block"><span class="event-badge">🏆 PREMIO</span><h3 id="eventPrizeTitle"></h3><div id="eventPrizeDesc" class="event-rich-content"></div></div><div class="event-detail-block"><span class="event-badge">📋 CONDICIONES</span><h3 id="eventConditionTitle"></h3><div id="eventConditionDesc" class="event-rich-content"></div></div><label id="eventTermsRow" class="consent-row"><input id="eventTermsConsent" type="checkbox"><span>Acepto los <a href="terminos.html" target="_blank" rel="noopener noreferrer">Términos y Condiciones</a> y la <a href="privacidad.html" target="_blank" rel="noopener noreferrer">Política de Privacidad</a>.</span></label><p id="eventAuthHint" class="field-hint"></p><button id="eventJoinButton" class="primary-button" type="button">INICIAR SESIÓN PARA PARTICIPAR <span>→</span></button><button id="eventBackButton" class="secondary-button" type="button">VOLVER <span>←</span></button></div>';
     document.querySelector(".app-shell").insertBefore(screen,document.getElementById("profileScreen"));
     screen.querySelector("#eventBackButton").onclick=()=>navigateTo("play");
     screen.querySelector("#eventJoinButton").onclick=async()=>{
@@ -305,8 +305,18 @@ async function openEventScreen(){
     });
   }
   const cfg=getEventConfig();
+  const open=eventIsOpen();
+  screen.querySelector("#eventBadge").textContent=cfg.active?(cfg.badge||"AMS FLY · EVENTO"):"AMS FLY · EVENTO";
   screen.querySelector("#eventTitle").textContent=cfg.title;
   screen.querySelector("#eventDesc").textContent=cfg.desc;
+  screen.querySelector("#eventStatus").textContent=open
+    ? ((cfg.cta?cfg.cta+". ":"")+"El evento está abierto. Inicia sesión, completa tu piloto y acepta las condiciones para participar.")
+    : (cfg.active
+      ? "El evento está fuera de su periodo de participación. Puedes consultar sus condiciones."
+      : "No hay un evento activo por ahora. Puedes jugar libremente y consultar el ranking.");
+  screen.querySelector(".event-details-card").hidden=!cfg.active;
+  screen.querySelector("#eventTermsRow").hidden=!open;
+  screen.querySelector("#eventJoinButton").hidden=!open;
   screen.querySelector("#eventPrizeTitle").textContent=cfg.prizeTitle;
   renderEventRichText(screen.querySelector("#eventPrizeDesc"),cfg.prizeDesc);
   screen.querySelector("#eventConditionTitle").textContent=cfg.conditionTitle;
@@ -365,7 +375,17 @@ async function loadRemoteEventConfig(){
       waTemplate:row.wa_template,eventStartAt:row.event_start_at,eventEndAt:row.event_end_at
     });
     applyEventConfig();
-  }catch(_){}
+    const screen=document.getElementById("amsFlyEventScreen");
+    if(screen&&!screen.hidden)openEventScreen();
+  }catch(error){
+    // Si Neon no responde, nunca dejamos abierto por error un evento guardado
+    // anteriormente en el navegador.
+    const cached=getEventConfig();
+    saveEventConfig({...cached,active:false});
+    applyEventConfig();
+    const screen=document.getElementById("amsFlyEventScreen");
+    if(screen&&!screen.hidden)openEventScreen();
+  }
 }
 function safeParse(key, fallback){
   try{return JSON.parse(localStorage.getItem(key) || "") || fallback}catch(_){return fallback}
@@ -475,9 +495,14 @@ function startMusic(){
   }catch(_){musicStarting=false}
 }
 function unlockMenuMusic(){
-  window.removeEventListener("pointerdown",unlockMenuMusic);
+  window.removeEventListener("pointerdown",unlockMenuMusic,true);
   window.removeEventListener("keydown",unlockMenuMusic);
-  if(soundOn)startMusic();
+  if(soundOn){
+    // La primera llamada durante la carga puede quedar suspendida por la
+    // política de autoplay del navegador. Reintentar dentro del primer gesto.
+    musicStarting=false;
+    startMusic();
+  }
 }
 function resizeCanvas(){
   const dpr=Math.min(window.devicePixelRatio||1,2);
@@ -521,6 +546,7 @@ function difficultyFor(score){
 function setHeaderGameActionsHidden(hidden){}
 function resetGame(){
   setHeaderGameActionsHidden(true);
+  if(soundOn)startMusic();
   resizeCanvas();
   const w=window.innerWidth,h=window.innerHeight;
   const chosenBirdId=selectedBirdId||profile?.birdId||"condor-co";
@@ -753,9 +779,14 @@ function endGame(){
   els.submitScoreBtn.dataset.published="0";
   els.submitScoreBtn.disabled=false;
   els.scoreMessage.disabled=false;
+  els.submitScoreBtn.hidden=!eventIsOpen();
+  const scoreMessageLabel=els.scoreMessage.closest(".message-label");
+  if(scoreMessageLabel)scoreMessageLabel.hidden=!eventIsOpen();
   els.submitScoreBtn.innerHTML='PUBLICAR PUNTUACIÓN <span>↑</span>';
   els.submitScoreStatus.hidden=false;
-  els.submitScoreStatus.textContent="Puedes dejar un mensaje o publicar directamente tu puntuación.";
+  els.submitScoreStatus.textContent=eventIsOpen()
+    ? (profile?"Puedes publicar este vuelo en el evento activo.":"Para participar en el evento, inicia sesión o crea una cuenta. Tu vuelo ya quedó guardado en este dispositivo.")
+    : "Puedes jugar libremente. No hay un evento abierto para publicar puntuaciones; tu récord queda guardado en este dispositivo.";
   showOnly(els.gameOverScreen);
   els.gameOverScreen.hidden=false;
   scheduleAutoPublishPendingScore(3500);
@@ -784,7 +815,14 @@ async function publishScore(options={}){
 }
 async function publishScoreInternal(options={}){
   const automatic=options.automatic===true;
-  if(!profile)return false;
+  if(!profile){
+    if(!automatic){
+      els.submitScoreStatus.textContent="Inicia sesión o crea una cuenta para participar. Tu puntuación está guardada en este dispositivo.";
+      navigateTo("account");
+      setAuthStatus(els.authStatus,"Inicia sesión o crea una cuenta para publicar este vuelo.",false);
+    }
+    return false;
+  }
   if(!eventIsOpen()){
     if(!automatic) els.submitScoreStatus.textContent="El evento ya no está vigente. Las puntuaciones solo pueden publicarse durante el periodo oficial del evento.";
     return false;
@@ -822,9 +860,12 @@ async function publishScoreInternal(options={}){
     const authUser=await getCurrentAuthUser();
     if(!authUser)throw new Error("auth_required");
     if(!termsAcceptedFor(authUser)){
-      if(!automatic) els.submitScoreStatus.textContent="Para publicar y participar en el evento debes aceptar primero los Términos y Condiciones desde la sección Evento.";
-      els.submitScoreBtn.disabled=false;
-      els.scoreMessage.disabled=false;
+      if(!automatic){
+        els.submitScoreStatus.textContent="Acepta los Términos y Condiciones en la sección Evento para publicar este puntaje.";
+        els.submitScoreBtn.disabled=false;
+        els.scoreMessage.disabled=false;
+        navigateTo("event");
+      }
       return false;
     }
 
@@ -1031,33 +1072,10 @@ async function ensureParticipantReady(user){
   saveProfile();
   return true;
 }
-async function startWithProfile(){
-  const user=await getCurrentAuthUser().catch(()=>null);
-  if(!user){
-    navigateTo("account");
-    setAuthStatus(els.authStatus,"Inicia sesión o crea tu cuenta para participar.",true);
-    return;
-  }
-  if(eventIsOpen()){
-    const accepted=await getTermsAcceptedFor(user);
-    if(!accepted){
-      navigateTo("event");
-      return;
-    }
-  }
-  try{
-    const ready=await ensureParticipantReady(user);
-    if(!ready){
-      navigateTo("account");
-      setAuthStatus(els.accountStatus,"Completa tus datos de cuenta antes de iniciar el vuelo.",true);
-      return;
-    }
-    resetGame();
-  }catch(error){
-    console.error("AMS Fly: no se pudo preparar el piloto",error);
-    navigateTo("account");
-    setAuthStatus(els.accountStatus,"No pudimos preparar tu piloto. Revisa tus datos e inténtalo de nuevo.",true);
-  }
+function startWithProfile(){
+  // Jugar es público. La cuenta solo se necesita para participar y publicar
+  // una puntuación durante un evento activo.
+  resetGame();
 }
 function prepareFactThenGame(){
   const fact=colombiaFacts[currentFactIndex%colombiaFacts.length];currentFactIndex=(currentFactIndex+1)%colombiaFacts.length;localStorage.setItem(FACT_INDEX_KEY,String(currentFactIndex));
@@ -1174,6 +1192,7 @@ async function signInPlayer(){
     }
     populateAccountFields();
     await refreshAuthUI();
+    if(readPendingScore())restorePendingResult();
   }catch(error){
     setAuthStatus(els.authStatus,friendlyAuthError(error,"No se pudo iniciar sesión. Revisa tu correo y contraseña."),true);
   }finally{
@@ -1219,11 +1238,13 @@ async function signUpPlayer(){
       console.error("AMS Fly: cuenta creada, pero el piloto aún no se pudo sincronizar",syncError);
       setAuthStatus(els.registerStatus,"✓ Cuenta creada y datos guardados. La sincronización con Neon quedó pendiente.",true);
       await refreshAuthUI();
+      if(readPendingScore()&&restorePendingResult())return;
       navigateTo("play");
       return;
     }
     localStorage.removeItem(PENDING_REG_KEY);
     saveProfile();await refreshAuthUI();
+    if(readPendingScore()&&restorePendingResult())return;
     navigateTo("play");
   }catch(error){
     const code=String(error?.code||"").toUpperCase();
@@ -1287,7 +1308,7 @@ function bootHome(){
   refreshAuthUI();updateLargeScreenRecommendation();
   setTimeout(()=>els.loadingScreen.classList.add("is-gone"),500);
   if(restorePendingResult()){scheduleAutoPublishPendingScore(1800);return}
-  if(soundOn){startMusic();window.addEventListener("pointerdown",unlockMenuMusic,{once:true,passive:true});window.addEventListener("keydown",unlockMenuMusic,{once:true})}
+  if(soundOn){startMusic();window.addEventListener("pointerdown",unlockMenuMusic,{once:true,passive:true,capture:true});window.addEventListener("keydown",unlockMenuMusic,{once:true})}
 }
 function navigateTo(target){
   const eventScreen=document.getElementById("amsFlyEventScreen");
@@ -1296,7 +1317,7 @@ function navigateTo(target){
   if(target==="event"){document.querySelectorAll(".bottom-nav-item").forEach(btn=>btn.classList.toggle("is-active",btn.dataset.nav==="event"));openEventScreen();return}
   if(target==="ranking"){document.querySelectorAll(".bottom-nav-item").forEach(btn=>btn.classList.toggle("is-active",btn.dataset.nav==="ranking"));loadRanking();return}
   if(target==="account"){refreshAuthUI();showOnly(els.profileScreen)}
-  else {showOnly(screen);if(target==="play"){renderBirds();renderHomeBird();}}
+  else {showOnly(screen);if(target==="play"){renderBirds();renderHomeBird();if(soundOn)startMusic();}}
   document.querySelectorAll(".bottom-nav-item").forEach(btn=>btn.classList.toggle("is-active",btn.dataset.nav===target));
 }
 els.birdGrid?.addEventListener("click",event=>{
