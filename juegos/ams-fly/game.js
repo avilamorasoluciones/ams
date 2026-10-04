@@ -5,7 +5,19 @@ const STORAGE_KEY = "amsFlyProfileV2";
 const STATS_KEY = "amsFlyStatsV1";
 const FACT_INDEX_KEY = "amsFlyFactIndexV1";
 const NEON_DATA_READY = () => !!window.AMS_FLY_NEON_CONFIG?.dataApiUrl;
-const VALID_EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const VALID_EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;\nfunction friendlyAuthError(error, fallback){
+  const raw=String(error?.message||error?.details||error?.hint||"").trim();
+  const key=raw.toLowerCase();
+  if(key.includes("invalid email or password")||key.includes("invalid credentials")||key.includes("invalid password")||key.includes("incorrect email")||key.includes("incorrect password")){
+    return "Correo o contraseña incorrectos. Revisa los datos e inténtalo de nuevo.";
+  }
+  if(key.includes("user not found")||key.includes("email not found")) return "No encontramos una cuenta con ese correo.";
+  if(key.includes("email already exists")||key.includes("already registered")||key.includes("user already exists")) return "Ese correo ya tiene una cuenta. Intenta iniciar sesión.";
+  if(key.includes("email not verified")||key.includes("verify your email")) return "Tu correo todavía no está verificado. Revisa tu bandeja de entrada.";
+  if(key.includes("too many")||key.includes("rate limit")) return "Demasiados intentos. Espera un momento y vuelve a intentarlo.";
+  return fallback;
+}
+
 function formatRankingDate(value){
   const date=new Date(value);
   if(!Number.isFinite(date.getTime()))return "";
@@ -924,7 +936,7 @@ async function signInPlayer(){
     if(result?.error)throw new Error(result.error.message||"No se pudo iniciar sesión.");
     if(!await getCurrentAuthUser())throw new Error("Neon no devolvió una sesión válida.");
     await refreshAuthUI();
-  }catch(error){els.authStatus.classList.add("is-error");els.authStatus.textContent=error?.message||"No se pudo iniciar sesión. Revisa el correo y la contraseña."}
+  }catch(error){els.authStatus.classList.add("is-error");els.authStatus.textContent=friendlyAuthError(error,"No se pudo iniciar sesión. Revisa el correo y la contraseña.")}
   finally{els.authSignInBtn.disabled=false;els.authSignUpBtn.disabled=false}
 }
 async function signUpPlayer(){
@@ -940,7 +952,7 @@ async function signUpPlayer(){
     const user=await getCurrentAuthUser();
     if(user)await refreshAuthUI();
     else els.authStatus.textContent="✓ Cuenta creada. Si Neon solicita verificar el correo, completa ese paso y luego inicia sesión.";
-  }catch(error){els.authStatus.classList.add("is-error");els.authStatus.textContent=error?.message||"No se pudo crear la cuenta."}
+  }catch(error){els.authStatus.classList.add("is-error");els.authStatus.textContent=friendlyAuthError(error,"No se pudo crear la cuenta. Intenta de nuevo.")}
   finally{els.authSignInBtn.disabled=false;els.authSignUpBtn.disabled=false}
 }
 async function signOutPlayer(){
