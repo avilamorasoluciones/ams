@@ -506,7 +506,12 @@ function resetGame(){
   setHeaderGameActionsHidden(true);
   resizeCanvas();
   const w=window.innerWidth,h=window.innerHeight;
-  const birdData=getBird(profile?.birdId||selectedBirdId);
+  const chosenBirdId=selectedBirdId||profile?.birdId||"condor-co";
+  if(profile){
+    profile.birdId=chosenBirdId;
+    saveProfile();
+  }
+  const birdData=getBird(chosenBirdId);
   game={
     running:true,paused:false,started:false,score:0,time:0,last:performance.now(),spawn:0,
     bird:{x:Math.max(75,w*.22),y:h*.48,vy:0,r:18},
@@ -1209,6 +1214,59 @@ function navigateTo(target){
   else {showOnly(screen);if(target==="play"){renderBirds();renderHomeBird();}}
   document.querySelectorAll(".bottom-nav-item").forEach(btn=>btn.classList.toggle("is-active",btn.dataset.nav===target));
 }
+els.birdGrid?.addEventListener("click",event=>{
+  const button=event.target.closest("[data-bird]");
+  if(!button || !els.birdGrid.contains(button))return;
+  const birdId=button.dataset.bird;
+  if(!getBird(birdId))return;
+  selectedBirdId=birdId;
+  if(profile){
+    profile.birdId=birdId;
+    saveProfile();
+  }
+  renderBirds();
+  playTone(660,.06,"triangle");
+});
+
+els.startBtn?.addEventListener("click",()=>{
+  startWithProfile();
+});
+
+els.pauseBtn?.addEventListener("click",()=>{
+  if(!game?.running)return;
+  if(game.paused)return;
+  game.paused=true;
+  cancelAnimationFrame(raf);
+  els.pauseScore.textContent=game.score+" puntos";
+  showOnly(els.pauseScreen);
+});
+
+els.resumeBtn?.addEventListener("click",()=>{
+  if(!game?.running)return;
+  game.paused=false;
+  game.last=performance.now();
+  showOnly(els.gameScreen);
+  cancelAnimationFrame(raf);
+  raf=requestAnimationFrame(loop);
+});
+
+els.quitBtn?.addEventListener("click",()=>{
+  if(game){
+    game.running=false;
+    game.paused=false;
+  }
+  cancelAnimationFrame(raf);
+  stopMusic();
+  navigateTo("play");
+});
+
+els.againBtn?.addEventListener("click",()=>{
+  startWithProfile();
+});
+
+els.submitScoreBtn?.addEventListener("click",()=>publishScore({automatic:false}));
+els.shareResultBtn?.addEventListener("click",shareResult);
+
 document.querySelectorAll(".bottom-nav-item[data-nav]").forEach(btn=>btn.addEventListener("click",()=>navigateTo(btn.dataset.nav)));
 els.accountBtn?.addEventListener("click",()=>navigateTo("account"));
 els.authCreateAccountBtn?.addEventListener("click",()=>{
