@@ -259,6 +259,7 @@ async function openEventScreen(){
       if(!user){
         document.getElementById("eventTermsConsent").checked=false;
         document.getElementById("eventAuthHint").textContent="Debes iniciar sesión o registrarte para aceptar los términos y participar.";
+        navigateTo("account");
         return;
       }
     });
@@ -325,6 +326,9 @@ function showOnly(target){
   [els.homeScreen,els.profileScreen,els.factScreen,els.gameScreen,els.pauseScreen,els.gameOverScreen,els.rankingScreen].forEach(x=>{if(x)x.hidden=true});
   ["amsFlyEventScreen"].forEach(id=>{const x=document.getElementById(id);if(x)x.hidden=true});
   if(target)target.hidden=false;
+  const gameplayScreen=target===els.gameScreen||target===els.pauseScreen||target===els.gameOverScreen;
+  const shell=document.querySelector(".app-shell");
+  shell?.classList.toggle("game-active",gameplayScreen);
   if(els.bottomNav)els.bottomNav.hidden=false;
 }
 function hydrateStats(){
@@ -1116,9 +1120,10 @@ function bootHome(){
 }
 function navigateTo(target){
   const eventScreen=document.getElementById("amsFlyEventScreen");
-  const map={play:els.homeScreen,event:eventScreen,account:els.profileScreen};
+  const map={play:els.homeScreen,event:eventScreen,account:els.profileScreen,ranking:els.rankingScreen};
   const screen=map[target]||els.homeScreen;
   if(target==="event"){document.querySelectorAll(".bottom-nav-item").forEach(btn=>btn.classList.toggle("is-active",btn.dataset.nav==="event"));openEventScreen();return}
+  if(target==="ranking"){document.querySelectorAll(".bottom-nav-item").forEach(btn=>btn.classList.toggle("is-active",btn.dataset.nav==="ranking"));loadRanking();return}
   if(target==="account"){refreshAuthUI();showOnly(els.profileScreen)}
   else {showOnly(screen);if(target==="play"){renderBirds();renderHomeBird();}}
   document.querySelectorAll(".bottom-nav-item").forEach(btn=>btn.classList.toggle("is-active",btn.dataset.nav===target));
