@@ -5,7 +5,7 @@ const STORAGE_KEY = "amsFlyProfileV2";
 const TERMS_KEY = "amsFlyTermsAcceptedV1";
 const STATS_KEY = "amsFlyStatsV1";
 const FACT_INDEX_KEY = "amsFlyFactIndexV1";
-const NEON_DATA_READY = () => !!window.AMS_FLY_NEON_CONFIG?.dataApiUrl;
+const NEON_DATA_READY = () => !!window.AMS_FLY_NEON_CONFIG?.authUrl && !!window.AMS_FLY_NEON_CONFIG?.dataApiUrl;
 const VALID_EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 function friendlyAuthError(error, fallback){
   const raw=[error?.message,error?.details,error?.hint,error?.code,error?.status].filter(Boolean).map(String).join(" | ").trim();
@@ -455,7 +455,12 @@ function updateStage(){
 function difficultyFor(score){
   return 1 + Math.min(5,Math.floor(score/12)*.28);
 }
+function setHeaderGameActionsHidden(hidden){
+  if(els.accountBtn)els.accountBtn.hidden=hidden;
+  if(els.rankingHeaderBtn)els.rankingHeaderBtn.hidden=hidden;
+}
 function resetGame(){
+  setHeaderGameActionsHidden(true);
   resizeCanvas();
   const w=window.innerWidth,h=window.innerHeight;
   const birdData=getBird(profile?.birdId||selectedBirdId);
@@ -643,6 +648,7 @@ function updateLargeScreenRecommendation(){
 function endGame(){
   if(!game || !game.running)return;
   game.running=false;
+  setHeaderGameActionsHidden(false);
   game.deathAt=performance.now();
   stopMusic();
   cancelAnimationFrame(raf);
@@ -791,6 +797,7 @@ async function publishScore(options={}){
     // Si el récord local ya está publicado, no volvemos a crear una fila solo
     // por terminar otra partida menor.
     if(scoreToPublish<=remoteBest){
+      cancelAutoPublishPendingScore();
       els.submitScoreBtn.dataset.published="1";
       els.submitScoreBtn.disabled=true;
       els.scoreMessage.disabled=true;
@@ -813,6 +820,7 @@ async function publishScore(options={}){
 
     if(result.error)throw result.error;
 
+    cancelAutoPublishPendingScore();
     els.submitScoreBtn.dataset.published="1";
     els.submitScoreBtn.disabled=true;
     els.scoreMessage.disabled=true;
@@ -1064,7 +1072,20 @@ els.rankingFromResultBtn?.addEventListener("click",async()=>{
   if(published)await loadRanking();
 });
 els.rankingBackBtn.addEventListener("click",()=>{ if(readPendingScore() || lastResult){ showOnly(els.gameOverScreen); els.gameOverScreen.hidden=false; } else showOnly(els.homeScreen); });
-els.backBtn?.addEventListener("click",()=>{ if(game?.running && !game?.paused){ game.paused=true; stopMusic(); cancelAnimationFrame(raf); els.pauseScore.textContent=game.score+" puntos"; showOnly(els.pauseScreen); } else if(!els.profileScreen.hidden){ showOnly(els.homeScreen); } else if(!els.factScreen.hidden){ showOnly(els.profileScreen); } else if(!els.rankingScreen.hidden){ showOnly(els.homeScreen); } else { showOnly(els.homeScreen); } });
+els.backBtn?.addEventListener("click",async()=>{
+  if(game?.running && !game?.paused){
+    game.paused=true;stopMusic();cancelAnimationFrame(raf);els.pauseScore.textContent=game.score+" puntos";showOnly(els.pauseScreen);return;
+  }
+  if(!els.gameOverScreen.hidden){
+    const published=await ensureResultPublishedBeforeLeaving();
+    if(published)showOnly(els.homeScreen);
+    return;
+  }
+  if(!els.profileScreen.hidden){showOnly(els.homeScreen);return}
+  if(!els.factScreen.hidden){showOnly(els.profileScreen);return}
+  if(!els.rankingScreen.hidden){showOnly(els.homeScreen);return}
+  showOnly(els.homeScreen);
+});
 els.rankingRefreshBtn.addEventListener("click",loadRanking);
 els.submitScoreBtn.addEventListener("click",()=>{publishScore();});
 els.scoreMessage?.addEventListener("input",()=>{
@@ -1073,7 +1094,9 @@ els.scoreMessage?.addEventListener("input",()=>{
   const pending=readPendingScore();
   if(!pending)return;
   // Guardamos lo que el usuario escribe tal cual, incluidos los espacios.
-  // La publicación solo ocurre al pulsar "PUBLICAR PUNTUACIÓN".
+  // La publicación manual ocurre al pulsar "PUBLICAR PUNTUACIÓN"; además,
+  // existe un reintento automático para proteger el resultado si el usuario
+  // abandona la pantalla sin pulsar el botón.
   pending.message=(els.scoreMessage.value||"").slice(0,90);
   savePendingScore(pending);
   if(lastResult)lastResult={...lastResult,message:pending.message};
@@ -1095,8 +1118,14 @@ els.factContinueBtn.addEventListener("click",()=>{playTone(560,.05);startMusic()
 els.pauseBtn.addEventListener("click",()=>{if(!game?.running)return;game.paused=true;stopMusic();cancelAnimationFrame(raf);els.pauseScore.textContent=game.score+" puntos";showOnly(els.pauseScreen);playTone(300,.05)});
 els.resumeBtn.addEventListener("click",()=>{if(!game?.running)return;game.paused=false;startMusic();game.last=performance.now();showOnly(els.gameScreen);playTone(420,.05);raf=requestAnimationFrame(loop)});
 els.quitBtn.addEventListener("click",()=>{if(game)game.running=false;stopMusic();cancelAnimationFrame(raf);showOnly(els.homeScreen);hydrateStats();startMusic()});
-els.againBtn.addEventListener("click",()=>{prepareFactThenGame()});
-els.changePilotBtn.addEventListener("click",()=>{showOnly(els.profileScreen);if(profile){els.playerName.value=profile.name;els.playerCountry.value=profile.country;selectedBirdId=profile.birdId}refreshAuthUI();renderBirds()});
+els.againBtn.addEventListener("click",async()=>{
+  const published=await ensureResultPublishedBeforeLeaving();
+  if(published)prepareFactThenGame();
+});
+els.changePilotBtn.addEventListener("click",async()=>{
+  const published=await ensureResultPublishedBeforeLeaving();
+  if(!published)return;
+  showOnly(els.profileScreen);if(profile){els.playerName.value=profile.name;els.playerCountry.value=profile.country;selectedBirdId=profile.birdId}refreshAuthUI();renderBirds()});
 els.changePilotHomeBtn.addEventListener("click",()=>{playTone(440,.05);if(profile){els.playerName.value=profile.name;els.playerCountry.value=profile.country;selectedBirdId=profile.birdId}refreshAuthUI();renderBirds();showOnly(els.profileScreen)});
 els.adminNavBtn?.addEventListener("click",()=>window.dispatchEvent(new Event("ams-fly-admin-open")));
 window.addEventListener("ams-fly-event-updated",event=>{if(!event.detail)return;saveEventConfig({...DEFAULT_EVENT,...event.detail});applyEventConfig()});
