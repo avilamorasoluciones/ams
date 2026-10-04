@@ -15,7 +15,7 @@ button{cursor:pointer}
  radial-gradient(circle at 88% 24%,rgba(236,72,153,.09),transparent 25%),
  linear-gradient(180deg,#080715 0%,#0c0b20 52%,#070812 100%)}
 .app-shell:before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.18;background-image:linear-gradient(rgba(255,255,255,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.03) 1px,transparent 1px);background-size:48px 48px;mask-image:linear-gradient(to bottom,black,transparent 90%)}
-.game-header{position:sticky;z-index:100;top:0;min-height:76px;padding:calc(10px + var(--safe-top)) max(16px,4vw) 10px;display:flex;justify-content:space-between;align-items:center;pointer-events:none;background:linear-gradient(180deg,rgba(8,7,21,.97) 0%,rgba(8,7,21,.88) 78%,rgba(8,7,21,.55) 100%);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border-bottom:1px solid rgba(255,255,255,.05)
+.game-header{position:sticky;z-index:100;top:0;min-height:76px;padding:calc(10px + var(--safe-top)) max(16px,4vw) 10px;display:flex;justify-content:space-between;align-items:center;pointer-events:none;background:linear-gradient(180deg,rgba(8,7,21,.97) 0%,rgba(8,7,21,.88) 78%,rgba(8,7,21,.55) 100%);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border-bottom:1px solid rgba(255,255,255,.05)}
 .game-header>*{pointer-events:auto}
 .brand{display:inline-flex;align-items:center;gap:10px;color:var(--text);text-decoration:none}
 .brand-dot{width:35px;height:35px;border-radius:12px;background:linear-gradient(135deg,var(--purple),var(--pink));box-shadow:0 0 28px rgba(139,92,246,.28);position:relative}
