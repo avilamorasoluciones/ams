@@ -1261,6 +1261,8 @@ const ImpostorGame = (() => {
     }
 
     changeScreen("i-scr-result");
+    // El resultado final no se restaura después de cerrar o volver otro día.
+    window.GameSession?.clear("impostor");
   }
 
   function restartGame() {
@@ -1270,6 +1272,10 @@ const ImpostorGame = (() => {
     selectedCard = null;
     currentIndex = 0;
     timerRunning = false;
+    timerEndsAt = 0;
+    secondsLeft = 0;
+    lastVoteIndex = null;
+    window.GameSession?.clear("impostor");
 
     document.body.classList.remove("playing");
     changeScreen("i-scr-lobby");
@@ -1318,6 +1324,11 @@ const ImpostorGame = (() => {
 
     if (restartBtn) {
       restartBtn.onclick = restartGame;
+    }
+
+    const backLobbyBtn = $("i-btnBackLobby");
+    if (backLobbyBtn) {
+      backLobbyBtn.onclick = restartGame;
     }
 
     if (input) {
