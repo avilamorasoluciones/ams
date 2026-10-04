@@ -1123,7 +1123,10 @@ function navigateTo(target){
   else {showOnly(screen);if(target==="play"){renderBirds();renderHomeBird();}}
   document.querySelectorAll(".bottom-nav-item").forEach(btn=>btn.classList.toggle("is-active",btn.dataset.nav===target));
 }
-document.querySelectorAll(".bottom-nav-item").forEach(btn=>btn.addEventListener("click",()=>navigateTo(btn.dataset.nav)));
+document.querySelectorAll(".bottom-nav-item[data-nav]").forEach(btn=>btn.addEventListener("click",()=>navigateTo(btn.dataset.nav)));
+els.accountBtn?.addEventListener("click",()=>navigateTo("account"));
+els.rankingHeaderBtn?.addEventListener("click",()=>loadRanking());
+els.backBtn?.addEventListener("click",()=>navigateTo("play"));
 els.rankingBackBtn?.addEventListener("click",()=>navigateTo("play"));
 els.rankingRefreshBtn?.addEventListener("click",loadRanking);
 window.addEventListener("ams-fly-event-updated",event=>{if(!event.detail)return;saveEventConfig({...DEFAULT_EVENT,...event.detail});applyEventConfig()});
