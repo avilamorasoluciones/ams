@@ -1297,6 +1297,12 @@ const ImpostorGame = (() => {
       .map((player, playerIndex) => ({ player, playerIndex, count: counts[playerIndex] || 0 }))
       .sort((a, b) => b.count - a.count || a.playerIndex - b.playerIndex);
 
+    const topVoted = ranking[0] || {
+      player: votedPlayer || "-",
+      playerIndex: index,
+      count: counts[index] || 0
+    };
+
     const voteDetails = voteQueue
       .map((voterIndex) => {
         const targetIndex = Number(votes[String(voterIndex)]);
