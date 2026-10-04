@@ -26,6 +26,25 @@ function friendlyAuthError(error, fallback){
   return fallback;
 }
 
+function friendlyNeonSyncError(error){
+  const code=String(error?.code||"").toUpperCase();
+  const raw=[error?.message,error?.details,error?.hint,error?.code,error?.status].filter(Boolean).map(String).join(" | ").trim();
+  const key=raw.toLowerCase().replace(/[_-]+/g," ");
+  if(key.includes("auth required")||key.includes("unauthorized")||key.includes("jwt")||code==="401"||code==="403"){
+    return "Neon no detectó una sesión válida. Verifica el correo y vuelve a iniciar sesión.";
+  }
+  if(key.includes("invalid participant")){
+    return "Neon rechazó los datos del piloto. Revisa nombre, país, ave y celular.";
+  }
+  if(key.includes("ams fly register participant")||key.includes("pgrst202")||key.includes("function")&&key.includes("not found")){
+    return "Falta habilitar el registro de pilotos en Neon. Revisa la migración de AMS Fly.";
+  }
+  return "No pudimos sincronizar con Neon."+(raw?" Detalle: "+raw.slice(0,180):" Intenta de nuevo.");
+}
+function neonAuthRetryable(error){
+  const raw=[error?.message,error?.details,error?.hint,error?.code,error?.status].filter(Boolean).map(String).join(" ").toLowerCase();
+  return /auth[_ ]required|unauthorized|permission denied|jwt|42501|401|403/.test(raw);
+}
 function termsAcceptedFor(user){
   if(!user?.email)return false;
   const data=safeParse(TERMS_KEY,{});
@@ -57,7 +76,10 @@ async function getCurrentAuthUser(){
   const client=await getNeonClient();
   const result=await client.auth.getSession();
   if(result?.error) throw new Error(result.error.message||"No se pudo consultar la sesión.");
-  return result?.data?.user || result?.data?.session?.user || null;
+  const data=result?.data||{};
+  const session=data.session||data.data?.session||null;
+  if(!session)return null;
+  return data.user||session.user||null;
 }
 const RANKING_LIMIT = 50;
 function escapeHtml(value){
@@ -1108,7 +1130,6 @@ async function loadAccountProfile(user){
   let candidate=local&&local.email===email?{...local}:null;
   if(!candidate&&pending&&pending.email===email){
     candidate={...pending};
-    localStorage.removeItem(PENDING_REG_KEY);
   }
   if(!candidate){
     const parsed=splitStoredName(user.name||"");
@@ -1188,7 +1209,13 @@ async function signInPlayer(){
     if(!user)throw new Error("No se pudo recuperar la sesión después de iniciar sesión.");
     await loadAccountProfile(user);
     if(profile?.name&&profile.name.length>=2&&/^\+[1-9]\d{7,14}$/.test(String(profile.phone||""))){
-      try{await syncParticipantProfile(user);saveProfile();}catch(_){}
+      try{
+        await syncParticipantProfile(user);
+        saveProfile();
+        localStorage.removeItem(PENDING_REG_KEY);
+      }catch(syncError){
+        setAuthStatus(els.accountStatus,friendlyNeonSyncError(syncError),true);
+      }
     }
     populateAccountFields();
     await refreshAuthUI();
@@ -1236,7 +1263,7 @@ async function signUpPlayer(){
       await syncParticipantProfile(user);
     }catch(syncError){
       console.error("AMS Fly: cuenta creada, pero el piloto aún no se pudo sincronizar",syncError);
-      setAuthStatus(els.registerStatus,"✓ Cuenta creada y datos guardados. La sincronización con Neon quedó pendiente.",true);
+      setAuthStatus(els.registerStatus,"✓ Cuenta creada y datos guardados localmente. "+friendlyNeonSyncError(syncError),true);
       await refreshAuthUI();
       if(readPendingScore()&&restorePendingResult())return;
       navigateTo("play");
@@ -1254,14 +1281,30 @@ async function signUpPlayer(){
   finally{els.authSignUpBtn.disabled=false}
 }
 async function syncParticipantProfile(user){
-  if(!user||!NEON_DATA_READY()||!profile)return;
+  if(!user)throw new Error("auth_required");
+  if(!NEON_DATA_READY())throw new Error("neon_not_configured");
+  if(!profile)throw new Error("profile_missing");
+  const name=String(profile.name||"").trim();
+  if(name.length<2||name.length>18)throw new Error("invalid_participant");
   const client=await getPublicNeonClient();
-  const result=await client.rpc("ams_fly_register_participant",{
-    p_name:String(profile.name||"").slice(0,70),p_country:profile.country,p_bird_id:profile.birdId,p_phone:profile.phone||null,p_score:0
-  });
+  const payload={
+    p_name:name,
+    p_country:profile.country,
+    p_bird_id:profile.birdId,
+    p_phone:profile.phone||null,
+    p_score:0
+  };
+  let result=await client.rpc("ams_fly_register_participant",payload);
+  if(result.error&&neonAuthRetryable(result.error)){
+    await new Promise(resolve=>setTimeout(resolve,450));
+    const activeUser=await getCurrentAuthUser();
+    if(!activeUser||(user.id&&activeUser.id!==user.id))throw new Error("auth_required");
+    result=await client.rpc("ams_fly_register_participant",payload);
+  }
   if(result.error)throw result.error;
-  const remote=result.data||{};
-  profile.participantId=remote.participant_id||profile.participantId||null;
+  const remote=Array.isArray(result.data)?result.data[0]:(result.data||{});
+  if(!remote.participant_id)throw new Error("participant_not_confirmed");
+  profile.participantId=remote.participant_id;
   profile.prizeEligible=remote.prize_eligible!==false;
 }
 async function saveAccount(){
@@ -1291,10 +1334,11 @@ async function saveAccount(){
   try{
     await syncParticipantProfile(user);
     saveProfile();
+    localStorage.removeItem(PENDING_REG_KEY);
     setAuthStatus(els.accountStatus,"✓ Datos guardados y sincronizados.");
   }catch(error){
     console.error("AMS Fly: no se pudo sincronizar el perfil",error);
-    setAuthStatus(els.accountStatus,"✓ Datos guardados en este dispositivo. No pudimos sincronizarlos con Neon todavía.",true);
+    setAuthStatus(els.accountStatus,"✓ Datos guardados en este dispositivo. "+friendlyNeonSyncError(error),true);
   }
 }
 async function signOutPlayer(){
