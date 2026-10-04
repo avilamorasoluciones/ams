@@ -96,6 +96,10 @@
                   <div class="player-list" id="t-uiPlayerList"></div>
                 </div>
 
+                <div class="panel-soft" style="margin-bottom: 12px;">
+                  <p class="tabu-round-note"><strong>Cómo funcionan las rondas:</strong> una ronda termina cuando todos los equipos han tenido un turno. Si eliges 3 rondas, cada equipo juega 3 turnos y los hablantes van rotando.</p>
+                </div>
+
                 <div class="config-grid">
                   <div class="box stack compact">
                     <span class="label-muted">Equipos</span>
@@ -164,6 +168,10 @@
               <!-- JUEGO ACTIVO -->
               <div id="t-scr-game" class="im-screen center">
                 <div class="box stack compact">
+                  <div class="tabu-game-context">
+                    <span class="tabu-turn-badge" id="t-liveTeam">Equipo 1</span>
+                    <span class="label-muted" id="t-liveRound">Ronda 1 de 3</span>
+                  </div>
                   <div class="timer-text" id="t-uiTimer">01:00</div>
                   
                   <!-- ESTADÍSTICAS EN VIVO -->
