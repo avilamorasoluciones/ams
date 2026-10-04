@@ -6,9 +6,9 @@ const STATS_KEY = "amsFlyStatsV1";
 const FACT_INDEX_KEY = "amsFlyFactIndexV1";
 const NEON_DATA_READY = () => !!window.AMS_FLY_NEON_CONFIG?.dataApiUrl;
 const VALID_EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;\nfunction friendlyAuthError(error, fallback){
-  const raw=String(error?.message||error?.details||error?.hint||"").trim();
-  const key=raw.toLowerCase();
-  if(key.includes("invalid email or password")||key.includes("invalid credentials")||key.includes("invalid password")||key.includes("incorrect email")||key.includes("incorrect password")){
+  const raw=[error?.message,error?.details,error?.hint,error?.code,error?.status].filter(Boolean).map(String).join(" | ").trim();
+  const key=raw.toLowerCase().replace(/[_-]+/g," ");
+  if(key.includes("invalid email or password")||key.includes("invalid credentials")||key.includes("invalid password")||key.includes("incorrect email")||key.includes("incorrect password")||key.includes("invalid login")){
     return "Correo o contraseña incorrectos. Revisa los datos e inténtalo de nuevo.";
   }
   if(key.includes("user not found")||key.includes("email not found")) return "No encontramos una cuenta con ese correo.";
