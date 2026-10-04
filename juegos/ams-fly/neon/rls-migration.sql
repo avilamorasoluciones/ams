@@ -246,3 +246,30 @@ end; $$;
 
 revoke all on function public.ams_fly_accept_terms() from public;
 grant execute on function public.ams_fly_accept_terms() to authenticated;
+
+
+create or replace function public.ams_fly_get_terms_status()
+returns json
+language plpgsql
+security definer
+set search_path=public,neon_auth
+as $$
+declare
+  v_auth_user_id text:=nullif(trim(auth.user_id()),'');
+  v_accepted_at timestamptz;
+begin
+  if v_auth_user_id is null then raise exception 'auth_required'; end if;
+
+  select terms_accepted_at into v_accepted_at
+  from public.ams_fly_participants
+  where auth_user_id=v_auth_user_id
+  limit 1;
+
+  return json_build_object(
+    'accepted',v_accepted_at is not null,
+    'accepted_at',v_accepted_at
+  );
+end; $$;
+
+revoke all on function public.ams_fly_get_terms_status() from public;
+grant execute on function public.ams_fly_get_terms_status() to authenticated;
