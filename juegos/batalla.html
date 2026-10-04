@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <script src="../github-redirect.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
+  <title>Batalla de Palabras | Avila Mora Soluciones</title>
+  <meta name="description" content="Batalla de Palabras: un juego de palabras rápido para grupos, con equipos, rondas y desafíos.">
+  <meta name="theme-color" content="#f59e0b">
+  <link rel="icon" href="pwa-icon-192.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="styles.css?v=20261004-01">
+  <style>
+    .bp-mode-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+    .bp-mode{padding:14px;text-align:left;border:1px solid var(--border-light);border-radius:15px;background:var(--player-bg);cursor:pointer}
+    .bp-mode.selected{border-color:var(--primary);box-shadow:0 0 0 2px color-mix(in srgb,var(--primary) 18%,transparent)}
+    .bp-mode strong{display:block}.bp-mode small{display:block;color:var(--muted);margin-top:4px;line-height:1.35}
+    .bp-config{display:grid;gap:14px}.bp-config label{font-weight:800}
+    .bp-config select,.bp-config input{margin-top:6px}
+    .bp-game-card{text-align:center}.bp-letter{font-size:clamp(4rem,22vw,8rem);font-weight:1000;line-height:.9;margin:8px 0}
+    .bp-category{font-size:1.1rem;font-weight:900}.bp-timer{font-size:clamp(2.8rem,13vw,5rem);font-weight:1000}
+    .bp-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px}.bp-actions .full{grid-column:1/-1}
+    .bp-score{font-size:1.5rem;font-weight:1000}.bp-team-list{display:grid;gap:8px}.bp-team-row{display:flex;justify-content:space-between;gap:10px;padding:11px 13px;border:1px solid var(--border-light);border-radius:12px;background:var(--player-bg)}
+    .bp-verdict{padding:14px;border-radius:14px;background:var(--player-bg);border:1px solid var(--border-light)}
+    @media(max-width:520px){.bp-mode-grid{grid-template-columns:1fr}.bp-actions{grid-template-columns:1fr}.bp-actions .full{grid-column:auto}}
+  </style>
+</head>
+<body class="game-batalla">
+<header class="topbar"><div class="topbar-inner">
+  <a class="brand brand-link" href="index.html"><span class="logo brand-logo-svg"><img src="game-batalla.svg" alt=""></span><span class="txt"><span class="name">Avila Mora Soluciones</span><small>Juegos · Batalla de Palabras</small></span></a>
+  <div class="topbar-actions"><button type="button" class="icon-btn theme-switch-btn" data-theme-toggle aria-label="Cambiar tema"><svg class="ui-icon"><use href="ui-icons.svg#theme"></use></svg></button><a class="game-back-btn" href="index.html"><svg class="ui-icon"><use href="ui-icons.svg#home"></use></svg><span>Menú</span></a></div>
+</div></header>
+<main id="mainContent"><div class="wrap"><section class="section active"><div class="stack">
+  <div id="bp-scr-lobby" class="box narrow stack">
+    <div class="game-page-hero-icon"><img src="game-batalla.svg" alt=""></div><h1 class="game-title">Batalla de Palabras</h1>
+    <p class="game-sub">Un equipo juega. Los demás escuchan, validan y llevan la presión. El celular controla la batalla.</p>
+    <div class="game-audio-tip"><svg class="ui-icon"><use href="ui-icons.svg#info"></use></svg><span><strong>Cómo se juega:</strong> aparece una categoría y, según el modo, una letra o reto. El equipo tiene que responder antes de que se acabe el tiempo.</span></div>
+    <div class="box panel-soft stack">
+      <h2 class="section-title">1. Elige el modo</h2>
+      <div id="bp-modes" class="bp-mode-grid"></div>
+    </div>
+    <div class="box panel-soft bp-config">
+      <h2 class="section-title">2. Configura la partida</h2>
+      <label>Equipos<select id="bp-teams"><option value="2">2 equipos</option><option value="3">3 equipos</option><option value="4">4 equipos</option></select></label>
+      <label>Tiempo por batalla<select id="bp-time"><option value="20">20 segundos</option><option value="30" selected>30 segundos</option><option value="45">45 segundos</option><option value="60">60 segundos</option></select></label>
+      <label>Rondas<select id="bp-rounds"><option value="5">5 rondas</option><option value="10" selected>10 rondas</option><option value="15">15 rondas</option><option value="20">20 rondas</option></select></label>
+      <label>Meta de puntos<select id="bp-goal"><option value="0" selected>Sin meta</option><option value="10">10 puntos</option><option value="20">20 puntos</option><option value="30">30 puntos</option></select></label>
+    </div>
+    <div class="box panel-soft"><h2 class="section-title">3. Prepara los equipos</h2><p class="muted">No necesitas registrar personas. Pueden usar Equipo 1, Equipo 2 o poner nombres.</p><div id="bp-team-inputs" class="stack"></div></div>
+    <button id="bp-start" class="btn primary btn-full" type="button">Comenzar batalla</button>
+    <a class="btn ghost btn-full" href="index.html">Volver al menú</a>
+  </div>
+
+  <div id="bp-scr-game" class="box narrow stack" hidden>
+    <div class="row" style="justify-content:space-between"><span id="bp-round" class="badge badge-indigo"></span><span id="bp-active" class="badge"></span></div>
+    <div class="bp-game-card box panel-soft"><div class="label-muted">RESPONDE</div><div id="bp-letter" class="bp-letter">A</div><div id="bp-category" class="bp-category"></div><div id="bp-hint" class="muted"></div><div id="bp-timer" class="bp-timer">30</div></div>
+    <div class="bp-score" id="bp-score"></div>
+    <div class="bp-actions"><button id="bp-correct" class="btn primary" type="button">✓ Correcta</button><button id="bp-wrong" class="btn danger" type="button">✕ No válida</button><button id="bp-next" class="btn ghost full" type="button">Siguiente reto</button><button id="bp-end" class="btn ghost full" type="button">Terminar partida</button></div>
+  </div>
+
+  <div id="bp-scr-result" class="box narrow stack" hidden>
+    <div class="game-page-hero-icon"><img src="game-batalla.svg" alt=""></div><h1 class="game-title">¡Batalla terminada!</h1><div id="bp-result-body" class="stack"></div>
+    <button id="bp-new" class="btn primary btn-full" type="button">Nueva partida</button><a class="btn ghost btn-full" href="index.html">Volver al menú</a>
+  </div>
+</div></section></div></main>
+<script src="scripts.js?v=20261004-46" defer></script>
+<script src="batalla.js?v=20261004-01" defer></script>
+</body></html>
