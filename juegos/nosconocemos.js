@@ -77,6 +77,7 @@ const NosConocemosGame = (() => {
   function startTurn() {
     if (pool.length === 0) {
       alert("¡Se acabaron las preguntas!");
+      window.GameSession?.clear("nosconocemos");
       changeScreen("nc-scr-lobby");
       return;
     }
