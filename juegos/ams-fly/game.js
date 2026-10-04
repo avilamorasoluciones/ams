@@ -681,12 +681,6 @@ function endGame(){
 async function ensureResultPublishedBeforeLeaving(){
   if(!lastResult && !readPendingScore())return true;
   if(els.submitScoreBtn?.dataset.published==="1")return true;
-  const message=(els.scoreMessage?.value||"").trim();
-  if(message.length<3){
-    els.submitScoreStatus.textContent="Primero escribe un mensaje de al menos 3 caracteres y publica tu puntuación.";
-    els.scoreMessage?.focus();
-    return false;
-  }
   els.submitScoreStatus.textContent="Guardando tu puntuación antes de abrir el ranking…";
   const ok=await publishScore();
   if(!ok)return false;
