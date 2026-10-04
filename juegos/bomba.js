@@ -21,11 +21,10 @@ const BombaGame = (() => {
   }
 
   function startGame() {
-    const limit = $("b-selLimit").value;
     // Solución al bug de mezcla
     const shuffled = window.Utils.shuffleArray([...DB_BOMBA]);
     
-    pool = limit === "all" ? shuffled : shuffled.slice(0, parseInt(limit));
+    pool = shuffled;
     if (pool.length === 0) return alert("Error cargando palabras");
     
     nextRound();
