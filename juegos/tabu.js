@@ -445,6 +445,21 @@ const TabuGame = (() => {
     setTimeout(() => window.emitSound(1200, 0.4, "triangle"), 350);
 
     changeScreen("t-scr-result");
+    // La partida terminó: no debe restaurarse al volver otro día.
+    window.GameSession?.clear("tabu");
+  }
+
+  function returnToLobby() {
+    window.GameSession?.clear("tabu");
+    clearInterval(timerId);
+    clearInterval(countdownTimerId);
+    timerId = null;
+    countdownTimerId = null;
+    timerEndsAt = 0;
+    secondsLeft = 0;
+    currentWord = null;
+    turnStats = { correct: 0, taboo: 0, skip: 0 };
+    changeScreen("t-scr-lobby");
   }
 
   function init() {
