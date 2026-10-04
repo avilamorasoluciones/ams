@@ -575,7 +575,7 @@ button{cursor:pointer}
   .game-bird-grid .bird-mini .bird-shape{transform:scale(.86) rotate(-7deg)}
 }
 .game-footer a{color:#7f76b8}
-.game-footer{padding-bottom:3px}
+.game-footer{padding-bottom:calc(92px + var(--safe-bottom))}
 .app-shell:has(.game-screen:not([hidden])) .game-header,
 .app-shell:has(.pause-screen:not([hidden])) .game-header,
 .app-shell:has(.gameOverScreen:not([hidden])) .game-header{display:none}
