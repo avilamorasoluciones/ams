@@ -52,7 +52,7 @@ La URL de Auth ya está configurada en ese archivo.
 
 ## RLS
 
-Ejecutar **una sola vez** `rls-migration.sql` en SQL Editor de Neon `production`.
+Ejecutar `rls-migration.sql` en SQL Editor de Neon `production` después de cualquier actualización del flujo de autenticación/participación. El archivo es idempotente para las columnas, políticas y funciones que administra.
 
 La intención es:
 
@@ -61,6 +61,7 @@ La intención es:
 - Configuración del evento: lectura pública.
 - Configuración del evento: modificación solo para administrador.
 - Participantes: registro público mediante función controlada.
+- Aceptación de T&C: guardada mediante RPC ligada al `auth_user_id`, no mediante un UPDATE directo desde el navegador.
 - Participantes: lectura únicamente para administrador.
 
 El Data API usa JWT + RLS para aplicar estas reglas desde el navegador.
