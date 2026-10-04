@@ -222,21 +222,30 @@ const TabuGame = (() => {
 
     countdownTimerId = setInterval(() => {
       count--;
-      if (count >= 3) {
+      if (count >= 1) {
         number.textContent = count;
         number.style.animation = "none";
         void number.offsetWidth;
         number.style.animation = "tabu-count-pop .7s ease both";
         window.emitSound(count === 1 ? 700 : 520, 0.08, "sine");
+        if (count > 1) return;
+
+        setTimeout(() => {
+          clearInterval(countdownTimerId);
+          countdownTimerId = null;
+          number.textContent = "¡YA!";
+          number.style.animation = "none";
+          void number.offsetWidth;
+          number.style.animation = "tabu-count-pop .7s ease both";
+          window.emitSound(900, 0.16, "triangle");
+
+          setTimeout(() => {
+            overlay.hidden = true;
+            startTimer();
+          }, 450);
+        }, 1000);
         return;
       }
-
-      clearInterval(countdownTimerId);
-      countdownTimerId = null;
-      overlay.hidden = true;
-      number.textContent = "¡YA!";
-      window.emitSound(900, 0.16, "triangle");
-      startTimer();
     }, 1000);
   }
 
