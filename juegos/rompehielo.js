@@ -28,6 +28,7 @@ const RompehieloGame = (() => {
   function nextQuestion() {
     if (pool.length === 0) {
       alert("¡Se acabaron las preguntas!");
+      window.GameSession?.clear("rompehielo");
       changeScreen("r-scr-lobby");
       return;
     }
