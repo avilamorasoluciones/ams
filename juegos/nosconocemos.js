@@ -170,7 +170,8 @@ const NosConocemosGame = (() => {
       nameSpan.textContent = name;
 
       const resultSpan = document.createElement("span");
-      resultSpan.innerHTML = `${isCorrect ? window.uiIcon("check") : window.uiIcon("close")} ${isCorrect ? "Acertó" : "Falló"}`;
+      resultSpan.className = "result-detail";
+      resultSpan.innerHTML = `${isCorrect ? window.uiIcon("check") : window.uiIcon("close")} <strong>${window.Utils.escapeHTML(guess)}</strong> · ${isCorrect ? "Acertó" : "Falló"}`;
 
       row.appendChild(nameSpan);
       row.appendChild(resultSpan);
