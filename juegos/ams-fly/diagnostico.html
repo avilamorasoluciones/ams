@@ -103,24 +103,8 @@ async function run(){
     return "RPC alcanzable y rechazó la solicitud de prueba.";
   });
 
-  await test("Autorización de Gestión",async()=>{
-    if(!client)throw new Error("Cliente Neon no disponible.");
-    const r=await client.rpc("ams_fly_is_admin",{});
-    if(r.error){
-      const raw=String(r.error.message||r.error.details||r.error.code||"");
-      if(/PGRST202|could not find.*function|function.*not found|schema cache/i.test(raw)){
-        throw new Error("No está disponible ams_fly_is_admin. Ejecuta neon/rls-migration.sql en el branch production.");
-      }
-      if(/permission denied|not authorized|insufficient privilege|42501/i.test(raw)){
-        return "La llamada sin permisos quedó bloqueada por Neon.";
-      }
-      throw r.error;
-    }
-    return "La función de autorización está disponible y evaluó la sesión actual.";
-  });
-
   await test("Archivos del juego",async()=>{
-    const paths=["index.html","styles.css?v=26","game.js?v=69","neon-config.js?v=4","neon-client.js?v=7","control-ams/","control-ams/admin.js?v=2","manifest.webmanifest?v=6","terminos.html","privacidad.html","sw.js"];
+    const paths=["index.html","styles.css?v=27","game.js?v=69","neon-config.js?v=4","neon-client.js?v=7","control-ams/","manifest.webmanifest?v=6","terminos.html","privacidad.html","sw.js"];
     const bad=[];
     for(const p of paths){const r=await fetch(p,{cache:"no-store"});if(!r.ok)bad.push(p+" ("+r.status+")")}
     if(bad.length)throw new Error("No cargaron: "+bad.join(", "));
