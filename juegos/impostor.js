@@ -19,9 +19,13 @@ const ImpostorGame = (() => {
   let initialized = false;
 
   let lastVoteIndex = null;
+  let voteQueue = [];
+  let currentVoterIndex = 0;
+  let votes = {};
+  let voteWinnerIndex = null;
 
   function saveSession(screen = document.querySelector(".im-screen.active")?.id || "i-scr-lobby") {
-    window.GameSession?.save("impostor", { players, usedWords, roles, selectedCard, currentIndex, starterIndex, secondsLeft, timerRunning, timerEndsAt, lastVoteIndex, impostorCounts, impostorHintsEnabled, screen });
+    window.GameSession?.save("impostor", { players, usedWords, roles, selectedCard, currentIndex, starterIndex, secondsLeft, timerRunning, timerEndsAt, lastVoteIndex, impostorCounts, impostorHintsEnabled, voteQueue, currentVoterIndex, votes, voteWinnerIndex, screen });
   }
 
   function $(id) {
@@ -1178,13 +1182,32 @@ const ImpostorGame = (() => {
     timerEndsAt = 0;
     secondsLeft = 0;
 
+    voteQueue = players.map((_, index) => index);
+    currentVoterIndex = 0;
+    votes = {};
+    voteWinnerIndex = null;
+    lastVoteIndex = null;
+
+    safeSound(340, 0.14, "triangle");
+    renderCurrentVote();
+  }
+
+  function renderCurrentVote() {
+    const voterName = players[voteQueue[currentVoterIndex]];
+    const voterLabel = $("i-txtVoter");
     const list = $("i-uiVoteList");
 
-    if (!list) {
-      alert("No encontré el contenedor i-uiVoteList.");
+    if (!list || !voterLabel) {
+      alert("No encontré los elementos de votación.");
       return;
     }
 
+    if (currentVoterIndex >= voteQueue.length) {
+      resolveVotes();
+      return;
+    }
+
+    voterLabel.textContent = voterName || "-";
     list.innerHTML = players
       .map((player, index) => {
         return `
@@ -1195,12 +1218,66 @@ const ImpostorGame = (() => {
       })
       .join("");
 
-    safeSound(340, 0.14, "triangle");
     changeScreen("i-scr-vote");
+    saveSession("i-scr-vote");
   }
 
-  function finishGame(index) {
+  function recordVote(index) {
+    const voterIndex = voteQueue[currentVoterIndex];
+
+    if (!Number.isInteger(voterIndex) || !Number.isInteger(index) || !players[index]) {
+      return;
+    }
+
+    votes[String(voterIndex)] = index;
+    safeSound(520, 0.07, "triangle");
+
+    currentVoterIndex += 1;
+
+    if (currentVoterIndex >= voteQueue.length) {
+      resolveVotes();
+      return;
+    }
+
+    renderCurrentVote();
+  }
+
+  function resolveVotes() {
+    const counts = Array(players.length).fill(0);
+
+    Object.keys(votes).forEach((voterIndex) => {
+      const targetIndex = Number(votes[voterIndex]);
+      if (Number.isInteger(targetIndex) && counts[targetIndex] !== undefined) {
+        counts[targetIndex] += 1;
+      }
+    });
+
+    const highest = Math.max(...counts);
+    const leaders = counts
+      .map((count, index) => count === highest ? index : -1)
+      .filter(index => index >= 0);
+
+    // Un empate en el primer lugar favorece al impostor.
+    const tied = leaders.length > 1;
+    const winnerIndex = leaders[0];
+    voteWinnerIndex = winnerIndex;
+    lastVoteIndex = winnerIndex;
+
+    finishGame(winnerIndex, counts, tied);
+  }
+
+  function finishGame(index, voteCounts, tied = false) {
+    const counts = Array.isArray(voteCounts)
+      ? voteCounts
+      : Array(players.length).fill(0);
+
+    if (!Array.isArray(voteCounts)) {
+      counts[index] = Object.keys(votes).filter((voterIndex) => Number(votes[voterIndex]) === index).length;
+    }
+
     lastVoteIndex = index;
+    voteWinnerIndex = index;
+
     const votedPlayer = players[index];
     const votedRole = roles[index];
 
@@ -1216,14 +1293,34 @@ const ImpostorGame = (() => {
       return;
     }
 
-    if (votedRole === "impostor") {
-      title.textContent = "¡ATRAPARON AL IMPOSTOR! ";
+    const ranking = players
+      .map((player, playerIndex) => ({ player, playerIndex, count: counts[playerIndex] || 0 }))
+      .sort((a, b) => b.count - a.count || a.playerIndex - b.playerIndex);
+
+    const voteSummary = ranking
+      .filter(item => item.count > 0)
+      .map(item => `
+        <div class="row" style="justify-content:space-between;width:100%;gap:12px;">
+          <span>${escapeHTML(item.player)}</span>
+          <strong>${item.count} ${item.count === 1 ? "voto" : "votos"}</strong>
+        </div>
+      `)
+      .join("");
+
+    const resultWasCatch = !tied && votedRole === "impostor";
+
+    if (resultWasCatch) {
+      title.textContent = "¡ATRAPARON AL IMPOSTOR!";
       title.style.color = "var(--success)";
 
       area.innerHTML = `
         <div class="pass-art">${window.uiIcon("impostor")}</div>
         <h2 class="big-player-name" style="font-size:1.9rem;">${escapeHTML(votedPlayer)}</h2>
         <p class="muted strong-copy">Sí era impostor.</p>
+        <div class="box panel-soft full-width">
+          <div class="label-muted">Votación</div>
+          ${voteSummary || '<p class="muted">Sin votos registrados.</p>'}
+        </div>
         <div class="box panel-soft full-width">
           <div class="label-muted">Palabra real</div>
           <div class="big-player-name" style="font-size:1.8rem;">
@@ -1240,13 +1337,17 @@ const ImpostorGame = (() => {
       safeSound(520, 0.08, "square");
       setTimeout(() => safeSound(760, 0.12, "square"), 120);
     } else {
-      title.textContent = "¡GANÓ EL IMPOSTOR!";
+      title.textContent = tied ? "¡EMPATE! GANA EL IMPOSTOR" : "¡GANÓ EL IMPOSTOR!";
       title.style.color = "var(--danger)";
 
       area.innerHTML = `
         <div class="pass-art">${window.uiIcon("impostor")}</div>
         <h2 class="big-player-name" style="font-size:1.9rem;">${escapeHTML(votedPlayer)}</h2>
-        <p class="muted strong-copy">Era inocente.</p>
+        <p class="muted strong-copy">${tied ? "Hubo empate en la votación." : "La persona con más votos era inocente."}</p>
+        <div class="box panel-soft full-width">
+          <div class="label-muted">Votación</div>
+          ${voteSummary || '<p class="muted">Sin votos registrados.</p>'}
+        </div>
         <div class="box panel-soft full-width">
           <div class="label-muted">Impostor(es)</div>
           <p class="muted strong-copy">${impostors.map(escapeHTML).join(" · ")}</p>
@@ -1264,7 +1365,6 @@ const ImpostorGame = (() => {
     }
 
     changeScreen("i-scr-result");
-    // El resultado final no se restaura después de cerrar o volver otro día.
     window.GameSession?.clear("impostor");
   }
 
@@ -1278,6 +1378,10 @@ const ImpostorGame = (() => {
     timerEndsAt = 0;
     secondsLeft = 0;
     lastVoteIndex = null;
+    voteQueue = [];
+    currentVoterIndex = 0;
+    votes = {};
+    voteWinnerIndex = null;
     window.GameSession?.clear("impostor");
 
     document.body.classList.remove("playing");
@@ -1365,7 +1469,7 @@ const ImpostorGame = (() => {
         }
 
         const index = parseInt(btn.getAttribute("data-vote"), 10);
-        finishGame(index);
+        recordVote(index);
       };
     }
   }
@@ -1397,6 +1501,10 @@ const ImpostorGame = (() => {
       timerRunning = Boolean(saved.timerRunning);
       timerEndsAt = Number(saved.timerEndsAt || 0);
       lastVoteIndex = Number.isInteger(saved.lastVoteIndex) ? saved.lastVoteIndex : null;
+      voteQueue = Array.isArray(saved.voteQueue) ? saved.voteQueue : [];
+      currentVoterIndex = Number(saved.currentVoterIndex || 0);
+      votes = saved.votes && typeof saved.votes === "object" ? saved.votes : {};
+      voteWinnerIndex = Number.isInteger(saved.voteWinnerIndex) ? saved.voteWinnerIndex : null;
       renderPlayers();
 
       const elapsed = Math.max(0, Math.floor((Date.now() - Number(saved.savedAt || Date.now())) / 1000));
@@ -1405,9 +1513,12 @@ const ImpostorGame = (() => {
       } else if (saved.screen === "i-scr-reveal") {
         revealRole();
       } else if (saved.screen === "i-scr-vote") {
-        showVoteScreen();
+        if (!voteQueue.length) {
+          voteQueue = players.map((_, index) => index);
+        }
+        renderCurrentVote();
       } else if (saved.screen === "i-scr-result" && lastVoteIndex !== null) {
-        finishGame(lastVoteIndex);
+        finishGame(lastVoteIndex, Array.isArray(saved.voteCounts) ? saved.voteCounts : undefined, Boolean(saved.voteTied));
       } else if (saved.screen === "i-scr-game") {
         if (saved.timerRunning) {
           if (timerEndsAt > 0) {
@@ -1450,6 +1561,7 @@ const ImpostorGame = (() => {
     toggleTimer: toggleTimer,
     showVoteScreen: showVoteScreen,
     finishGame: finishGame,
+    recordVote: recordVote,
     restartGame: restartGame
   };
 })();
