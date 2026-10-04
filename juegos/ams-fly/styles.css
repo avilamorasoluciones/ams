@@ -87,7 +87,9 @@ button{cursor:pointer}
 .bird-option strong{display:block;font-size:.72rem}.bird-option small{display:block;color:#8e92aa;margin-top:4px;font-size:.58rem;line-height:1.25}
 .host-badge{position:absolute;right:8px;top:7px;font-size:.43rem;font-weight:950;letter-spacing:.08em;color:#fde68a}
 .selected-bird-info{min-height:45px;margin:12px 0 14px;padding:10px 12px;border-radius:14px;background:rgba(139,92,246,.06);border:1px solid rgba(139,92,246,.13);color:#aeb1c5;font-size:.65rem;line-height:1.4}
-.form-error{color:#fda4af;background:rgba(244,63,94,.08);border:1px solid rgba(244,63,94,.25);padding:9px 11px;border-radius:11px;font-size:.66rem;margin:10px 0 0}
+.form-error{color:#ff4d67;background:rgba(244,63,94,.12);border:2px solid rgba(244,63,94,.72);padding:12px 14px;border-radius:12px;font-size:.9rem;font-weight:800;line-height:1.45;margin:12px 0 0;box-shadow:0 0 18px rgba(244,63,94,.1)}
+.auth-status.is-error,.auth-card .field-hint.is-error{color:#ff4d67;background:rgba(244,63,94,.1);border:2px solid rgba(244,63,94,.65);padding:11px 13px;border-radius:12px;font-size:.9rem;font-weight:800;line-height:1.45}
+.auth-status:not(.is-error),.auth-card .field-hint:not(.is-error){font-size:.84rem;line-height:1.45}
 .fact-screen{width:min(620px,100%);margin:auto;padding:110px 24px calc(70px + var(--safe-bottom));display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;background:radial-gradient(circle at 50% 38%,rgba(234,179,8,.08),transparent 32%)}
 .fact-mark{width:74px;height:74px;border-radius:25px;display:grid;place-items:center;margin-bottom:24px;background:linear-gradient(135deg,rgba(139,92,246,.2),rgba(234,179,8,.1));border:1px solid rgba(250,204,21,.25);font-size:1.8rem;color:#facc15;box-shadow:0 0 45px rgba(250,204,21,.08)}
 .fact-screen h2{font-size:clamp(2rem,7vw,3.3rem);margin:12px 0}.fact-screen p{font-size:clamp(1rem,3.8vw,1.2rem);line-height:1.65;color:#d8dae7;max-width:550px}.fact-screen small{color:#7f849f;margin:0 0 28px}
