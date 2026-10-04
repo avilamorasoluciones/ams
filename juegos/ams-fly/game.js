@@ -755,6 +755,12 @@ async function publishScoreInternal(options={}){
   try{
     const authUser=await getCurrentAuthUser();
     if(!authUser)throw new Error("auth_required");
+    if(!termsAcceptedFor(authUser)){
+      if(!automatic) els.submitScoreStatus.textContent="Para publicar y participar en el evento debes aceptar primero los Términos y Condiciones desde la sección Evento.";
+      els.submitScoreBtn.disabled=false;
+      els.scoreMessage.disabled=false;
+      return false;
+    }
 
     const client=await getPublicNeonClient();
     let participantId=profile.participantId||null;
