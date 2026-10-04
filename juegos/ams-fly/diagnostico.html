@@ -104,7 +104,7 @@ async function run(){
   });
 
   await test("Archivos del juego",async()=>{
-    const paths=["index.html","styles.css?v=27","game.js?v=69","neon-config.js?v=4","neon-client.js?v=7","control-ams/","manifest.webmanifest?v=6","terminos.html","privacidad.html","sw.js"];
+    const paths=["index.html","styles.css?v=27","game.js?v=70","neon-config.js?v=4","neon-client.js?v=7","control-ams/","manifest.webmanifest?v=6","terminos.html","privacidad.html","sw.js"];
     const bad=[];
     for(const p of paths){const r=await fetch(p,{cache:"no-store"});if(!r.ok)bad.push(p+" ("+r.status+")")}
     if(bad.length)throw new Error("No cargaron: "+bad.join(", "));
