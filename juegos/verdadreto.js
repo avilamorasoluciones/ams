@@ -76,6 +76,7 @@ const VerdadRetoGame = (() => {
   function startTurn() {
     if (turnsPlayed >= maxTurns || (poolVerdad.length === 0 && poolReto.length === 0)) {
       alert("¡El juego ha terminado!");
+      window.GameSession?.clear("verdadreto");
       changeScreen("vr-scr-lobby");
       return;
     }
