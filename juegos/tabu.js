@@ -84,7 +84,6 @@ const TabuGame = (() => {
     maxRounds = parseInt($("t-selRounds").value);
     timePerTurn = parseInt($("t-selTime").value);
     
-    const limit = $("t-selLimit").value;
 
     // El mazo es único para toda la partida: ningún equipo puede volver
     // a recibir una palabra que ya haya salido en una ronda anterior.
@@ -96,7 +95,7 @@ const TabuGame = (() => {
       return true;
     });
     const shuffledPool = window.Utils.shuffleArray(uniqueCards);
-    pool = limit === "all" ? shuffledPool : shuffledPool.slice(0, parseInt(limit));
+    pool = shuffledPool;
     usedWords = [];
 
     if (pool.length === 0) return alert("Error cargando palabras.");
