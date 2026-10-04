@@ -482,3 +482,30 @@ button{cursor:pointer}
 
 /* AMS Fly · recomendación no bloqueante para pantallas grandes */
 .ams-fly-large-screen-note{position:absolute;left:50%;bottom:calc(18px + var(--safe-bottom));transform:translateX(-50%);z-index:12;width:min(520px,calc(100% - 32px));padding:10px 14px;border:1px solid rgba(255,255,255,.1);border-radius:14px;background:rgba(7,8,18,.55);color:#aeb1c5;font-size:.58rem;line-height:1.45;text-align:center;backdrop-filter:blur(10px);pointer-events:none;box-sizing:border-box}
+
+/* AMS Fly · QA UX final */
+.header-actions{gap:7px}
+.header-account-button{
+  min-height:42px;
+  padding:0 12px;
+  border:1px solid rgba(255,255,255,.13);
+  border-radius:14px;
+  background:rgba(7,8,18,.45);
+  color:#fff;
+  font-size:.54rem;
+  font-weight:950;
+  letter-spacing:.05em;
+  backdrop-filter:blur(10px);
+}
+.header-account-button:active{transform:scale(.97)}
+.terms-row-hidden{display:none!important}
+.bird-mini .bird-shape,
+.art-bird .bird-shape,
+.result-bird .bird-shape{transform:translateX(-5px) scale(.38) rotate(-7deg)}
+.art-bird .bird-shape{transform:translateX(-5px) scale(1) rotate(-7deg)}
+.result-bird .bird-shape{transform:translateX(-5px) scale(1.15) rotate(-7deg)}
+.submit-status[hidden]{display:none!important}
+@media(max-width:560px){
+  .header-account-button{min-width:42px;padding:0 9px;font-size:.5rem}
+  .header-actions{gap:5px}
+}
