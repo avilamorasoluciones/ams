@@ -347,6 +347,10 @@ const TabuGame = (() => {
   }
 
   function finishTurn() {
+    clearInterval(timerId);
+    timerId = null;
+    timerEndsAt = 0;
+    secondsLeft = 0;
     window.emitSound(220, 0.4, "sawtooth");
     const activeTeam = teams[activeTeamIndex];
     const pointsEarned = turnStats.correct - turnStats.taboo;
