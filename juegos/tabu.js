@@ -15,6 +15,7 @@ const TabuGame = (() => {
   let timerEndsAt = 0;
   let currentWord = null;
   let turnStats = { correct: 0, taboo: 0, skip: 0 };
+  let countdownTimerId = null;
 
   function $(id) { return document.getElementById(id); }
 
@@ -177,6 +178,39 @@ const TabuGame = (() => {
     $("t-txtWatcherMembers").textContent = watcherTeam.members.join(" · ");
 
     changeScreen("t-scr-preturn");
+  }
+
+  function startCountdown() {
+    clearInterval(countdownTimerId);
+    const overlay = $("t-countdown");
+    const number = $("t-countdownNumber");
+    let count = 5;
+
+    overlay.hidden = false;
+    number.textContent = count;
+    number.style.animation = "none";
+    void number.offsetWidth;
+    number.style.animation = "tabu-count-pop .7s ease both";
+    window.emitSound(520, 0.08, "sine");
+
+    countdownTimerId = setInterval(() => {
+      count--;
+      if (count > 0) {
+        number.textContent = count;
+        number.style.animation = "none";
+        void number.offsetWidth;
+        number.style.animation = "tabu-count-pop .7s ease both";
+        window.emitSound(count === 1 ? 700 : 520, 0.08, "sine");
+        return;
+      }
+
+      clearInterval(countdownTimerId);
+      countdownTimerId = null;
+      overlay.hidden = true;
+      number.textContent = "¡YA!";
+      window.emitSound(900, 0.16, "triangle");
+      startTimer();
+    }, 1000);
   }
 
   function startTimer(resume = false) {
@@ -347,14 +381,14 @@ const TabuGame = (() => {
 
     $("t-btnStart").onclick = startGame;
     $("t-btnConfirmTeams").onclick = confirmTeamNames;
-    $("t-btnStartTurn").onclick = () => startTimer();
+    $("t-btnStartTurn").onclick = startCountdown;
     
     $("t-btnCorrect").onclick = () => { setActionFeedback($("t-btnCorrect")); recordAction("correct"); };
     $("t-btnTaboo").onclick = () => { setActionFeedback($("t-btnTaboo")); recordAction("taboo"); };
     $("t-btnSkip").onclick = () => { setActionFeedback($("t-btnSkip")); recordAction("skip"); };
     
     $("t-btnNextTurn").onclick = advanceNextTurn;
-    $("t-btnRestart").onclick = () => { clearInterval(timerId); window.GameSession?.clear("tabu"); changeScreen("t-scr-lobby"); };
+    $("t-btnRestart").onclick = () => { clearInterval(timerId); clearInterval(countdownTimerId); $("t-countdown").hidden = true; window.GameSession?.clear("tabu"); changeScreen("t-scr-lobby"); };
     
     renderPlayers();
     window.GameSession?.register(saveSession);
