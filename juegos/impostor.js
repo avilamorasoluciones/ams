@@ -475,15 +475,238 @@ const ImpostorGame = (() => {
     "Cuaderno":"Conjunto de hojas encuadernadas que se utiliza para escribir, tomar apuntes o dibujar.",
   };
 
+  const IMPOSTOR_SOFT_GROUPS = [
+    {
+      words: new Set("Manzana Banano Fresa Sandía Uva Piña Mango Naranja Limón Cereza Durazno Kiwi Aguacate Tomate Zanahoria Brócoli Maíz Papa Cebolla Ajo Pepino Lechuga Ají Champiñón Coco Melón Pera Berenjena Calabaza Maní".split(" ")),
+      clues: [
+        "Suele aparecer en meriendas, recetas o bebidas.",
+        "Es bastante común en la cocina cotidiana.",
+        "Tiene mucha presencia en comidas preparadas en casa.",
+        "Probablemente lo hayas encontrado en una lonchera o en una mesa.",
+        "Es de esas cosas que aparecen con frecuencia al hablar de comida."
+      ]
+    },
+    {
+      words: new Set("León Tigre Oso Panda Koala Zorro Lobo Mono Gorila Elefante Rinoceronte Hipopótamo Jirafa Cebra Ciervo Jabalí Camello Llama Canguro Leopardo Caballo Cerdo Vaca Oveja Cabra Perro Gato Conejo Ratón Tejón Ardilla Erizo".split(" ")),
+      clues: [
+        "Es algo que podrías encontrar en un entorno natural.",
+        "Tiene relación con animales y suele reconocerse por su comportamiento.",
+        "Es común hablar de esto cuando se mencionan hábitats o naturaleza.",
+        "Puede aparecer tanto en documentales como en historias.",
+        "Su entorno y forma de vida dicen bastante sobre él."
+      ]
+    },
+    {
+      words: new Set("Águila Búho Pato Pingüino Pájaro Gallo Paloma Flamenco".split(" ")),
+      clues: [
+        "Tiene relación con animales que pasan buena parte del tiempo en el aire o cerca de él.",
+        "Es algo que suele asociarse con parques, campo o naturaleza.",
+        "Su comportamiento suele llamar la atención cuando aparece.",
+        "Es común verlo mencionado al hablar de fauna.",
+        "Puede encontrarse en distintos ambientes, dependiendo de la especie."
+      ]
+    },
+    {
+      words: new Set("Tiburón Delfín Ballena Pulpo Calamar Langosta Cangrejo Tortuga Cocodrilo".split(" ")),
+      clues: [
+        "Tiene relación con ambientes donde hay bastante agua.",
+        "Suele aparecer cuando se habla de fauna acuática.",
+        "Es algo que mucha gente relaciona con el mar o zonas húmedas.",
+        "Su entorno es una parte importante para reconocerlo.",
+        "Puede aparecer en documentales de naturaleza."
+      ]
+    },
+    {
+      words: new Set("Rana Serpiente Murciélago Mariposa Abeja Mariquita Hormiga Mosquito Escorpión Caracol".split(" ")),
+      clues: [
+        "Es pequeño o suele encontrarse en ambientes donde hay otros animales de este tipo.",
+        "Es común encontrarlo mencionado cuando se habla de naturaleza.",
+        "Su comportamiento suele ser más interesante que su apariencia.",
+        "Puede aparecer cerca de plantas, tierra o agua.",
+        "Es algo que muchas personas reconocen aunque no lo vean todos los días."
+      ]
+    },
+    {
+      words: new Set("Sol Nube Lluvia Tormenta Rayo Nieve Viento Tornado Arcoíris Ola Fuego".split(" ")),
+      clues: [
+        "Es algo que forma parte de situaciones que vemos a nuestro alrededor.",
+        "Puede cambiar bastante según el lugar y el momento.",
+        "Es común hablar de esto al describir lo que está pasando afuera.",
+        "Tiene relación con fenómenos que pueden observarse directamente.",
+        "Probablemente lo hayas usado alguna vez para describir un día o un paisaje."
+      ]
+    },
+    {
+      words: new Set("Tronco Cactus Pino Hoja Trébol Rosa Girasol Planta".split(" ")),
+      clues: [
+        "Tiene relación con el mundo vegetal.",
+        "Suele encontrarse en jardines, parques o espacios naturales.",
+        "Es algo que cambia según la estación, el lugar o las condiciones.",
+        "Su aspecto suele ser una de las primeras cosas que llama la atención.",
+        "Tiene bastante relación con jardines y naturaleza."
+      ]
+    },
+    {
+      words: new Set("Fútbol Baloncesto Béisbol Sóftbol Tenis Voleibol Rugby Frisbee Hockey Boxeo Karate Pesca Buceo Golf Esquí Ciclismo Escalada Gimnasia Bolos Dardos Ajedrez Baile Natación".split(" ")),
+      clues: [
+        "Es una actividad que suele tener reglas y una forma específica de practicarla.",
+        "Puede aparecer tanto en clases como en competencias.",
+        "Normalmente requiere cierta técnica o práctica.",
+        "Es común verlo asociado con entrenamientos o torneos.",
+        "Tiene relación con una actividad que muchas personas practican por diversión o competencia."
+      ]
+    },
+    {
+      words: new Set("Silla Sofá Cama Puerta Ventana Mesa Reloj Bombillo Vela Llave Espejo Jabón Escoba Balde Caja Cuadro Libro Plato Tenedor Cuchara Cuchillo Vaso Taza Sartén Alarma Peineta Timbre".split(" ")),
+      clues: [
+        "Es algo que probablemente haya en una casa.",
+        "Es un objeto bastante cotidiano.",
+        "Puede aparecer en una habitación, cocina o espacio de uso diario.",
+        "Es algo que normalmente usamos sin pensar demasiado en ello.",
+        "Forma parte de cosas que suelen estar a nuestro alrededor todos los días."
+      ]
+    },
+    {
+      words: new Set("Automóvil Taxi Camioneta Autobús Patrulla Ambulancia Tractor Bicicleta Scooter Motocicleta Tren Metro Avión Helicóptero Velero Yate Crucero Canoa OVNI Patineta".split(" ")),
+      clues: [
+        "Tiene relación con desplazarse de un lugar a otro.",
+        "Suele aparecer cuando se habla de viajes o transporte.",
+        "Puede llevar personas, objetos o cumplir alguna función específica.",
+        "Es algo que probablemente hayas visto en una calle, carretera, estación o viaje.",
+        "Su uso suele estar relacionado con moverse o llegar a otro lugar."
+      ]
+    },
+    {
+      words: new Set("Hamburguesa Pizza Taco Sándwich Ensalada Espagueti Sushi Empanada Panqueque Waffle Queso Costilla Filete Tocino Dona Galleta Pastel Helado Chocolate Dulce Miel Leche Café Té Gaseosa Jugo".split(" ")),
+      clues: [
+        "Puede aparecer en una comida, merienda o reunión.",
+        "Es algo que suele relacionarse con momentos de comer o compartir.",
+        "Tiene bastante presencia en restaurantes o cocinas.",
+        "Es fácil encontrarlo en menús o preparaciones caseras.",
+        "Suele formar parte de alguna comida o antojo."
+      ]
+    },
+    {
+      words: new Set("Guitarra Violín Piano Tambor Saxofón Trompeta Acordeón Banjo Flauta Maracas Arpa Campana Megáfono".split(" ")),
+      clues: [
+        "Tiene relación con producir o acompañar sonidos.",
+        "Puede aparecer en presentaciones, ensayos o celebraciones.",
+        "Suele necesitar cierta técnica para usarse bien.",
+        "Es común relacionarlo con música, ritmo o comunicación.",
+        "Su sonido suele ser una parte importante de cómo se reconoce."
+      ]
+    },
+    {
+      words: new Set("Hospital Escuela Banco Hotel Supermercado Fábrica Castillo Iglesia Estadio Playa Campamento Montaña Volcán Desierto Isla Parque Monumento Circo Montaña rusa Cine Fuente Edificio Barrio Puerto Aeropuerto".split(" ")),
+      clues: [
+        "Es un lugar que puedes visitar por una razón específica.",
+        "Su función suele depender mucho de las personas que van allí.",
+        "Es común mencionarlo cuando se habla de lugares o destinos.",
+        "Tiene relación con un espacio físico reconocible.",
+        "Probablemente lo hayas visto o escuchado mencionar en situaciones cotidianas."
+      ]
+    },
+    {
+      words: new Set("Médico Estudiante Profesor Juez Agricultor Chef Mecánico Obrero Oficinista Científico Cantante Pintor Astronauta Bombero Policía Detective Guardia Constructor Mesero Peluquero Piloto Diseñador Abogado Fotógrafo Dentista Carpintero Albañil Conserje Salvavidas Escritor Locutor".split(" ")),
+      clues: [
+        "Es una persona asociada a una actividad o trabajo específico.",
+        "Normalmente requiere ciertas habilidades para hacerlo bien.",
+        "Suele aparecer en situaciones relacionadas con su profesión.",
+        "Es un rol que muchas personas reconocen por lo que hace.",
+        "Su trabajo suele ser la mejor pista para entenderlo."
+      ]
+    },
+    {
+      words: new Set("Camiseta Camisa Blusa Pantalón Pantaloneta Abrigo Vestido Medias Zapatillas Tacones Botas Corona Sombrero Gorra Maleta Gafas Anillo Maletín Abanico Bufanda Guantes Corbata Sombrilla Moño".split(" ")),
+      clues: [
+        "Tiene relación con la forma en que una persona se viste o lleva sus cosas.",
+        "Puede formar parte de un conjunto de uso personal.",
+        "Su apariencia suele cambiar según el estilo o la ocasión.",
+        "Es algo que puede aparecer en un armario o durante un viaje.",
+        "Normalmente se usa, se lleva o se coloca sobre alguna parte del cuerpo."
+      ]
+    },
+    {
+      words: new Set("Martillo Hacha Pico Tornillo Cadena Imán Pistola Bomba Dinamita Serrucho Llave inglesa Destornillador Escalera Caja de herramientas Escuadra Regla Gancho Tubo".split(" ")),
+      clues: [
+        "Es algo que suele aparecer en trabajos manuales o de reparación.",
+        "Normalmente tiene un uso práctico bastante concreto.",
+        "Puede formar parte del equipo de alguien que arregla o construye cosas.",
+        "Suele encontrarse entre objetos de trabajo.",
+        "Su utilidad depende bastante de cómo se utilice."
+      ]
+    },
+    {
+      words: new Set("Billete Moneda Tarjeta Diamante Bolsa Alcancía Pérdida Ganancia Recibo Buzón Candado Bola Varita Escudo Espada Vasija Rosario Peluche Confeti Globo".split(" ")),
+      clues: [
+        "Es algo que puede aparecer en situaciones bastante diferentes.",
+        "Suele asociarse con objetos, acciones o momentos de la vida cotidiana.",
+        "Puede tener un uso concreto dependiendo del contexto.",
+        "Es fácil encontrarlo en historias, conversaciones o situaciones comunes.",
+        "Su significado puede cambiar bastante según cómo se use."
+      ]
+    },
+    {
+      words: new Set("Cerebro Corazón Pulmón Diente Hueso Ojo Oreja Nariz Lengua Boca Curita Estetoscopio Pastilla Jeringa Termómetro".split(" ")),
+      clues: [
+        "Tiene relación con el cuerpo o con su cuidado.",
+        "Puede aparecer en conversaciones sobre salud.",
+        "Es algo que suele mencionarse cuando se habla de bienestar o medicina.",
+        "Su contexto normalmente tiene que ver con el cuerpo.",
+        "Es bastante común escucharlo en situaciones relacionadas con la salud."
+      ]
+    },
+    {
+      words: new Set("Planeta Luna Saturno Estrella Cometa".split(" ")),
+      clues: [
+        "Tiene relación con cosas que están mucho más allá de nuestro entorno inmediato.",
+        "Es común encontrarlo en temas de astronomía.",
+        "Forma parte de conversaciones sobre el espacio.",
+        "Su contexto normalmente está relacionado con el cielo.",
+        "Es algo que puede aparecer al hablar de lo que vemos desde la Tierra."
+      ]
+    },
+    {
+      words: new Set("Lápiz Pluma Bolígrafo Crayón Pincel Nota Carpeta Calendario Clip Chincheta Tijeras Cuaderno".split(" ")),
+      clues: [
+        "Suele aparecer en un escritorio, salón o espacio de estudio.",
+        "Tiene relación con escribir, organizar o crear.",
+        "Es un objeto bastante común en actividades escolares o de oficina.",
+        "Puede formar parte de un conjunto de útiles cotidianos.",
+        "Normalmente aparece cuando alguien está trabajando, estudiando o haciendo algo manual."
+      ]
+    }
+  ];
+
+  function hashImpostorWord(word) {
+    return Array.from(String(word || "")).reduce((sum, char) => sum + char.charCodeAt(0), 0);
+  }
+
   function getImpostorHint(card) {
-    if (!card) return "Piensa en algo relacionado con la categoría.";
-    return IMPOSTOR_HINTS[card.word] || (
-      card.category === "Naturaleza"
-        ? "Piensa en su forma, dónde se encuentra y qué lo hace reconocible."
-        : card.category === "Cosas"
-          ? "Piensa en para qué se usa, dónde suele encontrarse y cómo se reconoce."
-          : "Piensa en su función, aspecto y en qué situación suele aparecer."
-    );
+    if (!card) return "Piensa en el contexto y en las asociaciones que tenga la palabra.";
+    const group = IMPOSTOR_SOFT_GROUPS.find((entry) => entry.words.has(card.word));
+    if (group) {
+      return group.clues[hashImpostorWord(card.word) % group.clues.length];
+    }
+    const fallback = {
+      Naturaleza: [
+        "Tiene relación con el mundo natural.",
+        "Es algo que suele aparecer al hablar de naturaleza.",
+        "Su entorno ayuda a reconocerlo."
+      ],
+      Cosas: [
+        "Es un objeto que puede aparecer en situaciones cotidianas.",
+        "Su uso depende bastante del contexto.",
+        "Probablemente lo hayas visto muchas veces."
+      ],
+      Humanidad: [
+        "Tiene relación con personas, actividades o situaciones de la vida diaria.",
+        "Su contexto ayuda bastante a reconocerlo.",
+        "Es algo que suele aparecer en situaciones comunes."
+      ]
+    };
+    const clues = fallback[card.category] || fallback.Cosas;
+    return clues[hashImpostorWord(card.word) % clues.length];
   }
 
   function savePlayers() {
