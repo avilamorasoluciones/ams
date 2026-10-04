@@ -816,375 +816,4404 @@ const DB_BOMBA = [
 ];
 
 const DB_TABU = [
-  // GENERAL
-  {cat:"general", word:"Reloj", forbidden:["Hora","Tiempo","Muñeca","Manecillas","Tic-tac"]},
-  {cat:"general", word:"Cama", forbidden:["Dormir","Colchón","Almohada","Noche","Sábanas"]},
-  {cat:"general", word:"Espejo", forbidden:["Reflejo","Mirar","Vidrio","Cara","Baño"]},
-  {cat:"general", word:"Llave", forbidden:["Puerta","Abrir","Cerradura","Metal","Casa"]},
-  {cat:"general", word:"Zapato", forbidden:["Pie","Caminar","Suela","Tenis","Cordones"]},
-  {cat:"general", word:"Sombrilla", forbidden:["Lluvia","Agua","Mojar","Sol","Abrir"]},
-  {cat:"general", word:"Bicicleta", forbidden:["Pedal","Ruedas","Montar","Cadena","Casco"]},
-  {cat:"general", word:"Avión", forbidden:["Volar","Cielo","Aeropuerto","Piloto","Alas"]},
-  {cat:"general", word:"Guitarra", forbidden:["Cuerdas","Música","Tocar","Instrumento","Acústica"]},
-  {cat:"general", word:"Celular", forbidden:["Llamar","Pantalla","Teléfono","Mensaje","Batería"]},
-  {cat:"general", word:"Gafas", forbidden:["Ojos","Ver","Lentes","Sol","Miopía"]},
-  {cat:"general", word:"Dinero", forbidden:["Comprar","Billetes","Monedas","Banco","Pagar"]},
-  {cat:"general", word:"Anillo", forbidden:["Dedo","Boda","Matrimonio","Oro","Joya"]},
-  {cat:"general", word:"Perfume", forbidden:["Oler","Aroma","Frasco","Líquido","Colonia"]},
-  {cat:"general", word:"Jabón", forbidden:["Lavar","Agua","Espuma","Baño","Limpiar"]},
-  {cat:"general", word:"Tijeras", forbidden:["Cortar","Papel","Pelo","Filo","Herramienta"]},
-  {cat:"general", word:"Libro", forbidden:["Leer","Páginas","Letras","Biblioteca","Historia"]},
-  {cat:"general", word:"Cuchillo", forbidden:["Cortar","Comida","Filo","Tenedor","Cocina"]},
-  {cat:"general", word:"Televisor", forbidden:["Ver","Pantalla","Control","Canal","Series"]},
-  {cat:"general", word:"Cepillo", forbidden:["Dientes","Pelo","Peinar","Pasta","Boca"]},
-  // COMIDA
-  {cat:"comida", word:"Pizza", forbidden:["Queso","Italiana","Masa","Pepperoni","Horno"]},
-  {cat:"comida", word:"Hamburguesa", forbidden:["Carne","Pan","Papas","McDonalds","Comida Rápida"]},
-  {cat:"comida", word:"Helado", forbidden:["Frío","Cono","Postre","Derretir","Sabores"]},
-  {cat:"comida", word:"Sushi", forbidden:["Arroz","Pescado","Japón","Crudo","Palillos"]},
-  {cat:"comida", word:"Arroz con Pollo", forbidden:["Amarillo","Plato","Tradicional","Almuerzo","Colombia"]},
-  {cat:"comida", word:"Empanada", forbidden:["Freír","Masa","Relleno","Carne","Ají"]},
-  {cat:"comida", word:"Arepa", forbidden:["Maíz","Queso","Desayuno","Asar","Mantequilla"]},
-  {cat:"comida", word:"Queso", forbidden:["Leche","Vaca","Ratón","Amarillo","Derretir"]},
-  {cat:"comida", word:"Leche", forbidden:["Vaca","Blanca","Líquido","Beber","Cereal"]},
-  {cat:"comida", word:"Café", forbidden:["Tinto","Mañana","Despertar","Taza","Bebida"]},
-  {cat:"comida", word:"Cerveza", forbidden:["Alcohol","Bebida","Lata","Botella","Fiesta"]},
-  {cat:"comida", word:"Vino", forbidden:["Uva","Copa","Rojo","Blanco","Brindis"]},
-  {cat:"comida", word:"Manzana", forbidden:["Roja","Fruta","Árbol","Eva","Blanca Nieves"]},
-  {cat:"comida", word:"Banano", forbidden:["Mono","Amarillo","Fruta","Cáscara","Potasio"]},
-  {cat:"comida", word:"Huevo", forbidden:["Gallina","Frito","Revuelto","Blanco","Yema"]},
-  {cat:"comida", word:"Chocolate", forbidden:["Dulce","Cacao","Café","Leche","Derretir"]},
-  {cat:"comida", word:"Tacos", forbidden:["México","Tortilla","Picante","Carne","Comida"]},
-  {cat:"comida", word:"Ensalada", forbidden:["Lechuga","Verde","Sana","Tomate","Vegetales"]},
-  {cat:"comida", word:"Sopa", forbidden:["Cuchara","Caliente","Líquido","Caldo","Enfermo"]},
-  {cat:"comida", word:"Galleta", forbidden:["Dulce","Horno","Chips","Chocolate","Comer"]},
-  // CINE Y SERIES
-  {cat:"cine", word:"Harry Potter", forbidden:["Magia","Varita","Cicatriz","Gafas","Hogwarts"]},
-  {cat:"cine", word:"Star Wars", forbidden:["Espacio","Jedi","Sable","Darth Vader","Galaxia"]},
-  {cat:"cine", word:"Spiderman", forbidden:["Araña","Peter Parker","Telaraña","Rojo","Marvel"]},
-  {cat:"cine", word:"Batman", forbidden:["Murciélago","Ciudad Gótica","Noche","Joker","Bruce Wayne"]},
-  {cat:"cine", word:"Titanic", forbidden:["Barco","Hundir","Hielo","Jack","Rose"]},
-  {cat:"cine", word:"Shrek", forbidden:["Ogro","Verde","Burro","Princesa","Pantano"]},
-  {cat:"cine", word:"Toy Story", forbidden:["Juguetes","Woody","Buzz","Vaquero","Animación"]},
-  {cat:"cine", word:"El Rey León", forbidden:["Simba","Mufasa","África","Animales","Disney"]},
-  {cat:"cine", word:"Los Simpson", forbidden:["Amarillos","Homero","Bart","Animada","Televisión"]},
-  {cat:"cine", word:"Stranger Things", forbidden:["Niños","Monstruo","Ochenta","Netflix","Poderes"]},
-  {cat:"cine", word:"Game of Thrones", forbidden:["Dragones","Rey","Trono","Hielo","HBO"]},
-  {cat:"cine", word:"Matrix", forbidden:["Pastilla","Keanu Reeves","Simulación","Verde","Neo"]},
-  {cat:"cine", word:"Avengers", forbidden:["Marvel","Superhéroes","Iron Man","Capitán América","Thanos"]},
-  {cat:"cine", word:"Jurassic Park", forbidden:["Dinosaurios","Isla","T-Rex","Parque","Fósil"]},
-  {cat:"cine", word:"El Señor de los Anillos", forbidden:["Frodo","Magia","Hobbit","Gollum","Libro"]},
-  {cat:"cine", word:"Breaking Bad", forbidden:["Química","Drogas","Walter White","Profesor","Dinero"]},
-  {cat:"cine", word:"Avatar", forbidden:["Azules","Planeta","James Cameron","Naturaleza","Pelicula"]},
-  {cat:"cine", word:"La Casa de Papel", forbidden:["Robo","Máscara","España","Banco","Profesor"]},
-  {cat:"cine", word:"El Juego del Calamar", forbidden:["Corea","Juegos","Supervivencia","Dinero","Muñeca"]},
-  {cat:"cine", word:"Voldemort", forbidden:["Villano","Nariz","Malo","Magia","Harry Potter"]},
-  // INTERNET / TECH
-  {cat:"internet", word:"Google", forbidden:["Buscador","Internet","Buscar","Web","Página"]},
-  {cat:"internet", word:"YouTube", forbidden:["Videos","Ver","Canal","Suscribirse","Play"]},
-  {cat:"internet", word:"TikTok", forbidden:["Videos","Bailes","Cortos","Red Social","Scroll"]},
-  {cat:"internet", word:"Instagram", forbidden:["Fotos","Historias","Likes","Red Social","Filtros"]},
-  {cat:"internet", word:"WhatsApp", forbidden:["Mensajes","Chat","Verde","Llamar","Grupos"]},
-  {cat:"internet", word:"WiFi", forbidden:["Internet","Conexión","Contraseña","Inalámbrico","Señal"]},
-  {cat:"internet", word:"Bluetooth", forbidden:["Conectar","Audífonos","Inalámbrico","Celular","Emparejar"]},
-  {cat:"internet", word:"Hacker", forbidden:["Computadora","Robar","Contraseñas","Código","Virus"]},
-  {cat:"internet", word:"Virus", forbidden:["Computadora","Enfermo","Dañar","Antivirus","Troyano"]},
-  {cat:"internet", word:"Influencer", forbidden:["Famoso","Seguidores","Redes","Marcas","Fotos"]},
-  {cat:"internet", word:"Meme", forbidden:["Chiste","Imagen","Risa","Internet","Compartir"]},
-  {cat:"internet", word:"Emoji", forbidden:["Carita","Mensaje","Emoción","Amarillo","WhatsApp"]},
-  {cat:"internet", word:"Streamer", forbidden:["En Vivo","Twitch","Jugar","Videos","Cámara"]},
-  {cat:"internet", word:"Videojuego", forbidden:["Consola","Jugar","Control","Gamer","Pantalla"]},
-  {cat:"internet", word:"PlayStation", forbidden:["Consola","Jugar","Sony","Control","Videojuegos"]},
-  {cat:"internet", word:"Netflix", forbidden:["Series","Películas","Suscripción","Ver","Televisor"]},
-  {cat:"internet", word:"Spotify", forbidden:["Música","Escuchar","Canciones","Playlist","Podcast"]},
-  {cat:"internet", word:"Twitter", forbidden:["X","Mensajes","Pájaro","Hilo","Tendencia"]},
-  {cat:"internet", word:"ChatGpt", forbidden:["IA","Inteligencia","Preguntar","Bot","Escribir"]},
-  {cat:"internet", word:"Programador", forbidden:["Código","Computadora","Escribir","Software","Hacker"]},
-  // FAMILIA Y COTIDIANO
-  {cat:"familia", word:"Mamá", forbidden:["Madre","Hijos","Dar a luz","Mujer","Casa"]},
-  {cat:"familia", word:"Papá", forbidden:["Padre","Hijos","Hombre","Familia","Esposo"]},
-  {cat:"familia", word:"Abuelo", forbidden:["Viejo","Papá","Canas","Edad","Familia"]},
-  {cat:"familia", word:"Hermano", forbidden:["Familia","Sangre","Mayor","Menor","Compartir"]},
-  {cat:"familia", word:"Bebé", forbidden:["Llorar","Pañal","Nacer","Pequeño","Cuna"]},
-  {cat:"familia", word:"Mascota", forbidden:["Perro","Gato","Animal","Casa","Cuidar"]},
-  {cat:"familia", word:"Perro", forbidden:["Ladrar","Mascota","Hueso","Pasear","Guau"]},
-  {cat:"familia", word:"Gato", forbidden:["Miau","Mascota","Ratón","Ronronear","Felino"]},
-  {cat:"familia", word:"Casa", forbidden:["Vivir","Hogar","Techo","Puerta","Familia"]},
-  {cat:"familia", word:"Colegio", forbidden:["Estudiar","Profesor","Clases","Aprender","Alumnos"]},
-  {cat:"familia", word:"Universidad", forbidden:["Carrera","Estudiar","Grado","Profesión","Campus"]},
-  {cat:"familia", word:"Trabajo", forbidden:["Dinero","Jefe","Oficina","Labor","Horario"]},
-  {cat:"familia", word:"Jefe", forbidden:["Trabajo","Mandar","Despedir","Sueldo","Oficina"]},
-  {cat:"familia", word:"Vacaciones", forbidden:["Descansar","Viajar","Playa","Trabajo","Días"]},
-  {cat:"familia", word:"Cumpleaños", forbidden:["Fiesta","Regalo","Pastel","Edad","Celebrar"]},
-  {cat:"familia", word:"Médico", forbidden:["Enfermo","Hospital","Curar","Doctor","Salud"]},
-  {cat:"familia", word:"Policía", forbidden:["Ladrón","Arma","Arresto","Patrulla","Seguridad"]},
-  {cat:"familia", word:"Bombero", forbidden:["Fuego","Agua","Apagar","Manguera","Emergencia"]},
-  {cat:"familia", word:"Vecino", forbidden:["Barrio","Casa","Puerta","Cerca","Persona"]},
-  {cat:"familia", word:"Amigo", forbidden:["Compañero","Confianza","Persona","Conocer","Lealtad"]},
-  // AMPLIACIÓN · GENERAL
-  {cat:"general",word:"Mochila",forbidden:["Libros","Espalda","Viaje","Cargar","Cremallera"]},
-  {cat:"general",word:"Paraguas",forbidden:["Lluvia","Agua","Abrir","Tormenta","Mojar"]},
-  {cat:"general",word:"Escalera",forbidden:["Subir","Bajar","Peldaños","Piso","Altura"]},
-  {cat:"general",word:"Ventana",forbidden:["Vidrio","Casa","Mirar","Abrir","Cortina"]},
-  {cat:"general",word:"Puerta",forbidden:["Entrada","Casa","Abrir","Cerradura","Salir"]},
-  {cat:"general",word:"Almohada",forbidden:["Dormir","Cama","Cabeza","Suave","Noche"]},
-  {cat:"general",word:"Cobija",forbidden:["Frío","Cama","Dormir","Calor","Manta"]},
-  {cat:"general",word:"Linterna",forbidden:["Luz","Oscuridad","Pilas","Camping","Iluminar"]},
-  {cat:"general",word:"Martillo",forbidden:["Clavo","Golpear","Herramienta","Construcción","Madera"]},
-  {cat:"general",word:"Destornillador",forbidden:["Tornillo","Herramienta","Girar","Phillips","Reparar"]},
-  {cat:"general",word:"Regla",forbidden:["Medir","Centímetros","Línea","Colegio","Longitud"]},
-  {cat:"general",word:"Cuaderno",forbidden:["Hojas","Escribir","Colegio","Notas","Lápiz"]},
-  {cat:"general",word:"Lápiz",forbidden:["Escribir","Grafito","Borrador","Punta","Colegio"]},
-  {cat:"general",word:"Borrador",forbidden:["Lápiz","Goma","Borrar","Colegio","Escribir"]},
-  {cat:"general",word:"Pizarra",forbidden:["Tiza","Colegio","Escribir","Clase","Negra"]},
-  {cat:"general",word:"Reloj despertador",forbidden:["Alarma","Dormir","Hora","Mañana","Sonido"]},
-  {cat:"general",word:"Escritorio",forbidden:["Mesa","Computador","Oficina","Silla","Trabajar"]},
-  {cat:"general",word:"Silla",forbidden:["Sentarse","Mesa","Espalda","Cuatro patas","Mueble"]},
-  {cat:"general",word:"Sofá",forbidden:["Sala","Sentarse","Cojines","Televisión","Mueble"]},
-  {cat:"general",word:"Alfombra",forbidden:["Piso","Casa","Tapete","Caminar","Decoración"]},
-  {cat:"general",word:"Cortina",forbidden:["Ventana","Tela","Casa","Privacidad","Abrir"]},
-  {cat:"general",word:"Vela",forbidden:["Fuego","Cera","Luz","Cumpleaños","Encender"]},
-  {cat:"general",word:"Fósforo",forbidden:["Fuego","Caja","Encender","Cerilla","Humo"]},
-  {cat:"general",word:"Parlante",forbidden:["Música","Sonido","Bluetooth","Audio","Bocina"]},
-  {cat:"general",word:"Auriculares",forbidden:["Música","Oídos","Escuchar","Cable","Bluetooth"]},
-  {cat:"general",word:"Cargador",forbidden:["Celular","Batería","Cable","Electricidad","Conectar"]},
-  {cat:"general",word:"Enchufe",forbidden:["Electricidad","Pared","Tomacorriente","Cable","Conectar"]},
-  {cat:"general",word:"Ventilador",forbidden:["Aire","Calor","Aspas","Girar","Enfriar"]},
-  {cat:"general",word:"Nevera",forbidden:["Frío","Comida","Cocina","Hielo","Electrodoméstico"]},
-  {cat:"general",word:"Lavadora",forbidden:["Ropa","Agua","Jabón","Centrifugar","Casa"]},
-  {cat:"general",word:"Ducha",forbidden:["Baño","Agua","Bañarse","Jabón","Cabello"]},
-  {cat:"general",word:"Toalla",forbidden:["Secar","Baño","Agua","Cuerpo","Tela"]},
-  {cat:"general",word:"Cepillo de dientes",forbidden:["Boca","Pasta","Dientes","Cepillar","Baño"]},
-  {cat:"general",word:"Peine",forbidden:["Cabello","Peinar","Púas","Cabeza","Cepillo"]},
-  {cat:"general",word:"Esponja",forbidden:["Lavar","Agua","Jabón","Limpiar","Cocina"]},
-  {cat:"general",word:"Escoba",forbidden:["Barrer","Piso","Basura","Casa","Limpiar"]},
-  {cat:"general",word:"Trapeador",forbidden:["Piso","Agua","Limpiar","Balde","Casa"]},
-  {cat:"general",word:"Balde",forbidden:["Agua","Plástico","Llenar","Limpiar","Asa"]},
-  {cat:"general",word:"Candado",forbidden:["Llave","Cerrar","Seguridad","Puerta","Metal"]},
-  {cat:"general",word:"Maleta",forbidden:["Viaje","Ropa","Aeropuerto","Equipaje","Cremallera"]},
-  // AMPLIACIÓN · COMIDA
-  {cat:"comida",word:"Sancocho",forbidden:["Sopa","Plátano","Yuca","Carne","Colombia"]},
-  {cat:"comida",word:"Ajiaco",forbidden:["Bogotá","Sopa","Papa","Pollo","Guascas"]},
-  {cat:"comida",word:"Bandeja paisa",forbidden:["Frijoles","Arroz","Chicharrón","Antioquia","Plátano"]},
-  {cat:"comida",word:"Tamales",forbidden:["Masa","Hoja","Pollo","Desayuno","Colombia"]},
-  {cat:"comida",word:"Patacón",forbidden:["Plátano","Frito","Verde","Costa","Aplastar"]},
-  {cat:"comida",word:"Buñuelo",forbidden:["Queso","Navidad","Frito","Masa","Redondo"]},
-  {cat:"comida",word:"Pandebono",forbidden:["Queso","Maíz","Pan","Cali","Hornear"]},
-  {cat:"comida",word:"Almojábana",forbidden:["Queso","Pan","Maíz","Hornear","Merienda"]},
-  {cat:"comida",word:"Chocolate caliente",forbidden:["Bebida","Cacao","Leche","Taza","Caliente"]},
-  {cat:"comida",word:"Avena",forbidden:["Leche","Desayuno","Cereal","Bebida","Canela"]},
-  {cat:"comida",word:"Limonada",forbidden:["Limón","Agua","Azúcar","Bebida","Fría"]},
-  {cat:"comida",word:"Mango",forbidden:["Fruta","Amarillo","Dulce","Árbol","Tropical"]},
-  {cat:"comida",word:"Piña",forbidden:["Fruta","Tropical","Corona","Amarilla","Ácida"]},
-  {cat:"comida",word:"Sandía",forbidden:["Fruta","Roja","Semillas","Verano","Verde"]},
-  {cat:"comida",word:"Fresa",forbidden:["Fruta","Roja","Pequeña","Dulce","Crema"]},
-  {cat:"comida",word:"Uva",forbidden:["Fruta","Racimo","Vino","Morada","Semillas"]},
-  {cat:"comida",word:"Naranja",forbidden:["Fruta","Jugo","Cítrica","Vitamina C","Árbol"]},
-  {cat:"comida",word:"Papaya",forbidden:["Fruta","Naranja","Semillas","Tropical","Desayuno"]},
-  {cat:"comida",word:"Maracuyá",forbidden:["Fruta","Ácida","Jugo","Semillas","Amarillo"]},
-  {cat:"comida",word:"Guayaba",forbidden:["Fruta","Rosada","Dulce","Bocadillo","Árbol"]},
-  {cat:"comida",word:"Mazamorra",forbidden:["Maíz","Leche","Postre","Blanca","Colombia"]},
-  {cat:"comida",word:"Natilla",forbidden:["Navidad","Postre","Canela","Leche","Dulce"]},
-  {cat:"comida",word:"Flan",forbidden:["Postre","Huevo","Caramelo","Leche","Molde"]},
-  {cat:"comida",word:"Brownie",forbidden:["Chocolate","Postre","Horno","Cuadrado","Dulce"]},
-  {cat:"comida",word:"Torta",forbidden:["Cumpleaños","Pastel","Velas","Horno","Crema"]},
-  {cat:"comida",word:"Palomitas",forbidden:["Maíz","Cine","Mantequilla","Sal","Estallar"]},
-  {cat:"comida",word:"Hot dog",forbidden:["Pan","Salchicha","Salsa","Mostaza","Comida rápida"]},
-  {cat:"comida",word:"Nachos",forbidden:["Maíz","Queso","Totopos","Salsa","México"]},
-  {cat:"comida",word:"Burrito",forbidden:["México","Tortilla","Arroz","Frijoles","Enrollado"]},
-  {cat:"comida",word:"Pasta",forbidden:["Italia","Espagueti","Salsa","Harina","Fideos"]},
-  {cat:"comida",word:"Lasaña",forbidden:["Pasta","Capas","Queso","Carne","Horno"]},
-  {cat:"comida",word:"Panqueque",forbidden:["Harina","Desayuno","Sartén","Miel","Redondo"]},
-  {cat:"comida",word:"Waffle",forbidden:["Desayuno","Cuadrícula","Harina","Sirope","Dulce"]},
-  {cat:"comida",word:"Cereal",forbidden:["Leche","Desayuno","Caja","Granos","Tazón"]},
-  {cat:"comida",word:"Yogur",forbidden:["Leche","Frío","Desayuno","Probióticos","Vaso"]},
-  {cat:"comida",word:"Gelatina",forbidden:["Postre","Frío","Temblar","Molde","Dulce"]},
-  {cat:"comida",word:"Paleta",forbidden:["Helado","Palo","Dulce","Fría","Caramelo"]},
-  {cat:"comida",word:"Churro",forbidden:["Frito","Azúcar","Masa","Canela","Dulce"]},
-  {cat:"comida",word:"Croissant",forbidden:["Francia","Pan","Mantequilla","Hojaldre","Desayuno"]},
-  {cat:"comida",word:"Ravioli",forbidden:["Pasta","Relleno","Italia","Salsa","Cuadrado"]},
-  // AMPLIACIÓN · CINE
-  {cat:"cine",word:"Actor",forbidden:["Película","Personaje","Cámara","Hollywood","Interpretar"]},
-  {cat:"cine",word:"Actriz",forbidden:["Película","Personaje","Cámara","Hollywood","Interpretar"]},
-  {cat:"cine",word:"Director",forbidden:["Película","Rodaje","Cámara","Escena","Filmar"]},
-  {cat:"cine",word:"Guion",forbidden:["Historia","Diálogo","Película","Escribir","Escena"]},
-  {cat:"cine",word:"Escena",forbidden:["Película","Actores","Rodaje","Momento","Cámara"]},
-  {cat:"cine",word:"Tráiler",forbidden:["Avance","Película","Video","Estreno","Cine"]},
-  {cat:"cine",word:"Estreno",forbidden:["Película","Fecha","Cine","Primera vez","Lanzamiento"]},
-  {cat:"cine",word:"Taquilla",forbidden:["Cine","Entradas","Dinero","Película","Recaudo"]},
-  {cat:"cine",word:"Oscar",forbidden:["Premio","Estatuilla","Hollywood","Academia","Cine"]},
-  {cat:"cine",word:"Proyector",forbidden:["Pantalla","Película","Luz","Sala","Imagen"]},
-  {cat:"cine",word:"Subtítulos",forbidden:["Texto","Idioma","Pantalla","Diálogo","Traducir"]},
-  {cat:"cine",word:"Doblaje",forbidden:["Voz","Idioma","Película","Actores","Audio"]},
-  {cat:"cine",word:"Banda sonora",forbidden:["Música","Película","Canciones","Audio","Compositor"]},
-  {cat:"cine",word:"Villano",forbidden:["Malo","Héroe","Enemigo","Película","Malvado"]},
-  {cat:"cine",word:"Héroe",forbidden:["Bueno","Villano","Salvar","Personaje","Poderes"]},
-  {cat:"cine",word:"Superhéroe",forbidden:["Capa","Poderes","Héroe","Marvel","DC"]},
-  {cat:"cine",word:"Comedia",forbidden:["Risa","Humor","Película","Chistes","Género"]},
-  {cat:"cine",word:"Terror",forbidden:["Miedo","Monstruo","Susto","Película","Oscuridad"]},
-  {cat:"cine",word:"Romance",forbidden:["Amor","Pareja","Beso","Película","Corazón"]},
-  {cat:"cine",word:"Acción",forbidden:["Peleas","Explosiones","Héroe","Película","Adrenalina"]},
-  {cat:"cine",word:"Animación",forbidden:["Dibujos","Personajes","Película","Caricatura","Digital"]},
-  {cat:"cine",word:"Documental",forbidden:["Real","Historia","Información","Cámara","Película"]},
-  {cat:"cine",word:"Secuela",forbidden:["Segunda","Película","Continuación","Saga","Historia"]},
-  {cat:"cine",word:"Remake",forbidden:["Nueva versión","Película","Original","Rehacer","Adaptación"]},
-  {cat:"cine",word:"Saga",forbidden:["Películas","Historia","Secuelas","Franquicia","Capítulos"]},
-  {cat:"cine",word:"Franquicia",forbidden:["Saga","Marca","Películas","Personajes","Serie"]},
-  {cat:"cine",word:"Cortometraje",forbidden:["Corto","Película","Minutos","Historia","Cine"]},
-  {cat:"cine",word:"Cineasta",forbidden:["Director","Película","Rodaje","Cámara","Filmación"]},
-  {cat:"cine",word:"Guionista",forbidden:["Guion","Escribir","Diálogo","Película","Historia"]},
-  {cat:"cine",word:"Productor",forbidden:["Dinero","Película","Producción","Rodaje","Estudio"]},
-  {cat:"cine",word:"Casting",forbidden:["Audición","Actores","Personajes","Prueba","Director"]},
-  {cat:"cine",word:"Audición",forbidden:["Prueba","Actor","Casting","Papel","Personaje"]},
-  {cat:"cine",word:"Fotograma",forbidden:["Imagen","Película","Cuadro","Cámara","Video"]},
-  {cat:"cine",word:"Plano",forbidden:["Cámara","Escena","Filmación","Imagen","Encuadre"]},
-  {cat:"cine",word:"Efectos especiales",forbidden:["Película","Explosión","Visual","Cine","Computador"]},
-  {cat:"cine",word:"Maquillaje",forbidden:["Actor","Cara","Cine","Caracterización","Pintura"]},
-  {cat:"cine",word:"Vestuario",forbidden:["Ropa","Actor","Personaje","Cine","Traje"]},
-  {cat:"cine",word:"Claqueta",forbidden:["Rodaje","Cámara","Acción","Director","Escena"]},
-  {cat:"cine",word:"Cinematografía",forbidden:["Imagen","Cámara","Luz","Película","Director"]},
-  {cat:"cine",word:"Montaje",forbidden:["Editar","Cortes","Película","Video","Escenas"]},
-  // AMPLIACIÓN · INTERNET
-  {cat:"internet",word:"Router",forbidden:["Internet","Red","Señal","Conexión","Antena"]},
-  {cat:"internet",word:"Contraseña",forbidden:["Clave","Cuenta","Seguridad","Login","Acceso"]},
-  {cat:"internet",word:"Usuario",forbidden:["Cuenta","Nombre","Perfil","Login","Persona"]},
-  {cat:"internet",word:"Perfil",forbidden:["Cuenta","Foto","Usuario","Red social","Información"]},
-  {cat:"internet",word:"Comentario",forbidden:["Escribir","Publicación","Opinión","Red social","Texto"]},
-  {cat:"internet",word:"Publicación",forbidden:["Red social","Foto","Texto","Compartir","Perfil"]},
-  {cat:"internet",word:"Notificación",forbidden:["Alerta","Celular","Mensaje","Aviso","Aplicación"]},
-  {cat:"internet",word:"Hashtag",forbidden:["Almohadilla","Etiqueta","Red social","Tendencia","Publicación"]},
-  {cat:"internet",word:"Reel",forbidden:["Instagram","Video","Corto","Red social","Deslizar"]},
-  {cat:"internet",word:"Podcast",forbidden:["Audio","Episodio","Micrófono","Programa","Spotify"]},
-  {cat:"internet",word:"Blog",forbidden:["Artículo","Web","Escribir","Publicación","Página"]},
-  {cat:"internet",word:"Foro",forbidden:["Internet","Preguntas","Comunidad","Debate","Usuarios"]},
-  {cat:"internet",word:"Chat",forbidden:["Mensaje","Conversación","Internet","Escribir","Tiempo real"]},
-  {cat:"internet",word:"Videollamada",forbidden:["Cámara","Llamada","Internet","Pantalla","Zoom"]},
-  {cat:"internet",word:"Correo electrónico",forbidden:["Email","Mensaje","Bandeja","Enviar","Dirección"]},
-  {cat:"internet",word:"Spam",forbidden:["Correo","Publicidad","Basura","Mensajes","Indeseado"]},
-  {cat:"internet",word:"Enlace",forbidden:["URL","Página","Clic","Internet","Dirección"]},
-  {cat:"internet",word:"Navegador",forbidden:["Chrome","Web","Internet","Pestaña","Buscar"]},
-  {cat:"internet",word:"Pestaña",forbidden:["Navegador","Ventana","Abrir","Web","Chrome"]},
-  {cat:"internet",word:"Buscador",forbidden:["Google","Buscar","Internet","Resultados","Consulta"]},
-  {cat:"internet",word:"Página web",forbidden:["Internet","URL","Navegador","Sitio","HTML"]},
-  {cat:"internet",word:"Aplicación",forbidden:["App","Celular","Programa","Instalar","Software"]},
-  {cat:"internet",word:"Descarga",forbidden:["Archivo","Internet","Bajar","Guardar","Computador"]},
-  {cat:"internet",word:"Nube",forbidden:["Internet","Archivos","Guardar","Servidor","Online"]},
-  {cat:"internet",word:"Servidor",forbidden:["Computador","Web","Datos","Internet","Alojamiento"]},
-  {cat:"internet",word:"Base de datos",forbidden:["Información","Tablas","Datos","Servidor","Guardar"]},
-  {cat:"internet",word:"Código QR",forbidden:["Escanear","Cuadrado","Cámara","Enlace","Código"]},
-  {cat:"internet",word:"GPS",forbidden:["Ubicación","Mapa","Satélite","Ruta","Celular"]},
-  {cat:"internet",word:"Captura de pantalla",forbidden:["Imagen","Pantalla","Foto","Celular","Guardar"]},
-  {cat:"internet",word:"GIF",forbidden:["Animación","Imagen","Internet","Bucle","Video"]},
-  {cat:"internet",word:"Seguidor",forbidden:["Instagram","Red social","Persona","Follow","Cuenta"]},
-  {cat:"internet",word:"Suscripción",forbidden:["Pagar","Mensual","Servicio","Cuenta","Premium"]},
-  {cat:"internet",word:"Algoritmo",forbidden:["Computador","Datos","Reglas","Redes","Recomendación"]},
-  {cat:"internet",word:"Inteligencia artificial",forbidden:["Robot","ChatGPT","Máquina","Tecnología","Modelo"]},
-  {cat:"internet",word:"Código fuente",forbidden:["Programación","Texto","Software","Desarrollador","Código"]},
-  {cat:"internet",word:"Dominio",forbidden:["Web","Dirección","Página","URL","Internet"]},
-  {cat:"internet",word:"Servidor web",forbidden:["Hosting","Página","Internet","Apache","Navegador"]},
-  {cat:"internet",word:"Cookie",forbidden:["Navegador","Web","Datos","Sitio","Privacidad"]},
-  {cat:"internet",word:"Firewall",forbidden:["Seguridad","Red","Bloquear","Protección","Internet"]},
-  {cat:"internet",word:"Actualización",forbidden:["Software","Nueva versión","Aplicación","Instalar","Mejora"]},
-  // AMPLIACIÓN · FAMILIA
-  {cat:"familia",word:"Hija",forbidden:["Padres","Niña","Familia","Descendiente","Casa"]},
-  {cat:"familia",word:"Hermana",forbidden:["Familia","Misma madre","Mujer","Hermanos","Casa"]},
-  {cat:"familia",word:"Abuela",forbidden:["Madre","Anciana","Nietos","Familia","Mamá"]},
-  {cat:"familia",word:"Tío",forbidden:["Hermano","Padres","Sobrino","Familia","Pariente"]},
-  {cat:"familia",word:"Tía",forbidden:["Hermana","Padres","Sobrino","Familia","Pariente"]},
-  {cat:"familia",word:"Primo",forbidden:["Familia","Tío","Pariente","Mismo abuelo","Hermano"]},
-  {cat:"familia",word:"Prima",forbidden:["Familia","Tía","Pariente","Mismo abuelo","Hermana"]},
-  {cat:"familia",word:"Sobrino",forbidden:["Tío","Hermano","Hijo","Familia","Pariente"]},
-  {cat:"familia",word:"Sobrina",forbidden:["Tía","Hermana","Hija","Familia","Pariente"]},
-  {cat:"familia",word:"Nieto",forbidden:["Abuelo","Hijo","Familia","Descendiente","Anciano"]},
-  {cat:"familia",word:"Nieta",forbidden:["Abuela","Hija","Familia","Descendiente","Anciana"]},
-  {cat:"familia",word:"Adolescente",forbidden:["Joven","Colegio","Edad","Pubertad","Familia"]},
-  {cat:"familia",word:"Esposo",forbidden:["Marido","Pareja","Hombre","Matrimonio","Anillo"]},
-  {cat:"familia",word:"Esposa",forbidden:["Mujer","Pareja","Matrimonio","Anillo","Marido"]},
-  {cat:"familia",word:"Novio",forbidden:["Pareja","Hombre","Amor","Beso","Relación"]},
-  {cat:"familia",word:"Novia",forbidden:["Pareja","Mujer","Amor","Beso","Relación"]},
-  {cat:"familia",word:"Suegro",forbidden:["Esposo","Padre","Pareja","Familia","Yerno"]},
-  {cat:"familia",word:"Suegra",forbidden:["Esposa","Madre","Pareja","Familia","Nuera"]},
-  {cat:"familia",word:"Yerno",forbidden:["Esposo","Hija","Suegro","Familia","Matrimonio"]},
-  {cat:"familia",word:"Nuera",forbidden:["Esposa","Hijo","Suegra","Familia","Matrimonio"]},
-  {cat:"familia",word:"Cuñado",forbidden:["Hermana","Esposa","Hermano","Familia","Pariente"]},
-  {cat:"familia",word:"Cuñada",forbidden:["Hermano","Esposa","Hermana","Familia","Pariente"]},
-  {cat:"familia",word:"Gemelo",forbidden:["Igual","Hermano","Nacimiento","Dos","Parecido"]},
-  {cat:"familia",word:"Árbol genealógico",forbidden:["Familia","Antepasados","Parientes","Generaciones","Diagrama"]},
-  {cat:"familia",word:"Reunión familiar",forbidden:["Familia","Encuentro","Casa","Celebración","Parientes"]},
-  {cat:"familia",word:"Bautizo",forbidden:["Iglesia","Bebé","Agua","Ceremonia","Padrinos"]},
-  {cat:"familia",word:"Boda",forbidden:["Matrimonio","Novios","Iglesia","Anillos","Fiesta"]},
-  {cat:"familia",word:"Aniversario",forbidden:["Pareja","Fecha","Años","Celebración","Matrimonio"]},
-  {cat:"familia",word:"Regalo",forbidden:["Cumpleaños","Caja","Sorpresa","Dar","Navidad"]},
-  {cat:"familia",word:"Padrino",forbidden:["Bautizo","Madrina","Ceremonia","Ahijado","Familia"]},
-  {cat:"familia",word:"Madrina",forbidden:["Bautizo","Padrino","Ceremonia","Ahijada","Familia"]},
-  {cat:"familia",word:"Pariente",forbidden:["Familia","Sangre","Tío","Primo","Persona"]},
-  {cat:"familia",word:"Cuidador",forbidden:["Cuidar","Persona","Ayuda","Casa","Responsable"]},
-  {cat:"familia",word:"Tutor",forbidden:["Estudio","Responsable","Colegio","Aprender","Adulto"]},
-  {cat:"familia",word:"Hogar",forbidden:["Casa","Familia","Vivir","Techo","Lugar"]},
-  {cat:"familia",word:"Parentesco",forbidden:["Familia","Relación","Sangre","Pariente","Vínculo"]},
-  {cat:"familia",word:"Generación",forbidden:["Familia","Años","Abuelos","Padres","Hijos"]},
-  {cat:"familia",word:"Hermanastro",forbidden:["Hermano","Padre","Madre","Familia","Medio"]},
-  {cat:"familia",word:"Padrastro",forbidden:["Madre","Pareja","Hijo","Familia","Esposo"]},
-  {cat:"familia",word:"Madrastra",forbidden:["Padre","Pareja","Hija","Familia","Esposa"]},
-  // COLOMBIA · CIUDADES, LUGARES Y CULTURA POPULAR
-  {cat:"colombia",word:"Bogotá",forbidden:["Capital","Frío","Colombia","Monserrate","Rolo"]},
-  {cat:"colombia",word:"Medellín",forbidden:["Antioquia","Paisa","Metro","Flores","Valle"]},
-  {cat:"colombia",word:"Cali",forbidden:["Valle","Salsa","Pacífico","Feria","Caleño"]},
-  {cat:"colombia",word:"Cartagena",forbidden:["Caribe","Murallas","Mar","Turismo","Bolívar"]},
-  {cat:"colombia",word:"Barranquilla",forbidden:["Carnaval","Caribe","Atlántico","Shakira","Costeño"]},
-  {cat:"colombia",word:"Bucaramanga",forbidden:["Santander","Ciudad Bonita","Cabecera","Hormiga","Santandereano"]},
-  {cat:"colombia",word:"Pereira",forbidden:["Risaralda","Café","Eje Cafetero","Matecaña","Triángulo"]},
-  {cat:"colombia",word:"Manizales",forbidden:["Caldas","Café","Feria","Nevado","Eje Cafetero"]},
-  {cat:"colombia",word:"Armenia",forbidden:["Quindío","Café","Eje Cafetero","Quindiano","Parque"]},
-  {cat:"colombia",word:"Santa Marta",forbidden:["Magdalena","Caribe","Tayrona","Mar","Sierra"]},
-  {cat:"colombia",word:"Cúcuta",forbidden:["Norte de Santander","Frontera","Venezuela","Santander","Catatumbo"]},
-  {cat:"colombia",word:"Villavicencio",forbidden:["Meta","Llanos","Joropo","Puerta","Oriental"]},
-  {cat:"colombia",word:"Ibagué",forbidden:["Tolima","Música","Cañón","Nevado","Musical"]},
-  {cat:"colombia",word:"Neiva",forbidden:["Huila","San Pedro","Bambuco","Magdalena","Opita"]},
-  {cat:"colombia",word:"Pasto",forbidden:["Nariño","Carnaval","Negros","Blancos","Sur"]},
-  {cat:"colombia",word:"Montería",forbidden:["Córdoba","Sinú","Ganado","Río","Sabanas"]},
-  {cat:"colombia",word:"Valledupar",forbidden:["Vallenato","Cesar","Festival","Acordeón","Caribe"]},
-  {cat:"colombia",word:"Tunja",forbidden:["Boyacá","Frío","Independencia","Puente","Capital"]},
-  {cat:"colombia",word:"Popayán",forbidden:["Cauca","Blanca","Semana Santa","Procesiones","Colonial"]},
-  {cat:"colombia",word:"Riohacha",forbidden:["La Guajira","Caribe","Mar","Wayuu","Desierto"]},
-  {cat:"colombia",word:"Leticia",forbidden:["Amazonas","Río","Selva","Brasil","Perú"]},
-  {cat:"colombia",word:"Buenaventura",forbidden:["Pacífico","Puerto","Valle","Mar","Contenedores"]},
-  {cat:"colombia",word:"San Andrés",forbidden:["Isla","Caribe","Mar","Archipiélago","Providencia"]},
-  {cat:"colombia",word:"Monserrate",forbidden:["Bogotá","Cerro","Teleférico","Iglesia","Virgen"]},
-  {cat:"colombia",word:"Guatapé",forbidden:["Antioquia","Piedra","Embalse","Pueblo","Zócalos"]},
-  {cat:"colombia",word:"Parque Tayrona",forbidden:["Santa Marta","Playa","Caribe","Selva","Magdalena"]},
-  {cat:"colombia",word:"Catedral de Sal",forbidden:["Zipaquirá","Mina","Bogotá","Sal","Subterránea"]},
-  {cat:"colombia",word:"Caño Cristales",forbidden:["Río","Meta","Colores","Macarenia","Naturaleza"]},
-  {cat:"colombia",word:"Eje Cafetero",forbidden:["Café","Pereira","Armenia","Manizales","Quindío"]},
-  {cat:"colombia",word:"El Dorado",forbidden:["Aeropuerto","Bogotá","Avión","Oro","Terminal"]},
-  {cat:"colombia",word:"Carnaval de Barranquilla",forbidden:["Fiesta","Disfraces","Marimonda","Atlántico","Febrero"]},
-  {cat:"colombia",word:"Feria de Cali",forbidden:["Salsa","Diciembre","Cali","Baile","Valle"]},
-  {cat:"colombia",word:"Feria de las Flores",forbidden:["Medellín","Antioquia","Silletas","Agosto","Flores"]},
-  {cat:"colombia",word:"Festival Vallenato",forbidden:["Valledupar","Acordeón","Cesar","Música","Compositores"]},
-  {cat:"colombia",word:"Sombrero vueltiao",forbidden:["Sombrero","Caña","Sucre","Córdoba","Negro"]},
-  {cat:"colombia",word:"Ruana",forbidden:["Frío","Boyacá","Poncho","Lana","Abrigo"]},
-  {cat:"colombia",word:"Chiva",forbidden:["Bus","Colores","Fiesta","Pueblo","Turismo"]},
-  {cat:"colombia",word:"TransMilenio",forbidden:["Bogotá","Bus","Rojo","Estación","Capital"]},
-  {cat:"colombia",word:"Metro de Medellín",forbidden:["Medellín","Tren","Antioquia","Estación","Paisa"]},
-  {cat:"colombia",word:"Ciclovía",forbidden:["Bicicleta","Domingo","Calles","Bogotá","Deporte"]},
-  {cat:"colombia",word:"Tinto",forbidden:["Café","Negro","Bebida","Vaso","Azúcar"]},
-  {cat:"colombia",word:"Panela",forbidden:["Caña","Dulce","Agua","Trapiche","Colombia"]},
-  {cat:"colombia",word:"Oblea",forbidden:["Arequipe","Dulce","Redonda","Galleta","Crema"]},
-  {cat:"colombia",word:"Chontaduro",forbidden:["Fruta","Pacífico","Palma","Amarillo","Cali"]},
-  {cat:"colombia",word:"Salpicón",forbidden:["Fruta","Jugo","Rojo","Vaso","Dulce"]},
-  {cat:"colombia",word:"Fritanga",forbidden:["Carne","Chicharrón","Papa","Comida","Plato"]},
-  {cat:"colombia",word:"Lechona",forbidden:["Cerdo","Tolima","Arroz","Horno","Fiesta"]},
-  {cat:"colombia",word:"Aguardiente",forbidden:["Alcohol","Licor","Anís","Botella","Fiesta"]},
-  {cat:"colombia",word:"Lulada",forbidden:["Lulo","Bebida","Cali","Hielo","Fruta"]},
-  {cat:"colombia",word:"Milo",forbidden:["Chocolate","Leche","Bebida","Polvo","Nestlé"]},
-  {cat:"colombia",word:"Picó",forbidden:["Música","Costa","Parlantes","Baile","Sonido"]},
-  {cat:"colombia",word:"Carriel",forbidden:["Paisa","Bolso","Cuero","Antioquia","Hombre"]},
-  {cat:"colombia",word:"Mochila Wayuu",forbidden:["La Guajira","Tejida","Bolso","Indígena","Colores"]},
-  {cat:"colombia",word:"Parcero",forbidden:["Amigo","Paisa","Amistad","Compañero","Medellín"]},
-  {cat:"colombia",word:"Bacano",forbidden:["Bueno","Genial","chévere","Expresión","Colombia"]},
-  {cat:"colombia",word:"Dar papaya",forbidden:["Descuidarse","Oportunidad","Expresión","Cuidado","Colombia"]},
-  {cat:"colombia",word:"Ñapa",forbidden:["Extra","Regalo","Tienda","Vendedor","Gratis"]},
-  {cat:"colombia",word:"Vaina",forbidden:["Cosa","Problema","Palabra","Expresión","Objeto"]},
-  {cat:"colombia",word:"Qué pena",forbidden:["Disculpa","Vergüenza","Perdón","Expresión","Colombia"]},
-  {cat:"colombia",word:"Rolo",forbidden:["Bogotá","Capital","Cachaco","Bogotano","Ciudad"]},
+  {
+    "cat": "general",
+    "word": "Reloj",
+    "forbidden": [
+      "Hora",
+      "Tiempo",
+      "Muñeca",
+      "Manecillas",
+      "Tic-tac"
+    ]
+  },
+  {
+    "cat": "general",
+    "word": "Cama",
+    "forbidden": [
+      "Dormir",
+      "Colchón",
+      "Almohada",
+      "Noche",
+      "Sábanas"
+    ]
+  },
+  {
+    "cat": "general",
+    "word": "Espejo",
+    "forbidden": [
+      "Reflejo",
+      "Mirar",
+      "Vidrio",
+      "Cara",
+      "Baño"
+    ]
+  },
+  {
+    "cat": "general",
+    "word": "Llave",
+    "forbidden": [
+      "Puerta",
+      "Abrir",
+      "Cerradura",
+      "Metal",
+      "Casa"
+    ]
+  },
+  {
+    "cat": "general",
+    "word": "Zapato",
+    "forbidden": [
+      "Pie",
+      "Caminar",
+      "Suela",
+      "Tenis",
+      "Cordones"
+    ]
+  },
+  {
+    "cat": "general",
+    "word": "Sombrilla",
+    "forbidden": [
+      "Lluvia",
+      "Agua",
+      "Mojar",
+      "Sol",
+      "Abrir"
+    ]
+  },
+  {
+    "cat": "general",
+    "word": "Bicicleta",
+    "forbidden": [
+      "Pedal",
+      "Ruedas",
+      "Montar",
+      "Cadena",
+      "Casco"
+    ]
+  },
+  {
+    "cat": "general",
+    "word": "Avión",
+    "forbidden": [
+      "Volar",
+      "Cielo",
+      "Aeropuerto",
+      "Piloto",
+      "Alas"
+    ]
+  },
+  {
+    "cat": "general",
+    "word": "Guitarra",
+    "forbidden": [
+      "Cuerdas",
+      "Música",
+      "Tocar",
+      "Instrumento",
+      "Acústica"
+    ]
+  },
+  {
+    "cat": "general",
+    "word": "Celular",
+    "forbidden": [
+      "Llamar",
+      "Pantalla",
+      "Teléfono",
+      "Mensaje",
+      "Batería"
+    ]
+  },
+  {
+    "cat": "general",
+    "word": "Gafas",
+    "forbidden": [
+      "Ojos",
+      "Ver",
+      "Lentes",
+      "Sol",
+      "Miopía"
+    ]
+  },
+  {
+    "cat": "general",
+    "word": "Dinero",
+    "forbidden": [
+      "Comprar",
+      "Billetes",
+      "Monedas",
+      "Banco",
+      "Pagar"
+    ]
+  },
+  {
+    "cat": "general",
+    "word": "Anillo",
+    "forbidden": [
+      "Dedo",
+      "Boda",
+      "Matrimonio",
+      "Oro",
+      "Joya"
+    ]
+  },
+  {
+    "cat": "general",
+    "word": "Perfume",
+    "forbidden": [
+      "Oler",
+      "Aroma",
+      "Frasco",
+      "Líquido",
+      "Colonia"
+    ]
+  },
+  {
+    "cat": "general",
+    "word": "Jabón",
+    "forbidden": [
+      "Lavar",
+      "Agua",
+      "Espuma",
+      "Baño",
+      "Limpiar"
+    ]
+  },
+  {
+    "cat": "general",
+    "word": "Tijeras",
+    "forbidden": [
+      "Cortar",
+      "Papel",
+      "Pelo",
+      "Filo",
+      "Herramienta"
+    ]
+  },
+  {
+    "cat": "general",
+    "word": "Libro",
+    "forbidden": [
+      "Leer",
+      "Páginas",
+      "Letras",
+      "Biblioteca",
+      "Historia"
+    ]
+  },
+  {
+    "cat": "general",
+    "word": "Cuchillo",
+    "forbidden": [
+      "Cortar",
+      "Comida",
+      "Filo",
+      "Tenedor",
+      "Cocina"
+    ]
+  },
+  {
+    "cat": "general",
+    "word": "Televisor",
+    "forbidden": [
+      "Ver",
+      "Pantalla",
+      "Control",
+      "Canal",
+      "Series"
+    ]
+  },
+  {
+    "cat": "general",
+    "word": "Cepillo",
+    "forbidden": [
+      "Dientes",
+      "Pelo",
+      "Peinar",
+      "Pasta",
+      "Boca"
+    ]
+  },
+  {
+    "cat": "comida",
+    "word": "Pizza",
+    "forbidden": [
+      "Queso",
+      "Italiana",
+      "Masa",
+      "Pepperoni",
+      "Horno"
+    ]
+  },
+  {
+    "cat": "comida",
+    "word": "Hamburguesa",
+    "forbidden": [
+      "Carne",
+      "Pan",
+      "Papas",
+      "McDonalds",
+      "Comida Rápida"
+    ]
+  },
+  {
+    "cat": "comida",
+    "word": "Helado",
+    "forbidden": [
+      "Frío",
+      "Cono",
+      "Postre",
+      "Derretir",
+      "Sabores"
+    ]
+  },
+  {
+    "cat": "comida",
+    "word": "Sushi",
+    "forbidden": [
+      "Arroz",
+      "Pescado",
+      "Japón",
+      "Crudo",
+      "Palillos"
+    ]
+  },
+  {
+    "cat": "comida",
+    "word": "Empanada",
+    "forbidden": [
+      "Freír",
+      "Masa",
+      "Relleno",
+      "Carne",
+      "Ají"
+    ]
+  },
+  {
+    "cat": "comida",
+    "word": "Arepa",
+    "forbidden": [
+      "Maíz",
+      "Queso",
+      "Desayuno",
+      "Asar",
+      "Mantequilla"
+    ]
+  },
+  {
+    "cat": "comida",
+    "word": "Queso",
+    "forbidden": [
+      "Leche",
+      "Vaca",
+      "Ratón",
+      "Amarillo",
+      "Derretir"
+    ]
+  },
+  {
+    "cat": "comida",
+    "word": "Leche",
+    "forbidden": [
+      "Vaca",
+      "Blanca",
+      "Líquido",
+      "Beber",
+      "Cereal"
+    ]
+  },
+  {
+    "cat": "comida",
+    "word": "Café",
+    "forbidden": [
+      "Tinto",
+      "Mañana",
+      "Despertar",
+      "Taza",
+      "Bebida"
+    ]
+  },
+  {
+    "cat": "comida",
+    "word": "Cerveza",
+    "forbidden": [
+      "Alcohol",
+      "Bebida",
+      "Lata",
+      "Botella",
+      "Fiesta"
+    ]
+  },
+  {
+    "cat": "comida",
+    "word": "Vino",
+    "forbidden": [
+      "Uva",
+      "Copa",
+      "Rojo",
+      "Blanco",
+      "Brindis"
+    ]
+  },
+  {
+    "cat": "comida",
+    "word": "Manzana",
+    "forbidden": [
+      "Roja",
+      "Fruta",
+      "Árbol",
+      "Eva",
+      "Blanca Nieves"
+    ]
+  },
+  {
+    "cat": "comida",
+    "word": "Banano",
+    "forbidden": [
+      "Mono",
+      "Amarillo",
+      "Fruta",
+      "Cáscara",
+      "Potasio"
+    ]
+  },
+  {
+    "cat": "comida",
+    "word": "Huevo",
+    "forbidden": [
+      "Gallina",
+      "Frito",
+      "Revuelto",
+      "Blanco",
+      "Yema"
+    ]
+  },
+  {
+    "cat": "comida",
+    "word": "Chocolate",
+    "forbidden": [
+      "Dulce",
+      "Cacao",
+      "Café",
+      "Leche",
+      "Derretir"
+    ]
+  },
+  {
+    "cat": "comida",
+    "word": "Tacos",
+    "forbidden": [
+      "México",
+      "Tortilla",
+      "Picante",
+      "Carne",
+      "Comida"
+    ]
+  },
+  {
+    "cat": "comida",
+    "word": "Ensalada",
+    "forbidden": [
+      "Lechuga",
+      "Verde",
+      "Sana",
+      "Tomate",
+      "Vegetales"
+    ]
+  },
+  {
+    "cat": "comida",
+    "word": "Sopa",
+    "forbidden": [
+      "Cuchara",
+      "Caliente",
+      "Líquido",
+      "Caldo",
+      "Enfermo"
+    ]
+  },
+  {
+    "cat": "comida",
+    "word": "Galleta",
+    "forbidden": [
+      "Dulce",
+      "Horno",
+      "Chips",
+      "Chocolate",
+      "Comer"
+    ]
+  },
+  {
+    "cat": "cine",
+    "word": "Harry Potter",
+    "forbidden": [
+      "Magia",
+      "Varita",
+      "Cicatriz",
+      "Gafas",
+      "Hogwarts"
+    ]
+  },
+  {
+    "cat": "cine",
+    "word": "Star Wars",
+    "forbidden": [
+      "Espacio",
+      "Jedi",
+      "Sable",
+      "Darth Vader",
+      "Galaxia"
+    ]
+  },
+  {
+    "cat": "cine",
+    "word": "Spiderman",
+    "forbidden": [
+      "Araña",
+      "Peter Parker",
+      "Telaraña",
+      "Rojo",
+      "Marvel"
+    ]
+  },
+  {
+    "cat": "cine",
+    "word": "Batman",
+    "forbidden": [
+      "Murciélago",
+      "Ciudad Gótica",
+      "Noche",
+      "Joker",
+      "Bruce Wayne"
+    ]
+  },
+  {
+    "cat": "cine",
+    "word": "Titanic",
+    "forbidden": [
+      "Barco",
+      "Hundir",
+      "Hielo",
+      "Jack",
+      "Rose"
+    ]
+  },
+  {
+    "cat": "cine",
+    "word": "Shrek",
+    "forbidden": [
+      "Ogro",
+      "Verde",
+      "Burro",
+      "Princesa",
+      "Pantano"
+    ]
+  },
+  {
+    "cat": "cine",
+    "word": "Toy Story",
+    "forbidden": [
+      "Juguetes",
+      "Woody",
+      "Buzz",
+      "Vaquero",
+      "Animación"
+    ]
+  },
+  {
+    "cat": "cine",
+    "word": "El Rey León",
+    "forbidden": [
+      "Simba",
+      "Mufasa",
+      "África",
+      "Animales",
+      "Disney"
+    ]
+  },
+  {
+    "cat": "cine",
+    "word": "Los Simpson",
+    "forbidden": [
+      "Amarillos",
+      "Homero",
+      "Bart",
+      "Animada",
+      "Televisión"
+    ]
+  },
+  {
+    "cat": "cine",
+    "word": "Stranger Things",
+    "forbidden": [
+      "Niños",
+      "Monstruo",
+      "Ochenta",
+      "Netflix",
+      "Poderes"
+    ]
+  },
+  {
+    "cat": "cine",
+    "word": "Game of Thrones",
+    "forbidden": [
+      "Dragones",
+      "Rey",
+      "Trono",
+      "Hielo",
+      "HBO"
+    ]
+  },
+  {
+    "cat": "cine",
+    "word": "Matrix",
+    "forbidden": [
+      "Pastilla",
+      "Keanu Reeves",
+      "Simulación",
+      "Verde",
+      "Neo"
+    ]
+  },
+  {
+    "cat": "cine",
+    "word": "Avengers",
+    "forbidden": [
+      "Marvel",
+      "Superhéroes",
+      "Iron Man",
+      "Capitán América",
+      "Thanos"
+    ]
+  },
+  {
+    "cat": "cine",
+    "word": "Jurassic Park",
+    "forbidden": [
+      "Dinosaurios",
+      "Isla",
+      "T-Rex",
+      "Parque",
+      "Fósil"
+    ]
+  },
+  {
+    "cat": "cine",
+    "word": "El Señor de los Anillos",
+    "forbidden": [
+      "Frodo",
+      "Magia",
+      "Hobbit",
+      "Gollum",
+      "Libro"
+    ]
+  },
+  {
+    "cat": "cine",
+    "word": "Breaking Bad",
+    "forbidden": [
+      "Química",
+      "Drogas",
+      "Walter White",
+      "Profesor",
+      "Dinero"
+    ]
+  },
+  {
+    "cat": "cine",
+    "word": "Avatar",
+    "forbidden": [
+      "Azules",
+      "Planeta",
+      "James Cameron",
+      "Naturaleza",
+      "Pelicula"
+    ]
+  },
+  {
+    "cat": "cine",
+    "word": "La Casa de Papel",
+    "forbidden": [
+      "Robo",
+      "Máscara",
+      "España",
+      "Banco",
+      "Profesor"
+    ]
+  },
+  {
+    "cat": "cine",
+    "word": "El Juego del Calamar",
+    "forbidden": [
+      "Corea",
+      "Juegos",
+      "Supervivencia",
+      "Dinero",
+      "Muñeca"
+    ]
+  },
+  {
+    "cat": "cine",
+    "word": "Voldemort",
+    "forbidden": [
+      "Villano",
+      "Nariz",
+      "Malo",
+      "Magia",
+      "Harry Potter"
+    ]
+  },
+  {
+    "cat": "internet",
+    "word": "Google",
+    "forbidden": [
+      "Buscador",
+      "Internet",
+      "Buscar",
+      "Web",
+      "Página"
+    ]
+  },
+  {
+    "cat": "internet",
+    "word": "YouTube",
+    "forbidden": [
+      "Videos",
+      "Ver",
+      "Canal",
+      "Suscribirse",
+      "Play"
+    ]
+  },
+  {
+    "cat": "internet",
+    "word": "TikTok",
+    "forbidden": [
+      "Videos",
+      "Bailes",
+      "Cortos",
+      "Red Social",
+      "Scroll"
+    ]
+  },
+  {
+    "cat": "internet",
+    "word": "Instagram",
+    "forbidden": [
+      "Fotos",
+      "Historias",
+      "Likes",
+      "Red Social",
+      "Filtros"
+    ]
+  },
+  {
+    "cat": "internet",
+    "word": "WhatsApp",
+    "forbidden": [
+      "Mensajes",
+      "Chat",
+      "Verde",
+      "Llamar",
+      "Grupos"
+    ]
+  },
+  {
+    "cat": "internet",
+    "word": "WiFi",
+    "forbidden": [
+      "Internet",
+      "Conexión",
+      "Contraseña",
+      "Inalámbrico",
+      "Señal"
+    ]
+  },
+  {
+    "cat": "internet",
+    "word": "Bluetooth",
+    "forbidden": [
+      "Conectar",
+      "Audífonos",
+      "Inalámbrico",
+      "Celular",
+      "Emparejar"
+    ]
+  },
+  {
+    "cat": "internet",
+    "word": "Hacker",
+    "forbidden": [
+      "Computadora",
+      "Robar",
+      "Contraseñas",
+      "Código",
+      "Virus"
+    ]
+  },
+  {
+    "cat": "internet",
+    "word": "Virus",
+    "forbidden": [
+      "Computadora",
+      "Enfermo",
+      "Dañar",
+      "Antivirus",
+      "Troyano"
+    ]
+  },
+  {
+    "cat": "internet",
+    "word": "Influencer",
+    "forbidden": [
+      "Famoso",
+      "Seguidores",
+      "Redes",
+      "Marcas",
+      "Fotos"
+    ]
+  },
+  {
+    "cat": "internet",
+    "word": "Meme",
+    "forbidden": [
+      "Chiste",
+      "Imagen",
+      "Risa",
+      "Internet",
+      "Compartir"
+    ]
+  },
+  {
+    "cat": "internet",
+    "word": "Emoji",
+    "forbidden": [
+      "Carita",
+      "Mensaje",
+      "Emoción",
+      "Amarillo",
+      "WhatsApp"
+    ]
+  },
+  {
+    "cat": "internet",
+    "word": "Streamer",
+    "forbidden": [
+      "En Vivo",
+      "Twitch",
+      "Jugar",
+      "Videos",
+      "Cámara"
+    ]
+  },
+  {
+    "cat": "internet",
+    "word": "Videojuego",
+    "forbidden": [
+      "Consola",
+      "Jugar",
+      "Control",
+      "Gamer",
+      "Pantalla"
+    ]
+  },
+  {
+    "cat": "internet",
+    "word": "PlayStation",
+    "forbidden": [
+      "Consola",
+      "Jugar",
+      "Sony",
+      "Control",
+      "Videojuegos"
+    ]
+  },
+  {
+    "cat": "internet",
+    "word": "Netflix",
+    "forbidden": [
+      "Series",
+      "Películas",
+      "Suscripción",
+      "Ver",
+      "Televisor"
+    ]
+  },
+  {
+    "cat": "internet",
+    "word": "Spotify",
+    "forbidden": [
+      "Música",
+      "Escuchar",
+      "Canciones",
+      "Playlist",
+      "Podcast"
+    ]
+  },
+  {
+    "cat": "internet",
+    "word": "Twitter",
+    "forbidden": [
+      "X",
+      "Mensajes",
+      "Pájaro",
+      "Hilo",
+      "Tendencia"
+    ]
+  },
+  {
+    "cat": "internet",
+    "word": "ChatGpt",
+    "forbidden": [
+      "IA",
+      "Inteligencia",
+      "Preguntar",
+      "Bot",
+      "Escribir"
+    ]
+  },
+  {
+    "cat": "internet",
+    "word": "Programador",
+    "forbidden": [
+      "Código",
+      "Computadora",
+      "Escribir",
+      "Software",
+      "Hacker"
+    ]
+  },
+  {
+    "cat": "familia",
+    "word": "Mamá",
+    "forbidden": [
+      "Madre",
+      "Hijos",
+      "Dar a luz",
+      "Mujer",
+      "Casa"
+    ]
+  },
+  {
+    "cat": "familia",
+    "word": "Papá",
+    "forbidden": [
+      "Padre",
+      "Hijos",
+      "Hombre",
+      "Familia",
+      "Esposo"
+    ]
+  },
+  {
+    "cat": "familia",
+    "word": "Abuelo",
+    "forbidden": [
+      "Viejo",
+      "Papá",
+      "Canas",
+      "Edad",
+      "Familia"
+    ]
+  },
+  {
+    "cat": "familia",
+    "word": "Hermano",
+    "forbidden": [
+      "Familia",
+      "Sangre",
+      "Mayor",
+      "Menor",
+      "Compartir"
+    ]
+  },
+  {
+    "cat": "familia",
+    "word": "Bebé",
+    "forbidden": [
+      "Llorar",
+      "Pañal",
+      "Nacer",
+      "Pequeño",
+      "Cuna"
+    ]
+  },
+  {
+    "cat": "familia",
+    "word": "Mascota",
+    "forbidden": [
+      "Perro",
+      "Gato",
+      "Animal",
+      "Casa",
+      "Cuidar"
+    ]
+  },
+  {
+    "cat": "familia",
+    "word": "Perro",
+    "forbidden": [
+      "Ladrar",
+      "Mascota",
+      "Hueso",
+      "Pasear",
+      "Guau"
+    ]
+  },
+  {
+    "cat": "familia",
+    "word": "Gato",
+    "forbidden": [
+      "Miau",
+      "Mascota",
+      "Ratón",
+      "Ronronear",
+      "Felino"
+    ]
+  },
+  {
+    "cat": "familia",
+    "word": "Casa",
+    "forbidden": [
+      "Vivir",
+      "Hogar",
+      "Techo",
+      "Puerta",
+      "Familia"
+    ]
+  },
+  {
+    "cat": "familia",
+    "word": "Colegio",
+    "forbidden": [
+      "Estudiar",
+      "Profesor",
+      "Clases",
+      "Aprender",
+      "Alumnos"
+    ]
+  },
+  {
+    "cat": "familia",
+    "word": "Universidad",
+    "forbidden": [
+      "Carrera",
+      "Estudiar",
+      "Grado",
+      "Profesión",
+      "Campus"
+    ]
+  },
+  {
+    "cat": "familia",
+    "word": "Trabajo",
+    "forbidden": [
+      "Dinero",
+      "Jefe",
+      "Oficina",
+      "Labor",
+      "Horario"
+    ]
+  },
+  {
+    "cat": "familia",
+    "word": "Jefe",
+    "forbidden": [
+      "Trabajo",
+      "Mandar",
+      "Despedir",
+      "Sueldo",
+      "Oficina"
+    ]
+  },
+  {
+    "cat": "familia",
+    "word": "Vacaciones",
+    "forbidden": [
+      "Descansar",
+      "Viajar",
+      "Playa",
+      "Trabajo",
+      "Días"
+    ]
+  },
+  {
+    "cat": "familia",
+    "word": "Cumpleaños",
+    "forbidden": [
+      "Fiesta",
+      "Regalo",
+      "Pastel",
+      "Edad",
+      "Celebrar"
+    ]
+  },
+  {
+    "cat": "familia",
+    "word": "Médico",
+    "forbidden": [
+      "Enfermo",
+      "Hospital",
+      "Curar",
+      "Doctor",
+      "Salud"
+    ]
+  },
+  {
+    "cat": "familia",
+    "word": "Policía",
+    "forbidden": [
+      "Ladrón",
+      "Arma",
+      "Arresto",
+      "Patrulla",
+      "Seguridad"
+    ]
+  },
+  {
+    "cat": "familia",
+    "word": "Bombero",
+    "forbidden": [
+      "Fuego",
+      "Agua",
+      "Apagar",
+      "Manguera",
+      "Emergencia"
+    ]
+  },
+  {
+    "cat": "familia",
+    "word": "Vecino",
+    "forbidden": [
+      "Barrio",
+      "Casa",
+      "Puerta",
+      "Cerca",
+      "Persona"
+    ]
+  },
+  {
+    "cat": "familia",
+    "word": "Amigo",
+    "forbidden": [
+      "Compañero",
+      "Confianza",
+      "Persona",
+      "Conocer",
+      "Lealtad"
+    ]
+  },
+  {
+    "cat": "general",
+    "word": "Mochila",
+    "forbidden": [
+      "Libros",
+      "Espalda",
+      "Viaje",
+      "Cargar",
+      "Cremallera"
+    ]
+  },
+  {
+    "cat": "general",
+    "word": "Paraguas",
+    "forbidden": [
+      "Lluvia",
+      "Agua",
+      "Abrir",
+      "Tormenta",
+      "Mojar"
+    ]
+  },
+  {
+    "cat": "general",
+    "word": "Escalera",
+    "forbidden": [
+      "Subir",
+      "Bajar",
+      "Peldaños",
+      "Piso",
+      "Altura"
+    ]
+  },
+  {
+    "cat": "general",
+    "word": "Ventana",
+    "forbidden": [
+      "Vidrio",
+      "Casa",
+      "Mirar",
+      "Abrir",
+      "Cortina"
+    ]
+  },
+  {
+    "cat": "general",
+    "word": "Puerta",
+    "forbidden": [
+      "Entrada",
+      "Casa",
+      "Abrir",
+      "Cerradura",
+      "Salir"
+    ]
+  },
+  {
+    "cat": "general",
+    "word": "Almohada",
+    "forbidden": [
+      "Dormir",
+      "Cama",
+      "Cabeza",
+      "Suave",
+      "Noche"
+    ]
+  },
+  {
+    "cat": "general",
+    "word": "Cobija",
+    "forbidden": [
+      "Frío",
+      "Cama",
+      "Dormir",
+      "Calor",
+      "Manta"
+    ]
+  },
+  {
+    "cat": "general",
+    "word": "Linterna",
+    "forbidden": [
+      "Luz",
+      "Oscuridad",
+      "Pilas",
+      "Camping",
+      "Iluminar"
+    ]
+  },
+  {
+    "cat": "general",
+    "word": "Martillo",
+    "forbidden": [
+      "Clavo",
+      "Golpear",
+      "Herramienta",
+      "Construcción",
+      "Madera"
+    ]
+  },
+  {
+    "cat": "general",
+    "word": "Destornillador",
+    "forbidden": [
+      "Tornillo",
+      "Herramienta",
+      "Girar",
+      "Phillips",
+      "Reparar"
+    ]
+  },
+  {
+    "cat": "general",
+    "word": "Regla",
+    "forbidden": [
+      "Medir",
+      "Centímetros",
+      "Línea",
+      "Colegio",
+      "Longitud"
+    ]
+  },
+  {
+    "cat": "general",
+    "word": "Cuaderno",
+    "forbidden": [
+      "Hojas",
+      "Escribir",
+      "Colegio",
+      "Notas",
+      "Lápiz"
+    ]
+  },
+  {
+    "cat": "general",
+    "word": "Lápiz",
+    "forbidden": [
+      "Escribir",
+      "Grafito",
+      "Borrador",
+      "Punta",
+      "Colegio"
+    ]
+  },
+  {
+    "cat": "general",
+    "word": "Borrador",
+    "forbidden": [
+      "Lápiz",
+      "Goma",
+      "Borrar",
+      "Colegio",
+      "Escribir"
+    ]
+  },
+  {
+    "cat": "general",
+    "word": "Pizarra",
+    "forbidden": [
+      "Tiza",
+      "Colegio",
+      "Escribir",
+      "Clase",
+      "Negra"
+    ]
+  },
+  {
+    "cat": "general",
+    "word": "Escritorio",
+    "forbidden": [
+      "Mesa",
+      "Computador",
+      "Oficina",
+      "Silla",
+      "Trabajar"
+    ]
+  },
+  {
+    "cat": "general",
+    "word": "Silla",
+    "forbidden": [
+      "Sentarse",
+      "Mesa",
+      "Espalda",
+      "Cuatro patas",
+      "Mueble"
+    ]
+  },
+  {
+    "cat": "general",
+    "word": "Sofá",
+    "forbidden": [
+      "Sala",
+      "Sentarse",
+      "Cojines",
+      "Televisión",
+      "Mueble"
+    ]
+  },
+  {
+    "cat": "general",
+    "word": "Alfombra",
+    "forbidden": [
+      "Piso",
+      "Casa",
+      "Tapete",
+      "Caminar",
+      "Decoración"
+    ]
+  },
+  {
+    "cat": "general",
+    "word": "Cortina",
+    "forbidden": [
+      "Ventana",
+      "Tela",
+      "Casa",
+      "Privacidad",
+      "Abrir"
+    ]
+  },
+  {
+    "cat": "general",
+    "word": "Vela",
+    "forbidden": [
+      "Fuego",
+      "Cera",
+      "Luz",
+      "Cumpleaños",
+      "Encender"
+    ]
+  },
+  {
+    "cat": "general",
+    "word": "Fósforo",
+    "forbidden": [
+      "Fuego",
+      "Caja",
+      "Encender",
+      "Cerilla",
+      "Humo"
+    ]
+  },
+  {
+    "cat": "general",
+    "word": "Parlante",
+    "forbidden": [
+      "Música",
+      "Sonido",
+      "Bluetooth",
+      "Audio",
+      "Bocina"
+    ]
+  },
+  {
+    "cat": "general",
+    "word": "Auriculares",
+    "forbidden": [
+      "Música",
+      "Oídos",
+      "Escuchar",
+      "Cable",
+      "Bluetooth"
+    ]
+  },
+  {
+    "cat": "general",
+    "word": "Cargador",
+    "forbidden": [
+      "Celular",
+      "Batería",
+      "Cable",
+      "Electricidad",
+      "Conectar"
+    ]
+  },
+  {
+    "cat": "general",
+    "word": "Enchufe",
+    "forbidden": [
+      "Electricidad",
+      "Pared",
+      "Tomacorriente",
+      "Cable",
+      "Conectar"
+    ]
+  },
+  {
+    "cat": "general",
+    "word": "Ventilador",
+    "forbidden": [
+      "Aire",
+      "Calor",
+      "Aspas",
+      "Girar",
+      "Enfriar"
+    ]
+  },
+  {
+    "cat": "general",
+    "word": "Nevera",
+    "forbidden": [
+      "Frío",
+      "Comida",
+      "Cocina",
+      "Hielo",
+      "Electrodoméstico"
+    ]
+  },
+  {
+    "cat": "general",
+    "word": "Lavadora",
+    "forbidden": [
+      "Ropa",
+      "Agua",
+      "Jabón",
+      "Centrifugar",
+      "Casa"
+    ]
+  },
+  {
+    "cat": "general",
+    "word": "Ducha",
+    "forbidden": [
+      "Baño",
+      "Agua",
+      "Bañarse",
+      "Jabón",
+      "Cabello"
+    ]
+  },
+  {
+    "cat": "general",
+    "word": "Toalla",
+    "forbidden": [
+      "Secar",
+      "Baño",
+      "Agua",
+      "Cuerpo",
+      "Tela"
+    ]
+  },
+  {
+    "cat": "general",
+    "word": "Peine",
+    "forbidden": [
+      "Cabello",
+      "Peinar",
+      "Púas",
+      "Cabeza",
+      "Cepillo"
+    ]
+  },
+  {
+    "cat": "general",
+    "word": "Esponja",
+    "forbidden": [
+      "Lavar",
+      "Agua",
+      "Jabón",
+      "Limpiar",
+      "Cocina"
+    ]
+  },
+  {
+    "cat": "general",
+    "word": "Escoba",
+    "forbidden": [
+      "Barrer",
+      "Piso",
+      "Basura",
+      "Casa",
+      "Limpiar"
+    ]
+  },
+  {
+    "cat": "general",
+    "word": "Trapeador",
+    "forbidden": [
+      "Piso",
+      "Agua",
+      "Limpiar",
+      "Balde",
+      "Casa"
+    ]
+  },
+  {
+    "cat": "general",
+    "word": "Balde",
+    "forbidden": [
+      "Agua",
+      "Plástico",
+      "Llenar",
+      "Limpiar",
+      "Asa"
+    ]
+  },
+  {
+    "cat": "general",
+    "word": "Candado",
+    "forbidden": [
+      "Llave",
+      "Cerrar",
+      "Seguridad",
+      "Puerta",
+      "Metal"
+    ]
+  },
+  {
+    "cat": "general",
+    "word": "Maleta",
+    "forbidden": [
+      "Viaje",
+      "Ropa",
+      "Aeropuerto",
+      "Equipaje",
+      "Cremallera"
+    ]
+  },
+  {
+    "cat": "comida",
+    "word": "Sancocho",
+    "forbidden": [
+      "Sopa",
+      "Plátano",
+      "Yuca",
+      "Carne",
+      "Colombia"
+    ]
+  },
+  {
+    "cat": "comida",
+    "word": "Ajiaco",
+    "forbidden": [
+      "Bogotá",
+      "Sopa",
+      "Papa",
+      "Pollo",
+      "Guascas"
+    ]
+  },
+  {
+    "cat": "comida",
+    "word": "Tamales",
+    "forbidden": [
+      "Masa",
+      "Hoja",
+      "Pollo",
+      "Desayuno",
+      "Colombia"
+    ]
+  },
+  {
+    "cat": "comida",
+    "word": "Patacón",
+    "forbidden": [
+      "Plátano",
+      "Frito",
+      "Verde",
+      "Costa",
+      "Aplastar"
+    ]
+  },
+  {
+    "cat": "comida",
+    "word": "Buñuelo",
+    "forbidden": [
+      "Queso",
+      "Navidad",
+      "Frito",
+      "Masa",
+      "Redondo"
+    ]
+  },
+  {
+    "cat": "comida",
+    "word": "Pandebono",
+    "forbidden": [
+      "Queso",
+      "Maíz",
+      "Pan",
+      "Cali",
+      "Hornear"
+    ]
+  },
+  {
+    "cat": "comida",
+    "word": "Almojábana",
+    "forbidden": [
+      "Queso",
+      "Pan",
+      "Maíz",
+      "Hornear",
+      "Merienda"
+    ]
+  },
+  {
+    "cat": "comida",
+    "word": "Avena",
+    "forbidden": [
+      "Leche",
+      "Desayuno",
+      "Cereal",
+      "Bebida",
+      "Canela"
+    ]
+  },
+  {
+    "cat": "comida",
+    "word": "Limonada",
+    "forbidden": [
+      "Limón",
+      "Agua",
+      "Azúcar",
+      "Bebida",
+      "Fría"
+    ]
+  },
+  {
+    "cat": "comida",
+    "word": "Mango",
+    "forbidden": [
+      "Fruta",
+      "Amarillo",
+      "Dulce",
+      "Árbol",
+      "Tropical"
+    ]
+  },
+  {
+    "cat": "comida",
+    "word": "Piña",
+    "forbidden": [
+      "Fruta",
+      "Tropical",
+      "Corona",
+      "Amarilla",
+      "Ácida"
+    ]
+  },
+  {
+    "cat": "comida",
+    "word": "Sandía",
+    "forbidden": [
+      "Fruta",
+      "Roja",
+      "Semillas",
+      "Verano",
+      "Verde"
+    ]
+  },
+  {
+    "cat": "comida",
+    "word": "Fresa",
+    "forbidden": [
+      "Fruta",
+      "Roja",
+      "Pequeña",
+      "Dulce",
+      "Crema"
+    ]
+  },
+  {
+    "cat": "comida",
+    "word": "Uva",
+    "forbidden": [
+      "Fruta",
+      "Racimo",
+      "Vino",
+      "Morada",
+      "Semillas"
+    ]
+  },
+  {
+    "cat": "comida",
+    "word": "Naranja",
+    "forbidden": [
+      "Fruta",
+      "Jugo",
+      "Cítrica",
+      "Vitamina C",
+      "Árbol"
+    ]
+  },
+  {
+    "cat": "comida",
+    "word": "Papaya",
+    "forbidden": [
+      "Fruta",
+      "Naranja",
+      "Semillas",
+      "Tropical",
+      "Desayuno"
+    ]
+  },
+  {
+    "cat": "comida",
+    "word": "Maracuyá",
+    "forbidden": [
+      "Fruta",
+      "Ácida",
+      "Jugo",
+      "Semillas",
+      "Amarillo"
+    ]
+  },
+  {
+    "cat": "comida",
+    "word": "Guayaba",
+    "forbidden": [
+      "Fruta",
+      "Rosada",
+      "Dulce",
+      "Bocadillo",
+      "Árbol"
+    ]
+  },
+  {
+    "cat": "comida",
+    "word": "Mazamorra",
+    "forbidden": [
+      "Maíz",
+      "Leche",
+      "Postre",
+      "Blanca",
+      "Colombia"
+    ]
+  },
+  {
+    "cat": "comida",
+    "word": "Natilla",
+    "forbidden": [
+      "Navidad",
+      "Postre",
+      "Canela",
+      "Leche",
+      "Dulce"
+    ]
+  },
+  {
+    "cat": "comida",
+    "word": "Flan",
+    "forbidden": [
+      "Postre",
+      "Huevo",
+      "Caramelo",
+      "Leche",
+      "Molde"
+    ]
+  },
+  {
+    "cat": "comida",
+    "word": "Brownie",
+    "forbidden": [
+      "Chocolate",
+      "Postre",
+      "Horno",
+      "Cuadrado",
+      "Dulce"
+    ]
+  },
+  {
+    "cat": "comida",
+    "word": "Torta",
+    "forbidden": [
+      "Cumpleaños",
+      "Pastel",
+      "Velas",
+      "Horno",
+      "Crema"
+    ]
+  },
+  {
+    "cat": "comida",
+    "word": "Palomitas",
+    "forbidden": [
+      "Maíz",
+      "Cine",
+      "Mantequilla",
+      "Sal",
+      "Estallar"
+    ]
+  },
+  {
+    "cat": "comida",
+    "word": "Nachos",
+    "forbidden": [
+      "Maíz",
+      "Queso",
+      "Totopos",
+      "Salsa",
+      "México"
+    ]
+  },
+  {
+    "cat": "comida",
+    "word": "Burrito",
+    "forbidden": [
+      "México",
+      "Tortilla",
+      "Arroz",
+      "Frijoles",
+      "Enrollado"
+    ]
+  },
+  {
+    "cat": "comida",
+    "word": "Pasta",
+    "forbidden": [
+      "Italia",
+      "Espagueti",
+      "Salsa",
+      "Harina",
+      "Fideos"
+    ]
+  },
+  {
+    "cat": "comida",
+    "word": "Lasaña",
+    "forbidden": [
+      "Pasta",
+      "Capas",
+      "Queso",
+      "Carne",
+      "Horno"
+    ]
+  },
+  {
+    "cat": "comida",
+    "word": "Panqueque",
+    "forbidden": [
+      "Harina",
+      "Desayuno",
+      "Sartén",
+      "Miel",
+      "Redondo"
+    ]
+  },
+  {
+    "cat": "comida",
+    "word": "Waffle",
+    "forbidden": [
+      "Desayuno",
+      "Cuadrícula",
+      "Harina",
+      "Sirope",
+      "Dulce"
+    ]
+  },
+  {
+    "cat": "comida",
+    "word": "Cereal",
+    "forbidden": [
+      "Leche",
+      "Desayuno",
+      "Caja",
+      "Granos",
+      "Tazón"
+    ]
+  },
+  {
+    "cat": "comida",
+    "word": "Yogur",
+    "forbidden": [
+      "Leche",
+      "Frío",
+      "Desayuno",
+      "Probióticos",
+      "Vaso"
+    ]
+  },
+  {
+    "cat": "comida",
+    "word": "Gelatina",
+    "forbidden": [
+      "Postre",
+      "Frío",
+      "Temblar",
+      "Molde",
+      "Dulce"
+    ]
+  },
+  {
+    "cat": "comida",
+    "word": "Paleta",
+    "forbidden": [
+      "Helado",
+      "Palo",
+      "Dulce",
+      "Fría",
+      "Caramelo"
+    ]
+  },
+  {
+    "cat": "comida",
+    "word": "Churro",
+    "forbidden": [
+      "Frito",
+      "Azúcar",
+      "Masa",
+      "Canela",
+      "Dulce"
+    ]
+  },
+  {
+    "cat": "comida",
+    "word": "Croissant",
+    "forbidden": [
+      "Francia",
+      "Pan",
+      "Mantequilla",
+      "Hojaldre",
+      "Desayuno"
+    ]
+  },
+  {
+    "cat": "comida",
+    "word": "Ravioli",
+    "forbidden": [
+      "Pasta",
+      "Relleno",
+      "Italia",
+      "Salsa",
+      "Cuadrado"
+    ]
+  },
+  {
+    "cat": "cine",
+    "word": "Actor",
+    "forbidden": [
+      "Película",
+      "Personaje",
+      "Cámara",
+      "Hollywood",
+      "Interpretar"
+    ]
+  },
+  {
+    "cat": "cine",
+    "word": "Actriz",
+    "forbidden": [
+      "Película",
+      "Personaje",
+      "Cámara",
+      "Hollywood",
+      "Interpretar"
+    ]
+  },
+  {
+    "cat": "cine",
+    "word": "Director",
+    "forbidden": [
+      "Película",
+      "Rodaje",
+      "Cámara",
+      "Escena",
+      "Filmar"
+    ]
+  },
+  {
+    "cat": "cine",
+    "word": "Guion",
+    "forbidden": [
+      "Historia",
+      "Diálogo",
+      "Película",
+      "Escribir",
+      "Escena"
+    ]
+  },
+  {
+    "cat": "cine",
+    "word": "Escena",
+    "forbidden": [
+      "Película",
+      "Actores",
+      "Rodaje",
+      "Momento",
+      "Cámara"
+    ]
+  },
+  {
+    "cat": "cine",
+    "word": "Tráiler",
+    "forbidden": [
+      "Avance",
+      "Película",
+      "Video",
+      "Estreno",
+      "Cine"
+    ]
+  },
+  {
+    "cat": "cine",
+    "word": "Estreno",
+    "forbidden": [
+      "Película",
+      "Fecha",
+      "Cine",
+      "Primera vez",
+      "Lanzamiento"
+    ]
+  },
+  {
+    "cat": "cine",
+    "word": "Taquilla",
+    "forbidden": [
+      "Cine",
+      "Entradas",
+      "Dinero",
+      "Película",
+      "Recaudo"
+    ]
+  },
+  {
+    "cat": "cine",
+    "word": "Oscar",
+    "forbidden": [
+      "Premio",
+      "Estatuilla",
+      "Hollywood",
+      "Academia",
+      "Cine"
+    ]
+  },
+  {
+    "cat": "cine",
+    "word": "Proyector",
+    "forbidden": [
+      "Pantalla",
+      "Película",
+      "Luz",
+      "Sala",
+      "Imagen"
+    ]
+  },
+  {
+    "cat": "cine",
+    "word": "Subtítulos",
+    "forbidden": [
+      "Texto",
+      "Idioma",
+      "Pantalla",
+      "Diálogo",
+      "Traducir"
+    ]
+  },
+  {
+    "cat": "cine",
+    "word": "Doblaje",
+    "forbidden": [
+      "Voz",
+      "Idioma",
+      "Película",
+      "Actores",
+      "Audio"
+    ]
+  },
+  {
+    "cat": "cine",
+    "word": "Villano",
+    "forbidden": [
+      "Malo",
+      "Héroe",
+      "Enemigo",
+      "Película",
+      "Malvado"
+    ]
+  },
+  {
+    "cat": "cine",
+    "word": "Héroe",
+    "forbidden": [
+      "Bueno",
+      "Villano",
+      "Salvar",
+      "Personaje",
+      "Poderes"
+    ]
+  },
+  {
+    "cat": "cine",
+    "word": "Superhéroe",
+    "forbidden": [
+      "Capa",
+      "Poderes",
+      "Héroe",
+      "Marvel",
+      "DC"
+    ]
+  },
+  {
+    "cat": "cine",
+    "word": "Comedia",
+    "forbidden": [
+      "Risa",
+      "Humor",
+      "Película",
+      "Chistes",
+      "Género"
+    ]
+  },
+  {
+    "cat": "cine",
+    "word": "Terror",
+    "forbidden": [
+      "Miedo",
+      "Monstruo",
+      "Susto",
+      "Película",
+      "Oscuridad"
+    ]
+  },
+  {
+    "cat": "cine",
+    "word": "Romance",
+    "forbidden": [
+      "Amor",
+      "Pareja",
+      "Beso",
+      "Película",
+      "Corazón"
+    ]
+  },
+  {
+    "cat": "cine",
+    "word": "Acción",
+    "forbidden": [
+      "Peleas",
+      "Explosiones",
+      "Héroe",
+      "Película",
+      "Adrenalina"
+    ]
+  },
+  {
+    "cat": "cine",
+    "word": "Animación",
+    "forbidden": [
+      "Dibujos",
+      "Personajes",
+      "Película",
+      "Caricatura",
+      "Digital"
+    ]
+  },
+  {
+    "cat": "cine",
+    "word": "Documental",
+    "forbidden": [
+      "Real",
+      "Historia",
+      "Información",
+      "Cámara",
+      "Película"
+    ]
+  },
+  {
+    "cat": "cine",
+    "word": "Secuela",
+    "forbidden": [
+      "Segunda",
+      "Película",
+      "Continuación",
+      "Saga",
+      "Historia"
+    ]
+  },
+  {
+    "cat": "cine",
+    "word": "Remake",
+    "forbidden": [
+      "Nueva versión",
+      "Película",
+      "Original",
+      "Rehacer",
+      "Adaptación"
+    ]
+  },
+  {
+    "cat": "cine",
+    "word": "Saga",
+    "forbidden": [
+      "Películas",
+      "Historia",
+      "Secuelas",
+      "Franquicia",
+      "Capítulos"
+    ]
+  },
+  {
+    "cat": "cine",
+    "word": "Franquicia",
+    "forbidden": [
+      "Saga",
+      "Marca",
+      "Películas",
+      "Personajes",
+      "Serie"
+    ]
+  },
+  {
+    "cat": "cine",
+    "word": "Cortometraje",
+    "forbidden": [
+      "Corto",
+      "Película",
+      "Minutos",
+      "Historia",
+      "Cine"
+    ]
+  },
+  {
+    "cat": "cine",
+    "word": "Cineasta",
+    "forbidden": [
+      "Director",
+      "Película",
+      "Rodaje",
+      "Cámara",
+      "Filmación"
+    ]
+  },
+  {
+    "cat": "cine",
+    "word": "Guionista",
+    "forbidden": [
+      "Guion",
+      "Escribir",
+      "Diálogo",
+      "Película",
+      "Historia"
+    ]
+  },
+  {
+    "cat": "cine",
+    "word": "Productor",
+    "forbidden": [
+      "Dinero",
+      "Película",
+      "Producción",
+      "Rodaje",
+      "Estudio"
+    ]
+  },
+  {
+    "cat": "cine",
+    "word": "Casting",
+    "forbidden": [
+      "Audición",
+      "Actores",
+      "Personajes",
+      "Prueba",
+      "Director"
+    ]
+  },
+  {
+    "cat": "cine",
+    "word": "Audición",
+    "forbidden": [
+      "Prueba",
+      "Actor",
+      "Casting",
+      "Papel",
+      "Personaje"
+    ]
+  },
+  {
+    "cat": "cine",
+    "word": "Fotograma",
+    "forbidden": [
+      "Imagen",
+      "Película",
+      "Cuadro",
+      "Cámara",
+      "Video"
+    ]
+  },
+  {
+    "cat": "cine",
+    "word": "Plano",
+    "forbidden": [
+      "Cámara",
+      "Escena",
+      "Filmación",
+      "Imagen",
+      "Encuadre"
+    ]
+  },
+  {
+    "cat": "cine",
+    "word": "Maquillaje",
+    "forbidden": [
+      "Actor",
+      "Cara",
+      "Cine",
+      "Caracterización",
+      "Pintura"
+    ]
+  },
+  {
+    "cat": "cine",
+    "word": "Vestuario",
+    "forbidden": [
+      "Ropa",
+      "Actor",
+      "Personaje",
+      "Cine",
+      "Traje"
+    ]
+  },
+  {
+    "cat": "cine",
+    "word": "Claqueta",
+    "forbidden": [
+      "Rodaje",
+      "Cámara",
+      "Acción",
+      "Director",
+      "Escena"
+    ]
+  },
+  {
+    "cat": "cine",
+    "word": "Cinematografía",
+    "forbidden": [
+      "Imagen",
+      "Cámara",
+      "Luz",
+      "Película",
+      "Director"
+    ]
+  },
+  {
+    "cat": "cine",
+    "word": "Montaje",
+    "forbidden": [
+      "Editar",
+      "Cortes",
+      "Película",
+      "Video",
+      "Escenas"
+    ]
+  },
+  {
+    "cat": "internet",
+    "word": "Router",
+    "forbidden": [
+      "Internet",
+      "Red",
+      "Señal",
+      "Conexión",
+      "Antena"
+    ]
+  },
+  {
+    "cat": "internet",
+    "word": "Contraseña",
+    "forbidden": [
+      "Clave",
+      "Cuenta",
+      "Seguridad",
+      "Login",
+      "Acceso"
+    ]
+  },
+  {
+    "cat": "internet",
+    "word": "Usuario",
+    "forbidden": [
+      "Cuenta",
+      "Nombre",
+      "Perfil",
+      "Login",
+      "Persona"
+    ]
+  },
+  {
+    "cat": "internet",
+    "word": "Perfil",
+    "forbidden": [
+      "Cuenta",
+      "Foto",
+      "Usuario",
+      "Red social",
+      "Información"
+    ]
+  },
+  {
+    "cat": "internet",
+    "word": "Comentario",
+    "forbidden": [
+      "Escribir",
+      "Publicación",
+      "Opinión",
+      "Red social",
+      "Texto"
+    ]
+  },
+  {
+    "cat": "internet",
+    "word": "Publicación",
+    "forbidden": [
+      "Red social",
+      "Foto",
+      "Texto",
+      "Compartir",
+      "Perfil"
+    ]
+  },
+  {
+    "cat": "internet",
+    "word": "Notificación",
+    "forbidden": [
+      "Alerta",
+      "Celular",
+      "Mensaje",
+      "Aviso",
+      "Aplicación"
+    ]
+  },
+  {
+    "cat": "internet",
+    "word": "Hashtag",
+    "forbidden": [
+      "Almohadilla",
+      "Etiqueta",
+      "Red social",
+      "Tendencia",
+      "Publicación"
+    ]
+  },
+  {
+    "cat": "internet",
+    "word": "Reel",
+    "forbidden": [
+      "Instagram",
+      "Video",
+      "Corto",
+      "Red social",
+      "Deslizar"
+    ]
+  },
+  {
+    "cat": "internet",
+    "word": "Podcast",
+    "forbidden": [
+      "Audio",
+      "Episodio",
+      "Micrófono",
+      "Programa",
+      "Spotify"
+    ]
+  },
+  {
+    "cat": "internet",
+    "word": "Blog",
+    "forbidden": [
+      "Artículo",
+      "Web",
+      "Escribir",
+      "Publicación",
+      "Página"
+    ]
+  },
+  {
+    "cat": "internet",
+    "word": "Foro",
+    "forbidden": [
+      "Internet",
+      "Preguntas",
+      "Comunidad",
+      "Debate",
+      "Usuarios"
+    ]
+  },
+  {
+    "cat": "internet",
+    "word": "Chat",
+    "forbidden": [
+      "Mensaje",
+      "Conversación",
+      "Internet",
+      "Escribir",
+      "Tiempo real"
+    ]
+  },
+  {
+    "cat": "internet",
+    "word": "Videollamada",
+    "forbidden": [
+      "Cámara",
+      "Llamada",
+      "Internet",
+      "Pantalla",
+      "Zoom"
+    ]
+  },
+  {
+    "cat": "internet",
+    "word": "Spam",
+    "forbidden": [
+      "Correo",
+      "Publicidad",
+      "Basura",
+      "Mensajes",
+      "Indeseado"
+    ]
+  },
+  {
+    "cat": "internet",
+    "word": "Enlace",
+    "forbidden": [
+      "URL",
+      "Página",
+      "Clic",
+      "Internet",
+      "Dirección"
+    ]
+  },
+  {
+    "cat": "internet",
+    "word": "Navegador",
+    "forbidden": [
+      "Chrome",
+      "Web",
+      "Internet",
+      "Pestaña",
+      "Buscar"
+    ]
+  },
+  {
+    "cat": "internet",
+    "word": "Pestaña",
+    "forbidden": [
+      "Navegador",
+      "Ventana",
+      "Abrir",
+      "Web",
+      "Chrome"
+    ]
+  },
+  {
+    "cat": "internet",
+    "word": "Buscador",
+    "forbidden": [
+      "Google",
+      "Buscar",
+      "Internet",
+      "Resultados",
+      "Consulta"
+    ]
+  },
+  {
+    "cat": "internet",
+    "word": "Aplicación",
+    "forbidden": [
+      "App",
+      "Celular",
+      "Programa",
+      "Instalar",
+      "Software"
+    ]
+  },
+  {
+    "cat": "internet",
+    "word": "Descarga",
+    "forbidden": [
+      "Archivo",
+      "Internet",
+      "Bajar",
+      "Guardar",
+      "Computador"
+    ]
+  },
+  {
+    "cat": "internet",
+    "word": "Nube",
+    "forbidden": [
+      "Internet",
+      "Archivos",
+      "Guardar",
+      "Servidor",
+      "Online"
+    ]
+  },
+  {
+    "cat": "internet",
+    "word": "Servidor",
+    "forbidden": [
+      "Computador",
+      "Web",
+      "Datos",
+      "Internet",
+      "Alojamiento"
+    ]
+  },
+  {
+    "cat": "internet",
+    "word": "GPS",
+    "forbidden": [
+      "Ubicación",
+      "Mapa",
+      "Satélite",
+      "Ruta",
+      "Celular"
+    ]
+  },
+  {
+    "cat": "internet",
+    "word": "GIF",
+    "forbidden": [
+      "Animación",
+      "Imagen",
+      "Internet",
+      "Bucle",
+      "Video"
+    ]
+  },
+  {
+    "cat": "internet",
+    "word": "Seguidor",
+    "forbidden": [
+      "Instagram",
+      "Red social",
+      "Persona",
+      "Follow",
+      "Cuenta"
+    ]
+  },
+  {
+    "cat": "internet",
+    "word": "Suscripción",
+    "forbidden": [
+      "Pagar",
+      "Mensual",
+      "Servicio",
+      "Cuenta",
+      "Premium"
+    ]
+  },
+  {
+    "cat": "internet",
+    "word": "Algoritmo",
+    "forbidden": [
+      "Computador",
+      "Datos",
+      "Reglas",
+      "Redes",
+      "Recomendación"
+    ]
+  },
+  {
+    "cat": "internet",
+    "word": "Dominio",
+    "forbidden": [
+      "Web",
+      "Dirección",
+      "Página",
+      "URL",
+      "Internet"
+    ]
+  },
+  {
+    "cat": "internet",
+    "word": "Cookie",
+    "forbidden": [
+      "Navegador",
+      "Web",
+      "Datos",
+      "Sitio",
+      "Privacidad"
+    ]
+  },
+  {
+    "cat": "internet",
+    "word": "Firewall",
+    "forbidden": [
+      "Seguridad",
+      "Red",
+      "Bloquear",
+      "Protección",
+      "Internet"
+    ]
+  },
+  {
+    "cat": "internet",
+    "word": "Actualización",
+    "forbidden": [
+      "Software",
+      "Nueva versión",
+      "Aplicación",
+      "Instalar",
+      "Mejora"
+    ]
+  },
+  {
+    "cat": "familia",
+    "word": "Hija",
+    "forbidden": [
+      "Padres",
+      "Niña",
+      "Familia",
+      "Descendiente",
+      "Casa"
+    ]
+  },
+  {
+    "cat": "familia",
+    "word": "Hermana",
+    "forbidden": [
+      "Familia",
+      "Misma madre",
+      "Mujer",
+      "Hermanos",
+      "Casa"
+    ]
+  },
+  {
+    "cat": "familia",
+    "word": "Abuela",
+    "forbidden": [
+      "Madre",
+      "Anciana",
+      "Nietos",
+      "Familia",
+      "Mamá"
+    ]
+  },
+  {
+    "cat": "familia",
+    "word": "Tío",
+    "forbidden": [
+      "Hermano",
+      "Padres",
+      "Sobrino",
+      "Familia",
+      "Pariente"
+    ]
+  },
+  {
+    "cat": "familia",
+    "word": "Tía",
+    "forbidden": [
+      "Hermana",
+      "Padres",
+      "Sobrino",
+      "Familia",
+      "Pariente"
+    ]
+  },
+  {
+    "cat": "familia",
+    "word": "Primo",
+    "forbidden": [
+      "Familia",
+      "Tío",
+      "Pariente",
+      "Mismo abuelo",
+      "Hermano"
+    ]
+  },
+  {
+    "cat": "familia",
+    "word": "Prima",
+    "forbidden": [
+      "Familia",
+      "Tía",
+      "Pariente",
+      "Mismo abuelo",
+      "Hermana"
+    ]
+  },
+  {
+    "cat": "familia",
+    "word": "Sobrino",
+    "forbidden": [
+      "Tío",
+      "Hermano",
+      "Hijo",
+      "Familia",
+      "Pariente"
+    ]
+  },
+  {
+    "cat": "familia",
+    "word": "Sobrina",
+    "forbidden": [
+      "Tía",
+      "Hermana",
+      "Hija",
+      "Familia",
+      "Pariente"
+    ]
+  },
+  {
+    "cat": "familia",
+    "word": "Nieto",
+    "forbidden": [
+      "Abuelo",
+      "Hijo",
+      "Familia",
+      "Descendiente",
+      "Anciano"
+    ]
+  },
+  {
+    "cat": "familia",
+    "word": "Nieta",
+    "forbidden": [
+      "Abuela",
+      "Hija",
+      "Familia",
+      "Descendiente",
+      "Anciana"
+    ]
+  },
+  {
+    "cat": "familia",
+    "word": "Adolescente",
+    "forbidden": [
+      "Joven",
+      "Colegio",
+      "Edad",
+      "Pubertad",
+      "Familia"
+    ]
+  },
+  {
+    "cat": "familia",
+    "word": "Esposo",
+    "forbidden": [
+      "Marido",
+      "Pareja",
+      "Hombre",
+      "Matrimonio",
+      "Anillo"
+    ]
+  },
+  {
+    "cat": "familia",
+    "word": "Esposa",
+    "forbidden": [
+      "Mujer",
+      "Pareja",
+      "Matrimonio",
+      "Anillo",
+      "Marido"
+    ]
+  },
+  {
+    "cat": "familia",
+    "word": "Novio",
+    "forbidden": [
+      "Pareja",
+      "Hombre",
+      "Amor",
+      "Beso",
+      "Relación"
+    ]
+  },
+  {
+    "cat": "familia",
+    "word": "Novia",
+    "forbidden": [
+      "Pareja",
+      "Mujer",
+      "Amor",
+      "Beso",
+      "Relación"
+    ]
+  },
+  {
+    "cat": "familia",
+    "word": "Suegro",
+    "forbidden": [
+      "Esposo",
+      "Padre",
+      "Pareja",
+      "Familia",
+      "Yerno"
+    ]
+  },
+  {
+    "cat": "familia",
+    "word": "Suegra",
+    "forbidden": [
+      "Esposa",
+      "Madre",
+      "Pareja",
+      "Familia",
+      "Nuera"
+    ]
+  },
+  {
+    "cat": "familia",
+    "word": "Yerno",
+    "forbidden": [
+      "Esposo",
+      "Hija",
+      "Suegro",
+      "Familia",
+      "Matrimonio"
+    ]
+  },
+  {
+    "cat": "familia",
+    "word": "Nuera",
+    "forbidden": [
+      "Esposa",
+      "Hijo",
+      "Suegra",
+      "Familia",
+      "Matrimonio"
+    ]
+  },
+  {
+    "cat": "familia",
+    "word": "Cuñado",
+    "forbidden": [
+      "Hermana",
+      "Esposa",
+      "Hermano",
+      "Familia",
+      "Pariente"
+    ]
+  },
+  {
+    "cat": "familia",
+    "word": "Cuñada",
+    "forbidden": [
+      "Hermano",
+      "Esposa",
+      "Hermana",
+      "Familia",
+      "Pariente"
+    ]
+  },
+  {
+    "cat": "familia",
+    "word": "Gemelo",
+    "forbidden": [
+      "Igual",
+      "Hermano",
+      "Nacimiento",
+      "Dos",
+      "Parecido"
+    ]
+  },
+  {
+    "cat": "familia",
+    "word": "Bautizo",
+    "forbidden": [
+      "Iglesia",
+      "Bebé",
+      "Agua",
+      "Ceremonia",
+      "Padrinos"
+    ]
+  },
+  {
+    "cat": "familia",
+    "word": "Boda",
+    "forbidden": [
+      "Matrimonio",
+      "Novios",
+      "Iglesia",
+      "Anillos",
+      "Fiesta"
+    ]
+  },
+  {
+    "cat": "familia",
+    "word": "Aniversario",
+    "forbidden": [
+      "Pareja",
+      "Fecha",
+      "Años",
+      "Celebración",
+      "Matrimonio"
+    ]
+  },
+  {
+    "cat": "familia",
+    "word": "Regalo",
+    "forbidden": [
+      "Cumpleaños",
+      "Caja",
+      "Sorpresa",
+      "Dar",
+      "Navidad"
+    ]
+  },
+  {
+    "cat": "familia",
+    "word": "Padrino",
+    "forbidden": [
+      "Bautizo",
+      "Madrina",
+      "Ceremonia",
+      "Ahijado",
+      "Familia"
+    ]
+  },
+  {
+    "cat": "familia",
+    "word": "Madrina",
+    "forbidden": [
+      "Bautizo",
+      "Padrino",
+      "Ceremonia",
+      "Ahijada",
+      "Familia"
+    ]
+  },
+  {
+    "cat": "familia",
+    "word": "Pariente",
+    "forbidden": [
+      "Familia",
+      "Sangre",
+      "Tío",
+      "Primo",
+      "Persona"
+    ]
+  },
+  {
+    "cat": "familia",
+    "word": "Cuidador",
+    "forbidden": [
+      "Cuidar",
+      "Persona",
+      "Ayuda",
+      "Casa",
+      "Responsable"
+    ]
+  },
+  {
+    "cat": "familia",
+    "word": "Tutor",
+    "forbidden": [
+      "Estudio",
+      "Responsable",
+      "Colegio",
+      "Aprender",
+      "Adulto"
+    ]
+  },
+  {
+    "cat": "familia",
+    "word": "Hogar",
+    "forbidden": [
+      "Casa",
+      "Familia",
+      "Vivir",
+      "Techo",
+      "Lugar"
+    ]
+  },
+  {
+    "cat": "familia",
+    "word": "Parentesco",
+    "forbidden": [
+      "Familia",
+      "Relación",
+      "Sangre",
+      "Pariente",
+      "Vínculo"
+    ]
+  },
+  {
+    "cat": "familia",
+    "word": "Generación",
+    "forbidden": [
+      "Familia",
+      "Años",
+      "Abuelos",
+      "Padres",
+      "Hijos"
+    ]
+  },
+  {
+    "cat": "familia",
+    "word": "Hermanastro",
+    "forbidden": [
+      "Hermano",
+      "Padre",
+      "Madre",
+      "Familia",
+      "Medio"
+    ]
+  },
+  {
+    "cat": "familia",
+    "word": "Padrastro",
+    "forbidden": [
+      "Madre",
+      "Pareja",
+      "Hijo",
+      "Familia",
+      "Esposo"
+    ]
+  },
+  {
+    "cat": "familia",
+    "word": "Madrastra",
+    "forbidden": [
+      "Padre",
+      "Pareja",
+      "Hija",
+      "Familia",
+      "Esposa"
+    ]
+  },
+  {
+    "cat": "colombia",
+    "word": "Bogotá",
+    "forbidden": [
+      "Capital",
+      "Frío",
+      "Colombia",
+      "Monserrate",
+      "Rolo"
+    ]
+  },
+  {
+    "cat": "colombia",
+    "word": "Medellín",
+    "forbidden": [
+      "Antioquia",
+      "Paisa",
+      "Metro",
+      "Flores",
+      "Valle"
+    ]
+  },
+  {
+    "cat": "colombia",
+    "word": "Cali",
+    "forbidden": [
+      "Valle",
+      "Salsa",
+      "Pacífico",
+      "Feria",
+      "Caleño"
+    ]
+  },
+  {
+    "cat": "colombia",
+    "word": "Cartagena",
+    "forbidden": [
+      "Caribe",
+      "Murallas",
+      "Mar",
+      "Turismo",
+      "Bolívar"
+    ]
+  },
+  {
+    "cat": "colombia",
+    "word": "Barranquilla",
+    "forbidden": [
+      "Carnaval",
+      "Caribe",
+      "Atlántico",
+      "Shakira",
+      "Costeño"
+    ]
+  },
+  {
+    "cat": "colombia",
+    "word": "Bucaramanga",
+    "forbidden": [
+      "Santander",
+      "Ciudad Bonita",
+      "Cabecera",
+      "Hormiga",
+      "Santandereano"
+    ]
+  },
+  {
+    "cat": "colombia",
+    "word": "Pereira",
+    "forbidden": [
+      "Risaralda",
+      "Café",
+      "Eje Cafetero",
+      "Matecaña",
+      "Triángulo"
+    ]
+  },
+  {
+    "cat": "colombia",
+    "word": "Manizales",
+    "forbidden": [
+      "Caldas",
+      "Café",
+      "Feria",
+      "Nevado",
+      "Eje Cafetero"
+    ]
+  },
+  {
+    "cat": "colombia",
+    "word": "Armenia",
+    "forbidden": [
+      "Quindío",
+      "Café",
+      "Eje Cafetero",
+      "Quindiano",
+      "Parque"
+    ]
+  },
+  {
+    "cat": "colombia",
+    "word": "Cúcuta",
+    "forbidden": [
+      "Norte de Santander",
+      "Frontera",
+      "Venezuela",
+      "Santander",
+      "Catatumbo"
+    ]
+  },
+  {
+    "cat": "colombia",
+    "word": "Villavicencio",
+    "forbidden": [
+      "Meta",
+      "Llanos",
+      "Joropo",
+      "Puerta",
+      "Oriental"
+    ]
+  },
+  {
+    "cat": "colombia",
+    "word": "Ibagué",
+    "forbidden": [
+      "Tolima",
+      "Música",
+      "Cañón",
+      "Nevado",
+      "Musical"
+    ]
+  },
+  {
+    "cat": "colombia",
+    "word": "Neiva",
+    "forbidden": [
+      "Huila",
+      "San Pedro",
+      "Bambuco",
+      "Magdalena",
+      "Opita"
+    ]
+  },
+  {
+    "cat": "colombia",
+    "word": "Pasto",
+    "forbidden": [
+      "Nariño",
+      "Carnaval",
+      "Negros",
+      "Blancos",
+      "Sur"
+    ]
+  },
+  {
+    "cat": "colombia",
+    "word": "Montería",
+    "forbidden": [
+      "Córdoba",
+      "Sinú",
+      "Ganado",
+      "Río",
+      "Sabanas"
+    ]
+  },
+  {
+    "cat": "colombia",
+    "word": "Valledupar",
+    "forbidden": [
+      "Vallenato",
+      "Cesar",
+      "Festival",
+      "Acordeón",
+      "Caribe"
+    ]
+  },
+  {
+    "cat": "colombia",
+    "word": "Tunja",
+    "forbidden": [
+      "Boyacá",
+      "Frío",
+      "Independencia",
+      "Puente",
+      "Capital"
+    ]
+  },
+  {
+    "cat": "colombia",
+    "word": "Popayán",
+    "forbidden": [
+      "Cauca",
+      "Blanca",
+      "Semana Santa",
+      "Procesiones",
+      "Colonial"
+    ]
+  },
+  {
+    "cat": "colombia",
+    "word": "Riohacha",
+    "forbidden": [
+      "La Guajira",
+      "Caribe",
+      "Mar",
+      "Wayuu",
+      "Desierto"
+    ]
+  },
+  {
+    "cat": "colombia",
+    "word": "Leticia",
+    "forbidden": [
+      "Amazonas",
+      "Río",
+      "Selva",
+      "Brasil",
+      "Perú"
+    ]
+  },
+  {
+    "cat": "colombia",
+    "word": "Buenaventura",
+    "forbidden": [
+      "Pacífico",
+      "Puerto",
+      "Valle",
+      "Mar",
+      "Contenedores"
+    ]
+  },
+  {
+    "cat": "colombia",
+    "word": "Monserrate",
+    "forbidden": [
+      "Bogotá",
+      "Cerro",
+      "Teleférico",
+      "Iglesia",
+      "Virgen"
+    ]
+  },
+  {
+    "cat": "colombia",
+    "word": "Guatapé",
+    "forbidden": [
+      "Antioquia",
+      "Piedra",
+      "Embalse",
+      "Pueblo",
+      "Zócalos"
+    ]
+  },
+  {
+    "cat": "colombia",
+    "word": "Ruana",
+    "forbidden": [
+      "Frío",
+      "Boyacá",
+      "Poncho",
+      "Lana",
+      "Abrigo"
+    ]
+  },
+  {
+    "cat": "colombia",
+    "word": "Chiva",
+    "forbidden": [
+      "Bus",
+      "Colores",
+      "Fiesta",
+      "Pueblo",
+      "Turismo"
+    ]
+  },
+  {
+    "cat": "colombia",
+    "word": "TransMilenio",
+    "forbidden": [
+      "Bogotá",
+      "Bus",
+      "Rojo",
+      "Estación",
+      "Capital"
+    ]
+  },
+  {
+    "cat": "colombia",
+    "word": "Ciclovía",
+    "forbidden": [
+      "Bicicleta",
+      "Domingo",
+      "Calles",
+      "Bogotá",
+      "Deporte"
+    ]
+  },
+  {
+    "cat": "colombia",
+    "word": "Tinto",
+    "forbidden": [
+      "Café",
+      "Negro",
+      "Bebida",
+      "Vaso",
+      "Azúcar"
+    ]
+  },
+  {
+    "cat": "colombia",
+    "word": "Panela",
+    "forbidden": [
+      "Caña",
+      "Dulce",
+      "Agua",
+      "Trapiche",
+      "Colombia"
+    ]
+  },
+  {
+    "cat": "colombia",
+    "word": "Oblea",
+    "forbidden": [
+      "Arequipe",
+      "Dulce",
+      "Redonda",
+      "Galleta",
+      "Crema"
+    ]
+  },
+  {
+    "cat": "colombia",
+    "word": "Chontaduro",
+    "forbidden": [
+      "Fruta",
+      "Pacífico",
+      "Palma",
+      "Amarillo",
+      "Cali"
+    ]
+  },
+  {
+    "cat": "colombia",
+    "word": "Salpicón",
+    "forbidden": [
+      "Fruta",
+      "Jugo",
+      "Rojo",
+      "Vaso",
+      "Dulce"
+    ]
+  },
+  {
+    "cat": "colombia",
+    "word": "Fritanga",
+    "forbidden": [
+      "Carne",
+      "Chicharrón",
+      "Papa",
+      "Comida",
+      "Plato"
+    ]
+  },
+  {
+    "cat": "colombia",
+    "word": "Lechona",
+    "forbidden": [
+      "Cerdo",
+      "Tolima",
+      "Arroz",
+      "Horno",
+      "Fiesta"
+    ]
+  },
+  {
+    "cat": "colombia",
+    "word": "Aguardiente",
+    "forbidden": [
+      "Alcohol",
+      "Licor",
+      "Anís",
+      "Botella",
+      "Fiesta"
+    ]
+  },
+  {
+    "cat": "colombia",
+    "word": "Lulada",
+    "forbidden": [
+      "Lulo",
+      "Bebida",
+      "Cali",
+      "Hielo",
+      "Fruta"
+    ]
+  },
+  {
+    "cat": "colombia",
+    "word": "Milo",
+    "forbidden": [
+      "Chocolate",
+      "Leche",
+      "Bebida",
+      "Polvo",
+      "Nestlé"
+    ]
+  },
+  {
+    "cat": "colombia",
+    "word": "Picó",
+    "forbidden": [
+      "Música",
+      "Costa",
+      "Parlantes",
+      "Baile",
+      "Sonido"
+    ]
+  },
+  {
+    "cat": "colombia",
+    "word": "Carriel",
+    "forbidden": [
+      "Paisa",
+      "Bolso",
+      "Cuero",
+      "Antioquia",
+      "Hombre"
+    ]
+  },
+  {
+    "cat": "colombia",
+    "word": "Parcero",
+    "forbidden": [
+      "Amigo",
+      "Paisa",
+      "Amistad",
+      "Compañero",
+      "Medellín"
+    ]
+  },
+  {
+    "cat": "colombia",
+    "word": "Bacano",
+    "forbidden": [
+      "Bueno",
+      "Genial",
+      "chévere",
+      "Expresión",
+      "Colombia"
+    ]
+  },
+  {
+    "cat": "colombia",
+    "word": "Ñapa",
+    "forbidden": [
+      "Extra",
+      "Regalo",
+      "Tienda",
+      "Vendedor",
+      "Gratis"
+    ]
+  },
+  {
+    "cat": "colombia",
+    "word": "Vaina",
+    "forbidden": [
+      "Cosa",
+      "Problema",
+      "Palabra",
+      "Expresión",
+      "Objeto"
+    ]
+  },
+  {
+    "cat": "colombia",
+    "word": "Rolo",
+    "forbidden": [
+      "Bogotá",
+      "Capital",
+      "Cachaco",
+      "Bogotano",
+      "Ciudad"
+    ]
+  },
+  {
+    "cat": "general",
+    "word": "Brújula",
+    "forbidden": [
+      "Norte",
+      "Dirección",
+      "Mapa",
+      "Orientación",
+      "Aguja"
+    ]
+  },
+  {
+    "cat": "general",
+    "word": "Botella",
+    "forbidden": [
+      "Agua",
+      "Vidrio",
+      "Plástico",
+      "Beber",
+      "Tapa"
+    ]
+  },
+  {
+    "cat": "general",
+    "word": "Termómetro",
+    "forbidden": [
+      "Temperatura",
+      "Grados",
+      "Fiebre",
+      "Calor",
+      "Mercurio"
+    ]
+  },
+  {
+    "cat": "general",
+    "word": "Calendario",
+    "forbidden": [
+      "Fecha",
+      "Mes",
+      "Año",
+      "Día",
+      "Agenda"
+    ]
+  },
+  {
+    "cat": "general",
+    "word": "Imán",
+    "forbidden": [
+      "Metal",
+      "Atraer",
+      "Fuerza",
+      "Polo",
+      "Nevera"
+    ]
+  },
+  {
+    "cat": "general",
+    "word": "Silbato",
+    "forbidden": [
+      "Sonido",
+      "Soplar",
+      "Árbitro",
+      "Boca",
+      "Agudo"
+    ]
+  },
+  {
+    "cat": "general",
+    "word": "Telescopio",
+    "forbidden": [
+      "Estrellas",
+      "Espacio",
+      "Lente",
+      "Astronomía",
+      "Observar"
+    ]
+  },
+  {
+    "cat": "general",
+    "word": "Micrófono",
+    "forbidden": [
+      "Voz",
+      "Cantar",
+      "Sonido",
+      "Grabar",
+      "Cable"
+    ]
+  },
+  {
+    "cat": "general",
+    "word": "Batería",
+    "forbidden": [
+      "Energía",
+      "Carga",
+      "Electricidad",
+      "Celular",
+      "Pilas"
+    ]
+  },
+  {
+    "cat": "general",
+    "word": "Candela",
+    "forbidden": [
+      "Fuego",
+      "Luz",
+      "Cera",
+      "Llama",
+      "Encender"
+    ]
+  },
+  {
+    "cat": "comida",
+    "word": "Mandarina",
+    "forbidden": [
+      "Naranja",
+      "Fruta",
+      "Cáscara",
+      "Jugo",
+      "Gajos"
+    ]
+  },
+  {
+    "cat": "comida",
+    "word": "Pera",
+    "forbidden": [
+      "Fruta",
+      "Verde",
+      "Dulce",
+      "Jugo",
+      "Árbol"
+    ]
+  },
+  {
+    "cat": "comida",
+    "word": "Ciruela",
+    "forbidden": [
+      "Fruta",
+      "Morada",
+      "Semilla",
+      "Dulce",
+      "Árbol"
+    ]
+  },
+  {
+    "cat": "comida",
+    "word": "Durazno",
+    "forbidden": [
+      "Fruta",
+      "Pelusa",
+      "Hueso",
+      "Dulce",
+      "Naranja"
+    ]
+  },
+  {
+    "cat": "comida",
+    "word": "Cebolla",
+    "forbidden": [
+      "Lágrimas",
+      "Cocina",
+      "Blanca",
+      "Morada",
+      "Capas"
+    ]
+  },
+  {
+    "cat": "comida",
+    "word": "Tomate",
+    "forbidden": [
+      "Rojo",
+      "Ensalada",
+      "Salsa",
+      "Verdura",
+      "Semillas"
+    ]
+  },
+  {
+    "cat": "comida",
+    "word": "Zanahoria",
+    "forbidden": [
+      "Naranja",
+      "Conejo",
+      "Verdura",
+      "Raíz",
+      "Ensalada"
+    ]
+  },
+  {
+    "cat": "comida",
+    "word": "Lechuga",
+    "forbidden": [
+      "Ensalada",
+      "Verde",
+      "Hoja",
+      "Verdura",
+      "Tomate"
+    ]
+  },
+  {
+    "cat": "comida",
+    "word": "Pepino",
+    "forbidden": [
+      "Verde",
+      "Ensalada",
+      "Verdura",
+      "Largo",
+      "Fresco"
+    ]
+  },
+  {
+    "cat": "comida",
+    "word": "Calabaza",
+    "forbidden": [
+      "Naranja",
+      "Halloween",
+      "Verdura",
+      "Semillas",
+      "Crema"
+    ]
+  },
+  {
+    "cat": "comida",
+    "word": "Lenteja",
+    "forbidden": [
+      "Legumbre",
+      "Sopa",
+      "Roja",
+      "Grano",
+      "Comida"
+    ]
+  },
+  {
+    "cat": "comida",
+    "word": "Frijol",
+    "forbidden": [
+      "Legumbre",
+      "Sopa",
+      "Rojo",
+      "Grano",
+      "Comida"
+    ]
+  },
+  {
+    "cat": "comida",
+    "word": "Garbanzo",
+    "forbidden": [
+      "Legumbre",
+      "Hummus",
+      "Grano",
+      "Beige",
+      "Sopa"
+    ]
+  },
+  {
+    "cat": "comida",
+    "word": "Remolacha",
+    "forbidden": [
+      "Roja",
+      "Verdura",
+      "Raíz",
+      "Ensalada",
+      "Jugo"
+    ]
+  },
+  {
+    "cat": "cine",
+    "word": "Inception",
+    "forbidden": [
+      "Sueño",
+      "Leonardo",
+      "Mente",
+      "Película",
+      "Realidad"
+    ]
+  },
+  {
+    "cat": "cine",
+    "word": "Gladiador",
+    "forbidden": [
+      "Roma",
+      "Coliseo",
+      "Guerrero",
+      "Russell",
+      "Arena"
+    ]
+  },
+  {
+    "cat": "cine",
+    "word": "Terminator",
+    "forbidden": [
+      "Robot",
+      "Futuro",
+      "Arnold",
+      "Máquina",
+      "Cyborg"
+    ]
+  },
+  {
+    "cat": "cine",
+    "word": "Rocky",
+    "forbidden": [
+      "Boxeo",
+      "Pelea",
+      "Balboa",
+      "Ring",
+      "Guantes"
+    ]
+  },
+  {
+    "cat": "cine",
+    "word": "Coco",
+    "forbidden": [
+      "México",
+      "Música",
+      "Familia",
+      "Muertos",
+      "Miguel"
+    ]
+  },
+  {
+    "cat": "cine",
+    "word": "Encanto",
+    "forbidden": [
+      "Colombia",
+      "Familia",
+      "Magia",
+      "Mirabel",
+      "Casa"
+    ]
+  },
+  {
+    "cat": "cine",
+    "word": "Moana",
+    "forbidden": [
+      "Océano",
+      "Isla",
+      "Disney",
+      "Maui",
+      "Princesa"
+    ]
+  },
+  {
+    "cat": "cine",
+    "word": "Interestelar",
+    "forbidden": [
+      "Espacio",
+      "Nolan",
+      "Planetas",
+      "Astronauta",
+      "Tiempo"
+    ]
+  },
+  {
+    "cat": "cine",
+    "word": "Parasite",
+    "forbidden": [
+      "Corea",
+      "Familia",
+      "Casa",
+      "Oscar",
+      "Película"
+    ]
+  },
+  {
+    "cat": "cine",
+    "word": "Mulan",
+    "forbidden": [
+      "China",
+      "Guerrera",
+      "Disney",
+      "Dragón",
+      "Princesa"
+    ]
+  },
+  {
+    "cat": "internet",
+    "word": "Streaming",
+    "forbidden": [
+      "Video",
+      "Internet",
+      "Series",
+      "Películas",
+      "Plataforma"
+    ]
+  },
+  {
+    "cat": "internet",
+    "word": "Protocolo",
+    "forbidden": [
+      "Red",
+      "Internet",
+      "Regla",
+      "Comunicación",
+      "Datos"
+    ]
+  },
+  {
+    "cat": "internet",
+    "word": "Plataforma",
+    "forbidden": [
+      "Servicio",
+      "Internet",
+      "Página",
+      "Aplicación",
+      "Usuario"
+    ]
+  },
+  {
+    "cat": "internet",
+    "word": "Conexión",
+    "forbidden": [
+      "Internet",
+      "Red",
+      "WiFi",
+      "Señal",
+      "Enlace"
+    ]
+  },
+  {
+    "cat": "internet",
+    "word": "Moderador",
+    "forbidden": [
+      "Foro",
+      "Comentarios",
+      "Reglas",
+      "Usuario",
+      "Control"
+    ]
+  },
+  {
+    "cat": "internet",
+    "word": "Captcha",
+    "forbidden": [
+      "Robot",
+      "Verificación",
+      "Web",
+      "Seguridad",
+      "Imágenes"
+    ]
+  },
+  {
+    "cat": "internet",
+    "word": "Píxel",
+    "forbidden": [
+      "Imagen",
+      "Pantalla",
+      "Color",
+      "Gráfico",
+      "Resolución"
+    ]
+  },
+  {
+    "cat": "internet",
+    "word": "Bit",
+    "forbidden": [
+      "Cero",
+      "Uno",
+      "Datos",
+      "Computador",
+      "Digital"
+    ]
+  },
+  {
+    "cat": "internet",
+    "word": "Tuit",
+    "forbidden": [
+      "Twitter",
+      "Mensaje",
+      "Publicar",
+      "Red",
+      "Texto"
+    ]
+  },
+  {
+    "cat": "internet",
+    "word": "Búsqueda",
+    "forbidden": [
+      "Google",
+      "Buscar",
+      "Internet",
+      "Resultado",
+      "Palabras"
+    ]
+  },
+  {
+    "cat": "internet",
+    "word": "Motor",
+    "forbidden": [
+      "Búsqueda",
+      "Google",
+      "Internet",
+      "Resultados",
+      "Web"
+    ]
+  },
+  {
+    "cat": "internet",
+    "word": "Consola",
+    "forbidden": [
+      "Videojuego",
+      "Control",
+      "Jugar",
+      "Pantalla",
+      "PlayStation"
+    ]
+  },
+  {
+    "cat": "internet",
+    "word": "Código",
+    "forbidden": [
+      "Programar",
+      "Computador",
+      "Lenguaje",
+      "Software",
+      "Líneas"
+    ]
+  },
+  {
+    "cat": "internet",
+    "word": "Etiqueta",
+    "forbidden": [
+      "Hashtag",
+      "Palabra",
+      "Red",
+      "Publicación",
+      "Tema"
+    ]
+  },
+  {
+    "cat": "familia",
+    "word": "Padres",
+    "forbidden": [
+      "Mamá",
+      "Papá",
+      "Hijos",
+      "Familia",
+      "Casa"
+    ]
+  },
+  {
+    "cat": "familia",
+    "word": "Descendiente",
+    "forbidden": [
+      "Familia",
+      "Hijo",
+      "Generación",
+      "Pariente",
+      "Herencia"
+    ]
+  },
+  {
+    "cat": "familia",
+    "word": "Antepasado",
+    "forbidden": [
+      "Familia",
+      "Ancestro",
+      "Pasado",
+      "Generación",
+      "Pariente"
+    ]
+  },
+  {
+    "cat": "familia",
+    "word": "Tatarabuelo",
+    "forbidden": [
+      "Familia",
+      "Abuelo",
+      "Ancestro",
+      "Generación",
+      "Pariente"
+    ]
+  },
+  {
+    "cat": "familia",
+    "word": "Tatarabuela",
+    "forbidden": [
+      "Familia",
+      "Abuela",
+      "Ancestro",
+      "Generación",
+      "Pariente"
+    ]
+  },
+  {
+    "cat": "familia",
+    "word": "Nietos",
+    "forbidden": [
+      "Abuelos",
+      "Hijos",
+      "Familia",
+      "Generación",
+      "Descendientes"
+    ]
+  },
+  {
+    "cat": "familia",
+    "word": "Parientes",
+    "forbidden": [
+      "Familia",
+      "Personas",
+      "Sangre",
+      "Tíos",
+      "Primos"
+    ]
+  },
+  {
+    "cat": "familia",
+    "word": "Consuegro",
+    "forbidden": [
+      "Familia",
+      "Suegro",
+      "Padres",
+      "Hijo",
+      "Boda"
+    ]
+  },
+  {
+    "cat": "familia",
+    "word": "Consuegra",
+    "forbidden": [
+      "Familia",
+      "Suegra",
+      "Padres",
+      "Hija",
+      "Boda"
+    ]
+  },
+  {
+    "cat": "familia",
+    "word": "Primogénito",
+    "forbidden": [
+      "Hijo",
+      "Primero",
+      "Familia",
+      "Nacimiento",
+      "Hermano"
+    ]
+  },
+  {
+    "cat": "colombia",
+    "word": "Colombia",
+    "forbidden": [
+      "País",
+      "Bandera",
+      "Sudamérica",
+      "Bogotá",
+      "Café"
+    ]
+  },
+  {
+    "cat": "colombia",
+    "word": "Guayabo",
+    "forbidden": [
+      "Fiesta",
+      "Resaca",
+      "Alcohol",
+      "Dolor",
+      "Aguardiente"
+    ]
+  },
+  {
+    "cat": "colombia",
+    "word": "Chócolo",
+    "forbidden": [
+      "Maíz",
+      "Arepa",
+      "Comida",
+      "Amarillo",
+      "Grano"
+    ]
+  },
+  {
+    "cat": "colombia",
+    "word": "Aguapanela",
+    "forbidden": [
+      "Panela",
+      "Bebida",
+      "Agua",
+      "Limón",
+      "Caliente"
+    ]
+  },
+  {
+    "cat": "colombia",
+    "word": "Ciclista",
+    "forbidden": [
+      "Bicicleta",
+      "Montar",
+      "Carrera",
+      "Rueda",
+      "Deporte"
+    ]
+  },
+  {
+    "cat": "colombia",
+    "word": "Currulao",
+    "forbidden": [
+      "Música",
+      "Pacífico",
+      "Baile",
+      "Ritmo",
+      "Folclor"
+    ]
+  },
+  {
+    "cat": "colombia",
+    "word": "Mapalé",
+    "forbidden": [
+      "Baile",
+      "Música",
+      "Costa",
+      "Ritmo",
+      "Folclor"
+    ]
+  },
+  {
+    "cat": "colombia",
+    "word": "Joropo",
+    "forbidden": [
+      "Música",
+      "Baile",
+      "Llanos",
+      "Arpa",
+      "Ritmo"
+    ]
+  },
+  {
+    "cat": "colombia",
+    "word": "Bambuco",
+    "forbidden": [
+      "Música",
+      "Baile",
+      "Andes",
+      "Folclor",
+      "Ritmo"
+    ]
+  },
+  {
+    "cat": "colombia",
+    "word": "Porro",
+    "forbidden": [
+      "Música",
+      "Baile",
+      "Costa",
+      "Ritmo",
+      "Banda"
+    ]
+  },
+  {
+    "cat": "colombia",
+    "word": "Costeño",
+    "forbidden": [
+      "Costa",
+      "Caribe",
+      "Colombia",
+      "Mar",
+      "Región"
+    ]
+  },
+  {
+    "cat": "colombia",
+    "word": "Coliseo",
+    "forbidden": [
+      "Deporte",
+      "Arena",
+      "Público",
+      "Competencia",
+      "Estadio"
+    ]
+  },
+  {
+    "cat": "colombia",
+    "word": "Palma",
+    "forbidden": [
+      "Árbol",
+      "Tropical",
+      "Hoja",
+      "Cera",
+      "Colombia"
+    ]
+  },
+  {
+    "cat": "colombia",
+    "word": "Orquídea",
+    "forbidden": [
+      "Flor",
+      "Nacional",
+      "Planta",
+      "Pétalos",
+      "Colombia"
+    ]
+  },
+  {
+    "cat": "colombia",
+    "word": "Esmeralda",
+    "forbidden": [
+      "Verde",
+      "Piedra",
+      "Joya",
+      "Mineral",
+      "Colombia"
+    ]
+  },
+  {
+    "cat": "colombia",
+    "word": "Guadua",
+    "forbidden": [
+      "Bambú",
+      "Planta",
+      "Eje",
+      "Construcción",
+      "Verde"
+    ]
+  }
 ];
