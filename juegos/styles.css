@@ -4250,3 +4250,28 @@ body.light-theme .btn.danger {
     font-size: .92rem;
   }
 }
+
+
+/* Corrección de contraste — aviso de sonido en modo claro */
+body.light-theme .game-audio-tip {
+  color: #475569 !important;
+  background: rgba(245, 158, 11, 0.09) !important;
+  border-color: rgba(217, 119, 6, 0.28) !important;
+}
+body.light-theme .game-audio-tip strong {
+  color: #0f172a !important;
+}
+body.light-theme .game-audio-tip .ui-icon {
+  color: #d97706 !important;
+}
+body.light-theme .game-bomba .game-audio-tip {
+  color: #475569 !important;
+  background: rgba(239, 68, 68, 0.08) !important;
+  border-color: rgba(220, 38, 38, 0.28) !important;
+}
+body.light-theme .game-bomba .game-audio-tip strong {
+  color: #0f172a !important;
+}
+body.light-theme .game-bomba .game-audio-tip .ui-icon {
+  color: #dc2626 !important;
+}
