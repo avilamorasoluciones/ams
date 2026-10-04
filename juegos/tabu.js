@@ -384,6 +384,44 @@ const TabuGame = (() => {
     }
   }
 
+  function requestCancelGame() {
+    clearInterval(timerId);
+    timerId = null;
+    clearInterval(countdownTimerId);
+    countdownTimerId = null;
+    $("t-countdown").hidden = true;
+    changeScreen("t-scr-cancel");
+  }
+
+  function keepGame() {
+    const screen = currentWord && timerEndsAt && Date.now() < timerEndsAt ? "t-scr-game" : "t-scr-preturn";
+    if (screen === "t-scr-game") {
+      secondsLeft = Math.max(0, Math.ceil((timerEndsAt - Date.now()) / 1000));
+      startTimer(true);
+    } else {
+      setupTurn();
+    }
+  }
+
+  function confirmCancelGame() {
+    clearInterval(timerId);
+    clearInterval(countdownTimerId);
+    timerId = null;
+    countdownTimerId = null;
+    timerEndsAt = 0;
+    secondsLeft = 0;
+    currentWord = null;
+    turnStats = { correct: 0, taboo: 0, skip: 0 };
+    window.GameSession?.clear("tabu");
+    teamNameDrafts = [];
+    pool = [];
+    usedWords = [];
+    teams = [];
+    currentRound = 1;
+    activeTeamIndex = 0;
+    changeScreen("t-scr-lobby");
+  }
+
   function endGame() {
     teams.sort((a, b) => b.stats.score - a.stats.score);
     const topScore = teams[0]?.stats.score ?? 0;
@@ -427,6 +465,9 @@ const TabuGame = (() => {
     $("t-btnStart").onclick = startGame;
     $("t-btnConfirmTeams").onclick = confirmTeamNames;
     $("t-btnStartTurn").onclick = startCountdown;
+    $("t-btnCancelGame").onclick = requestCancelGame;
+    $("t-btnKeepGame").onclick = keepGame;
+    $("t-btnConfirmCancel").onclick = confirmCancelGame;
     
     $("t-btnCorrect").onclick = () => { setActionFeedback($("t-btnCorrect")); recordAction("correct"); };
     $("t-btnTaboo").onclick = () => { setActionFeedback($("t-btnTaboo")); recordAction("taboo"); };
