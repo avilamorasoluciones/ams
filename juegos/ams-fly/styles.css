@@ -525,7 +525,7 @@ button{cursor:pointer}
 .game-bird-grid .bird-option-copy{align-self:center}
 .game-bird-grid .bird-option strong{font-size:.76rem}
 .game-bird-grid .bird-option small{font-size:.6rem}
-.bottom-nav{position:fixed;z-index:90;left:50%;bottom:max(10px,var(--safe-bottom));transform:translateX(-50%);width:min(390px,calc(100% - 24px));height:70px;padding:7px;display:grid;grid-template-columns:repeat(4,1fr);gap:6px;border:1px solid rgba(255,255,255,.13);border-radius:24px;background:rgba(13,12,31,.94);backdrop-filter:blur(22px);-webkit-backdrop-filter:blur(22px);box-shadow:0 20px 60px rgba(0,0,0,.48)}
+.bottom-nav{position:fixed;z-index:90;left:50%;bottom:max(10px,var(--safe-bottom));transform:translateX(-50%);width:min(390px,calc(100% - 24px));height:70px;padding:7px;display:grid;grid-template-columns:repeat(5,1fr);gap:6px;border:1px solid rgba(255,255,255,.13);border-radius:24px;background:rgba(13,12,31,.94);backdrop-filter:blur(22px);-webkit-backdrop-filter:blur(22px);box-shadow:0 20px 60px rgba(0,0,0,.48)}
 .bottom-nav-item{position:relative;border:0;background:transparent;color:#858aa4;border-radius:18px;display:grid;place-items:center;font-size:1.42rem;transition:transform .18s ease,background .18s ease,color .18s ease,box-shadow .18s ease;min-width:0}
 .bottom-nav-item span{display:block;line-height:1}
 .bottom-nav-item.is-active{background:linear-gradient(145deg,rgba(139,92,246,.28),rgba(236,72,153,.16));color:#fff;box-shadow:inset 0 0 0 1px rgba(167,139,250,.2),0 7px 20px rgba(139,92,246,.12)}
@@ -613,4 +613,17 @@ button{cursor:pointer}
 .app-shell:has(#pauseScreen:not([hidden])) .bottom-nav,
 .app-shell:has(#gameOverScreen:not([hidden])) .bottom-nav{
   display:grid!important;
+}
+
+
+/* Regla autoritativa: mientras el juego está activo, arriba no existe ningún chrome. */
+.app-shell.game-active .game-header,
+.app-shell.game-active .game-footer{
+  display:none!important;
+}
+.app-shell.game-active .game-screen,
+.app-shell.game-active .pause-screen,
+.app-shell.game-active .gameOverScreen{
+  margin:0!important;
+  padding:0!important;
 }
