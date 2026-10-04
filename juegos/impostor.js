@@ -627,7 +627,7 @@ const ImpostorGame = (() => {
       ]
     },
     {
-      words: new Set("Martillo Hacha Pico Tornillo Cadena Imán Pistola Bomba Dinamita Serrucho Llave inglesa Destornillador Escalera Caja de herramientas Escuadra Regla Gancho Tubo".split(" ")),
+      words: new Set(["Martillo", "Hacha", "Pico", "Tornillo", "Cadena", "Imán", "Pistola", "Bomba", "Dinamita", "Serrucho", "Llave inglesa", "Destornillador", "Escalera", "Caja de herramientas", "Escuadra", "Regla", "Gancho", "Tubo"]),
       clues: [
         "Es algo que suele aparecer en trabajos manuales o de reparación.",
         "Normalmente tiene un uso práctico bastante concreto.",
