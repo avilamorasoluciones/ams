@@ -162,7 +162,6 @@ let audioCtx = null;
 let musicTimer = 0;
 let musicStep = 0;
 let musicStarting = false;
-let autoPublishTimer = 0;
 let publishPromise = null;
 let game = null;
 let raf = 0;
@@ -427,7 +426,7 @@ function showOnly(target){
   const gameplayScreen=target===els.gameScreen||target===els.pauseScreen||target===els.gameOverScreen;
   const shell=document.querySelector(".app-shell");
   shell?.classList.toggle("game-active",gameplayScreen);
-  if(els.bottomNav)els.bottomNav.hidden=false;
+  if(els.bottomNav)els.bottomNav.hidden=target===els.gameScreen||target===els.pauseScreen;
 }
 function hydrateStats(){
   stats=safeParse(STATS_KEY,{games:0,best:0});
@@ -681,16 +680,6 @@ function loop(now){
   draw();
   raf=requestAnimationFrame(loop);
 }
-function scheduleAutoPublishPendingScore(delay=3500){
-  if(autoPublishTimer)clearTimeout(autoPublishTimer);
-  autoPublishTimer=setTimeout(()=>{
-    autoPublishTimer=0;
-    tryAutoPublishPendingScore().catch(()=>{});
-  },Math.max(500,Number(delay)||3500));
-}
-function cancelAutoPublishPendingScore(){
-  if(autoPublishTimer){clearTimeout(autoPublishTimer);autoPublishTimer=0}
-}
 function savePendingScore(result){
   const payload={...result,savedAt:new Date().toISOString()};
   try{localStorage.setItem("amsFlyPendingScoreV1",JSON.stringify(payload));return true}catch(_){}
@@ -811,7 +800,6 @@ function endGame(){
     : "Puedes jugar libremente. No hay un evento abierto para publicar puntuaciones; tu récord queda guardado en este dispositivo.";
   showOnly(els.gameOverScreen);
   els.gameOverScreen.hidden=false;
-  scheduleAutoPublishPendingScore(3500);
   window.scrollTo(0,0);
   requestAnimationFrame(()=>{els.gameOverScreen.hidden=false;els.scoreMessage?.focus({preventScroll:true})});
   playTone(isRecord?880:220,.12,isRecord?"triangle":"sine");
@@ -865,8 +853,9 @@ async function publishScoreInternal(options={}){
     return false;
   }
 
-  const typedMessage=(els.scoreMessage.value||currentResult?.message||"").trim();
-  const message=(typedMessage.length>=3?typedMessage:"¡Buen vuelo!").slice(0,90);
+  const typedMessage=String(els.scoreMessage.value||"").trim();
+  const savedMessage=String(currentResult?.message||"").trim();
+  const message=(typedMessage||savedMessage||"¡Buen vuelo!").slice(0,90);
 
   if(!NEON_DATA_READY()){
     if(!automatic) els.submitScoreStatus.textContent="No se puede publicar todavía: falta conectar el Data API de Neon.";
@@ -941,7 +930,6 @@ async function publishScoreInternal(options={}){
     // Si el récord local ya está publicado, no volvemos a crear una fila solo
     // por terminar otra partida menor.
     if(scoreToPublish<=remoteBest){
-      cancelAutoPublishPendingScore();
       els.submitScoreBtn.dataset.published="1";
       els.submitScoreBtn.disabled=true;
       els.scoreMessage.disabled=true;
@@ -964,7 +952,6 @@ async function publishScoreInternal(options={}){
 
     if(result.error)throw result.error;
 
-    cancelAutoPublishPendingScore();
     els.submitScoreBtn.dataset.published="1";
     els.submitScoreBtn.disabled=true;
     els.scoreMessage.disabled=true;
@@ -989,16 +976,6 @@ async function publishScoreInternal(options={}){
     else els.submitScoreStatus.textContent="Puntuación guardada localmente. Reintentaremos la publicación automáticamente.";
     return false;
   }
-}
-
-async function tryAutoPublishPendingScore(){
-  if(!profile || !eventIsOpen() || !NEON_DATA_READY())return false;
-  const pending=readPendingScore();
-  if(!pending || Number(pending.score||0)<=0)return false;
-
-  // Evitar intentos automáticos repetidos mientras el usuario todavía está
-  // escribiendo el mensaje del resultado actual.
-  return publishScore({automatic:true});
 }
 
 async function loadRanking(){
@@ -1351,7 +1328,7 @@ function bootHome(){
   if(NEON_DATA_READY()) loadRemoteEventConfig();
   refreshAuthUI();updateLargeScreenRecommendation();
   setTimeout(()=>els.loadingScreen.classList.add("is-gone"),500);
-  if(restorePendingResult()){scheduleAutoPublishPendingScore(1800);return}
+  if(restorePendingResult())return
   if(soundOn){startMusic();window.addEventListener("pointerdown",unlockMenuMusic,{once:true,passive:true,capture:true});window.addEventListener("keydown",unlockMenuMusic,{once:true})}
 }
 function navigateTo(target){
@@ -1405,10 +1382,10 @@ els.resumeBtn?.addEventListener("click",()=>{
 });
 
 els.quitBtn?.addEventListener("click",()=>{
-  if(game){
-    game.running=false;
-    game.paused=false;
-  }
+  if(!game?.running||!game.paused)return;
+  if(!window.confirm("Si vuelves al menú, perderás los puntos de esta partida. ¿Quieres salir?"))return;
+  game.running=false;
+  game.paused=false;
   cancelAnimationFrame(raf);
   stopMusic();
   navigateTo("play");
@@ -1419,6 +1396,11 @@ els.againBtn?.addEventListener("click",()=>{
 });
 
 els.submitScoreBtn?.addEventListener("click",()=>publishScore({automatic:false}));
+els.scoreMessage?.addEventListener("input",()=>{
+  if(!lastResult)return;
+  lastResult={...lastResult,message:String(els.scoreMessage.value||"").slice(0,90)};
+  savePendingScore(lastResult);
+});
 els.shareResultBtn?.addEventListener("click",shareResult);
 
 document.querySelectorAll(".bottom-nav-item[data-nav]").forEach(btn=>btn.addEventListener("click",()=>navigateTo(btn.dataset.nav)));
