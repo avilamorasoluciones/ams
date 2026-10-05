@@ -88,3 +88,5 @@ const AMS_NEW_GAMES_DB = {
     ["¿Cuál de estos animales pone huevos?",["Gallina","Perro"],0]
   ]}
 };
+
+window.AMS_NEW_GAMES_DB = AMS_NEW_GAMES_DB;
