@@ -845,11 +845,12 @@ async function publishScoreInternal(options={}){
   const resultDuration=Number(currentResult?.durationMs||0);
   const localBest=Math.max(0,Number(stats.best||0));
 
-  // Una partida de 0 o 1 también puede servir para sincronizar un récord
-  // local antiguo. Solo rechazamos el intento si no existe ningún récord que
-  // sincronizar y tampoco hay una puntuación actual válida.
-  if(resultScore<=0 && localBest<=0){
+  if(!currentResult){
     if(!automatic) els.submitScoreStatus.textContent="No hay una puntuación pendiente para publicar.";
+    return false;
+  }
+  if(resultScore<1){
+    if(!automatic) els.submitScoreStatus.textContent="La partida debe sumar al menos 1 punto para aparecer en el ranking.";
     return false;
   }
 
@@ -881,36 +882,29 @@ async function publishScoreInternal(options={}){
     }
 
     const client=await getPublicNeonClient();
-    let participantId=profile.participantId||null;
+    const latestBirdId=getBird(currentResult?.birdId||profile.birdId||selectedBirdId).id;
+    // Sincroniza el ave usada en esta partida; Neon valida el ave contra el perfil.
+    let participantResult=await client.rpc("ams_fly_register_participant",{
+      p_name:profile.name,p_country:profile.country,p_bird_id:latestBirdId,p_phone:null,p_score:0
+    });
 
-    // El piloto ya quedó registrado al configurar su perfil. No repetimos esa
-    // RPC en cada publicación: evita una llamada de red y acelera el guardado.
-    if(!participantId){
-      let participantResult=await client.rpc("ams_fly_register_participant",{
-        p_name:profile.name,p_country:profile.country,p_bird_id:profile.birdId,p_phone:null,p_score:0
+    if(participantResult.error && String(participantResult.error.message||"").includes("auth_required")){
+      await new Promise(resolve=>setTimeout(resolve,350));
+      if(!await getCurrentAuthUser())throw new Error("auth_required");
+      participantResult=await client.rpc("ams_fly_register_participant",{
+        p_name:profile.name,p_country:profile.country,p_bird_id:latestBirdId,p_phone:null,p_score:0
       });
-
-      if(participantResult.error && String(participantResult.error.message||"").includes("auth_required")){
-        await new Promise(resolve=>setTimeout(resolve,350));
-        if(!await getCurrentAuthUser())throw new Error("auth_required");
-        participantResult=await client.rpc("ams_fly_register_participant",{
-          p_name:profile.name,p_country:profile.country,p_bird_id:profile.birdId,p_phone:null,p_score:0
-        });
-      }
-
-      if(participantResult.error)throw participantResult.error;
-      participantId=participantResult.data?.participant_id||null;
-      if(participantId){
-        profile.participantId=participantId;
-        saveProfile();
-      }
     }
 
+    if(participantResult.error)throw participantResult.error;
+    const participantData=Array.isArray(participantResult.data)?participantResult.data[0]:(participantResult.data||{});
+    const participantId=participantData.participant_id||null;
     if(!participantId)throw new Error("No se pudo identificar tu piloto.");
+    profile.participantId=participantId;
+    saveProfile();
 
-    // El dispositivo puede conservar un récord conseguido antes de que la
-    // publicación en Neon estuviera disponible. Al terminar una nueva partida,
-    // sincronizamos ese récord local si todavía supera el récord remoto.
+    // Si el récord solo existe en este dispositivo, súbelo primero para que
+    // una partida menor no lo reemplace. Luego registramos la partida actual.
     let remoteBest=0;
     try{
       const remote=await client.from("ams_fly_scores")
@@ -918,36 +912,29 @@ async function publishScoreInternal(options={}){
         .eq("participant_id",participantId)
         .order("score",{ascending:false})
         .limit(1);
-      if(!remote.error && remote.data?.length){
-        remoteBest=Math.max(0,Number(remote.data[0].score||0));
-      }
+      if(!remote.error && remote.data?.length)remoteBest=Math.max(0,Number(remote.data[0].score||0));
     }catch(_){}
 
-    const scoreToPublish=Math.max(resultScore,localBest);
-    const isLocalRecordSync=scoreToPublish>resultScore;
-    const durationToPublish=isLocalRecordSync ? null : resultDuration;
-
-    // Si el récord local ya está publicado, no volvemos a crear una fila solo
-    // por terminar otra partida menor.
-    if(scoreToPublish<=remoteBest){
-      els.submitScoreBtn.dataset.published="1";
-      els.submitScoreBtn.disabled=true;
-      els.scoreMessage.disabled=true;
-      els.submitScoreBtn.innerHTML="✓ PUNTUACIÓN PUBLICADA";
-      els.submitScoreStatus.hidden=true;
-      clearPendingScore();
-      lastResult=null;
-      return true;
+    const syncLocalBest=localBest>remoteBest && localBest>resultScore;
+    if(syncLocalBest){
+      const syncResult=await client.rpc("ams_fly_submit_score",{
+        p_participant_id:participantId,p_name:profile.name,p_country:profile.country,
+        p_bird_id:latestBirdId,p_score:localBest,p_message:message,p_duration_ms:null
+      });
+      if(syncResult.error)throw syncResult.error;
+      els.submitScoreStatus.textContent="Conservando tu récord anterior y registrando esta partida…";
+      // Neon limita publicaciones del mismo piloto a una cada tres segundos.
+      await new Promise(resolve=>setTimeout(resolve,3100));
     }
 
     const result=await client.rpc("ams_fly_submit_score",{
       p_participant_id:participantId,
       p_name:profile.name,
       p_country:profile.country,
-      p_bird_id:profile.birdId,
-      p_score:scoreToPublish,
+      p_bird_id:latestBirdId,
+      p_score:resultScore,
       p_message:message,
-      p_duration_ms:durationToPublish
+      p_duration_ms:resultDuration
     });
 
     if(result.error)throw result.error;
@@ -984,37 +971,45 @@ async function loadRanking(){
   if(!NEON_DATA_READY()){els.rankingList.innerHTML='<div class="ranking-empty"><strong>Ranking mundial preparado.</strong><br><span>Falta conectar el Data API de Neon.</span></div>';return}
   try{
     const client=await getPublicNeonClient();
-    const result=await client.from("ams_fly_scores")
-      .select("participant_id,player_name,country_code,bird_id,score,message,created_at")
-      .order("score",{ascending:false})
-      .order("created_at",{ascending:true})
-      .limit(1000);
-    if(result.error)throw result.error;
+    const [bestResult,latestResult]=await Promise.all([
+      client.from("ams_fly_scores")
+        .select("participant_id,player_name,country_code,bird_id,score,message,created_at")
+        .order("score",{ascending:false})
+        .order("created_at",{ascending:true})
+        .limit(1000),
+      client.from("ams_fly_scores")
+        .select("participant_id,player_name,country_code,bird_id,score,message,created_at")
+        .order("created_at",{ascending:false})
+        .limit(1000)
+    ]);
+    if(bestResult.error)throw bestResult.error;
+    if(latestResult.error)throw latestResult.error;
 
-    // El ranking muestra el mejor puntaje del piloto, pero el mensaje debe ser
-    // siempre el de su publicación más reciente. Así un piloto puede actualizar
-    // su mensaje aunque la nueva partida tenga menos puntos.
+    // El puesto depende del mejor puntaje; el ave, el mensaje y el puntaje
+    // reciente vienen de la última partida publicada, aunque haya sido menor.
     const bestByParticipant=new Map();
     const latestByParticipant=new Map();
-    (result.data||[]).forEach(row=>{
+    (bestResult.data||[]).forEach(row=>{
       const key=row.participant_id||((row.player_name||"").trim().toLowerCase()+"|"+(row.country_code||""));
       const currentBest=bestByParticipant.get(key);
-      const currentLatest=latestByParticipant.get(key);
       const rowTime=new Date(row.created_at).getTime();
-      if(!currentLatest || rowTime>new Date(currentLatest.created_at).getTime()){
-        latestByParticipant.set(key,row);
-      }
       if(!currentBest || Number(row.score||0)>Number(currentBest.score||0) ||
         (Number(row.score||0)===Number(currentBest.score||0) && rowTime<new Date(currentBest.created_at).getTime())){
         bestByParticipant.set(key,row);
       }
+    });
+    (latestResult.data||[]).forEach(row=>{
+      const key=row.participant_id||((row.player_name||"").trim().toLowerCase()+"|"+(row.country_code||""));
+      if(!latestByParticipant.has(key))latestByParticipant.set(key,row);
     });
 
     const rows=[...bestByParticipant.values()]
       .map(row=>{
         const key=row.participant_id||((row.player_name||"").trim().toLowerCase()+"|"+(row.country_code||""));
         const latest=latestByParticipant.get(key);
-        return latest ? {...row,message:latest.message||"",latestCreatedAt:latest.created_at} : row;
+        return latest
+          ? {...row,bird_id:latest.bird_id,message:latest.message||"",latestScore:Number(latest.score||0),latestCreatedAt:latest.created_at}
+          : {...row,latestScore:Number(row.score||0)};
       })
       .sort((a,b)=>Number(b.score||0)-Number(a.score||0) || new Date(a.created_at).getTime()-new Date(b.created_at).getTime())
       .slice(0,RANKING_LIMIT);
@@ -1034,7 +1029,10 @@ async function loadRanking(){
       main.append(name,countryEl,dateEl,message);
       const score=document.createElement("div");score.className="ranking-score";
       const scoreValue=document.createElement("strong");scoreValue.textContent=String(Number(row.score||0));
-      const scoreLabel=document.createElement("span");scoreLabel.textContent="PUNTOS";score.append(scoreValue,scoreLabel);
+      const scoreLabel=document.createElement("span");scoreLabel.textContent="MEJOR";
+      const latestScore=document.createElement("small");latestScore.className="ranking-latest-score";
+      latestScore.textContent="Último: "+Number(row.latestScore??row.score??0)+" pts";
+      score.append(scoreValue,scoreLabel,latestScore);
       card.append(pos,avatar,main,score);els.rankingList.appendChild(card);
     });
   }catch(error){
