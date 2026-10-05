@@ -394,8 +394,13 @@ async function getTermsAcceptedFor(user){
     const accepted=data.accepted===true;
     if(accepted)saveTermsAcceptedFor(user);
     return accepted;
-  }catch(_){
-    return local;
+  }catch(error){
+    // Con Neon configurado, un fallo remoto NO debe convertir una aceptación
+    // vieja/local en una aceptación válida para el evento. La fuente de verdad
+    // del consentimiento es Neon; el fallback local solo sirve cuando Neon
+    // todavía no está configurado.
+    console.error("AMS Fly: no se pudo consultar la aceptación de T&C",error);
+    return false;
   }
 }
 async function persistTermsAccepted(user){
