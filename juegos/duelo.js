@@ -296,6 +296,7 @@ const Duelo = (() => {
   }
 
   function startGame() {
+    window.emitSound?.(440, 0.03, "sine", 0.035);
     names = [
       $("du-p1").value.trim() || "Jugador 1",
       $("du-p2").value.trim() || "Jugador 2"

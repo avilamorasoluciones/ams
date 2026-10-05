@@ -220,6 +220,7 @@ const BatallaPalabras = (() => {
   }
 
   function startGame() {
+    window.emitSound?.(440, 0.03, "sine", 0.035);
     mode = document.querySelector("#bp-modes .selected")?.dataset.mode || mode;
     rounds = Number($("bp-rounds").value);
     time = Number($("bp-time").value);

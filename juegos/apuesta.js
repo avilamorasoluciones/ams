@@ -183,6 +183,7 @@ const Apuesta = (() => {
   function render() {
     const question = current;
     $("ap-round-label").textContent = "Ronda " + round + " de " + rounds;
+    $("ap-cat-label").textContent = current ? categoryOf(current.index) : category;
     $("ap-turn-label").textContent = "Turno: " + (names[active] || "");
     renderBank();
 
@@ -218,6 +219,7 @@ const Apuesta = (() => {
   }
 
   function startGame() {
+    window.emitSound?.(440, 0.03, "sine", 0.035);
     category = $("ap-cat").value || "Todas";
     if (!candidateIndices().length) {
       showError("No hay preguntas disponibles en esta categoría. Elige otra categoría.");
