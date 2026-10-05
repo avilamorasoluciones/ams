@@ -1106,10 +1106,50 @@ async function ensureParticipantReady(user){
   saveProfile();
   return true;
 }
-function startWithProfile(){
-  // Jugar es público. La cuenta solo se necesita para participar y publicar
-  // una puntuación durante un evento activo.
-  resetGame();
+async function startWithProfile(){
+  // Durante un evento activo, iniciar el vuelo exige una cuenta, un piloto
+  // sincronizado y la aceptación de T&C. Fuera del evento, el juego puede
+  // seguir siendo público.
+  if(!eventIsOpen()){
+    resetGame();
+    return;
+  }
+
+  const user=await getCurrentAuthUser().catch(()=>null);
+  if(!user){
+    navigateTo("account");
+    setAuthStatus(els.authStatus,"Inicia sesión o crea tu cuenta antes de participar.",true);
+    return;
+  }
+
+  try{
+    const accepted=await getTermsAcceptedFor(user);
+    if(!accepted){
+      navigateTo("event");
+      setTimeout(()=>{
+        const hint=document.getElementById("eventAuthHint");
+        if(hint)hint.textContent="Acepta los Términos y Condiciones para poder participar.";
+      },0);
+      return;
+    }
+
+    const ready=await ensureParticipantReady(user);
+    if(!ready){
+      navigateTo("account");
+      setAuthStatus(els.accountStatus,"Completa y guarda tus datos de cuenta antes de participar.",true);
+      return;
+    }
+
+    resetGame();
+  }catch(error){
+    console.error("AMS Fly: no se pudo preparar el vuelo",error);
+    navigateTo("account");
+    setAuthStatus(
+      els.accountStatus,
+      friendlyNeonSyncError(error),
+      true
+    );
+  }
 }
 function prepareFactThenGame(){
   const fact=colombiaFacts[currentFactIndex%colombiaFacts.length];currentFactIndex=(currentFactIndex+1)%colombiaFacts.length;localStorage.setItem(FACT_INDEX_KEY,String(currentFactIndex));
