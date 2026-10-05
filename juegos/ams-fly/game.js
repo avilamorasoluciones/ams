@@ -81,6 +81,30 @@ async function getCurrentAuthUser(){
   if(!session)return null;
   return data.user||session.user||null;
 }
+async function getRemoteParticipantProfile(user){
+  if(!user || !NEON_DATA_READY()) return null;
+  try{
+    const client=await getPublicNeonClient();
+    const result=await client.rpc("ams_fly_get_participant_profile",{});
+    if(result?.error) return null;
+    const data=Array.isArray(result.data)?result.data[0]:(result.data||null);
+    if(!data?.participant_id) return null;
+    return {
+      participantId:data.participant_id,
+      name:String(data.name||"").trim(),
+      firstName:String(data.first_name||"").trim(),
+      lastName:String(data.last_name||"").trim(),
+      country:String(data.country||"CO").toUpperCase(),
+      birdId:String(data.bird_id||""),
+      phone:String(data.phone||""),
+      dial:String(data.dial||"57"),
+      prizeEligible:data.prize_eligible!==false,
+      termsAccepted:data.terms_accepted===true
+    };
+  }catch(_){
+    return null;
+  }
+}
 const RANKING_LIMIT = 50;
 function escapeHtml(value){
   return String(value ?? "").replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
@@ -927,19 +951,9 @@ async function publishScoreInternal(options={}){
     const isLocalRecordSync=scoreToPublish>resultScore;
     const durationToPublish=isLocalRecordSync ? null : resultDuration;
 
-    // Si el récord local ya está publicado, no volvemos a crear una fila solo
-    // por terminar otra partida menor.
-    if(scoreToPublish<=remoteBest){
-      els.submitScoreBtn.dataset.published="1";
-      els.submitScoreBtn.disabled=true;
-      els.scoreMessage.disabled=true;
-      els.submitScoreBtn.innerHTML="✓ PUNTUACIÓN PUBLICADA";
-      els.submitScoreStatus.hidden=true;
-      clearPendingScore();
-      lastResult=null;
-      return true;
-    }
-
+    // Publicamos también partidas menores al récord. El ranking conserva
+    // el mejor puntaje, pero la publicación más reciente actualiza el ave
+    // y el mensaje que se muestran al piloto.
     const result=await client.rpc("ams_fly_submit_score",{
       p_participant_id:participantId,
       p_name:profile.name,
@@ -1014,7 +1028,14 @@ async function loadRanking(){
       .map(row=>{
         const key=row.participant_id||((row.player_name||"").trim().toLowerCase()+"|"+(row.country_code||""));
         const latest=latestByParticipant.get(key);
-        return latest ? {...row,message:latest.message||"",latestCreatedAt:latest.created_at} : row;
+        return latest ? {
+          ...row,
+          bird_id:latest.bird_id||row.bird_id,
+          country_code:latest.country_code||row.country_code,
+          player_name:latest.player_name||row.player_name,
+          message:latest.message||"",
+          latestCreatedAt:latest.created_at
+        } : row;
       })
       .sort((a,b)=>Number(b.score||0)-Number(a.score||0) || new Date(a.created_at).getTime()-new Date(b.created_at).getTime())
       .slice(0,RANKING_LIMIT);
@@ -1117,8 +1138,30 @@ async function loadAccountProfile(user){
     candidate.lastName=candidate.lastName||parts.last||"";
     candidate.name=String(candidate.name||[candidate.firstName,candidate.lastName].filter(Boolean).join(" ")).trim();
   }
+
+  // Neon es la fuente de verdad cuando ya existe un piloto. Esto permite
+  // recuperar celular, ave, país y aceptación después de borrar caché,
+  // cambiar de dispositivo o volver a iniciar sesión.
+  const remote=await getRemoteParticipantProfile(user);
+  if(remote){
+    candidate={
+      ...candidate,
+      ...remote,
+      name:remote.name||candidate.name,
+      firstName:remote.firstName||candidate.firstName,
+      lastName:remote.lastName||candidate.lastName,
+      country:remote.country||candidate.country,
+      birdId:remote.birdId||candidate.birdId,
+      phone:remote.phone||candidate.phone,
+      dial:remote.dial||candidate.dial,
+      participantId:remote.participantId,
+      prizeEligible:remote.prizeEligible
+    };
+  }
+
   profile={...candidate,email};
   selectedBirdId=profile.birdId||selectedBirdId;
+  saveProfile();
   return profile;
 }
 function populateAccountFields(){
@@ -1341,6 +1384,7 @@ function navigateTo(target){
   else {showOnly(screen);if(target==="play"){renderBirds();renderHomeBird();if(soundOn)startMusic();}}
   document.querySelectorAll(".bottom-nav-item").forEach(btn=>btn.classList.toggle("is-active",btn.dataset.nav===target));
 }
+let birdSyncQueue=Promise.resolve();
 els.birdGrid?.addEventListener("click",event=>{
   const button=event.target.closest("[data-bird]");
   if(!button || !els.birdGrid.contains(button))return;
@@ -1350,6 +1394,21 @@ els.birdGrid?.addEventListener("click",event=>{
   if(profile){
     profile.birdId=birdId;
     saveProfile();
+
+    // La selección de ave es parte del perfil del piloto, no solo del
+    // navegador. Serializamos los cambios para que dos clics rápidos no
+    // puedan terminar guardando el ave equivocada en Neon.
+    birdSyncQueue=birdSyncQueue.then(async()=>{
+      const user=await getCurrentAuthUser().catch(()=>null);
+      if(!user || !NEON_DATA_READY())return;
+      try{
+        await syncParticipantProfile(user);
+        saveProfile();
+      }catch(error){
+        console.error("AMS Fly: no se pudo sincronizar el ave seleccionada",error);
+        setAuthStatus(els.accountStatus,"El ave quedó seleccionada en este dispositivo, pero no pudimos sincronizarla con Neon todavía.",true);
+      }
+    }).catch(()=>{});
   }
   renderBirds();
   playTone(660,.06,"triangle");
