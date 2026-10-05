@@ -1,4 +1,4 @@
-const CACHE_NAME = 'ams-games-20261001-47';
+const CACHE_NAME = 'ams-games-20261005-48';
 const CACHE_PREFIX = "ams-games-";
 const APP_SHELL = [
   "./",
@@ -10,7 +10,7 @@ const APP_SHELL = [
   "./tabu.html",
   "./verdadreto.html",
   "./yonunca.html",
-  "./styles.css?v=20261001-47",
+  "./styles.css?v=20261005-48",
   "./scripts.js?v=20261001-47",
   "./datos.js?v=20261001-47",
   "./impostor.js?v=20261001-47",

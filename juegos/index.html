@@ -43,7 +43,7 @@
   <link rel="icon" href="pwa-icon-192.svg?v=22" type="image/svg+xml" />
   <link rel="manifest" href="manifest.webmanifest?v=23" />
   <link rel="apple-touch-icon" href="pwa-icon-192.svg?v=22" />
-  <link rel="stylesheet" href="styles.css?v=20261001-46" />
+  <link rel="stylesheet" href="styles.css?v=20261005-48" />
   <link rel="canonical" href="https://avilamorasoluciones.com/juegos/" />
 
   <style id="ams-games-loader-style">
@@ -142,7 +142,10 @@
         <a class="nav-item" href="batalla.html"><img src="game-batalla.svg" alt=""> Batalla de Palabras</a>
         <a class="nav-item" href="duelo.html"><img src="game-duelo.svg" alt=""> Duelo</a>
         <a class="nav-item" href="apuesta.html"><img src="game-apuesta.svg" alt=""> Apuesta</a>
-        <a class="nav-item" href="ams-fly/"><span aria-hidden="true">🪽</span> AMS Fly</a>
+        <div class="nav-event-group">
+          <span class="nav-event-label">EVENTO ESPECIAL</span>
+          <a class="nav-item nav-item-event" href="ams-fly/">AMS Fly</a>
+        </div>
       </div>
     </nav>
   </header>
@@ -177,13 +180,26 @@
             </div>
           </section>
 
+          <section class="special-event-card" aria-labelledby="special-event-title">
+            <div class="special-event-content">
+              <span class="special-event-label"><span aria-hidden="true">✦</span> JUEGO CON EVENTO ESPECIAL</span>
+              <h2 id="special-event-title">AMS Fly</h2>
+              <p>Elige una de las 10 aves, supera obstáculos y mejora tu puntaje en el evento de AMS.</p>
+              <a class="btn primary special-event-button" href="ams-fly/">Jugar AMS Fly</a>
+            </div>
+            <div class="special-event-art">
+              <img src="ams-fly/condor-colombia.svg" alt="Cóndor de los Andes, ave insignia de Colombia">
+            </div>
+          </section>
+
+
           <section class="game-selector box" aria-labelledby="game-selector-title">
             <div class="game-selector-head">
               <div>
                 <div class="section-kicker">ELIGE TU JUEGO</div>
                 <h2 id="game-selector-title">¿A qué jugamos?</h2>
               </div>
-              <span class="game-selector-count" id="gameSelectorCount">11 juegos</span>
+              <span class="game-selector-count" id="gameSelectorCount">10 juegos</span>
             </div>
 
             <label class="game-search">
@@ -197,43 +213,25 @@
               <div class="game-carousel" id="gameCarousel" tabindex="0" aria-label="Carrusel de juegos">
                 <article class="game-slide game-batalla" data-search="batalla de palabras palabras equipos categorias letras rapidez" data-game="batalla">
                 <div class="game-slide-glow"></div>
-                <div class="game-slide-top"><span class="game-slide-index">09 / 11</span><img class="game-slide-icon" src="game-batalla.svg" alt="Batalla de Palabras"></div>
+                <div class="game-slide-top"><span class="game-slide-index">01 / 10</span><img class="game-slide-icon" src="game-batalla.svg" alt="Batalla de Palabras"></div>
                 <div class="game-slide-copy"><span class="badge badge-indigo">Equipos · Palabras · Presión</span><h3>Batalla de Palabras</h3><p>Un equipo juega y los demás controlan la batalla. Responde antes de que se acabe el tiempo y suma puntos.</p></div>
                 <div class="game-slide-actions"><span class="slide-hint">Categorías, letras y modos para variar cada partida.</span><a class="btn primary" href="batalla.html">Batallar ahora</a></div>
               </article>
               <article class="game-slide game-duelo" data-search="duelo competencia dos jugadores reaccion preguntas quiz arbitros" data-game="duelo">
-                <div class="game-slide-glow"></div><div class="game-slide-top"><span class="game-slide-index">10 / 11</span><img class="game-slide-icon" src="game-duelo.svg" alt="Duelo"></div>
+                <div class="game-slide-glow"></div><div class="game-slide-top"><span class="game-slide-index">02 / 10</span><img class="game-slide-icon" src="game-duelo.svg" alt="Duelo"></div>
                 <div class="game-slide-copy"><span class="badge badge-red">Dos jugadores · Reacción · Quiz</span><h3>Duelo</h3><p>Dos personas se enfrentan cara a cara. El grupo arbitra mientras el celular decide el ritmo.</p></div>
                 <div class="game-slide-actions"><span class="slide-hint">Reacción o Quiz · marcador y resumen final.</span><a class="btn primary" href="duelo.html">Entrar al duelo</a></div>
               </article>
               <article class="game-slide game-apuesta" data-search="apuesta fichas trivia riesgo grupo dinero puntos preguntas" data-game="apuesta">
-                <div class="game-slide-glow"></div><div class="game-slide-top"><span class="game-slide-index">11 / 11</span><img class="game-slide-icon" src="game-apuesta.svg" alt="Apuesta"></div>
+                <div class="game-slide-glow"></div><div class="game-slide-top"><span class="game-slide-index">03 / 10</span><img class="game-slide-icon" src="game-apuesta.svg" alt="Apuesta"></div>
                 <div class="game-slide-copy"><span class="badge badge-green">Todos juegan · Riesgo · Fichas</span><h3>Apuesta</h3><p>Todos participan. Elige tu respuesta, decide cuántas fichas arriesgar y mira cómo cambia el ranking.</p></div>
                 <div class="game-slide-actions"><span class="slide-hint">Cada decisión importa · ranking final.</span><a class="btn primary" href="apuesta.html">Apostar ahora</a></div>
               </article>
-
-              <article class="game-slide game-ams-fly" data-search="ams fly vuelo aves arcade puntaje colombia récord" data-game="ams-fly">
+<article class="game-slide game-tabu" data-search="tabu equipos palabras prohibidas puntos voceria" data-game="tabu">
                   <div class="game-slide-glow"></div>
                   <div class="game-slide-top">
-                    <span class="game-slide-index">01 / 11</span>
-                    <img class="game-slide-icon" src="ams-fly/condor-colombia.svg" alt="Cóndor de los Andes, ave insignia de Colombia">
-                  </div>
-                  <div class="game-slide-copy">
-                    <span class="badge badge-indigo">Arcade · Vuelo · Récord</span>
-                    <h3>AMS Fly</h3>
-                    <p>El vuelo arcade de AMS. Elige entre 10 aves de distintos países, supera obstáculos, cambia de mundo y rompe tu récord.</p>
-                  </div>
-                  <div class="game-slide-actions">
-                    <span class="slide-hint">10 aves · Colombia representada por el Cóndor de los Andes.</span>
-                    <a class="btn primary" href="ams-fly/">Volar ahora</a>
-                  </div>
-                </article>
-
-                <article class="game-slide game-tabu" data-search="tabu equipos palabras prohibidas puntos voceria" data-game="tabu">
-                  <div class="game-slide-glow"></div>
-                  <div class="game-slide-top">
-                    <span class="game-slide-index">02 / 11</span>
-                    <img class="game-slide-icon" src="game-tabu.svg" alt="">
+                    <span class="game-slide-index">04 / 10</span>
+                    <div class="game-slide-icon-frame"><img class="game-slide-icon" src="game-tabu.svg" alt=""></div>
                   </div>
                   <div class="game-slide-copy">
                     <span class="badge badge-indigo">Equipos · Vocería · Puntaje</span>
@@ -249,8 +247,8 @@
                 <article class="game-slide game-impostor" data-search="impostor detective secreto debate sospecha" data-game="impostor">
                   <div class="game-slide-glow"></div>
                   <div class="game-slide-top">
-                    <span class="game-slide-index">03 / 11</span>
-                    <img class="game-slide-icon" src="game-impostor.svg?v=20260926-2" alt="El Impostor">
+                    <span class="game-slide-index">05 / 10</span>
+                    <div class="game-slide-icon-frame"><img class="game-slide-icon" src="game-impostor.svg?v=20260926-2" alt="El Impostor"></div>
                   </div>
                   <div class="game-slide-copy">
                     <span class="badge badge-cyan">Secreto · Debate · Sospecha</span>
@@ -266,8 +264,8 @@
                 <article class="game-slide game-bomba" data-search="bomba palabras velocidad presion caos" data-game="bomba">
                   <div class="game-slide-glow"></div>
                   <div class="game-slide-top">
-                    <span class="game-slide-index">04 / 11</span>
-                    <img class="game-slide-icon" src="game-bomba.svg" alt="">
+                    <span class="game-slide-index">06 / 10</span>
+                    <div class="game-slide-icon-frame"><img class="game-slide-icon" src="game-bomba.svg" alt=""></div>
                   </div>
                   <div class="game-slide-copy">
                     <span class="badge badge-red">Caos · Velocidad · Presión</span>
@@ -283,8 +281,8 @@
                 <article class="game-slide game-rompehielo" data-search="rompehielo preguntas conversar amigos charla ambiente" data-game="rompehielo">
                   <div class="game-slide-glow"></div>
                   <div class="game-slide-top">
-                    <span class="game-slide-index">05 / 11</span>
-                    <img class="game-slide-icon" src="game-rompehielo.svg" alt="">
+                    <span class="game-slide-index">07 / 10</span>
+                    <div class="game-slide-icon-frame"><img class="game-slide-icon" src="game-rompehielo.svg" alt=""></div>
                   </div>
                   <div class="game-slide-copy">
                     <span class="badge">Conversación · Amigos · Ambiente</span>
@@ -300,8 +298,8 @@
                 <article class="game-slide game-nosconocemos" data-search="nos conocemos preguntas adivinar social grupo parejas" data-game="nosconocemos">
                   <div class="game-slide-glow"></div>
                   <div class="game-slide-top">
-                    <span class="game-slide-index">06 / 11</span>
-                    <img class="game-slide-icon" src="game-nosconocemos.svg" alt="">
+                    <span class="game-slide-index">08 / 10</span>
+                    <div class="game-slide-icon-frame"><img class="game-slide-icon" src="game-nosconocemos.svg" alt=""></div>
                   </div>
                   <div class="game-slide-copy">
                     <span class="badge badge-amber">Social · Adivinar · Grupo</span>
@@ -317,8 +315,8 @@
                 <article class="game-slide game-yonunca" data-search="yo nunca historias confesiones grupo frases" data-game="yonunca">
                   <div class="game-slide-glow"></div>
                   <div class="game-slide-top">
-                    <span class="game-slide-index">07 / 11</span>
-                    <img class="game-slide-icon" src="game-yonunca.svg" alt="">
+                    <span class="game-slide-index">09 / 10</span>
+                    <div class="game-slide-icon-frame"><img class="game-slide-icon" src="game-yonunca.svg" alt=""></div>
                   </div>
                   <div class="game-slide-copy">
                     <span class="badge badge-green">Historias · Confesiones · Grupo</span>
@@ -334,8 +332,8 @@
                 <article class="game-slide game-verdadreto" data-search="verdad reto fiesta preguntas retos turnos" data-game="verdadreto">
                   <div class="game-slide-glow"></div>
                   <div class="game-slide-top">
-                    <span class="game-slide-index">08 / 11</span>
-                    <img class="game-slide-icon" src="game-verdadreto.svg" alt="">
+                    <span class="game-slide-index">10 / 10</span>
+                    <div class="game-slide-icon-frame"><img class="game-slide-icon" src="game-verdadreto.svg" alt=""></div>
                   </div>
                   <div class="game-slide-copy">
                     <span class="badge badge-pink">Fiesta · Turnos · Locura</span>
