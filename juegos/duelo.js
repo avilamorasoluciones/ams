@@ -1,1 +1,532 @@
-const Duelo=(()=>{const $=id=>document.getElementById(id),DB=window.AMS_NEW_GAMES_DB?.duelo?.questions||[];let mode="reaccion",names=["Jugador 1","Jugador 2"],round=1,rounds=10,time=12,scores=[0,0],current=null,claimed=-1,timer=null,phase="idle",history=[];const ranges=[["Cultura general",0,10],["Colombia",10,20],["Ciencia",20,30],["Entretenimiento",30,40]],catOf=i=>ranges.find(r=>i>=r[1]&&i<r[2])?.[0]||"General";const modes=[{id:"reaccion",name:"⚡ Reacción",desc:"Ambos esperan. El primero en pulsar gana el derecho a responder."},{id:"quiz",name:"🧠 Quiz",desc:"La pregunta aparece y los jugadores responden por turnos."}];const esc=s=>window.Utils?.escapeHTML?window.Utils.escapeHTML(s):String(s).replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]));const save=screen=>window.GameSession?.save("duelo",{mode,names,round,rounds,time,scores,current,claimed,phase,history,screen,savedAt:Date.now()});function screen(id){["du-scr-lobby","du-scr-game","du-scr-result"].forEach(x=>$(x).hidden=x!==id);save(id)}function renderModes(){$("du-modes").innerHTML=modes.map(m=>`<button class="du-mode ${m.id===mode?"selected":""}" type="button" data-mode="${m.id}"><strong>${m.name}</strong><small>${m.desc}</small></button>`).join("")}function renderCats(){$("du-cat").innerHTML='<option value="Todas">Todas</option>'+ranges.map(r=>`<option>${esc(r[0])}</option>`).join("")}function pick(){const cat=$("du-cat").value;const pool=cat==="Todas"?DB:DB.filter((q,i)=>catOf(i)===cat);const q=pool[Math.floor(Math.random()*pool.length)]||DB[Math.floor(Math.random()*DB.length)];return q}function render(){const q=current;$("du-round-label").textContent=`Ronda ${round} de ${rounds}`;$("du-cat-label").textContent=catOf(DB.indexOf(q));$("du-name-a").textContent=names[0];$("du-name-b").textContent=names[1];$("du-score-a").textContent=scores[0];$("du-score-b").textContent=scores[1];$("du-claim-a").textContent=names[0];$("du-claim-b").textContent=names[1];$("du-claim").hidden=mode!=="reaccion"||phase!=="claim";$("du-options").innerHTML=q&&phase==="answer"?q[1].map((o,i)=>`<button class="btn ghost" data-opt="${i}" type="button">${esc(o)}</button>`).join(""):"";$("du-question").textContent=q?.[0]||"";$("du-status").textContent=phase==="claim"?"¡Listos! Pulsen su lado cuando estén preparados.":claimed>=0?`${names[claimed]} responde`:"";$("du-card-a").classList.toggle("active",claimed===0);$("du-card-b").classList.toggle("active",claimed===1)}function startTimer(seconds,cb){clearInterval(timer);let end=Date.now()+seconds*1000;timer=setInterval(()=>{const left=Math.max(0,Math.ceil((end-Date.now())/1000));$("du-timer").textContent=left;if(Date.now()>=end){clearInterval(timer);timer=null;cb()}},100);$("du-timer").textContent=seconds}function startGame(){names=[$("du-p1").value.trim()||"Jugador 1",$("du-p2").value.trim()||"Jugador 2"];rounds=Number($("du-rounds").value);time=Number($("du-time").value);scores=[0,0];round=1;history=[];newRound();screen("du-scr-game")}function newRound(){clearInterval(timer);current=pick();claimed=mode==="quiz"?(round-1)%2:-1;phase=mode==="quiz"?"answer":"claim";render();if(mode==="reaccion"){let wait=1100+Math.random()*2200;$("du-status").textContent="No pulsen todavía…";setTimeout(()=>{if(phase!=="claim")return;phase="claim";$("du-count").textContent="¡YA!";window.emitSound?.(850,.16,"square");render()},wait)}else{startTimer(time,()=>resolve(-1))}}function claim(p){if(phase!=="claim"||claimed>=0)return;claimed=p;phase="answer";window.emitSound?.(600,.1,"triangle");render();startTimer(time,()=>resolve(-1))}function answer(i){if(phase!=="answer")return;if(mode==="quiz"&&claimed<0)return;const ok=i===current[2];resolve(ok?claimed:-1,ok)}function resolve(winner,correct=false){clearInterval(timer);timer=null;if(claimed<0&&mode==="reaccion"){history.push({round,q:current[0],winner:-1,correct:false});return advance()}if(winner>=0&&correct)scores[winner]++;history.push({round,q:current[0],winner,correct});phase="done";render();$("du-status").textContent=correct?`✓ ${names[winner]} acertó`:"✕ Nadie suma esta ronda";$("du-options").innerHTML=current[1].map((o,i)=>`<button class="btn ${i===current[2]?"primary":"ghost"}" disabled>${esc(o)}</button>`).join("");$("du-next").hidden=false}function advance(){if(round>=rounds)return finish();round++;$("du-next").hidden=true;newRound();save("du-scr-game")}function finish(){clearInterval(timer);timer=null;phase="done";const max=Math.max(...scores),winner=scores[0]===scores[1]?"Empate":names[scores.indexOf(max)];$("du-result-body").innerHTML=`<div class="bp-verdict"><strong>${winner==="Empate"?"¡Empate!":"¡Ganó "+esc(winner)+"!"}</strong><p class="muted">${scores[0]} a ${scores[1]} · ${round} rondas.</p></div><div class="du-result-row"><span>${esc(names[0])}</span><strong>${scores[0]} pts</strong></div><div class="du-result-row"><span>${esc(names[1])}</span><strong>${scores[1]} pts</strong></div><div class="du-history"><strong>Historia del duelo</strong>${history.map(h=>`<div>R${h.round}: ${esc(h.winner>=0?names[h.winner]:"Nadie")} · ${h.correct?"Acertó":"No sumó"}<br><small>${esc(h.q)}</small></div>`).join("")}</div>`;screen("du-scr-result")}function bind(){renderModes();renderCats();$("du-modes").onclick=e=>{const b=e.target.closest("[data-mode]");if(b){mode=b.dataset.mode;renderModes()}};$("du-start").onclick=startGame;$("du-top-menu").onclick=()=>window.GameSession?.clear("duelo");$("du-lobby-menu").onclick=()=>window.GameSession?.clear("duelo");$("du-claim-a").onclick=()=>claim(0);$("du-claim-b").onclick=()=>claim(1);$("du-options").onclick=e=>{const b=e.target.closest("[data-opt]");if(b)answer(Number(b.dataset.opt))};$("du-next").onclick=advance;$("du-end").onclick=finish;$("du-new").onclick=()=>{window.GameSession?.clear("duelo");location.reload()};$("du-result-menu").onclick=()=>window.GameSession?.clear("duelo")}function restore(s){if(!s?.names)return false;mode=s.mode||"reaccion";names=s.names;round=s.round||1;rounds=s.rounds||10;time=s.time||12;scores=s.scores||[0,0];current=s.current||null;claimed=s.claimed??-1;phase=s.phase||"claim";history=s.history||[];renderModes();renderCats();if(s.screen==="du-scr-game"&&current){screen("du-scr-game");render()}else if(s.screen==="du-scr-result")finish();else screen("du-scr-lobby");return true}function init(){bind();window.GameSession?.register(save);const s=window.GameSession?.load?.("duelo");if(s)restore(s);else screen("du-scr-lobby")}if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",init,{once:true});else init()})();
+/* Duelo: dos modos, categorías y turnos guardados entre visitas. */
+const Duelo = (() => {
+  const $ = id => document.getElementById(id);
+  const DB = window.AMS_NEW_GAMES_DB?.duelo?.questions || [];
+  const ranges = [
+    ["Cultura general", 0, 10],
+    ["Colombia", 10, 15],
+    ["Entretenimiento", 15, 25],
+    ["Ciencia", 25, 30]
+  ];
+  const modes = [
+    { id: "reaccion", name: "⚡ Reacción", desc: "Esperen la señal. El primero en pulsar gana el derecho a responder." },
+    { id: "quiz", name: "🧠 Quiz", desc: "Cada ronda le toca a uno de los jugadores responder." }
+  ];
+
+  let mode = "reaccion";
+  let names = ["Jugador 1", "Jugador 2"];
+  let round = 1;
+  let rounds = 10;
+  let time = 12;
+  let scores = [0, 0];
+  let current = null;
+  let currentCategory = "Todas";
+  let questionDeck = [];
+  let lastQuestionIndex = -1;
+  let claimed = -1;
+  let selectedAnswer = -1;
+  let timer = null;
+  let readyTimer = null;
+  let timerEndsAt = 0;
+  let readyAt = 0;
+  let remainingMs = 0;
+  let paused = false;
+  let phase = "idle";
+  let history = [];
+  let currentScreen = "du-scr-lobby";
+
+  const esc = value => window.Utils?.escapeHTML
+    ? window.Utils.escapeHTML(value)
+    : String(value).replace(/[&<>"']/g, char => ({
+      "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#039;"
+    }[char]));
+
+  function categoryOf(index) {
+    return ranges.find(range => index >= range[1] && index < range[2])?.[0] || "General";
+  }
+
+  function shuffle(items) {
+    const result = [...items];
+    for (let i = result.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [result[i], result[j]] = [result[j], result[i]];
+    }
+    return result;
+  }
+
+  function validQuestion(question) {
+    return Array.isArray(question)
+      && typeof question[0] === "string"
+      && Array.isArray(question[1])
+      && question[1].length >= 2
+      && Number.isInteger(question[2])
+      && question[2] >= 0
+      && question[2] < question[1].length;
+  }
+
+  function candidateIndices() {
+    return DB
+      .map((question, index) => ({ question, index }))
+      .filter(({ question, index }) => validQuestion(question)
+        && (currentCategory === "Todas" || categoryOf(index) === currentCategory))
+      .map(({ index }) => index);
+  }
+
+  function refillDeck() {
+    questionDeck = shuffle(candidateIndices());
+    if (questionDeck.length > 1 && questionDeck[questionDeck.length - 1] === lastQuestionIndex) {
+      [questionDeck[0], questionDeck[questionDeck.length - 1]] =
+        [questionDeck[questionDeck.length - 1], questionDeck[0]];
+    }
+  }
+
+  function pick() {
+    if (!questionDeck.length) refillDeck();
+    const index = questionDeck.pop();
+    const source = DB[index];
+    if (!source) return null;
+
+    const options = shuffle(source[1].map((text, sourceIndex) => ({ text, sourceIndex })));
+    lastQuestionIndex = index;
+    return {
+      index,
+      text: source[0],
+      category: categoryOf(index),
+      options: options.map(option => option.text),
+      answer: options.findIndex(option => option.sourceIndex === source[2])
+    };
+  }
+
+  function stopTimers() {
+    clearInterval(timer);
+    clearTimeout(readyTimer);
+    timer = null;
+    readyTimer = null;
+  }
+
+  function save() {
+    if (currentScreen === "du-scr-lobby") {
+      names = [
+        $("du-p1")?.value.trim() || "Jugador 1",
+        $("du-p2")?.value.trim() || "Jugador 2"
+      ];
+      rounds = Number($("du-rounds")?.value || rounds);
+      time = Number($("du-time")?.value || time);
+      currentCategory = $("du-cat")?.value || currentCategory;
+    }
+    window.GameSession?.save("duelo", {
+      mode, names, round, rounds, time, scores, current, currentCategory, questionDeck,
+      lastQuestionIndex, claimed, selectedAnswer, phase, history, timerEndsAt, readyAt,
+      remainingMs, paused, screen: currentScreen
+    });
+  }
+
+  function showScreen(id) {
+    currentScreen = id;
+    ["du-scr-lobby", "du-scr-game", "du-scr-result"].forEach(screenId => {
+      $(screenId).hidden = screenId !== id;
+    });
+    save();
+  }
+
+  function showError(message) {
+    const error = $("du-data-error");
+    if (!error) return;
+    error.textContent = message || "";
+    error.hidden = !message;
+  }
+
+  function renderModes() {
+    $("du-modes").innerHTML = modes.map(item =>
+      '<button class="du-mode ' + (item.id === mode ? "selected" : "") +
+      '" type="button" data-mode="' + item.id + '" aria-pressed="' + (item.id === mode) +
+      '"><strong>' + item.name + '</strong><small>' + esc(item.desc) + "</small></button>"
+    ).join("");
+  }
+
+  function renderCategories() {
+    $("du-cat").innerHTML = '<option value="Todas">Todas</option>' +
+      ranges.map(range => '<option value="' + esc(range[0]) + '">' + esc(range[0]) + "</option>").join("");
+    $("du-cat").value = currentCategory;
+  }
+
+  function renderOptions() {
+    const host = $("du-options");
+    if (!current || (phase !== "answer" && phase !== "done") || paused) {
+      host.innerHTML = "";
+      return;
+    }
+
+    host.innerHTML = current.options.map((option, index) => {
+      const isCorrect = phase === "done" && index === current.answer;
+      const isSelected = index === selectedAnswer;
+      const style = isCorrect ? "success" : (phase === "done" && isSelected ? "danger" :
+        (isSelected ? "primary" : "ghost"));
+      const disabled = phase === "done" ? " disabled" : "";
+      const suffix = isCorrect ? " · Correcta" : (phase === "done" && isSelected ? " · Elegida" : "");
+      return '<button class="btn ' + style + '" data-opt="' + index + '" type="button"' +
+        disabled + ">" + esc(option) + suffix + "</button>";
+    }).join("");
+  }
+
+  function render() {
+    $("du-round-label").textContent = "Ronda " + round + " de " + rounds;
+    $("du-cat-label").textContent = current?.category || "Categoría";
+    $("du-name-a").textContent = names[0] || "Jugador 1";
+    $("du-name-b").textContent = names[1] || "Jugador 2";
+    $("du-score-a").textContent = scores[0] || 0;
+    $("du-score-b").textContent = scores[1] || 0;
+    $("du-claim-a").textContent = names[0] || "Jugador 1";
+    $("du-claim-b").textContent = names[1] || "Jugador 2";
+    $("du-question").textContent = current?.text || "";
+
+    const claimVisible = mode === "reaccion" && phase === "claim" && !paused;
+    $("du-claim").hidden = !claimVisible;
+    $("du-card-a").classList.toggle("active", claimed === 0);
+    $("du-card-b").classList.toggle("active", claimed === 1);
+
+    if (paused) {
+      $("du-status").textContent = "Partida pausada. Pulsa Continuar para retomar el turno.";
+      $("du-count").textContent = "PAUSA";
+    } else if (phase === "waiting") {
+      $("du-status").textContent = "No pulsen todavía…";
+      $("du-count").textContent = "…";
+    } else if (phase === "claim") {
+      $("du-status").textContent = "¡Listos! Pulsen su lado cuando estén preparados.";
+      $("du-count").textContent = "¡YA!";
+    } else if (phase === "answer" && mode === "quiz") {
+      $("du-status").textContent = "Turno de " + names[claimed] + ". Elige una respuesta.";
+      $("du-count").textContent = "";
+    } else if (phase === "answer") {
+      $("du-status").textContent = names[claimed] + " responde.";
+      $("du-count").textContent = "";
+    } else if (phase === "done") {
+      const result = history[history.length - 1];
+      $("du-status").textContent = result?.correct
+        ? "✓ " + names[result.winner] + " acertó."
+        : "✕ Nadie suma esta ronda. Respuesta: " + (current?.options[current?.answer] || "");
+      $("du-count").textContent = "";
+    } else {
+      $("du-status").textContent = "";
+      $("du-count").textContent = "";
+    }
+
+    $("du-pause").hidden = phase !== "answer";
+    $("du-pause").textContent = paused ? "Continuar" : "Pausar";
+    $("du-pause").setAttribute("aria-pressed", String(paused));
+    $("du-pause-banner").hidden = !paused;
+    $("du-timer").textContent = paused
+      ? String(Math.ceil(remainingMs / 1000))
+      : timerEndsAt && phase === "answer"
+        ? String(Math.max(0, Math.ceil((timerEndsAt - Date.now()) / 1000)))
+        : "";
+    $("du-next").hidden = phase !== "done";
+    renderOptions();
+  }
+
+  function updateTimer() {
+    if (paused || phase !== "answer") return;
+    const left = Math.max(0, Math.ceil((timerEndsAt - Date.now()) / 1000));
+    $("du-timer").textContent = String(left);
+    if (left <= 0) resolve(-1, false);
+  }
+
+  function startAnswerTimer(deadline = 0, remaining = 0) {
+    clearInterval(timer);
+    timer = null;
+    if (paused || phase !== "answer") return;
+    timerEndsAt = deadline || (Date.now() + (remaining || time * 1000));
+    if (timerEndsAt <= Date.now()) {
+      resolve(-1, false);
+      return;
+    }
+    updateTimer();
+    if (phase === "answer") timer = setInterval(updateTimer, 100);
+  }
+
+  function activateReady() {
+    if (phase !== "waiting") return;
+    readyAt = 0;
+    phase = "claim";
+    $("du-count").textContent = "¡YA!";
+    window.emitSound?.(850, 0.16, "square");
+    render();
+    save();
+  }
+
+  function scheduleReady() {
+    clearTimeout(readyTimer);
+    if (phase !== "waiting") return;
+    const wait = readyAt - Date.now();
+    if (wait <= 0) {
+      activateReady();
+      return;
+    }
+    readyTimer = setTimeout(activateReady, wait);
+  }
+
+  function newRound() {
+    stopTimers();
+    paused = false;
+    remainingMs = 0;
+    timerEndsAt = 0;
+    readyAt = 0;
+    current = pick();
+    if (!current) {
+      showError("No hay preguntas válidas para esta categoría. Elige otra e inténtalo de nuevo.");
+      showScreen("du-scr-lobby");
+      return;
+    }
+    selectedAnswer = -1;
+    if (mode === "reaccion") {
+      claimed = -1;
+      phase = "waiting";
+      readyAt = Date.now() + 1100 + Math.random() * 2200;
+    } else {
+      claimed = (round - 1) % 2;
+      phase = "answer";
+      timerEndsAt = Date.now() + time * 1000;
+    }
+
+    showError("");
+    render();
+    showScreen("du-scr-game");
+    if (phase === "waiting") scheduleReady();
+    else startAnswerTimer(timerEndsAt);
+  }
+
+  function startGame() {
+    names = [
+      $("du-p1").value.trim() || "Jugador 1",
+      $("du-p2").value.trim() || "Jugador 2"
+    ];
+    rounds = Number($("du-rounds").value);
+    time = Number($("du-time").value);
+    currentCategory = $("du-cat").value || "Todas";
+    if (!candidateIndices().length) {
+      showError("No hay preguntas válidas en esta categoría. Elige otra categoría.");
+      return;
+    }
+    showError("");
+    scores = [0, 0];
+    round = 1;
+    history = [];
+    questionDeck = [];
+    lastQuestionIndex = -1;
+    newRound();
+  }
+
+  function claim(player) {
+    if (phase !== "claim" || mode !== "reaccion" || claimed >= 0) return;
+    claimed = player;
+    selectedAnswer = -1;
+    phase = "answer";
+    remainingMs = time * 1000;
+    timerEndsAt = Date.now() + remainingMs;
+    window.emitSound?.(600, 0.1, "triangle");
+    render();
+    startAnswerTimer(timerEndsAt);
+    save();
+  }
+
+  function answer(index) {
+    if (phase !== "answer" || paused || !current || index < 0 || index >= current.options.length) return;
+    selectedAnswer = index;
+    resolve(index === current.answer ? claimed : -1, index === current.answer);
+  }
+
+  function resolve(winner, correct) {
+    if (phase !== "answer") return;
+    stopTimers();
+    paused = false;
+    remainingMs = 0;
+    timerEndsAt = 0;
+    readyAt = 0;
+    if (winner >= 0 && correct) scores[winner] += 1;
+    history.push({
+      round,
+      question: current.text,
+      category: current.category,
+      winner,
+      correct,
+      answer: current.options[current.answer],
+      selected: selectedAnswer >= 0 ? current.options[selectedAnswer] : ""
+    });
+    phase = "done";
+    window.emitSound?.(correct ? 720 : 220, 0.1, correct ? "triangle" : "sawtooth");
+    render();
+    save();
+  }
+
+  function advance() {
+    if (phase !== "done") return;
+    if (round >= rounds) {
+      finish();
+      return;
+    }
+    round += 1;
+    newRound();
+  }
+
+  function finish() {
+    stopTimers();
+    paused = false;
+    remainingMs = 0;
+    if (!names.length) return;
+    const winner = scores[0] === scores[1] ? "Empate" : names[scores[0] > scores[1] ? 0 : 1];
+    $("du-result-body").innerHTML =
+      '<div class="bp-verdict"><strong>' + (winner === "Empate" ? "¡Empate!" : "¡Ganó " + esc(winner) + "!") +
+      '</strong><p class="muted">' + scores[0] + " a " + scores[1] + " · " + history.length + " rondas jugadas de " + rounds + '.</p></div>' +
+      '<div class="du-result-row"><span>' + esc(names[0]) + "</span><strong>" + scores[0] + " pts</strong></div>" +
+      '<div class="du-result-row"><span>' + esc(names[1]) + "</span><strong>" + scores[1] + " pts</strong></div>" +
+      '<div class="du-history"><strong>Historia del duelo</strong>' +
+      (history.length ? history.map(item =>
+        '<div>R' + item.round + " · " + esc(item.winner >= 0 ? names[item.winner] : "Nadie") +
+        " · " + (item.correct ? "Acertó" : "No sumó") + " · respuesta: " + esc(item.answer) +
+        '<br><small>' + esc(item.question) + "</small></div>").join("")
+        : '<p class="muted">No hubo rondas registradas.</p>') + "</div>";
+    phase = "done";
+    showScreen("du-scr-result");
+  }
+
+  function syncConfig() {
+    $("du-p1").value = names[0] || "Jugador 1";
+    $("du-p2").value = names[1] || "Jugador 2";
+    $("du-rounds").value = String(rounds);
+    $("du-time").value = String(time);
+    $("du-cat").value = currentCategory;
+    renderModes();
+    renderCategories();
+  }
+
+  function togglePause() {
+    if (phase !== "answer") return;
+    if (!paused) {
+      remainingMs = Math.max(0, timerEndsAt - Date.now());
+      clearInterval(timer);
+      timer = null;
+      paused = true;
+      render();
+      save();
+      return;
+    }
+    paused = false;
+    if (remainingMs <= 0) {
+      resolve(-1, false);
+      return;
+    }
+    timerEndsAt = Date.now() + remainingMs;
+    startAnswerTimer(timerEndsAt);
+    render();
+    save();
+  }
+
+  function newGame() {
+    stopTimers();
+    window.GameSession?.clear("duelo");
+    round = 1;
+    scores = [0, 0];
+    history = [];
+    current = null;
+    currentScreen = "du-scr-lobby";
+    phase = "idle";
+    claimed = -1;
+    selectedAnswer = -1;
+    paused = false;
+    questionDeck = [];
+    renderModes();
+    showError("");
+    render();
+    showScreen("du-scr-lobby");
+  }
+
+  function normalizeQuestion(question) {
+    if (Array.isArray(question)) {
+      const index = DB.findIndex(item => item[0] === question[0]);
+      const options = [...(question[1] || [])];
+      return { index, text: question[0], category: categoryOf(index), options, answer: Number(question[2] || 0) };
+    }
+    if (question && typeof question.text === "string" && Array.isArray(question.options)) return question;
+    return null;
+  }
+
+  function restore(state) {
+    if (!state?.names?.length) return false;
+    mode = state.mode === "quiz" ? "quiz" : "reaccion";
+    names = [String(state.names[0] || "Jugador 1"), String(state.names[1] || "Jugador 2")];
+    round = Math.max(1, Number(state.round || 1));
+    rounds = Number(state.rounds || 10);
+    time = Number(state.time || 12);
+    scores = Array.isArray(state.scores) && state.scores.length === 2 ? state.scores : [0, 0];
+    current = normalizeQuestion(state.current);
+    currentCategory = state.currentCategory === "Todas" || ranges.some(range => range[0] === state.currentCategory) ? state.currentCategory : "Todas";
+    questionDeck = Array.isArray(state.questionDeck) ? state.questionDeck.filter(index => Number.isInteger(index) && validQuestion(DB[index]) && (currentCategory === "Todas" || categoryOf(index) === currentCategory)) : [];
+    lastQuestionIndex = Number.isInteger(state.lastQuestionIndex) ? state.lastQuestionIndex : current?.index ?? -1;
+    claimed = Number.isInteger(state.claimed) ? state.claimed : -1;
+    selectedAnswer = Number.isInteger(state.selectedAnswer) ? state.selectedAnswer : -1;
+    phase = state.phase || "idle";
+    history = Array.isArray(state.history) ? state.history : [];
+    timerEndsAt = Number(state.timerEndsAt || 0);
+    readyAt = Number(state.readyAt || 0);
+    remainingMs = Number(state.remainingMs || 0);
+    paused = Boolean(state.paused);
+    currentScreen = state.screen || "du-scr-lobby";
+
+    syncConfig();
+    if (currentScreen === "du-scr-game" && current) {
+      showScreen("du-scr-game");
+      render();
+      if (phase === "waiting") scheduleReady();
+      else if (phase === "answer" && !paused) startAnswerTimer(timerEndsAt, remainingMs);
+    } else if (currentScreen === "du-scr-result") {
+      finish();
+    } else {
+      showScreen("du-scr-lobby");
+    }
+    return true;
+  }
+
+  function bind() {
+    renderModes();
+    renderCategories();
+    $("du-modes").onclick = event => {
+      const button = event.target.closest("[data-mode]");
+      if (!button) return;
+      mode = button.dataset.mode;
+      renderModes();
+      save();
+    };
+    $("du-cat").onchange = event => {
+      currentCategory = event.target.value;
+      questionDeck = [];
+      save();
+    };
+    ["du-p1", "du-p2", "du-rounds", "du-time"].forEach(id => $(id).oninput = save);
+    ["du-rounds", "du-time"].forEach(id => $(id).onchange = save);
+    $("du-start").onclick = startGame;
+    $("du-claim-a").onclick = () => claim(0);
+    $("du-claim-b").onclick = () => claim(1);
+    $("du-options").onclick = event => {
+      const button = event.target.closest("[data-opt]");
+      if (button) answer(Number(button.dataset.opt));
+    };
+    $("du-pause").onclick = togglePause;
+    $("du-next").onclick = advance;
+    $("du-end").onclick = () => {
+      if (window.confirm("¿Terminar el duelo y ver el resultado?")) finish();
+    };
+    $("du-new").onclick = newGame;
+  }
+
+  function init() {
+    bind();
+    window.GameSession?.register(save);
+    const saved = window.GameSession?.load?.("duelo");
+    if (!restore(saved)) showScreen("du-scr-lobby");
+  }
+
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init, { once: true });
+  else init();
+
+  return { startGame, finish };
+})();

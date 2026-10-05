@@ -341,7 +341,10 @@ const Nav = (() => {
       ["rompehielo.html", "Rompehielo", "question"],
       ["tabu.html", "Tabú", "close"],
       ["verdadreto.html", "Verdad o Reto", "flame"],
-      ["yonunca.html", "Yo Nunca", "question"]
+      ["yonunca.html", "Yo Nunca", "question"],
+      ["batalla.html", "Batalla de Palabras", "question"],
+      ["duelo.html", "Duelo", "question"],
+      ["apuesta.html", "Apuesta", "question"]
     ];
 
     inner.innerHTML = games.map(([href, label, icon]) =>

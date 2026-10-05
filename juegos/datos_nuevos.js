@@ -76,15 +76,15 @@ const AMS_NEW_GAMES_DB = {
     ["¿Qué juego popular tiene impostores?",["Among Us","Tetris"],0],
     ["¿Qué fontanero protagoniza Super Mario?",["Mario","Luigi"],0],
     ["¿Qué película tiene a Woody y Buzz?",["Toy Story","Cars"],0],
-    ["¿Qué escogería la mayoría: playa o montaña?",["Playa","Montaña"],0],
-    ["¿Qué escogería la mayoría: pizza o hamburguesa?",["Pizza","Hamburguesa"],0],
-    ["¿Qué escogería la mayoría: perro o gato?",["Perro","Gato"],0],
-    ["¿Qué escogería la mayoría: día o noche?",["Día","Noche"],0],
-    ["¿Qué escogería la mayoría: dulce o salado?",["Dulce","Salado"],0],
-    ["¿Qué escogería la mayoría: cine o concierto?",["Cine","Concierto"],0],
-    ["¿Qué escogería la mayoría: viajar o ahorrar?",["Viajar","Ahorrar"],0],
-    ["¿Qué escogería la mayoría: celular nuevo o vacaciones?",["Vacaciones","Celular nuevo"],0],
-    ["¿Qué escogería la mayoría: madrugar o trasnochar?",["Trasnochar","Madrugar"],0],
-    ["¿Qué escogería la mayoría: cocinar o pedir domicilio?",["Pedir domicilio","Cocinar"],0]
+    ["¿Cuál de estos animales es mamífero?",["Delfín","Tiburón"],0],
+    ["¿Cuál es la moneda de Colombia?",["Peso colombiano","Sol peruano"],0],
+    ["¿Qué órgano usamos principalmente para ver?",["Los ojos","Las orejas"],0],
+    ["¿En qué continente está Brasil?",["América del Sur","Europa"],0],
+    ["¿Cuál es el idioma oficial de Brasil?",["Portugués","Español"],0],
+    ["¿En qué continente está Egipto?",["África","Oceanía"],0],
+    ["¿Qué instrumento musical tiene teclas?",["Piano","Violín"],0],
+    ["¿Cuánto es 7 + 5?",["12","13"],0],
+    ["¿Qué instrumento sirve para medir la temperatura?",["Termómetro","Barómetro"],0],
+    ["¿Cuál de estos animales pone huevos?",["Gallina","Perro"],0]
   ]}
 };
