@@ -374,6 +374,16 @@ const Apuesta = (() => {
     return true;
   }
 
+  function openEndConfirm() {
+    $("ap-end-confirm").classList.add("active");
+    $("ap-end-cancel").focus();
+  }
+
+  function closeEndConfirm() {
+    $("ap-end-confirm").classList.remove("active");
+    $("ap-end").focus();
+  }
+
   function bind() {
     renderCategories();
     renderInputs();
@@ -396,9 +406,12 @@ const Apuesta = (() => {
       if (button) wager(Number(button.dataset.bet));
     };
     $("ap-next").onclick = next;
-    $("ap-end").onclick = () => {
-      if (window.confirm("¿Terminar la partida y ver el resultado?")) finish();
-    };
+    $("ap-end").onclick = openEndConfirm;
+    $("ap-end-cancel").onclick = closeEndConfirm;
+    $("ap-end-confirm-submit").onclick = () => { closeEndConfirm(); finish(); };
+    window.addEventListener("keydown", event => {
+      if (event.key === "Escape" && $("ap-end-confirm").classList.contains("active")) closeEndConfirm();
+    });
     $("ap-new").onclick = newGame;
     $("ap-result-menu").onclick = () => save();
     $("ap-lobby-menu").onclick = () => save();

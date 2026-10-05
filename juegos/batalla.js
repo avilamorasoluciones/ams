@@ -424,6 +424,16 @@ const BatallaPalabras = (() => {
     return true;
   }
 
+  function openEndConfirm() {
+    $("bp-end-confirm").classList.add("active");
+    $("bp-end-cancel").focus();
+  }
+
+  function closeEndConfirm() {
+    $("bp-end-confirm").classList.remove("active");
+    $("bp-end").focus();
+  }
+
   function bind() {
     renderModes();
     renderTeamInputs();
@@ -448,9 +458,12 @@ const BatallaPalabras = (() => {
     $("bp-correct").onclick = () => completeTurn(true);
     $("bp-wrong").onclick = () => completeTurn(false);
     $("bp-next").onclick = () => completeTurn(false);
-    $("bp-end").onclick = () => {
-      if (window.confirm("¿Terminar la batalla y ver el resultado?")) finish();
-    };
+    $("bp-end").onclick = openEndConfirm;
+    $("bp-end-cancel").onclick = closeEndConfirm;
+    $("bp-end-confirm-submit").onclick = () => { closeEndConfirm(); finish(); };
+    window.addEventListener("keydown", event => {
+      if (event.key === "Escape" && $("bp-end-confirm").classList.contains("active")) closeEndConfirm();
+    });
     $("bp-new").onclick = newGame;
   }
 

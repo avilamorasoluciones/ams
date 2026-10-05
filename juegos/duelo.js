@@ -486,6 +486,16 @@ const Duelo = (() => {
     return true;
   }
 
+  function openEndConfirm() {
+    $("du-end-confirm").classList.add("active");
+    $("du-end-cancel").focus();
+  }
+
+  function closeEndConfirm() {
+    $("du-end-confirm").classList.remove("active");
+    $("du-end").focus();
+  }
+
   function bind() {
     renderModes();
     renderCategories();
@@ -512,9 +522,12 @@ const Duelo = (() => {
     };
     $("du-pause").onclick = togglePause;
     $("du-next").onclick = advance;
-    $("du-end").onclick = () => {
-      if (window.confirm("¿Terminar el duelo y ver el resultado?")) finish();
-    };
+    $("du-end").onclick = openEndConfirm;
+    $("du-end-cancel").onclick = closeEndConfirm;
+    $("du-end-confirm-submit").onclick = () => { closeEndConfirm(); finish(); };
+    window.addEventListener("keydown", event => {
+      if (event.key === "Escape" && $("du-end-confirm").classList.contains("active")) closeEndConfirm();
+    });
     $("du-new").onclick = newGame;
   }
 
