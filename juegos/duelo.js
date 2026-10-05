@@ -1,4 +1,4 @@
-/* Duelo: dos modos, categorías y turnos guardados entre visitas. */
+/* Duelo: enfrentamientos aleatorios, respuesta oral y puntuación arbitral. */
 const Duelo = (() => {
   const $ = id => document.getElementById(id);
   const DB = window.AMS_NEW_GAMES_DB?.duelo?.questions || [];
@@ -8,27 +8,23 @@ const Duelo = (() => {
     ["Entretenimiento", 15, 25],
     ["Ciencia", 25, 30]
   ];
-  const modes = [
-    { id: "reaccion", name: "⚡ Reacción", desc: "Esperen la señal. El primero en pulsar gana el derecho a responder." },
-    { id: "quiz", name: "🧠 Quiz", desc: "Cada ronda le toca a uno de los jugadores responder." }
-  ];
 
-  let mode = "reaccion";
-  let names = ["Jugador 1", "Jugador 2"];
-  let round = 1;
-  let rounds = 10;
+  let format = "individual";
+  let rosterSize = 4;
   let time = 12;
-  let scores = [0, 0];
-  let current = null;
   let currentCategory = "Todas";
+  let teamNames = ["Equipo 1", "Equipo 2"];
+  let rosterNames = { individual: [], teams: [[], []] };
+  let participants = [];
+  let matches = [];
+  let matchIndex = 0;
+  let teamScores = [0, 0];
+  let playerScores = {};
+  let current = null;
   let questionDeck = [];
   let lastQuestionIndex = -1;
-  let claimed = -1;
-  let selectedAnswer = -1;
   let timer = null;
-  let readyTimer = null;
   let timerEndsAt = 0;
-  let readyAt = 0;
   let remainingMs = 0;
   let paused = false;
   let phase = "idle";
@@ -58,66 +54,110 @@ const Duelo = (() => {
     return Array.isArray(question)
       && typeof question[0] === "string"
       && Array.isArray(question[1])
-      && question[1].length >= 2
+      && question[1].length > 0
       && Number.isInteger(question[2])
       && question[2] >= 0
       && question[2] < question[1].length;
   }
 
   function candidateIndices() {
-    return DB
-      .map((question, index) => ({ question, index }))
-      .filter(({ question, index }) => validQuestion(question)
-        && (currentCategory === "Todas" || categoryOf(index) === currentCategory))
-      .map(({ index }) => index);
+    return DB.map((question, index) => ({ question, index }))
+      .filter(item => validQuestion(item.question)
+        && (currentCategory === "Todas" || categoryOf(item.index) === currentCategory))
+      .map(item => item.index);
   }
 
-  function refillDeck() {
-    questionDeck = shuffle(candidateIndices());
-    if (questionDeck.length > 1 && questionDeck[questionDeck.length - 1] === lastQuestionIndex) {
-      [questionDeck[0], questionDeck[questionDeck.length - 1]] =
-        [questionDeck[questionDeck.length - 1], questionDeck[0]];
+  function renderCategories() {
+    $("du-cat").innerHTML = '<option value="Todas">Todas las categorías</option>' +
+      ranges.map(range => '<option value="' + esc(range[0]) + '">' + esc(range[0]) + "</option>").join("");
+    $("du-cat").value = currentCategory;
+  }
+
+  function renderSizeOptions() {
+    const options = format === "individual" ? [2, 4, 6, 8, 10, 12] : [1, 2, 3, 4, 5, 6];
+    const oldSize = rosterSize;
+    $("du-size").innerHTML = options.map(value => {
+      const label = format === "individual"
+        ? value + " jugadores · " + (value / 2) + " duelos"
+        : value + (value === 1 ? " jugador" : " jugadores") + " por equipo · " + value + " duelos";
+      return '<option value="' + value + '">' + label + "</option>";
+    }).join("");
+    rosterSize = options.includes(oldSize)
+      ? oldSize
+      : (format === "individual" ? 4 : 2);
+    $("du-size").value = String(rosterSize);
+    $("du-size-label").firstChild.textContent = format === "individual"
+      ? "Cantidad de jugadores"
+      : "Integrantes por equipo";
+    $("du-team-config").hidden = format !== "teams";
+    $("du-match-count").textContent = format === "individual"
+      ? "Cada jugador tendrá un duelo. Se enfrentarán " + (rosterSize / 2) + " parejas."
+      : "Cada integrante de ambos equipos juega una vez contra un rival aleatorio.";
+    $("du-format-help").textContent = format === "individual"
+      ? "La cantidad debe ser par. La app mezcla los nombres y forma las parejas al azar."
+      : "La app empareja al azar a una persona de cada equipo. Los compañeros que esperan hacen de árbitros.";
+  }
+
+  function defaultPlayerName(index, teamIndex) {
+    return format === "individual"
+      ? "Jugador " + (index + 1)
+      : "Jugador " + (teamIndex === 0 ? "A" : "B") + (index + 1);
+  }
+
+  function renderRosterInputs() {
+    if (format === "individual") {
+      const names = rosterNames.individual;
+      $("du-roster-inputs").innerHTML = Array.from({ length: rosterSize }, (_, index) =>
+        '<label>Jugador ' + (index + 1) + '<input id="du-player-' + index +
+        '" maxlength="24" value="' + esc(names[index] || defaultPlayerName(index, 0)) +
+        '" autocomplete="off" placeholder="Nombre del jugador"></label>'
+      ).join("");
+      return;
     }
+
+    $("du-team-name-0").value = teamNames[0] || "Equipo 1";
+    $("du-team-name-1").value = teamNames[1] || "Equipo 2";
+    $("du-roster-inputs").innerHTML = [0, 1].map(teamIndex =>
+      '<section class="du-team-roster"><h3>' + esc(teamNames[teamIndex] || ("Equipo " + (teamIndex + 1))) +
+      '</h3><div class="stack">' + Array.from({ length: rosterSize }, (_, index) =>
+        '<label>Integrante ' + (index + 1) + '<input id="du-player-' + teamIndex + "-" + index +
+        '" maxlength="24" value="' + esc(rosterNames.teams[teamIndex][index] || defaultPlayerName(index, teamIndex)) +
+        '" autocomplete="off" placeholder="Nombre del jugador"></label>'
+      ).join("") + "</div></section>"
+    ).join("");
   }
 
-  function pick() {
-    if (!questionDeck.length) refillDeck();
-    const index = questionDeck.pop();
-    const source = DB[index];
-    if (!source) return null;
-
-    const options = shuffle(source[1].map((text, sourceIndex) => ({ text, sourceIndex })));
-    lastQuestionIndex = index;
-    return {
-      index,
-      text: source[0],
-      category: categoryOf(index),
-      options: options.map(option => option.text),
-      answer: options.findIndex(option => option.sourceIndex === source[2])
-    };
+  function captureRosterInputs(targetFormat = format, targetSize = rosterSize) {
+    const fieldValue = id => $(id)?.value.trim() || "";
+    if (targetFormat === "individual") {
+      rosterNames.individual = Array.from({ length: targetSize }, (_, index) =>
+        fieldValue("du-player-" + index) || defaultPlayerName(index, 0));
+      return;
+    }
+    teamNames = [
+      fieldValue("du-team-name-0") || "Equipo 1",
+      fieldValue("du-team-name-1") || "Equipo 2"
+    ];
+    rosterNames.teams = [0, 1].map(teamIndex =>
+      Array.from({ length: targetSize }, (_, index) =>
+        fieldValue("du-player-" + teamIndex + "-" + index) || defaultPlayerName(index, teamIndex))
+    );
   }
 
-  function stopTimers() {
-    clearInterval(timer);
-    clearTimeout(readyTimer);
-    timer = null;
-    readyTimer = null;
+  function captureLobbyConfig() {
+    format = $("du-format").value === "teams" ? "teams" : "individual";
+    rosterSize = Number($("du-size").value || rosterSize);
+    time = Number($("du-time").value || 12);
+    currentCategory = $("du-cat").value || "Todas";
+    captureRosterInputs(format, rosterSize);
   }
 
   function save() {
-    if (currentScreen === "du-scr-lobby") {
-      names = [
-        $("du-p1")?.value.trim() || "Jugador 1",
-        $("du-p2")?.value.trim() || "Jugador 2"
-      ];
-      rounds = Number($("du-rounds")?.value || rounds);
-      time = Number($("du-time")?.value || time);
-      currentCategory = $("du-cat")?.value || currentCategory;
-    }
+    if (currentScreen === "du-scr-lobby") captureLobbyConfig();
     window.GameSession?.save("duelo", {
-      mode, names, round, rounds, time, scores, current, currentCategory, questionDeck,
-      lastQuestionIndex, claimed, selectedAnswer, phase, history, timerEndsAt, readyAt,
-      remainingMs, paused, screen: currentScreen
+      schemaVersion: 2, format, rosterSize, time, currentCategory, teamNames, rosterNames,
+      participants, matches, matchIndex, teamScores, playerScores, current, questionDeck,
+      lastQuestionIndex, timerEndsAt, remainingMs, paused, phase, history, screen: currentScreen
     });
   }
 
@@ -130,274 +170,292 @@ const Duelo = (() => {
   }
 
   function showError(message) {
-    const error = $("du-data-error");
-    if (!error) return;
-    error.textContent = message || "";
-    error.hidden = !message;
+    const node = $("du-data-error");
+    node.textContent = message || "";
+    node.hidden = !message;
   }
 
-  function renderModes() {
-    $("du-modes").innerHTML = modes.map(item =>
-      '<button class="du-mode ' + (item.id === mode ? "selected" : "") +
-      '" type="button" data-mode="' + item.id + '" aria-pressed="' + (item.id === mode) +
-      '"><strong>' + item.name + '</strong><small>' + esc(item.desc) + "</small></button>"
+  function syncConfig() {
+    $("du-format").value = format;
+    $("du-time").value = String(time);
+    renderCategories();
+    renderSizeOptions();
+    renderRosterInputs();
+  }
+
+  function getParticipant(id) {
+    return participants.find(player => player.id === id) || null;
+  }
+
+  function currentMatch() {
+    const match = matches[matchIndex];
+    if (!match) return null;
+    return { a: getParticipant(match.a), b: getParticipant(match.b) };
+  }
+
+  function renderScoreboard(pair) {
+    if (format === "teams") {
+      $("du-scoreboard").innerHTML = [0, 1].map(teamIndex =>
+        '<div class="du-score-row' + (pair && (pair.a?.team === teamIndex || pair.b?.team === teamIndex) ? " active" : "") +
+        '"><span>' + esc(teamNames[teamIndex]) + '</span><strong>' + (teamScores[teamIndex] || 0) + " pts</strong></div>"
+      ).join("");
+      return;
+    }
+    $("du-scoreboard").innerHTML = participants.map(player =>
+      '<div class="du-score-row' + (pair && (pair.a?.id === player.id || pair.b?.id === player.id) ? " active" : "") +
+      '"><span>' + esc(player.name) + '</span><strong>' + (playerScores[player.id] || 0) + " pts</strong></div>"
     ).join("");
   }
 
-  function renderCategories() {
-    $("du-cat").innerHTML = '<option value="Todas">Todas</option>' +
-      ranges.map(range => '<option value="' + esc(range[0]) + '">' + esc(range[0]) + "</option>").join("");
-    $("du-cat").value = currentCategory;
-  }
-
-  function renderOptions() {
-    const host = $("du-options");
-    if (!current || (phase !== "answer" && phase !== "done") || paused) {
-      host.innerHTML = "";
-      return;
-    }
-
-    host.innerHTML = current.options.map((option, index) => {
-      const isCorrect = phase === "done" && index === current.answer;
-      const isSelected = index === selectedAnswer;
-      const style = isCorrect ? "success" : (phase === "done" && isSelected ? "danger" :
-        (isSelected ? "primary" : "ghost"));
-      const disabled = phase === "done" ? " disabled" : "";
-      const suffix = isCorrect ? " · Correcta" : (phase === "done" && isSelected ? " · Elegida" : "");
-      return '<button class="btn ' + style + '" data-opt="' + index + '" type="button"' +
-        disabled + ">" + esc(option) + suffix + "</button>";
-    }).join("");
+  function answerText(index) {
+    const source = DB[index];
+    return source && source[1] ? String(source[1][source[2]] || "") : "";
   }
 
   function render() {
-    $("du-round-label").textContent = "Ronda " + round + " de " + rounds;
+    const pair = currentMatch();
+    $("du-round-label").textContent = "Duelo " + Math.min(matchIndex + 1, matches.length) + " de " + matches.length;
     $("du-cat-label").textContent = current?.category || "Categoría";
-    $("du-name-a").textContent = names[0] || "Jugador 1";
-    $("du-name-b").textContent = names[1] || "Jugador 2";
-    $("du-score-a").textContent = scores[0] || 0;
-    $("du-score-b").textContent = scores[1] || 0;
-    $("du-claim-a").textContent = names[0] || "Jugador 1";
-    $("du-claim-b").textContent = names[1] || "Jugador 2";
+    $("du-name-a").textContent = pair?.a?.name || "";
+    $("du-name-b").textContent = pair?.b?.name || "";
+    $("du-team-a-label").textContent = format === "teams" && pair?.a ? teamNames[pair.a.team] : "Participante";
+    $("du-team-b-label").textContent = format === "teams" && pair?.b ? teamNames[pair.b.team] : "Participante";
     $("du-question").textContent = current?.text || "";
-
-    const claimVisible = mode === "reaccion" && phase === "claim" && !paused;
-    $("du-claim").hidden = !claimVisible;
-    $("du-card-a").classList.toggle("active", claimed === 0);
-    $("du-card-b").classList.toggle("active", claimed === 1);
-
-    if (paused) {
-      $("du-status").textContent = "Partida pausada. Pulsa Continuar para retomar el turno.";
-      $("du-count").textContent = "PAUSA";
-    } else if (phase === "waiting") {
-      $("du-status").textContent = "No pulsen todavía…";
-      $("du-count").textContent = "…";
-    } else if (phase === "claim") {
-      $("du-status").textContent = "¡Listos! Pulsen su lado cuando estén preparados.";
-      $("du-count").textContent = "¡YA!";
-    } else if (phase === "answer" && mode === "quiz") {
-      $("du-status").textContent = "Turno de " + names[claimed] + ". Elige una respuesta.";
-      $("du-count").textContent = "";
-    } else if (phase === "answer") {
-      $("du-status").textContent = names[claimed] + " responde.";
-      $("du-count").textContent = "";
-    } else if (phase === "done") {
-      const result = history[history.length - 1];
-      $("du-status").textContent = result?.correct
-        ? "✓ " + names[result.winner] + " acertó."
-        : "✕ Nadie suma esta ronda. Respuesta: " + (current?.options[current?.answer] || "");
-      $("du-count").textContent = "";
-    } else {
-      $("du-status").textContent = "";
-      $("du-count").textContent = "";
-    }
-
+    $("du-point-a").textContent = pair?.a ? "Punto para " + pair.a.name : "Punto para jugador 1";
+    $("du-point-b").textContent = pair?.b ? "Punto para " + pair.b.name : "Punto para jugador 2";
+    $("du-point-actions").hidden = phase !== "answer" || paused;
+    $("du-point-a").disabled = phase !== "answer" || paused;
+    $("du-point-b").disabled = phase !== "answer" || paused;
+    $("du-result-message").hidden = phase !== "done";
+    $("du-official-answer").hidden = phase !== "done";
+    $("du-official-answer").textContent = phase === "done" && current
+      ? "Respuesta de referencia: " + answerText(current.index)
+      : "";
+    $("du-pause-banner").hidden = !paused;
     $("du-pause").hidden = phase !== "answer";
     $("du-pause").textContent = paused ? "Continuar" : "Pausar";
     $("du-pause").setAttribute("aria-pressed", String(paused));
-    $("du-pause-banner").hidden = !paused;
     $("du-timer").textContent = paused
       ? String(Math.ceil(remainingMs / 1000))
-      : timerEndsAt && phase === "answer"
+      : (timerEndsAt && phase === "answer"
         ? String(Math.max(0, Math.ceil((timerEndsAt - Date.now()) / 1000)))
-        : "";
+        : "");
     $("du-next").hidden = phase !== "done";
-    renderOptions();
+    $("du-next").textContent = matchIndex >= matches.length - 1 ? "Ver resultado final" : "Siguiente duelo";
+    if (paused) $("du-status").textContent = "Duelo en pausa. El tiempo está detenido.";
+    else if (phase === "answer") $("du-status").textContent = "Árbitros: toquen a quien responda primero correctamente.";
+    else if (phase === "done") {
+      const item = history[history.length - 1];
+      $("du-result-message").textContent = item?.winner
+        ? "Punto para " + (getParticipant(item.winner)?.name || "el participante elegido") + "."
+        : "Se acabó el tiempo. Nadie suma este duelo.";
+      $("du-status").textContent = item?.winner
+        ? "Respuesta registrada por los árbitros."
+        : "No hubo una respuesta válida antes de terminar el tiempo.";
+    } else $("du-status").textContent = "";
+    renderScoreboard(pair);
   }
 
-  function updateTimer() {
-    if (paused || phase !== "answer") return;
-    const left = Math.max(0, Math.ceil((timerEndsAt - Date.now()) / 1000));
-    $("du-timer").textContent = String(left);
-    if (left <= 0) resolve(-1, false);
-  }
-
-  function startAnswerTimer(deadline = 0, remaining = 0) {
+  function startTimer(deadline = 0, remaining = 0) {
     clearInterval(timer);
     timer = null;
     if (paused || phase !== "answer") return;
     timerEndsAt = deadline || (Date.now() + (remaining || time * 1000));
     if (timerEndsAt <= Date.now()) {
-      resolve(-1, false);
+      resolve(null);
       return;
     }
     updateTimer();
     if (phase === "answer") timer = setInterval(updateTimer, 100);
   }
 
-  function activateReady() {
-    if (phase !== "waiting") return;
-    readyAt = 0;
-    phase = "claim";
-    $("du-count").textContent = "¡YA!";
-    window.emitSound?.(850, 0.16, "square");
-    render();
-    save();
+  function updateTimer() {
+    if (paused || phase !== "answer") return;
+    const left = Math.max(0, Math.ceil((timerEndsAt - Date.now()) / 1000));
+    $("du-timer").textContent = String(left);
+    if (left <= 0) resolve(null);
   }
 
-  function scheduleReady() {
-    clearTimeout(readyTimer);
-    if (phase !== "waiting") return;
-    const wait = readyAt - Date.now();
-    if (wait <= 0) {
-      activateReady();
+  function pickQuestion() {
+    if (!questionDeck.length) {
+      questionDeck = shuffle(candidateIndices());
+      if (questionDeck.length > 1 && questionDeck[questionDeck.length - 1] === lastQuestionIndex) {
+        [questionDeck[0], questionDeck[questionDeck.length - 1]] =
+          [questionDeck[questionDeck.length - 1], questionDeck[0]];
+      }
+    }
+    const index = questionDeck.pop();
+    const source = DB[index];
+    if (!source) return null;
+    lastQuestionIndex = index;
+    return { index, text: source[0], category: categoryOf(index) };
+  }
+
+  function buildParticipants() {
+    if (format === "individual") {
+      return rosterNames.individual.slice(0, rosterSize).map((name, index) => ({
+        id: "p" + index, name: name || ("Jugador " + (index + 1)), team: -1
+      }));
+    }
+    return [0, 1].flatMap(teamIndex =>
+      rosterNames.teams[teamIndex].slice(0, rosterSize).map((name, index) => ({
+        id: (teamIndex === 0 ? "a" : "b") + index,
+        name: name || defaultPlayerName(index, teamIndex),
+        team: teamIndex
+      }))
+    );
+  }
+
+  function buildMatches() {
+    if (format === "individual") {
+      const pool = shuffle([...participants]);
+      return Array.from({ length: pool.length / 2 }, (_, index) => ({
+        a: pool[index * 2].id, b: pool[index * 2 + 1].id
+      }));
+    }
+    const first = shuffle(participants.filter(player => player.team === 0));
+    const second = shuffle(participants.filter(player => player.team === 1));
+    return first.map((player, index) => ({ a: player.id, b: second[index].id }));
+  }
+
+  function beginMatch() {
+    if (matchIndex >= matches.length) {
+      finish();
       return;
     }
-    readyTimer = setTimeout(activateReady, wait);
-  }
-
-  function newRound() {
-    stopTimers();
-    paused = false;
-    remainingMs = 0;
-    timerEndsAt = 0;
-    readyAt = 0;
-    current = pick();
+    current = pickQuestion();
     if (!current) {
       showError("No hay preguntas válidas para esta categoría. Elige otra e inténtalo de nuevo.");
       showScreen("du-scr-lobby");
       return;
     }
-    selectedAnswer = -1;
-    if (mode === "reaccion") {
-      claimed = -1;
-      phase = "waiting";
-      readyAt = Date.now() + 1100 + Math.random() * 2200;
-    } else {
-      claimed = (round - 1) % 2;
-      phase = "answer";
-      timerEndsAt = Date.now() + time * 1000;
-    }
-
-    showError("");
+    phase = "answer";
+    paused = false;
+    remainingMs = 0;
+    timerEndsAt = Date.now() + time * 1000;
     render();
     showScreen("du-scr-game");
-    if (phase === "waiting") scheduleReady();
-    else startAnswerTimer(timerEndsAt);
+    startTimer(timerEndsAt);
   }
 
   function startGame() {
-    window.emitSound?.(440, 0.03, "sine", 0.035);
-    names = [
-      $("du-p1").value.trim() || "Jugador 1",
-      $("du-p2").value.trim() || "Jugador 2"
-    ];
-    rounds = Number($("du-rounds").value);
-    time = Number($("du-time").value);
-    currentCategory = $("du-cat").value || "Todas";
-    if (!candidateIndices().length) {
-      showError("No hay preguntas válidas en esta categoría. Elige otra categoría.");
+    captureLobbyConfig();
+    const candidates = candidateIndices();
+    if (!candidates.length) {
+      showError("No hay preguntas disponibles para esa categoría. Elige otra.");
       return;
     }
-    showError("");
-    scores = [0, 0];
-    round = 1;
+    const names = format === "individual"
+      ? rosterNames.individual.slice(0, rosterSize)
+      : [...rosterNames.teams[0].slice(0, rosterSize), ...rosterNames.teams[1].slice(0, rosterSize)];
+    const cleanNames = names.map(name => String(name || "").trim());
+    const unique = new Set(cleanNames.map(name => name.toLocaleLowerCase("es")));
+    if (unique.size !== cleanNames.length) {
+      showError("Usa nombres distintos para que los árbitros puedan identificar cada botón.");
+      return;
+    }
+    if (format === "teams") {
+      const normalizedTeams = teamNames.map(name => String(name || "").trim().toLocaleLowerCase("es"));
+      if (!normalizedTeams[0] || normalizedTeams[0] === normalizedTeams[1]) {
+        showError("Pon un nombre distinto a cada equipo.");
+        return;
+      }
+    }
+    if (format === "individual" && (rosterSize < 2 || rosterSize % 2 !== 0)) {
+      showError("Elige una cantidad par de jugadores.");
+      return;
+    }
+
+    participants = buildParticipants();
+    matches = buildMatches();
+    if (!matches.length || matches.some(match => !match.a || !match.b)) {
+      showError("No se pudieron crear los duelos. Revisa los nombres e inténtalo de nuevo.");
+      return;
+    }
+    teamScores = [0, 0];
+    playerScores = Object.fromEntries(participants.map(player => [player.id, 0]));
+    matchIndex = 0;
     history = [];
+    current = null;
     questionDeck = [];
     lastQuestionIndex = -1;
-    newRound();
+    showError("");
+    window.emitSound?.(440, 0.03, "sine", 0.035);
+    beginMatch();
   }
 
-  function claim(player) {
-    if (phase !== "claim" || mode !== "reaccion" || claimed >= 0) return;
-    claimed = player;
-    selectedAnswer = -1;
-    phase = "answer";
-    remainingMs = time * 1000;
-    timerEndsAt = Date.now() + remainingMs;
-    window.emitSound?.(600, 0.1, "triangle");
-    render();
-    startAnswerTimer(timerEndsAt);
-    save();
-  }
-
-  function answer(index) {
-    if (phase !== "answer" || paused || !current || index < 0 || index >= current.options.length) return;
-    selectedAnswer = index;
-    resolve(index === current.answer ? claimed : -1, index === current.answer);
-  }
-
-  function resolve(winner, correct) {
+  function resolve(winnerId) {
     if (phase !== "answer") return;
-    stopTimers();
+    clearInterval(timer);
+    timer = null;
+    timerEndsAt = 0;
     paused = false;
     remainingMs = 0;
-    timerEndsAt = 0;
-    readyAt = 0;
-    if (winner >= 0 && correct) scores[winner] += 1;
+
+    const pair = currentMatch();
+    if (winnerId) {
+      const winner = getParticipant(winnerId);
+      if (!winner || (winner.id !== pair?.a?.id && winner.id !== pair?.b?.id)) return;
+      if (format === "teams") teamScores[winner.team] += 1;
+      else playerScores[winner.id] = (playerScores[winner.id] || 0) + 1;
+    }
     history.push({
-      round,
-      question: current.text,
-      category: current.category,
-      winner,
-      correct,
-      answer: current.options[current.answer],
-      selected: selectedAnswer >= 0 ? current.options[selectedAnswer] : ""
+      match: matchIndex + 1,
+      a: pair?.a?.id || "",
+      b: pair?.b?.id || "",
+      winner: winnerId || "",
+      question: current?.text || "",
+      category: current?.category || "",
+      answer: answerText(current?.index)
     });
     phase = "done";
-    window.emitSound?.(correct ? 720 : 220, 0.1, correct ? "triangle" : "sawtooth");
+    window.emitSound?.(winnerId ? 720 : 220, 0.1, winnerId ? "triangle" : "sawtooth");
     render();
     save();
   }
 
   function advance() {
     if (phase !== "done") return;
-    if (round >= rounds) {
-      finish();
-      return;
+    matchIndex += 1;
+    beginMatch();
+  }
+
+  function resultSummary() {
+    if (format === "teams") {
+      const high = Math.max(...teamScores);
+      const winners = [0, 1].filter(index => teamScores[index] === high).map(index => teamNames[index]);
+      const title = winners.length > 1 ? "¡Empate entre ambos equipos!" : "¡Ganó " + esc(winners[0]) + "!";
+      return '<div class="du-help"><strong>' + title + '</strong><p class="muted">' +
+        teamScores[0] + " a " + teamScores[1] + " · " + history.length + " duelos jugados.</p></div>" +
+        [0, 1].map(index => '<div class="du-result-row"><span>' + esc(teamNames[index]) +
+          '</span><strong>' + teamScores[index] + " pts</strong></div>").join("");
     }
-    round += 1;
-    newRound();
+    const high = Math.max(0, ...participants.map(player => playerScores[player.id] || 0));
+    const winners = participants.filter(player => (playerScores[player.id] || 0) === high);
+    const title = winners.length > 1 ? "¡Empate entre " + winners.map(player => esc(player.name)).join(", ") + "!" :
+      "¡Ganó " + esc(winners[0]?.name || "el duelo") + "!";
+    return '<div class="du-help"><strong>' + title + '</strong><p class="muted">' +
+      history.length + " duelos jugados.</p></div>" +
+      participants.map(player => '<div class="du-result-row"><span>' + esc(player.name) +
+        '</span><strong>' + (playerScores[player.id] || 0) + " pts</strong></div>").join("");
   }
 
   function finish() {
-    stopTimers();
+    clearInterval(timer);
+    timer = null;
     paused = false;
-    remainingMs = 0;
-    if (!names.length) return;
-    const winner = scores[0] === scores[1] ? "Empate" : names[scores[0] > scores[1] ? 0 : 1];
-    $("du-result-body").innerHTML =
-      '<div class="bp-verdict"><strong>' + (winner === "Empate" ? "¡Empate!" : "¡Ganó " + esc(winner) + "!") +
-      '</strong><p class="muted">' + scores[0] + " a " + scores[1] + " · " + history.length + " rondas jugadas de " + rounds + '.</p></div>' +
-      '<div class="du-result-row"><span>' + esc(names[0]) + "</span><strong>" + scores[0] + " pts</strong></div>" +
-      '<div class="du-result-row"><span>' + esc(names[1]) + "</span><strong>" + scores[1] + " pts</strong></div>" +
-      '<div class="du-history"><strong>Historia del duelo</strong>' +
-      (history.length ? history.map(item =>
-        '<div>R' + item.round + " · " + esc(item.winner >= 0 ? names[item.winner] : "Nadie") +
-        " · " + (item.correct ? "Acertó" : "No sumó") + " · respuesta: " + esc(item.answer) +
-        '<br><small>' + esc(item.question) + "</small></div>").join("")
-        : '<p class="muted">No hubo rondas registradas.</p>') + "</div>";
-    phase = "done";
+    phase = "result";
+    $("du-result-body").innerHTML = resultSummary() +
+      '<div class="du-history"><strong>Preguntas jugadas</strong>' +
+      (history.length ? history.map(item => {
+        const a = getParticipant(item.a)?.name || "Participante";
+        const b = getParticipant(item.b)?.name || "Participante";
+        const winner = item.winner ? (getParticipant(item.winner)?.name || "Participante") : "Nadie sumó";
+        return '<div><strong>Duelo ' + item.match + " · " + esc(winner) + '</strong><br>' +
+          '<small>' + esc(a) + " vs. " + esc(b) + " · " + esc(item.category) +
+          "<br>" + esc(item.question) + " · respuesta: " + esc(item.answer) + "</small></div>";
+      }).join("") : '<p class="muted">No hay duelos registrados.</p>') + "</div>";
     showScreen("du-scr-result");
-  }
-
-  function syncConfig() {
-    $("du-p1").value = names[0] || "Jugador 1";
-    $("du-p2").value = names[1] || "Jugador 2";
-    $("du-rounds").value = String(rounds);
-    $("du-time").value = String(time);
-    $("du-cat").value = currentCategory;
-    renderModes();
-    renderCategories();
   }
 
   function togglePause() {
@@ -407,127 +465,151 @@ const Duelo = (() => {
       clearInterval(timer);
       timer = null;
       paused = true;
-      render();
-      save();
-      return;
+    } else {
+      if (remainingMs <= 0) {
+        resolve(null);
+        return;
+      }
+      paused = false;
+      timerEndsAt = Date.now() + remainingMs;
+      startTimer(timerEndsAt);
     }
-    paused = false;
-    if (remainingMs <= 0) {
-      resolve(-1, false);
-      return;
-    }
-    timerEndsAt = Date.now() + remainingMs;
-    startAnswerTimer(timerEndsAt);
     render();
     save();
   }
 
   function newGame() {
-    stopTimers();
+    clearInterval(timer);
+    timer = null;
     window.GameSession?.clear("duelo");
-    round = 1;
-    scores = [0, 0];
-    history = [];
+    participants = [];
+    matches = [];
+    matchIndex = 0;
+    teamScores = [0, 0];
+    playerScores = {};
     current = null;
-    currentScreen = "du-scr-lobby";
     phase = "idle";
-    claimed = -1;
-    selectedAnswer = -1;
-    paused = false;
+    history = [];
     questionDeck = [];
-    renderModes();
+    paused = false;
+    timerEndsAt = 0;
+    remainingMs = 0;
+    syncConfig();
     showError("");
-    render();
     showScreen("du-scr-lobby");
   }
 
-  function normalizeQuestion(question) {
-    if (Array.isArray(question)) {
-      const index = DB.findIndex(item => item[0] === question[0]);
-      const options = [...(question[1] || [])];
-      return { index, text: question[0], category: categoryOf(index), options, answer: Number(question[2] || 0) };
-    }
-    if (question && typeof question.text === "string" && Array.isArray(question.options)) return question;
-    return null;
-  }
-
   function restore(state) {
-    if (!state?.names?.length) return false;
-    mode = state.mode === "quiz" ? "quiz" : "reaccion";
-    names = [String(state.names[0] || "Jugador 1"), String(state.names[1] || "Jugador 2")];
-    round = Math.max(1, Number(state.round || 1));
-    rounds = Number(state.rounds || 10);
+    if (!state || state.schemaVersion !== 2) return false;
+    format = state.format === "teams" ? "teams" : "individual";
+    rosterSize = Number(state.rosterSize || (format === "teams" ? 2 : 4));
+    rosterSize = Math.max(format === "teams" ? 1 : 2, Math.min(format === "teams" ? 6 : 12, rosterSize));
     time = Number(state.time || 12);
-    scores = Array.isArray(state.scores) && state.scores.length === 2 ? state.scores : [0, 0];
-    current = normalizeQuestion(state.current);
-    currentCategory = state.currentCategory === "Todas" || ranges.some(range => range[0] === state.currentCategory) ? state.currentCategory : "Todas";
-    questionDeck = Array.isArray(state.questionDeck) ? state.questionDeck.filter(index => Number.isInteger(index) && validQuestion(DB[index]) && (currentCategory === "Todas" || categoryOf(index) === currentCategory)) : [];
-    lastQuestionIndex = Number.isInteger(state.lastQuestionIndex) ? state.lastQuestionIndex : current?.index ?? -1;
-    claimed = Number.isInteger(state.claimed) ? state.claimed : -1;
-    selectedAnswer = Number.isInteger(state.selectedAnswer) ? state.selectedAnswer : -1;
-    phase = state.phase || "idle";
-    history = Array.isArray(state.history) ? state.history : [];
+    currentCategory = state.currentCategory === "Todas" || ranges.some(range => range[0] === state.currentCategory)
+      ? state.currentCategory : "Todas";
+    teamNames = Array.isArray(state.teamNames) ? state.teamNames.slice(0, 2) : ["Equipo 1", "Equipo 2"];
+    rosterNames = state.rosterNames && Array.isArray(state.rosterNames.teams)
+      ? state.rosterNames : { individual: [], teams: [[], []] };
+    participants = Array.isArray(state.participants) ? state.participants : [];
+    matches = Array.isArray(state.matches) ? state.matches : [];
+    matchIndex = Math.max(0, Number(state.matchIndex || 0));
+    teamScores = Array.isArray(state.teamScores) && state.teamScores.length === 2 ? state.teamScores : [0, 0];
+    playerScores = state.playerScores && typeof state.playerScores === "object" ? state.playerScores : {};
+    current = state.current && typeof state.current.text === "string" ? state.current : null;
+    questionDeck = Array.isArray(state.questionDeck)
+      ? state.questionDeck.filter(index => Number.isInteger(index) && validQuestion(DB[index])
+        && (currentCategory === "Todas" || categoryOf(index) === currentCategory))
+      : [];
+    lastQuestionIndex = Number.isInteger(state.lastQuestionIndex) ? state.lastQuestionIndex : -1;
     timerEndsAt = Number(state.timerEndsAt || 0);
-    readyAt = Number(state.readyAt || 0);
     remainingMs = Number(state.remainingMs || 0);
     paused = Boolean(state.paused);
+    phase = state.phase || "idle";
+    history = Array.isArray(state.history) ? state.history : [];
     currentScreen = state.screen || "du-scr-lobby";
-
     syncConfig();
-    if (currentScreen === "du-scr-game" && current) {
-      showScreen("du-scr-game");
-      render();
-      if (phase === "waiting") scheduleReady();
-      else if (phase === "answer" && !paused) startAnswerTimer(timerEndsAt, remainingMs);
-    } else if (currentScreen === "du-scr-result") {
-      finish();
-    } else {
+
+    if (!participants.length || !matches.length) {
       showScreen("du-scr-lobby");
+      return true;
     }
+    if (currentScreen === "du-scr-game" && current) {
+      render();
+      showScreen("du-scr-game");
+      if (phase === "answer" && !paused) startTimer(timerEndsAt, remainingMs);
+      return true;
+    }
+    if (currentScreen === "du-scr-result") {
+      finish();
+      return true;
+    }
+    showScreen("du-scr-lobby");
     return true;
   }
 
-  function openEndConfirm() {
+  function openExitConfirm() {
     $("du-end-confirm").classList.add("active");
     $("du-end-cancel").focus();
   }
 
-  function closeEndConfirm() {
+  function closeExitConfirm() {
     $("du-end-confirm").classList.remove("active");
-    $("du-end").focus();
+    $("du-menu-game").focus();
+  }
+
+  function exitToMenu() {
+    clearInterval(timer);
+    timer = null;
+    window.GameSession?.clear("duelo");
+    window.location.href = "index.html";
   }
 
   function bind() {
-    renderModes();
-    renderCategories();
-    $("du-modes").onclick = event => {
-      const button = event.target.closest("[data-mode]");
-      if (!button) return;
-      mode = button.dataset.mode;
-      renderModes();
+    syncConfig();
+    $("du-format").onchange = () => {
+      captureRosterInputs(format, rosterSize);
+      format = $("du-format").value === "teams" ? "teams" : "individual";
+      rosterSize = format === "individual" ? 4 : 2;
+      renderSizeOptions();
+      renderRosterInputs();
       save();
     };
+    $("du-size").onchange = () => {
+      captureRosterInputs(format, rosterSize);
+      rosterSize = Number($("du-size").value || (format === "individual" ? 4 : 2));
+      renderRosterInputs();
+      save();
+    };
+    $("du-roster-inputs").oninput = () => save();
+    ["du-team-name-0", "du-team-name-1"].forEach(id => $(id).oninput = () => save());
+    $("du-time").onchange = () => save();
     $("du-cat").onchange = event => {
       currentCategory = event.target.value;
       questionDeck = [];
       save();
     };
-    ["du-p1", "du-p2", "du-rounds", "du-time"].forEach(id => $(id).oninput = save);
-    ["du-rounds", "du-time"].forEach(id => $(id).onchange = save);
     $("du-start").onclick = startGame;
-    $("du-claim-a").onclick = () => claim(0);
-    $("du-claim-b").onclick = () => claim(1);
-    $("du-options").onclick = event => {
-      const button = event.target.closest("[data-opt]");
-      if (button) answer(Number(button.dataset.opt));
+    $("du-point-a").onclick = () => {
+      const pair = currentMatch();
+      if (pair?.a) resolve(pair.a.id);
+    };
+    $("du-point-b").onclick = () => {
+      const pair = currentMatch();
+      if (pair?.b) resolve(pair.b.id);
     };
     $("du-pause").onclick = togglePause;
     $("du-next").onclick = advance;
-    $("du-end").onclick = openEndConfirm;
-    $("du-end-cancel").onclick = closeEndConfirm;
-    $("du-end-confirm-submit").onclick = () => { closeEndConfirm(); finish(); };
+    $("du-menu-game").onclick = openExitConfirm;
+    $("du-end-cancel").onclick = closeExitConfirm;
+    $("du-end-confirm-submit").onclick = exitToMenu;
+    $("du-top-menu").onclick = event => {
+      if (currentScreen === "du-scr-game") {
+        event.preventDefault();
+        openExitConfirm();
+      }
+    };
     window.addEventListener("keydown", event => {
-      if (event.key === "Escape" && $("du-end-confirm").classList.contains("active")) closeEndConfirm();
+      if (event.key === "Escape" && $("du-end-confirm").classList.contains("active")) closeExitConfirm();
     });
     $("du-new").onclick = newGame;
   }
@@ -536,7 +618,11 @@ const Duelo = (() => {
     bind();
     window.GameSession?.register(save);
     const saved = window.GameSession?.load?.("duelo");
-    if (!restore(saved)) showScreen("du-scr-lobby");
+    if (!restore(saved)) {
+      window.GameSession?.clear("duelo");
+      syncConfig();
+      showScreen("du-scr-lobby");
+    }
   }
 
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init, { once: true });

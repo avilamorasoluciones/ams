@@ -137,7 +137,7 @@ const PWA = (() => {
     if ("serviceWorker" in navigator &&
         (location.protocol === "https:" || location.hostname === "localhost" || location.hostname === "127.0.0.1")) {
       window.addEventListener("load", () => {
-        navigator.serviceWorker.register("./sw.js?v=20261001-46", {
+        navigator.serviceWorker.register("./sw.js?v=20261005-49", {
           scope: "./",
           updateViaCache: "none"
         }).catch(() => {});
@@ -344,7 +344,6 @@ const Nav = (() => {
       ["yonunca.html", "Yo Nunca", "question"],
       ["batalla.html", "Batalla de Palabras", "question"],
       ["duelo.html", "Duelo", "question"],
-      ["apuesta.html", "Apuesta", "question"]
     ];
 
     inner.innerHTML = games.map(([href, label, icon]) =>
