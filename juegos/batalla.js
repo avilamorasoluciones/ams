@@ -102,6 +102,13 @@ const BatallaPalabras = (() => {
       '<span class="badge ' + (index === active ? "badge-indigo" : "") + '">' +
       esc(team) + ": " + (score[index] ?? 0) + "</span>"
     ).join(" ");
+    $("bp-correct").textContent = "✓ Punto para " + (teams[active] || "equipo activo") + " · +1";
+    $("bp-wrong").textContent = mode === "supervivencia"
+      ? "✕ No válida · −1 punto"
+      : "✕ Respuesta no válida · 0 puntos";
+    $("bp-next").textContent = mode === "supervivencia"
+      ? "Pasar turno · −1 punto"
+      : "Pasar turno sin punto";
   }
 
   function eligibleChallenges() {
@@ -162,10 +169,10 @@ const BatallaPalabras = (() => {
 
   function updatePrompt() {
     $("bp-hint").textContent = mode === "normal"
-      ? "Di una palabra que pertenezca a la categoría."
+      ? "Di una palabra que pertenezca a " + current.category + "."
       : mode === "cadena"
-        ? "Empieza con la letra mostrada. El equipo contrario valida la respuesta."
-        : "Empieza con la letra mostrada. El equipo contrario valida la respuesta.";
+        ? "Cadena: di una palabra de " + current.category + " que empiece por la última letra válida (" + current.letter + ")."
+        : "Di una palabra de " + current.category + " que empiece por " + current.letter + ".";
     $("bp-timer-label").textContent = mode === "rapido"
       ? "Rápido · " + effectiveTime() + " s"
       : "Tiempo";

@@ -4277,35 +4277,6 @@ body.light-theme .game-bomba .game-audio-tip .ui-icon {
 }
 
 
-/* Marcos compartidos para los SVG antiguos; los archivos originales quedan intactos. */
-.game-slide-icon-frame{
-  width:clamp(74px,13vw,112px);
-  height:clamp(74px,13vw,112px);
-  flex:0 0 auto;
-  display:grid;
-  place-items:center;
-  overflow:hidden;
-  border:1px solid rgba(167,139,250,.34);
-  border-radius:25px;
-  background:
-    radial-gradient(circle at 28% 18%,rgba(34,211,238,.17),transparent 58%),
-    linear-gradient(145deg,rgba(29,34,63,.98),rgba(12,14,31,.98));
-  box-shadow:0 12px 28px rgba(0,0,0,.24),inset 0 1px 0 rgba(255,255,255,.08);
-  transition:transform .5s cubic-bezier(.2,.85,.25,1),box-shadow .5s ease;
-}
-.game-slide-icon-frame .game-slide-icon{
-  width:100%;
-  height:100%;
-  object-fit:contain;
-  filter:none;
-  transition:none;
-}
-.game-slide:hover .game-slide-icon-frame{
-  transform:rotate(-6deg) scale(1.08);
-  box-shadow:0 16px 34px rgba(0,0,0,.34),0 0 22px rgba(167,139,250,.14);
-}
-.game-slide:hover .game-slide-icon-frame .game-slide-icon{transform:none}
-
 .nav-event-group{
   grid-column:1/-1;
   display:flex;
@@ -4380,13 +4351,9 @@ body.light-theme .game-bomba .game-audio-tip .ui-icon {
   filter:drop-shadow(0 16px 30px rgba(0,0,0,.3));
 }
 @media(max-width:700px){
-  .game-slide-icon-frame{width:82px;height:82px;border-radius:19px}
   .special-event-card{grid-template-columns:minmax(0,1fr) auto;gap:12px;padding:18px}
   .special-event-art{width:86px;height:86px}
   .special-event-card h2{font-size:1.8rem}
   .special-event-card p{font-size:.9rem}
 }
-@media(prefers-reduced-motion:reduce){
-  .game-slide-icon-frame{transition:none!important}
-  .game-slide:hover .game-slide-icon-frame{transform:none}
-}
+
