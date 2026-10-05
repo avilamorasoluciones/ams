@@ -382,11 +382,16 @@ async function getTermsAcceptedFor(user){
   const local=termsAcceptedFor(user);
   if(!NEON_DATA_READY())return local;
   try{
+    const remote=await getRemoteParticipantProfile(user);
+    if(remote?.termsAccepted===true){
+      saveTermsAcceptedFor(user);
+      return true;
+    }
     const client=await getPublicNeonClient();
     const result=await client.rpc("ams_fly_get_terms_status",{});
     if(result?.error)throw result.error;
-    const data=result.data||{};
-    const accepted=data.accepted===true||data[0]?.accepted===true;
+    const data=Array.isArray(result.data)?result.data[0]:(result.data||{});
+    const accepted=data.accepted===true;
     if(accepted)saveTermsAcceptedFor(user);
     return accepted;
   }catch(_){
@@ -397,7 +402,16 @@ async function persistTermsAccepted(user){
   if(!user?.email)throw new Error("auth_required");
   if(NEON_DATA_READY()){
     const client=await getPublicNeonClient();
-    const result=await client.rpc("ams_fly_accept_terms",{});
+    let result=await client.rpc("ams_fly_accept_terms",{});
+    if(result?.error){
+      const raw=[result.error.message,result.error.details,result.error.hint,result.error.code].filter(Boolean).join(" ").toLowerCase();
+      // Si el piloto existe en Auth pero aún no existe en participants,
+      // registrarlo una vez con sus datos reales y volver a guardar la aceptación.
+      if(raw.includes("participant_not_found")){
+        await syncParticipantProfile(user);
+        result=await client.rpc("ams_fly_accept_terms",{});
+      }
+    }
     if(result?.error)throw result.error;
   }
   saveTermsAcceptedFor(user);
