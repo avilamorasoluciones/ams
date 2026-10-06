@@ -3,7 +3,6 @@
 
 const STORAGE_KEY = "amsFlyProfileV2";
 const PENDING_REG_KEY = "amsFlyPendingRegistrationV1";
-const TERMS_KEY = "amsFlyTermsAcceptedV1";
 const STATS_KEY = "amsFlyStatsV1";
 const FACT_INDEX_KEY = "amsFlyFactIndexV1";
 const NEON_DATA_READY = () => !!window.AMS_FLY_NEON_CONFIG?.authUrl && !!window.AMS_FLY_NEON_CONFIG?.dataApiUrl;
@@ -44,17 +43,6 @@ function friendlyNeonSyncError(error){
 function neonAuthRetryable(error){
   const raw=[error?.message,error?.details,error?.hint,error?.code,error?.status].filter(Boolean).map(String).join(" ").toLowerCase();
   return /auth[_ ]required|unauthorized|permission denied|jwt|42501|401|403/.test(raw);
-}
-function termsAcceptedFor(user){
-  if(!user?.email)return false;
-  const data=safeParse(TERMS_KEY,{});
-  return data[String(user.email).toLowerCase()]?.accepted===true;
-}
-function saveTermsAcceptedFor(user){
-  if(!user?.email)return;
-  const data=safeParse(TERMS_KEY,{});
-  data[String(user.email).toLowerCase()]={accepted:true,acceptedAt:new Date().toISOString()};
-  localStorage.setItem(TERMS_KEY,JSON.stringify(data));
 }
 function formatRankingDate(value){
   const date=new Date(value);
@@ -119,7 +107,7 @@ const DEFAULT_EVENT = {
   prizeTitle:"Desarrollo de Landing Page 100% GRATIS",
   prizeDesc:"El ganador recibe GRATIS el desarrollo completo y profesional de una Landing Page responsive, adaptada a su negocio, con diseño, estructura UX/UI, SEO básico y conexión a sus canales de venta. IMPORTANTE: el desarrollo es gratis; el hosting y dominio no están incluidos en el premio y deben contratarse con Avila Mora Soluciones por US$10/mes o US$100/año para hacer efectivo y mantener el premio.",
   conditionTitle:"Reglas, vigencia y servicio posterior",
-  conditionDesc:"⚠️ IMPORTANTE ANTES DE PARTICIPAR\n• El premio es el desarrollo de una Landing Page profesional sin costo de desarrollo.\n• El premio NO significa que el ganador pueda llevarse la Landing Page a un hosting y dominio propios sin contratar el servicio posterior de Avila Mora Soluciones.\n• Para hacer efectivo el premio y mantener la Landing Page publicada, el ganador debe aceptar y pagar el servicio de hosting y dominio gestionado por Avila Mora Soluciones. La mensualidad o anualidad es obligatoria para el ganador.\n• Si ya tienes hosting y dominio propios, o no necesitas que Avila Mora Soluciones gestione tu presencia web, este evento probablemente no es para ti y no deberías participar bajo estas condiciones.\n\n🎁 QUÉ RECIBES GRATIS\n• Desarrollo completo de una Landing Page responsive, adaptada a tu negocio, con diseño, estructura, experiencia de usuario, SEO básico y conexión con los canales de contacto definidos para el proyecto.\n• El desarrollo inicial tiene valor $0 para el ganador. La Landing Page será propiedad del ganador.\n\n💳 QUÉ DEBES PAGAR SI GANAS\n• Hosting + dominio + mantenimiento básico gestionados por Avila Mora Soluciones: US$10 al mes o US$100 al año.\n• Esta es una tarifa especial para el ganador del evento. La tarifa comercial habitual de mantenimiento es de US$15 al mes; el evento conserva para el ganador el precio reducido de US$10 al mes o US$100 al año.\n• La obligación de contratar este servicio aplica para poder recibir y mantener el premio. Si el ganador no acepta la mensualidad o anualidad, se considerará que no cumple las condiciones para hacer efectivo el premio.\n• Si el ganador ya dispone de hosting y dominio y quiere utilizarlos en lugar del servicio gestionado por Avila Mora Soluciones, no podrá hacer efectivo este premio bajo estas condiciones.\n• Modificaciones, funcionalidades, integraciones, servicios adicionales o trabajos fuera del alcance inicial se cotizan por separado.\n\n🌎 FORMA DE COBRO\n• En Colombia, el valor podrá cobrarse en pesos colombianos (COP) tomando como referencia la tarifa publicada en USD y la tasa de cambio de referencia vigente al momento del pago.\n• En otros países, cuando sea posible realizar el cobro en moneda local, podrá cobrarse el equivalente correspondiente a la tarifa en USD.\n• En Venezuela, cuando los medios de pago locales no permitan una conversión o cobro adecuado, la tarifa podrá mantenerse expresada y cobrarse en USD.\n\n🔐 TU CUENTA: UN PILOTO\n• Para participar debes iniciar sesión o crear una cuenta. Esa cuenta queda vinculada a tu piloto y a sus resultados en el ranking.\n• Una misma cuenta solo puede representar a un piloto. Si vuelves desde otro teléfono, computador o navegador e inicias sesión con la misma cuenta, seguirás siendo el mismo piloto.\n• No se permite crear varias cuentas para representar al mismo jugador, registrar copias del mismo jugador o utilizar cuentas duplicadas para alterar el ranking. Si se detectan participaciones duplicadas o destinadas a obtener una ventaja, podrán ser excluidas o descalificadas.\n• Esta cuenta se utiliza para vincular una participación única al ranking; no constituye por sí sola una verificación legal absoluta de identidad física.\n\n🏆 REGLAS DEL EVENTO\n• El evento termina el 31 de diciembre de 2026 a las 11:59 p. m. Ganará el participante elegible con la puntuación válida más alta.\n• En caso de empate, gana quien haya alcanzado primero esa puntuación.\n• Las puntuaciones y la identidad del participante pueden ser revisadas antes de declarar el resultado definitivo.\n• El equipo de Avila Mora Soluciones puede jugar, pero sus puntuaciones no son elegibles para el premio.\n• Al participar, aceptas expresamente tanto las reglas del evento como la condición económica del servicio de hosting y dominio posterior. Si no estás de acuerdo con esa condición, no participes.\n\n📌 EN RESUMEN\nLa propuesta es: desarrollo de la Landing Page GRATIS + hosting y dominio gestionados por Avila Mora Soluciones mediante una tarifa especial obligatoria de US$10/mes o US$100/año. El evento está pensado para personas o negocios que necesitan una Landing Page y quieren que Avila Mora Soluciones se encargue de mantenerla publicada. Si ya tienes infraestructura web propia y no quieres contratar este servicio, no participes porque el premio está condicionado a este modelo.",
+  conditionDesc:"⚠️ CÓMO PARTICIPAR\n• Puedes jugar libremente sin cuenta y tu resultado quedará guardado solo en este dispositivo. Ese resultado local no entra al ranking del evento.\n• Si juegas con una cuenta registrada, tu piloto queda vinculado a esa cuenta y las puntuaciones válidas pueden guardarse y publicarse en el ranking.\n• Al jugar con una cuenta registrada durante la vigencia del evento, se entiende que estás participando en el evento y aceptas sus reglas y condiciones descritas aquí. No necesitas marcar una casilla adicional.\n• Una misma cuenta solo puede representar a un piloto. Si vuelves desde otro teléfono, computador o navegador e inicias sesión con la misma cuenta, seguirás siendo el mismo piloto.\n\n⚠️ IMPORTANTE ANTES DE PARTICIPAR\n• El premio es el desarrollo de una Landing Page profesional sin costo de desarrollo.\n• El premio NO significa que el ganador pueda llevarse la Landing Page a un hosting y dominio propios sin contratar el servicio posterior de Avila Mora Soluciones.\n• Para hacer efectivo el premio y mantener la Landing Page publicada, el ganador debe aceptar y pagar el servicio de hosting y dominio gestionado por Avila Mora Soluciones. La mensualidad o anualidad es obligatoria para el ganador.\n• Si ya tienes hosting y dominio propios, o no necesitas que Avila Mora Soluciones gestione tu presencia web, este evento probablemente no es para ti y no deberías participar bajo estas condiciones.\n\n🎁 QUÉ RECIBES GRATIS\n• Desarrollo completo de una Landing Page responsive, adaptada a tu negocio, con diseño, estructura, experiencia de usuario, SEO básico y conexión con los canales de contacto definidos para el proyecto.\n• El desarrollo inicial tiene valor $0 para el ganador. La Landing Page será propiedad del ganador.\n\n💳 QUÉ DEBES PAGAR SI GANAS\n• Hosting + dominio + mantenimiento básico gestionados por Avila Mora Soluciones: US$10 al mes o US$100 al año.\n• Esta es una tarifa especial para el ganador del evento. La tarifa comercial habitual de mantenimiento es de US$15 al mes; el evento conserva para el ganador el precio reducido de US$10 al mes o US$100 al año.\n• La obligación de contratar este servicio aplica para poder recibir y mantener el premio. Si el ganador no acepta la mensualidad o anualidad, se considerará que no cumple las condiciones para hacer efectivo el premio.\n• Si el ganador ya dispone de hosting y dominio y quiere utilizarlos en lugar del servicio gestionado por Avila Mora Soluciones, no podrá hacer efectivo este premio bajo estas condiciones.\n• Modificaciones, funcionalidades, integraciones, servicios adicionales o trabajos fuera del alcance inicial se cotizan por separado.\n\n🌎 FORMA DE COBRO\n• En Colombia, el valor podrá cobrarse en pesos colombianos (COP) tomando como referencia la tarifa publicada en USD y la tasa de cambio de referencia vigente al momento del pago.\n• En otros países, cuando sea posible realizar el cobro en moneda local, podrá cobrarse el equivalente correspondiente a la tarifa en USD.\n• En Venezuela, cuando los medios de pago locales no permitan una conversión o cobro adecuado, la tarifa podrá mantenerse expresada y cobrarse en USD.\n\n🔐 TU CUENTA: UN PILOTO\n• Para participar debes iniciar sesión o crear una cuenta. Esa cuenta queda vinculada a tu piloto y a sus resultados en el ranking.\n• Una misma cuenta solo puede representar a un piloto. Si vuelves desde otro teléfono, computador o navegador e inicias sesión con la misma cuenta, seguirás siendo el mismo piloto.\n• No se permite crear varias cuentas para representar al mismo jugador, registrar copias del mismo jugador o utilizar cuentas duplicadas para alterar el ranking. Si se detectan participaciones duplicadas o destinadas a obtener una ventaja, podrán ser excluidas o descalificadas.\n• Esta cuenta se utiliza para vincular una participación única al ranking; no constituye por sí sola una verificación legal absoluta de identidad física.\n\n🏆 REGLAS DEL EVENTO\n• El evento termina el 31 de diciembre de 2026 a las 11:59 p. m. Ganará el participante elegible con la puntuación válida más alta.\n• En caso de empate, gana quien haya alcanzado primero esa puntuación.\n• Las puntuaciones y la identidad del participante pueden ser revisadas antes de declarar el resultado definitivo.\n• El equipo de Avila Mora Soluciones puede jugar, pero sus puntuaciones no son elegibles para el premio.\n• Al participar, aceptas expresamente tanto las reglas del evento como la condición económica del servicio de hosting y dominio posterior. Si no estás de acuerdo con esa condición, no participes.\n\n📌 EN RESUMEN\nLa propuesta es: desarrollo de la Landing Page GRATIS + hosting y dominio gestionados por Avila Mora Soluciones mediante una tarifa especial obligatoria de US$10/mes o US$100/año. El evento está pensado para personas o negocios que necesitan una Landing Page y quieren que Avila Mora Soluciones se encargue de mantenerla publicada. Si ya tienes infraestructura web propia y no quieres contratar este servicio, no participes porque el premio está condicionado a este modelo.",
   waTemplate:"Hola {name}, te escribimos de Avila Mora Soluciones sobre tu récord de {score} puntos en {event}.",
   eventStartAt:"2026-01-01T05:00:00.000Z",
   eventEndAt:"2027-01-01T04:59:59.000Z"
@@ -287,139 +275,32 @@ async function openEventScreen(){
   let screen=document.getElementById("amsFlyEventScreen");
   if(!screen){
     screen=document.createElement("section");
-    screen.id="amsFlyEventScreen";screen.className="screen app-screen";screen.hidden=true;
-    screen.innerHTML='<div class="section-heading"><span id="eventBadge" class="eyebrow"></span><h2 id="eventTitle"></h2><p id="eventDesc"></p><p id="eventStatus" class="field-hint" role="status"></p></div><div class="event-details-card"><div class="event-detail-block"><span class="event-badge">🏆 PREMIO</span><h3 id="eventPrizeTitle"></h3><div id="eventPrizeDesc" class="event-rich-content"></div></div><div class="event-detail-block"><span class="event-badge">📋 CONDICIONES</span><h3 id="eventConditionTitle"></h3><div id="eventConditionDesc" class="event-rich-content"></div></div><label id="eventTermsRow" class="consent-row"><input id="eventTermsConsent" type="checkbox"><span>Acepto los <a href="terminos.html" target="_blank" rel="noopener noreferrer">Términos y Condiciones</a> y la <a href="privacidad.html" target="_blank" rel="noopener noreferrer">Política de Privacidad</a>.</span></label><p id="eventAuthHint" class="field-hint"></p><button id="eventJoinButton" class="primary-button" type="button">INICIAR SESIÓN PARA PARTICIPAR <span>→</span></button><button id="eventBackButton" class="secondary-button" type="button">VOLVER <span>←</span></button></div>';
+    screen.id="amsFlyEventScreen";
+    screen.className="screen app-screen";
+    screen.hidden=true;
+    screen.innerHTML='<div class="section-heading"><span id="eventBadge" class="eyebrow"></span><h2 id="eventTitle"></h2><p id="eventDesc"></p><p id="eventStatus" class="field-hint" role="status"></p></div><div class="event-details-card"><div class="event-detail-block"><span class="event-badge">🏆 PREMIO</span><h3 id="eventPrizeTitle"></h3><div id="eventPrizeDesc" class="event-rich-content"></div></div><div class="event-detail-block"><span class="event-badge">📋 CONDICIONES</span><h3 id="eventConditionTitle"></h3><div id="eventConditionDesc" class="event-rich-content"></div></div><p id="eventAuthHint" class="field-hint"></p><button id="eventJoinButton" class="primary-button" type="button">IR A JUGAR <span>→</span></button><button id="eventBackButton" class="secondary-button" type="button">VOLVER <span>←</span></button></div>';
     document.querySelector(".app-shell").insertBefore(screen,document.getElementById("profileScreen"));
     screen.querySelector("#eventBackButton").onclick=()=>navigateTo("play");
-    screen.querySelector("#eventJoinButton").onclick=async()=>{
-      const user=await getCurrentAuthUser().catch(()=>null);
-      if(!user){navigateTo("account");return}
-      try{
-        const accepted=await getTermsAcceptedFor(user);
-        const check=document.getElementById("eventTermsConsent");
-        if(!accepted && !check.checked){
-          document.getElementById("eventAuthHint").textContent="Marca la casilla para aceptar los términos y participar.";
-          return;
-        }
-        const ready=await ensureParticipantReady(user);
-        if(!ready){
-          navigateTo("account");
-          setAuthStatus(els.accountStatus,"Completa tus datos de cuenta antes de participar.",true);
-          return;
-        }
-        if(check.checked&&!accepted) await persistTermsAccepted(user);
-        navigateTo("play");
-      }catch(error){
-        document.getElementById("eventAuthHint").textContent=friendlyAuthError(error,"No pudimos preparar tu participación. Revisa tu cuenta e inténtalo de nuevo.");
-      }
-    };
-    document.querySelectorAll(".bottom-nav-item").forEach(btn=>btn.classList.toggle("is-active",btn.dataset.nav==="event"));
-    screen.querySelector("#eventTermsConsent").addEventListener("change",async()=>{
-      const check=document.getElementById("eventTermsConsent");
-      const hint=document.getElementById("eventAuthHint");
-      const user=await getCurrentAuthUser().catch(()=>null);
-      if(!user){
-        check.checked=false;
-        hint.textContent="Debes iniciar sesión o registrarte para aceptar los términos y participar.";
-        navigateTo("account");
-        return;
-      }
-      if(check.checked){
-        check.disabled=true;
-        hint.textContent="Preparando tu participación…";
-        try{
-          const ready=await ensureParticipantReady(user);
-          if(!ready){
-            check.checked=false;
-            check.disabled=false;
-            hint.textContent="Completa primero tus datos de cuenta.";
-            navigateTo("account");
-            return;
-          }
-          await persistTermsAccepted(user);
-          document.getElementById("eventTermsRow").classList.add("is-accepted");
-          hint.textContent="✓ Términos aceptados para esta cuenta.";
-          document.getElementById("eventJoinButton").textContent="PARTICIPAR Y VOLAR ✦";
-        }catch(error){
-          check.checked=false;
-          check.disabled=false;
-          hint.textContent=friendlyAuthError(error,"No pudimos guardar la aceptación. Inténtalo de nuevo.");
-          document.getElementById("eventTermsRow").classList.remove("is-accepted");
-        }
-      }
-    });
+    screen.querySelector("#eventJoinButton").onclick=()=>navigateTo("play");
   }
   const cfg=getEventConfig();
   const open=eventIsOpen();
-  screen.querySelector("#eventBadge").textContent=cfg.active?(cfg.badge||"AMS FLY · EVENTO"):"AMS FLY · EVENTO";
-  screen.querySelector("#eventTitle").textContent=cfg.title;
-  screen.querySelector("#eventDesc").textContent=cfg.desc;
-  screen.querySelector("#eventStatus").textContent=open
-    ? ((cfg.cta?cfg.cta+". ":"")+"El evento está abierto. Inicia sesión, completa tu piloto y acepta las condiciones para participar.")
-    : (cfg.active
-      ? "El evento está fuera de su periodo de participación. Puedes consultar sus condiciones."
-      : "No hay un evento activo por ahora. Puedes jugar libremente y consultar el ranking.");
-  screen.querySelector(".event-details-card").hidden=!cfg.active;
-  screen.querySelector("#eventTermsRow").hidden=!open;
-  screen.querySelector("#eventJoinButton").hidden=!open;
-  screen.querySelector("#eventPrizeTitle").textContent=cfg.prizeTitle;
-  renderEventRichText(screen.querySelector("#eventPrizeDesc"),cfg.prizeDesc);
-  screen.querySelector("#eventConditionTitle").textContent=cfg.conditionTitle;
-  renderEventRichText(screen.querySelector("#eventConditionDesc"),cfg.conditionDesc);
+  screen.querySelector("#eventBadge").textContent=cfg.active?(cfg.badge||"AMS FLY · EVENTO"):"AMS FLY · EVENTO FINALIZADO";
+  screen.querySelector("#eventTitle").textContent=cfg.title||"Evento AMS Fly";
+  screen.querySelector("#eventDesc").textContent=cfg.desc||"";
+  screen.querySelector("#eventStatus").textContent=open?"Evento activo":"El evento no está activo";
+  renderEventRichText(screen.querySelector("#eventPrizeDesc"),cfg.prizeDesc||"");
+  screen.querySelector("#eventPrizeTitle").textContent=cfg.prizeTitle||"";
+  screen.querySelector("#eventConditionTitle").textContent=cfg.conditionTitle||"";
+  renderEventRichText(screen.querySelector("#eventConditionDesc"),cfg.conditionDesc||"");
   const user=await getCurrentAuthUser().catch(()=>null);
-  const accepted=!!user&&await getTermsAcceptedFor(user);
-  const check=screen.querySelector("#eventTermsConsent");
-  const row=screen.querySelector("#eventTermsRow");
-  const hint=screen.querySelector("#eventAuthHint");
-  check.checked=accepted;check.disabled=accepted;
-  row.classList.toggle("is-accepted",accepted);
-  hint.textContent=accepted?"✓ Términos aceptados para esta cuenta.":"Para participar necesitas una cuenta y aceptar los términos.";
-  screen.querySelector("#eventJoinButton").textContent=accepted?"PARTICIPAR Y VOLAR ✦":(user?"ACEPTAR Y PARTICIPAR ✦":"INICIAR SESIÓN PARA PARTICIPAR →");
-  showOnly(screen);screen.hidden=false;screen.scrollTop=0;
-}
-async function getTermsAcceptedFor(user){
-  if(!user?.email)return false;
-  const local=termsAcceptedFor(user);
-  if(!NEON_DATA_READY())return local;
-  try{
-    const remote=await getRemoteParticipantProfile(user);
-    if(remote?.termsAccepted===true){
-      saveTermsAcceptedFor(user);
-      return true;
-    }
-    const client=await getPublicNeonClient();
-    const result=await client.rpc("ams_fly_get_terms_status",{});
-    if(result?.error)throw result.error;
-    const data=Array.isArray(result.data)?result.data[0]:(result.data||{});
-    const accepted=data.accepted===true;
-    if(accepted)saveTermsAcceptedFor(user);
-    return accepted;
-  }catch(error){
-    // Con Neon configurado, un fallo remoto NO debe convertir una aceptación
-    // vieja/local en una aceptación válida para el evento. La fuente de verdad
-    // del consentimiento es Neon; el fallback local solo sirve cuando Neon
-    // todavía no está configurado.
-    console.error("AMS Fly: no se pudo consultar la aceptación de T&C",error);
-    return false;
-  }
-}
-async function persistTermsAccepted(user){
-  if(!user?.email)throw new Error("auth_required");
-  if(NEON_DATA_READY()){
-    const client=await getPublicNeonClient();
-    let result=await client.rpc("ams_fly_accept_terms",{});
-    if(result?.error){
-      const raw=[result.error.message,result.error.details,result.error.hint,result.error.code].filter(Boolean).join(" ").toLowerCase();
-      // Si el piloto existe en Auth pero aún no existe en participants,
-      // registrarlo una vez con sus datos reales y volver a guardar la aceptación.
-      if(raw.includes("participant_not_found")){
-        await syncParticipantProfile(user);
-        result=await client.rpc("ams_fly_accept_terms",{});
-      }
-    }
-    if(result?.error)throw result.error;
-  }
-  saveTermsAcceptedFor(user);
+  screen.querySelector("#eventAuthHint").textContent=user
+    ?"✓ Tienes una cuenta activa. Tus partidas del evento pueden quedar vinculadas a tu piloto y publicarse en el ranking."
+    :"Puedes jugar sin cuenta y conservar tu resultado en este dispositivo. Para participar en el ranking, inicia sesión o crea una cuenta.";
+  screen.querySelector("#eventJoinButton").textContent=user?"IR A JUGAR ✦":"INICIAR SESIÓN O JUGAR →";
+  showOnly(screen);
+  screen.hidden=false;
+  screen.scrollTop=0;
 }
 async function loadRemoteEventConfig(){
   if(!NEON_DATA_READY())return;
@@ -913,16 +794,6 @@ async function publishScoreInternal(options={}){
   try{
     const authUser=await getCurrentAuthUser();
     if(!authUser)throw new Error("auth_required");
-    if(!termsAcceptedFor(authUser)){
-      if(!automatic){
-        els.submitScoreStatus.textContent="Acepta los Términos y Condiciones en la sección Evento para publicar este puntaje.";
-        els.submitScoreBtn.disabled=false;
-        els.scoreMessage.disabled=false;
-        navigateTo("event");
-      }
-      return false;
-    }
-
     const client=await getPublicNeonClient();
     let participantId=profile.participantId||null;
 
@@ -1112,48 +983,30 @@ async function ensureParticipantReady(user){
   return true;
 }
 async function startWithProfile(){
-  // Durante un evento activo, iniciar el vuelo exige una cuenta, un piloto
-  // sincronizado y la aceptación de T&C. Fuera del evento, el juego puede
-  // seguir siendo público.
+  // El juego puede probarse sin cuenta y el resultado queda únicamente en
+  // localStorage. Si hay una cuenta activa durante el evento, el vuelo queda
+  // vinculado al piloto y podrá publicarse en el ranking.
   if(!eventIsOpen()){
     resetGame();
     return;
   }
-
   const user=await getCurrentAuthUser().catch(()=>null);
   if(!user){
-    navigateTo("account");
-    setAuthStatus(els.authStatus,"Inicia sesión o crea tu cuenta antes de participar.",true);
+    resetGame();
     return;
   }
-
   try{
-    const accepted=await getTermsAcceptedFor(user);
-    if(!accepted){
-      navigateTo("event");
-      setTimeout(()=>{
-        const hint=document.getElementById("eventAuthHint");
-        if(hint)hint.textContent="Acepta los Términos y Condiciones para poder participar.";
-      },0);
-      return;
-    }
-
     const ready=await ensureParticipantReady(user);
     if(!ready){
       navigateTo("account");
-      setAuthStatus(els.accountStatus,"Completa y guarda tus datos de cuenta antes de participar.",true);
+      setAuthStatus(els.accountStatus,"Completa y guarda tus datos de cuenta para participar en el ranking.",true);
       return;
     }
-
     resetGame();
   }catch(error){
     console.error("AMS Fly: no se pudo preparar el vuelo",error);
     navigateTo("account");
-    setAuthStatus(
-      els.accountStatus,
-      friendlyNeonSyncError(error),
-      true
-    );
+    setAuthStatus(els.accountStatus,friendlyNeonSyncError(error),true);
   }
 }
 function prepareFactThenGame(){
