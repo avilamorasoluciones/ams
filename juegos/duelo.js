@@ -11,12 +11,15 @@ const Duelo = (() => {
   ];
 
   let players = [];
+  let mode = "duel";
   let time = 12;
   let currentCategory = "Todas";
   let participants = [];
   let matches = [];
   let matchIndex = 0;
   let playerScores = {};
+  let teamScores = {0:0,1:0};
+  let tournamentRound = 1;
   let current = null;
   let questionDeck = [];
   let lastQuestionIndex = -1;
@@ -133,6 +136,7 @@ const Duelo = (() => {
   }
 
   function captureLobbyConfig() {
+     mode = $("du-mode")?.value || "duel";
     time = Number($("du-time").value || 12);
     currentCategory = $("du-cat").value || "Todas";
   }
@@ -140,8 +144,8 @@ const Duelo = (() => {
   function save() {
     if (currentScreen === "du-scr-lobby") captureLobbyConfig();
     window.GameSession?.save("duelo", {
-      schemaVersion: 3, players, time, currentCategory,
-      participants, matches, matchIndex, playerScores, current, questionDeck,
+      schemaVersion: 4, players, mode, time, currentCategory,
+      participants, matches, matchIndex, playerScores, teamScores, tournamentRound, current, questionDeck,
       lastQuestionIndex, timerEndsAt, remainingMs, paused, phase, history, screen: currentScreen
     });
   }
@@ -161,6 +165,7 @@ const Duelo = (() => {
   }
 
   function syncConfig() {
+    if ($("du-mode")) $("du-mode").value = mode;
     $("du-time").value = String(time);
     renderCategories();
     renderPlayers();
@@ -177,6 +182,14 @@ const Duelo = (() => {
   }
 
   function renderScoreboard(pair) {
+    if (mode === "teams") {
+      const teamHtml = [0,1].map(team =>
+        '<div class="du-score-row' + (pair && (pair.a?.team === team || pair.b?.team === team) ? " active" : "") +
+        '"><span>Equipo ' + (team === 0 ? "A" : "B") + '</span><strong>' + (teamScores[team] || 0) + " pts</strong></div>"
+      ).join("");
+      $("du-scoreboard").innerHTML = teamHtml;
+      return;
+    }
     $("du-scoreboard").innerHTML = participants.map(player =>
       '<div class="du-score-row' + (pair && (pair.a?.id === player.id || pair.b?.id === player.id) ? " active" : "") +
       '"><span>' + esc(player.name) + '</span><strong>' + (playerScores[player.id] || 0) + " pts</strong></div>"
@@ -190,12 +203,14 @@ const Duelo = (() => {
 
   function render() {
     const pair = currentMatch();
-    $("du-round-label").textContent = "Duelo " + Math.min(matchIndex + 1, matches.length) + " de " + matches.length;
+    $("du-round-label").textContent = mode === "tournament"
+      ? "Ronda " + tournamentRound + " · Duelo " + Math.min(matchIndex + 1, matches.length) + " de " + matches.length
+      : "Duelo " + Math.min(matchIndex + 1, matches.length) + " de " + matches.length;
     $("du-cat-label").textContent = current?.category || "Categoría";
     $("du-name-a").textContent = pair?.a?.name || "";
     $("du-name-b").textContent = pair?.b?.name || "";
-    $("du-team-a-label").textContent = "Jugador";
-    $("du-team-b-label").textContent = "Jugador";
+    $("du-team-a-label").textContent = mode === "teams" ? "Equipo " + (pair?.a?.team === 0 ? "A" : "B") : "Jugador";
+    $("du-team-b-label").textContent = mode === "teams" ? "Equipo " + (pair?.b?.team === 0 ? "A" : "B") : "Jugador";
     $("du-question").textContent = current?.text || "";
     $("du-point-a").textContent = pair?.a ? "Punto para " + pair.a.name : "";
     $("du-point-b").textContent = pair?.b ? "Punto para " + pair.b.name : "";
@@ -217,7 +232,9 @@ const Duelo = (() => {
         ? String(Math.max(0, Math.ceil((timerEndsAt - Date.now()) / 1000)))
         : "");
     $("du-next").hidden = phase !== "done";
-    $("du-next").textContent = matchIndex >= matches.length - 1 ? "Ver resultado final" : "Siguiente duelo";
+    $("du-next").textContent = mode === "tournament" && matchIndex >= matches.length - 1
+      ? (matches[matchIndex]?.winner ? (tournamentRound === 1 ? "Siguiente ronda" : "Siguiente ronda") : "Ver resultado final")
+      : (matchIndex >= matches.length - 1 ? "Ver resultado final" : "Siguiente duelo");
     if (paused) $("du-status").textContent = "Pausa.";
     else if (phase === "answer") $("du-status").textContent = "¿Quién respondió primero y bien?";
     else if (phase === "done") {
@@ -266,19 +283,46 @@ const Duelo = (() => {
     return players.map((name, index) => ({
       id: "p" + index,
       name,
-      team: -1
+      team: mode === "teams" ? index % 2 : -1
     }));
   }
 
-  function buildMatches() {
-    const pool = shuffle([...participants]);
-    return Array.from({ length: pool.length / 2 }, (_, index) => ({
-      a: pool[index * 2].id, b: pool[index * 2 + 1].id
+  function buildMatches(pool = participants) {
+    if (mode === "teams") {
+      const teamA = shuffle(pool.filter(player => player.team === 0));
+      const teamB = shuffle(pool.filter(player => player.team === 1));
+      if (!teamA.length || !teamB.length) return [];
+      const count = Math.max(teamA.length, teamB.length);
+      return Array.from({ length: count }, (_, index) => ({
+        a: teamA[index % teamA.length].id,
+        b: teamB[index % teamB.length].id
+      }));
+    }
+    const shuffled = shuffle(pool);
+    if (shuffled.length < 2) return [];
+    return Array.from({ length: Math.floor(shuffled.length / 2) }, (_, index) => ({
+      a: shuffled[index * 2].id, b: shuffled[index * 2 + 1].id
     }));
   }
 
   function beginMatch() {
     if (matchIndex >= matches.length) { finish(); return; }
+    const bracketMatch = matches[matchIndex];
+    if (mode === "tournament" && !bracketMatch.b) {
+      bracketMatch.winner = bracketMatch.a;
+      history.push({
+        match: matchIndex + 1, round: tournamentRound, bye: true,
+        a: bracketMatch.a, b: "", winner: bracketMatch.a,
+        question: "", category: "", answer: ""
+      });
+      matchIndex += 1;
+      if (matchIndex >= matches.length) {
+        prepareNextTournamentRound();
+      } else {
+        beginMatch();
+      }
+      return;
+    }
     current = pickQuestion();
     if (!current) {
       showError("No hay preguntas para esa categoría. Prueba otra.");
@@ -297,12 +341,13 @@ const Duelo = (() => {
   function startGame() {
     captureLobbyConfig();
     const cleanNames = players.map(name => String(name || "").trim()).filter(Boolean);
-    if (cleanNames.length < 2) {
-      showError("Agrega mínimo 2 jugadores para empezar.");
+    const minimum = mode === "duel" ? 2 : 3;
+    if (cleanNames.length < minimum) {
+      showError("Agrega mínimo " + minimum + " jugadores para empezar.");
       return;
     }
-    if (cleanNames.length % 2 !== 0) {
-      showError("Agrega un jugador más para que todos tengan pareja.");
+    if (mode === "duel" && cleanNames.length % 2 !== 0) {
+      showError("En 1 vs. 1 necesitas una cantidad par de jugadores. Para 5, 7 o cualquier grupo impar, elige Torneo o Equipos.");
       return;
     }
     const unique = new Set(cleanNames.map(name => name.toLocaleLowerCase("es")));
@@ -319,6 +364,8 @@ const Duelo = (() => {
       return;
     }
     playerScores = Object.fromEntries(participants.map(player => [player.id, 0]));
+    teamScores = {0:0,1:0};
+    tournamentRound = 1;
     matchIndex = 0;
     history = [];
     current = null;
@@ -342,9 +389,12 @@ const Duelo = (() => {
       const winner = getParticipant(winnerId);
       if (!winner || (winner.id !== pair?.a?.id && winner.id !== pair?.b?.id)) return;
       playerScores[winner.id] = (playerScores[winner.id] || 0) + 1;
+      if (mode === "teams") teamScores[winner.team] = (teamScores[winner.team] || 0) + 1;
+      if (mode === "tournament") matches[matchIndex].winner = winner.id;
     }
     history.push({
       match: matchIndex + 1,
+      round: tournamentRound,
       a: pair?.a?.id || "",
       b: pair?.b?.id || "",
       winner: winnerId || "",
@@ -358,20 +408,50 @@ const Duelo = (() => {
     save();
   }
 
+  function prepareNextTournamentRound() {
+    if (mode !== "tournament") { finish(); return; }
+    const winners = matches.map(match => match.winner).filter(Boolean);
+    if (winners.length <= 1) {
+      finish();
+      return;
+    }
+    tournamentRound += 1;
+    participants = winners.map(id => getParticipant(id)).filter(Boolean);
+    matches = buildMatches(participants);
+    matchIndex = 0;
+    history.push({ round: tournamentRound, transition: true, winner: "" });
+    beginMatch();
+  }
+
   function advance() {
     if (phase !== "done") return;
     matchIndex += 1;
+    if (mode === "tournament" && matchIndex >= matches.length) {
+      prepareNextTournamentRound();
+      return;
+    }
     beginMatch();
   }
 
   function resultSummary() {
+    if (mode === "teams") {
+      const high = Math.max(teamScores[0] || 0, teamScores[1] || 0);
+      const winners = [0,1].filter(team => (teamScores[team] || 0) === high);
+      const title = winners.length > 1 ? "¡Empate entre los equipos!" : "¡Ganó el Equipo " + (winners[0] === 0 ? "A" : "B") + "!";
+      return '<div class="du-help"><strong>' + title + '</strong><p class="muted">' +
+        history.filter(item => item.question || item.bye).length + " enfrentamientos jugados.</p></div>" +
+        [0,1].map(team => '<div class="du-result-row"><span>Equipo ' + (team === 0 ? "A" : "B") + '</span><strong>' +
+          (teamScores[team] || 0) + " pts</strong></div>").join("") +
+        participants.map(player => '<div class="du-result-row"><span>' + esc(player.name) +
+          ' · Equipo ' + (player.team === 0 ? "A" : "B") + '</span><strong>' + (playerScores[player.id] || 0) + " pts</strong></div>").join("");
+    }
     const high = Math.max(0, ...participants.map(player => playerScores[player.id] || 0));
     const winners = participants.filter(player => (playerScores[player.id] || 0) === high);
     const title = winners.length > 1
       ? "¡Empate entre " + winners.map(player => esc(player.name)).join(", ") + "!"
-      : "¡Ganó " + esc(winners[0]?.name || "el duelo") + "!";
+      : (mode === "tournament" ? "🏆 ¡Campeón: " + esc(winners[0]?.name || "el torneo") + "!" : "¡Ganó " + esc(winners[0]?.name || "el duelo") + "!");
     return '<div class="du-help"><strong>' + title + '</strong><p class="muted">' +
-      history.length + " duelos jugados.</p></div>" +
+      history.filter(item => item.question || item.bye).length + " duelos jugados.</p></div>" +
       participants.map(player => '<div class="du-result-row"><span>' + esc(player.name) +
         '</span><strong>' + (playerScores[player.id] || 0) + " pts</strong></div>").join("");
   }
@@ -417,6 +497,8 @@ const Duelo = (() => {
     window.GameSession?.clear("duelo");
     participants = [];
     matches = [];
+    tournamentRound = 1;
+    teamScores = {0:0,1:0};
     matchIndex = 0;
     playerScores = {};
     current = null;
@@ -432,8 +514,9 @@ const Duelo = (() => {
   }
 
   function restore(state) {
-    if (!state || state.schemaVersion !== 3) return false;
+    if (!state || ![3,4].includes(state.schemaVersion)) return false;
     players = Array.isArray(state.players) ? state.players.filter(name => typeof name === "string" && name.trim()) : players;
+    mode = state.mode === "tournament" || state.mode === "teams" ? state.mode : "duel";
     time = Number(state.time || 12);
     currentCategory = state.currentCategory === "Todas" || ranges.some(range => range[0] === state.currentCategory)
       ? state.currentCategory : "Todas";
@@ -441,6 +524,8 @@ const Duelo = (() => {
     matches = Array.isArray(state.matches) ? state.matches : [];
     matchIndex = Math.max(0, Number(state.matchIndex || 0));
     playerScores = state.playerScores && typeof state.playerScores === "object" ? state.playerScores : {};
+    teamScores = state.teamScores && typeof state.teamScores === "object" ? state.teamScores : {0:0,1:0};
+    tournamentRound = Math.max(1, Number(state.tournamentRound || 1));
     current = state.current && typeof state.current.text === "string" ? state.current : null;
     questionDeck = Array.isArray(state.questionDeck)
       ? state.questionDeck.filter(index => Number.isInteger(index) && validQuestion(DB[index])
@@ -492,6 +577,7 @@ const Duelo = (() => {
 
   function bind() {
     syncConfig();
+    $("du-mode")?.addEventListener("change", event => { mode = event.target.value; save(); });
     $("du-inpName").onkeydown = event => {
       if (event.key === "Enter") {
         event.preventDefault();
