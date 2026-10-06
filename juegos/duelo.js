@@ -629,9 +629,30 @@ const Duelo = (() => {
 
   function exitToMenu() {
     clearInterval(timer);
+    clearInterval(countdownTimer);
     timer = null;
+    countdownTimer = null;
     window.GameSession?.clear("duelo");
-    window.location.href = "index.html";
+    participants = [];
+    matches = [];
+    matchIndex = 0;
+    tournamentRound = 1;
+    playerScores = {};
+    teamScores = {0:0,1:0};
+    currentMatchPoints = {a:0,b:0};
+    current = null;
+    phase = "idle";
+    countdownActive = false;
+    countdownSeconds = 5;
+    history = [];
+    questionDeck = [];
+    paused = false;
+    timerEndsAt = 0;
+    remainingMs = 0;
+    syncConfig();
+    showError("");
+    showScreen("du-scr-lobby");
+    window.scrollTo({top: 0, behavior: "smooth"});
   }
 
   function bind() {
