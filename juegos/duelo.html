@@ -10,9 +10,10 @@
   <link rel="icon" href="pwa-icon-192.svg" type="image/svg+xml">
   <link rel="stylesheet" href="styles.css?v=20261005-49">
   <style>
-    #du-scr-lobby[hidden],#du-scr-game[hidden],#du-scr-result[hidden],#du-team-config[hidden],#du-point-actions[hidden],#du-result-message[hidden],#du-official-answer[hidden],#du-pause[hidden],#du-next[hidden]{display:none!important}
+    #du-scr-lobby[hidden],#du-scr-game[hidden],#du-scr-result[hidden],#du-point-actions[hidden],#du-result-message[hidden],#du-official-answer[hidden],#du-pause[hidden],#du-next[hidden]{display:none!important}
     .du-config-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
     .du-config-grid label{font-weight:800}
+    .du-player-list{display:grid;gap:8px}
     .du-help{padding:14px;border:1px solid var(--border-light);border-radius:14px;background:var(--player-bg);line-height:1.5}
     .du-roster{display:grid;gap:12px}
     .du-roster-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
@@ -66,33 +67,21 @@
         <p class="game-sub">Dos jugadores, una pregunta. El primero que responda bien se lleva el punto.</p>
 
         <div class="box panel-soft stack">
-          <h2 class="section-title">¿Cómo quieren jugar?</h2>
-          <label>Formato
-            <select id="du-format">
-              <option value="individual">Todos contra todos</option>
-              <option value="teams">Por equipos</option>
-            </select>
-          </label>
-          <p id="du-format-help" class="muted"></p>
-        </div>
-
-        <div class="box panel-soft stack">
           <h2 class="section-title">Partida</h2>
-          <div id="du-team-config" class="du-config-grid" hidden>
-            <label>Nombre del equipo 1<input id="du-team-name-0" maxlength="24" value="Equipo 1" autocomplete="off"></label>
-            <label>Nombre del equipo 2<input id="du-team-name-1" maxlength="24" value="Equipo 2" autocomplete="off"></label>
-          </div>
           <div class="du-config-grid">
-            <label id="du-size-label">Jugadores<select id="du-size"></select></label>
             <label>Categoría<select id="du-cat"></select></label>
             <label>Tiempo<select id="du-time"><option value="8">8 segundos</option><option value="12" selected>12 segundos</option><option value="15">15 segundos</option><option value="20">20 segundos</option></select></label>
           </div>
-          <p id="du-match-count" class="muted"></p>
         </div>
 
         <div class="box panel-soft stack">
-          <h2 class="section-title">Nombres</h2>
-          <div id="du-roster-inputs" class="du-roster"></div>
+          <h2 class="section-title">Jugadores</h2>
+          <div class="inline-input-group">
+            <input type="text" id="du-inpName" placeholder="Añadir jugador..." autocomplete="off" maxlength="24">
+            <button type="button" class="btn btn-inline-square" id="du-btnAddPlayer"><svg class="ui-icon" aria-hidden="true"><use href="ui-icons.svg#plus"></use></svg><span>Agregar</span></button>
+          </div>
+          <div class="player-list" id="du-uiPlayerList"></div>
+          <p class="muted">Agrega a todos los que van a jugar. El juego los mezcla y arma los duelos automáticamente.</p>
         </div>
         <p id="du-data-error" class="muted" role="alert" hidden></p>
         <button id="du-start" class="btn primary btn-full" type="button">Empezar</button>
@@ -142,6 +131,6 @@
   </main>
   <script src="scripts.js?v=20261005-49" defer></script>
   <script src="datos_nuevos.js?v=20261005-02" defer></script>
-  <script src="duelo.js?v=20261005-49" defer></script>
+  <script src="duelo.js?v=20261006-01" defer></script>
 </body>
 </html>
