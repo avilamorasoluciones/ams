@@ -942,10 +942,8 @@ async function loadRanking(){
       const avatar=document.createElement("div");avatar.className="ranking-avatar";avatar.innerHTML=birdMarkup(b,".43");
       const main=document.createElement("div");main.className="ranking-main";
       const name=document.createElement("div");name.className="ranking-name";name.textContent=row.player_name||"Piloto";
-      const countryEl=document.createElement("div");countryEl.className="ranking-country";countryEl.textContent=country.flag+" "+country.name+" · "+b.name;
-      const dateEl=document.createElement("div");dateEl.className="ranking-date";dateEl.textContent="Mejor puntuación · "+formatRankingDate(row.created_at);
-      const message=document.createElement("div");message.className="ranking-message";message.textContent="“"+(row.message||"Sin mensaje")+"”";
-      main.append(name,countryEl,dateEl,message);
+      const countryEl=document.createElement("div");countryEl.className="ranking-country";countryEl.textContent=country.flag+" "+country.name;
+      main.append(name,countryEl);
       const score=document.createElement("div");score.className="ranking-score";
       const scoreValue=document.createElement("strong");scoreValue.textContent=String(Number(row.score||0));
       const scoreLabel=document.createElement("span");scoreLabel.textContent="PUNTOS";score.append(scoreValue,scoreLabel);
