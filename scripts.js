@@ -328,3 +328,71 @@ themeToggles.forEach((toggle) => {
 });
 
 initTheme();
+
+// ===== Modal de pago Wompi =====
+(() => {
+  const modal = document.getElementById("paymentModal");
+  if (!modal) return;
+
+  const triggers = Array.from(document.querySelectorAll("[data-payment-trigger]"));
+  const closers = Array.from(modal.querySelectorAll("[data-payment-close]"));
+  const checkout = modal.querySelector(".payment-modal-action");
+  let lastFocused = null;
+
+  const closePaymentModal = () => {
+    modal.hidden = true;
+    modal.setAttribute("aria-hidden", "true");
+    document.body.classList.remove("payment-modal-open");
+    if (lastFocused && typeof lastFocused.focus === "function") {
+      window.setTimeout(() => lastFocused.focus(), 0);
+    }
+  };
+
+  const openPaymentModal = (event) => {
+    event.preventDefault();
+    lastFocused = event.currentTarget;
+    modal.hidden = false;
+    modal.setAttribute("aria-hidden", "false");
+    document.body.classList.add("payment-modal-open");
+    window.setTimeout(() => {
+      const closeButton = modal.querySelector(".payment-modal-close");
+      if (closeButton) closeButton.focus();
+    }, 0);
+  };
+
+  triggers.forEach((trigger) => trigger.addEventListener("click", openPaymentModal));
+  closers.forEach((close) => close.addEventListener("click", closePaymentModal));
+
+  modal.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") {
+      event.preventDefault();
+      closePaymentModal();
+      return;
+    }
+
+    if (event.key !== "Tab") return;
+
+    const focusable = Array.from(modal.querySelectorAll(
+      'button:not([disabled]), a[href]:not([disabled])'
+    )).filter((el) => !el.closest("[hidden]"));
+
+    if (!focusable.length) return;
+
+    const first = focusable[0];
+    const last = focusable[focusable.length - 1];
+
+    if (event.shiftKey && document.activeElement === first) {
+      event.preventDefault();
+      last.focus();
+    } else if (!event.shiftKey && document.activeElement === last) {
+      event.preventDefault();
+      first.focus();
+    }
+  });
+
+  if (checkout) {
+    checkout.addEventListener("click", () => {
+      window.setTimeout(closePaymentModal, 80);
+    });
+  }
+})();
