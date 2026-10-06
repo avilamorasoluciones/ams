@@ -1278,15 +1278,38 @@ async function signOutPlayer(){
   try{const client=await getNeonClient();await client.auth.signOut();profile=null;localStorage.removeItem(STORAGE_KEY);renderHomeBird();await refreshAuthUI();navigateTo("play")}
   catch(error){setAuthStatus(els.accountStatus,error?.message||"No se pudo cerrar sesión.",true)}
 }
-function bootHome(){
-  loadProfile();hydrateStats();initCountries();renderBirds();renderHomeBird();applyEventConfig();
-  fillDialSelect("playerDialCode","57");fillDialSelect("accountDialCode","57");
-  if(NEON_DATA_READY()) loadRemoteEventConfig();
-  refreshAuthUI();updateLargeScreenRecommendation();
-  setTimeout(()=>els.loadingScreen.classList.add("is-gone"),500);
-  if(restorePendingResult())return
-  if(soundOn){startMusic();window.addEventListener("pointerdown",unlockMenuMusic,{once:true,passive:true,capture:true});window.addEventListener("keydown",unlockMenuMusic,{once:true})}
+function dismissLoadingScreen(){
+  const loader=els.loadingScreen;
+  if(loader)loader.classList.add("is-gone");
 }
+function bootHome(){
+  try{
+    loadProfile();
+    hydrateStats();
+    initCountries();
+    renderBirds();
+    renderHomeBird();
+    applyEventConfig();
+    fillDialSelect("playerDialCode","57");
+    fillDialSelect("accountDialCode","57");
+    if(NEON_DATA_READY()) loadRemoteEventConfig();
+    refreshAuthUI();
+    updateLargeScreenRecommendation();
+    if(restorePendingResult())return;
+    if(soundOn){
+      startMusic();
+      window.addEventListener("pointerdown",unlockMenuMusic,{once:true,passive:true,capture:true});
+      window.addEventListener("keydown",unlockMenuMusic,{once:true});
+    }
+  }catch(error){
+    console.error("AMS Fly: error durante la carga inicial",error);
+  }finally{
+    // El juego nunca debe quedar bloqueado detrás del loader por un fallo
+    // secundario de inicialización o de servicios externos.
+    setTimeout(dismissLoadingScreen,150);
+  }
+}
+setTimeout(dismissLoadingScreen,3000);
 function navigateTo(target){
   const eventScreen=document.getElementById("amsFlyEventScreen");
   const map={play:els.homeScreen,event:eventScreen,account:els.profileScreen,ranking:els.rankingScreen};
