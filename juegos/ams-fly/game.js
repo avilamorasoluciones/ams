@@ -292,7 +292,7 @@ async function openEventScreen(){
   renderEventRichText(screen.querySelector("#eventPrizeDesc"),cfg.prizeDesc||"");
   screen.querySelector("#eventPrizeTitle").textContent=cfg.prizeTitle||"";
   screen.querySelector("#eventConditionTitle").textContent=cfg.conditionTitle||"";
-  renderEventRichText(screen.querySelector("#eventConditionDesc"),cfg.conditionDesc||"");
+  const participationNotice="⚠️ PARTICIPACIÓN\n• Puedes jugar sin cuenta y tu resultado quedará solo en este dispositivo; ese resultado local no entra al ranking.\n• Si juegas con una cuenta registrada durante la vigencia del evento, tu piloto queda vinculado a esa cuenta y la puntuación válida puede guardarse y publicarse en el ranking. Al jugar con una cuenta registrada se entiende que estás participando en el evento y aceptas sus reglas y condiciones. No necesitas marcar una casilla adicional.";\n  const conditionText=String(cfg.conditionDesc||"");\n  renderEventRichText(screen.querySelector("#eventConditionDesc"),conditionText.includes("Al jugar con una cuenta registrada")?conditionText:participationNotice+"\n\n"+conditionText);
   const user=await getCurrentAuthUser().catch(()=>null);
   screen.querySelector("#eventAuthHint").textContent=user
     ?"✓ Tienes una cuenta activa. Tus partidas del evento pueden quedar vinculadas a tu piloto y publicarse en el ranking."
