@@ -545,7 +545,7 @@
           </a>
         </div>
         <span class="nav-divider" aria-hidden="true">—</span>
-        <a class="nav-payment" href="https://checkout.wompi.co/l/VPOS_pHYnEG" target="_blank" rel="noopener" aria-label="Pagar con Wompi" title="Pagar con Wompi">
+        <a class="nav-payment" href="#pago" data-payment-trigger aria-label="Pagar con Wompi" title="Pagar con Wompi">
           <i class="fa-solid fa-credit-card" aria-hidden="true"></i>
           <span>Pagar</span>
           <b>Wompi</b>
@@ -582,7 +582,7 @@
           </a>
         </div>
         <span class="nav-divider nav-compact-divider" aria-hidden="true">—</span>
-        <a class="nav-payment nav-compact-payment" href="https://checkout.wompi.co/l/VPOS_pHYnEG" target="_blank" rel="noopener" aria-label="Pagar con Wompi" title="Pagar con Wompi">
+        <a class="nav-payment nav-compact-payment" href="#pago" data-payment-trigger aria-label="Pagar con Wompi" title="Pagar con Wompi">
           <i class="fa-solid fa-credit-card" aria-hidden="true"></i>
           <span>Pagar</span>
         </a>
@@ -606,7 +606,7 @@
     <a href="#recursos">Recursos <i class="fa-solid fa-arrow-right"></i></a>
     <a href="#faq">Preguntas <i class="fa-solid fa-arrow-right"></i></a>
     <a href="#contacto">Contacto <i class="fa-solid fa-arrow-right"></i></a>
-    <a class="mobile-payment" href="https://checkout.wompi.co/l/VPOS_pHYnEG" target="_blank" rel="noopener" aria-label="Pagar con Wompi" title="Pagar con Wompi">
+    <a class="mobile-payment" href="#pago" data-payment-trigger aria-label="Pagar con Wompi" title="Pagar con Wompi">
       <span><i class="fa-solid fa-credit-card" aria-hidden="true"></i> Pagar con Wompi</span>
       <b>Pago seguro</b>
     </a>
@@ -1180,7 +1180,7 @@
       <div class="hero-actions" style="justify-content:center;">
         <a class="btn btn-primary" href="https://forms.cloud.microsoft/r/nrTBEJ1E3C" target="_blank" rel="noopener"><i class="fa-solid fa-clipboard-list"></i> Llenar formulario</a>
         <a class="btn btn-wa" href="https://wa.me/573052547072?text=Hola%20Avila%20Mora%20Soluciones!%20Quiero%20hablar%20sobre%20un%20proyecto." target="_blank" rel="noopener"><i class="fa-brands fa-whatsapp"></i> Hablar por WhatsApp</a>
-        <a class="btn btn-ghost" href="https://checkout.wompi.co/l/VPOS_pHYnEG" target="_blank" rel="noopener"><i class="fa-solid fa-credit-card"></i> Pagar con Wompi</a>
+        <a class="btn btn-ghost" href="#pago" data-payment-trigger><i class="fa-solid fa-credit-card"></i> Pagar con Wompi</a>
         <button class="btn btn-ghost" type="button" id="emailCta"><i class="fa-solid fa-envelope"></i> Escribir por correo</button>
         <a class="btn btn-ghost" href="#portafolio"><i class="fa-solid fa-eye"></i> Ver ejemplos</a>
         <div id="emailQuick" hidden style="width:100%;max-width:760px;margin:12px auto 0;padding:12px;border:1px solid rgba(255,255,255,.12);border-radius:16px;background:rgba(255,255,255,.04)">
@@ -1229,6 +1229,24 @@
       </div>
     </div>
   <div style="display:flex;justify-content:center;gap:14px;flex-wrap:wrap;margin-top:12px;font-size:.78rem"><a href="./legal_privacidad.html" style="color:inherit">Privacidad</a><a href="./legal_terminos.html" style="color:inherit">Términos</a><a href="./legal_cookies.html" style="color:inherit">Cookies</a><a href="mailto:equipo@avilamorasoluciones.com?subject=PQR%20-%20Avila%20Mora%20Soluciones&body=Hola%20AMS,%0A%0AQuiero%20presentar%20una%20PQR.%0A%0ANombre:%0AAsunto:%0ADetalle:%0A" style="color:inherit">PQR</a></div></footer>
+
+  <div class="payment-modal" id="paymentModal" hidden aria-hidden="true">
+    <div class="payment-modal-backdrop" data-payment-close></div>
+    <section class="payment-modal-card" role="dialog" aria-modal="true" aria-labelledby="paymentModalTitle">
+      <button class="payment-modal-close" type="button" data-payment-close aria-label="Cerrar"><i class="fa-solid fa-xmark"></i></button>
+      <div class="payment-modal-icon" aria-hidden="true"><i class="fa-solid fa-credit-card"></i></div>
+      <h2 id="paymentModalTitle">Realiza tu pago</h2>
+      <p class="payment-modal-lead">Puedes realizar tu pago de forma segura mediante Wompi.</p>
+      <div class="payment-modal-note">
+        <i class="fa-solid fa-circle-info" aria-hidden="true"></i>
+        <span>Si recibiste un enlace de pago personalizado por correo o WhatsApp, utiliza directamente ese enlace.</span>
+      </div>
+      <a class="btn btn-primary payment-modal-action" href="https://checkout.wompi.co/l/VPOS_pHYnEG" target="_blank" rel="noopener">
+        <i class="fa-solid fa-lock"></i> Continuar con Wompi
+      </a>
+      <button class="payment-modal-cancel" type="button" data-payment-close>Cancelar</button>
+    </section>
+  </div>
 
   <button class="to-top" id="toTop" aria-label="Volver arriba" title="Volver arriba"><i class="fa-solid fa-arrow-up"></i></button>
 
