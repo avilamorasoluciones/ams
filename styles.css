@@ -1038,3 +1038,117 @@ body.light-theme .mobile-shortcut {
 @keyframes ams-minimal-pulse{0%,100%{opacity:.35;transform:scale(.8)}50%{opacity:.8;transform:scale(1.05)}}
 @keyframes ams-minimal-dot{0%,100%{opacity:.25;transform:translateY(0)}50%{opacity:1;transform:translateY(-2px)}}
 @media(prefers-reduced-motion:reduce){.ams-loading-track span,.ams-loading-glow,.ams-loading-dots i{animation:none}.ams-loading-track span{left:0;width:100%}}
+
+
+/* ===== Modal de pago Wompi ===== */
+.payment-modal{
+  position:fixed;
+  inset:0;
+  z-index:6000;
+  display:grid;
+  place-items:center;
+  padding:20px;
+}
+.payment-modal[hidden]{display:none}
+.payment-modal-backdrop{
+  position:absolute;
+  inset:0;
+  background:rgba(2,6,23,.72);
+  backdrop-filter:blur(8px);
+  -webkit-backdrop-filter:blur(8px);
+}
+.payment-modal-card{
+  position:relative;
+  z-index:1;
+  width:min(100%,500px);
+  padding:34px 30px 26px;
+  border:1px solid var(--glass-border);
+  border-radius:26px;
+  background:linear-gradient(180deg,rgba(15,23,42,.98),rgba(7,11,24,.98));
+  box-shadow:0 28px 90px rgba(0,0,0,.48);
+  text-align:center;
+  animation:paymentModalIn .22s ease-out;
+}
+.payment-modal-icon{
+  width:54px;
+  height:54px;
+  margin:0 auto 16px;
+  display:grid;
+  place-items:center;
+  border-radius:16px;
+  background:rgba(99,102,241,.14);
+  color:#a5b4fc;
+  font-size:1.25rem;
+}
+.payment-modal-card h2{
+  margin:0;
+  font-size:1.55rem;
+  letter-spacing:-.02em;
+}
+.payment-modal-lead{
+  margin:9px auto 18px;
+  max-width:390px;
+  color:var(--muted-2);
+  font-size:.92rem;
+}
+.payment-modal-note{
+  display:flex;
+  align-items:flex-start;
+  gap:10px;
+  margin:0 auto 22px;
+  max-width:410px;
+  padding:13px 14px;
+  border:1px solid rgba(255,255,255,.09);
+  border-radius:15px;
+  background:rgba(255,255,255,.035);
+  color:var(--muted);
+  text-align:left;
+  font-size:.78rem;
+  line-height:1.5;
+}
+.payment-modal-note i{
+  margin-top:2px;
+  color:#a5b4fc;
+}
+.payment-modal-action{
+  width:100%;
+  justify-content:center;
+}
+.payment-modal-close{
+  position:absolute;
+  top:12px;
+  right:12px;
+  width:38px;
+  height:38px;
+  display:grid;
+  place-items:center;
+  border:1px solid rgba(255,255,255,.08);
+  border-radius:50%;
+  background:rgba(255,255,255,.04);
+  color:var(--muted-2);
+  cursor:pointer;
+}
+.payment-modal-close:hover{background:rgba(255,255,255,.08);color:var(--light)}
+.payment-modal-cancel{
+  margin-top:13px;
+  border:0;
+  background:transparent;
+  color:var(--muted);
+  font:inherit;
+  font-size:.78rem;
+  cursor:pointer;
+}
+.payment-modal-cancel:hover{color:var(--light)}
+body.payment-modal-open{overflow:hidden}
+@keyframes paymentModalIn{
+  from{opacity:0;transform:translateY(8px) scale(.98)}
+  to{opacity:1;transform:translateY(0) scale(1)}
+}
+@media(max-width:520px){
+  .payment-modal{padding:14px}
+  .payment-modal-card{padding:30px 19px 23px;border-radius:22px}
+  .payment-modal-card h2{font-size:1.35rem}
+}
+@media(prefers-reduced-motion:reduce){
+  .payment-modal-card{animation:none}
+}
