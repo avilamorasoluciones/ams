@@ -509,9 +509,10 @@ const Duelo = (() => {
     timer = null;
     paused = false;
     phase = "result";
+    const playedHistory = history.filter(item => item.question);
     $("du-result-body").innerHTML = resultSummary() +
       '<div class="du-history"><strong>Preguntas jugadas</strong>' +
-      (history.length ? history.map(item => {
+      (playedHistory.length ? playedHistory.map(item => {
         const a = getParticipant(item.a)?.name || "Jugador";
         const b = getParticipant(item.b)?.name || "Jugador";
         const winner = item.winner ? (getParticipant(item.winner)?.name || "Jugador") : "Nadie sumó";
