@@ -72,9 +72,11 @@
           <div class="du-config-grid">
             <label>Modo de juego<select id="du-mode"><option value="duel">⚔️ 1 vs. 1</option><option value="tournament">🏆 Torneo</option><option value="teams">👥 Equipos</option></select></label>
             <label>Categoría<select id="du-cat"></select></label>
-            <label>Tiempo<select id="du-time"><option value="8">8 segundos</option><option value="12" selected>12 segundos</option><option value="15">15 segundos</option><option value="20">20 segundos</option></select></label>
+            <label>Tiempo por pregunta<select id="du-time"><option value="8">8 segundos</option><option value="12" selected>12 segundos</option><option value="20">20 segundos</option><option value="30">30 segundos</option><option value="60">1 minuto</option></select></label>
+            <label>Puntos para ganar<select id="du-target"><option value="5">5 puntos</option><option value="10" selected>10 puntos</option><option value="20">20 puntos</option><option value="custom">Personalizado</option></select></label>
+            <label id="du-custom-target-wrap" hidden>Puntos personalizados<input id="du-custom-target" type="number" min="1" max="1000" value="10" inputmode="numeric"></label>
           </div>
-          <p class="du-mode-help">1 vs. 1 funciona como siempre. Torneo permite grupos impares y elimina jugadores hasta encontrar un campeón. Equipos reparte al grupo entre dos equipos y mantiene el marcador por equipo.</p>
+          <p class="du-mode-help">Cada pregunta es una ronda y vale 1 punto. El duelo continúa hasta que alguien llegue a la puntuación elegida. Con 10 o 20 puntos, una pelea puede durar mucho más; el tiempo por pregunta también es configurable. Torneo y Equipos aplican la misma puntuación a cada enfrentamiento.</p>
         </div>
 
         <div class="box panel-soft stack">
