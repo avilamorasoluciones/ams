@@ -1,19 +1,5 @@
-/* DB independiente para Batalla de Palabras, Duelo y Apuesta. */
+/* DB independiente para Duelo y Apuesta. */
 const AMS_NEW_GAMES_DB = {
-  batalla:{categories:{
-    "Animales":["perro","gato","elefante","tigre","león","águila","delfín","caballo","jirafa","mono","cocodrilo","mariposa","conejo","tortuga","pingüino","ballena","zorro","oso","serpiente","rana"],
-    "Comida":["arepa","pizza","hamburguesa","pasta","arroz","sopa","ensalada","empanada","taco","sándwich","pollo","pescado","queso","helado","chocolate","pan","frijoles","lentejas","tamales","buñuelos"],
-    "Países":["Colombia","México","Argentina","Brasil","Chile","Perú","Ecuador","Venezuela","España","Francia","Italia","Japón","China","Canadá","Australia","India","Egipto","Portugal","Alemania","Estados Unidos"],
-    "Ciudades":["Bogotá","Medellín","Cali","Cartagena","Barranquilla","Bucaramanga","Pereira","Manizales","Armenia","Santa Marta","Ibagué","Tunja","Popayán","Cúcuta","Neiva","Villavicencio","Pasto","Valledupar","Montería","Riohacha"],
-    "Lugares de Colombia":["Guatapé","Monserrate","Tayrona","San Andrés","Caño Cristales","Villa de Leyva","Salento","Cartagena","Amazonas","Eje Cafetero","Ciudad Perdida","Desierto de la Tatacoa","Catedral de Sal","Nuquí","Barichara","Leticia","Guatavita","Minca","Palomino","El Cocuy"],
-    "Comida colombiana":["arepa","bandeja paisa","ajiaco","sancocho","lechona","tamales","mute","changua","frijoles","empanadas","buñuelos","pandebono","oblea","cholado","fritanga","arroz con pollo","carne oreada","ab||||adejo","almojábana","mazamorra"],
-    "Deportes":["fútbol","baloncesto","tenis","ciclismo","natación","atletismo","boxeo","voleibol","gimnasia","béisbol","patinaje","esgrima","judo","surf","golf","ajedrez","rugby","skate","karate","escalada"],
-    "Tecnología":["celular","computador","tablet","teclado","mouse","monitor","servidor","internet","router","cámara","micrófono","audífonos","robot","dron","consola","aplicación","web","programa","batería","cargador"],
-    "Videojuegos":["Minecraft","Fortnite","Tetris","Mario","Zelda","Pokémon","FIFA","Roblox","Pac-Man","Sonic","Halo","Overwatch","Among Us","Terraria","GTA","Fall Guys","Cuphead","Doom","Celeste","Kirby"],
-    "Objetos de la casa":["mesa","silla","cama","sofá","nevera","televisor","lámpara","espejo","escoba","almohada","toalla","vaso","plato","cuchara","armario","puerta","ventana","reloj","ventilador","microondas"],
-    "Profesiones":["médico","ingeniero","profesor","abogado","chef","piloto","arquitecto","periodista","fotógrafo","diseñador","programador","veterinario","enfermero","bombero","policía","mecánico","electricista","agricultor","contador","músico"],
-    "Naturaleza":["montaña","río","mar","bosque","volcán","isla","cascada","desierto","playa","lago","nube","lluvia","trueno","arcoíris","árbol","flor","piedra","cueva","selva","glaciar"]
-  }},
   duelo:{questions:[
     ["¿Cuál es el planeta más grande del sistema solar?",["Mercurio","Júpiter","Marte","Venus"],1],
     ["¿Cuántos lados tiene un hexágono?",["5","6","7","8"],1],
