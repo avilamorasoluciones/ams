@@ -663,15 +663,23 @@ function endGame(){
     isRecord
   };
 
-  els.submitScoreStatus.textContent=profile
-    ?"Guardando tu puntuación…"
-    :"Resultado guardado en este dispositivo. Crea una cuenta para entrar al ranking.";
+  els.submitScoreStatus.hidden=false;
+  els.submitScoreStatus.textContent="Resultado guardado en este dispositivo.";
   showOnly(els.gameOverScreen);
   els.gameOverScreen.hidden=false;
   window.scrollTo(0,0);
   playTone(isRecord?880:220,.12,isRecord?"triangle":"sine");
 
-  if(profile) publishScore({automatic:true});
+  getCurrentAuthUser().then(user=>{
+    if(user){
+      els.submitScoreStatus.textContent="Guardando tu puntuación…";
+      publishScore({automatic:true});
+    }else{
+      els.submitScoreStatus.textContent="Resultado guardado en este dispositivo. Crea una cuenta para entrar al ranking.";
+    }
+  }).catch(()=>{
+    els.submitScoreStatus.textContent="Resultado guardado en este dispositivo. Crea una cuenta para entrar al ranking.";
+  });
 }
 
 async function publishScore(options={}){
@@ -716,7 +724,6 @@ async function publishScoreInternal(options={}){
 
     els.submitScoreStatus.hidden=true;
     lastResult=null;
-    await loadRanking(true);
     return true;
   }catch(error){
     console.error("AMS Fly: no se pudo guardar automáticamente la puntuación",error);
