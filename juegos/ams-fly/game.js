@@ -782,7 +782,7 @@ async function publishScoreInternal(options={}){
 
   const typedMessage=String(els.scoreMessage.value||"").trim();
   const savedMessage=String(currentResult?.message||"").trim();
-  const message=(typedMessage||savedMessage||"¡Buen vuelo!").slice(0,90);
+  const message="";
 
   if(!NEON_DATA_READY()){
     if(!automatic) els.submitScoreStatus.textContent="No se puede publicar todavía: falta conectar el Data API de Neon.";
@@ -922,10 +922,17 @@ async function loadRanking(){
     const participantMap=new Map();
     if(participantIds.length){
       const profiles=await client.from("ams_fly_participants")
-        .select("id,name,country_code")
+        .select("*")
         .in("id",participantIds);
       if(profiles.error)throw profiles.error;
-      (profiles.data||[]).forEach(participant=>participantMap.set(participant.id,participant));
+      (profiles.data||[]).forEach(participant=>{
+        // El esquema de participantes puede cambiar de nombre de columna.
+        // Tomamos el dato actual sin depender de una columna concreta como "name".
+        participantMap.set(participant.id,{
+          name:participant.name ?? participant.full_name ?? participant.display_name ?? participant.player_name ?? "",
+          country_code:participant.country_code ?? participant.country ?? participant.countryCode ?? "CO"
+        });
+      });
     }
 
     const rows=[...bestByParticipant.values()]
