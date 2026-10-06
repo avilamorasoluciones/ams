@@ -63,41 +63,40 @@
       <div id="du-scr-lobby" class="box narrow stack">
         <div class="game-page-hero-icon"><img src="game-duelo.svg" alt=""></div>
         <h1 class="game-title">Duelo</h1>
-        <p class="game-sub">Todos se enfrentan una vez en parejas aleatorias. También puedes jugar por equipos.</p>
-        <div class="du-help"><strong>Cómo se juega:</strong> mira la pregunta y léela en voz alta. Los dos participantes responden; los árbitros tocan el nombre de quien contestó primero correctamente. Cada persona participa una sola vez por partida. Si se acaba el tiempo sin respuesta válida, nadie suma.</div>
+        <p class="game-sub">Dos jugadores, una pregunta. El primero que responda bien se lleva el punto.</p>
 
         <div class="box panel-soft stack">
-          <h2 class="section-title">1. Elige cómo jugar</h2>
+          <h2 class="section-title">¿Cómo quieren jugar?</h2>
           <label>Formato
             <select id="du-format">
-              <option value="individual">Individual · cada jugador por su cuenta</option>
-              <option value="teams">Por equipos · un representante de cada equipo</option>
+              <option value="individual">Todos contra todos</option>
+              <option value="teams">Por equipos</option>
             </select>
           </label>
           <p id="du-format-help" class="muted"></p>
         </div>
 
         <div class="box panel-soft stack">
-          <h2 class="section-title">2. Configura la partida</h2>
+          <h2 class="section-title">Partida</h2>
           <div id="du-team-config" class="du-config-grid" hidden>
             <label>Nombre del equipo 1<input id="du-team-name-0" maxlength="24" value="Equipo 1" autocomplete="off"></label>
             <label>Nombre del equipo 2<input id="du-team-name-1" maxlength="24" value="Equipo 2" autocomplete="off"></label>
           </div>
           <div class="du-config-grid">
-            <label id="du-size-label">Cantidad de jugadores<select id="du-size"></select></label>
+            <label id="du-size-label">Jugadores<select id="du-size"></select></label>
             <label>Categoría<select id="du-cat"></select></label>
-            <label>Tiempo por duelo<select id="du-time"><option value="8">8 segundos</option><option value="12" selected>12 segundos</option><option value="15">15 segundos</option><option value="20">20 segundos</option></select></label>
+            <label>Tiempo<select id="du-time"><option value="8">8 segundos</option><option value="12" selected>12 segundos</option><option value="15">15 segundos</option><option value="20">20 segundos</option></select></label>
           </div>
           <p id="du-match-count" class="muted"></p>
         </div>
 
         <div class="box panel-soft stack">
-          <h2 class="section-title">3. Escribe los nombres</h2>
+          <h2 class="section-title">Nombres</h2>
           <div id="du-roster-inputs" class="du-roster"></div>
         </div>
         <p id="du-data-error" class="muted" role="alert" hidden></p>
-        <button id="du-start" class="btn primary btn-full" type="button">Comenzar duelos aleatorios</button>
-        <a id="du-lobby-menu" class="btn ghost btn-full" href="index.html">Volver al menú</a>
+        <button id="du-start" class="btn primary btn-full" type="button">Empezar</button>
+        <a id="du-lobby-menu" class="btn ghost btn-full" href="index.html">Volver</a>
       </div>
 
       <div id="du-scr-game" class="box narrow stack" hidden>
@@ -111,7 +110,7 @@
         <div class="box panel-soft du-arena stack">
           <div id="du-status" class="muted" role="status" aria-live="polite"></div>
           <div id="du-question" class="du-question"></div>
-          <div id="du-point-actions" class="du-point-actions">
+          <div id="du-point-actions" class="du-point-actions" aria-label="¿Quién ganó el punto?">
             <button id="du-point-a" class="btn primary" type="button"></button>
             <button id="du-point-b" class="btn primary" type="button"></button>
           </div>
@@ -120,8 +119,8 @@
           <div id="du-timer" class="du-count" aria-live="polite"></div>
           <p id="du-pause-banner" class="muted" role="status" hidden>Duelo en pausa.</p>
         </div>
-        <button id="du-pause" class="btn ghost btn-full" type="button">Pausar</button>
-        <button id="du-next" class="btn primary btn-full" type="button" hidden>Siguiente duelo</button>
+        <button id="du-pause" class="btn ghost btn-full" type="button">Pausa</button>
+        <button id="du-next" class="btn primary btn-full" type="button" hidden>Siguiente</button>
         <button id="du-menu-game" class="btn ghost btn-full" type="button">Volver al menú</button>
         <div id="du-end-confirm" class="tool-overlay" role="dialog" aria-modal="true" aria-labelledby="du-end-confirm-title" tabindex="-1">
           <div class="box narrow stack tool-modal-card">
@@ -134,7 +133,7 @@
 
       <div id="du-scr-result" class="box narrow stack" hidden>
         <div class="game-page-hero-icon"><img src="game-duelo.svg" alt=""></div>
-        <h1 class="game-title">¡Duelo terminado!</h1>
+        <h1 class="game-title">Resultado</h1>
         <div id="du-result-body" class="stack"></div>
         <button id="du-new" class="btn primary btn-full" type="button">Nueva partida</button>
         <a id="du-result-menu" class="btn ghost btn-full" href="index.html">Volver al menú</a>
