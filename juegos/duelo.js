@@ -14,7 +14,6 @@ const Duelo = (() => {
   let mode = "duel";
   let time = 12;
   let targetPoints = 10;
-  let matchScores = {a:0,b:0};
   let currentCategory = "Todas";
   let participants = [];
   let matches = [];
@@ -26,6 +25,9 @@ const Duelo = (() => {
   let questionDeck = [];
   let lastQuestionIndex = -1;
   let timer = null;
+  let countdownTimer = null;
+  let countdownActive = false;
+  let countdownSeconds = 5;
   let timerEndsAt = 0;
   let remainingMs = 0;
   let paused = false;
@@ -150,7 +152,7 @@ const Duelo = (() => {
   function save() {
     if (currentScreen === "du-scr-lobby") captureLobbyConfig();
     window.GameSession?.save("duelo", {
-      schemaVersion: 4, players, mode, time, targetPoints, matchScores, currentCategory,
+      schemaVersion: 5, players, mode, time, targetPoints, currentCategory,
       participants, matches, matchIndex, playerScores, teamScores, tournamentRound, current, questionDeck,
       lastQuestionIndex, timerEndsAt, remainingMs, paused, phase, history, screen: currentScreen
     });
@@ -190,21 +192,6 @@ const Duelo = (() => {
     return { a: getParticipant(match.a), b: getParticipant(match.b) };
   }
 
-  function renderScoreboard(pair) {
-    if (mode === "teams") {
-      const teamHtml = [0,1].map(team =>
-        '<div class="du-score-row' + (pair && (pair.a?.team === team || pair.b?.team === team) ? " active" : "") +
-        '"><span>Equipo ' + (team === 0 ? "A" : "B") + '</span><strong>' + (teamScores[team] || 0) + " pts</strong></div>"
-      ).join("");
-      $("du-scoreboard").innerHTML = teamHtml;
-      return;
-    }
-    $("du-scoreboard").innerHTML = participants.map(player =>
-      '<div class="du-score-row' + (pair && (pair.a?.id === player.id || pair.b?.id === player.id) ? " active" : "") +
-      '"><span>' + esc(player.name) + '</span><strong>' + (playerScores[player.id] || 0) + " pts</strong></div>"
-    ).join("");
-  }
-
   function answerText(index) {
     const source = DB[index];
     return source && source[1] ? String(source[1][source[2]] || "") : "";
@@ -214,7 +201,7 @@ const Duelo = (() => {
     const pair = currentMatch();
     $("du-round-label").textContent = mode === "tournament"
       ? "Ronda " + tournamentRound + " · Duelo " + Math.min(matchIndex + 1, matches.length) + " de " + matches.length
-      : "Duelo " + Math.min(matchIndex + 1, matches.length) + " de " + matches.length;
+      : "Duelo";
     $("du-cat-label").textContent = current?.category || "Categoría";
     $("du-name-a").textContent = pair?.a?.name || "";
     $("du-name-b").textContent = pair?.b?.name || "";
@@ -223,39 +210,63 @@ const Duelo = (() => {
     $("du-question").textContent = current?.text || "";
     $("du-point-a").textContent = pair?.a ? "Punto para " + pair.a.name : "";
     $("du-point-b").textContent = pair?.b ? "Punto para " + pair.b.name : "";
-    $("du-point-actions").hidden = phase !== "answer" || paused;
-    $("du-point-a").disabled = phase !== "answer" || paused;
-    $("du-point-b").disabled = phase !== "answer" || paused;
-    $("du-result-message").hidden = phase !== "done";
-    $("du-official-answer").hidden = phase !== "done";
-    $("du-official-answer").textContent = phase === "done" && current
-      ? "Respuesta de referencia: " + answerText(current.index)
+
+    const isAnswer = phase === "answer" && !paused;
+    $("du-point-actions").hidden = !isAnswer;
+    $("du-point-a").disabled = !isAnswer;
+    $("du-point-b").disabled = !isAnswer;
+    $("du-result-message").hidden = true;
+    $("du-official-answer").hidden = !current;
+    $("du-official-answer").textContent = current
+      ? "Respuesta correcta: " + answerText(current.index)
       : "";
+    $("du-countdown").hidden = !countdownActive;
+    $("du-countdown-number").textContent = String(Math.max(0, countdownActive ? countdownSeconds : 0));
     $("du-pause-banner").hidden = !paused;
     $("du-pause").hidden = phase !== "answer";
     $("du-pause").textContent = paused ? "Continuar" : "Pausar";
     $("du-pause").setAttribute("aria-pressed", String(paused));
-    $("du-match-score").textContent = mode === "teams" ? ("Marcador: " + (matchScores.a || 0) + " - " + (matchScores.b || 0) + " · gana con " + targetPoints) : ("Marcador: " + (matchScores.a || 0) + " - " + (matchScores.b || 0) + " · gana con " + targetPoints);
     $("du-timer").textContent = paused
       ? String(Math.ceil(remainingMs / 1000))
       : (timerEndsAt && phase === "answer"
         ? String(Math.max(0, Math.ceil((timerEndsAt - Date.now()) / 1000)))
         : "");
-    $("du-next").hidden = phase !== "done";
-    $("du-next").textContent = phase === "done" && !matches[matchIndex]?.winner ? "Siguiente pregunta" : (mode === "tournament" && matchIndex >= matches.length - 1
-      ? (matches[matchIndex]?.winner ? (tournamentRound === 1 ? "Siguiente ronda" : "Siguiente ronda") : "Ver resultado final")
-      : (matchIndex >= matches.length - 1 ? "Ver resultado final" : "Siguiente duelo"));
-    if (paused) $("du-status").textContent = "Pausa.";
-    else if (phase === "answer") $("du-status").textContent = "¿Quién respondió primero y bien?";
-    else if (phase === "done") {
-      const item = history[history.length - 1];
-      $("du-result-message").textContent = item?.winner
-        ? "🏆 " + (getParticipant(item.winner)?.name || "el jugador elegido") + " ganó el duelo con " + targetPoints + " puntos."
-        : item?.pointWinner ? "Punto para " + (getParticipant(item.pointWinner)?.name || "el jugador elegido") + ". Continúa la pelea."
-        : "Se acabó el tiempo. Nadie suma este duelo.";
-      $("du-status").textContent = item?.winner ? "Punto anotado." : "Se acabó el tiempo.";
-    } else $("du-status").textContent = "";
-    renderScoreboard(pair);
+
+    if (countdownActive) {
+      $("du-status").textContent = "Prepárense…";
+    } else if (paused) {
+      $("du-status").textContent = "Duelo en pausa.";
+    } else if (phase === "answer") {
+      $("du-status").textContent = "Lee la pregunta y pulsa al jugador que respondió primero y bien.";
+    } else {
+      $("du-status").textContent = "";
+    }
+  }
+
+  function startCountdown() {
+    clearInterval(countdownTimer);
+    clearInterval(timer);
+    timer = null;
+    countdownActive = true;
+    countdownSeconds = 5;
+    phase = "countdown";
+    render();
+    showScreen("du-scr-game");
+    countdownTimer = setInterval(() => {
+      countdownSeconds -= 1;
+      if (countdownSeconds <= 0) {
+        clearInterval(countdownTimer);
+        countdownTimer = null;
+        countdownActive = false;
+        phase = "answer";
+        timerEndsAt = Date.now() + time * 1000;
+        render();
+        startTimer(timerEndsAt);
+        save();
+        return;
+      }
+      render();
+    }, 1000);
   }
 
   function startTimer(deadline = 0, remaining = 0) {
@@ -324,6 +335,7 @@ const Duelo = (() => {
   function beginMatch() {
     if (matchIndex >= matches.length) { finish(); return; }
     const bracketMatch = matches[matchIndex];
+
     if (mode === "tournament" && !bracketMatch.b) {
       bracketMatch.winner = bracketMatch.a;
       history.push({
@@ -332,23 +344,22 @@ const Duelo = (() => {
         question: "", category: "", answer: ""
       });
       matchIndex += 1;
-      if (matchIndex >= matches.length) {
-        prepareNextTournamentRound();
-      } else {
-        beginMatch();
-      }
+      if (matchIndex >= matches.length) prepareNextTournamentRound();
+      else beginMatch();
       return;
     }
-    matchScores = {a:0,b:0};
+
     current = pickQuestion();
     if (!current) {
       showError("No hay preguntas para esa categoría. Prueba otra.");
       showScreen("du-scr-lobby");
       return;
     }
+
     phase = "answer";
     paused = false;
     remainingMs = 0;
+    countdownActive = false;
     timerEndsAt = Date.now() + time * 1000;
     render();
     showScreen("du-scr-game");
@@ -376,7 +387,7 @@ const Duelo = (() => {
     savePlayers();
     participants = buildParticipants();
     matches = buildMatches();
-    if (!matches.length || matches.some(match => !match.a || !match.b)) {
+    if (!matches.length || matches.some(match => !match.a)) {
       showError("No pudimos crear la partida. Revisa los jugadores.");
       return;
     }
@@ -387,11 +398,14 @@ const Duelo = (() => {
     matchIndex = 0;
     history = [];
     current = null;
+    countdownActive = false;
+    countdownSeconds = 5;
     questionDeck = [];
     lastQuestionIndex = -1;
     showError("");
     window.emitSound?.(440, 0.03, "sine", 0.035);
     beginMatch();
+    startCountdown();
   }
 
   function resolve(winnerId) {
@@ -403,34 +417,48 @@ const Duelo = (() => {
     remainingMs = 0;
 
     const pair = currentMatch();
-    let matchWinner = null;
     if (winnerId) {
       const winner = getParticipant(winnerId);
       if (!winner || (winner.id !== pair?.a?.id && winner.id !== pair?.b?.id)) return;
       playerScores[winner.id] = (playerScores[winner.id] || 0) + 1;
-      const winnerSide = pair?.a?.id === winner.id ? "a" : "b";
-      matchScores[winnerSide] = (matchScores[winnerSide] || 0) + 1;
       if (mode === "teams") teamScores[winner.team] = (teamScores[winner.team] || 0) + 1;
-      if (matchScores[winnerSide] >= targetPoints) {
-        matchWinner = winner.id;
-        if (mode === "tournament") matches[matchIndex].winner = winner.id;
+
+      const winnerSide = pair?.a?.id === winner.id ? "a" : "b";
+      const sideScore = history.filter(item =>
+        item.match === matchIndex + 1 && item.pointWinner === winner.id
+      ).length + 1;
+
+      if (sideScore >= targetPoints) {
+        matches[matchIndex].winner = winner.id;
       }
     }
+
     history.push({
       match: matchIndex + 1,
       round: tournamentRound,
       a: pair?.a?.id || "",
       b: pair?.b?.id || "",
-      winner: matchWinner || "",
+      winner: matches[matchIndex]?.winner || "",
       pointWinner: winnerId || "",
       question: current?.text || "",
       category: current?.category || "",
       answer: answerText(current?.index)
     });
-    phase = "done";
-    window.emitSound?.(winnerId ? 720 : 220, 0.1, winnerId ? "triangle" : "sawtooth");
-    render();
-    save();
+
+    window.emitSound?.(winnerId ? 720 : 220, 0.06, winnerId ? "triangle" : "sawtooth");
+
+    // No "Siguiente" button: every question advances automatically.
+    if (matches[matchIndex]?.winner) {
+      matchIndex += 1;
+      if (mode === "tournament" && matchIndex >= matches.length) {
+        prepareNextTournamentRound();
+      } else {
+        beginMatch();
+      }
+      return;
+    }
+
+    beginMatch();
   }
 
   function prepareNextTournamentRound() {
@@ -448,18 +476,8 @@ const Duelo = (() => {
   }
 
   function advance() {
-    if (phase !== "done") return;
-    const finishedMatch = Boolean(matches[matchIndex]?.winner);
-    if (!finishedMatch) {
-      beginMatch();
-      return;
-    }
-    matchIndex += 1;
-    if (mode === "tournament" && matchIndex >= matches.length) {
-      prepareNextTournamentRound();
-      return;
-    }
-    beginMatch();
+    // Kept only for saved sessions from older versions. New games advance automatically.
+    if (phase === "done") beginMatch();
   }
 
   function resultSummary() {
@@ -475,7 +493,9 @@ const Duelo = (() => {
           ' · Equipo ' + (player.team === 0 ? "A" : "B") + '</span><strong>' + (playerScores[player.id] || 0) + " pts</strong></div>").join("");
     }
     const high = Math.max(0, ...participants.map(player => playerScores[player.id] || 0));
-    const winners = participants.filter(player => (playerScores[player.id] || 0) === high);
+    const winners = mode === "tournament"
+      ? participants.filter(player => player.id === history.filter(item => item.round === tournamentRound && item.winner).at(-1)?.winner)
+      : participants.filter(player => (playerScores[player.id] || 0) === high);
     const title = winners.length > 1
       ? "¡Empate entre " + winners.map(player => esc(player.name)).join(", ") + "!"
       : (mode === "tournament" ? "🏆 ¡Campeón: " + esc(winners[0]?.name || "el torneo") + "!" : "¡Ganó " + esc(winners[0]?.name || "el duelo") + "!");
@@ -522,7 +542,9 @@ const Duelo = (() => {
 
   function newGame() {
     clearInterval(timer);
+    clearInterval(countdownTimer);
     timer = null;
+    countdownTimer = null;
     window.GameSession?.clear("duelo");
     participants = [];
     matches = [];
@@ -532,6 +554,8 @@ const Duelo = (() => {
     playerScores = {};
     current = null;
     phase = "idle";
+    countdownActive = false;
+    countdownSeconds = 5;
     history = [];
     questionDeck = [];
     paused = false;
@@ -548,7 +572,6 @@ const Duelo = (() => {
     mode = state.mode === "tournament" || state.mode === "teams" ? state.mode : "duel";
     time = Number(state.time || 12);
     targetPoints = Math.min(1000, Math.max(1, Number(state.targetPoints || 10)));
-    matchScores = state.matchScores && typeof state.matchScores === "object" ? state.matchScores : {a:0,b:0};
     currentCategory = state.currentCategory === "Todas" || ranges.some(range => range[0] === state.currentCategory)
       ? state.currentCategory : "Todas";
     participants = Array.isArray(state.participants) ? state.participants : [];
@@ -576,9 +599,11 @@ const Duelo = (() => {
       return true;
     }
     if (currentScreen === "du-scr-game" && current) {
+      countdownActive = phase === "countdown";
       render();
       showScreen("du-scr-game");
       if (phase === "answer" && !paused) startTimer(timerEndsAt, remainingMs);
+      if (phase === "countdown") startCountdown();
       return true;
     }
     if (currentScreen === "du-scr-result") {
@@ -638,7 +663,6 @@ const Duelo = (() => {
       if (pair?.b) resolve(pair.b.id);
     };
     $("du-pause").onclick = togglePause;
-    $("du-next").onclick = advance;
     $("du-menu-game").onclick = openExitConfirm;
     $("du-end-cancel").onclick = closeExitConfirm;
     $("du-end-confirm-submit").onclick = exitToMenu;
