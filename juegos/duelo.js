@@ -300,9 +300,14 @@ const Duelo = (() => {
     }
     const shuffled = shuffle(pool);
     if (shuffled.length < 2) return [];
-    return Array.from({ length: Math.floor(shuffled.length / 2) }, (_, index) => ({
-      a: shuffled[index * 2].id, b: shuffled[index * 2 + 1].id
-    }));
+    const result = [];
+    for (let index = 0; index < shuffled.length; index += 2) {
+      result.push({
+        a: shuffled[index].id,
+        b: shuffled[index + 1]?.id || null
+      });
+    }
+    return result;
   }
 
   function beginMatch() {
