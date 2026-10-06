@@ -172,6 +172,10 @@
           <div><span>PARTIDAS</span><strong id="resultGames">0</strong></div>
         </div>
         <p id="newRecord" class="new-record" hidden>🏆 NUEVO RÉCORD</p>
+        <label class="message-label" hidden>MENSAJE PARA EL RANKING
+          <textarea id="scoreMessage" maxlength="90" aria-hidden="true"></textarea>
+        </label>
+        <button id="submitScoreBtn" class="primary-button" type="button" hidden aria-hidden="true">PUBLICAR PUNTUACIÓN</button>
         <p id="submitScoreStatus" class="submit-status" role="status">La puntuación se guarda automáticamente si tienes cuenta.</p>
         <button id="shareResultBtn" class="secondary-button" type="button">↗ COMPARTIR EN WHATSAPP</button>
         <button id="againBtn" class="primary-button" type="button">OTRA PARTIDA <span>↻</span></button>
@@ -209,7 +213,7 @@
 
   <script src="neon-config.js?v=4"></script>
   <script src="neon-client.js?v=7"></script>
-  <script src="game.js?v=77"></script>
+  <script src="game.js?v=78"></script>
   <script>
     if ("serviceWorker" in navigator) {
       window.addEventListener("load", () => navigator.serviceWorker.register("./sw.js").catch(() => {}));
