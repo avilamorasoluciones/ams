@@ -72,24 +72,29 @@ function emitSound(frequency, duration, waveType = "sine", volume = 0.5) {
       audioCtx = new (window.AudioContext || window.webkitAudioContext)();
     }
 
+    const play = () => {
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+
+      osc.type = waveType;
+      osc.frequency.setValueAtTime(frequency, audioCtx.currentTime);
+
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+
+      gain.gain.setValueAtTime(volume, audioCtx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + duration);
+
+      osc.start(audioCtx.currentTime);
+      osc.stop(audioCtx.currentTime + duration);
+    };
+
     if (audioCtx.state === "suspended") {
-      audioCtx.resume();
+      Promise.resolve(audioCtx.resume()).then(play).catch(() => {});
+      return;
     }
 
-    const osc = audioCtx.createOscillator();
-    const gain = audioCtx.createGain();
-
-    osc.type = waveType;
-    osc.frequency.setValueAtTime(frequency, audioCtx.currentTime);
-
-    osc.connect(gain);
-    gain.connect(audioCtx.destination);
-
-    gain.gain.setValueAtTime(volume, audioCtx.currentTime);
-    gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + duration);
-
-    osc.start(audioCtx.currentTime);
-    osc.stop(audioCtx.currentTime + duration);
+    play();
   } catch (e) {
     // Silencioso a propósito
   }

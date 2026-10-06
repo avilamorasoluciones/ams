@@ -374,3 +374,6 @@ $$;
 
 revoke all on function public.ams_fly_public_ranking(integer) from public;
 grant execute on function public.ams_fly_public_ranking(integer) to anonymous, authenticated;
+
+-- Make the new RPC signature visible to the Data API immediately.
+notify pgrst, 'reload schema';

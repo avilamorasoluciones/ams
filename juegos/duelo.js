@@ -72,6 +72,11 @@ const Duelo = (() => {
       .map(item => item.index);
   }
 
+  function normalizeTargetPoints(value) {
+    const points = Number(value);
+    return Math.min(1000, Math.max(1, Number.isFinite(points) ? Math.round(points) : 10));
+  }
+
   function renderCategories() {
     $("du-cat").innerHTML = '<option value="Todas">Todas las categorías</option>' +
       ranges.map(range => '<option value="' + esc(range[0]) + '">' + esc(range[0]) + "</option>").join("");
@@ -146,7 +151,7 @@ const Duelo = (() => {
     const targetSelect = $("du-target")?.value || "10";
     const customTarget = Number($("du-custom-target")?.value || 10);
     targetPoints = targetSelect === "custom" ? customTarget : Number(targetSelect);
-    targetPoints = Math.min(1000, Math.max(1, Number.isFinite(targetPoints) ? targetPoints : 10));
+    targetPoints = normalizeTargetPoints(targetPoints);
     currentCategory = $("du-cat").value || "Todas";
   }
 
@@ -255,6 +260,7 @@ const Duelo = (() => {
     phase = "countdown";
     render();
     showScreen("du-scr-game");
+    window.emitSound?.(620, 0.08, "sine", 0.16);
     countdownTimer = setInterval(() => {
       countdownSeconds -= 1;
       if (countdownSeconds <= 0) {
@@ -262,12 +268,14 @@ const Duelo = (() => {
         countdownTimer = null;
         countdownActive = false;
         phase = "answer";
+        window.emitSound?.(880, 0.16, "sine", 0.2);
         timerEndsAt = Date.now() + time * 1000;
         render();
         startTimer(timerEndsAt);
         save();
         return;
       }
+      window.emitSound?.(620 + (5 - countdownSeconds) * 55, 0.08, "sine", 0.16);
       render();
     }, 1000);
   }
@@ -352,7 +360,6 @@ const Duelo = (() => {
       return;
     }
 
-    currentMatchPoints = {a:0,b:0};
     current = pickQuestion();
     if (!current) {
       showError("No hay preguntas para esa categoría. Prueba otra.");
@@ -397,6 +404,7 @@ const Duelo = (() => {
     }
     playerScores = Object.fromEntries(participants.map(player => [player.id, 0]));
     teamScores = {0:0,1:0};
+    currentMatchPoints = {a:0,b:0};
     tournamentRound = 1;
     matchIndex = 0;
     history = [];
@@ -420,16 +428,20 @@ const Duelo = (() => {
     remainingMs = 0;
 
     const pair = currentMatch();
+    let teamReachedTarget = false;
     if (winnerId) {
       const winner = getParticipant(winnerId);
       if (!winner || (winner.id !== pair?.a?.id && winner.id !== pair?.b?.id)) return;
       playerScores[winner.id] = (playerScores[winner.id] || 0) + 1;
-      if (mode === "teams") teamScores[winner.team] = (teamScores[winner.team] || 0) + 1;
+      if (mode === "teams") {
+        teamScores[winner.team] = Math.min(targetPoints, (teamScores[winner.team] || 0) + 1);
+        teamReachedTarget = teamScores[winner.team] >= targetPoints;
+      }
 
       const winnerSide = pair?.a?.id === winner.id ? "a" : "b";
-      currentMatchPoints[winnerSide] = (currentMatchPoints[winnerSide] || 0) + 1;
+      currentMatchPoints[winnerSide] = Math.min(targetPoints, (currentMatchPoints[winnerSide] || 0) + 1);
 
-      if (currentMatchPoints[winnerSide] >= targetPoints) {
+      if (teamReachedTarget || currentMatchPoints[winnerSide] >= targetPoints) {
         matches[matchIndex].winner = winner.id;
       }
     }
@@ -448,9 +460,15 @@ const Duelo = (() => {
 
     window.emitSound?.(winnerId ? 720 : 220, 0.06, winnerId ? "triangle" : "sawtooth");
 
+    if (teamReachedTarget) {
+      finish();
+      return;
+    }
+
     // No "Siguiente" button: every question advances automatically.
     if (matches[matchIndex]?.winner) {
       matchIndex += 1;
+      currentMatchPoints = {a:0,b:0};
       if (mode === "tournament" && matchIndex >= matches.length) {
         prepareNextTournamentRound();
       } else {
@@ -575,7 +593,7 @@ const Duelo = (() => {
     players = Array.isArray(state.players) ? state.players.filter(name => typeof name === "string" && name.trim()) : players;
     mode = state.mode === "tournament" || state.mode === "teams" ? state.mode : "duel";
     time = Number(state.time || 12);
-    targetPoints = Math.min(1000, Math.max(1, Number(state.targetPoints || 10)));
+    targetPoints = normalizeTargetPoints(state.targetPoints || 10);
     currentCategory = state.currentCategory === "Todas" || ranges.some(range => range[0] === state.currentCategory)
       ? state.currentCategory : "Todas";
     participants = Array.isArray(state.participants) ? state.participants : [];

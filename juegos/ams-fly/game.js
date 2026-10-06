@@ -600,9 +600,10 @@ function draw(){
   }
 }
 function loop(now){
-  if(!game||!game.running)return;
+  if(!game||!game.running||game.paused)return;
   const dt=Math.min(.032,(now-game.last)/1000);game.last=now;
-  if(!game.paused)update(dt);
+  update(dt);
+  if(!game||!game.running||game.paused)return;
   draw();
   raf=requestAnimationFrame(loop);
 }
@@ -687,8 +688,6 @@ function endGame(){
 
   stats.games=Math.max(0,Number(stats.games||0))+1;
   stats.best=Math.max(previousBest,finalScore);
-  saveStats();
-  hydrateStats();
 
   els.finalScore.textContent=String(finalScore);
   els.resultBest.textContent=String(stats.best);
@@ -711,7 +710,6 @@ function endGame(){
   }
 
   lastResult={score:finalScore,durationMs:Math.max(0,Math.round((game.time||0)*1000)),birdId:game.birdData?.id||profile?.birdId||selectedBirdId,best:stats.best,games:stats.games,isRecord,message:""};
-  savePendingScore(lastResult);
   els.scoreMessage.value="";
   els.submitScoreBtn.dataset.published="0";
   els.submitScoreBtn.disabled=false;
@@ -728,6 +726,23 @@ function endGame(){
   els.gameOverScreen.hidden=false;
   window.scrollTo(0,0);
   requestAnimationFrame(()=>{els.gameOverScreen.hidden=false;els.scoreMessage?.focus({preventScroll:true})});
+
+  const resultSaved=savePendingScore(lastResult);
+  let persistenceError=false;
+  try{
+    saveStats();
+  }catch(error){
+    persistenceError=true;
+    console.error("AMS Fly: no se pudieron guardar las estadísticas locales",error);
+  }
+  if(els.homeBest)els.homeBest.textContent=String(stats.best);
+  if(els.homeGames)els.homeGames.textContent=String(stats.games);
+  if(!resultSaved||persistenceError){
+    const issues=[];
+    if(!resultSaved)issues.push("No se pudo guardar el resultado en este dispositivo.");
+    if(persistenceError)issues.push("No se pudieron guardar las estadísticas locales.");
+    els.submitScoreStatus.textContent+=" "+issues.join(" ");
+  }
   if(profile) publishScore({automatic:true});
   playTone(isRecord?880:220,.12,isRecord?"triangle":"sine");
 }

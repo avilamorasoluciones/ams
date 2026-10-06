@@ -72,6 +72,69 @@ function makeAyuContext(overrides = {}) {
   return { context, localStorage };
 }
 
+function makeDueloHarness({ mode = "duel", target = 10, names = ["Ana", "Beto"] } = {}) {
+  const elements = new Map();
+  const getElement = id => {
+    if (!elements.has(id)) {
+      elements.set(id, {
+        id, value: "", textContent: "", innerHTML: "", hidden: false, disabled: false,
+        attributes: {}, listeners: {}, classList: {
+          add() {}, remove() {}, contains() { return false; }
+        },
+        addEventListener(type, callback) { this.listeners[type] = callback; },
+        setAttribute(name, value) { this.attributes[name] = value; },
+        focus() {}
+      });
+    }
+    return elements.get(id);
+  };
+  let nextTimerId = 1;
+  const timers = new Map();
+  const sounds = [];
+  const localStorage = new MemoryStorage();
+  const window = {
+    AMS_NEW_GAMES_DB: undefined,
+    emitSound: (...args) => sounds.push(args),
+    addEventListener() {},
+    scrollTo() {}
+  };
+  const context = vm.createContext({
+    window,
+    document: { readyState: "complete", getElementById: getElement },
+    localStorage,
+    Date,
+    Math,
+    setInterval(callback) { const id = nextTimerId++; timers.set(id, callback); return id; },
+    clearInterval(id) { timers.delete(id); },
+    confirm: () => true,
+    console
+  });
+  vm.runInContext(read("juegos/datos_nuevos.js"), context);
+  vm.runInContext(read("juegos/duelo.js"), context);
+  getElement("du-mode").value = mode;
+  getElement("du-target").value = String(target);
+  getElement("du-custom-target").value = String(target);
+  getElement("du-time").value = "12";
+  getElement("du-cat").value = "Todas";
+  names.forEach(name => {
+    getElement("du-inpName").value = name;
+    getElement("du-btnAddPlayer").onclick();
+  });
+  const start = () => getElement("du-start").onclick();
+  const runCountdown = () => {
+    const callback = [...timers.values()].find(timer => timer !== undefined);
+    assert.equal(typeof callback, "function");
+    for (let tick = 0; tick < 5; tick++) callback();
+  };
+  return { context, elements, getElement, timers, sounds, start, runCountdown };
+}
+
+function loadQuestionDb() {
+  const context = vm.createContext({ window: {} });
+  vm.runInContext(read("juegos/datos_nuevos.js"), context);
+  return context.window.AMS_NEW_GAMES_DB;
+}
+
 test("Gestión subscription payment records cash once and advances due date once", () => {
   const { store } = makeStore();
   const client = store.upsertClient({
@@ -248,6 +311,11 @@ test("Game pages permit zoom and service workers do not cache out-of-scope reque
   assert.match(read("juegos/sw.js"), /url\.pathname\.startsWith\(scopePath\)/);
   assert.match(read("juegos/ams-fly/sw.js"), /url\.pathname\.startsWith\(scopePath\)/);
   assert.match(read("juegos/ams-fly/sw.js"), /if\(response\.ok\)/);
+  const dueloPage = read("juegos/duelo.html");
+  const gamesWorker = read("juegos/sw.js");
+  for (const asset of ["scripts.js?v=20261006-54", "duelo.js?v=20261006-08"]) {
+    assert.ok(dueloPage.includes(asset) && gamesWorker.includes(asset), `${asset} must be pre-cached`);
+  }
   const gameIndex = read("juegos/index.html");
   const gameShell = read("juegos/sw.js");
   for (const asset of ["styles.css?v=20261006-50", "scripts.js?v=20261006-50", "manifest.webmanifest?v=23"]) {
@@ -287,4 +355,86 @@ test("BurgerX landing demo has accessible drawer navigation and FAQ state", () =
 
 test("Venezuela landing navigation remains named when its visible caption hides on mobile", () => {
   assert.match(read("venezuela/index.html"), /class="nav-link"[^>]*aria-label="Ir al sitio principal de Avila Mora Soluciones"/);
+});
+
+test("Duelo keeps matchup points across questions and ends at exactly 10", () => {
+  const game = makeDueloHarness();
+  game.start();
+  game.runCountdown();
+
+  for (let point = 0; point < 10; point++) game.getElement("du-point-a").onclick();
+
+  assert.equal(game.getElement("du-scr-result").hidden, false);
+  assert.match(game.getElement("du-result-body").innerHTML, /10 pts/);
+  assert.equal((game.getElement("du-result-body").innerHTML.match(/<div><strong>Duelo /g) || []).length, 10);
+  game.getElement("du-point-a").onclick();
+  assert.match(game.getElement("du-result-body").innerHTML, /10 pts/);
+});
+
+test("Duelo team mode ends when the shared team score reaches its target", () => {
+  const game = makeDueloHarness({ mode: "teams", target: 2, names: ["Ana", "Beto", "Cata", "Diego"] });
+  game.start();
+  game.runCountdown();
+
+  game.getElement("du-point-a").onclick();
+  game.getElement("du-point-a").onclick();
+
+  assert.equal(game.getElement("du-scr-result").hidden, false);
+  assert.match(game.getElement("du-result-body").innerHTML, /Equipo A<\/span><strong>2 pts/);
+  assert.doesNotMatch(game.getElement("du-result-body").innerHTML, /Equipo A<\/span><strong>[3-9]\d* pts/);
+});
+
+test("Duelo countdown sounds each tick and the shared audio helper handles autoplay rejection", async () => {
+  const game = makeDueloHarness();
+  game.start();
+  game.runCountdown();
+
+  const tones = game.sounds.map(([frequency]) => frequency);
+  assert.ok(tones.includes(620));
+  assert.deepEqual(tones.slice(-6), [620, 675, 730, 785, 840, 880]);
+
+  const scripts = read("juegos/scripts.js");
+  const audioStart = scripts.indexOf("let audioCtx;");
+  const audioEnd = scripts.indexOf("\nwindow.emitSound = emitSound;", audioStart) + "\nwindow.emitSound = emitSound;".length;
+  assert.notEqual(audioStart, -1);
+  assert.ok(audioEnd > audioStart);
+  const audioSource = scripts.slice(audioStart, audioEnd);
+  let oscillatorCount = 0;
+  const context = vm.createContext({
+    window: {
+      AudioContext: class {
+        constructor() { this.state = "suspended"; this.currentTime = 0; this.destination = {}; }
+        resume() { return Promise.reject(new Error("Autoplay blocked")); }
+        createOscillator() { oscillatorCount++; return { frequency: { setValueAtTime() {} }, connect() {}, start() {}, stop() {} }; }
+        createGain() { return { gain: { setValueAtTime() {}, exponentialRampToValueAtTime() {} }, connect() {} }; }
+      }
+    },
+    Promise
+  });
+  vm.runInContext(audioSource, context);
+  context.window.emitSound(440, 0.1);
+  await new Promise(resolve => setImmediate(resolve));
+  assert.equal(oscillatorCount, 0);
+});
+
+test("Duelo database contains 30 valid, distinct questions in the configured category ranges", () => {
+  const questions = loadQuestionDb().duelo.questions;
+  const usable = questions.filter(question => Array.isArray(question)
+    && typeof question[0] === "string"
+    && Array.isArray(question[1])
+    && question[1].length > 0
+    && Number.isInteger(question[2])
+    && question[2] >= 0
+    && question[2] < question[1].length);
+  const categories = [
+    usable.slice(0, 10),
+    usable.slice(10, 15),
+    usable.slice(15, 25),
+    usable.slice(25, 30)
+  ];
+
+  assert.equal(questions.length, 30);
+  assert.equal(usable.length, 30);
+  assert.equal(new Set(usable.map(question => question[0])).size, 30);
+  assert.deepEqual(categories.map(category => category.length), [10, 5, 10, 5]);
 });

@@ -29,15 +29,32 @@ Archivos principales:
 
 ### Preparación de Neon
 
-1. Habilita Neon Auth y Data API en el branch que usa el juego.
-2. Ejecuta `neon/schema.sql` y después `neon/rls-migration.sql` en Neon SQL Editor. Vuelve a ejecutar esta migración cuando cambie el RPC del ranking público.
-3. Crea una cuenta de jugador desde la sección **Cuenta** y verifica el correo si Neon lo solicita.
+1. Habilita Neon Auth y Data API en el branch que usa el juego y confirma que `public` está entre los esquemas expuestos por Data API.
+2. Ejecuta `neon/schema.sql` y después `neon/rls-migration.sql` en Neon SQL Editor. Para reparar solo el ranking, ejecuta `neon/ranking-rpc-migration.sql`; define explícitamente `public.ams_fly_public_ranking(p_limit integer)` y recarga la caché de esquema de PostgREST.
+3. Comprueba en el SQL Editor, en el mismo branch y base de datos configurados en `neon-config.js`, que existe la firma usada por el cliente:
+
+   ```sql
+   select n.nspname as schema_name, p.proname as function_name,
+          pg_get_function_identity_arguments(p.oid) as arguments,
+          p.pronargdefaults as default_arguments
+   from pg_proc p
+   join pg_namespace n on n.oid = p.pronamespace
+   where (n.nspname, p.proname) in (
+     ('public', 'ams_fly_public_ranking'),
+     ('ams_fly', 'public_ranking')
+   );
+   ```
+
+   El resultado esperado es `public | ams_fly_public_ranking | p_limit integer | 1`. No crees un alias en `ams_fly`: el navegador llama a `ams_fly_public_ranking` en el esquema expuesto `public` y envía `p_limit`.
+4. Crea una cuenta de jugador desde la sección **Cuenta** y verifica el correo si Neon lo solicita.
 
 La migración se puede volver a ejecutar para reparar o actualizar políticas. `neon/server.js` es un servidor Express legado; el flujo publicado en GitHub Pages usa Neon directamente.
 
 ## Seguridad de puntajes
 
 La base valida la cuenta del piloto, la vigencia del evento, los valores y la frecuencia de publicación. El RPC `ams_fly_public_ranking` devuelve solo los datos ya públicos del ranking; los perfiles privados de participantes no se consultan desde el navegador. Como la partida se ejecuta en el navegador, el puntaje sigue necesitando revisión manual si entrega un premio real.
+
+Si aparece `could not find the function ... in the schema cache`, verifica primero el branch/base conectados y el esquema `public` expuesto en Neon; después ejecuta `neon/ranking-rpc-migration.sql` y confirma la firma con la consulta anterior. El SQL solo crea/reemplaza la función pública limitada y otorga ejecución a los roles de Data API; no publica perfiles ni cambia los datos de participantes.
 
 ## Archivos legales
 
