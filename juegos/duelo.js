@@ -13,6 +13,8 @@ const Duelo = (() => {
   let players = [];
   let mode = "duel";
   let time = 12;
+  let targetPoints = 10;
+  let matchScores = {a:0,b:0};
   let currentCategory = "Todas";
   let participants = [];
   let matches = [];
@@ -138,13 +140,17 @@ const Duelo = (() => {
   function captureLobbyConfig() {
      mode = $("du-mode")?.value || "duel";
     time = Number($("du-time").value || 12);
+    const targetSelect = $("du-target")?.value || "10";
+    const customTarget = Number($("du-custom-target")?.value || 10);
+    targetPoints = targetSelect === "custom" ? customTarget : Number(targetSelect);
+    targetPoints = Math.min(1000, Math.max(1, Number.isFinite(targetPoints) ? targetPoints : 10));
     currentCategory = $("du-cat").value || "Todas";
   }
 
   function save() {
     if (currentScreen === "du-scr-lobby") captureLobbyConfig();
     window.GameSession?.save("duelo", {
-      schemaVersion: 4, players, mode, time, currentCategory,
+      schemaVersion: 4, players, mode, time, targetPoints, matchScores, currentCategory,
       participants, matches, matchIndex, playerScores, teamScores, tournamentRound, current, questionDeck,
       lastQuestionIndex, timerEndsAt, remainingMs, paused, phase, history, screen: currentScreen
     });
@@ -167,6 +173,9 @@ const Duelo = (() => {
   function syncConfig() {
     if ($("du-mode")) $("du-mode").value = mode;
     $("du-time").value = String(time);
+    if ($("du-target")) $("du-target").value = [5,10,20].includes(targetPoints) ? String(targetPoints) : "custom";
+    if ($("du-custom-target")) $("du-custom-target").value = String(targetPoints);
+    if ($("du-custom-target-wrap")) $("du-custom-target-wrap").hidden = $("du-target")?.value !== "custom";
     renderCategories();
     renderPlayers();
   }
@@ -226,21 +235,23 @@ const Duelo = (() => {
     $("du-pause").hidden = phase !== "answer";
     $("du-pause").textContent = paused ? "Continuar" : "Pausar";
     $("du-pause").setAttribute("aria-pressed", String(paused));
+    $("du-match-score").textContent = mode === "teams" ? ("Marcador: " + (matchScores.a || 0) + " - " + (matchScores.b || 0) + " · gana con " + targetPoints) : ("Marcador: " + (matchScores.a || 0) + " - " + (matchScores.b || 0) + " · gana con " + targetPoints);
     $("du-timer").textContent = paused
       ? String(Math.ceil(remainingMs / 1000))
       : (timerEndsAt && phase === "answer"
         ? String(Math.max(0, Math.ceil((timerEndsAt - Date.now()) / 1000)))
         : "");
     $("du-next").hidden = phase !== "done";
-    $("du-next").textContent = mode === "tournament" && matchIndex >= matches.length - 1
+    $("du-next").textContent = phase === "done" && !matches[matchIndex]?.winner ? "Siguiente pregunta" : (mode === "tournament" && matchIndex >= matches.length - 1
       ? (matches[matchIndex]?.winner ? (tournamentRound === 1 ? "Siguiente ronda" : "Siguiente ronda") : "Ver resultado final")
-      : (matchIndex >= matches.length - 1 ? "Ver resultado final" : "Siguiente duelo");
+      : (matchIndex >= matches.length - 1 ? "Ver resultado final" : "Siguiente duelo"));
     if (paused) $("du-status").textContent = "Pausa.";
     else if (phase === "answer") $("du-status").textContent = "¿Quién respondió primero y bien?";
     else if (phase === "done") {
       const item = history[history.length - 1];
       $("du-result-message").textContent = item?.winner
-        ? "Punto para " + (getParticipant(item.winner)?.name || "el jugador elegido") + "."
+        ? "🏆 " + (getParticipant(item.winner)?.name || "el jugador elegido") + " ganó el duelo con " + targetPoints + " puntos."
+        : item?.pointWinner ? "Punto para " + (getParticipant(item.pointWinner)?.name || "el jugador elegido") + "."
         : "Se acabó el tiempo. Nadie suma este duelo.";
       $("du-status").textContent = item?.winner ? "Punto anotado." : "Se acabó el tiempo.";
     } else $("du-status").textContent = "";
@@ -328,6 +339,7 @@ const Duelo = (() => {
       }
       return;
     }
+    matchScores = {a:0,b:0};
     current = pickQuestion();
     if (!current) {
       showError("No hay preguntas para esa categoría. Prueba otra.");
@@ -369,6 +381,7 @@ const Duelo = (() => {
       return;
     }
     playerScores = Object.fromEntries(participants.map(player => [player.id, 0]));
+    matchScores = {a:0,b:0};
     teamScores = {0:0,1:0};
     tournamentRound = 1;
     matchIndex = 0;
@@ -390,19 +403,26 @@ const Duelo = (() => {
     remainingMs = 0;
 
     const pair = currentMatch();
+    let matchWinner = null;
     if (winnerId) {
       const winner = getParticipant(winnerId);
       if (!winner || (winner.id !== pair?.a?.id && winner.id !== pair?.b?.id)) return;
       playerScores[winner.id] = (playerScores[winner.id] || 0) + 1;
+      const winnerSide = pair?.a?.id === winner.id ? "a" : "b";
+      matchScores[winnerSide] = (matchScores[winnerSide] || 0) + 1;
       if (mode === "teams") teamScores[winner.team] = (teamScores[winner.team] || 0) + 1;
-      if (mode === "tournament") matches[matchIndex].winner = winner.id;
+      if (matchScores[winnerSide] >= targetPoints) {
+        matchWinner = winner.id;
+        if (mode === "tournament") matches[matchIndex].winner = winner.id;
+      }
     }
     history.push({
       match: matchIndex + 1,
       round: tournamentRound,
       a: pair?.a?.id || "",
       b: pair?.b?.id || "",
-      winner: winnerId || "",
+      winner: matchWinner || "",
+      pointWinner: winnerId || "",
       question: current?.text || "",
       category: current?.category || "",
       answer: answerText(current?.index)
@@ -522,6 +542,8 @@ const Duelo = (() => {
     players = Array.isArray(state.players) ? state.players.filter(name => typeof name === "string" && name.trim()) : players;
     mode = state.mode === "tournament" || state.mode === "teams" ? state.mode : "duel";
     time = Number(state.time || 12);
+    targetPoints = Math.min(1000, Math.max(1, Number(state.targetPoints || 10)));
+    matchScores = state.matchScores && typeof state.matchScores === "object" ? state.matchScores : {a:0,b:0};
     currentCategory = state.currentCategory === "Todas" || ranges.some(range => range[0] === state.currentCategory)
       ? state.currentCategory : "Todas";
     participants = Array.isArray(state.participants) ? state.participants : [];
@@ -582,6 +604,8 @@ const Duelo = (() => {
   function bind() {
     syncConfig();
     $("du-mode")?.addEventListener("change", event => { mode = event.target.value; save(); });
+    $("du-target")?.addEventListener("change", () => { captureLobbyConfig(); syncConfig(); save(); });
+    $("du-custom-target")?.addEventListener("input", () => { if ($("du-target")?.value === "custom") { captureLobbyConfig(); save(); } });
     $("du-inpName").onkeydown = event => {
       if (event.key === "Enter") {
         event.preventDefault();
