@@ -160,7 +160,7 @@ const els = {};
   "accountDetails","accountEmail","accountName","accountLastName","accountDialCode","accountPhone","accountCountry","saveAccountBtn","accountStatus","accountTitle","accountSubtitle",
   "birdGrid","selectedBirdInfo","factTitle","factText","factSourceHint","factContinueBtn","gameCanvas","scoreValue","difficultyValue","pauseBtn","gameStartHint",
   "pauseScore","resumeBtn","bottomNav","quitBtn","resultBird","resultEyebrow","resultTitle","finalScore","resultBest","resultGames","newRecord",
-  "againBtn","soundBtn","rankingBackBtn","rankingRefreshBtn","rankingList","rankingStatus","scoreMessage","submitScoreBtn","submitScoreStatus","shareResultBtn","rankingScreen"
+  "againBtn","soundBtn","rankingBackBtn","rankingRefreshBtn","rankingList","rankingStatus","submitScoreStatus","shareResultBtn","rankingScreen"
 ].forEach(id => els[id] = document.getElementById(id));
 
 const ctx = els.gameCanvas.getContext("2d", {alpha:false});
