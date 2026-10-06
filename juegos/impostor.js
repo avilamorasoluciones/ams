@@ -765,7 +765,7 @@ const ImpostorGame = (() => {
         return `
           <div class="player-tag">
             ${window.uiIcon("user")} ${escapeHTML(player)}
-            <span class="delete-btn" data-remove="${index}">×</span>
+            <button type="button" class="delete-btn" data-remove="${index}" aria-label="Eliminar ${escapeHTML(player)}">×</button>
           </div>
         `;
       })
@@ -845,6 +845,7 @@ const ImpostorGame = (() => {
     const playing = !["i-scr-lobby", "i-scr-result"].includes(screenId);
     document.body.classList.toggle("playing", playing);
 
+    saveSession(screenId);
     window.scrollTo(0, 0);
   }
 

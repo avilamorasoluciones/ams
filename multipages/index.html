@@ -67,7 +67,8 @@
         .nav-links { display: flex; gap: 40px; list-style: none; }
         .nav-links a { color: var(--text-light); text-decoration: none; font-size: 14px; text-transform: uppercase; letter-spacing: 1px; transition: 0.3s; }
         .nav-links a:hover, .nav-links a.active { color: var(--primary-color); }
-        .menu-btn { display: none; color: var(--primary-color); font-size: 24px; cursor: pointer; }
+        .menu-btn { display: none; border: 0; padding: 8px; background: transparent; color: var(--primary-color); font: inherit; font-size: 24px; cursor: pointer; }
+        .menu-btn:focus-visible { outline: 2px solid var(--primary-color); outline-offset: 4px; }
 
         /* Botones */
         .btn { display: inline-block; padding: 15px 40px; background: transparent; color: var(--primary-color); border: 1px solid var(--primary-color); text-decoration: none; font-size: 14px; text-transform: uppercase; letter-spacing: 2px; transition: 0.4s; }
@@ -133,7 +134,7 @@
 
     <header>
         <a href="index.html" class="logo">AURA STUDIO</a>
-        <div class="menu-btn" id="menu-btn"><i class="fas fa-bars"></i></div>
+        <button class="menu-btn" id="menu-btn" type="button" aria-label="Abrir menú" aria-controls="nav-links" aria-expanded="false"><i class="fas fa-bars" aria-hidden="true"></i></button>
         <ul class="nav-links" id="nav-links">
             <li><a href="index.html" class="active">Inicio</a></li>
             <li><a href="servicios.html">Servicios</a></li>
@@ -220,9 +221,39 @@
         // Mobile Menu
         const menuBtn = document.getElementById('menu-btn');
         const navLinks = document.getElementById('nav-links');
-        menuBtn.addEventListener('click', () => {
-            navLinks.classList.toggle('active');
-            menuBtn.innerHTML = navLinks.classList.contains('active') ? '<i class="fas fa-times"></i>' : '<i class="fas fa-bars"></i>';
+        const mobileNavMedia = window.matchMedia('(max-width: 768px)');
+        function setMobileNav(open, restoreFocus = false) {
+            const isOpen = open && mobileNavMedia.matches;
+            navLinks.classList.toggle('active', isOpen);
+            menuBtn.setAttribute('aria-expanded', String(isOpen));
+            menuBtn.setAttribute('aria-label', isOpen ? 'Cerrar menú' : 'Abrir menú');
+            menuBtn.innerHTML = isOpen ? '<i class="fas fa-times" aria-hidden="true"></i>' : '<i class="fas fa-bars" aria-hidden="true"></i>';
+            if (mobileNavMedia.matches) {
+                navLinks.inert = !isOpen;
+                navLinks.setAttribute('aria-hidden', String(!isOpen));
+            } else {
+                navLinks.inert = false;
+                navLinks.removeAttribute('aria-hidden');
+            }
+            if (isOpen) navLinks.querySelector('a[href]')?.focus();
+            else if (restoreFocus) menuBtn.focus();
+        }
+        setMobileNav(false);
+        mobileNavMedia.addEventListener('change', event => {
+            const active = document.activeElement;
+            setMobileNav(false);
+            if (event.matches && navLinks.contains(active)) menuBtn.focus();
+            else if (!event.matches && active === menuBtn) navLinks.querySelector('a[href]')?.focus();
+        });
+        menuBtn.addEventListener('click', () => setMobileNav(!navLinks.classList.contains('active')));
+        navLinks.addEventListener('click', event => {
+            if (event.target.closest('a[href]') && mobileNavMedia.matches) setMobileNav(false);
+        });
+        document.addEventListener('keydown', event => {
+            if (event.key === 'Escape' && mobileNavMedia.matches && navLinks.classList.contains('active')) {
+                event.preventDefault();
+                setMobileNav(false, true);
+            }
         });
 
         // Scroll Reveal

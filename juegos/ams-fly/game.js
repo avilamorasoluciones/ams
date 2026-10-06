@@ -782,7 +782,7 @@ async function publishScoreInternal(options={}){
 
   const typedMessage=String(els.scoreMessage.value||"").trim();
   const savedMessage=String(currentResult?.message||"").trim();
-  const message="";
+  const message=typedMessage||savedMessage||"¡A volar!";
 
   if(!NEON_DATA_READY()){
     if(!automatic) els.submitScoreStatus.textContent="No se puede publicar todavía: falta conectar el Data API de Neon.";
@@ -894,60 +894,9 @@ async function loadRanking(){
   }
   try{
     const client=await getPublicNeonClient();
-    const result=await client.from("ams_fly_scores")
-      .select("participant_id,bird_id,score,created_at")
-      .order("score",{ascending:false})
-      .order("created_at",{ascending:true})
-      .limit(1000);
+    const result=await client.rpc("ams_fly_public_ranking",{p_limit:RANKING_LIMIT});
     if(result.error)throw result.error;
-
-    const bestByParticipant=new Map();
-    const latestBirdByParticipant=new Map();
-    (result.data||[]).forEach(row=>{
-      const key=row.participant_id;
-      if(!key)return;
-      const rowTime=new Date(row.created_at).getTime();
-      const currentBest=bestByParticipant.get(key);
-      const currentLatest=latestBirdByParticipant.get(key);
-      if(!currentLatest || rowTime>new Date(currentLatest.created_at).getTime()){
-        latestBirdByParticipant.set(key,row);
-      }
-      if(!currentBest || Number(row.score||0)>Number(currentBest.score||0) ||
-        (Number(row.score||0)===Number(currentBest.score||0) && rowTime<new Date(currentBest.created_at).getTime())){
-        bestByParticipant.set(key,row);
-      }
-    });
-
-    const participantIds=[...bestByParticipant.keys()];
-    const participantMap=new Map();
-    if(participantIds.length){
-      const profiles=await client.from("ams_fly_participants")
-        .select("*")
-        .in("id",participantIds);
-      if(profiles.error)throw profiles.error;
-      (profiles.data||[]).forEach(participant=>{
-        // El esquema de participantes puede cambiar de nombre de columna.
-        // Tomamos el dato actual sin depender de una columna concreta como "name".
-        participantMap.set(participant.id,{
-          name:participant.name ?? participant.full_name ?? participant.display_name ?? participant.player_name ?? "",
-          country_code:participant.country_code ?? participant.country ?? participant.countryCode ?? "CO"
-        });
-      });
-    }
-
-    const rows=[...bestByParticipant.values()]
-      .map(row=>{
-        const participant=participantMap.get(row.participant_id);
-        const latest=latestBirdByParticipant.get(row.participant_id);
-        return {
-          ...row,
-          player_name:participant?.name||"Piloto",
-          country_code:participant?.country_code||"CO",
-          bird_id:latest?.bird_id||row.bird_id
-        };
-      })
-      .sort((a,b)=>Number(b.score||0)-Number(a.score||0) || new Date(a.created_at).getTime()-new Date(b.created_at).getTime())
-      .slice(0,RANKING_LIMIT);
+    const rows=result.data||[];
 
     if(!rows.length){
       els.rankingList.innerHTML='<div class="ranking-empty">Aún no hay pilotos. ¡Sé el primero!</div>';

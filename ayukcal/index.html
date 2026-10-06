@@ -1076,7 +1076,18 @@ const formatHM = (dec) => {
   return `${h}h ${m}m`;
 };
 
-const KEY = "ayukcal_v8"; 
+const KEY = "ayukcal_v8";
+const CLOUD_OWNER_KEY = "ayukcal_cloud_owner_v1";
+const ACCOUNT_CACHE_PREFIX = "ayukcal_account_cache_v1:";
+const cachedCloudOwner = localStorage.getItem(CLOUD_OWNER_KEY);
+if(cachedCloudOwner){
+  const cachedState=localStorage.getItem(KEY);
+  if(cachedState){
+    try{localStorage.setItem(ACCOUNT_CACHE_PREFIX+cachedCloudOwner,cachedState)}
+    catch(error){console.error("AyuKcal could not preserve the account-local copy",error)}
+  }
+  localStorage.removeItem(KEY);
+}
 const $ = id => document.getElementById(id);
 let viewDate = getLocalISODate();
 
@@ -1089,7 +1100,10 @@ document.addEventListener("DOMContentLoaded", () => {
   setTimeout(() => {
     if (!isStandaloneApp() && !deferredInstallPrompt) updateInstallUI();
   }, 900);
-  bootCloud();
+  bootCloud().catch(error=>{
+    console.error("AyuKcal cloud startup",error);
+    setCloudStatus("⚠️ No se pudo iniciar la sincronización. Tus datos locales no se enviaron.");
+  });
 });
 
 let deferredInstallPrompt = null;
@@ -1153,6 +1167,7 @@ let CLOUD_USER = null;
 let CLOUD_READY = false;
 let CLOUD_SYNCING = false;
 let CLOUD_PENDING_STATE = null;
+let CLOUD_SYNC_PROMISE = null;
 let AUTH_MODE = "login";
 let cloudSaveTimer = null;
 let AUTH_LISTENER_READY = false;
@@ -1211,25 +1226,95 @@ function state(){
   catch(e){ return normalizeState(null); }
 }
 
-function localStateSave(s){ localStorage.setItem(KEY,JSON.stringify(normalizeState(s))); }
-
-async function cloudLoad(){
-  if(!window.supabase || !window.AYUKCAL_SUPABASE_URL || String(window.AYUKCAL_SUPABASE_URL).includes("PEGAR_AQUI")) return null;
-  try {
-    const {data:{session}}=await window.ayukcalSupabase.auth.getSession();
-    CLOUD_USER=session?.user||null;
-    if(!CLOUD_USER) return null;
-    const {data,error}=await window.ayukcalSupabase.from("ayukcal_user_data").select("data").eq("user_id",CLOUD_USER.id).maybeSingle();
-    if(error) throw error;
-    if(data?.data) { const s=normalizeState(data.data); localStateSave(s); return s; }
-    return null;
-  } catch(e){ console.error("AyuKcal cloud load",e); return null; }
+function localStateSave(s,userId=CLOUD_USER?.id||""){
+  const clean=normalizeState(s),serialized=JSON.stringify(clean);
+  localStorage.setItem(KEY,serialized);
+  if(userId){
+    localStorage.setItem(CLOUD_OWNER_KEY,userId);
+    try{localStorage.setItem(ACCOUNT_CACHE_PREFIX+userId,serialized)}
+    catch(error){console.error("AyuKcal could not update the account-local copy",error)}
+  }
 }
 
-async function cloudSave(s){if(!CLOUD_USER)return;CLOUD_PENDING_STATE=normalizeState(s);if(CLOUD_SYNCING)return;CLOUD_SYNCING=true;try{while(CLOUD_USER&&CLOUD_PENDING_STATE){const clean=CLOUD_PENDING_STATE;CLOUD_PENDING_STATE=null;delete clean._migration;const {error}=await window.ayukcalSupabase.from("ayukcal_user_data").upsert({user_id:CLOUD_USER.id,data:clean,schema_version:2},{onConflict:"user_id"});if(error)throw error;localStateSave(clean)}setCloudStatus("☁️ Sincronizado")}catch(e){console.error("AyuKcal cloud save",e);setCloudStatus("⚠️ Guardado local; sincronización pendiente")}finally{CLOUD_SYNCING=false;if(CLOUD_USER&&CLOUD_PENDING_STATE)setTimeout(()=>cloudSave(CLOUD_PENDING_STATE),50)}}
+function prepareLocalStateForUser(userId){
+  const owner=localStorage.getItem(CLOUD_OWNER_KEY);
+  const active=localStorage.getItem(KEY);
+  if(owner&&owner!==userId){
+    if(active){
+      try{localStorage.setItem(ACCOUNT_CACHE_PREFIX+owner,active)}
+      catch(error){console.error("AyuKcal could not preserve the previous account-local copy",error)}
+    }
+    localStorage.removeItem(KEY);
+    localStorage.removeItem(CLOUD_OWNER_KEY);
+  }
+  if(!localStorage.getItem(KEY)){
+    const cached=localStorage.getItem(ACCOUNT_CACHE_PREFIX+userId);
+    if(cached)localStateSave(JSON.parse(cached),userId);
+  }
+}
+
+function clearActiveAccountState(userId){
+  const owner=localStorage.getItem(CLOUD_OWNER_KEY);
+  if(userId&&owner&&owner!==userId)return;
+  const active=localStorage.getItem(KEY);
+  if(userId&&active)localStorage.setItem(ACCOUNT_CACHE_PREFIX+userId,active);
+  localStorage.removeItem(KEY);
+  localStorage.removeItem(CLOUD_OWNER_KEY);
+}
+
+async function cloudLoad(userId){
+  if(!window.ayukcalSupabase)throw new Error("Supabase no está configurado.");
+  const {data:{session},error:sessionError}=await window.ayukcalSupabase.auth.getSession();
+  if(sessionError)throw sessionError;
+  if(session?.user?.id!==userId||CLOUD_USER?.id!==userId)throw new Error("La sesión cambió mientras se cargaban los datos.");
+  const {data,error}=await window.ayukcalSupabase.from("ayukcal_user_data").select("data").eq("user_id",userId).maybeSingle();
+  if(error)throw error;
+  if(!data?.data)return null;
+  const s=normalizeState(data.data);
+  if(CLOUD_USER?.id!==userId)throw new Error("La sesión cambió mientras se cargaban los datos.");
+  localStateSave(s,userId);
+  return s;
+}
+
+async function cloudSave(s,userId=CLOUD_USER?.id){
+  if(!userId||CLOUD_USER?.id!==userId)return false;
+  CLOUD_PENDING_STATE={userId,state:normalizeState(s)};
+  if(CLOUD_SYNCING)return CLOUD_SYNC_PROMISE;
+  CLOUD_SYNCING=true;
+  CLOUD_SYNC_PROMISE=(async()=>{
+    try{
+      while(CLOUD_PENDING_STATE){
+        const pending=CLOUD_PENDING_STATE;
+        CLOUD_PENDING_STATE=null;
+        if(CLOUD_USER?.id!==pending.userId)return false;
+        delete pending.state._migration;
+        const {error}=await window.ayukcalSupabase.from("ayukcal_user_data").upsert(
+          {user_id:pending.userId,data:pending.state,schema_version:2},
+          {onConflict:"user_id"}
+        );
+        if(error)throw error;
+        if(CLOUD_USER?.id===pending.userId)localStateSave(pending.state,pending.userId);
+      }
+      if(CLOUD_USER?.id===userId)setCloudStatus("☁️ Sincronizado");
+      return true;
+    }catch(error){
+      console.error("AyuKcal cloud save",error);
+      if(CLOUD_USER?.id===userId)setCloudStatus("⚠️ Guardado local; sincronización pendiente");
+      return false;
+    }finally{
+      CLOUD_SYNCING=false;
+      CLOUD_SYNC_PROMISE=null;
+      if(CLOUD_PENDING_STATE&&CLOUD_USER?.id===CLOUD_PENDING_STATE.userId){
+        const pending=CLOUD_PENDING_STATE;
+        setTimeout(()=>cloudSave(pending.state,pending.userId),50);
+      }
+    }
+  })();
+  return CLOUD_SYNC_PROMISE;
+}
 
 function save(s){
-  const clean=normalizeState(s); localStateSave(clean); refresh();
+  const clean=normalizeState(s); localStateSave(clean,CLOUD_USER?.id||""); refresh();
   if(CLOUD_USER){ clearTimeout(cloudSaveTimer); cloudSaveTimer=setTimeout(()=>cloudSave(clean),250); }
 }
 
@@ -2244,34 +2329,82 @@ async function finishPasswordRecovery(e){
 }
 
 async function logoutCloud(){
-  if(window.ayukcalSupabase) await window.ayukcalSupabase.auth.signOut();
-  CLOUD_USER=null;
-  AUTH_MODE="login";
-  setCloudStatus("☁️ Sin sesión · datos locales");
-  updateAuthUI();
-  closeAccountModal();
-  toast("Sesión cerrada.");
+  const userId=CLOUD_USER?.id||"";
+  try{
+    let syncFailed=false;
+    if(cloudSaveTimer){
+      clearTimeout(cloudSaveTimer);
+      cloudSaveTimer=null;
+      if(!await cloudSave(state(),userId))syncFailed=true;
+    }else if(CLOUD_SYNCING&&CLOUD_SYNC_PROMISE&&!await CLOUD_SYNC_PROMISE)syncFailed=true;
+    const {error}=await window.ayukcalSupabase.auth.signOut();
+    if(error)throw error;
+    if(CLOUD_PENDING_STATE?.userId===userId)CLOUD_PENDING_STATE=null;
+    clearActiveAccountState(userId);
+    CLOUD_USER=null;
+    AUTH_MODE="login";
+    setCloudStatus(syncFailed
+      ?"⚠️ Sesión cerrada · los últimos cambios están solo en este dispositivo y no se sincronizaron."
+      :"☁️ Sin sesión · datos locales");
+    updateAuthUI();
+    closeAccountModal();
+    toast(syncFailed
+      ?"Sesión cerrada. Los últimos cambios no se sincronizaron y siguen guardados en este dispositivo."
+      :"Sesión cerrada.");
+  }catch(error){
+    console.error("AyuKcal logout",error);
+    setCloudStatus("⚠️ No se pudo cerrar sesión de forma segura. Revisa tu conexión e inténtalo de nuevo.");
+  }
 }
 
 async function loadCloudForCurrentUser(){
   if(!CLOUD_USER) return null;
-  const cloud=await cloudLoad();
-  if(!cloud) await migrateLocalToCloud();
-  setCloudStatus("☁️ Cuenta sincronizada");
-  updateAuthUI();
-  refresh();
-  return cloud;
+  const userId=CLOUD_USER.id;
+  try{
+    prepareLocalStateForUser(userId);
+    let cloud=await cloudLoad(userId),synced=!!cloud;
+    if(!cloud){
+      const migration=await migrateLocalToCloud(userId);
+      cloud=migration.state;
+      synced=migration.synced;
+    }
+    if(CLOUD_USER?.id!==userId)return null;
+    if(!localStorage.getItem(CLOUD_OWNER_KEY))localStorage.setItem(CLOUD_OWNER_KEY,userId);
+    setCloudStatus(synced?"☁️ Cuenta sincronizada":cloud?"☁️ Datos locales · aún no sincronizados":"☁️ Cuenta lista · sin datos guardados");
+    updateAuthUI();
+    refresh();
+    return cloud;
+  }catch(error){
+    console.error("AyuKcal cloud load",error);
+    if(CLOUD_USER?.id===userId){
+      setCloudStatus("⚠️ No se pudieron cargar o sincronizar los datos de esta cuenta. No se inició una migración.");
+      updateAuthUI();
+      refresh();
+    }
+    return null;
+  }
 }
 
-async function migrateLocalToCloud(){
-  if(!CLOUD_USER) return;
+async function migrateLocalToCloud(userId){
+  if(!CLOUD_USER||CLOUD_USER.id!==userId)return {state:null,synced:false};
   const local=state(), raw=localStorage.getItem(KEY);
-  if(!raw) return;
-  const {data:existing}=await window.ayukcalSupabase.from("ayukcal_user_data").select("data").eq("user_id",CLOUD_USER.id).maybeSingle();
-  if(existing?.data) return;
-  const ok=confirm("Encontré datos guardados en este dispositivo. ¿Quieres copiarlos a tu cuenta AyuKcal? Se conservarán en este navegador como respaldo.");
-  if(!ok) return;
-  await cloudSave(local); toast("☁️ Tus datos locales fueron migrados a tu cuenta.");
+  if(!raw)return {state:null,synced:false};
+  const {data:existing,error}=await window.ayukcalSupabase.from("ayukcal_user_data").select("data").eq("user_id",userId).maybeSingle();
+  if(error)throw error;
+  if(CLOUD_USER?.id!==userId)return {state:null,synced:false};
+  if(existing?.data){
+    const cloud=normalizeState(existing.data);
+    localStateSave(cloud,userId);
+    return {state:cloud,synced:true};
+  }
+  const ok=confirm("Encontré datos guardados en este dispositivo. Solo cópialos si te pertenecen y quieres asociarlos a esta cuenta; no compartas datos de otra persona. Se conservarán en este navegador como respaldo.");
+  if(!ok){
+    localStateSave(local,userId);
+    return {state:local,synced:false};
+  }
+  if(!await cloudSave(local,userId))throw new Error("No se pudo completar la migración de los datos.");
+  toast("☁️ Tus datos locales fueron migrados a tu cuenta.");
+  return {state:local,synced:true};
 }
 async function bootCloud(){
   const sdkReady = await (window.__AYUKCAL_SUPABASE_READY || Promise.resolve(Boolean(window.supabase)));
@@ -2286,9 +2419,14 @@ async function bootCloud(){
   const {data:{session},error}=await window.ayukcalSupabase.auth.getSession();
   if(error){ console.error("AyuKcal auth session",error); setCloudStatus("⚠️ No se pudo comprobar la cuenta"); return; }
 
+  const previousUserId=localStorage.getItem(CLOUD_OWNER_KEY)||"";
   CLOUD_USER=session?.user||null;
   if(CLOUD_USER) await loadCloudForCurrentUser();
-  else { setCloudStatus("☁️ Sin sesión · datos locales"); updateAuthUI(); }
+  else {
+    clearActiveAccountState(previousUserId);
+    setCloudStatus("☁️ Sin sesión · datos locales");
+    updateAuthUI();
+  }
 
   if(!AUTH_LISTENER_READY){
     AUTH_LISTENER_READY=true;
@@ -2296,9 +2434,15 @@ async function bootCloud(){
       if(_event==="PASSWORD_RECOVERY" && sess?.user){
         CLOUD_USER=sess.user;updateAuthUI();$("recoveryModal").classList.add("active");return;
       }
+      const previousUserId=CLOUD_USER?.id||localStorage.getItem(CLOUD_OWNER_KEY)||"";
       CLOUD_USER=sess?.user||null;
       if(CLOUD_USER) await loadCloudForCurrentUser();
-      else { setCloudStatus("☁️ Sin sesión · datos locales"); updateAuthUI(); refresh(); }
+      else {
+        clearActiveAccountState(previousUserId);
+        setCloudStatus("☁️ Sin sesión · datos locales");
+        updateAuthUI();
+        refresh();
+      }
     });
   }
 }

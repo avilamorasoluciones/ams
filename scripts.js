@@ -72,18 +72,28 @@ toTop.addEventListener("click", () => {
 const menuBtn = document.getElementById("menuBtn");
 const mobilePanel = document.getElementById("mobilePanel");
 
-const closeMobile = () => {
+const closeMobile = (restoreFocus = false) => {
   mobilePanel.classList.remove("open");
   mobilePanel.setAttribute("aria-hidden", "true");
   menuBtn.setAttribute("aria-expanded", "false");
+  menuBtn.setAttribute("aria-label", "Abrir menú");
   document.body.classList.remove("menu-open");
+  if (restoreFocus) menuBtn.focus();
 };
 
 menuBtn.addEventListener("click", () => {
   const isOpen = mobilePanel.classList.toggle("open");
   mobilePanel.setAttribute("aria-hidden", String(!isOpen));
   menuBtn.setAttribute("aria-expanded", String(isOpen));
+  menuBtn.setAttribute("aria-label", isOpen ? "Cerrar menú" : "Abrir menú");
   document.body.classList.toggle("menu-open", isOpen);
+  if (isOpen) mobilePanel.querySelector("a[href]")?.focus();
+});
+
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Escape" && mobilePanel.classList.contains("open")) {
+    closeMobile(true);
+  }
 });
 
 document.addEventListener("click", (e) => {
@@ -129,6 +139,10 @@ allMenuLinks.forEach((a) => {
     e.preventDefault();
     closeMobile();
     smoothScrollTo(target);
+    if (!target.matches("a[href], button, input, select, textarea, [tabindex]")) {
+      target.setAttribute("tabindex", "-1");
+    }
+    target.focus({ preventScroll: true });
 
     setTimeout(() => replayAOSForSection(target), prefersReduced ? 0 : 520);
   });

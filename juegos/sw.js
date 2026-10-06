@@ -1,30 +1,44 @@
-const CACHE_NAME = 'ams-games-20261006-50';
+const CACHE_NAME = 'ams-games-20261006-51';
 const CACHE_PREFIX = "ams-games-";
 const APP_SHELL = [
   "./",
   "./index.html",
+  "./apuesta.html",
   "./impostor.html",
   "./bomba.html",
+  "./duelo.html",
   "./nosconocemos.html",
   "./rompehielo.html",
   "./tabu.html",
   "./verdadreto.html",
   "./yonunca.html",
   "./styles.css?v=20261006-50",
+  "./styles.css?v=20261004-01",
+  "./styles.css?v=20261006-53",
   "./scripts.js?v=20261006-50",
-  "./datos.js?v=20261001-47",
-  "./impostor.js?v=20261001-47",
-  "./bomba.js?v=20260926-32",
-  "./nosconocemos.js?v=20260926-32",
-  "./rompehielo.js?v=20260926-32",
-  "./tabu.js?v=20260926-32",
-  "./verdadreto.js?v=20260926-32",
-  "./yonunca.js?v=20260926-32",
-  "./manifest.webmanifest?v=22",
+  "./scripts.js?v=20261001-46",
+  "./scripts.js?v=20261005-01",
+  "./scripts.js?v=20261006-53",
+  "./manifest.webmanifest?v=23",
+  "./datos.js?v=20261001-46",
+  "./datos.js?v=20261003-48",
+  "./datos_nuevos.js?v=20261005-02",
+  "./apuesta.js?v=20261005-03",
+  "./impostor.js?v=20261004-12",
+  "./bomba.js?v=20261004-04",
+  "./duelo.js?v=20261006-07",
+  "./nosconocemos.js?v=20261004-04",
+  "./rompehielo.js?v=20261004-03",
+  "./tabu.js?v=20261004-56",
+  "./verdadreto.js?v=20261004-03",
+  "./yonunca.js?v=20261004-03",
+  "./manifest.webmanifest?v=20260929-36",
+  "./pwa-icon-192.svg",
   "./pwa-icon-192.svg?v=22",
   "./pwa-icon-512.svg?v=22",
   "./icon-games.svg",
   "./ams-fly/condor-colombia.svg",
+  "./game-apuesta.svg",
   "./game-duelo.svg",
   "./game-impostor.svg",
   "./game-bomba.svg",
@@ -65,7 +79,8 @@ self.addEventListener("fetch", event => {
   if (event.request.method !== "GET") return;
 
   const url = new URL(event.request.url);
-  if (url.origin !== self.location.origin) return;
+  const scopePath = new URL(self.registration.scope).pathname;
+  if (url.origin !== self.location.origin || !url.pathname.startsWith(scopePath)) return;
 
   const freshDestinations = new Set(["document", "script", "style", "manifest"]);
   const mustBeFresh = event.request.mode === "navigate" || freshDestinations.has(event.request.destination);

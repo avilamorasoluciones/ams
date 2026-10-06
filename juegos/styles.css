@@ -919,10 +919,20 @@ input[type="range"] {
 }
 
 .delete-btn {
+  appearance: none;
+  display: inline-grid;
+  place-items: center;
+  flex: 0 0 32px;
+  width: 32px;
+  min-height: 32px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
   color: var(--danger);
   cursor: pointer;
   font-weight: 900;
-  padding-left: 4px;
+  line-height: 1;
 }
 
 /* Option buttons */

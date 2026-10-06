@@ -1,5 +1,6 @@
 const RompehieloGame = (() => {
   let pool = [];
+  let currentQuestion = null;
 
   function $(id) { return document.getElementById(id); }
 

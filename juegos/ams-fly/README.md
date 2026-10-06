@@ -30,14 +30,14 @@ Archivos principales:
 ### Preparación de Neon
 
 1. Habilita Neon Auth y Data API en el branch que usa el juego.
-2. Ejecuta `neon/schema.sql` y después `neon/rls-migration.sql` en Neon SQL Editor.
+2. Ejecuta `neon/schema.sql` y después `neon/rls-migration.sql` en Neon SQL Editor. Vuelve a ejecutar esta migración cuando cambie el RPC del ranking público.
 3. Crea una cuenta de jugador desde la sección **Cuenta** y verifica el correo si Neon lo solicita.
 
 La migración se puede volver a ejecutar para reparar o actualizar políticas. `neon/server.js` es un servidor Express legado; el flujo publicado en GitHub Pages usa Neon directamente.
 
 ## Seguridad de puntajes
 
-La base valida la cuenta del piloto, la vigencia del evento, los valores y la frecuencia de publicación. Como la partida se ejecuta en el navegador, el puntaje sigue necesitando revisión manual si entrega un premio real.
+La base valida la cuenta del piloto, la vigencia del evento, los valores y la frecuencia de publicación. El RPC `ams_fly_public_ranking` devuelve solo los datos ya públicos del ranking; los perfiles privados de participantes no se consultan desde el navegador. Como la partida se ejecuta en el navegador, el puntaje sigue necesitando revisión manual si entrega un premio real.
 
 ## Archivos legales
 

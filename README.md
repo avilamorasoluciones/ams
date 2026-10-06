@@ -16,6 +16,9 @@ Avila Mora Soluciones opera como marca comercial y proveedor de servicios digita
 - `/LANZAMIENTO.md` — checklist para dominio, correo y pagos.
 - Demos y juegos — carpetas públicas independientes.
 
+## Pruebas locales
+Con Node.js, ejecuta `node --test tests/repo-improvements.test.cjs` para correr las pruebas de regresión del almacén de Gestión, el aislamiento local de AyuKcal, los contratos de AMS Fly y la navegación/demos accesibles.
+
 ## Flujo de cliente
 Contacto → Formulario de proyecto → Calificación → Propuesta → Aceptación → Pago → Alta → Dominio → Staging/Demo → Producción → Revisión → Correcciones → Publicación → Entrega → Mantenimiento → Renovación.
 

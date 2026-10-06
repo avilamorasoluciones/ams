@@ -59,7 +59,8 @@
         .nav-links { display: flex; gap: 40px; list-style: none; }
         .nav-links a { color: var(--text-light); text-decoration: none; font-size: 14px; text-transform: uppercase; letter-spacing: 1px; transition: 0.3s; }
         .nav-links a:hover, .nav-links a.active { color: var(--primary-color); }
-        .menu-btn { display: none; color: var(--primary-color); font-size: 24px; cursor: pointer; }
+        .menu-btn { display: none; border: 0; padding: 8px; background: transparent; color: var(--primary-color); font: inherit; font-size: 24px; cursor: pointer; }
+        .menu-btn:focus-visible { outline: 2px solid var(--primary-color); outline-offset: 4px; }
 
         .page-banner { padding: 150px 0 60px; text-align: center; border-bottom: 1px solid var(--glass-border); background: var(--surface-color); }
         .page-banner h1 { font-size: 3.5rem; }
@@ -88,8 +89,9 @@
         .faq-section { margin-top: 80px; }
         .faq-section h2 { text-align: center; font-size: 2.5rem; margin-bottom: 40px; }
         .faq-item { background: var(--surface-color); margin-bottom: 15px; border-radius: 5px; overflow: hidden; border: 1px solid #222; }
-        .faq-question { padding: 20px 30px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; color: var(--text-light); font-weight: 500; font-family: 'Playfair Display', serif; font-size: 1.2rem; transition: 0.3s; }
+        .faq-question { width: 100%; padding: 20px 30px; display: flex; justify-content: space-between; align-items: center; border: 0; background: transparent; text-align: left; cursor: pointer; color: var(--text-light); font-weight: 500; font-family: 'Playfair Display', serif; font-size: 1.2rem; transition: 0.3s; }
         .faq-question:hover { color: var(--primary-color); }
+        .faq-question:focus-visible { outline: 2px solid var(--primary-color); outline-offset: -4px; }
         .faq-answer { padding: 0 30px; max-height: 0; overflow: hidden; transition: max-height 0.4s ease, padding 0.4s ease; background: var(--bg-color); }
         .faq-item.active .faq-answer { padding: 20px 30px; max-height: 200px; }
         .faq-item.active .faq-question i { transform: rotate(180deg); color: var(--primary-color); }
@@ -121,7 +123,7 @@
 
     <header>
         <a href="index.html" class="logo">AURA STUDIO</a>
-        <div class="menu-btn" id="menu-btn"><i class="fas fa-bars"></i></div>
+        <button class="menu-btn" id="menu-btn" type="button" aria-label="Abrir menú" aria-controls="nav-links" aria-expanded="false"><i class="fas fa-bars" aria-hidden="true"></i></button>
         <ul class="nav-links" id="nav-links">
             <li><a href="index.html">Inicio</a></li>
             <li><a href="servicios.html">Servicios</a></li>
@@ -165,21 +167,21 @@
                 <form action="#" method="POST">
                     <div class="input-row">
                         <div class="input-group">
-                            <input type="text" required>
-                            <label>Nombre Completo</label>
+                            <input id="contact-name" type="text" required>
+                            <label for="contact-name">Nombre Completo</label>
                         </div>
                         <div class="input-group">
-                            <input type="text" required>
-                            <label>Marca / Empresa</label>
+                            <input id="contact-business" type="text" required>
+                            <label for="contact-business">Marca / Empresa</label>
                         </div>
                     </div>
                     <div class="input-group" style="margin-bottom: 25px;">
-                        <input type="email" required>
-                        <label>Correo Electrónico</label>
+                        <input id="contact-email" type="email" required>
+                        <label for="contact-email">Correo Electrónico</label>
                     </div>
                     <div class="input-group">
-                        <textarea required></textarea>
-                        <label>Cuéntanos sobre los requerimientos técnicos de tu proyecto...</label>
+                        <textarea id="contact-project" required></textarea>
+                        <label for="contact-project">Cuéntanos sobre los requerimientos técnicos de tu proyecto...</label>
                     </div>
                     <button type="submit" class="btn-submit">Solicitar Cotización</button>
                 </form>
@@ -191,18 +193,18 @@
             <h2>Preguntas Frecuentes</h2>
             
             <div class="faq-item">
-                <div class="faq-question">¿En qué formato entregan los moldes? <i class="fas fa-chevron-down"></i></div>
-                <div class="faq-answer"><p>Entregamos los moldes físicamente en cartulina kraff industrial de 300g, o de forma digital en formatos universales como DXF o PDF, listos para plotter.</p></div>
+                <button class="faq-question" type="button" aria-expanded="false" aria-controls="faq-answer-1">¿En qué formato entregan los moldes? <i class="fas fa-chevron-down" aria-hidden="true"></i></button>
+                <div class="faq-answer" id="faq-answer-1" aria-hidden="true" inert><p>Entregamos los moldes físicamente en cartulina kraff industrial de 300g, o de forma digital en formatos universales como DXF o PDF, listos para plotter.</p></div>
             </div>
             
             <div class="faq-item">
-                <div class="faq-question">¿Incluyen la confección de la muestra inicial? <i class="fas fa-chevron-down"></i></div>
-                <div class="faq-answer"><p>Sí, desarrollamos un "Toile" (muestra en lienzo crudo) para revisar el calce exacto sobre maniquí antes de pasar al tejido final y al escalado.</p></div>
+                <button class="faq-question" type="button" aria-expanded="false" aria-controls="faq-answer-2">¿Incluyen la confección de la muestra inicial? <i class="fas fa-chevron-down" aria-hidden="true"></i></button>
+                <div class="faq-answer" id="faq-answer-2" aria-hidden="true" inert><p>Sí, desarrollamos un "Toile" (muestra en lienzo crudo) para revisar el calce exacto sobre maniquí antes de pasar al tejido final y al escalado.</p></div>
             </div>
 
             <div class="faq-item">
-                <div class="faq-question">¿Cuánto tiempo toma desarrollar una colección base de 10 prendas? <i class="fas fa-chevron-down"></i></div>
-                <div class="faq-answer"><p>Dependiendo de la complejidad de los cortes, un desarrollo completo de 10 referencias toma aproximadamente de 3 a 4 semanas hábiles, incluyendo las correcciones de calce.</p></div>
+                <button class="faq-question" type="button" aria-expanded="false" aria-controls="faq-answer-3">¿Cuánto tiempo toma desarrollar una colección base de 10 prendas? <i class="fas fa-chevron-down" aria-hidden="true"></i></button>
+                <div class="faq-answer" id="faq-answer-3" aria-hidden="true" inert><p>Dependiendo de la complejidad de los cortes, un desarrollo completo de 10 referencias toma aproximadamente de 3 a 4 semanas hábiles, incluyendo las correcciones de calce.</p></div>
             </div>
         </div>
     </section>
@@ -227,9 +229,39 @@
         // Mobile Menu
         const menuBtn = document.getElementById('menu-btn');
         const navLinks = document.getElementById('nav-links');
-        menuBtn.addEventListener('click', () => {
-            navLinks.classList.toggle('active');
-            menuBtn.innerHTML = navLinks.classList.contains('active') ? '<i class="fas fa-times"></i>' : '<i class="fas fa-bars"></i>';
+        const mobileNavMedia = window.matchMedia('(max-width: 768px)');
+        function setMobileNav(open, restoreFocus = false) {
+            const isOpen = open && mobileNavMedia.matches;
+            navLinks.classList.toggle('active', isOpen);
+            menuBtn.setAttribute('aria-expanded', String(isOpen));
+            menuBtn.setAttribute('aria-label', isOpen ? 'Cerrar menú' : 'Abrir menú');
+            menuBtn.innerHTML = isOpen ? '<i class="fas fa-times" aria-hidden="true"></i>' : '<i class="fas fa-bars" aria-hidden="true"></i>';
+            if (mobileNavMedia.matches) {
+                navLinks.inert = !isOpen;
+                navLinks.setAttribute('aria-hidden', String(!isOpen));
+            } else {
+                navLinks.inert = false;
+                navLinks.removeAttribute('aria-hidden');
+            }
+            if (isOpen) navLinks.querySelector('a[href]')?.focus();
+            else if (restoreFocus) menuBtn.focus();
+        }
+        setMobileNav(false);
+        mobileNavMedia.addEventListener('change', event => {
+            const active = document.activeElement;
+            setMobileNav(false);
+            if (event.matches && navLinks.contains(active)) menuBtn.focus();
+            else if (!event.matches && active === menuBtn) navLinks.querySelector('a[href]')?.focus();
+        });
+        menuBtn.addEventListener('click', () => setMobileNav(!navLinks.classList.contains('active')));
+        navLinks.addEventListener('click', event => {
+            if (event.target.closest('a[href]') && mobileNavMedia.matches) setMobileNav(false);
+        });
+        document.addEventListener('keydown', event => {
+            if (event.key === 'Escape' && mobileNavMedia.matches && navLinks.classList.contains('active')) {
+                event.preventDefault();
+                setMobileNav(false, true);
+            }
         });
 
         // FAQ Acordeón Interactividad
@@ -237,12 +269,15 @@
         faqItems.forEach(item => {
             const question = item.querySelector('.faq-question');
             question.addEventListener('click', () => {
-                // Cerrar otros
+                const open = !item.classList.contains('active');
                 faqItems.forEach(el => {
-                    if(el !== item) el.classList.remove('active');
+                    const isOpen = el === item && open;
+                    el.classList.toggle('active', isOpen);
+                    el.querySelector('.faq-question').setAttribute('aria-expanded', String(isOpen));
+                    const panel = el.querySelector('.faq-answer');
+                    panel.inert = !isOpen;
+                    panel.setAttribute('aria-hidden', String(!isOpen));
                 });
-                // Abrir el actual
-                item.classList.toggle('active');
             });
         });
 

@@ -48,10 +48,49 @@ const api={
  setTask(projectId,key,value){const all=read(TK)||{};all[projectId]=all[projectId]||{};all[projectId][key]=!!value;write(TK,all);return all[projectId]},
  projectTasks(projectId){return Object.assign({},(read(TK)||{})[projectId]||{})},
  removeTask(projectId){const all=read(TK)||{};delete all[projectId];write(TK,all)},
- advanceDue(base,period){let d=new Date(text(base)||localToday()+"T12:00:00");if(isNaN(d))d=new Date();const day=d.getDate();if(period==="annual"){d.setFullYear(d.getFullYear()+1);return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0")}d.setDate(1);d.setMonth(d.getMonth()+1);const last=new Date(d.getFullYear(),d.getMonth()+1,0).getDate();d.setDate(Math.min(day,last));return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0")},
+ advanceDue(base,period){const value=text(base)||localToday();let d=new Date(/^\d{4}-\d{2}-\d{2}$/.test(value)?value+"T12:00:00":value);if(isNaN(d))d=new Date();const day=d.getDate();if(period==="annual"){const year=d.getFullYear()+1,month=d.getMonth(),last=new Date(year,month+1,0).getDate();d.setDate(Math.min(day,last));d.setFullYear(year);return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0")}d.setDate(1);d.setMonth(d.getMonth()+1);const last=new Date(d.getFullYear(),d.getMonth()+1,0).getDate();d.setDate(Math.min(day,last));return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0")},
  subscriptionStatus(c){const s=c.subscription||{},d=new Date((s.due||localToday())+"T12:00:00"),n=Math.ceil((d-new Date())/86400000),gr=Number(s.grace||0);if(s.suspended)return {key:"suspended",days:n,label:"Suspendido"};if(n<0&&n>=-gr)return {key:"grace",days:n,label:"En gracia"};if(n<0)return {key:"overdue",days:n,label:"Vencido"};if(n<=7)return {key:"pending",days:n,label:"Por vencer"};return {key:"active",days:n,label:"Activo"}},
- recordPayment(clientId,date){const a=arr(CK).map(normalizeClient),i=a.findIndex(c=>c.id===clientId);if(i<0)throw Error("Cliente no encontrado");const c=a[i],s=c.subscription||{},paid=date||localToday();if(s.lastPayment===paid)throw Error("Este pago ya figura registrado para hoy.");const baseText=s.due&&new Date(s.due+"T12:00:00")>new Date(paid+"T12:00:00")?s.due:paid;s.lastPayment=paid;s.due=api.advanceDue(baseText,s.period);c.subscription=s;c.updated=new Date().toISOString();a[i]=c;write(CK,a);writeMirrors();return c},
+ recordPayment(clientId,date){
+  const a=arr(CK).map(normalizeClient),i=a.findIndex(c=>c.id===clientId);
+  if(i<0)throw Error("Cliente no encontrado");
+  const c=a[i],s=c.subscription||{},paid=date||localToday(),finance=api.finance();
+  const paymentId="fin_sub_"+encodeURIComponent(clientId)+"_"+paid;
+  const payment=finance.find(x=>x.id===paymentId);
+  const legacyPayment=finance.some(x=>x.type==="Ingreso"&&x.category==="Suscripción"&&x.clientId===clientId&&x.date===paid);
+  const alreadyPaid=s.lastPayment===paid;
+  if(!payment&&!legacyPayment&&Number(s.price||0)>0){
+   finance.push(normalizeFinance({
+    id:paymentId,type:"Ingreso",currency:s.currency||"USD",amount:Number(s.price||0),date:paid,
+    clientId,party:c.company||"",category:"Suscripción",
+    description:"Pago de suscripción — "+(c.company||"Cliente"),recurring:"yes",ref:"Suscripción"
+   }));
+   write(FK,finance);writeMirrors();
+  }
+  if(!alreadyPaid){
+   const baseText=s.due&&new Date(s.due+"T12:00:00")>new Date(paid+"T12:00:00")?s.due:paid;
+   s.lastPayment=paid;s.due=api.advanceDue(baseText,s.period);
+   c.subscription=s;c.updated=new Date().toISOString();a[i]=c;
+   write(CK,a);writeMirrors();
+  }
+  return c
+ },
  backup(){const local={};for(let i=0;i<localStorage.length;i++){const k=localStorage.key(i)||"";if(k.startsWith("ams_doc_")||k==="ams_calc_v3")local[k]=localStorage.getItem(k)}return {version:3,date:new Date().toISOString(),clients:api.clients(),projects:api.projects(),finance:api.finance(),tasks:api.tasks(),local}},
- restore(d){if(!d||!Array.isArray(d.clients)||!Array.isArray(d.projects)||!Array.isArray(d.finance))throw Error("Respaldo inválido");for(let i=localStorage.length-1;i>=0;i--){const k=localStorage.key(i)||"";if(k.startsWith("ams_doc_")||k==="ams_calc_v3")localStorage.removeItem(k)}write(CK,d.clients.map(normalizeClient));write(PK,d.projects.map(normalizeProject));write(FK,d.finance.map(normalizeFinance));write(TK,d.tasks&&typeof d.tasks==="object"?d.tasks:{});if(d.local&&typeof d.local==="object")Object.keys(d.local).forEach(k=>{if(k.startsWith("ams_doc_")||k==="ams_calc_v3")localStorage.setItem(k,String(d.local[k]))});write(MK,{at:new Date().toISOString(),version:4});writeMirrors();return true}};
+ restore(d){
+  const isObject=v=>v!==null&&typeof v==="object"&&!Array.isArray(v);
+  if(!isObject(d)||!Array.isArray(d.clients)||!Array.isArray(d.projects)||!Array.isArray(d.finance)||
+    !d.clients.every(isObject)||!d.projects.every(isObject)||!d.finance.every(isObject)||
+    (d.tasks!==undefined&&!isObject(d.tasks))||(d.local!==undefined&&!isObject(d.local)))throw Error("Respaldo inválido");
+  const localEntries=Object.entries(d.local||{});
+  if(localEntries.some(([k,v])=>(!k.startsWith("ams_doc_")&&k!=="ams_calc_v3")||typeof v!=="string"))throw Error("Respaldo inválido");
+  const clients=d.clients.map(c=>{
+   if(c.subscription!==undefined&&!isObject(c.subscription))throw Error("Respaldo inválido");
+   return normalizeClient(c);
+  });
+  const projects=d.projects.map(normalizeProject),finance=d.finance.map(normalizeFinance),tasks=d.tasks||{};
+  for(let i=localStorage.length-1;i>=0;i--){const k=localStorage.key(i)||"";if(k.startsWith("ams_doc_")||k==="ams_calc_v3")localStorage.removeItem(k)}
+  write(CK,clients);write(PK,projects);write(FK,finance);write(TK,tasks);
+  localEntries.forEach(([k,v])=>localStorage.setItem(k,v));
+  write(MK,{at:new Date().toISOString(),version:4});writeMirrors();return true
+ }};
 window.AMSStore=api;
 })();

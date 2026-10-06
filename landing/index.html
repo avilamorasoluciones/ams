@@ -104,7 +104,8 @@
         .nav-links a::after { content: ''; position: absolute; bottom: -5px; left: 0; width: 0%; height: 2px; background: var(--primary); transition: 0.3s; }
         .nav-links a:hover::after { width: 100%; }
         
-        .menu-btn { display: none; font-size: 1.8rem; color: white; cursor: pointer; z-index: 1002; }
+        .menu-btn { display: none; padding: 8px; border: 0; background: transparent; color: white; font: inherit; font-size: 1.8rem; cursor: pointer; z-index: 1002; }
+        .menu-btn:focus-visible { outline: 2px solid var(--primary); outline-offset: 3px; }
         .menu-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.7); backdrop-filter: blur(5px); z-index: 999; opacity: 0; visibility: hidden; transition: 0.3s; }
         .menu-overlay.active { opacity: 1; visibility: visible; }
 
@@ -193,7 +194,7 @@
         .footer-col p { color: var(--gray); margin-bottom: 15px; display: flex; align-items: flex-start; gap: 15px; }
         .footer-col p i { color: var(--primary); font-size: 1.2rem; margin-top: 5px; }
         .social-links { display: flex; gap: 15px; margin-top: 25px; }
-        .social-links a { width: 45px; height: 45px; background: var(--glass); display: flex; align-items: center; justify-content: center; border-radius: 50%; color: var(--light); text-decoration: none; transition: 0.3s; font-size: 1.2rem; border: 1px solid var(--glass-border); }
+        .social-links a, .social-links .social-placeholder { width: 45px; height: 45px; background: var(--glass); display: flex; align-items: center; justify-content: center; border-radius: 50%; color: var(--light); text-decoration: none; transition: 0.3s; font-size: 1.2rem; border: 1px solid var(--glass-border); }
         .social-links a:hover { background: var(--primary); border-color: var(--primary); transform: translateY(-5px); box-shadow: 0 10px 20px rgba(255, 71, 87, 0.3); }
         
         .footer-bottom { text-align: center; padding-top: 40px; border-top: 1px solid var(--glass-border); color: var(--gray); display: flex; flex-direction: column; align-items: center; gap: 20px; }
@@ -271,9 +272,9 @@
     <div class="menu-overlay" id="menuOverlay"></div>
 
     <nav id="navbar">
-        <a href="#" class="logo"><i class="fa-solid fa-fire" style="color: var(--primary);"></i> Burger<span>X</span></a>
-        <div class="menu-btn"><i class="fa-solid fa-bars-staggered"></i></div>
-        <ul class="nav-links">
+        <a href="#inicio" class="logo"><i class="fa-solid fa-fire" style="color: var(--primary);" aria-hidden="true"></i> Burger<span>X</span></a>
+        <button class="menu-btn" id="menuBtn" type="button" aria-label="Abrir menú" aria-controls="navLinks" aria-expanded="false"><i class="fa-solid fa-bars-staggered" aria-hidden="true"></i></button>
+        <ul class="nav-links" id="navLinks">
             <li><a href="#inicio">Inicio</a></li>
             <li><a href="#nosotros">Nosotros</a></li>
             <li><a href="#menu">Menú</a></li>
@@ -284,8 +285,8 @@
     </nav>
 
     <!-- Botón Flotante WhatsApp -->
-    <a href="https://wa.me/573052547072?text=Hola%20Avila%20Mora%20Soluciones,%20estoy%20probando%20la%20demo%20de%20men%C3%BA%20y%20quiero%20conocer%20una%20soluci%C3%B3n%20similar." target="_blank" class="floating-wa">
-        <i class="fa-brands fa-whatsapp"></i>
+    <a href="https://wa.me/573052547072?text=Hola%20Avila%20Mora%20Soluciones,%20estoy%20probando%20la%20demo%20de%20men%C3%BA%20y%20quiero%20conocer%20una%20soluci%C3%B3n%20similar." target="_blank" rel="noopener noreferrer" class="floating-wa" aria-label="Escribir por WhatsApp">
+        <i class="fa-brands fa-whatsapp" aria-hidden="true"></i>
     </a>
 
     <header id="inicio">
@@ -294,7 +295,7 @@
             <p class="reveal" style="transition-delay: 0.1s;">Carne 100% Angus asada a la parrilla, pan brioche artesanal horneado a diario y vegetales frescos. No hacemos comida rápida, hacemos buenas hamburguesas lo más rápido posible.</p>
             <div class="hero-buttons reveal" style="transition-delay: 0.2s;">
                 <a href="#menu" class="btn"><i class="fa-solid fa-burger"></i> Ver Menú</a>
-                <a href="https://wa.me/573052547072?text=Hola%20Avila%20Mora%20Soluciones,%20estoy%20probando%20la%20demo%20de%20men%C3%BA%20y%20quiero%20conocer%20una%20soluci%C3%B3n%20similar." target="_blank" class="btn btn-outline"><i class="fa-brands fa-whatsapp"></i> Pedir Domicilio</a>
+                <a href="https://wa.me/573052547072?text=Hola%20Avila%20Mora%20Soluciones,%20estoy%20probando%20la%20demo%20de%20men%C3%BA%20y%20quiero%20conocer%20una%20soluci%C3%B3n%20similar." target="_blank" rel="noopener noreferrer" class="btn btn-outline"><i class="fa-brands fa-whatsapp" aria-hidden="true"></i> Pedir Domicilio</a>
             </div>
         </div>
     </header>
@@ -460,38 +461,38 @@
         </div>
         <div class="faq-container">
             <div class="faq-item reveal">
-                <button class="faq-question">
+                <button class="faq-question" type="button" aria-expanded="false" aria-controls="faq-answer-1">
                     ¿Cuál es el área de cobertura para domicilios?
-                    <i class="fa-solid fa-chevron-down"></i>
+                    <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
                 </button>
-                <div class="faq-answer">
+                <div class="faq-answer" id="faq-answer-1" aria-hidden="true" inert>
                     <p>Actualmente cubrimos el norte y centro de Bogotá (desde la Calle 26 hasta la Calle 170). Si estás fuera de nuestra zona, puedes pedir a través de plataformas aliadas como Rappi o Didi Food.</p>
                 </div>
             </div>
             <div class="faq-item reveal" style="transition-delay: 0.1s;">
-                <button class="faq-question">
+                <button class="faq-question" type="button" aria-expanded="false" aria-controls="faq-answer-2">
                     ¿Tienen opciones vegetarianas o veganas?
-                    <i class="fa-solid fa-chevron-down"></i>
+                    <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
                 </button>
-                <div class="faq-answer">
+                <div class="faq-answer" id="faq-answer-2" aria-hidden="true" inert>
                     <p>¡Sí! Tenemos la 'Veggie X', hecha con un medallón a base de proteína de arveja, lentejas y especias, acompañada de queso vegano fundido y pan brioche artesanal sin lácteos.</p>
                 </div>
             </div>
             <div class="faq-item reveal" style="transition-delay: 0.2s;">
-                <button class="faq-question">
+                <button class="faq-question" type="button" aria-expanded="false" aria-controls="faq-answer-3">
                     ¿Aceptan reservas para grupos grandes?
-                    <i class="fa-solid fa-chevron-down"></i>
+                    <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
                 </button>
-                <div class="faq-answer">
+                <div class="faq-answer" id="faq-answer-3" aria-hidden="true" inert>
                     <p>Aceptamos reservas para grupos de más de 8 personas de lunes a jueves. Los fines de semana y festivos atendemos estrictamente por orden de llegada para mantener un flujo rápido de mesas.</p>
                 </div>
             </div>
             <div class="faq-item reveal" style="transition-delay: 0.3s;">
-                <button class="faq-question">
+                <button class="faq-question" type="button" aria-expanded="false" aria-controls="faq-answer-4">
                     ¿Son Pet Friendly?
-                    <i class="fa-solid fa-chevron-down"></i>
+                    <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
                 </button>
-                <div class="faq-answer">
+                <div class="faq-answer" id="faq-answer-4" aria-hidden="true" inert>
                     <p>¡Totalmente! Amamos a los peludos. Tenemos una terraza al aire libre muy amplia donde tu mascota será bienvenida e incluso le ofreceremos un bowl con agua fresca de la casa.</p>
                 </div>
             </div>
@@ -501,12 +502,12 @@
     <footer id="contacto">
         <div class="footer-grid reveal">
             <div class="footer-col">
-                <a href="#" class="logo" style="display: flex; margin-bottom: 20px;"><i class="fa-solid fa-fire" style="color: var(--primary);"></i> Burger<span>X</span></a>
+                <a href="#inicio" class="logo" style="display: flex; margin-bottom: 20px;"><i class="fa-solid fa-fire" style="color: var(--primary);" aria-hidden="true"></i> Burger<span>X</span></a>
                 <p style="color: var(--gray);">No es comida rápida, es buena comida hecha rápidamente. El verdadero sabor urbano está aquí.</p>
                 <div class="social-links">
-                    <a href="#"><i class="fa-brands fa-instagram"></i></a>
-                    <a href="#"><i class="fa-brands fa-tiktok"></i></a>
-                    <a href="#"><i class="fa-brands fa-facebook-f"></i></a>
+                    <span class="social-placeholder" role="img" aria-label="Instagram: enlace no configurado"><i class="fa-brands fa-instagram" aria-hidden="true"></i></span>
+                    <span class="social-placeholder" role="img" aria-label="TikTok: enlace no configurado"><i class="fa-brands fa-tiktok" aria-hidden="true"></i></span>
+                    <span class="social-placeholder" role="img" aria-label="Facebook: enlace no configurado"><i class="fa-brands fa-facebook-f" aria-hidden="true"></i></span>
                 </div>
             </div>
             <div class="footer-col">
@@ -557,27 +558,59 @@
         const navLinks = document.querySelector('.nav-links');
         const links = document.querySelectorAll('.nav-links a');
         const overlay = document.getElementById('menuOverlay');
+        const mobileNavMedia = window.matchMedia('(max-width: 768px)');
 
-        function toggleMenu() {
-            navLinks.classList.toggle('active');
-            overlay.classList.toggle('active');
+        function setMenu(open, restoreFocus = false) {
+            const isOpen = open && mobileNavMedia.matches;
+            navLinks.classList.toggle('active', isOpen);
+            overlay.classList.toggle('active', isOpen);
+            navLinks.inert = mobileNavMedia.matches && !isOpen;
+            navLinks.setAttribute('aria-hidden', String(mobileNavMedia.matches && !isOpen));
+            menuBtn.setAttribute('aria-expanded', String(isOpen));
+            menuBtn.setAttribute('aria-label', isOpen ? 'Cerrar menú' : 'Abrir menú');
             const icon = menuBtn.querySelector('i');
-            if(navLinks.classList.contains('active')){
+            if(isOpen){
                 icon.classList.remove('fa-bars-staggered');
                 icon.classList.add('fa-xmark');
             } else {
                 icon.classList.remove('fa-xmark');
                 icon.classList.add('fa-bars-staggered');
             }
+            if (isOpen) navLinks.querySelector('a[href]')?.focus();
+            else if (restoreFocus) menuBtn.focus();
         }
 
+        function toggleMenu() {
+            setMenu(!navLinks.classList.contains('active'));
+        }
+
+        setMenu(false);
+        mobileNavMedia.addEventListener('change', event => {
+            const active = document.activeElement;
+            setMenu(false);
+            if (event.matches && navLinks.contains(active)) menuBtn.focus();
+            else if (!event.matches && active === menuBtn) navLinks.querySelector('a[href]')?.focus();
+        });
         menuBtn.addEventListener('click', toggleMenu);
-        overlay.addEventListener('click', toggleMenu);
+        overlay.addEventListener('click', () => setMenu(false, true));
+        document.addEventListener('keydown', event => {
+            if (event.key === 'Escape' && navLinks.classList.contains('active')) {
+                event.preventDefault();
+                setMenu(false, true);
+            }
+        });
 
         links.forEach(link => {
             link.addEventListener('click', () => {
                 if(window.innerWidth <= 768) {
-                    toggleMenu();
+                    setMenu(false);
+                    const target = link.hash ? document.querySelector(link.hash) : null;
+                    if (target) {
+                        if (!target.matches('a[href], button, input, select, textarea, [tabindex]')) {
+                            target.setAttribute('tabindex', '-1');
+                        }
+                        target.focus({ preventScroll: true });
+                    }
                 }
             });
         });
@@ -608,7 +641,10 @@
                 faqQuestions.forEach(otherQuestion => {
                     if (otherQuestion !== question) {
                         otherQuestion.classList.remove('active');
+                        otherQuestion.setAttribute('aria-expanded', 'false');
                         otherQuestion.nextElementSibling.style.maxHeight = null;
+                        otherQuestion.nextElementSibling.inert = true;
+                        otherQuestion.nextElementSibling.setAttribute('aria-hidden', 'true');
                     }
                 });
 
@@ -616,8 +652,14 @@
                 question.classList.toggle('active');
                 if (question.classList.contains('active')) {
                     answer.style.maxHeight = answer.scrollHeight + "px";
+                    question.setAttribute('aria-expanded', 'true');
+                    answer.inert = false;
+                    answer.setAttribute('aria-hidden', 'false');
                 } else {
                     answer.style.maxHeight = null;
+                    question.setAttribute('aria-expanded', 'false');
+                    answer.inert = true;
+                    answer.setAttribute('aria-hidden', 'true');
                 }
             });
         });

@@ -846,7 +846,7 @@
                 </button>
             </div>
             
-            <button class="navbar-toggler shadow-none border-0 p-1" type="button" data-bs-toggle="offcanvas" data-bs-target="#menuHerramientas" aria-controls="menuHerramientas">
+            <button class="navbar-toggler shadow-none border-0 p-1" type="button" aria-label="Abrir menú de herramientas" data-bs-toggle="offcanvas" data-bs-target="#menuHerramientas" aria-controls="menuHerramientas">
                 <span class="navbar-toggler-icon" style="width: 1.2em; height: 1.2em;"></span>
             </button>
         </div>
@@ -1012,7 +1012,7 @@
                     </label>
 
                     <div id="cropper-container" style="display: none; width: 100%; max-height: 200px; margin-bottom: 10px; text-align: center;">
-                        <img id="cropper-image" style="max-width: 100%; max-height: 150px; display: block; margin: 0 auto;">
+                        <img id="cropper-image" alt="Vista previa para recorte circular" style="max-width: 100%; max-height: 150px; display: block; margin: 0 auto;">
                         <button class="btn btn-sm btn-outline-danger mt-2 w-100" id="btn-cancel-crop">Quitar Foto</button>
                     </div>
                     <button class="btn btn-ams mt-auto" id="btn-circle" disabled>Recortar</button>
@@ -1324,7 +1324,7 @@
                     <div id="uuid-output" class="result-box text-center py-3 mb-2 small text-break">Pulsa generar</div>
                     <div class="d-flex gap-2">
                         <button class="btn btn-ams w-100" id="btn-uuid">Generar UUID</button>
-                        <button class="btn btn-outline-light" id="btn-uuid-copy"><i class="fa-regular fa-copy"></i></button>
+                        <button class="btn btn-outline-light" id="btn-uuid-copy" type="button" aria-label="Copiar UUID"><i class="fa-regular fa-copy" aria-hidden="true"></i></button>
                     </div>
                 </div>
             </div>
@@ -1397,7 +1397,7 @@
                     
                     <div class="result-box text-center fs-6 py-2 mb-2 d-flex justify-content-between align-items-center" style="letter-spacing: 1px;">
                         <span id="pass-output" class="text-white text-truncate">Genera una clave segura</span>
-                        <button class="btn btn-sm btn-outline-info ms-2 py-0 px-2" id="btn-copy-pass"><i class="fa-regular fa-copy"></i></button>
+                        <button class="btn btn-sm btn-outline-info ms-2 py-0 px-2" id="btn-copy-pass" type="button" aria-label="Copiar contraseña"><i class="fa-regular fa-copy" aria-hidden="true"></i></button>
                     </div>
 
                     <div class="micro-options mb-2">
@@ -1674,7 +1674,7 @@
                     let sizeHtml = showSize ? `<div class="file-sizes"><span class="size-original">${formatBytes(file.size)}</span><span class="size-estimated est-size-${index}" data-original="${file.size}"></span></div>` : '';
                     
                     card.innerHTML = `
-                        <button class="remove-btn" onclick="${this.extraConfig.instanceName}.removeFile(${index})"><i class="fa-solid fa-xmark"></i></button>
+                        <button class="remove-btn" type="button" aria-label="Quitar ${safeFileName}" onclick="${this.extraConfig.instanceName}.removeFile(${index})"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
                         <i class="${iconClass}"></i>
                         <div class="file-name" title="${safeFileName}">${safeFileName}</div>
                         ${sizeHtml}

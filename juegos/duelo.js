@@ -101,7 +101,7 @@ const Duelo = (() => {
     }
     list.innerHTML = players.map((player, index) =>
       '<div class="player-tag">' + window.uiIcon?.("user") + " " + esc(player) +
-      '<span class="delete-btn" data-remove="' + index + '" role="button" tabindex="0" aria-label="Quitar ' + esc(player) + '">×</span></div>'
+      '<button type="button" class="delete-btn" data-remove="' + index + '" aria-label="Quitar ' + esc(player) + '">×</button></div>'
     ).join("");
   }
 
@@ -210,7 +210,9 @@ const Duelo = (() => {
     $("du-team-b-label").textContent = mode === "teams" ? "Equipo " + (pair?.b?.team === 0 ? "A" : "B") : "Jugador";
     $("du-question").textContent = current?.text || "";
     $("du-point-a").textContent = pair?.a ? "Punto para " + pair.a.name : "";
+    $("du-point-a").setAttribute("aria-label", pair?.a ? "Dar punto a " + pair.a.name : "Dar punto al jugador A");
     $("du-point-b").textContent = pair?.b ? "Punto para " + pair.b.name : "";
+    $("du-point-b").setAttribute("aria-label", pair?.b ? "Dar punto a " + pair.b.name : "Dar punto al jugador B");
 
     const isAnswer = phase === "answer" && !paused;
     $("du-point-actions").hidden = !isAnswer;

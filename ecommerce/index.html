@@ -105,11 +105,13 @@
         .nav-links a::after { content: ''; position: absolute; bottom: -5px; left: 0; width: 0%; height: 2px; background: var(--accent); transition: 0.3s; }
         .nav-links a:hover::after { width: 100%; }
         
-        .cart-icon { font-size: 1.5rem; cursor: pointer; transition: 0.3s; position: relative; }
+        .cart-icon { border: 0; padding: 0; background: transparent; color: inherit; font: inherit; font-size: 1.5rem; cursor: pointer; transition: 0.3s; position: relative; }
         .cart-icon:hover { color: var(--accent); }
         .cart-badge { position: absolute; top: -8px; right: -10px; background: var(--accent); color: var(--bg); font-size: 0.7rem; font-weight: 800; width: 18px; height: 18px; border-radius: 50%; display: flex; justify-content: center; align-items: center; }
+        #cartBadge[hidden], #checkoutBtn[hidden] { display: none; }
         
-        .menu-btn { display: none; font-size: 1.8rem; cursor: pointer; }
+        .menu-btn { display: none; border: 0; padding: 0 4px; background: transparent; color: inherit; font: inherit; font-size: 1.8rem; cursor: pointer; }
+        .cart-icon:focus-visible, .menu-btn:focus-visible, .close-cart:focus-visible, .remove-item:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
 
         /* 3. HERO SECTION */
         header {
@@ -231,10 +233,10 @@
         footer { border-top: 1px solid var(--border); padding: 80px 20px 30px; margin-top: 100px; background: #020202; }
         .footer-content { max-width: 1400px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 50px; margin-bottom: 60px; }
         .footer-col h4 { font-family: 'Syncopate', sans-serif; font-size: 1.2rem; margin-bottom: 20px; }
-        .footer-col p, .footer-col a { color: #a1a1aa; text-decoration: none; display: block; margin-bottom: 10px; transition: 0.3s; }
+        .footer-col p, .footer-col a, .footer-col .footer-placeholder { color: #a1a1aa; text-decoration: none; display: block; margin-bottom: 10px; transition: 0.3s; }
         .footer-col a:hover { color: var(--accent); }
         .socials { display: flex; gap: 15px; margin-top: 20px; }
-        .socials a { width: 45px; height: 45px; border: 1px solid var(--border); border-radius: 50%; display: flex; justify-content: center; align-items: center; color: var(--text); transition: 0.3s; font-size: 1.2rem; }
+        .socials a, .socials .social-placeholder { width: 45px; height: 45px; border: 1px solid var(--border); border-radius: 50%; display: flex; justify-content: center; align-items: center; color: var(--text); transition: 0.3s; font-size: 1.2rem; }
         .socials a:hover { background: var(--accent); color: var(--bg); border-color: var(--accent); }
         
         .footer-bottom { text-align: center; border-top: 1px solid var(--border); padding-top: 30px; display: flex; flex-direction: column; align-items: center; gap: 15px; }
@@ -276,55 +278,36 @@
     </div>
 
     <div class="cart-overlay" id="cartOverlay"></div>
-    <div class="cart-drawer" id="cartDrawer">
+    <aside class="cart-drawer" id="cartDrawer" role="dialog" aria-modal="true" aria-labelledby="cartTitle" aria-hidden="true" inert tabindex="-1">
         <div class="cart-header">
-            <h3>Tu Bolsa</h3>
-            <button class="close-cart" id="closeCartBtn"><i class="fa-solid fa-xmark"></i></button>
+            <h3 id="cartTitle">Tu Bolsa</h3>
+            <button class="close-cart" id="closeCartBtn" type="button" aria-label="Cerrar carrito"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
         </div>
-        <div class="cart-items">
-            <div class="cart-item">
-                <img src="https://images.unsplash.com/photo-1552346154-21d32810aba3?auto=format&fit=crop&w=300&q=80" alt="Sneaker">
-                <div class="cart-item-info">
-                    <h4>Air Urban Phantom X</h4>
-                    <p>Talla: 42</p>
-                    <span class="item-price">$350.000</span>
-                    <button class="remove-item">Eliminar</button>
-                </div>
-            </div>
-            <div class="cart-item">
-                <img src="https://images.unsplash.com/photo-1556821840-3a63f95609a7?auto=format&fit=crop&w=300&q=80" alt="Hoodie">
-                <div class="cart-item-info">
-                    <h4>Heavyweight Hoodie</h4>
-                    <p>Talla: L</p>
-                    <span class="item-price">$180.000</span>
-                    <button class="remove-item">Eliminar</button>
-                </div>
-            </div>
-        </div>
+        <div class="cart-items" id="cartItems" aria-live="polite"></div>
         <div class="cart-footer">
             <div class="cart-total">
                 <span>Total Estimado</span>
-                <span>$530.000</span>
+                <span id="cartTotal">$0</span>
             </div>
-            <a href="https://wa.me/573052547072?text=Hola%20Avila%20Mora%20Soluciones,%20estoy%20probando%20la%20demo%20de%20tienda%20y%20quiero%20conocer%20una%20tienda%20similar%20para%20mi%20negocio." target="_blank" class="checkout-btn">
+            <a id="checkoutBtn" href="https://wa.me/573052547072?text=Hola%20Avila%20Mora%20Soluciones,%20estoy%20probando%20la%20demo%20de%20tienda%20y%20quiero%20conocer%20una%20tienda%20similar%20para%20mi%20negocio." target="_blank" rel="noopener noreferrer" class="checkout-btn">
                 <i class="fa-brands fa-whatsapp"></i> Finalizar Pedido
             </a>
         </div>
-    </div>
+    </aside>
 
     <nav id="navbar">
-        <a href="#" class="logo">KI<span>C</span>KS</a>
-        <div class="nav-links">
+        <a href="#inicio" class="logo">KI<span>C</span>KS</a>
+        <div class="nav-links" id="navLinks">
             <a href="#inicio">Colección</a>
             <a href="#catalogo">Catálogo</a>
             <a href="#nosotros">Nosotros</a>
         </div>
         <div style="display: flex; align-items: center; gap: 25px;">
-            <div class="cart-icon" id="openCartBtn">
+            <button class="cart-icon" id="openCartBtn" type="button" aria-label="Abrir carrito" aria-controls="cartDrawer">
                 <i class="fa-solid fa-bag-shopping"></i>
-                <span class="cart-badge">2</span>
-            </div>
-            <div class="menu-btn"><i class="fa-solid fa-bars"></i></div>
+                <span class="cart-badge" id="cartBadge">2</span>
+            </button>
+            <button class="menu-btn" type="button" aria-label="Abrir menú" aria-controls="navLinks" aria-expanded="false"><i class="fa-solid fa-bars" aria-hidden="true"></i></button>
         </div>
     </nav>
 
@@ -427,19 +410,19 @@
     <footer id="nosotros">
         <div class="footer-content reveal">
             <div class="footer-col">
-                <a href="#" class="logo" style="display: block; margin-bottom: 20px;">KI<span>C</span>KS</a>
+                <a href="#inicio" class="logo" style="display: block; margin-bottom: 20px;">KI<span>C</span>KS</a>
                 <p>Curadores de cultura sneaker y streetwear en Colombia. Si no es exclusivo, no lo vendemos.</p>
                 <div class="socials">
-                    <a href="#"><i class="fa-brands fa-instagram"></i></a>
-                    <a href="#"><i class="fa-brands fa-tiktok"></i></a>
+                    <span class="social-placeholder" role="img" aria-label="Instagram: enlace no configurado"><i class="fa-brands fa-instagram" aria-hidden="true"></i></span>
+                    <span class="social-placeholder" role="img" aria-label="TikTok: enlace no configurado"><i class="fa-brands fa-tiktok" aria-hidden="true"></i></span>
                 </div>
             </div>
             <div class="footer-col">
                 <h4>Soporte</h4>
-                <a href="#">Envíos y Entregas</a>
-                <a href="#">Cambios y Devoluciones</a>
-                <a href="#">Guía de Tallas</a>
-                <a href="#">Preguntas Frecuentes</a>
+                <span class="footer-placeholder">Envíos y Entregas</span>
+                <span class="footer-placeholder">Cambios y Devoluciones</span>
+                <span class="footer-placeholder">Guía de Tallas</span>
+                <span class="footer-placeholder">Preguntas Frecuentes</span>
             </div>
             <div class="footer-col">
                 <h4>Contacto</h4>
@@ -467,14 +450,39 @@
         // 2. Menú Móvil
         const menuBtn = document.querySelector('.menu-btn');
         const navLinks = document.querySelector('.nav-links');
-        
-        menuBtn.addEventListener('click', () => {
-            navLinks.classList.toggle('active');
+        const mobileNavMedia = window.matchMedia('(max-width: 768px)');
+        function setMobileNav(open, restoreFocus = false) {
+            navLinks.classList.toggle('active', open);
             const icon = menuBtn.querySelector('i');
-            if(navLinks.classList.contains('active')){
+            menuBtn.setAttribute('aria-expanded', String(open));
+            menuBtn.setAttribute('aria-label', open ? 'Cerrar menú' : 'Abrir menú');
+            if (mobileNavMedia.matches) {
+                navLinks.inert = !open;
+                navLinks.setAttribute('aria-hidden', String(!open));
+            } else {
+                navLinks.inert = false;
+                navLinks.removeAttribute('aria-hidden');
+            }
+            if(open){
                 icon.className = 'fa-solid fa-xmark';
             } else {
                 icon.className = 'fa-solid fa-bars';
+            }
+            if (open && mobileNavMedia.matches) navLinks.querySelector('a[href]')?.focus();
+            else if (restoreFocus) menuBtn.focus();
+        }
+        if (mobileNavMedia.matches) setMobileNav(false);
+        mobileNavMedia.addEventListener('change', event => {
+            const active = document.activeElement;
+            setMobileNav(false);
+            if (event.matches && navLinks.contains(active)) menuBtn.focus();
+            else if (!event.matches && active === menuBtn) navLinks.querySelector('a[href]')?.focus();
+        });
+        menuBtn.addEventListener('click', () => setMobileNav(!navLinks.classList.contains('active')));
+        navLinks.addEventListener('click', event => {
+            if (event.target.closest('a[href]')) {
+                const wasOpen = mobileNavMedia.matches && navLinks.classList.contains('active');
+                setMobileNav(false, wasOpen);
             }
         });
 
@@ -539,31 +547,152 @@
         const closeCartBtn = document.getElementById('closeCartBtn');
         const cartDrawer = document.getElementById('cartDrawer');
         const cartOverlay = document.getElementById('cartOverlay');
+        const cartItems = document.getElementById('cartItems');
+        const cartBadge = document.getElementById('cartBadge');
+        const cartTotal = document.getElementById('cartTotal');
+        const checkoutBtn = document.getElementById('checkoutBtn');
         const addToCartBtns = document.querySelectorAll('.trigger-cart');
+        let lastCartTrigger = openCartBtn;
+        const cartBackgroundInert = new Map();
 
-        function openCart() {
+        function productFromButton(button) {
+            const card = button.closest('.product-card');
+            const name = card?.querySelector('h3')?.textContent.trim();
+            const priceText = card?.querySelector('.price')?.textContent || '';
+            const image = card?.querySelector('.product-img img');
+            const price = Number(priceText.replace(/[^\d]/g, ''));
+            if (!name || !Number.isFinite(price) || price <= 0 || !image) return null;
+            return { name, price, image: image.src, alt: image.alt || name };
+        }
+
+        const cart = Array.from(addToCartBtns).slice(0, 2).map(button => productFromButton(button)).filter(Boolean);
+        if (cart.length > 0) cart[0].detail = 'Talla: 42';
+        if (cart.length > 1) cart[1].detail = 'Talla: L';
+
+        function renderCart() {
+            cartItems.replaceChildren();
+            cart.forEach((product, index) => {
+                const row = document.createElement('div');
+                row.className = 'cart-item';
+                const image = document.createElement('img');
+                image.src = product.image;
+                image.alt = product.alt;
+                image.loading = 'lazy';
+                const info = document.createElement('div');
+                info.className = 'cart-item-info';
+                const name = document.createElement('h4');
+                name.textContent = product.name;
+                info.appendChild(name);
+                if (product.detail) {
+                    const detail = document.createElement('p');
+                    detail.textContent = product.detail;
+                    info.appendChild(detail);
+                }
+                const price = document.createElement('span');
+                price.className = 'item-price';
+                price.textContent = '$' + product.price.toLocaleString('es-CO');
+                const remove = document.createElement('button');
+                remove.className = 'remove-item';
+                remove.type = 'button';
+                remove.dataset.removeIndex = String(index);
+                remove.textContent = 'Eliminar';
+                remove.setAttribute('aria-label', 'Eliminar ' + product.name + ' de la bolsa');
+                info.append(price, remove);
+                row.append(image, info);
+                cartItems.appendChild(row);
+            });
+            if (cart.length === 0) {
+                const empty = document.createElement('p');
+                empty.className = 'cart-empty';
+                empty.textContent = 'Tu bolsa está vacía. Añade un producto para continuar.';
+                cartItems.appendChild(empty);
+            }
+            cartBadge.textContent = String(cart.length);
+            cartBadge.hidden = cart.length === 0;
+            cartTotal.textContent = '$' + cart.reduce((sum, product) => sum + product.price, 0).toLocaleString('es-CO');
+            checkoutBtn.hidden = cart.length === 0;
+        }
+
+        function openCart(trigger = openCartBtn) {
+            lastCartTrigger = trigger;
+            if (navLinks.classList.contains('active')) setMobileNav(false);
+            cartBackgroundInert.clear();
+            Array.from(document.body.children).forEach(element => {
+                if (element === cartDrawer || element === cartOverlay) return;
+                cartBackgroundInert.set(element, element.inert);
+                element.inert = true;
+            });
             cartDrawer.classList.add('active');
             cartOverlay.classList.add('active');
-            // Cierra el menú móvil si está abierto para no sobreponer
-            if(navLinks.classList.contains('active')){
-                navLinks.classList.remove('active');
-                menuBtn.querySelector('i').className = 'fa-solid fa-bars';
-            }
+            cartDrawer.inert = false;
+            cartDrawer.setAttribute('aria-hidden', 'false');
+            openCartBtn.setAttribute('aria-expanded', 'true');
+            closeCartBtn.focus();
         }
 
         function closeCart() {
             cartDrawer.classList.remove('active');
             cartOverlay.classList.remove('active');
+            cartDrawer.inert = true;
+            cartDrawer.setAttribute('aria-hidden', 'true');
+            openCartBtn.setAttribute('aria-expanded', 'false');
+            cartBackgroundInert.forEach((wasInert, element) => { element.inert = wasInert; });
+            cartBackgroundInert.clear();
+            if (lastCartTrigger?.isConnected) lastCartTrigger.focus();
         }
 
-        openCartBtn.addEventListener('click', openCart);
+        openCartBtn.setAttribute('aria-expanded', 'false');
+        openCartBtn.addEventListener('click', event => openCart(event.currentTarget));
         closeCartBtn.addEventListener('click', closeCart);
         cartOverlay.addEventListener('click', closeCart);
+        cartItems.addEventListener('click', event => {
+            const remove = event.target.closest('[data-remove-index]');
+            if (!remove) return;
+            cart.splice(Number(remove.dataset.removeIndex), 1);
+            renderCart();
+        });
+        document.addEventListener('keydown', event => {
+            if (cartDrawer.classList.contains('active')) {
+                if (event.key === 'Escape') {
+                    event.preventDefault();
+                    closeCart();
+                    return;
+                }
+                if (event.key === 'Tab') {
+                    const focusable = Array.from(cartDrawer.querySelectorAll(
+                        'button:not([disabled]), a[href]:not([hidden])'
+                    )).filter(element => element.getClientRects().length > 0);
+                    if (!focusable.length) return;
+                    const first = focusable[0], last = focusable[focusable.length - 1];
+                    if (!cartDrawer.contains(document.activeElement)) {
+                        event.preventDefault();
+                        (event.shiftKey ? last : first).focus();
+                    } else if (event.shiftKey && document.activeElement === first) {
+                        event.preventDefault();
+                        last.focus();
+                    } else if (!event.shiftKey && document.activeElement === last) {
+                        event.preventDefault();
+                        first.focus();
+                    }
+                }
+                return;
+            }
+            if (event.key === 'Escape' && navLinks.classList.contains('active')) setMobileNav(false, true);
+        });
 
-        // Hacer que los botones de compra abran el carrito de demostración
+        renderCart();
         addToCartBtns.forEach(btn => {
             btn.addEventListener('click', (e) => {
-                e.preventDefault(); 
+                e.preventDefault();
+                const product = productFromButton(btn);
+                if (!product) {
+                    console.error('No se pudo leer el producto de demostración.');
+                    btn.textContent = 'Producto no disponible';
+                    btn.disabled = true;
+                    return;
+                }
+                cart.push(product);
+                renderCart();
                 
                 // Efecto visual de haber agregado algo
                 btn.innerHTML = '<i class="fa-solid fa-check"></i> Agregado';
@@ -571,7 +700,7 @@
                 btn.style.color = '#fff';
                 
                 setTimeout(() => {
-                    openCart();
+                    openCart(btn);
                     // Restaurar botón después de abrir el carrito
                     setTimeout(() => {
                         btn.innerHTML = '<i class="fa-solid fa-bag-shopping"></i> Añadir a la Bolsa';
