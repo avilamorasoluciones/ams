@@ -8,10 +8,11 @@
   <meta name="description" content="Duelo: preguntas y enfrentamientos aleatorios uno contra uno, individuales o por equipos.">
   <meta name="theme-color" content="#ef4444">
   <link rel="icon" href="pwa-icon-192.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="styles.css?v=20261005-49">
+  <link rel="stylesheet" href="styles.css?v=20261006-51">
   <style>
     #du-scr-lobby[hidden],#du-scr-game[hidden],#du-scr-result[hidden],#du-point-actions[hidden],#du-result-message[hidden],#du-official-answer[hidden],#du-pause[hidden],#du-next[hidden]{display:none!important}
     .du-config-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+    .du-mode-help{margin:0;color:var(--muted);font-size:.88rem;line-height:1.5;font-weight:700}
     .du-config-grid label{font-weight:800}
     .du-player-list{display:grid;gap:8px}
     .du-help{padding:14px;border:1px solid var(--border-light);border-radius:14px;background:var(--player-bg);line-height:1.5}
@@ -69,9 +70,11 @@
         <div class="box panel-soft stack">
           <h2 class="section-title">Partida</h2>
           <div class="du-config-grid">
+            <label>Modo de juego<select id="du-mode"><option value="duel">⚔️ 1 vs. 1</option><option value="tournament">🏆 Torneo</option><option value="teams">👥 Equipos</option></select></label>
             <label>Categoría<select id="du-cat"></select></label>
             <label>Tiempo<select id="du-time"><option value="8">8 segundos</option><option value="12" selected>12 segundos</option><option value="15">15 segundos</option><option value="20">20 segundos</option></select></label>
           </div>
+          <p class="du-mode-help">1 vs. 1 funciona como siempre. Torneo permite grupos impares y elimina jugadores hasta encontrar un campeón. Equipos reparte al grupo entre dos equipos y mantiene el marcador por equipo.</p>
         </div>
 
         <div class="box panel-soft stack">
@@ -81,7 +84,7 @@
             <button type="button" class="btn btn-inline-square" id="du-btnAddPlayer"><svg class="ui-icon" aria-hidden="true"><use href="ui-icons.svg#plus"></use></svg><span>Agregar</span></button>
           </div>
           <div class="player-list" id="du-uiPlayerList"></div>
-          <p class="muted">Agrega a todos los que van a jugar. El juego los mezcla y arma los duelos automáticamente.</p>
+          <p class="muted">Agrega a todos los que van a jugar. El juego los mezcla y organiza automáticamente según el modo elegido.</p>
         </div>
         <p id="du-data-error" class="muted" role="alert" hidden></p>
         <button id="du-start" class="btn primary btn-full" type="button">Empezar</button>
@@ -131,6 +134,6 @@
   </main>
   <script src="scripts.js?v=20261005-49" defer></script>
   <script src="datos_nuevos.js?v=20261005-02" defer></script>
-  <script src="duelo.js?v=20261006-01" defer></script>
+  <script src="duelo.js?v=20261006-02" defer></script>
 </body>
 </html>
