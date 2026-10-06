@@ -569,7 +569,7 @@ const Duelo = (() => {
   }
 
   function restore(state) {
-    if (!state || ![3,4].includes(state.schemaVersion)) return false;
+    if (!state || ![3,4,5].includes(state.schemaVersion)) return false;
     players = Array.isArray(state.players) ? state.players.filter(name => typeof name === "string" && name.trim()) : players;
     mode = state.mode === "tournament" || state.mode === "teams" ? state.mode : "duel";
     time = Number(state.time || 12);
