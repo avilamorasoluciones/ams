@@ -107,7 +107,7 @@ const DEFAULT_EVENT = {
   prizeTitle:"Desarrollo de Landing Page 100% GRATIS",
   prizeDesc:"El ganador recibe GRATIS el desarrollo completo y profesional de una Landing Page responsive, adaptada a su negocio, con diseño, estructura UX/UI, SEO básico y conexión a sus canales de venta. IMPORTANTE: el desarrollo es gratis; el hosting y dominio no están incluidos en el premio y deben contratarse con Avila Mora Soluciones por US$10/mes o US$100/año para hacer efectivo y mantener el premio.",
   conditionTitle:"Reglas, vigencia y servicio posterior",
-  conditionDesc:"⚠️ CÓMO PARTICIPAR\n• Puedes jugar libremente sin cuenta y tu resultado quedará guardado solo en este dispositivo. Ese resultado local no entra al ranking del evento.\n• Si juegas con una cuenta registrada, tu piloto queda vinculado a esa cuenta y las puntuaciones válidas se guardan automáticamente en el ranking.\n• Al jugar con una cuenta registrada durante la vigencia del evento, se entiende que estás participando en el evento y aceptas sus reglas y condiciones descritas aquí. No necesitas marcar una casilla adicional.\n• Una misma cuenta solo puede representar a un piloto. Si vuelves desde otro teléfono, computador o navegador e inicias sesión con la misma cuenta, seguirás siendo el mismo piloto.\n\n⚠️ IMPORTANTE ANTES DE PARTICIPAR\n• El premio es el desarrollo de una Landing Page profesional sin costo de desarrollo.\n• El premio NO significa que el ganador pueda llevarse la Landing Page a un hosting y dominio propios sin contratar el servicio posterior de Avila Mora Soluciones.\n• Para hacer efectivo el premio y mantener la Landing Page publicada, el ganador debe aceptar y pagar el servicio de hosting y dominio gestionado por Avila Mora Soluciones. La mensualidad o anualidad es obligatoria para el ganador.\n• Si ya tienes hosting y dominio propios, o no necesitas que Avila Mora Soluciones gestione tu presencia web, este evento probablemente no es para ti y no deberías participar bajo estas condiciones.\n\n🎁 QUÉ RECIBES GRATIS\n• Desarrollo completo de una Landing Page responsive, adaptada a tu negocio, con diseño, estructura, experiencia de usuario, SEO básico y conexión con los canales de contacto definidos para el proyecto.\n• El desarrollo inicial tiene valor $0 para el ganador. La Landing Page será propiedad del ganador.\n\n💳 QUÉ DEBES PAGAR SI GANAS\n• Hosting + dominio + mantenimiento básico gestionados por Avila Mora Soluciones: US$10 al mes o US$100 al año.\n• Esta es una tarifa especial para el ganador del evento. La tarifa comercial habitual de mantenimiento es de US$15 al mes; el evento conserva para el ganador el precio reducido de US$10 al mes o US$100 al año.\n• La obligación de contratar este servicio aplica para poder recibir y mantener el premio. Si el ganador no acepta la mensualidad o anualidad, se considerará que no cumple las condiciones para hacer efectivo el premio.\n• Si el ganador ya dispone de hosting y dominio y quiere utilizarlos en lugar del servicio gestionado por Avila Mora Soluciones, no podrá hacer efectivo este premio bajo estas condiciones.\n• Modificaciones, funcionalidades, integraciones, servicios adicionales o trabajos fuera del alcance inicial se cotizan por separado.\n\n🌎 FORMA DE COBRO\n• En Colombia, el valor podrá cobrarse en pesos colombianos (COP) tomando como referencia la tarifa publicada en USD y la tasa de cambio de referencia vigente al momento del pago.\n• En otros países, cuando sea posible realizar el cobro en moneda local, podrá cobrarse el equivalente correspondiente a la tarifa en USD.\n• En Venezuela, cuando los medios de pago locales no permitan una conversión o cobro adecuado, la tarifa podrá mantenerse expresada y cobrarse en USD.\n\n🔐 TU CUENTA: UN PILOTO\n• Para participar debes iniciar sesión o crear una cuenta. Esa cuenta queda vinculada a tu piloto y a sus resultados en el ranking.\n• Una misma cuenta solo puede representar a un piloto. Si vuelves desde otro teléfono, computador o navegador e inicias sesión con la misma cuenta, seguirás siendo el mismo piloto.\n• No se permite crear varias cuentas para representar al mismo jugador, registrar copias del mismo jugador o utilizar cuentas duplicadas para alterar el ranking. Si se detectan participaciones duplicadas o destinadas a obtener una ventaja, podrán ser excluidas o descalificadas.\n• Esta cuenta se utiliza para vincular una participación única al ranking; no constituye por sí sola una verificación legal absoluta de identidad física.\n\n🏆 REGLAS DEL EVENTO\n• El evento termina el 31 de diciembre de 2026 a las 11:59 p. m. Ganará el participante elegible con la puntuación válida más alta.\n• En caso de empate, gana quien haya alcanzado primero esa puntuación.\n• Las puntuaciones y la identidad del participante pueden ser revisadas antes de declarar el resultado definitivo.\n• El equipo de Avila Mora Soluciones puede jugar, pero sus puntuaciones no son elegibles para el premio.\n• Al participar, aceptas expresamente tanto las reglas del evento como la condición económica del servicio de hosting y dominio posterior. Si no estás de acuerdo con esa condición, no participes.\n\n📌 EN RESUMEN\nLa propuesta es: desarrollo de la Landing Page GRATIS + hosting y dominio gestionados por Avila Mora Soluciones mediante una tarifa especial obligatoria de US$10/mes o US$100/año. El evento está pensado para personas o negocios que necesitan una Landing Page y quieren que Avila Mora Soluciones se encargue de mantenerla publicada. Si ya tienes infraestructura web propia y no quieres contratar este servicio, no participes porque el premio está condicionado a este modelo.",
+  conditionDesc:"⚠️ CÓMO PARTICIPAR\n• Puedes jugar libremente sin cuenta y tu resultado quedará guardado solo en este dispositivo. Ese resultado local no entra al ranking del evento.\n• Si juegas con una cuenta registrada, tu piloto queda vinculado a esa cuenta y las puntuaciones válidas pueden guardarse y publicarse en el ranking.\n• Al jugar con una cuenta registrada durante la vigencia del evento, se entiende que estás participando en el evento y aceptas sus reglas y condiciones descritas aquí. No necesitas marcar una casilla adicional.\n• Una misma cuenta solo puede representar a un piloto. Si vuelves desde otro teléfono, computador o navegador e inicias sesión con la misma cuenta, seguirás siendo el mismo piloto.\n\n⚠️ IMPORTANTE ANTES DE PARTICIPAR\n• El premio es el desarrollo de una Landing Page profesional sin costo de desarrollo.\n• El premio NO significa que el ganador pueda llevarse la Landing Page a un hosting y dominio propios sin contratar el servicio posterior de Avila Mora Soluciones.\n• Para hacer efectivo el premio y mantener la Landing Page publicada, el ganador debe aceptar y pagar el servicio de hosting y dominio gestionado por Avila Mora Soluciones. La mensualidad o anualidad es obligatoria para el ganador.\n• Si ya tienes hosting y dominio propios, o no necesitas que Avila Mora Soluciones gestione tu presencia web, este evento probablemente no es para ti y no deberías participar bajo estas condiciones.\n\n🎁 QUÉ RECIBES GRATIS\n• Desarrollo completo de una Landing Page responsive, adaptada a tu negocio, con diseño, estructura, experiencia de usuario, SEO básico y conexión con los canales de contacto definidos para el proyecto.\n• El desarrollo inicial tiene valor $0 para el ganador. La Landing Page será propiedad del ganador.\n\n💳 QUÉ DEBES PAGAR SI GANAS\n• Hosting + dominio + mantenimiento básico gestionados por Avila Mora Soluciones: US$10 al mes o US$100 al año.\n• Esta es una tarifa especial para el ganador del evento. La tarifa comercial habitual de mantenimiento es de US$15 al mes; el evento conserva para el ganador el precio reducido de US$10 al mes o US$100 al año.\n• La obligación de contratar este servicio aplica para poder recibir y mantener el premio. Si el ganador no acepta la mensualidad o anualidad, se considerará que no cumple las condiciones para hacer efectivo el premio.\n• Si el ganador ya dispone de hosting y dominio y quiere utilizarlos en lugar del servicio gestionado por Avila Mora Soluciones, no podrá hacer efectivo este premio bajo estas condiciones.\n• Modificaciones, funcionalidades, integraciones, servicios adicionales o trabajos fuera del alcance inicial se cotizan por separado.\n\n🌎 FORMA DE COBRO\n• En Colombia, el valor podrá cobrarse en pesos colombianos (COP) tomando como referencia la tarifa publicada en USD y la tasa de cambio de referencia vigente al momento del pago.\n• En otros países, cuando sea posible realizar el cobro en moneda local, podrá cobrarse el equivalente correspondiente a la tarifa en USD.\n• En Venezuela, cuando los medios de pago locales no permitan una conversión o cobro adecuado, la tarifa podrá mantenerse expresada y cobrarse en USD.\n\n🔐 TU CUENTA: UN PILOTO\n• Para participar debes iniciar sesión o crear una cuenta. Esa cuenta queda vinculada a tu piloto y a sus resultados en el ranking.\n• Una misma cuenta solo puede representar a un piloto. Si vuelves desde otro teléfono, computador o navegador e inicias sesión con la misma cuenta, seguirás siendo el mismo piloto.\n• No se permite crear varias cuentas para representar al mismo jugador, registrar copias del mismo jugador o utilizar cuentas duplicadas para alterar el ranking. Si se detectan participaciones duplicadas o destinadas a obtener una ventaja, podrán ser excluidas o descalificadas.\n• Esta cuenta se utiliza para vincular una participación única al ranking; no constituye por sí sola una verificación legal absoluta de identidad física.\n\n🏆 REGLAS DEL EVENTO\n• El evento termina el 31 de diciembre de 2026 a las 11:59 p. m. Ganará el participante elegible con la puntuación válida más alta.\n• En caso de empate, gana quien haya alcanzado primero esa puntuación.\n• Las puntuaciones y la identidad del participante pueden ser revisadas antes de declarar el resultado definitivo.\n• El equipo de Avila Mora Soluciones puede jugar, pero sus puntuaciones no son elegibles para el premio.\n• Al participar, aceptas expresamente tanto las reglas del evento como la condición económica del servicio de hosting y dominio posterior. Si no estás de acuerdo con esa condición, no participes.\n\n📌 EN RESUMEN\nLa propuesta es: desarrollo de la Landing Page GRATIS + hosting y dominio gestionados por Avila Mora Soluciones mediante una tarifa especial obligatoria de US$10/mes o US$100/año. El evento está pensado para personas o negocios que necesitan una Landing Page y quieren que Avila Mora Soluciones se encargue de mantenerla publicada. Si ya tienes infraestructura web propia y no quieres contratar este servicio, no participes porque el premio está condicionado a este modelo.",
   waTemplate:"Hola {name}, te escribimos de Avila Mora Soluciones sobre tu récord de {score} puntos en {event}.",
   eventStartAt:"2026-01-01T05:00:00.000Z",
   eventEndAt:"2027-01-01T04:59:59.000Z"
@@ -160,7 +160,7 @@ const els = {};
   "accountDetails","accountEmail","accountName","accountLastName","accountDialCode","accountPhone","accountCountry","saveAccountBtn","accountStatus","accountTitle","accountSubtitle",
   "birdGrid","selectedBirdInfo","factTitle","factText","factSourceHint","factContinueBtn","gameCanvas","scoreValue","difficultyValue","pauseBtn","gameStartHint",
   "pauseScore","resumeBtn","bottomNav","quitBtn","resultBird","resultEyebrow","resultTitle","finalScore","resultBest","resultGames","newRecord",
-  "againBtn","soundBtn","rankingBackBtn","rankingRefreshBtn","rankingList","rankingStatus","submitScoreStatus","shareResultBtn","rankingScreen"
+  "againBtn","soundBtn","rankingBackBtn","rankingRefreshBtn","rankingList","rankingStatus","scoreMessage","submitScoreBtn","submitScoreStatus","shareResultBtn","rankingScreen"
 ].forEach(id => els[id] = document.getElementById(id));
 
 const ctx = els.gameCanvas.getContext("2d", {alpha:false});
@@ -292,11 +292,11 @@ async function openEventScreen(){
   renderEventRichText(screen.querySelector("#eventPrizeDesc"),cfg.prizeDesc||"");
   screen.querySelector("#eventPrizeTitle").textContent=cfg.prizeTitle||"";
   screen.querySelector("#eventConditionTitle").textContent=cfg.conditionTitle||"";
-  const participationNotice="⚠️ PARTICIPACIÓN\n• Puedes jugar sin cuenta y tu resultado quedará solo en este dispositivo; ese resultado local no entra al ranking.\n• Si juegas con una cuenta registrada durante la vigencia del evento, tu piloto queda vinculado a esa cuenta y la puntuación válida se guarda automáticamente en el ranking. Al jugar con una cuenta registrada se entiende que estás participando en el evento y aceptas sus reglas y condiciones. No necesitas marcar una casilla adicional.";\n  const conditionText=String(cfg.conditionDesc||"");\n  renderEventRichText(screen.querySelector("#eventConditionDesc"),conditionText.includes("Al jugar con una cuenta registrada")?conditionText:participationNotice+"\n\n"+conditionText);
+  const participationNotice="⚠️ PARTICIPACIÓN\n• Puedes jugar sin cuenta y tu resultado quedará solo en este dispositivo; ese resultado local no entra al ranking.\n• Si juegas con una cuenta registrada durante la vigencia del evento, tu piloto queda vinculado a esa cuenta y la puntuación válida puede guardarse y publicarse en el ranking. Al jugar con una cuenta registrada se entiende que estás participando en el evento y aceptas sus reglas y condiciones. No necesitas marcar una casilla adicional.";\n  const conditionText=String(cfg.conditionDesc||"");\n  renderEventRichText(screen.querySelector("#eventConditionDesc"),conditionText.includes("Al jugar con una cuenta registrada")?conditionText:participationNotice+"\n\n"+conditionText);
   const user=await getCurrentAuthUser().catch(()=>null);
   screen.querySelector("#eventAuthHint").textContent=user
-    ?"✓ Tienes una cuenta activa. Tus partidas del evento se guardan automáticamente en el ranking."
-    :"Puedes jugar sin cuenta y conservar tu resultado en este dispositivo. Para entrar al ranking, inicia sesión o crea una cuenta.";
+    ?"✓ Tienes una cuenta activa. Tus partidas del evento pueden quedar vinculadas a tu piloto y publicarse en el ranking."
+    :"Puedes jugar sin cuenta y conservar tu resultado en este dispositivo. Para participar en el ranking, inicia sesión o crea una cuenta.";
   screen.querySelector("#eventJoinButton").textContent=user?"IR A JUGAR ✦":"INICIAR SESIÓN O JUGAR →";
   showOnly(screen);
   screen.hidden=false;
@@ -604,6 +604,60 @@ function loop(now){
   draw();
   raf=requestAnimationFrame(loop);
 }
+function savePendingScore(result){
+  const payload={...result,savedAt:new Date().toISOString()};
+  try{localStorage.setItem("amsFlyPendingScoreV1",JSON.stringify(payload));return true}catch(_){}
+  try{sessionStorage.setItem("amsFlyPendingScoreV1",JSON.stringify(payload));return true}catch(_){}
+  return false;
+}
+function readPendingScore(){
+  for(const storage of [localStorage,sessionStorage]){
+    try{
+      const value=JSON.parse(storage.getItem("amsFlyPendingScoreV1")||"null");
+      if(value&&Number(value.score)>=0)return value;
+    }catch(_){}
+  }
+  return null;
+}
+function clearPendingScore(){
+  for(const storage of [localStorage,sessionStorage]){
+    try{storage.removeItem("amsFlyPendingScoreV1")}catch(_){}
+  }
+}
+function restorePendingResult(){
+  if(!profile || !els.gameOverScreen || !els.gameOverScreen.hidden)return false;
+  const pending=readPendingScore();
+  if(!pending)return false;
+  const score=Math.max(0,Number(pending.score||0));
+  if(!Number.isFinite(score))return false;
+
+  // El récord local siempre vive en STATS_KEY. El resultado pendiente solo
+  // conserva la partida que falta por publicar y nunca puede bajar el récord.
+  const pendingBest=Math.max(0,Number(pending.best||0));
+  const pendingGames=Math.max(0,Number(pending.games||0));
+  const storedBest=Math.max(0,Number(stats.best||0));
+  const storedGames=Math.max(0,Number(stats.games||0));
+  stats.best=Math.max(storedBest,pendingBest,score);
+  stats.games=Math.max(storedGames,pendingGames);
+  if(stats.best!==storedBest || stats.games!==storedGames) saveStats();
+
+  const birdData=getBird(pending.birdId||profile.birdId||selectedBirdId);
+  lastResult={score,durationMs:Math.max(0,Number(pending.durationMs||0)),birdId:birdData?.id||profile.birdId||selectedBirdId,best:stats.best,games:stats.games,isRecord:Boolean(pending.isRecord),message:String(pending.message||"").slice(0,90)};
+  els.finalScore.textContent=String(score);
+  els.resultBest.textContent=String(stats.best);
+  els.resultGames.textContent=String(stats.games);
+  els.resultBird.innerHTML=birdMarkup(birdData,"1.15");
+  els.newRecord.hidden=!Boolean(pending.isRecord);
+  els.submitScoreBtn.dataset.published="0";
+  els.submitScoreBtn.disabled=false;
+  els.scoreMessage.disabled=false;
+  els.submitScoreBtn.innerHTML='PUBLICAR PUNTUACIÓN <span>↑</span>';
+  els.submitScoreStatus.textContent="Tienes una puntuación pendiente de publicación. Tu resultado se conserva localmente.";
+  els.scoreMessage.value=String(pending.message||"").slice(0,90);
+  showOnly(els.gameOverScreen);
+  els.gameOverScreen.hidden=false;
+  return true;
+}
 function updateLargeScreenRecommendation(){
   const id="amsFlyLargeScreenNote";
   let note=document.getElementById(id);
@@ -654,49 +708,89 @@ function endGame(){
     els.resultTitle.textContent="Vamos de nuevo.";
   }
 
-  lastResult={
-    score:finalScore,
-    durationMs:Math.max(0,Math.round((game.time||0)*1000)),
-    birdId:game.birdData?.id||profile?.birdId||selectedBirdId,
-    best:stats.best,
-    games:stats.games,
-    isRecord
-  };
-
+  lastResult={score:finalScore,durationMs:Math.max(0,Math.round((game.time||0)*1000)),birdId:game.birdData?.id||profile?.birdId||selectedBirdId,best:stats.best,games:stats.games,isRecord,message:""};
+  savePendingScore(lastResult);
+  els.scoreMessage.value="";
+  els.submitScoreBtn.dataset.published="0";
+  els.submitScoreBtn.disabled=false;
+  els.scoreMessage.disabled=false;
+  els.submitScoreBtn.hidden=!eventIsOpen();
+  const scoreMessageLabel=els.scoreMessage.closest(".message-label");
+  if(scoreMessageLabel)scoreMessageLabel.hidden=!eventIsOpen();
+  els.submitScoreBtn.innerHTML='PUBLICAR PUNTUACIÓN <span>↑</span>';
   els.submitScoreStatus.hidden=false;
-  els.submitScoreStatus.textContent="Resultado guardado en este dispositivo.";
+  els.submitScoreStatus.textContent=eventIsOpen()
+    ? (profile?"Puedes publicar este vuelo en el evento activo.":"Para participar en el evento, inicia sesión o crea una cuenta. Tu vuelo ya quedó guardado en este dispositivo.")
+    : "Puedes jugar libremente. No hay un evento abierto para publicar puntuaciones; tu récord queda guardado en este dispositivo.";
   showOnly(els.gameOverScreen);
   els.gameOverScreen.hidden=false;
   window.scrollTo(0,0);
+  requestAnimationFrame(()=>{els.gameOverScreen.hidden=false;els.scoreMessage?.focus({preventScroll:true})});
+  if(profile) publishScore({automatic:true});
   playTone(isRecord?880:220,.12,isRecord?"triangle":"sine");
-
-  getCurrentAuthUser().then(user=>{
-    if(user){
-      els.submitScoreStatus.textContent="Guardando tu puntuación…";
-      publishScore({automatic:true});
-    }else{
-      els.submitScoreStatus.textContent="Resultado guardado en este dispositivo. Crea una cuenta para entrar al ranking.";
-    }
-  }).catch(()=>{
-    els.submitScoreStatus.textContent="Resultado guardado en este dispositivo. Crea una cuenta para entrar al ranking.";
-  });
 }
 
+async function ensureResultPublishedBeforeLeaving(){
+  if(!lastResult && !readPendingScore())return true;
+  if(els.submitScoreBtn?.dataset.published==="1")return true;
+  els.submitScoreStatus.textContent="Guardando tu puntuación antes de abrir el ranking…";
+  const ok=await publishScore();
+  if(!ok)return false;
+  return true;
+}
 async function publishScore(options={}){
   if(publishPromise)return publishPromise;
   const current=publishScoreInternal(options);
   publishPromise=current;
-  try{return await current}
-  finally{if(publishPromise===current)publishPromise=null}
+  try{
+    return await current;
+  }finally{
+    if(publishPromise===current)publishPromise=null;
+  }
 }
-
 async function publishScoreInternal(options={}){
-  if(!profile || !lastResult || !eventIsOpen() || !NEON_DATA_READY())return false;
-  const score=Math.max(0,Number(lastResult.score||0));
-  if(score<=0 && !lastResult.isRecord)return false;
+  const automatic=options.automatic===true;
+  if(!profile){
+    if(!automatic){
+      els.submitScoreStatus.textContent="Inicia sesión o crea una cuenta para participar. Tu puntuación está guardada en este dispositivo.";
+      navigateTo("account");
+      setAuthStatus(els.authStatus,"Inicia sesión o crea una cuenta para publicar este vuelo.",false);
+    }
+    return false;
+  }
+  if(!eventIsOpen()){
+    if(!automatic) els.submitScoreStatus.textContent="El evento ya no está vigente. Las puntuaciones solo pueden publicarse durante el periodo oficial del evento.";
+    return false;
+  }
+  if(els.submitScoreBtn.dataset.published==="1")return true;
 
+  const pending=readPendingScore();
+  const currentResult=lastResult||pending;
+  const resultScore=Math.max(0,Number(currentResult?.score||0));
+  const resultDuration=Number(currentResult?.durationMs||0);
+  const localBest=Math.max(0,Number(stats.best||0));
+
+  // Una partida de 0 o 1 también puede servir para sincronizar un récord
+  // local antiguo. Solo rechazamos el intento si no existe ningún récord que
+  // sincronizar y tampoco hay una puntuación actual válida.
+  if(resultScore<=0 && localBest<=0){
+    if(!automatic) els.submitScoreStatus.textContent="No hay una puntuación pendiente para publicar.";
+    return false;
+  }
+
+  const typedMessage=String(els.scoreMessage.value||"").trim();
+  const savedMessage=String(currentResult?.message||"").trim();
+  const message=(typedMessage||savedMessage||"¡Buen vuelo!").slice(0,90);
+
+  if(!NEON_DATA_READY()){
+    if(!automatic) els.submitScoreStatus.textContent="No se puede publicar todavía: falta conectar el Data API de Neon.";
+    return false;
+  }
+
+  els.submitScoreBtn.disabled=true;
+  els.scoreMessage.disabled=true;
   els.submitScoreStatus.hidden=false;
-  els.submitScoreStatus.textContent="Guardando tu puntuación…";
+  if(!automatic) els.submitScoreStatus.textContent="Guardando tu puntuación en el ranking…";
 
   try{
     const authUser=await getCurrentAuthUser();
@@ -704,31 +798,87 @@ async function publishScoreInternal(options={}){
     const client=await getPublicNeonClient();
     let participantId=profile.participantId||null;
 
+    // El piloto ya quedó registrado al configurar su perfil. No repetimos esa
+    // RPC en cada publicación: evita una llamada de red y acelera el guardado.
     if(!participantId){
-      const participantResult=await client.rpc("ams_fly_register_participant",{
-        p_name:profile.name,p_country:profile.country,p_bird_id:profile.birdId,
-        p_phone:profile.phone||null,p_score:0
+      let participantResult=await client.rpc("ams_fly_register_participant",{
+        p_name:profile.name,p_country:profile.country,p_bird_id:profile.birdId,p_phone:null,p_score:0
       });
+
+      if(participantResult.error && String(participantResult.error.message||"").includes("auth_required")){
+        await new Promise(resolve=>setTimeout(resolve,350));
+        if(!await getCurrentAuthUser())throw new Error("auth_required");
+        participantResult=await client.rpc("ams_fly_register_participant",{
+          p_name:profile.name,p_country:profile.country,p_bird_id:profile.birdId,p_phone:null,p_score:0
+        });
+      }
+
       if(participantResult.error)throw participantResult.error;
       participantId=participantResult.data?.participant_id||null;
-      if(participantId){profile.participantId=participantId;saveProfile();}
+      if(participantId){
+        profile.participantId=participantId;
+        saveProfile();
+      }
     }
+
     if(!participantId)throw new Error("No se pudo identificar tu piloto.");
 
+    // El dispositivo puede conservar un récord conseguido antes de que la
+    // publicación en Neon estuviera disponible. Al terminar una nueva partida,
+    // sincronizamos ese récord local si todavía supera el récord remoto.
+    let remoteBest=0;
+    try{
+      const remote=await client.from("ams_fly_scores")
+        .select("score")
+        .eq("participant_id",participantId)
+        .order("score",{ascending:false})
+        .limit(1);
+      if(!remote.error && remote.data?.length){
+        remoteBest=Math.max(0,Number(remote.data[0].score||0));
+      }
+    }catch(_){}
+
+    const scoreToPublish=Math.max(resultScore,localBest);
+    const isLocalRecordSync=scoreToPublish>resultScore;
+    const durationToPublish=isLocalRecordSync ? null : resultDuration;
+
+    // Publicamos también partidas menores al récord. El ranking conserva
+    // el mejor puntaje, pero la publicación más reciente actualiza el ave
+    // y el mensaje que se muestran al piloto.
     const result=await client.rpc("ams_fly_submit_score",{
-      p_participant_id:participantId,p_name:profile.name,p_country:profile.country,
-      p_bird_id:profile.birdId,p_score:score,p_message:"",
-      p_duration_ms:Math.max(0,Number(lastResult.durationMs||0))
+      p_participant_id:participantId,
+      p_name:profile.name,
+      p_country:profile.country,
+      p_bird_id:profile.birdId,
+      p_score:scoreToPublish,
+      p_message:message,
+      p_duration_ms:durationToPublish
     });
+
     if(result.error)throw result.error;
 
+    els.submitScoreBtn.dataset.published="1";
+    els.submitScoreBtn.disabled=true;
+    els.scoreMessage.disabled=true;
+    els.submitScoreBtn.innerHTML="✓ PUNTUACIÓN PUBLICADA";
     els.submitScoreStatus.hidden=true;
+    clearPendingScore();
     lastResult=null;
+    playTone(880,.12,"triangle");
     return true;
   }catch(error){
-    console.error("AMS Fly: no se pudo guardar automáticamente la puntuación",error);
-    els.submitScoreStatus.hidden=false;
-    els.submitScoreStatus.textContent="No se pudo sincronizar ahora. Tu récord sigue guardado en este dispositivo.";
+    console.error("AMS Fly: error al publicar puntuación",error);
+    const raw=String(error?.message||error?.details||error?.hint||"Error desconocido de Neon Data API");
+    const detail=raw.includes("auth_required")
+      ?"La sesión no está disponible. La puntuación quedó guardada y se reintentará cuando la sesión esté disponible."
+      :raw;
+
+    // Nunca eliminamos el resultado pendiente por un fallo de red, sesión o
+    // Data API. El juego puede volver a intentarlo más adelante.
+    els.submitScoreBtn.disabled=false;
+    els.scoreMessage.disabled=false;
+    if(!automatic) els.submitScoreStatus.textContent="No se pudo publicar: "+detail;
+    else els.submitScoreStatus.textContent="Puntuación guardada localmente. Reintentaremos la publicación automáticamente.";
     return false;
   }
 }
@@ -806,15 +956,19 @@ async function loadRanking(){
   }
 }
 async function shareResult(){
-  const result=lastResult||{score:Number(els.finalScore?.textContent||0)};
+  if(!game)return;
   const cfg=getEventConfig();
-  const score=Math.max(0,Number(result.score||0));
+  const score=Number(game.score||0);
   const url=new URL("./",window.location.href).href;
-  const text="🦅 Hice "+score+" puntos en AMS Fly. ¿Puedes superarme?\n"+(cfg.title||"AMS Fly")+"\n"+url;
-  const wa="https://wa.me/?text="+encodeURIComponent(text);
-  window.open(wa,"_blank","noopener,noreferrer");
+  const text="🦅 Hice "+score+" puntos en AMS Fly. ¿Puedes superarme?\n"+(cfg.title||"Participa en el evento de AMS Fly.")+"\n"+url;
+  try{
+    if(navigator.share){await navigator.share({title:"AMS Fly",text,url});return;}
+    await navigator.clipboard.writeText(text);
+    els.submitScoreStatus.textContent="✓ Resultado copiado. Pégalo en WhatsApp o donde quieras compartirlo.";
+  }catch(error){
+    if(error?.name!=="AbortError") els.submitScoreStatus.textContent="No pudimos abrir el menú de compartir. Copia el enlace de AMS Fly y compártelo manualmente.";
+  }
 }
-
 async function ensureParticipantReady(user){
   if(!user)return false;
   await loadAccountProfile(user);
@@ -832,7 +986,7 @@ async function ensureParticipantReady(user){
 async function startWithProfile(){
   // El juego puede probarse sin cuenta y el resultado queda únicamente en
   // localStorage. Si hay una cuenta activa durante el evento, el vuelo queda
-  // vinculado al piloto y se guardará automáticamente en el ranking.
+  // vinculado al piloto y podrá publicarse en el ranking.
   if(!eventIsOpen()){
     resetGame();
     return;
@@ -998,6 +1152,7 @@ async function signInPlayer(){
     }
     populateAccountFields();
     await refreshAuthUI();
+    if(readPendingScore())restorePendingResult();
   }catch(error){
     setAuthStatus(els.authStatus,friendlyAuthError(error,"No se pudo iniciar sesión. Revisa tu correo y contraseña."),true);
   }finally{
@@ -1043,11 +1198,13 @@ async function signUpPlayer(){
       console.error("AMS Fly: cuenta creada, pero el piloto aún no se pudo sincronizar",syncError);
       setAuthStatus(els.registerStatus,"✓ Cuenta creada y datos guardados localmente. "+friendlyNeonSyncError(syncError),true);
       await refreshAuthUI();
-        navigateTo("play");
+      if(readPendingScore()&&restorePendingResult())return;
+      navigateTo("play");
       return;
     }
     localStorage.removeItem(PENDING_REG_KEY);
     saveProfile();await refreshAuthUI();
+    if(readPendingScore()&&restorePendingResult())return;
     navigateTo("play");
   }catch(error){
     const code=String(error?.code||"").toUpperCase();
@@ -1127,6 +1284,7 @@ function bootHome(){
   if(NEON_DATA_READY()) loadRemoteEventConfig();
   refreshAuthUI();updateLargeScreenRecommendation();
   setTimeout(()=>els.loadingScreen.classList.add("is-gone"),500);
+  if(restorePendingResult())return
   if(soundOn){startMusic();window.addEventListener("pointerdown",unlockMenuMusic,{once:true,passive:true,capture:true});window.addEventListener("keydown",unlockMenuMusic,{once:true})}
 }
 function navigateTo(target){
@@ -1209,6 +1367,12 @@ els.againBtn?.addEventListener("click",()=>{
   startWithProfile();
 });
 
+els.submitScoreBtn?.addEventListener("click",()=>publishScore({automatic:false}));
+els.scoreMessage?.addEventListener("input",()=>{
+  if(!lastResult)return;
+  lastResult={...lastResult,message:String(els.scoreMessage.value||"").slice(0,90)};
+  savePendingScore(lastResult);
+});
 els.shareResultBtn?.addEventListener("click",shareResult);
 
 document.querySelectorAll(".bottom-nav-item[data-nav]").forEach(btn=>btn.addEventListener("click",()=>navigateTo(btn.dataset.nav)));
