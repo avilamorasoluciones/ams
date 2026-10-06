@@ -104,23 +104,23 @@
         <div class="box panel-soft du-arena stack">
           <div id="du-status" class="muted" role="status" aria-live="polite"></div>
           <div id="du-countdown" class="du-countdown" hidden aria-live="assertive"><span id="du-countdown-number" class="du-countdown-number">5</span><small>Prepárense. Empieza el duelo.</small></div>
-          <div id="du-question"/> class="du-question"></div>
+          <div id="du-question" class="du-question"></div>
           <div id="du-point-actions" class="du-point-actions" aria-label="¿Quién ganó el punto?">
             <button id="du-point-a" class="btn primary" type="button"></button>
             <button id="du-point-b" class="btn primary" type="button"></button>
           </div>
           <div id="du-result-message" class="du-help" role="status" hidden></div>
           <div id="du-official-answer" class="du-official-answer-live" aria-live="polite"></div>
-          <div id="du-timer"/> class="du-count" aria-live="polite"></div>
+          <div id="du-timer" class="du-count" aria-live="polite"></div>
           <p id="du-pause-banner" class="muted" role="status" hidden>Duelo en pausa.</p>
         </div>
         <button id="du-pause" class="btn ghost btn-full" type="button">Pausa</button>
-        <button id="du-menu-game" class="btn ghost btn-full" type="button">Volver al menú</button>
+        <button id="du-menu-game" class="btn ghost btn-full" type="button">Salir de la partida</button>
         <div id="du-end-confirm" class="tool-overlay" role="dialog" aria-modal="true" aria-labelledby="du-end-confirm-title" tabindex="-1">
           <div class="box narrow stack tool-modal-card">
             <h2 id="du-end-confirm-title" class="game-title">¿Salir del duelo?</h2>
-            <p class="muted">La partida actual se cerrará y volverás al menú de juegos.</p>
-            <div class="row"><button id="du-end-cancel" class="btn ghost" type="button">Seguir jugando</button><button id="du-end-confirm-submit" class="btn danger" type="button">Salir al menú</button></div>
+            <p class="muted">La partida actual se cerrará y volverás a la configuración de Duelo.</p>
+            <div class="row"><button id="du-end-cancel" class="btn ghost" type="button">Seguir jugando</button><button id="du-end-confirm-submit" class="btn danger" type="button">Salir de la partida</button></div>
           </div>
         </div>
       </div>
@@ -136,6 +136,6 @@
   </main>
   <script src="scripts.js?v=20261006-53" defer></script>
   <script src="datos_nuevos.js?v=20261005-02" defer></script>
-  <script src="duelo.js?v=20261006-06" defer></script>
+  <script src="duelo.js?v=20261006-07" defer></script>
 </body>
 </html>
