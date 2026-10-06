@@ -1140,6 +1140,47 @@ body.light-theme .mobile-shortcut {
 }
 .payment-modal-cancel:hover{color:var(--light)}
 body.payment-modal-open{overflow:hidden}
+/* ===== Modal de pago · tema claro ===== */
+body.light-theme .payment-modal-backdrop{
+  background:rgba(15,23,42,.38);
+}
+body.light-theme .payment-modal-card{
+  border-color:rgba(15,23,42,.12);
+  background:linear-gradient(180deg,rgba(255,255,255,.99),rgba(248,250,252,.99));
+  box-shadow:0 28px 90px rgba(15,23,42,.22);
+  color:#0f172a;
+}
+body.light-theme .payment-modal-icon{
+  background:rgba(99,102,241,.10);
+  color:#4f46e5;
+}
+body.light-theme .payment-modal-lead{
+  color:#64748b;
+}
+body.light-theme .payment-modal-note{
+  border-color:rgba(15,23,42,.10);
+  background:rgba(15,23,42,.035);
+  color:#475569;
+}
+body.light-theme .payment-modal-note i{
+  color:#4f46e5;
+}
+body.light-theme .payment-modal-close{
+  border-color:rgba(15,23,42,.10);
+  background:rgba(15,23,42,.035);
+  color:#64748b;
+}
+body.light-theme .payment-modal-close:hover{
+  background:rgba(15,23,42,.07);
+  color:#0f172a;
+}
+body.light-theme .payment-modal-cancel{
+  color:#64748b;
+}
+body.light-theme .payment-modal-cancel:hover{
+  color:#0f172a;
+}
+
 @keyframes paymentModalIn{
   from{opacity:0;transform:translateY(8px) scale(.98)}
   to{opacity:1;transform:translateY(0) scale(1)}
