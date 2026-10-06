@@ -242,16 +242,16 @@ const Duelo = (() => {
         : "");
     $("du-next").hidden = phase !== "done";
     $("du-next").textContent = matchIndex >= matches.length - 1 ? "Ver resultado final" : "Siguiente duelo";
-    if (paused) $("du-status").textContent = "Duelo en pausa. El tiempo está detenido.";
-    else if (phase === "answer") $("du-status").textContent = "Árbitros: toquen a quien responda primero correctamente.";
+    if (paused) $("du-status").textContent = "Pausa.";
+    else if (phase === "answer") $("du-status").textContent = "¿Quién respondió primero y bien?";
     else if (phase === "done") {
       const item = history[history.length - 1];
       $("du-result-message").textContent = item?.winner
         ? "Punto para " + (getParticipant(item.winner)?.name || "el participante elegido") + "."
         : "Se acabó el tiempo. Nadie suma este duelo.";
       $("du-status").textContent = item?.winner
-        ? "Respuesta registrada por los árbitros."
-        : "No hubo una respuesta válida antes de terminar el tiempo.";
+        ? "Punto anotado."
+        : "Se acabó el tiempo.";
     } else $("du-status").textContent = "";
     renderScoreboard(pair);
   }
@@ -325,7 +325,7 @@ const Duelo = (() => {
     }
     current = pickQuestion();
     if (!current) {
-      showError("No hay preguntas válidas para esta categoría. Elige otra e inténtalo de nuevo.");
+      showError("No hay preguntas para esa categoría. Prueba otra.");
       showScreen("du-scr-lobby");
       return;
     }
@@ -342,7 +342,7 @@ const Duelo = (() => {
     captureLobbyConfig();
     const candidates = candidateIndices();
     if (!candidates.length) {
-      showError("No hay preguntas disponibles para esa categoría. Elige otra.");
+      showError("No hay preguntas para esa categoría. Prueba otra.");
       return;
     }
     const names = format === "individual"
@@ -351,7 +351,7 @@ const Duelo = (() => {
     const cleanNames = names.map(name => String(name || "").trim());
     const unique = new Set(cleanNames.map(name => name.toLocaleLowerCase("es")));
     if (unique.size !== cleanNames.length) {
-      showError("Usa nombres distintos para que los árbitros puedan identificar cada botón.");
+      showError("Usa nombres distintos para identificar a cada jugador.");
       return;
     }
     if (format === "teams") {
@@ -369,7 +369,7 @@ const Duelo = (() => {
     participants = buildParticipants();
     matches = buildMatches();
     if (!matches.length || matches.some(match => !match.a || !match.b)) {
-      showError("No se pudieron crear los duelos. Revisa los nombres e inténtalo de nuevo.");
+      showError("No pudimos crear la partida. Revisa los nombres.");
       return;
     }
     teamScores = [0, 0];
