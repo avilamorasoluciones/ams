@@ -28,6 +28,7 @@ const Duelo = (() => {
   let countdownTimer = null;
   let countdownActive = false;
   let countdownSeconds = 5;
+  let currentMatchPoints = {a:0,b:0};
   let timerEndsAt = 0;
   let remainingMs = 0;
   let paused = false;
@@ -152,7 +153,7 @@ const Duelo = (() => {
   function save() {
     if (currentScreen === "du-scr-lobby") captureLobbyConfig();
     window.GameSession?.save("duelo", {
-      schemaVersion: 5, players, mode, time, targetPoints, currentCategory,
+      schemaVersion: 5, players, mode, time, targetPoints, currentCategory, currentMatchPoints,
       participants, matches, matchIndex, playerScores, teamScores, tournamentRound, current, questionDeck,
       lastQuestionIndex, timerEndsAt, remainingMs, paused, phase, history, screen: currentScreen
     });
@@ -349,6 +350,7 @@ const Duelo = (() => {
       return;
     }
 
+    currentMatchPoints = {a:0,b:0};
     current = pickQuestion();
     if (!current) {
       showError("No hay preguntas para esa categoría. Prueba otra.");
@@ -392,7 +394,6 @@ const Duelo = (() => {
       return;
     }
     playerScores = Object.fromEntries(participants.map(player => [player.id, 0]));
-    matchScores = {a:0,b:0};
     teamScores = {0:0,1:0};
     tournamentRound = 1;
     matchIndex = 0;
@@ -424,11 +425,9 @@ const Duelo = (() => {
       if (mode === "teams") teamScores[winner.team] = (teamScores[winner.team] || 0) + 1;
 
       const winnerSide = pair?.a?.id === winner.id ? "a" : "b";
-      const sideScore = history.filter(item =>
-        item.match === matchIndex + 1 && item.pointWinner === winner.id
-      ).length + 1;
+      currentMatchPoints[winnerSide] = (currentMatchPoints[winnerSide] || 0) + 1;
 
-      if (sideScore >= targetPoints) {
+      if (currentMatchPoints[winnerSide] >= targetPoints) {
         matches[matchIndex].winner = winner.id;
       }
     }
@@ -550,8 +549,10 @@ const Duelo = (() => {
     matches = [];
     tournamentRound = 1;
     teamScores = {0:0,1:0};
+    currentMatchPoints = {a:0,b:0};
     matchIndex = 0;
     playerScores = {};
+    currentMatchPoints = {a:0,b:0};
     current = null;
     phase = "idle";
     countdownActive = false;
@@ -576,6 +577,7 @@ const Duelo = (() => {
       ? state.currentCategory : "Todas";
     participants = Array.isArray(state.participants) ? state.participants : [];
     matches = Array.isArray(state.matches) ? state.matches : [];
+    currentMatchPoints = state.currentMatchPoints && typeof state.currentMatchPoints === "object" ? state.currentMatchPoints : {a:0,b:0};
     matchIndex = Math.max(0, Number(state.matchIndex || 0));
     playerScores = state.playerScores && typeof state.playerScores === "object" ? state.playerScores : {};
     teamScores = state.teamScores && typeof state.teamScores === "object" ? state.teamScores : {0:0,1:0};
