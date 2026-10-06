@@ -172,13 +172,11 @@
           <div><span>PARTIDAS</span><strong id="resultGames">0</strong></div>
         </div>
         <p id="newRecord" class="new-record" hidden>🏆 NUEVO RÉCORD</p>
-        <label class="message-label" hidden>MENSAJE PARA EL RANKING
-          <textarea id="scoreMessage" maxlength="90" aria-hidden="true"></textarea>
-        </label>
         <button id="submitScoreBtn" class="primary-button" type="button" hidden aria-hidden="true">PUBLICAR PUNTUACIÓN</button>
-        <p id="submitScoreStatus" class="submit-status" role="status">La puntuación se guarda automáticamente si tienes cuenta.</p>
-        <button id="shareResultBtn" class="secondary-button" type="button">↗ COMPARTIR EN WHATSAPP</button>
+        <span id="submitScoreStatus" class="submit-status" role="status" hidden aria-hidden="true"></span>
         <button id="againBtn" class="primary-button" type="button">OTRA PARTIDA <span>↻</span></button>
+        <div class="result-share-gap"></div>
+        <button id="shareResultBtn" class="secondary-button" type="button">↗ COMPARTIR EN WHATSAPP</button>
       </div>
     </section>
 
@@ -186,7 +184,7 @@
       <div class="ranking-heading">
         <span class="eyebrow">AMS FLY · MUNDO</span>
         <h2>Ranking mundial</h2>
-        <p>Los pilotos, sus aves, sus puntos y las palabras que dejaron en el camino.</p>
+        <p>Los pilotos, sus aves y sus puntos.</p>
       </div>
       <div class="ranking-toolbar">
         <button id="rankingRefreshBtn" class="secondary-button" type="button">↻ ACTUALIZAR</button>
