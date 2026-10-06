@@ -421,8 +421,7 @@ const Duelo = (() => {
       return;
     }
     tournamentRound += 1;
-    participants = winners.map(id => getParticipant(id)).filter(Boolean);
-    matches = buildMatches(participants);
+    matches = buildMatches(winners.map(id => getParticipant(id)).filter(Boolean));
     matchIndex = 0;
     history.push({ round: tournamentRound, transition: true, winner: "" });
     beginMatch();
