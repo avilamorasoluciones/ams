@@ -251,7 +251,7 @@ const Duelo = (() => {
       const item = history[history.length - 1];
       $("du-result-message").textContent = item?.winner
         ? "🏆 " + (getParticipant(item.winner)?.name || "el jugador elegido") + " ganó el duelo con " + targetPoints + " puntos."
-        : item?.pointWinner ? "Punto para " + (getParticipant(item.pointWinner)?.name || "el jugador elegido") + "."
+        : item?.pointWinner ? "Punto para " + (getParticipant(item.pointWinner)?.name || "el jugador elegido") + ". Continúa la pelea."
         : "Se acabó el tiempo. Nadie suma este duelo.";
       $("du-status").textContent = item?.winner ? "Punto anotado." : "Se acabó el tiempo.";
     } else $("du-status").textContent = "";
@@ -449,6 +449,11 @@ const Duelo = (() => {
 
   function advance() {
     if (phase !== "done") return;
+    const finishedMatch = Boolean(matches[matchIndex]?.winner);
+    if (!finishedMatch) {
+      beginMatch();
+      return;
+    }
     matchIndex += 1;
     if (mode === "tournament" && matchIndex >= matches.length) {
       prepareNextTournamentRound();
