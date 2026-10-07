@@ -16,6 +16,8 @@ const Duelo = (() => {
   let targetPoints = 10;
   let currentCategory = "Todas";
   let teamNames = ["Equipo 1", "Equipo 2"];
+  let teamCount = 2;
+  let teams = [];
   let participants = [];
   let matches = [];
   let matchIndex = 0;
@@ -153,20 +155,19 @@ const Duelo = (() => {
     time = Number($("du-time")?.value || 12);
     const targetSelect = $("du-target")?.value || "10";
     const customTarget = Number($("du-custom-target")?.value || 10);
-    targetPoints = targetSelect === "custom" ? customTarget : Number(targetSelect);
-    targetPoints = normalizeTargetPoints(targetPoints);
+    targetPoints = normalizeTargetPoints(targetSelect === "custom" ? customTarget : Number(targetSelect));
     currentCategory = $("du-cat")?.value || "Todas";
-    teamNames = [
-      ($("du-team-name-a")?.value || "Equipo 1").trim() || "Equipo 1",
-      ($("du-team-name-b")?.value || "Equipo 2").trim() || "Equipo 2"
-    ];
+    teamCount = Math.min(5, Math.max(2, Number($("du-team-count")?.value || 2)));
+    teamNames = Array.from({ length: teamCount }, (_, index) =>
+      ($("du-team-name-" + index)?.value || "Equipo " + (index + 1)).trim() || "Equipo " + (index + 1)
+    );
   }
 
   function save() {
     if (currentScreen === "du-scr-lobby") captureLobbyConfig();
     window.GameSession?.save("duelo", {
-      schemaVersion: 8,
-      players, mode, time, targetPoints, currentCategory, teamNames,
+      schemaVersion: 9,
+      players, mode, time, targetPoints, currentCategory, teamNames, teamCount, teams,
       currentMatchPoints, participants, matches, matchIndex, playerScores, teamScores,
       tournamentRound, current, questionDeck, lastQuestionIndex, timerEndsAt,
       remainingMs, paused, phase, history, eliminated, teamMatchFinished,
@@ -194,24 +195,34 @@ const Duelo = (() => {
     if ($("du-target")) $("du-target").value = [5, 10, 20].includes(targetPoints) ? String(targetPoints) : "custom";
     if ($("du-custom-target")) $("du-custom-target").value = String(targetPoints);
     if ($("du-custom-target-wrap")) $("du-custom-target-wrap").hidden = $("du-target")?.value !== "custom";
-    if ($("du-team-name-a")) $("du-team-name-a").value = teamNames[0] || "Equipo 1";
-    if ($("du-team-name-b")) $("du-team-name-b").value = teamNames[1] || "Equipo 2";
+    if ($("du-team-count")) $("du-team-count").value = String(teamCount);
+    renderTeamNameFields();
     updateModeUI();
     renderCategories();
     renderPlayers();
+  }
+
+  function renderTeamNameFields() {
+    const container = $("du-team-name-fields");
+    if (!container) return;
+    container.innerHTML = Array.from({ length: teamCount }, (_, index) => {
+      const value = esc(teamNames[index] || "Equipo " + (index + 1));
+      return '<label>Nombre del equipo ' + (index + 1) + '<input id="du-team-name-' + index + '" type="text" maxlength="24" value="' + value + '" autocomplete="off"></label>';
+    }).join("");
   }
 
   function updateModeUI() {
     const teamMode = mode === "teams" || mode === "teamTournament";
     const names = $("du-team-names");
     if (names) names.hidden = !teamMode;
+    if (teamMode) renderTeamNameFields();
     const help = $("du-mode-help");
     if (!help) return;
     const copy = {
-      all: "Todos contra todos: todos los jugadores se enfrentan entre sí una vez. Los puntos se acumulan por jugador y al final se muestran oro, plata y bronce.",
-      tournament: "Torneo contra todos: eliminación directa. Los cruces son aleatorios; si el número es impar, un jugador pasa de ronda automáticamente. Al final se reconocen oro, plata y bronce.",
-      teams: "Equipos: los jugadores se reparten al azar en dos equipos lo más equilibrados posible. Los puntos son del equipo, no de cada jugador.",
-      teamTournament: "Torneo por equipos: se forman dos equipos al azar y juegan por eliminación. Los puntos pertenecen al equipo."
+      all: "Todos contra todos: cada jugador se enfrenta a todos los demás una vez. El calendario se organiza por jornadas para evitar que alguien juegue duelos consecutivos cuando sea posible.",
+      tournament: "Torneo contra todos: eliminación directa individual. Los cruces son aleatorios y los jugadores avanzan por rondas; si hace falta, se asignan descansos automáticos.",
+      teams: "Equipos: elige de 2 a 5 equipos. Los jugadores se reparten al azar y de forma equilibrada. Todos los equipos se enfrentan entre sí y los puntos pertenecen al equipo.",
+      teamTournament: "Torneo por equipos: elige de 2 a 5 equipos. Se sortean los equipos y se enfrentan por eliminación directa, con descansos automáticos cuando haga falta."
     };
     help.textContent = copy[mode] || copy.all;
   }
@@ -224,21 +235,25 @@ const Duelo = (() => {
     return (Array.isArray(ids) ? ids : [ids]).map(getParticipant).filter(Boolean);
   }
 
+  function matchTeamIndex(match, side) {
+    if (!isTeamMode()) return -1;
+    return side === "a" ? Number(match?.teamAIndex) : Number(match?.teamBIndex);
+  }
+
   function sideLabel(match, side) {
     const members = getSideMembers(match?.[side]);
     if (isTeamMode()) {
-      const teamIndex = side === "a" ? 0 : 1;
-      return teamNames[teamIndex] || "Equipo " + (teamIndex + 1);
+      const teamIndex = matchTeamIndex(match, side);
+      return teams[teamIndex]?.name || teamNames[teamIndex] || "Equipo " + (teamIndex + 1);
     }
     return members.map(player => player.name).join(" y ") || "Jugador";
   }
 
   function sideSubLabel(match, side) {
     const members = getSideMembers(match?.[side]);
-    if (isTeamMode()) {
-      return "Juega: " + (members.map(player => player.name).join(" y ") || "sin jugadores");
-    }
-    return "Jugador";
+    return isTeamMode()
+      ? "Juega: " + (members.map(player => player.name).join(" y ") || "sin jugadores")
+      : "Jugador";
   }
 
   function isTeamMode() {
@@ -344,7 +359,7 @@ const Duelo = (() => {
     phase = "preturn";
 
     if (mode === "tournament" || mode === "teamTournament") {
-      while (matches[matchIndex] && !matches[matchIndex].b) {
+      while (matches[matchIndex] && (!matches[matchIndex].b?.length || matches[matchIndex].teamBIndex === null)) {
         const bracketMatch = matches[matchIndex];
         bracketMatch.winner = bracketMatch.a;
         history.push({
@@ -367,6 +382,11 @@ const Duelo = (() => {
       }
     }
 
+    if (!currentMatch() || !currentMatch().a?.length || !currentMatch().b?.length) {
+      if (mode === "tournament" || mode === "teamTournament") prepareNextTournamentRound();
+      else finish();
+      return;
+    }
     renderPreturn();
     showScreen("du-scr-preturn");
   }
@@ -436,62 +456,95 @@ const Duelo = (() => {
   }
 
   function buildParticipants() {
-    return players.map((name, index) => ({
-      id: "p" + index,
-      name,
-      team: -1
-    }));
+    return players.map((name, index) => ({ id: "p" + index, name, team: -1 }));
+  }
+
+  function buildRoundRobin(ids) {
+    const pool = [...ids];
+    if (pool.length % 2) pool.push(null);
+    const rounds = [];
+    const working = [...pool];
+    const half = working.length / 2;
+    for (let round = 0; round < working.length - 1; round += 1) {
+      const pairs = [];
+      for (let i = 0; i < half; i += 1) {
+        const a = working[i], b = working[working.length - 1 - i];
+        if (a !== null && b !== null) pairs.push([a, b]);
+      }
+      rounds.push(pairs);
+      const fixed = working[0];
+      const rest = working.slice(1);
+      rest.unshift(rest.pop());
+      working.splice(0, working.length, fixed, ...rest);
+    }
+    return rounds;
   }
 
   function splitTeams() {
     const shuffled = shuffle(participants);
-    const half = Math.ceil(shuffled.length / 2);
-    const teamA = shuffled.slice(0, half);
-    const teamB = shuffled.slice(half);
-    participants.forEach(player => {
-      player.team = teamA.some(member => member.id === player.id) ? 0 : 1;
+    teams = Array.from({ length: teamCount }, (_, index) => ({
+      index, name: teamNames[index] || "Equipo " + (index + 1), playerIds: []
+    }));
+    shuffled.forEach((player, index) => {
+      const teamIndex = index % teamCount;
+      player.team = teamIndex;
+      teams[teamIndex].playerIds.push(player.id);
     });
-    return [teamA.map(player => player.id), teamB.map(player => player.id)];
+    teamScores = Object.fromEntries(teams.map(team => [team.index, 0]));
+    return teams;
   }
 
   function buildAllMatches() {
-    const shuffled = shuffle(participants);
-    const result = [];
-    for (let i = 0; i < shuffled.length; i += 1) {
-      for (let j = i + 1; j < shuffled.length; j += 1) {
-        result.push({ a: [shuffled[i].id], b: [shuffled[j].id], winner: null });
-      }
-    }
-    return shuffle(result);
+    const rounds = buildRoundRobin(participants.map(player => player.id));
+    return rounds.flatMap((pairs, roundIndex) => pairs.map((pair, matchInRound) => ({
+      a: [pair[0]], b: [pair[1]], winner: null,
+      scheduleRound: roundIndex + 1, scheduleMatch: matchInRound + 1
+    })));
   }
 
   function buildTournamentMatches(poolIds) {
     const shuffled = shuffle(poolIds.map(id => getParticipant(id)).filter(Boolean));
     const result = [];
     for (let i = 0; i < shuffled.length; i += 2) {
-      result.push({
-        a: shuffled[i] ? [shuffled[i].id] : [],
-        b: shuffled[i + 1] ? [shuffled[i + 1].id] : [],
-        winner: null
-      });
+      result.push({ a: shuffled[i] ? [shuffled[i].id] : [], b: shuffled[i + 1] ? [shuffled[i + 1].id] : [], winner: null });
     }
     return result;
   }
 
-  function buildTeamMatch(teamA, teamB) {
+  function buildTeamMatch(teamAIndex, teamBIndex) {
     return {
-      a: [...teamA],
-      b: [...teamB],
-      winner: null,
-      teamMatch: true
+      a: [...(teams[teamAIndex]?.playerIds || [])],
+      b: [...(teams[teamBIndex]?.playerIds || [])],
+      teamAIndex, teamBIndex, winner: null, teamMatch: true
     };
+  }
+
+  function buildTeamRoundRobinMatches() {
+    return buildRoundRobin(teams.map(team => team.index)).flatMap((pairs, roundIndex) =>
+      pairs.map((pair, matchInRound) => ({
+        ...buildTeamMatch(pair[0], pair[1]),
+        scheduleRound: roundIndex + 1, scheduleMatch: matchInRound + 1
+      }))
+    );
+  }
+
+  function buildTeamTournamentMatches(poolTeamIndices) {
+    const shuffled = shuffle(poolTeamIndices);
+    const result = [];
+    for (let i = 0; i < shuffled.length; i += 2) {
+      const a = shuffled[i], b = shuffled[i + 1];
+      result.push(b === undefined
+        ? { a: [...(teams[a]?.playerIds || [])], b: [], teamAIndex: a, teamBIndex: null, winner: [...(teams[a]?.playerIds || [])], teamMatch: true }
+        : buildTeamMatch(a, b));
+    }
+    return result;
   }
 
   function buildInitialMatches() {
     if (mode === "all") return buildAllMatches();
     if (mode === "tournament") return buildTournamentMatches(participants.map(player => player.id));
-    const [teamA, teamB] = splitTeams();
-    return [buildTeamMatch(teamA, teamB)];
+    splitTeams();
+    return mode === "teams" ? buildTeamRoundRobinMatches() : buildTeamTournamentMatches(teams.map(team => team.index));
   }
 
   function beginMatch() {
@@ -528,10 +581,16 @@ const Duelo = (() => {
   function startGame() {
     captureLobbyConfig();
     const cleanNames = players.map(name => String(name || "").trim()).filter(Boolean);
-    const minimum = isTeamMode() ? 4 : 2;
-    if (cleanNames.length < minimum) {
-      showError("Agrega mínimo " + minimum + " jugadores para este modo.");
+    if (cleanNames.length < 2) {
+      showError("Agrega mínimo 2 jugadores para este modo.");
       return;
+    }
+    if (isTeamMode()) {
+      const selectedTeams = Math.min(5, Math.max(2, Number($("du-team-count")?.value || 2)));
+      if (cleanNames.length < selectedTeams * 2) {
+        showError("Para " + selectedTeams + " equipos necesitas al menos " + (selectedTeams * 2) + " jugadores. Actualmente hay " + cleanNames.length + ".");
+        return;
+      }
     }
     const unique = new Set(cleanNames.map(name => name.toLocaleLowerCase("es")));
     if (unique.size !== cleanNames.length) {
@@ -545,7 +604,8 @@ const Duelo = (() => {
     matches = [];
     matchIndex = 0;
     playerScores = Object.fromEntries(participants.map(player => [player.id, 0]));
-    teamScores = {0: 0, 1: 0};
+    teamScores = {};
+    teams = [];
     currentMatchPoints = {a: 0, b: 0};
     tournamentRound = 1;
     history = [];
@@ -558,14 +618,7 @@ const Duelo = (() => {
     teamMatchFinished = false;
     showError("");
 
-    if (mode === "all") {
-      matches = buildAllMatches();
-    } else if (mode === "tournament") {
-      matches = buildTournamentMatches(participants.map(player => player.id));
-    } else {
-      const [teamA, teamB] = splitTeams();
-      matches = [buildTeamMatch(teamA, teamB)];
-    }
+    matches = buildInitialMatches();
 
     if (!matches.length) {
       showError("No pudimos crear los enfrentamientos. Revisa los jugadores.");
@@ -654,75 +707,54 @@ const Duelo = (() => {
   }
 
   function prepareNextTournamentRound() {
-    if (mode !== "tournament" && mode !== "teamTournament") {
-      finish();
-      return;
-    }
+    if (mode !== "tournament" && mode !== "teamTournament") return finish();
 
-    const winners = matches.map(match => Array.isArray(match.winner) ? match.winner : []).filter(ids => ids.length);
-    if (winners.length <= 1) {
-      finish();
-      return;
-    }
+    const played = matches.filter(match => match?.winner?.length);
+    const winners = played.map(match => match.winner);
+    if (winners.length <= 1) return finish();
 
     if (mode === "teamTournament") {
-      // Este modo usa dos equipos: la final se resuelve en un solo enfrentamiento.
-      const teamA = participants.filter(player => player.team === 0).map(player => player.id);
-      const teamB = participants.filter(player => player.team === 1).map(player => player.id);
-      if (winners.length >= 2) {
-        matches = [buildTeamMatch(teamA, teamB)];
-        matchIndex = 0;
-        tournamentRound += 1;
-        currentMatchPoints = {a: 0, b: 0};
-        history.push({ round: tournamentRound, transition: true });
-        showNextMatchScreen();
-        return;
-      }
+      const winnerTeams = played.map(match => {
+        const winnerId = match.winner[0];
+        return match.a?.includes(winnerId) ? match.teamAIndex : match.teamBIndex;
+      }).filter(Number.isInteger);
+      if (winnerTeams.length <= 1) return finish();
+      tournamentRound += 1;
+      matches = buildTeamTournamentMatches(winnerTeams);
+      matchIndex = 0;
+      currentMatchPoints = {a: 0, b: 0};
+      showNextMatchScreen();
+      return;
     }
 
-    const winnerIds = winners.flat();
     tournamentRound += 1;
-    matches = buildTournamentMatches(winnerIds);
+    matches = buildTournamentMatches(winners.flat());
     matchIndex = 0;
     currentMatchPoints = {a: 0, b: 0};
-    history.push({ round: tournamentRound, transition: true });
     showNextMatchScreen();
   }
 
   function getIndividualPlacements() {
     if (mode !== "tournament") return [];
     const finals = history.filter(item => item.question && item.winner?.length);
-    const lastRound = Math.max(1, ...finals.map(item => item.round || 1));
+    if (!finals.length) return [];
+    const lastRound = Math.max(...finals.map(item => item.round || 1));
     const finalMatch = finals.filter(item => item.round === lastRound).at(-1);
-    const goldId = finalMatch?.winner?.[0] || null;
-    const silverId = finalMatch?.pointWinner?.length
-      ? null
-      : null;
-
-    const lastPlayed = finals.filter(item => item.round === lastRound);
-    const runner = lastPlayed.length
-      ? lastPlayed[lastPlayed.length - 1]
-      : null;
-    const finalWinner = runner?.winner?.[0] || goldId;
-    const finalA = runner?.a?.[0] || null;
-    const finalB = runner?.b?.[0] || null;
+    const finalWinner = finalMatch?.winner?.[0] || null;
+    const finalA = finalMatch?.a?.[0] || null;
+    const finalB = finalMatch?.b?.[0] || null;
     const silver = finalWinner === finalA ? finalB : finalA;
-
-    const bronze = [];
-    if (lastRound <= 1) return placements;
-    const semiRound = lastRound - 1;
-    history.filter(item => item.question && item.round === semiRound && item.winner?.length).forEach(item => {
-      const a = item.a?.[0];
-      const b = item.b?.[0];
-      const winner = item.winner[0];
-      const loser = winner === a ? b : a;
-      if (loser) bronze.push(loser);
-    });
-
     const placements = [];
     if (finalWinner) placements.push({ medal: "🥇", label: "Oro", ids: [finalWinner] });
     if (silver) placements.push({ medal: "🥈", label: "Plata", ids: [silver] });
-    if (bronze.length) placements.push({ medal: "🥉", label: "Bronce", ids: bronze });
+    if (lastRound > 1) {
+      const bronze = [];
+      history.filter(item => item.question && item.round === lastRound - 1 && item.winner?.length).forEach(item => {
+        const loser = item.winner[0] === item.a?.[0] ? item.b?.[0] : item.a?.[0];
+        if (loser) bronze.push(loser);
+      });
+      if (bronze.length) placements.push({ medal: "🥉", label: "Bronce", ids: bronze });
+    }
     return placements;
   }
 
@@ -739,55 +771,40 @@ const Duelo = (() => {
   }
 
   function getTeamPlacements() {
-    const winnerTeam = teamScores[0] >= teamScores[1] ? 0 : 1;
-    const loserTeam = winnerTeam === 0 ? 1 : 0;
-    if (mode === "teamTournament") {
-      return [
-        { medal: "🥇", label: "Oro", team: winnerTeam },
-        { medal: "🥈", label: "Plata", team: loserTeam }
-      ];
+    if (!teams.length) return [];
+    if (mode === "teams") {
+      const ranking = teams.map(team => ({ team, score: teamScores[team.index] || 0 }))
+        .sort((a,b) => b.score - a.score || a.team.index - b.team.index);
+      return ranking.slice(0,3).map((item,index) => ({
+        medal:["🥇","🥈","🥉"][index], label:["Oro","Plata","Bronce"][index],
+        team:item.team.index, score:item.score
+      }));
     }
-    return [
-      { medal: "🥇", label: "Oro", team: winnerTeam },
-      { medal: "🥈", label: "Plata", team: loserTeam }
-    ];
-  }
-
-  function renderPodium() {
-    if (mode === "all") {
-      return getPodiumByPoints().map(item => {
-        const p = getParticipant(item.ids[0]);
-        return '<div class="du-result-row"><span>' + item.medal + " " + item.label + " · " + esc(p?.name || "Jugador") +
-          '</span><strong>' + item.score + " pts</strong></div>";
-      }).join("");
+    const finals = history.filter(item => item.teamMode && item.question && item.winner?.length);
+    if (!finals.length) return [];
+    const lastRound = Math.max(...finals.map(item => item.round || 1));
+    const finalMatch = finals.filter(item => item.round === lastRound).at(-1);
+    const winnerId = finalMatch.winner[0];
+    const winnerTeam = finalMatch.a.includes(winnerId) ? finalMatch.teamAIndex : finalMatch.teamBIndex;
+    const loserTeam = winnerTeam === finalMatch.teamAIndex ? finalMatch.teamBIndex : finalMatch.teamAIndex;
+    const placements = [];
+    if (Number.isInteger(winnerTeam)) placements.push({medal:"🥇",label:"Oro",team:winnerTeam});
+    if (Number.isInteger(loserTeam)) placements.push({medal:"🥈",label:"Plata",team:loserTeam});
+    if (lastRound > 1) {
+      const bronzeCandidates = [];
+      finals.filter(item => item.round === lastRound - 1).forEach(item => {
+        const winner = item.winner[0];
+        const winningTeam = item.a.includes(winner) ? item.teamAIndex : item.teamBIndex;
+        const losingTeam = winningTeam === item.teamAIndex ? item.teamBIndex : item.teamAIndex;
+        if (Number.isInteger(losingTeam)) bronzeCandidates.push(losingTeam);
+      });
+      if (bronzeCandidates.length) placements.push({medal:"🥉",label:"Bronce",team:bronzeCandidates[0]});
     }
-
-    if (mode === "tournament") {
-      return getIndividualPlacements().map(item => {
-        const names = item.ids.map(id => getParticipant(id)?.name || "Jugador").join(" y ");
-        return '<div class="du-result-row"><span>' + item.medal + " " + item.label + " · " + esc(names) + "</span></div>";
-      }).join("");
-    }
-
-    return getTeamPlacements().map(item => {
-      const members = participants.filter(player => player.team === item.team).map(player => player.name).join(" y ");
-      return '<div class="du-result-row"><span>' + item.medal + " " + item.label + " · " + esc(teamNames[item.team]) +
-        '</span><strong>' + (teamScores[item.team] || 0) + " pts</strong></div>" +
-        '<div class="muted">Juega: ' + esc(members) + "</div>";
-    }).join("");
+    return placements;
   }
 
   function resultSummary() {
-    if (mode === "all") {
-      return '<div class="du-help"><strong>Clasificación final</strong><p class="muted">Solo se muestran oro, plata y bronce.</p></div>' +
-        renderPodium();
-    }
-    if (mode === "tournament") {
-      return '<div class="du-help"><strong>Clasificación del torneo</strong><p class="muted">Eliminación directa. Solo se muestran oro, plata y bronce.</p></div>' +
-        renderPodium();
-    }
-    return '<div class="du-help"><strong>Resultado por equipos</strong><p class="muted">El puntaje pertenece al equipo.</p></div>' +
-      renderPodium();
+    return '<div class="du-result-podium"><strong>Clasificación final</strong>' + renderPodium() + '</div>';
   }
 
   function finish() {
@@ -868,7 +885,8 @@ const Duelo = (() => {
     participants = [];
     matches = [];
     tournamentRound = 1;
-    teamScores = {0: 0, 1: 0};
+    teamScores = {};
+    teams = [];
     currentMatchPoints = {a: 0, b: 0};
     matchIndex = 0;
     playerScores = {};
@@ -889,16 +907,17 @@ const Duelo = (() => {
   }
 
   function restore(state) {
-    if (!state || state.schemaVersion !== 8) return false;
+    if (!state || state.schemaVersion !== 9) return false;
     players = Array.isArray(state.players) ? state.players.filter(name => typeof name === "string" && name.trim()) : players;
     mode = ["all", "tournament", "teams", "teamTournament"].includes(state.mode) ? state.mode : "all";
     time = Number(state.time || 12);
     targetPoints = normalizeTargetPoints(state.targetPoints || 10);
     currentCategory = state.currentCategory === "Todas" || ranges.some(range => range[0] === state.currentCategory)
       ? state.currentCategory : "Todas";
-    teamNames = Array.isArray(state.teamNames) && state.teamNames.length >= 2
-      ? [String(state.teamNames[0] || "Equipo 1"), String(state.teamNames[1] || "Equipo 2")]
-      : ["Equipo 1", "Equipo 2"];
+    teamCount = Math.min(5, Math.max(2, Number(state.teamCount || state.teamNames?.length || 2)));
+    teamNames = Array.isArray(state.teamNames) ? state.teamNames.map(String).slice(0, teamCount) : [];
+    while (teamNames.length < teamCount) teamNames.push("Equipo " + (teamNames.length + 1));
+    teams = Array.isArray(state.teams) ? state.teams : [];
     participants = Array.isArray(state.participants) ? state.participants : [];
     matches = Array.isArray(state.matches) ? state.matches : [];
     currentMatchPoints = state.currentMatchPoints && typeof state.currentMatchPoints === "object"
@@ -996,8 +1015,18 @@ const Duelo = (() => {
     });
     $("du-target")?.addEventListener("change", () => { captureLobbyConfig(); syncConfig(); save(); });
     $("du-custom-target")?.addEventListener("input", () => { if ($("du-target")?.value === "custom") { captureLobbyConfig(); save(); } });
-    $("du-team-name-a")?.addEventListener("input", () => { captureLobbyConfig(); save(); });
-    $("du-team-name-b")?.addEventListener("input", () => { captureLobbyConfig(); save(); });
+    $("du-team-count")?.addEventListener("change", event => {
+      teamCount = Math.min(5, Math.max(2, Number(event.target.value || 2)));
+      renderTeamNameFields();
+      captureLobbyConfig();
+      save();
+    });
+    $("du-team-name-fields")?.addEventListener("input", event => {
+      if (event.target.matches("input[id^='du-team-name-']")) {
+        captureLobbyConfig();
+        save();
+      }
+    });
     $("du-inpName").onkeydown = event => {
       if (event.key === "Enter") {
         event.preventDefault();
