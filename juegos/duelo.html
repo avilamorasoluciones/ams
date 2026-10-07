@@ -13,6 +13,9 @@
     #du-scr-lobby[hidden],#du-scr-preturn[hidden],#du-scr-game[hidden],#du-scr-result[hidden],#du-point-actions[hidden],#du-result-message[hidden],#du-official-answer[hidden],#du-pause[hidden],#du-next[hidden],#du-countdown[hidden]{display:none!important}
     .du-config-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
     .du-mode-help{margin:0;color:var(--muted);font-size:.88rem;line-height:1.5;font-weight:700}
+    .du-team-names{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    .du-team-names label{font-weight:800}
+
     .du-config-grid label{font-weight:800}
     .du-player-list{display:grid;gap:8px}
     .du-help{padding:14px;border:1px solid var(--border-light);border-radius:14px;background:var(--player-bg);line-height:1.5}
@@ -48,7 +51,7 @@
     .du-history{display:grid;gap:8px}
     .du-history div{padding:10px;border-radius:10px;background:var(--player-bg)}
     @media(max-width:600px){
-      .du-config-grid,.du-roster-grid{grid-template-columns:1fr}
+      .du-config-grid,.du-roster-grid,.du-team-names{grid-template-columns:1fr}
       .du-matchup{gap:7px}
       .du-preturn-matchup{gap:7px}
       .du-preturn-player{padding:14px 7px}
@@ -83,13 +86,17 @@
         <div class="box panel-soft stack">
           <h2 class="section-title">Partida</h2>
           <div class="du-config-grid">
-            <label>Modo de juego<select id="du-mode"><option value="duel">⚔️ 1 vs. 1</option><option value="tournament">🏆 Torneo</option><option value="teams">👥 Equipos</option></select></label>
+            <label>Modo de juego<select id="du-mode"><option value="all" selected>👥 Todos contra todos</option><option value="tournament">🏆 Torneo contra todos</option><option value="teams">🤝 Equipos</option><option value="teamTournament">🏆 Torneo por equipos</option></select></label>
             <label>Categoría<select id="du-cat"></select></label>
             <label>Tiempo por pregunta<select id="du-time"><option value="8">8 segundos</option><option value="12" selected>12 segundos</option><option value="20">20 segundos</option><option value="30">30 segundos</option><option value="60">1 minuto</option></select></label>
             <label>Puntos para ganar<select id="du-target"><option value="5">5 puntos</option><option value="10" selected>10 puntos</option><option value="20">20 puntos</option><option value="custom">Personalizado</option></select></label>
             <label id="du-custom-target-wrap" hidden>Puntos personalizados<input id="du-custom-target" type="number" min="1" max="1000" value="10" inputmode="numeric"></label>
           </div>
-          <p class="du-mode-help">Todo es automático: el moderador lee la pregunta, mira la respuesta correcta y pulsa quién acertó primero. La siguiente pregunta aparece inmediatamente. La pelea continúa hasta que alguien llega a los puntos elegidos. Al terminar, se muestra el historial completo.</p>
+          <p id="du-mode-help" class="du-mode-help">Todos contra todos: todos los jugadores se enfrentan entre sí una vez. Los puntos se acumulan por jugador y al final se muestran oro, plata y bronce.</p>
+          <div id="du-team-names" class="du-team-names" hidden>
+            <label>Nombre del equipo 1<input id="du-team-name-a" type="text" maxlength="24" value="Equipo 1" autocomplete="off"></label>
+            <label>Nombre del equipo 2<input id="du-team-name-b" type="text" maxlength="24" value="Equipo 2" autocomplete="off"></label>
+          </div>
         </div>
 
         <div class="box panel-soft stack">
@@ -170,6 +177,6 @@
   </main>
   <script src="scripts.js?v=20261006-54" defer></script>
   <script src="datos_nuevos.js?v=20261005-02" defer></script>
-  <script src="duelo.js?v=20261006-09" defer></script>
+  <script src="duelo.js?v=20261006-10" defer></script>
 </body>
 </html>
