@@ -298,8 +298,8 @@ const Duelo = (() => {
     $("du-point-a").disabled = !isAnswer;
     $("du-point-b").disabled = !isAnswer;
     $("du-result-message").hidden = true;
-    $("du-official-answer").hidden = !current;
-    $("du-official-answer").textContent = current ? "Respuesta correcta: " + answerText(current.index) : "";
+    $("du-official-answer").hidden = true;
+    $("du-official-answer").textContent = "";
     $("du-countdown").hidden = !countdownActive;
     $("du-countdown-number").textContent = String(Math.max(0, countdownActive ? countdownSeconds : 0));
     $("du-countdown").querySelector("small").textContent = "Prepárense. Empieza el duelo.";
