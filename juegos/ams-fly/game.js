@@ -1026,6 +1026,9 @@ async function startWithProfile(){
       setAuthStatus(els.accountStatus,"Completa y guarda tus datos de cuenta para participar en el ranking.",true);
       return;
     }
+    if(els.gameStartHint){
+      els.gameStartHint.innerHTML="<strong>TOCA PARA VOLAR</strong><span>Tu cuenta está activa. Tu progreso válido se guardará en el ranking y tu participación quedará vinculada al evento.</span>";
+    }
     resetGame();
   }catch(error){
     console.error("AMS Fly: no se pudo preparar el vuelo",error);
