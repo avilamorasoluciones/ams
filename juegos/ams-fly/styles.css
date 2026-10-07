@@ -525,7 +525,7 @@ button{cursor:pointer}
 .game-bird-grid .bird-option-copy{align-self:center}
 .game-bird-grid .bird-option strong{font-size:.76rem}
 .game-bird-grid .bird-option small{font-size:.6rem}
-.bottom-nav{position:fixed;z-index:90;left:50%;bottom:max(10px,var(--safe-bottom));transform:translateX(-50%);width:min(390px,calc(100% - 24px));height:70px;padding:7px;display:grid;grid-template-columns:repeat(5,1fr);gap:6px;border:1px solid rgba(255,255,255,.13);border-radius:24px;background:rgba(13,12,31,.94);backdrop-filter:blur(22px);-webkit-backdrop-filter:blur(22px);box-shadow:0 20px 60px rgba(0,0,0,.48)}
+.bottom-nav{position:fixed;z-index:90;left:50%;bottom:max(10px,var(--safe-bottom));transform:translateX(-50%);width:min(390px,calc(100% - 24px));height:70px;padding:7px;display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:5px;border:1px solid rgba(255,255,255,.13);border-radius:24px;background:rgba(13,12,31,.94);backdrop-filter:blur(22px);-webkit-backdrop-filter:blur(22px);box-shadow:0 20px 60px rgba(0,0,0,.48)}
 .bottom-nav[hidden]{display:none!important}
 .bottom-nav-item{position:relative;border:0;background:transparent;color:#858aa4;border-radius:18px;display:grid;place-items:center;font-size:1.42rem;transition:transform .18s ease,background .18s ease,color .18s ease,box-shadow .18s ease;min-width:0}
 .bottom-nav-item span{display:block;line-height:1}
@@ -536,7 +536,7 @@ button{cursor:pointer}
 .bottom-nav-item:disabled{opacity:.3;cursor:not-allowed}
 @media(max-width:520px){
   .bottom-nav{width:calc(100% - 20px);height:68px;border-radius:23px}
-  .bottom-nav-item{font-size:1.32rem;border-radius:17px}
+  .bottom-nav-item{font-size:1.28rem;border-radius:17px}
 }
 @media(min-width:700px){
   .bottom-nav{width:390px}
@@ -740,6 +740,15 @@ button{cursor:pointer}
   letter-spacing:.04em;
 }
 
+
+
+/* AMS Fly · navegación inferior de 6 acciones */
+.bottom-nav{grid-template-columns:repeat(6,minmax(0,1fr));gap:5px}
+.bottom-nav-item{min-width:0;width:100%}
+@media(max-width:360px){
+  .bottom-nav{gap:3px}
+  .bottom-nav-item{font-size:1.18rem}
+}
 
 /* AMS Fly · tema claro opcional (oscuro sigue siendo el predeterminado) */
 :root{
