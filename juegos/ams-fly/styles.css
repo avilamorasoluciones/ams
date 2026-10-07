@@ -1005,3 +1005,34 @@ html[data-theme="light"] #amsFlyEventScreen #eventConditionDesc .event-rich-item
 html[data-theme="light"] #amsFlyEventScreen #eventConditionDesc .event-rich-marker{
   color:#7c3aed;
 }
+
+/* AMS Fly · evento · contraste claro + firma AMS visible */
+html[data-theme="light"] #amsFlyEventScreen .event-badge{
+  background:linear-gradient(135deg,rgba(124,58,237,.13),rgba(236,72,153,.10))!important;
+  border-color:rgba(124,58,237,.28)!important;
+  color:#5b21b6!important;
+  box-shadow:0 6px 18px rgba(124,58,237,.08);
+}
+html[data-theme="light"] #amsFlyEventScreen .event-detail-block:first-child .event-badge{
+  background:linear-gradient(135deg,rgba(245,158,11,.14),rgba(236,72,153,.08))!important;
+  border-color:rgba(180,83,9,.24)!important;
+  color:#9a3412!important;
+}
+html[data-theme="light"] #amsFlyEventScreen .event-brand-signature{
+  color:#7c3aed!important;
+  background:none!important;
+  -webkit-text-fill-color:#7c3aed!important;
+  text-shadow:none!important;
+  font-weight:950;
+  letter-spacing:.045em;
+}
+html[data-theme="light"] #amsFlyEventScreen .event-brand-signature::after{
+  content:"";
+  display:block;
+  width:74px;
+  height:3px;
+  margin:7px auto 0;
+  border-radius:999px;
+  background:linear-gradient(90deg,#7c3aed,#ec4899);
+  box-shadow:0 4px 14px rgba(124,58,237,.2);
+}
