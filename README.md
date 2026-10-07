@@ -43,7 +43,7 @@ Antes de usar dinero personal para una compra:
 No mezclar dinero personal y dinero de Avila Mora Soluciones sin registrarlo.
 
 ## GitHub Pages y dominio oficial
-GitHub Pages sirve para el sitio público y las demos estáticas. El dominio oficial es `https://avilamorasoluciones.com/`. Las URLs `avilamorasoluciones.github.io/ams/...` se conservan para compatibilidad y pueden redirigir al dominio oficial.
+El dominio oficial del sitio público es `https://avilamorasoluciones.com/`. El repositorio se utiliza para desarrollo, pruebas y despliegue de los proyectos.
 
 No usar GitHub Pages como backend seguro. No guardar allí:
 - contraseñas;
