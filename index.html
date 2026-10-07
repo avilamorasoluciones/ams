@@ -1207,12 +1207,17 @@
       .ams-story-founders{display:flex;justify-content:center;align-items:center;gap:12px;margin-top:3px;flex-wrap:wrap}
       .ams-story-founders>span{white-space:nowrap;display:inline-flex;align-items:center;gap:7px}.story-flag-emoji{display:block;width:24px;height:18px;object-fit:contain}
       .ams-linkedin-footer{display:flex;flex-direction:column;align-items:center;gap:7px;margin-top:12px}
-      .ams-linkedin-company{display:inline-flex;align-items:center;justify-content:center;gap:7px;font-size:.84rem;font-weight:800;color:inherit;text-decoration:none;opacity:.9}
-      .ams-linkedin-company i{font-size:1.05rem}
+      .ams-linkedin-company{display:inline-flex;align-items:center;justify-content:center;width:32px;height:32px;color:inherit;text-decoration:none;opacity:.9;transition:opacity .2s ease,transform .2s ease}
+      .ams-linkedin-company i{font-size:1.45rem}
+      .ams-linkedin-company:hover{opacity:1;transform:translateY(-1px)}
       .ams-linkedin-founders{display:flex;align-items:center;justify-content:center;gap:12px}
-      .ams-linkedin-founders a{display:inline-flex;align-items:center;gap:5px;font-size:.62rem;color:inherit;text-decoration:none;opacity:.46;transition:opacity .2s ease}
-      .ams-linkedin-founders a:hover{opacity:.8}
-      .ams-linkedin-founders i{font-size:.7rem}
+      .ams-linkedin-person{display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;color:inherit;text-decoration:none;opacity:.38;transition:opacity .2s ease,transform .2s ease}
+      .ams-linkedin-person i{font-size:.82rem}
+      .ams-linkedin-person:hover{opacity:.72;transform:translateY(-1px)}
+      .ams-linkedin-tip{position:relative}
+      .ams-linkedin-tip::after{content:attr(data-tooltip);position:absolute;left:50%;bottom:calc(100% + 8px);transform:translate(-50%,4px);padding:5px 8px;border-radius:7px;background:rgba(15,23,42,.96);color:#fff;font-size:.62rem;font-weight:700;line-height:1.2;white-space:nowrap;pointer-events:none;opacity:0;visibility:hidden;transition:opacity .15s ease,transform .15s ease;z-index:20;box-shadow:0 6px 18px rgba(0,0,0,.18)}
+      .ams-linkedin-tip:hover::after,.ams-linkedin-tip:focus-visible::after{opacity:1;visibility:visible;transform:translate(-50%,0)}
+      body.light-theme .ams-linkedin-tip::after{background:rgba(15,23,42,.96);color:#fff}
 
       @media(max-width:520px){
         .ams-story-signature{max-width:300px}
@@ -1236,13 +1241,12 @@
         <a href="https://wa.me/573052547072?text=Hola%20Avila%20Mora%20Soluciones!%20Quiero%20información%20sobre%20sus%20servicios." target="_blank" rel="noopener" aria-label="WhatsApp · Información"><i class="fa-brands fa-whatsapp" aria-hidden="true"></i> WhatsApp</a>
       </div>
       <div class="ams-linkedin-footer" aria-label="LinkedIn">
-        <a class="ams-linkedin-company" href="https://www.linkedin.com/company/avilamorasoluciones/" target="_blank" rel="noopener" aria-label="LinkedIn · Avila Mora Soluciones">
-          <i class="fa-brands fa-linkedin-in" aria-hidden="true"></i>
-          <span>Avila Mora Soluciones</span>
+        <a class="ams-linkedin-company ams-linkedin-tip" href="https://www.linkedin.com/company/avilamorasoluciones/" target="_blank" rel="noopener" aria-label="LinkedIn · Avila Mora Soluciones" data-tooltip="Avila Mora Soluciones">
+          <i class="fa-brands fa-linkedin" aria-hidden="true"></i>
         </a>
         <div class="ams-linkedin-founders" aria-label="LinkedIn · Fundadores">
-          <a href="https://www.linkedin.com/in/avilardiegoa/" target="_blank" rel="noopener" aria-label="LinkedIn · Diego Andrés Avila Ríos"><i class="fa-brands fa-linkedin-in" aria-hidden="true"></i> Diego Andrés</a>
-          <a href="https://www.linkedin.com/in/morammariaj/" target="_blank" rel="noopener" aria-label="LinkedIn · María José Mora Martínez"><i class="fa-brands fa-linkedin-in" aria-hidden="true"></i> María José</a>
+          <a class="ams-linkedin-person ams-linkedin-tip" href="https://www.linkedin.com/in/avilardiegoa/" target="_blank" rel="noopener" aria-label="LinkedIn · Diego Andrés Avila Ríos" data-tooltip="Diego Andrés Avila Ríos"><i class="fa-brands fa-linkedin" aria-hidden="true"></i></a>
+          <a class="ams-linkedin-person ams-linkedin-tip" href="https://www.linkedin.com/in/morammariaj/" target="_blank" rel="noopener" aria-label="LinkedIn · María José Mora Martínez" data-tooltip="María José Mora Martínez"><i class="fa-brands fa-linkedin" aria-hidden="true"></i></a>
         </div>
       </div>
     </div>
