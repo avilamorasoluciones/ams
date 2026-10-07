@@ -22,7 +22,7 @@
   <link rel="canonical" href="https://avilamorasoluciones.com/juegos/ams-fly/">
   <link rel="icon" href="icon.svg?v=6" type="image/svg+xml">
   <link rel="manifest" href="manifest.webmanifest?v=6">
-  <link rel="stylesheet" href="styles.css?v=30">
+  <link rel="stylesheet" href="styles.css?v=31">
   <title>AMS Fly · Avila Mora Soluciones</title>
 </head>
 <body>
@@ -35,6 +35,21 @@
 
   <main class="app-shell">
 
+    <section id="amsFlyDeviceGate" class="ams-fly-device-gate" hidden aria-labelledby="amsFlyDeviceGateTitle">
+      <div class="device-gate-glow"></div>
+      <div class="device-gate-card">
+        <div class="device-gate-mark" aria-hidden="true">
+          <span>✦</span>
+        </div>
+        <span class="eyebrow">AMS FLY · EXPERIENCIA MÓVIL</span>
+        <h1 id="amsFlyDeviceGateTitle">Este vuelo es solo para celulares.</h1>
+        <p>Para que todos compitan con la misma dificultad, <strong>el juego y el evento solo están disponibles desde un celular</strong>.</p>
+        <div class="device-gate-divider" aria-hidden="true"></div>
+        <p class="device-gate-hint">📱 Abre AMS Fly desde tu teléfono para entrar al vuelo.</p>
+        <div class="device-gate-bird" aria-hidden="true"><span>🪽</span></div>
+        <small>Computadores y tablets no pueden iniciar el juego.</small>
+      </div>
+    </section>
 
     <section id="homeScreen" class="screen app-screen active">
       <div class="game-menu-heading">
@@ -211,7 +226,7 @@
 
   <script src="neon-config.js?v=5"></script>
   <script src="neon-client.js?v=8"></script>
-  <script src="game.js?v=92"></script>
+  <script src="game.js?v=93"></script>
   <script>
     if ("serviceWorker" in navigator) {
       window.addEventListener("load", () => navigator.serviceWorker.register("./sw.js").catch(() => {}));
