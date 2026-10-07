@@ -768,30 +768,19 @@ function endGame(){
   els.submitScoreBtn.innerHTML='PUBLICAR PUNTUACIÓN <span>↑</span>';
   els.submitScoreStatus.hidden=false;
   els.submitScoreStatus.textContent=eventIsOpen()
-    ? (profile?"Puedes publicar este vuelo en el evento activo.":"Para participar en el evento, inicia sesión o crea una cuenta. Tu vuelo ya quedó guardado en este dispositivo.")
-    : "Puedes jugar libremente. No hay un evento abierto para publicar puntuaciones; tu récord queda guardado en este dispositivo.";
+    ? (profile
+      ? "Tu cuenta está vinculada al evento. Esta puntuación se guardará en el ranking."
+      : "Para guardar tu progreso y participar por el premio, inicia sesión o crea una cuenta. Al hacerlo aceptas los Términos y Condiciones del evento.")
+    : "El evento no está activo. Puedes jugar libremente, pero no se guardará tu progreso.";
   showOnly(els.gameOverScreen);
   els.gameOverScreen.hidden=false;
   window.scrollTo(0,0);
   requestAnimationFrame(()=>{els.gameOverScreen.hidden=false;els.scoreMessage?.focus({preventScroll:true})});
 
-  const resultSaved=savePendingScore(lastResult);
-  let persistenceError=false;
-  try{
-    saveStats();
-  }catch(error){
-    persistenceError=true;
-    console.error("AMS Fly: no se pudieron guardar las estadísticas locales",error);
-  }
+  if(profile) publishScore({automatic:true});
+  else clearPendingScore();
   if(els.homeBest)els.homeBest.textContent=String(stats.best);
   if(els.homeGames)els.homeGames.textContent=String(stats.games);
-  if(!resultSaved||persistenceError){
-    const issues=[];
-    if(!resultSaved)issues.push("No se pudo guardar el resultado en este dispositivo.");
-    if(persistenceError)issues.push("No se pudieron guardar las estadísticas locales.");
-    els.submitScoreStatus.textContent+=" "+issues.join(" ");
-  }
-  if(profile) publishScore({automatic:true});
   playTone(isRecord?880:220,.12,isRecord?"triangle":"sine");
 }
 
@@ -817,9 +806,9 @@ async function publishScoreInternal(options={}){
   const automatic=options.automatic===true;
   if(!profile){
     if(!automatic){
-      els.submitScoreStatus.textContent="Inicia sesión o crea una cuenta para participar. Tu puntuación está guardada en este dispositivo.";
+      els.submitScoreStatus.textContent="Para guardar tu progreso, entrar al ranking y participar por el premio, inicia sesión o crea una cuenta. Al hacerlo aceptas los Términos y Condiciones del evento.";
       navigateTo("account");
-      setAuthStatus(els.authStatus,"Inicia sesión o crea una cuenta para publicar este vuelo.",false);
+      setAuthStatus(els.authStatus,"Inicia sesión o crea una cuenta para guardar tu progreso y participar por el premio. Al hacerlo aceptas los Términos y Condiciones del evento.",false);
     }
     return false;
   }
@@ -983,8 +972,7 @@ async function loadRanking(){
     });
   }catch(error){
     console.error("AMS Fly: no se pudo cargar el ranking", error);
-    const detail=error?.message || "No se pudo cargar el ranking.";
-    els.rankingList.innerHTML='<div class="ranking-empty"><strong>No pudimos cargar el ranking.</strong><br><span>'+escapeHtml(detail)+'</span></div>';
+    els.rankingList.innerHTML='<div class="ranking-empty"><strong>No pudimos cargar el ranking.</strong><br><span>Intenta nuevamente en unos segundos.</span></div>';
   }
 }
 async function shareResult(){
@@ -1025,6 +1013,9 @@ async function startWithProfile(){
   }
   const user=await getCurrentAuthUser().catch(()=>null);
   if(!user){
+    if(els.gameStartHint){
+      els.gameStartHint.innerHTML="<strong>TOCA PARA VOLAR</strong><span>Juega sin cuenta. Para guardar tu progreso, entrar al ranking y participar por el premio, inicia sesión.</span>";
+    }
     resetGame();
     return;
   }
