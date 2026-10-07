@@ -746,6 +746,7 @@ function enforceGameDeviceGate(){
   const gate=document.getElementById("amsFlyDeviceGate");
   const blocked=!isGameDeviceAllowed();
   if(!gate)return !blocked;
+  const wasBlocked=!gate.hidden;
   gate.hidden=!blocked;
   if(blocked){
     if(game?.running){
@@ -755,6 +756,10 @@ function enforceGameDeviceGate(){
     }
     stopMusic();
     showOnly(null);
+  }else if(wasBlocked){
+    showOnly(els.homeScreen);
+    renderBirds();
+    renderHomeBird();
   }
   return !blocked;
 }
