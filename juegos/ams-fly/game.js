@@ -733,18 +733,33 @@ function restorePendingResult(){
   els.gameOverScreen.hidden=false;
   return true;
 }
-function updateLargeScreenRecommendation(){
-  const id="amsFlyLargeScreenNote";
-  let note=document.getElementById(id);
-  const largeDesktop=window.matchMedia("(min-width:1200px) and (hover:hover) and (pointer:fine)").matches;
-  if(!note){
-    note=document.createElement("div");
-    note.id=id;
-    note.className="ams-fly-large-screen-note";
-    note.textContent="Para una experiencia más cómoda, recomendamos jugar desde un celular.";
-    els.gameScreen.appendChild(note);
+function isGameDeviceAllowed(){
+  const widthAllowed=window.innerWidth<700;
+  const ua=String(navigator.userAgent||"");
+  const uaDataMobile=navigator.userAgentData?.mobile===true;
+  const mobileUa=uaDataMobile || /Android.*Mobile|iPhone|iPod|Windows Phone|webOS|BlackBerry|IEMobile|Opera Mini/i.test(ua);
+  const androidTablet=/Android/i.test(ua) && !/Mobile/i.test(ua);
+  const ipadOs=/iPad/i.test(ua) || (/Macintosh/i.test(ua) && Number(navigator.maxTouchPoints||0)>1);
+  return widthAllowed && mobileUa && !androidTablet && !ipadOs;
+}
+function enforceGameDeviceGate(){
+  const gate=document.getElementById("amsFlyDeviceGate");
+  const blocked=!isGameDeviceAllowed();
+  if(!gate)return !blocked;
+  gate.hidden=!blocked;
+  if(blocked){
+    if(game?.running){
+      game.running=false;
+      game.paused=false;
+      cancelGameLoop();
+    }
+    stopMusic();
+    showOnly(null);
   }
-  note.hidden=!largeDesktop;
+  return !blocked;
+}
+function updateLargeScreenRecommendation(){
+  enforceGameDeviceGate();
 }
 function endGame(){
   if(!game || !game.running)return;
@@ -1038,6 +1053,7 @@ async function ensureParticipantReady(user){
   return true;
 }
 async function startWithProfile(){
+  if(!enforceGameDeviceGate())return;
   // Sin cuenta se puede jugar, pero no se conserva progreso fuera de la partida.
   // Con una cuenta activa, el vuelo queda vinculado al piloto y puede guardarse
   // en el ranking.
@@ -1405,6 +1421,7 @@ function bootHome(){
 }
 setTimeout(dismissLoadingScreen,3000);
 function navigateTo(target){
+  if(!enforceGameDeviceGate())return;
   const eventScreen=document.getElementById("amsFlyEventScreen");
   const map={play:els.homeScreen,event:eventScreen,account:els.profileScreen,ranking:els.rankingScreen};
   const screen=map[target]||els.homeScreen;
@@ -1518,7 +1535,7 @@ els.soundBtn.addEventListener("click",()=>{soundOn=!soundOn;els.soundBtn.textCon
 function action(e){if(["BUTTON","INPUT","SELECT"].includes(e.target?.tagName))return;e.preventDefault();if(els.gameScreen.hidden)return;flap()}
 els.gameScreen.addEventListener("pointerdown",action,{passive:false});
 window.addEventListener("keydown",e=>{if(e.code==="Space"||e.code==="ArrowUp"){e.preventDefault();if(!els.gameScreen.hidden)flap()}if(e.code==="Escape"&&game?.running&&!game.paused){els.pauseBtn.click()}});
-window.addEventListener("resize",()=>{updateLargeScreenRecommendation();if(!els.gameScreen.hidden){resizeCanvas();if(game?.bird)game.bird.x=clamp(game.bird.x,50,window.innerWidth*.32)}});
+window.addEventListener("resize",()=>{updateLargeScreenRecommendation();if(!isGameDeviceAllowed())return;if(!els.gameScreen.hidden){resizeCanvas();if(game?.bird)game.bird.x=clamp(game.bird.x,50,window.innerWidth*.32)}});
 document.addEventListener("visibilitychange",()=>{
   if(document.hidden){pauseGame(true);return}
   if(game?.running&&visibilityPaused){resumeGame();return}
