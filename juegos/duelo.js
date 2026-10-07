@@ -661,17 +661,7 @@ const Duelo = (() => {
 
     const winners = matches.map(match => Array.isArray(match.winner) ? match.winner : []).filter(ids => ids.length);
     if (winners.length <= 1) {
-      if (winners.length === 1) {
-        matches = [{ a: winners[0], b: [], winner: winners[0], bye: true }];
-        matchIndex = 0;
-        if (tournamentRound > 1) finish();
-        else {
-          history.push({ round: tournamentRound, transition: true });
-          showNextMatchScreen();
-        }
-      } else {
-        finish();
-      }
+      finish();
       return;
     }
 
@@ -719,7 +709,8 @@ const Duelo = (() => {
     const silver = finalWinner === finalA ? finalB : finalA;
 
     const bronze = [];
-    const semiRound = Math.max(1, lastRound - 1);
+    if (lastRound <= 1) return placements;
+    const semiRound = lastRound - 1;
     history.filter(item => item.question && item.round === semiRound && item.winner?.length).forEach(item => {
       const a = item.a?.[0];
       const b = item.b?.[0];
