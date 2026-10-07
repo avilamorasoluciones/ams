@@ -5,7 +5,7 @@ Juego arcade público de Avila Mora Soluciones, publicado como archivos estátic
 ## Cómo se juega
 
 - El juego puede iniciarse y jugarse sin crear una cuenta.
-- Los récords personales y las partidas se guardan en el navegador.
+- Sin cuenta puedes jugar libremente, pero no se conserva el progreso. Con una cuenta activa, el récord y la cantidad de partidas se guardan en Neon y se recuperan al volver a iniciar sesión desde cualquier dispositivo.
 - Para competir y publicar un puntaje durante un evento activo, el piloto debe iniciar sesión, completar sus datos y aceptar las condiciones del evento.
 - Móvil: tocar la pantalla. PC: clic, barra espaciadora o flecha arriba. ESC pausa.
 
@@ -30,7 +30,7 @@ Archivos principales:
 ### Preparación de Neon
 
 1. Habilita Neon Auth y Data API en el branch que usa el juego y confirma que `public` está entre los esquemas expuestos por Data API.
-2. Ejecuta `neon/schema.sql` y después `neon/rls-migration.sql` en Neon SQL Editor. Si ese despliegue ya existe pero al volver a iniciar sesión no se recupera el perfil (incluido el celular), ejecuta `neon/phone-profile-recovery-migration.sql`; repara únicamente la RPC privada de lectura del piloto y recarga la caché de esquema, sin cambiar políticas ni la puerta de Gestión. Para reparar solo el ranking, ejecuta `neon/ranking-rpc-migration.sql`; define explícitamente `public.ams_fly_public_ranking()` sin parámetros y recarga la caché de esquema de PostgREST. Si Neon aún no reconoce la RPC, el juego usa como alternativa las columnas públicas de `ams_fly_scores`.
+2. Ejecuta `neon/schema.sql` y después `neon/rls-migration.sql` en Neon SQL Editor. Si ese despliegue ya existe pero al volver a iniciar sesión no se recupera el perfil (incluido el celular), ejecuta `neon/phone-profile-recovery-migration.sql`; repara únicamente la RPC privada de lectura del piloto y recarga la caché de esquema, sin cambiar políticas ni la puerta de Gestión. Para persistir y recuperar récord/partidas de cada cuenta, ejecuta `neon/participant-stats-migration.sql`. Para reparar solo el ranking, ejecuta `neon/ranking-rpc-migration.sql`; define explícitamente `public.ams_fly_public_ranking()` sin parámetros y recarga la caché de esquema de PostgREST. Si Neon aún no reconoce la RPC, el juego usa como alternativa las columnas públicas de `ams_fly_scores`.
 3. Comprueba en el SQL Editor, en el mismo branch y base de datos configurados en `neon-config.js`, que existe la firma usada por el cliente:
 
    ```sql
