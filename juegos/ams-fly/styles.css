@@ -623,7 +623,9 @@ button{cursor:pointer}
 
 
 
-.result-share-gap{height:12px;width:100%}
+/* AMS Fly · separación de acciones en resultado */
+.result-card #againBtn{margin-top:14px}
+\n.result-share-gap{height:12px;width:100%}
 
 /* AMS Fly · acceso exclusivo desde celular */
 .ams-fly-device-gate{
