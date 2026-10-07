@@ -984,7 +984,8 @@ html[data-theme="light"] .terms-row-hidden{color:#536074}
   margin:18px 0 20px;
   text-align:center;
   font-size:.78rem;
-  font-weight:950;
+  font-weight:900;
+  -webkit-text-stroke:.28px rgba(139,92,246,.45);
   letter-spacing:.035em;
   background:linear-gradient(100deg,#8b5cf6,#ec4899);
   -webkit-background-clip:text;
@@ -1025,7 +1026,8 @@ html[data-theme="light"] #amsFlyEventScreen .event-brand-signature{
   background-clip:text!important;
   -webkit-text-fill-color:transparent!important;
   text-shadow:none!important;
-  font-weight:950;
+  font-weight:900;
+  -webkit-text-stroke:.28px rgba(109,40,217,.5);
   letter-spacing:.045em;
 }
 html[data-theme="light"] #amsFlyEventScreen .event-brand-signature::after{
