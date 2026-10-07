@@ -59,6 +59,10 @@ begin
           when v_internal then false
           else coalesce(v_existing.prize_eligible,true)
         end,
+        terms_accepted_at=case
+          when v_internal then v_existing.terms_accepted_at
+          else coalesce(v_existing.terms_accepted_at,now())
+        end,
         updated_at=now()
     where id=v_existing.id
     returning * into v_existing;
@@ -67,16 +71,18 @@ begin
       'ok',true,'existing',true,'participant_id',v_existing.id,
       'name',v_existing.player_name,'country',v_existing.country_code,
       'bird_id',v_existing.bird_id,'phone',coalesce(v_existing.phone,''),
-      'auth_user_id',v_existing.auth_user_id,'prize_eligible',v_existing.prize_eligible
+      'auth_user_id',v_existing.auth_user_id,'prize_eligible',v_existing.prize_eligible,
+      'terms_accepted',v_existing.terms_accepted_at is not null
     );
   end if;
 
   insert into public.ams_fly_participants(
-    auth_user_id,player_name,country_code,bird_id,phone,score,best_score_at,prize_eligible
+    auth_user_id,player_name,country_code,bird_id,phone,score,best_score_at,prize_eligible,terms_accepted_at
   )
   values(
     v_auth_user_id,trim(p_name),upper(trim(p_country)),trim(p_bird_id),v_phone,
-    v_score,case when v_score>0 then now() else null end,not v_internal
+    v_score,case when v_score>0 then now() else null end,not v_internal,
+    case when v_internal then null else now() end
   )
   returning * into v_existing;
 
