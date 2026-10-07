@@ -199,8 +199,11 @@ let profile = null;
 let stats = {games:0,best:0};
 let lastResult = null;
 let selectedBirdId = "condor-co";
-let currentFactIndex = Number(localStorage.getItem(FACT_INDEX_KEY) || 0);
-let soundOn = localStorage.getItem("amsFlySound") !== "0";
+let currentFactIndex = 0;
+let soundOn = true;
+let pendingRegistration = null;
+let pendingScore = null;
+let eventConfig = null;
 let audioCtx = null;
 let musicTimer = 0;
 let musicStep = 0;
@@ -219,10 +222,10 @@ const stages = [
 
 
 function getEventConfig(){
-  return safeParse(EVENT_CONFIG_KEY, {...DEFAULT_EVENT,active:false});
+  return eventConfig||{...DEFAULT_EVENT,active:false};
 }
 function saveEventConfig(config){
-  localStorage.setItem(EVENT_CONFIG_KEY, JSON.stringify(config));
+  eventConfig={...DEFAULT_EVENT,...config};
 }
 function eventIsOpen(){
   const cfg=getEventConfig();
@@ -367,10 +370,10 @@ async function loadRemoteEventConfig(){
   }
 }
 function safeParse(key, fallback){
-  try{return JSON.parse(localStorage.getItem(key) || "") || fallback}catch(_){return fallback}
+  return fallback;
 }
-function saveProfile(){localStorage.setItem(STORAGE_KEY, JSON.stringify(profile))}
-function saveStats(){localStorage.setItem(STATS_KEY, JSON.stringify(stats))}
+function saveProfile(){}
+function saveStats(){}
 function getCountry(code){return countries.find(c=>c.code===code) || countries[0]}
 function getBird(id){return birds.find(b=>b.id===id) || birds[0]}
 function birdMarkup(bird,scale="1"){
@@ -387,8 +390,9 @@ function showOnly(target){
   if(els.bottomNav)els.bottomNav.hidden=target===els.gameScreen||target===els.pauseScreen;
 }
 function hydrateStats(){
-  stats=safeParse(STATS_KEY,{games:0,best:0});
-  els.homeBest.textContent=stats.best||0;els.homeGames.textContent=stats.games||0;
+  stats={games:0,best:0};
+  els.homeBest.textContent="0";
+  els.homeGames.textContent="0";
 }
 function initCountries(){
   const options=countries.map(c=>'<option value="'+c.code+'">'+c.flag+" "+c.name+'</option>').join("");
@@ -413,12 +417,8 @@ function updateBirdInfo(){
   });
 }
 function loadProfile(){
-  profile=safeParse(STORAGE_KEY,null);
-  if(profile?.email&&profile?.name&&birds.some(b=>b.id===profile.birdId)){
-    if(profile.birdId==="condor-ec")profile.birdId="tucan-ec";
-    if(profile.birdId==="condor-cl")profile.birdId="chucao-cl";
-    selectedBirdId=profile.birdId;
-  }else profile=null;
+  profile=null;
+  selectedBirdId="condor-co";
 }
 function playTone(freq=440,duration=.08,type="sine"){
   if(!soundOn)return;
@@ -666,24 +666,14 @@ function resumeGame(){
   scheduleGameLoop();
 }
 function savePendingScore(result){
-  const payload={...result,savedAt:new Date().toISOString()};
-  try{localStorage.setItem("amsFlyPendingScoreV1",JSON.stringify(payload));return true}catch(_){}
-  try{sessionStorage.setItem("amsFlyPendingScoreV1",JSON.stringify(payload));return true}catch(_){}
-  return false;
+  pendingScore={...result};
+  return true;
 }
 function readPendingScore(){
-  for(const storage of [localStorage,sessionStorage]){
-    try{
-      const value=JSON.parse(storage.getItem("amsFlyPendingScoreV1")||"null");
-      if(value&&Number(value.score)>=0)return value;
-    }catch(_){}
-  }
-  return null;
+  return pendingScore;
 }
 function clearPendingScore(){
-  for(const storage of [localStorage,sessionStorage]){
-    try{storage.removeItem("amsFlyPendingScoreV1")}catch(_){}
-  }
+  pendingScore=null;
 }
 function restorePendingResult(){
   if(!profile || !els.gameOverScreen || !els.gameOverScreen.hidden)return false;
@@ -1026,9 +1016,9 @@ async function ensureParticipantReady(user){
   return true;
 }
 async function startWithProfile(){
-  // El juego puede probarse sin cuenta y el resultado queda únicamente en
-  // localStorage. Si hay una cuenta activa durante el evento, el vuelo queda
-  // vinculado al piloto y podrá publicarse en el ranking.
+  // Sin cuenta se puede jugar, pero no se conserva progreso fuera de la partida.
+  // Con una cuenta activa, el vuelo queda vinculado al piloto y puede guardarse
+  // en el ranking.
   if(!eventIsOpen()){
     resetGame();
     return;
@@ -1053,7 +1043,7 @@ async function startWithProfile(){
   }
 }
 function prepareFactThenGame(){
-  const fact=colombiaFacts[currentFactIndex%colombiaFacts.length];currentFactIndex=(currentFactIndex+1)%colombiaFacts.length;localStorage.setItem(FACT_INDEX_KEY,String(currentFactIndex));
+  const fact=colombiaFacts[currentFactIndex%colombiaFacts.length];currentFactIndex=(currentFactIndex+1)%colombiaFacts.length;
   els.factText.textContent=fact;els.factSourceHint.textContent="Una curiosidad sobre Colombia antes de volver a volar.";
   showOnly(els.factScreen);
 }
@@ -1078,12 +1068,8 @@ function splitStoredName(name){
 async function loadAccountProfile(user){
   if(!user)return null;
   const email=String(user.email||"").toLowerCase();
-  const local=safeParse(STORAGE_KEY,null);
-  const pending=safeParse(PENDING_REG_KEY,null);
-  let candidate=local&&local.email===email?{...local}:null;
-  if(!candidate&&pending&&pending.email===email){
-    candidate={...pending};
-  }
+  const pending=pendingRegistration;
+  let candidate=pending&&pending.email===email?{...pending}:null;
   if(!candidate){
     const parsed=splitStoredName(user.name||"");
     candidate={name:String(user.name||"").trim(),firstName:parsed.first,lastName:parsed.last,country:"CO",birdId:selectedBirdId,phone:"",dial:"57",participantId:null};
@@ -1207,7 +1193,7 @@ async function signInPlayer(){
       try{
         await syncParticipantProfile(user);
         saveProfile();
-        localStorage.removeItem(PENDING_REG_KEY);
+        pendingRegistration=null;
       }catch(syncError){
         setAuthStatus(els.accountStatus,friendlyNeonSyncError(syncError),true);
       }
@@ -1235,9 +1221,7 @@ async function signUpPlayer(){
   if(password!==repeat){setAuthStatus(els.registerStatus,"Las contraseñas no coinciden.",true);return}
   const full=fullPhone(dial,phone);
   if(!/^\+[1-9]\d{7,14}$/.test(full)){setAuthStatus(els.registerStatus,"Escribe un celular válido con código de país.",true);return}
-  localStorage.setItem(PENDING_REG_KEY,JSON.stringify({
-    email,firstName:first,lastName:last,name:first+" "+last,phone:full,dial,country,birdId:selectedBirdId,participantId:null
-  }));
+  pendingRegistration={email,firstName:first,lastName:last,name:first+" "+last,phone:full,dial,country,birdId:selectedBirdId,participantId:null};
   els.authSignUpBtn.disabled=true;setAuthStatus(els.registerStatus,"Creando tu cuenta…");
   try{
     const client=await getNeonClient();
@@ -1344,7 +1328,7 @@ async function saveAccount(){
   }
 }
 async function signOutPlayer(){
-  try{const client=await getNeonClient();await client.auth.signOut();profile=null;localStorage.removeItem(STORAGE_KEY);renderHomeBird();await refreshAuthUI();navigateTo("play")}
+  try{const client=await getNeonClient();await client.auth.signOut();profile=null;pendingRegistration=null;pendingScore=null;renderHomeBird();await refreshAuthUI();navigateTo("play")}
   catch(error){
     console.error("AMS Fly: error al cerrar sesión",error);
     setAuthStatus(els.accountStatus,"No pudimos cerrar tu sesión. Intenta nuevamente.",true);
@@ -1492,7 +1476,7 @@ els.backBtn?.addEventListener("click",()=>navigateTo("play"));
 els.rankingBackBtn?.addEventListener("click",()=>navigateTo("play"));
 els.rankingRefreshBtn?.addEventListener("click",loadRanking);
 window.addEventListener("ams-fly-event-updated",event=>{if(!event.detail)return;saveEventConfig({...DEFAULT_EVENT,...event.detail});applyEventConfig()});
-els.soundBtn.addEventListener("click",()=>{soundOn=!soundOn;localStorage.setItem("amsFlySound",soundOn?"1":"0");els.soundBtn.textContent=soundOn?"♪":"×";if(soundOn){playTone(600,.05);startMusic()}else stopMusic()});
+els.soundBtn.addEventListener("click",()=>{soundOn=!soundOn;els.soundBtn.textContent=soundOn?"♪":"×";if(soundOn){playTone(600,.05);startMusic()}else stopMusic()});
 function action(e){if(["BUTTON","INPUT","SELECT"].includes(e.target?.tagName))return;e.preventDefault();if(els.gameScreen.hidden)return;flap()}
 els.gameScreen.addEventListener("pointerdown",action,{passive:false});
 window.addEventListener("keydown",e=>{if(e.code==="Space"||e.code==="ArrowUp"){e.preventDefault();if(!els.gameScreen.hidden)flap()}if(e.code==="Escape"&&game?.running&&!game.paused){els.pauseBtn.click()}});
