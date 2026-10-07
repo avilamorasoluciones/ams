@@ -4,7 +4,7 @@
 
 Web oficial:
 - `https://avilamorasoluciones.com/`
-- URL heredada: `https://avilamorasoluciones.github.io/ams/` (se conserva para compatibilidad)
+- URL oficial: `https://avilamorasoluciones.com/`
 
 Gestión interna:
 - `/gestion/`
