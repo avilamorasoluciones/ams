@@ -1,6 +1,8 @@
--- AMS Fly · repair the public ranking RPC in the Data API's exposed schema.
--- Run against the same database/branch configured in neon-config.js after schema.sql.
--- This does not create an alias in another schema or expose participant profiles.
+-- AMS Fly · ranking ligado al perfil actual del piloto.
+-- El puntaje sigue siendo el mejor puntaje guardado en ams_fly_participants.
+-- Nombre, país y ave se leen SIEMPRE del perfil actual.
+-- Así, cambiar nombre/país/ave se refleja en el ranking sin necesitar
+-- superar nuevamente el récord.
 
 create or replace function public.ams_fly_public_ranking()
 returns table (
@@ -16,24 +18,19 @@ stable
 security definer
 set search_path = public
 as $$
-  with best_scores as (
-    select distinct on (s.participant_id)
-      s.participant_id, s.player_name, s.country_code, s.score, s.created_at
-    from public.ams_fly_scores s
-    where s.participant_id is not null
-    order by s.participant_id, s.score desc, s.created_at asc, s.id asc
-  ),
-  latest_birds as (
-    select distinct on (s.participant_id)
-      s.participant_id, s.bird_id
-    from public.ams_fly_scores s
-    where s.participant_id is not null
-    order by s.participant_id, s.created_at desc, s.id desc
-  )
-  select b.participant_id, b.player_name, b.country_code, l.bird_id, b.score, b.created_at
-  from best_scores b
-  join latest_birds l using (participant_id)
-  order by b.score desc, b.created_at asc, b.participant_id asc
+  select
+    p.id as participant_id,
+    p.player_name,
+    p.country_code,
+    p.bird_id,
+    p.score,
+    coalesce(p.best_score_at, p.updated_at, p.created_at) as created_at
+  from public.ams_fly_participants p
+  where p.score > 0
+    and p.prize_eligible = true
+  order by p.score desc,
+           coalesce(p.best_score_at, p.updated_at, p.created_at) asc,
+           p.id asc
   limit 100
 $$;
 
