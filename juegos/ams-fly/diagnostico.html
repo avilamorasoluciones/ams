@@ -70,9 +70,19 @@ async function run(){
 
   await test("Ranking: lectura pública",async()=>{
     if(!client)throw new Error("Cliente Neon no disponible.");
-    const r=await client.from("ams_fly_scores").select("score,player_name").order("score",{ascending:false}).limit(1);
+    const r=await client.from("ams_fly_scores").select("participant_id,player_name,country_code,bird_id,score,created_at").order("score",{ascending:false}).order("created_at",{ascending:true}).limit(1);
     if(r.error)throw r.error;
     return "Ranking accesible. Registros visibles: "+(r.data?.length||0)+".";
+  });
+
+  await test("Ranking RPC y fallback público",async()=>{
+    if(!client)throw new Error("Cliente Neon no disponible.");
+    const rpc=await client.rpc("ams_fly_public_ranking");
+    if(!rpc.error)return "RPC sin parámetros accesible. Pilotos visibles: "+(rpc.data?.length||0)+".";
+    if(rpc.error.code!=="PGRST202")throw rpc.error;
+    const fallback=await client.from("ams_fly_scores").select("participant_id,player_name,country_code,bird_id,score,created_at").order("score",{ascending:false}).order("created_at",{ascending:true}).limit(1);
+    if(fallback.error)throw fallback.error;
+    return "RPC no disponible: "+rpc.error.message+". La tabla pública de puntuaciones permite el fallback del juego.";
   });
 
   await test("RPC de registro: validación",async()=>{
@@ -104,7 +114,7 @@ async function run(){
   });
 
   await test("Archivos del juego",async()=>{
-    const paths=["index.html","styles.css?v=27","game.js?v=70","neon-config.js?v=4","neon-client.js?v=7","control-ams/","manifest.webmanifest?v=6","terminos.html","privacidad.html","sw.js"];
+    const paths=["index.html","styles.css?v=29","game.js?v=87","neon-config.js?v=4","neon-client.js?v=7","control-ams/","manifest.webmanifest?v=6","terminos.html","privacidad.html","sw.js"];
     const bad=[];
     for(const p of paths){const r=await fetch(p,{cache:"no-store"});if(!r.ok)bad.push(p+" ("+r.status+")")}
     if(bad.length)throw new Error("No cargaron: "+bad.join(", "));

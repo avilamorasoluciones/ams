@@ -2,7 +2,7 @@
 -- Run against the same database/branch configured in neon-config.js after schema.sql.
 -- This does not create an alias in another schema or expose participant profiles.
 
-create or replace function public.ams_fly_public_ranking(p_limit integer default 100)
+create or replace function public.ams_fly_public_ranking()
 returns table (
   participant_id uuid,
   player_name varchar,
@@ -34,11 +34,12 @@ as $$
   from best_scores b
   join latest_birds l using (participant_id)
   order by b.score desc, b.created_at asc, b.participant_id asc
-  limit greatest(1, least(coalesce(p_limit, 100), 100))
+  limit 100
 $$;
 
-revoke all on function public.ams_fly_public_ranking(integer) from public;
+drop function if exists public.ams_fly_public_ranking(integer);
+revoke all on function public.ams_fly_public_ranking() from public;
 grant usage on schema public to anonymous, authenticated;
-grant execute on function public.ams_fly_public_ranking(integer) to anonymous, authenticated;
+grant execute on function public.ams_fly_public_ranking() to anonymous, authenticated;
 
 notify pgrst, 'reload schema';

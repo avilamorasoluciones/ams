@@ -277,9 +277,11 @@ test("AMS Fly browser RPCs match the public ranking projection and required scor
   const game = read("juegos/ams-fly/game.js");
   const migration = read("juegos/ams-fly/neon/rls-migration.sql");
 
-  assert.match(game, /rpc\("ams_fly_public_ranking",\s*\{\s*p_limit:RANKING_LIMIT\s*\}\)/);
-  assert.match(migration, /create or replace function public\.ams_fly_public_ranking\(p_limit integer default 100\)/);
-  assert.match(migration, /grant execute on function public\.ams_fly_public_ranking\(integer\) to anonymous, authenticated/i);
+  assert.match(game, /rpc\("ams_fly_public_ranking"\)/);
+  assert.match(migration, /create or replace function public\.ams_fly_public_ranking\(\)/);
+  assert.match(migration, /grant execute on function public\.ams_fly_public_ranking\(\) to anonymous, authenticated/i);
+  assert.match(game, /result\.error\.code[\s\S]*PGRST202/);
+  assert.match(game, /from\("ams_fly_scores"\)[\s\S]*participant_id,player_name,country_code,bird_id,score,created_at/);
   assert.match(game, /const message=typedMessage\|\|savedMessage\|\|"¡A volar!"/);
   assert.doesNotMatch(game, /\.from\("ams_fly_participants"\)\s*\.select\("\*"\)/);
 });

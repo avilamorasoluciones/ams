@@ -94,6 +94,33 @@ async function getRemoteParticipantProfile(user){
   }
 }
 const RANKING_LIMIT = 50;
+async function loadRankingFromScores(client){
+  const pageSize=500;
+  const leaders=new Map();
+  for(let offset=0; ; offset+=pageSize){
+    const result=await client.from("ams_fly_scores")
+      .select("id,participant_id,player_name,country_code,bird_id,score,created_at")
+      .order("score",{ascending:false})
+      .order("created_at",{ascending:true})
+      .order("participant_id",{ascending:true})
+      .order("id",{ascending:true})
+      .range(offset,offset+pageSize-1);
+    if(result.error)throw result.error;
+    const rows=result.data||[];
+    rows.forEach(row=>{
+      if(row.participant_id&&!leaders.has(row.participant_id))leaders.set(row.participant_id,row);
+    });
+    if(leaders.size>=RANKING_LIMIT||rows.length<pageSize)break;
+  }
+  return [...leaders.values()].slice(0,RANKING_LIMIT);
+}
+async function getRankingRows(client){
+  const result=await client.rpc("ams_fly_public_ranking");
+  if(!result.error)return {rows:(result.data||[]).slice(0,RANKING_LIMIT),fallback:false};
+  if(String(result.error.code||"")!=="PGRST202")throw result.error;
+  console.warn("AMS Fly: RPC de ranking no disponible; usando puntuaciones públicas",result.error);
+  return {rows:await loadRankingFromScores(client),fallback:true};
+}
 function escapeHtml(value){
   return String(value ?? "").replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
 }
@@ -177,6 +204,7 @@ let musicStarting = false;
 let publishPromise = null;
 let game = null;
 let raf = 0;
+let visibilityPaused = false;
 let lastStage = -1;
 const stages = [
   {at:0,name:"CIELO ANDINO",top:"#07091a",mid:"#111536",bottom:"#17102b",pipe:"#6d42c9",glow:"#8b5cf6",particle:"#c4b5fd"},
@@ -515,9 +543,9 @@ function resetGame(){
   lastStage=0;
   els.scoreValue.textContent="0";els.difficultyValue.textContent="VUELO 1";els.gameStartHint.hidden=false;
   showOnly(els.gameScreen);
-  cancelAnimationFrame(raf);
+  cancelGameLoop();
   game.last=performance.now();
-  raf=requestAnimationFrame(loop);
+  scheduleGameLoop();
 }
 function flap(){
   if(!game || !game.running || game.paused)return;
@@ -600,12 +628,38 @@ function draw(){
   }
 }
 function loop(now){
+  raf=0;
   if(!game||!game.running||game.paused)return;
   const dt=Math.min(.032,(now-game.last)/1000);game.last=now;
   update(dt);
   if(!game||!game.running||game.paused)return;
   draw();
+  scheduleGameLoop();
+}
+function scheduleGameLoop(){
+  if(raf||!game?.running||game.paused)return;
   raf=requestAnimationFrame(loop);
+}
+function cancelGameLoop(){
+  if(raf)cancelAnimationFrame(raf);
+  raf=0;
+}
+function pauseGame(fromVisibility=false){
+  if(!game?.running||game.paused)return;
+  game.paused=true;
+  visibilityPaused=fromVisibility;
+  cancelGameLoop();
+  els.pauseScore.textContent=game.score+" puntos";
+  showOnly(els.pauseScreen);
+}
+function resumeGame(){
+  if(!game?.running)return;
+  game.paused=false;
+  visibilityPaused=false;
+  game.last=performance.now();
+  showOnly(els.gameScreen);
+  cancelGameLoop();
+  scheduleGameLoop();
 }
 function savePendingScore(result){
   const payload={...result,savedAt:new Date().toISOString()};
@@ -653,10 +707,10 @@ function restorePendingResult(){
   els.newRecord.hidden=!Boolean(pending.isRecord);
   els.submitScoreBtn.dataset.published="0";
   els.submitScoreBtn.disabled=false;
-  els.scoreMessage.disabled=false;
+  if(els.scoreMessage)els.scoreMessage.disabled=false;
   els.submitScoreBtn.innerHTML='PUBLICAR PUNTUACIÓN <span>↑</span>';
   els.submitScoreStatus.textContent="Tienes una puntuación pendiente de publicación. Tu resultado se conserva localmente.";
-  els.scoreMessage.value=String(pending.message||"").slice(0,90);
+  if(els.scoreMessage)els.scoreMessage.value=String(pending.message||"").slice(0,90);
   showOnly(els.gameOverScreen);
   els.gameOverScreen.hidden=false;
   return true;
@@ -680,7 +734,7 @@ function endGame(){
   setHeaderGameActionsHidden(false);
   game.deathAt=performance.now();
   stopMusic();
-  cancelAnimationFrame(raf);
+  cancelGameLoop();
 
   const finalScore=Math.max(0,Number(game.score||0));
   const previousBest=Math.max(0,Number(stats.best||0));
@@ -710,12 +764,12 @@ function endGame(){
   }
 
   lastResult={score:finalScore,durationMs:Math.max(0,Math.round((game.time||0)*1000)),birdId:game.birdData?.id||profile?.birdId||selectedBirdId,best:stats.best,games:stats.games,isRecord,message:""};
-  els.scoreMessage.value="";
+  if(els.scoreMessage)els.scoreMessage.value="";
   els.submitScoreBtn.dataset.published="0";
   els.submitScoreBtn.disabled=false;
-  els.scoreMessage.disabled=false;
+  if(els.scoreMessage)els.scoreMessage.disabled=false;
   els.submitScoreBtn.hidden=!eventIsOpen();
-  const scoreMessageLabel=els.scoreMessage.closest(".message-label");
+  const scoreMessageLabel=els.scoreMessage?.closest(".message-label");
   if(scoreMessageLabel)scoreMessageLabel.hidden=!eventIsOpen();
   els.submitScoreBtn.innerHTML='PUBLICAR PUNTUACIÓN <span>↑</span>';
   els.submitScoreStatus.hidden=false;
@@ -795,7 +849,7 @@ async function publishScoreInternal(options={}){
     return false;
   }
 
-  const typedMessage=String(els.scoreMessage.value||"").trim();
+  const typedMessage=String(els.scoreMessage?.value||"").trim();
   const savedMessage=String(currentResult?.message||"").trim();
   const message=typedMessage||savedMessage||"¡A volar!";
 
@@ -805,7 +859,7 @@ async function publishScoreInternal(options={}){
   }
 
   els.submitScoreBtn.disabled=true;
-  els.scoreMessage.disabled=true;
+  if(els.scoreMessage)els.scoreMessage.disabled=true;
   els.submitScoreStatus.hidden=false;
   if(!automatic) els.submitScoreStatus.textContent="Guardando tu puntuación en el ranking…";
 
@@ -876,7 +930,7 @@ async function publishScoreInternal(options={}){
 
     els.submitScoreBtn.dataset.published="1";
     els.submitScoreBtn.disabled=true;
-    els.scoreMessage.disabled=true;
+    if(els.scoreMessage)els.scoreMessage.disabled=true;
     els.submitScoreBtn.innerHTML="✓ PUNTUACIÓN PUBLICADA";
     els.submitScoreStatus.hidden=true;
     clearPendingScore();
@@ -893,7 +947,7 @@ async function publishScoreInternal(options={}){
     // Nunca eliminamos el resultado pendiente por un fallo de red, sesión o
     // Data API. El juego puede volver a intentarlo más adelante.
     els.submitScoreBtn.disabled=false;
-    els.scoreMessage.disabled=false;
+    if(els.scoreMessage)els.scoreMessage.disabled=false;
     if(!automatic) els.submitScoreStatus.textContent="No se pudo publicar: "+detail;
     else els.submitScoreStatus.textContent="Puntuación guardada localmente. Reintentaremos la publicación automáticamente.";
     return false;
@@ -903,15 +957,16 @@ async function publishScoreInternal(options={}){
 async function loadRanking(){
   showOnly(els.rankingScreen);
   els.rankingList.innerHTML='<div class="ranking-loading">Cargando pilotos...</div>';
+  if(els.rankingStatus)els.rankingStatus.textContent="";
   if(!NEON_DATA_READY()){
     els.rankingList.innerHTML='<div class="ranking-empty"><strong>Ranking mundial preparado.</strong><br><span>Falta conectar el Data API de Neon.</span></div>';
     return;
   }
   try{
     const client=await getPublicNeonClient();
-    const result=await client.rpc("ams_fly_public_ranking",{p_limit:RANKING_LIMIT});
-    if(result.error)throw result.error;
-    const rows=result.data||[];
+    const ranking=await getRankingRows(client);
+    const rows=ranking.rows;
+    if(ranking.fallback&&els.rankingStatus)els.rankingStatus.textContent="Ranking cargado desde puntuaciones públicas; la RPC de Neon no está disponible.";
 
     if(!rows.length){
       els.rankingList.innerHTML='<div class="ranking-empty">Aún no hay pilotos. ¡Sé el primero!</div>';
@@ -1342,21 +1397,11 @@ els.factContinueBtn?.addEventListener("click",()=>{
 });
 
 els.pauseBtn?.addEventListener("click",()=>{
-  if(!game?.running)return;
-  if(game.paused)return;
-  game.paused=true;
-  cancelAnimationFrame(raf);
-  els.pauseScore.textContent=game.score+" puntos";
-  showOnly(els.pauseScreen);
+  pauseGame();
 });
 
 els.resumeBtn?.addEventListener("click",()=>{
-  if(!game?.running)return;
-  game.paused=false;
-  game.last=performance.now();
-  showOnly(els.gameScreen);
-  cancelAnimationFrame(raf);
-  raf=requestAnimationFrame(loop);
+  resumeGame();
 });
 
 els.quitBtn?.addEventListener("click",()=>{
@@ -1364,7 +1409,7 @@ els.quitBtn?.addEventListener("click",()=>{
   if(!window.confirm("Si vuelves al menú, perderás los puntos de esta partida. ¿Quieres salir?"))return;
   game.running=false;
   game.paused=false;
-  cancelAnimationFrame(raf);
+  cancelGameLoop();
   stopMusic();
   navigateTo("play");
 });
@@ -1418,7 +1463,21 @@ function action(e){if(["BUTTON","INPUT","SELECT"].includes(e.target?.tagName))re
 els.gameScreen.addEventListener("pointerdown",action,{passive:false});
 window.addEventListener("keydown",e=>{if(e.code==="Space"||e.code==="ArrowUp"){e.preventDefault();if(!els.gameScreen.hidden)flap()}if(e.code==="Escape"&&game?.running&&!game.paused){els.pauseBtn.click()}});
 window.addEventListener("resize",()=>{updateLargeScreenRecommendation();if(!els.gameScreen.hidden){resizeCanvas();if(game?.bird)game.bird.x=clamp(game.bird.x,50,window.innerWidth*.32)}});
-window.addEventListener("visibilitychange",()=>{if(document.hidden&&game?.running&&!game.paused){game.paused=true;cancelAnimationFrame(raf);els.pauseScore.textContent=game.score+" puntos";showOnly(els.pauseScreen)}});
+document.addEventListener("visibilitychange",()=>{
+  if(document.hidden){pauseGame(true);return}
+  if(game?.running&&visibilityPaused){resumeGame();return}
+  if(game?.running&&!game.paused){
+    game.last=performance.now();
+    cancelGameLoop();
+    scheduleGameLoop();
+  }
+});
+window.addEventListener("focus",()=>{
+  if(!game?.running||game.paused)return;
+  game.last=performance.now();
+  cancelGameLoop();
+  scheduleGameLoop();
+});
 els.soundBtn.textContent=soundOn?"♪":"×";
 bootHome();
 })();

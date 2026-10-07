@@ -337,7 +337,8 @@ grant execute on function public.ams_fly_get_participant_profile() to authentica
 
 -- Public ranking projection: expose only the fields already shown publicly,
 -- and avoid granting public reads to the private participant profiles table.
-create or replace function public.ams_fly_public_ranking(p_limit integer default 100)
+drop function if exists public.ams_fly_public_ranking(integer);
+create or replace function public.ams_fly_public_ranking()
 returns table (
   participant_id uuid,
   player_name varchar,
@@ -369,11 +370,11 @@ as $$
   from best_scores b
   join latest_birds l using (participant_id)
   order by b.score desc, b.created_at asc, b.participant_id asc
-  limit greatest(1, least(coalesce(p_limit, 100), 100))
+  limit 100
 $$;
 
-revoke all on function public.ams_fly_public_ranking(integer) from public;
-grant execute on function public.ams_fly_public_ranking(integer) to anonymous, authenticated;
+revoke all on function public.ams_fly_public_ranking() from public;
+grant execute on function public.ams_fly_public_ranking() to anonymous, authenticated;
 
 -- Make the new RPC signature visible to the Data API immediately.
 notify pgrst, 'reload schema';
