@@ -1020,8 +1020,10 @@ html[data-theme="light"] #amsFlyEventScreen .event-detail-block:first-child .eve
 }
 html[data-theme="light"] #amsFlyEventScreen .event-brand-signature{
   color:#7c3aed!important;
-  background:none!important;
-  -webkit-text-fill-color:#7c3aed!important;
+  background:linear-gradient(100deg,#6d28d9,#db2777)!important;
+  -webkit-background-clip:text!important;
+  background-clip:text!important;
+  -webkit-text-fill-color:transparent!important;
   text-shadow:none!important;
   font-weight:950;
   letter-spacing:.045em;
