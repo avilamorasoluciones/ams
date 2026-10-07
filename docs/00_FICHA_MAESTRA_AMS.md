@@ -13,7 +13,7 @@ No guardar en este repositorio documentos de identidad completos, RUT, datos ban
 - Correo: equipo@avilamorasoluciones.com
 - WhatsApp: +57 305 254 7072
 - Web oficial: https://avilamorasoluciones.com/
-- URL heredada de prueba/compatibilidad: https://avilamorasoluciones.github.io/ams/
+- URL oficial: https://avilamorasoluciones.com/
 - Dominio oficial: https://avilamorasoluciones.com/
 
 ## Infraestructura
