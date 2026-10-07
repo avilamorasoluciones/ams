@@ -30,21 +30,21 @@ function friendlyNeonSyncError(error){
   const raw=[error?.message,error?.details,error?.hint,error?.code,error?.status].filter(Boolean).map(String).join(" | ").trim();
   const key=raw.toLowerCase().replace(/[_-]+/g," ");
   if(key.includes("auth required")||key.includes("unauthorized")||key.includes("jwt")||code==="401"||code==="403"){
-    return "Neon no detectó una sesión válida. Verifica el correo y vuelve a iniciar sesión.";
+    return "Tu sesión no está disponible. Vuelve a iniciar sesión e inténtalo nuevamente.";
   }
   if(key.includes("invalid participant")){
-    return "Neon rechazó los datos del piloto. Revisa nombre, país, ave y celular.";
+    return "Revisa que tu nombre, país, ave y celular estén completos e inténtalo nuevamente.";
   }
   if(key.includes("ams fly get participant profile")){
-    return "Neon no tiene habilitada la recuperación del perfil. Ejecuta neon/phone-profile-recovery-migration.sql.";
+    return "No pudimos cargar tu perfil en este momento. Intenta nuevamente.";
   }
   if(key.includes("ams fly register participant")){
-    return "Falta habilitar el registro de pilotos en Neon. Revisa la migración de AMS Fly.";
+    return "No pudimos guardar tu perfil en este momento. Intenta nuevamente.";
   }
   if(key.includes("pgrst202")||key.includes("function")&&key.includes("not found")){
-    return "Falta habilitar una función de AMS Fly en Neon. Revisa las migraciones del juego.";
+    return "No pudimos completar la sincronización de tu cuenta. Intenta nuevamente.";
   }
-  return "No pudimos sincronizar con Neon."+(raw?" Detalle: "+raw.slice(0,180):" Intenta de nuevo.");
+  return "No pudimos sincronizar tus datos en este momento. Intenta nuevamente.";
 }
 function neonAuthRetryable(error){
   const raw=[error?.message,error?.details,error?.hint,error?.code,error?.status].filter(Boolean).map(String).join(" ").toLowerCase();
@@ -1258,7 +1258,7 @@ async function signUpPlayer(){
       await syncParticipantProfile(user);
     }catch(syncError){
       console.error("AMS Fly: cuenta creada, pero el piloto aún no se pudo sincronizar",syncError);
-      setAuthStatus(els.registerStatus,"✓ Cuenta creada y datos guardados localmente. "+friendlyNeonSyncError(syncError),true);
+      setAuthStatus(els.registerStatus,"✓ Cuenta creada. Estamos terminando de sincronizar tus datos. Puedes continuar y volver a intentarlo en unos segundos.",true);
       await refreshAuthUI();
       if(readPendingScore()&&restorePendingResult())return;
       navigateTo("play");
@@ -1340,12 +1340,15 @@ async function saveAccount(){
     setAuthStatus(els.accountStatus,"✓ Datos guardados y sincronizados.");
   }catch(error){
     console.error("AMS Fly: no se pudo sincronizar el perfil",error);
-    setAuthStatus(els.accountStatus,"✓ Datos guardados en este dispositivo. "+friendlyNeonSyncError(error),true);
+    setAuthStatus(els.accountStatus,"No pudimos sincronizar los cambios con tu cuenta. Revisa tu conexión e inténtalo nuevamente.",true);
   }
 }
 async function signOutPlayer(){
   try{const client=await getNeonClient();await client.auth.signOut();profile=null;localStorage.removeItem(STORAGE_KEY);renderHomeBird();await refreshAuthUI();navigateTo("play")}
-  catch(error){setAuthStatus(els.accountStatus,error?.message||"No se pudo cerrar sesión.",true)}
+  catch(error){
+    console.error("AMS Fly: error al cerrar sesión",error);
+    setAuthStatus(els.accountStatus,"No pudimos cerrar tu sesión. Intenta nuevamente.",true);
+  }
 }
 function dismissLoadingScreen(){
   const loader=els.loadingScreen;
