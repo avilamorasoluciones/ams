@@ -13,8 +13,10 @@
     #du-scr-lobby[hidden],#du-scr-preturn[hidden],#du-scr-game[hidden],#du-scr-result[hidden],#du-point-actions[hidden],#du-result-message[hidden],#du-official-answer[hidden],#du-pause[hidden],#du-next[hidden],#du-countdown[hidden]{display:none!important}
     .du-config-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
     .du-mode-help{margin:0;color:var(--muted);font-size:.88rem;line-height:1.5;font-weight:700}
-    .du-team-names{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-    .du-team-names label{font-weight:800}
+    .du-team-names{display:grid;gap:12px}
+    .du-team-count-wrap{display:grid;grid-template-columns:minmax(0,180px);gap:8px}
+    .du-team-name-fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+    .du-team-name-fields label{font-weight:800}
 
     .du-config-grid label{font-weight:800}
     .du-player-list{display:grid;gap:8px}
@@ -51,7 +53,8 @@
     .du-history{display:grid;gap:8px}
     .du-history div{padding:10px;border-radius:10px;background:var(--player-bg)}
     @media(max-width:600px){
-      .du-config-grid,.du-roster-grid,.du-team-names{grid-template-columns:1fr}
+      .du-config-grid,.du-roster-grid{grid-template-columns:1fr}
+      .du-team-name-fields{grid-template-columns:1fr}
       .du-matchup{gap:7px}
       .du-preturn-matchup{gap:7px}
       .du-preturn-player{padding:14px 7px}
@@ -94,8 +97,15 @@
           </div>
           <p id="du-mode-help" class="du-mode-help">Todos contra todos: todos los jugadores se enfrentan entre sí una vez. Los puntos se acumulan por jugador y al final se muestran oro, plata y bronce.</p>
           <div id="du-team-names" class="du-team-names" hidden>
-            <label>Nombre del equipo 1<input id="du-team-name-a" type="text" maxlength="24" value="Equipo 1" autocomplete="off"></label>
-            <label>Nombre del equipo 2<input id="du-team-name-b" type="text" maxlength="24" value="Equipo 2" autocomplete="off"></label>
+            <label class="du-team-count-wrap">Cantidad de equipos
+              <select id="du-team-count">
+                <option value="2" selected>2 equipos</option>
+                <option value="3">3 equipos</option>
+                <option value="4">4 equipos</option>
+                <option value="5">5 equipos</option>
+              </select>
+            </label>
+            <div id="du-team-name-fields" class="du-team-name-fields"></div>
           </div>
         </div>
 
@@ -177,6 +187,6 @@
   </main>
   <script src="scripts.js?v=20261006-54" defer></script>
   <script src="datos_nuevos.js?v=20261005-02" defer></script>
-  <script src="duelo.js?v=20261006-10" defer></script>
+  <script src="duelo.js?v=20261006-11" defer></script>
 </body>
 </html>
