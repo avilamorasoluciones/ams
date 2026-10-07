@@ -210,7 +210,7 @@ const els = {};
   "accountDetails","accountEmail","accountName","accountLastName","accountDialCode","accountPhone","accountCountry","saveAccountBtn","accountStatus","accountTitle","accountSubtitle",
   "birdGrid","selectedBirdInfo","factTitle","factText","factSourceHint","factContinueBtn","gameCanvas","scoreValue","difficultyValue","pauseBtn","gameStartHint",
   "pauseScore","resumeBtn","bottomNav","quitBtn","resultBird","resultEyebrow","resultTitle","finalScore","resultBest","resultGames","newRecord",
-  "againBtn","soundBtn","rankingBackBtn","rankingRefreshBtn","rankingList","rankingStatus","scoreMessage","submitScoreBtn","submitScoreStatus","shareResultBtn","rankingScreen"
+  "againBtn","soundBtn","themeBtn","themeIcon","rankingBackBtn","rankingRefreshBtn","rankingList","rankingStatus","scoreMessage","submitScoreBtn","submitScoreStatus","shareResultBtn","rankingScreen"
 ].forEach(id => els[id] = document.getElementById(id));
 
 const ctx = els.gameCanvas.getContext("2d", {alpha:false});
@@ -220,6 +220,7 @@ let lastResult = null;
 let selectedBirdId = "condor-co";
 let currentFactIndex = 0;
 let soundOn = true;
+let theme = "dark";
 let pendingRegistration = null;
 let pendingScore = null;
 let eventConfig = null;
@@ -233,12 +234,36 @@ let raf = 0;
 let visibilityPaused = false;
 let lastStage = -1;
 const stages = [
-  {at:0,name:"CIELO ANDINO",top:"#07091a",mid:"#111536",bottom:"#17102b",pipe:"#6d42c9",glow:"#8b5cf6",particle:"#c4b5fd"},
-  {at:10,name:"ATARDECER COLOMBIANO",top:"#211329",mid:"#6b294d",bottom:"#1b1230",pipe:"#e16b8c",glow:"#f472b6",particle:"#facc15"},
-  {at:20,name:"SELVA VIVA",top:"#031b1b",mid:"#075e54",bottom:"#081f26",pipe:"#16a085",glow:"#34d399",particle:"#facc15"},
-  {at:30,name:"CIELO NEÓN",top:"#07102d",mid:"#1e2a78",bottom:"#2a1050",pipe:"#22d3ee",glow:"#22d3ee",particle:"#a78bfa"}
+  {at:0,name:"CIELO ANDINO",top:"#07091a",mid:"#111536",bottom:"#17102b",pipe:"#6d42c9",glow:"#8b5cf6",particle:"#c4b5fd",light:{top:"#e8f0ff",mid:"#c9d9f5",bottom:"#e8dcf7",pipe:"#7650c8",glow:"#7c3aed",particle:"#6d28d9"}},
+  {at:10,name:"ATARDECER COLOMBIANO",top:"#211329",mid:"#6b294d",bottom:"#1b1230",pipe:"#e16b8c",glow:"#f472b6",particle:"#facc15",light:{top:"#fff1e8",mid:"#f6c4d3",bottom:"#efe4fa",pipe:"#d85d82",glow:"#db2777",particle:"#b45309"}},
+  {at:20,name:"SELVA VIVA",top:"#031b1b",mid:"#075e54",bottom:"#081f26",pipe:"#16a085",glow:"#34d399",particle:"#facc15",light:{top:"#e7f7f2",mid:"#b9e7dc",bottom:"#e4f1f4",pipe:"#168b76",glow:"#059669",particle:"#b45309"}},
+  {at:30,name:"CIELO NEÓN",top:"#07102d",mid:"#1e2a78",bottom:"#2a1050",pipe:"#22d3ee",glow:"#22d3ee",particle:"#a78bfa",light:{top:"#e9efff",mid:"#c6d3f5",bottom:"#eadff8",pipe:"#178aa8",glow:"#0891b2",particle:"#6d28d9"}}
 ];
 
+
+function applyTheme(mode){
+  theme=mode==="light"?"light":"dark";
+  document.documentElement.dataset.theme=theme;
+  const light=theme==="light";
+  if(els.themeBtn){
+    els.themeBtn.setAttribute("aria-label",light?"Activar tema oscuro":"Activar tema claro");
+    els.themeBtn.title=light?"Tema oscuro":"Tema claro";
+  }
+  if(els.themeIcon)els.themeIcon.textContent=light?"☾":"☼";
+  const meta=document.querySelector('meta[name="theme-color"]');
+  if(meta)meta.setAttribute("content",light?"#eef2f7":"#090817");
+}
+function initTheme(){
+  let saved="dark";
+  try{saved=localStorage.getItem("ams-fly-theme")==="light"?"light":"dark"}catch(_){}
+  applyTheme(saved);
+}
+function toggleTheme(){
+  const next=theme==="light"?"dark":"light";
+  applyTheme(next);
+  try{localStorage.setItem("ams-fly-theme",next)}catch(_){}
+  if(game?.running&&!game.paused)draw();
+}
 
 function getEventConfig(){
   return eventConfig||{...DEFAULT_EVENT,active:false};
@@ -616,23 +641,30 @@ function update(dt){
 }
 function drawBackground(w,h){
   const stage=game.stage||currentStage(game.score);
-  const g=ctx.createLinearGradient(0,0,0,h);g.addColorStop(0,stage.top);g.addColorStop(.55,stage.mid);g.addColorStop(1,stage.bottom);ctx.fillStyle=g;ctx.fillRect(0,0,w,h);
-  const glow=ctx.createRadialGradient(w*.5,h*.35,10,w*.5,h*.35,Math.max(w,h)*.7);glow.addColorStop(0,"rgba(139,92,246,.14)");glow.addColorStop(1,"rgba(139,92,246,0)");ctx.fillStyle=glow;ctx.fillRect(0,0,w,h);
+  const palette=theme==="light"?(stage.light||stage):stage;
+  const glowColor=theme==="light"?"rgba(124,58,237,.12)":"rgba(139,92,246,.14)";
+  const gridColor=theme==="light"?"rgba(15,23,42,.055)":"rgba(255,255,255,.035)";
+  const g=ctx.createLinearGradient(0,0,0,h);g.addColorStop(0,palette.top);g.addColorStop(.55,palette.mid);g.addColorStop(1,palette.bottom);ctx.fillStyle=g;ctx.fillRect(0,0,w,h);
+  const glow=ctx.createRadialGradient(w*.5,h*.35,10,w*.5,h*.35,Math.max(w,h)*.7);glow.addColorStop(0,glowColor);glow.addColorStop(1,"rgba(124,58,237,0)");ctx.fillStyle=glow;ctx.fillRect(0,0,w,h);
   ctx.globalAlpha=.7;
-  for(let i=0;i<18;i++){const x=((i*97+game.time*18)%w),y=(i*71+(game.time*(10+i%4)))%h;ctx.fillStyle=stage.particle;ctx.fillRect(x,y,1.5,1.5)}
+  for(let i=0;i<18;i++){const x=((i*97+game.time*18)%w),y=(i*71+(game.time*(10+i%4)))%h;ctx.fillStyle=palette.particle;ctx.fillRect(x,y,1.5,1.5)}
   ctx.globalAlpha=1;
-  ctx.strokeStyle="rgba(255,255,255,.035)";ctx.lineWidth=1;
+  ctx.strokeStyle=gridColor;ctx.lineWidth=1;
   const offset=(game?.time*game.worldSpeed*.13)%48;
   for(let x=-48+offset;x<w+48;x+=48){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,h);ctx.stroke()}
 }
 function drawPipe(p,h){
   const stage=game.stage||currentStage(game.score);
-  const grad=ctx.createLinearGradient(p.x,0,p.x+game.pipeW,0);grad.addColorStop(0,"#16132c");grad.addColorStop(.5,stage.pipe);grad.addColorStop(1,"#201636");
-  ctx.fillStyle=grad;ctx.shadowColor=stage.glow;ctx.shadowBlur=16;
+  const palette=theme==="light"?(stage.light||stage):stage;
+  const baseStart=theme==="light"?"#d8dee9":"#16132c";
+  const baseEnd=theme==="light"?"#eef2f7":"#201636";
+  const highlight=theme==="light"?"rgba(255,255,255,.58)":"rgba(255,255,255,.11)";
+  const grad=ctx.createLinearGradient(p.x,0,p.x+game.pipeW,0);grad.addColorStop(0,baseStart);grad.addColorStop(.5,palette.pipe);grad.addColorStop(1,baseEnd);
+  ctx.fillStyle=grad;ctx.shadowColor=palette.glow;ctx.shadowBlur=theme==="light"?12:16;
   ctx.fillRect(p.x,0,game.pipeW,p.top);ctx.fillRect(p.x,p.bottom,game.pipeW,h-p.bottom);
-  ctx.shadowBlur=0;ctx.fillStyle=stage.glow;
+  ctx.shadowBlur=0;ctx.fillStyle=palette.glow;
   ctx.fillRect(p.x-5,p.top-12,game.pipeW+10,12);ctx.fillRect(p.x-5,p.bottom,game.pipeW+10,12);
-  ctx.fillStyle="rgba(255,255,255,.11)";ctx.fillRect(p.x+10,0,4,p.top);ctx.fillRect(p.x+10,p.bottom,4,h-p.bottom);
+  ctx.fillStyle=highlight;ctx.fillRect(p.x+10,0,4,p.top);ctx.fillRect(p.x+10,p.bottom,4,h-p.bottom);
 }
 function drawBird(){
   const b=game.bird;ctx.save();ctx.translate(b.x,b.y);ctx.rotate(clamp(b.vy/650,-.45,.65));
@@ -1407,6 +1439,7 @@ function bootHome(){
     applyEventConfig();
     fillDialSelect("playerDialCode","57");
     fillDialSelect("accountDialCode","57");
+    initTheme();
     if(NEON_DATA_READY()) loadRemoteEventConfig();
     refreshAuthUI();
     updateLargeScreenRecommendation();
@@ -1537,6 +1570,7 @@ els.rankingBackBtn?.addEventListener("click",()=>navigateTo("play"));
 els.rankingRefreshBtn?.addEventListener("click",loadRanking);
 window.addEventListener("ams-fly-event-updated",event=>{if(!event.detail)return;saveEventConfig({...DEFAULT_EVENT,...event.detail});applyEventConfig()});
 els.soundBtn.addEventListener("click",()=>{soundOn=!soundOn;els.soundBtn.textContent=soundOn?"♪":"×";if(soundOn){playTone(600,.05);startMusic()}else stopMusic()});
+els.themeBtn?.addEventListener("click",toggleTheme);
 function action(e){if(["BUTTON","INPUT","SELECT"].includes(e.target?.tagName))return;e.preventDefault();if(els.gameScreen.hidden)return;flap()}
 els.gameScreen.addEventListener("pointerdown",action,{passive:false});
 window.addEventListener("keydown",e=>{if(e.code==="Space"||e.code==="ArrowUp"){e.preventDefault();if(!els.gameScreen.hidden)flap()}if(e.code==="Escape"&&game?.running&&!game.paused){els.pauseBtn.click()}});
