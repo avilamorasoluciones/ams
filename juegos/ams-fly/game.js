@@ -121,8 +121,9 @@ async function getRankingRows(client){
   const result=await client.rpc("ams_fly_public_ranking");
   if(!result.error)return {rows:(result.data||[]).slice(0,RANKING_LIMIT),fallback:false};
   if(String(result.error.code||"")!=="PGRST202")throw result.error;
-  console.warn("AMS Fly: RPC de ranking no disponible; usando puntuaciones públicas",result.error);
-  return {rows:await loadRankingFromScores(client),fallback:true};
+  // No usamos snapshots de ams_fly_scores como fallback: podrían mostrar
+  // nombre/país/ave antiguos después de editar la cuenta.
+  throw new Error("ranking_rpc_unavailable");
 }
 function escapeHtml(value){
   return String(value ?? "").replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
@@ -876,7 +877,7 @@ async function publishScoreInternal(options={}){
     // RPC en cada publicación: evita una llamada de red y acelera el guardado.
     if(!participantId){
       let participantResult=await client.rpc("ams_fly_register_participant",{
-        p_name:profile.name,p_country:profile.country,p_bird_id:profile.birdId,p_phone:null,p_score:0
+        p_name:profile.name,p_country:profile.country,p_bird_id:profile.birdId,p_phone:profile.phone||null,p_score:0
       });
 
       if(participantResult.error && String(participantResult.error.message||"").includes("auth_required")){
@@ -1300,6 +1301,13 @@ async function syncParticipantProfile(user){
   if(!remote.participant_id)throw new Error("participant_not_confirmed");
   profile.participantId=remote.participant_id;
   profile.prizeEligible=remote.prize_eligible!==false;
+  // Neon queda como fuente de verdad: recuperamos el perfil persistido
+  // para que el navegador no conserve una copia distinta.
+  const persisted=await getRemoteParticipantProfile(user);
+  if(persisted){
+    profile={...profile,...persisted,email:String(user.email||"").toLowerCase()};
+    selectedBirdId=profile.birdId||selectedBirdId;
+  }
 }
 async function saveAccount(){
   const user=await getCurrentAuthUser().catch(()=>null);
