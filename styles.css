@@ -1193,3 +1193,53 @@ body.light-theme .payment-modal-cancel:hover{
 @media(prefers-reduced-motion:reduce){
   .payment-modal-card{animation:none}
 }
+
+
+/* AMS · navegación móvil ultracompacta · pantallas CSS estrechas */
+@media(max-width:390px){
+  .nav-inner{
+    gap:6px!important;
+  }
+  .brand-text{
+    font-size:1.28rem!important;
+    letter-spacing:-.8px!important;
+  }
+  .brand-sub{
+    font-size:9px!important;
+    margin-top:2px!important;
+  }
+  .mobile-utilities{
+    gap:3px!important;
+  }
+  .mobile-utilities .nav-shortcut{
+    width:28px!important;
+    height:28px!important;
+    border-radius:9px!important;
+  }
+  .mobile-utilities .nav-shortcut i{
+    font-size:.68rem!important;
+  }
+  .mobile-utilities .nav-shortcuts{
+    gap:3px!important;
+  }
+  .mobile-utilities .nav-compact-payment{
+    width:32px!important;
+    min-width:32px!important;
+    height:28px!important;
+    border-radius:9px!important;
+    padding:3px!important;
+  }
+  .mobile-utilities .nav-compact-payment i{
+    font-size:.68rem!important;
+  }
+  .mobile-utilities .nav-venezuela-compact{
+    width:28px!important;
+    min-width:28px!important;
+    height:28px!important;
+    border-radius:9px!important;
+  }
+  .mobile-utilities .nav-venezuela-compact .flag-emoji{
+    width:18px!important;
+    height:13px!important;
+  }
+}
