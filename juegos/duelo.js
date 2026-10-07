@@ -28,8 +28,6 @@ const Duelo = (() => {
   let countdownTimer = null;
   let countdownActive = false;
   let countdownSeconds = 5;
-  let matchBreakActive = false;
-  let matchBreakSeconds = 6;
   let currentMatchPoints = {a:0,b:0};
   let timerEndsAt = 0;
   let remainingMs = 0;
@@ -160,7 +158,7 @@ const Duelo = (() => {
   function save() {
     if (currentScreen === "du-scr-lobby") captureLobbyConfig();
     window.GameSession?.save("duelo", {
-      schemaVersion: 6, players, mode, time, targetPoints, currentCategory, currentMatchPoints, matchBreakActive, matchBreakSeconds,
+      schemaVersion: 7, players, mode, time, targetPoints, currentCategory, currentMatchPoints,
       participants, matches, matchIndex, playerScores, teamScores, tournamentRound, current, questionDeck,
       lastQuestionIndex, timerEndsAt, remainingMs, paused, phase, history, screen: currentScreen
     });
@@ -168,7 +166,7 @@ const Duelo = (() => {
 
   function showScreen(id) {
     currentScreen = id;
-    ["du-scr-lobby", "du-scr-game", "du-scr-result"].forEach(screenId => {
+    ["du-scr-lobby", "du-scr-preturn", "du-scr-game", "du-scr-result"].forEach(screenId => {
       $(screenId).hidden = screenId !== id;
     });
     save();
@@ -233,9 +231,7 @@ const Duelo = (() => {
     $("du-countdown").hidden = !countdownActive;
     $("du-countdown-number").textContent = String(Math.max(0, countdownActive ? countdownSeconds : 0));
     const countdownHint = $("du-countdown")?.querySelector("small");
-    if (countdownHint) countdownHint.textContent = matchBreakActive
-      ? "Siguiente duelo. Prepárense los próximos jugadores."
-      : "Prepárense. Empieza el duelo.";
+    if (countdownHint) countdownHint.textContent = "Prepárense. Empieza el duelo.";
     $("du-pause-banner").hidden = !paused;
     $("du-pause").hidden = phase !== "answer";
     $("du-pause").textContent = paused ? "Continuar" : "Pausar";
@@ -247,9 +243,7 @@ const Duelo = (() => {
         : "");
 
     if (countdownActive) {
-      $("du-status").textContent = matchBreakActive
-        ? "Cambio de jugadores. Tómense un momento para prepararse."
-        : "Prepárense…";
+      $("du-status").textContent = "Prepárense…";
     } else if (paused) {
       $("du-status").textContent = "Duelo en pausa.";
     } else if (phase === "answer") {
@@ -259,14 +253,69 @@ const Duelo = (() => {
     }
   }
 
+  function renderPreturn() {
+    const pair = currentMatch();
+    const isFirst = tournamentRound === 1 && matchIndex === 0 && !history.some(item => item.question || item.bye);
+    $("du-preturn-kicker").textContent = isFirst
+      ? "Primer duelo"
+      : (mode === "tournament" ? "Siguiente duelo · Ronda " + tournamentRound : "Siguiente duelo");
+    $("du-preturn-title").textContent = isFirst ? "Prepárense para empezar" : "Los siguientes son…";
+    $("du-preturn-round").textContent = mode === "tournament"
+      ? "Ronda " + tournamentRound + " · Duelo " + (matchIndex + 1) + " de " + matches.length
+      : "Enfrentamiento " + (matchIndex + 1) + " de " + matches.length;
+    $("du-preturn-a").textContent = pair?.a?.name || "Jugador";
+    $("du-preturn-b").textContent = pair?.b?.name || "Jugador";
+    $("du-preturn-team-a").textContent = mode === "teams"
+      ? "Equipo " + (pair?.a?.team === 0 ? "A" : "B")
+      : "Jugador";
+    $("du-preturn-team-b").textContent = mode === "teams"
+      ? "Equipo " + (pair?.b?.team === 0 ? "A" : "B")
+      : "Jugador";
+    $("du-preturn-info").textContent = "Cuando estén listos, pulsa Siguiente. Después habrá 5 segundos de cuenta regresiva y comenzarán las preguntas.";
+  }
+
+  function showNextMatchScreen() {
+    clearInterval(countdownTimer);
+    clearInterval(timer);
+    timer = null;
+    countdownTimer = null;
+    countdownActive = false;
+    current = null;
+    timerEndsAt = 0;
+    remainingMs = 0;
+    paused = false;
+    phase = "preturn";
+
+    // Los pases automáticos del torneo se resuelven sin pedir preparación para un jugador inexistente.
+    while (mode === "tournament" && matches[matchIndex] && !matches[matchIndex].b) {
+      const bracketMatch = matches[matchIndex];
+      bracketMatch.winner = bracketMatch.a;
+      history.push({
+        match: matchIndex + 1, round: tournamentRound, bye: true,
+        a: bracketMatch.a, b: "", winner: bracketMatch.a,
+        question: "", category: "", answer: ""
+      });
+      matchIndex += 1;
+    }
+
+    if (matchIndex >= matches.length) {
+      prepareNextTournamentRound();
+      return;
+    }
+
+    renderPreturn();
+    showScreen("du-scr-preturn");
+  }
+
   function startCountdown() {
     clearInterval(countdownTimer);
     clearInterval(timer);
     timer = null;
     countdownActive = true;
-    matchBreakActive = false;
     countdownSeconds = 5;
     phase = "countdown";
+    current = null;
+    timerEndsAt = 0;
     render();
     showScreen("du-scr-game");
     window.emitSound?.(620, 0.08, "sine", 0.16);
@@ -276,43 +325,12 @@ const Duelo = (() => {
         clearInterval(countdownTimer);
         countdownTimer = null;
         countdownActive = false;
-        phase = "answer";
         window.emitSound?.(880, 0.16, "sine", 0.2);
-        timerEndsAt = Date.now() + time * 1000;
-        render();
-        startTimer(timerEndsAt);
+        beginMatch();
         save();
         return;
       }
       window.emitSound?.(620 + (5 - countdownSeconds) * 55, 0.08, "sine", 0.16);
-      render();
-    }, 1000);
-  }
-
-  function startNextMatchCountdown() {
-    clearInterval(countdownTimer);
-    clearInterval(timer);
-    timer = null;
-    countdownActive = true;
-    matchBreakActive = true;
-    countdownSeconds = matchBreakSeconds;
-    phase = "countdown";
-    current = null;
-    timerEndsAt = 0;
-    render();
-    showScreen("du-scr-game");
-    window.emitSound?.(520, 0.08, "sine", 0.14);
-    countdownTimer = setInterval(() => {
-      countdownSeconds -= 1;
-      if (countdownSeconds <= 0) {
-        clearInterval(countdownTimer);
-        countdownTimer = null;
-        countdownActive = false;
-        matchBreakActive = false;
-        beginMatch();
-        return;
-      }
-      window.emitSound?.(520 + (matchBreakSeconds - countdownSeconds) * 45, 0.07, "sine", 0.14);
       render();
       save();
     }, 1000);
@@ -449,14 +467,11 @@ const Duelo = (() => {
     current = null;
     countdownActive = false;
     countdownSeconds = 5;
-    matchBreakActive = false;
-    matchBreakSeconds = 6;
     questionDeck = [];
     lastQuestionIndex = -1;
     showError("");
     window.emitSound?.(440, 0.03, "sine", 0.035);
-    beginMatch();
-    startCountdown();
+    showNextMatchScreen();
   }
 
   function resolve(winnerId) {
@@ -512,7 +527,7 @@ const Duelo = (() => {
       if (mode === "tournament" && matchIndex >= matches.length) {
         prepareNextTournamentRound();
       } else {
-        startNextMatchCountdown();
+        showNextMatchScreen();
       }
       return;
     }
@@ -531,7 +546,7 @@ const Duelo = (() => {
     matches = buildMatches(winners.map(id => getParticipant(id)).filter(Boolean));
     matchIndex = 0;
     history.push({ round: tournamentRound, transition: true, winner: "" });
-    startNextMatchCountdown();
+    showNextMatchScreen();
   }
 
   function advance() {
@@ -642,8 +657,6 @@ const Duelo = (() => {
     phase = "idle";
     countdownActive = false;
     countdownSeconds = 5;
-    matchBreakActive = false;
-    matchBreakSeconds = 6;
     history = [];
     questionDeck = [];
     paused = false;
@@ -655,7 +668,7 @@ const Duelo = (() => {
   }
 
   function restore(state) {
-    if (!state || ![3,4,5,6].includes(state.schemaVersion)) return false;
+    if (!state || ![3,4,5,6,7].includes(state.schemaVersion)) return false;
     players = Array.isArray(state.players) ? state.players.filter(name => typeof name === "string" && name.trim()) : players;
     mode = state.mode === "tournament" || state.mode === "teams" ? state.mode : "duel";
     time = Number(state.time || 12);
@@ -665,8 +678,6 @@ const Duelo = (() => {
     participants = Array.isArray(state.participants) ? state.participants : [];
     matches = Array.isArray(state.matches) ? state.matches : [];
     currentMatchPoints = state.currentMatchPoints && typeof state.currentMatchPoints === "object" ? state.currentMatchPoints : {a:0,b:0};
-    matchBreakActive = Boolean(state.matchBreakActive);
-    matchBreakSeconds = Number(state.matchBreakSeconds || 6);
     matchIndex = Math.max(0, Number(state.matchIndex || 0));
     playerScores = state.playerScores && typeof state.playerScores === "object" ? state.playerScores : {};
     teamScores = state.teamScores && typeof state.teamScores === "object" ? state.teamScores : {0:0,1:0};
@@ -689,15 +700,16 @@ const Duelo = (() => {
       showScreen("du-scr-lobby");
       return true;
     }
-    if (currentScreen === "du-scr-game" && current) {
+    if (currentScreen === "du-scr-preturn" || phase === "preturn") {
+      showNextMatchScreen();
+      return true;
+    }
+    if (currentScreen === "du-scr-game" && (current || phase === "countdown")) {
       countdownActive = phase === "countdown";
       render();
       showScreen("du-scr-game");
       if (phase === "answer" && !paused) startTimer(timerEndsAt, remainingMs);
-      if (phase === "countdown") {
-        if (matchBreakActive) startNextMatchCountdown();
-        else startCountdown();
-      }
+      if (phase === "countdown") startCountdown();
       return true;
     }
     if (currentScreen === "du-scr-result") {
@@ -735,8 +747,6 @@ const Duelo = (() => {
     phase = "idle";
     countdownActive = false;
     countdownSeconds = 5;
-    matchBreakActive = false;
-    matchBreakSeconds = 6;
     history = [];
     questionDeck = [];
     paused = false;
@@ -771,6 +781,8 @@ const Duelo = (() => {
       save();
     };
     $("du-start").onclick = startGame;
+    $("du-start-next").onclick = startCountdown;
+    $("du-preturn-exit").onclick = exitToMenu;
     $("du-point-a").onclick = () => {
       const pair = currentMatch();
       if (pair?.a) resolve(pair.a.id);
@@ -784,7 +796,7 @@ const Duelo = (() => {
     $("du-end-cancel").onclick = closeExitConfirm;
     $("du-end-confirm-submit").onclick = exitToMenu;
     $("du-top-menu").onclick = event => {
-      if (currentScreen === "du-scr-game") {
+      if (currentScreen === "du-scr-game" || currentScreen === "du-scr-preturn") {
         event.preventDefault();
         openExitConfirm();
       }
