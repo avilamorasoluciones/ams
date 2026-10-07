@@ -1248,13 +1248,13 @@ async function signUpPlayer(){
       navigateTo("play");
       return;
     }
-    localStorage.removeItem(PENDING_REG_KEY);
+    pendingRegistration=null;
     saveProfile();await refreshAuthUI();
     if(readPendingScore()&&restorePendingResult())return;
     navigateTo("play");
   }catch(error){
     const code=String(error?.code||"").toUpperCase();
-    if(code==="USER_ALREADY_EXISTS"||code==="EMAIL_ALREADY_EXISTS")localStorage.removeItem(PENDING_REG_KEY);
+    if(code==="USER_ALREADY_EXISTS"||code==="EMAIL_ALREADY_EXISTS")pendingRegistration=null;
     setAuthStatus(els.registerStatus,friendlyAuthError(error,"No se pudo crear la cuenta. Si el correo ya existe, vuelve al inicio de sesión."),true);
   }
   finally{els.authSignUpBtn.disabled=false}
@@ -1320,7 +1320,7 @@ async function saveAccount(){
   try{
     await syncParticipantProfile(user);
     saveProfile();
-    localStorage.removeItem(PENDING_REG_KEY);
+    pendingRegistration=null;
     setAuthStatus(els.accountStatus,"✓ Datos guardados y sincronizados.");
   }catch(error){
     console.error("AMS Fly: no se pudo sincronizar el perfil",error);
