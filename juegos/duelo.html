@@ -10,7 +10,7 @@
   <link rel="icon" href="pwa-icon-192.svg" type="image/svg+xml">
   <link rel="stylesheet" href="styles.css?v=20261006-53">
   <style>
-    #du-scr-lobby[hidden],#du-scr-game[hidden],#du-scr-result[hidden],#du-point-actions[hidden],#du-result-message[hidden],#du-official-answer[hidden],#du-pause[hidden],#du-next[hidden],#du-countdown[hidden]{display:none!important}
+    #du-scr-lobby[hidden],#du-scr-preturn[hidden],#du-scr-game[hidden],#du-scr-result[hidden],#du-point-actions[hidden],#du-result-message[hidden],#du-official-answer[hidden],#du-pause[hidden],#du-next[hidden],#du-countdown[hidden]{display:none!important}
     .du-config-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
     .du-mode-help{margin:0;color:var(--muted);font-size:.88rem;line-height:1.5;font-weight:700}
     .du-config-grid label{font-weight:800}
@@ -20,6 +20,16 @@
     .du-roster-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
     .du-team-roster{display:grid;gap:10px;padding:14px;border:1px solid var(--border-light);border-radius:14px}
     .du-team-roster h3{margin:0}
+    .du-preturn{text-align:center}
+    .du-preturn-kicker{display:block;color:var(--muted);font-weight:900;text-transform:uppercase;letter-spacing:.08em;font-size:.78rem}
+    .du-preturn-title{margin:4px 0 0;font-size:clamp(1.55rem,5vw,2.2rem);font-weight:1000;line-height:1.1}
+    .du-preturn-round{margin:0;color:var(--muted);font-weight:800}
+    .du-preturn-matchup{display:grid;grid-template-columns:1fr auto 1fr;align-items:stretch;gap:12px}
+    .du-preturn-player{display:grid;align-content:center;gap:6px;min-width:0;padding:18px 12px;border:2px solid var(--border-light);border-radius:18px;background:var(--player-bg)}
+    .du-preturn-player small{color:var(--muted);font-weight:800}
+    .du-preturn-player strong{font-size:clamp(1.05rem,4vw,1.35rem);overflow-wrap:anywhere}
+    .du-preturn-vs{align-self:center;font-weight:1000;color:var(--muted)}
+    .du-preturn-info{margin:0;color:var(--muted);font-weight:700;line-height:1.5}
     .du-countdown{display:grid;place-items:center;gap:4px;padding:16px;border:1px solid var(--border-light);border-radius:16px;background:var(--player-bg);text-align:center}
     .du-countdown-number{font-size:clamp(3rem,14vw,5rem);font-weight:1000;line-height:1}
     .du-countdown small{color:var(--muted);font-weight:800}
@@ -40,6 +50,8 @@
     @media(max-width:600px){
       .du-config-grid,.du-roster-grid{grid-template-columns:1fr}
       .du-matchup{gap:7px}
+      .du-preturn-matchup{gap:7px}
+      .du-preturn-player{padding:14px 7px}
       .du-contestant{padding:10px 7px}
       .du-point-actions{grid-template-columns:1fr;gap:18px}
       .du-point-actions button{min-height:72px}
@@ -94,6 +106,28 @@
         <a id="du-lobby-menu" class="btn ghost btn-full" href="index.html">Volver</a>
       </div>
 
+      <div id="du-scr-preturn" class="box narrow stack du-preturn" hidden>
+        <span id="du-preturn-kicker" class="du-preturn-kicker">Primer duelo</span>
+        <h2 id="du-preturn-title" class="du-preturn-title">Prepárense para empezar</h2>
+        <p id="du-preturn-round" class="du-preturn-round">Enfrentamiento 1</p>
+
+        <div class="du-preturn-matchup">
+          <div class="du-preturn-player">
+            <small id="du-preturn-team-a">Jugador</small>
+            <strong id="du-preturn-a">-</strong>
+          </div>
+          <span class="du-preturn-vs">VS</span>
+          <div class="du-preturn-player">
+            <small id="du-preturn-team-b">Jugador</small>
+            <strong id="du-preturn-b">-</strong>
+          </div>
+        </div>
+
+        <p id="du-preturn-info" class="du-preturn-info">Cuando estén listos, pulsa Siguiente. Después habrá 5 segundos de cuenta regresiva y comenzarán las preguntas.</p>
+        <button id="du-start-next" class="btn primary btn-full" type="button">Siguiente</button>
+        <button id="du-preturn-exit" class="btn ghost btn-full" type="button">Salir de la partida</button>
+      </div>
+
       <div id="du-scr-game" class="box narrow stack" hidden>
         <div class="row" style="justify-content:space-between"><span id="du-round-label" class="badge badge-indigo"></span><span id="du-cat-label" class="badge"></span></div>
         <div class="du-matchup">
@@ -136,6 +170,6 @@
   </main>
   <script src="scripts.js?v=20261006-54" defer></script>
   <script src="datos_nuevos.js?v=20261005-02" defer></script>
-  <script src="duelo.js?v=20261006-08" defer></script>
+  <script src="duelo.js?v=20261006-09" defer></script>
 </body>
 </html>
