@@ -1206,18 +1206,28 @@
       .ams-story-message{display:block}
       .ams-story-founders{display:flex;justify-content:center;align-items:center;gap:12px;margin-top:3px;flex-wrap:wrap}
       .ams-story-founders>span{white-space:nowrap;display:inline-flex;align-items:center;gap:7px}.story-flag-emoji{display:block;width:24px;height:18px;object-fit:contain}
-      .ams-linkedin-footer{display:flex;flex-direction:column;align-items:center;gap:7px;margin-top:12px}
-      .ams-linkedin-company{display:inline-flex;align-items:center;justify-content:center;width:32px;height:32px;color:inherit;text-decoration:none;opacity:.9;transition:opacity .2s ease,transform .2s ease}
-      .ams-linkedin-company i{font-size:1.45rem}
-      .ams-linkedin-company:hover{opacity:1;transform:translateY(-1px)}
-      .ams-linkedin-founders{display:flex;align-items:center;justify-content:center;gap:12px}
-      .ams-linkedin-person{display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;color:inherit;text-decoration:none;opacity:.38;transition:opacity .2s ease,transform .2s ease}
-      .ams-linkedin-person i{font-size:.82rem}
-      .ams-linkedin-person:hover{opacity:.72;transform:translateY(-1px)}
-      .ams-linkedin-tip{position:relative}
-      .ams-linkedin-tip::after{content:attr(data-tooltip);position:absolute;left:50%;bottom:calc(100% + 8px);transform:translate(-50%,4px);padding:5px 8px;border-radius:7px;background:rgba(15,23,42,.96);color:#fff;font-size:.62rem;font-weight:700;line-height:1.2;white-space:nowrap;pointer-events:none;opacity:0;visibility:hidden;transition:opacity .15s ease,transform .15s ease;z-index:20;box-shadow:0 6px 18px rgba(0,0,0,.18)}
-      .ams-linkedin-tip:hover::after,.ams-linkedin-tip:focus-visible::after{opacity:1;visibility:visible;transform:translate(-50%,0)}
-      body.light-theme .ams-linkedin-tip::after{background:rgba(15,23,42,.96);color:#fff}
+      .ams-footer-contact{margin-top:10px;display:flex;flex-direction:column;align-items:center;gap:8px}
+      .ams-footer-socials{display:flex;align-items:center;justify-content:center;gap:12px}
+      .ams-footer-company-social{width:30px;height:30px;display:inline-flex;align-items:center;justify-content:center;color:inherit;text-decoration:none;opacity:.78;transition:opacity .2s ease,transform .2s ease}
+      .ams-footer-company-social i{font-size:1.2rem}
+      .ams-footer-company-social:hover{opacity:1;transform:translateY(-1px)}
+      .ams-footer-whatsapp{color:#25d366}
+      .ams-footer-email{display:inline-flex;align-items:center;justify-content:center;gap:6px;color:inherit;text-decoration:none;font-size:.78rem}
+      .ams-footer-email i{font-size:.82rem}
+      .ams-footer-links{display:flex;flex-direction:column;align-items:center;gap:9px;margin-top:12px;font-size:.78rem}
+      .ams-footer-legal{display:flex;justify-content:center;gap:14px;flex-wrap:wrap}
+      .ams-footer-legal a{color:inherit;text-decoration:none}
+      .ams-footer-personal{display:flex;align-items:center;justify-content:center;gap:9px}
+      .ams-footer-person{position:relative;display:inline-flex;align-items:center;gap:5px;padding:4px 8px;border-radius:999px;color:#fff!important;text-decoration:none;font-size:.58rem;font-weight:800;line-height:1;box-shadow:0 4px 12px rgba(0,0,0,.16);transition:transform .2s ease,filter .2s ease}
+      .ams-footer-person i{font-size:.68rem}
+      .ams-footer-person:hover{transform:translateY(-1px);filter:brightness(1.08)}
+      .ams-footer-maria{background:#8b5cf6}
+      .ams-footer-diego{background:#2563eb}
+      .ams-footer-person-separator{color:var(--text-muted,#94a3b8);font-weight:800;font-size:.7rem}
+      @media(max-width:520px){
+        .ams-footer-person{font-size:.55rem;padding:4px 7px}
+        .ams-footer-legal{gap:11px}
+      }
 
       @media(max-width:520px){
         .ams-story-signature{max-width:300px}
@@ -1236,21 +1246,31 @@
           <span>María José <img class="story-flag-emoji" src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.3/assets/svg/1f1fb-1f1ea.svg" alt="Venezuela" width="24" height="18" /></span>
         </span>
       </div>
-      <div style="margin-top:10px;display:flex;justify-content:center;gap:10px;flex-wrap:wrap;align-items:center;font-size:.78rem;">
-        <a href="mailto:equipo@avilamorasoluciones.com" target="_blank" rel="noopener"><i class="fa-solid fa-envelope"></i> equipo@avilamorasoluciones.com</a>
-        <a href="https://wa.me/573052547072?text=Hola%20Avila%20Mora%20Soluciones!%20Quiero%20información%20sobre%20sus%20servicios." target="_blank" rel="noopener" aria-label="WhatsApp · Información"><i class="fa-brands fa-whatsapp" aria-hidden="true"></i> WhatsApp</a>
-      </div>
-      <div class="ams-linkedin-footer" aria-label="LinkedIn">
-        <a class="ams-linkedin-company ams-linkedin-tip" href="https://www.linkedin.com/company/avilamorasoluciones/" target="_blank" rel="noopener" aria-label="LinkedIn · Avila Mora Soluciones" data-tooltip="Avila Mora Soluciones">
-          <i class="fa-brands fa-linkedin" aria-hidden="true"></i>
-        </a>
-        <div class="ams-linkedin-founders" aria-label="LinkedIn · Fundadores">
-          <a class="ams-linkedin-person ams-linkedin-tip" href="https://www.linkedin.com/in/avilardiegoa/" target="_blank" rel="noopener" aria-label="LinkedIn · Diego Andrés Avila Ríos" data-tooltip="Diego Andrés Avila Ríos"><i class="fa-brands fa-linkedin" aria-hidden="true"></i></a>
-          <a class="ams-linkedin-person ams-linkedin-tip" href="https://www.linkedin.com/in/morammariaj/" target="_blank" rel="noopener" aria-label="LinkedIn · María José Mora Martínez" data-tooltip="María José Mora Martínez"><i class="fa-brands fa-linkedin" aria-hidden="true"></i></a>
+      <div class="ams-footer-contact" aria-label="Contacto y redes">
+        <div class="ams-footer-socials">
+          <a class="ams-footer-company-social" href="https://www.linkedin.com/company/avilamorasoluciones/" target="_blank" rel="noopener" aria-label="LinkedIn · Avila Mora Soluciones"><i class="fa-brands fa-linkedin" aria-hidden="true"></i></a>
+          <a class="ams-footer-company-social ams-footer-whatsapp" href="https://wa.me/573052547072?text=Hola%20Avila%20Mora%20Soluciones!%20Quiero%20información%20sobre%20sus%20servicios." target="_blank" rel="noopener" aria-label="WhatsApp · Información"><i class="fa-brands fa-whatsapp" aria-hidden="true"></i></a>
         </div>
+        <a class="ams-footer-email" href="mailto:equipo@avilamorasoluciones.com" target="_blank" rel="noopener"><i class="fa-solid fa-envelope" aria-hidden="true"></i> equipo@avilamorasoluciones.com</a>
       </div>
     </div>
-  <div style="display:flex;justify-content:center;gap:14px;flex-wrap:wrap;margin-top:12px;font-size:.78rem"><a href="./legal_privacidad.html" style="color:inherit">Privacidad</a><a href="./legal_terminos.html" style="color:inherit">Términos</a><a href="./legal_cookies.html" style="color:inherit">Cookies</a><a href="mailto:equipo@avilamorasoluciones.com?subject=PQR%20-%20Avila%20Mora%20Soluciones&body=Hola%20AMS,%0A%0AQuiero%20presentar%20una%20PQR.%0A%0ANombre:%0AAsunto:%0ADetalle:%0A" style="color:inherit">PQR</a></div></footer>
+  <div class="ams-footer-links">
+    <div class="ams-footer-legal">
+      <a href="./legal_privacidad.html" target="_blank" rel="noopener">Privacidad</a>
+      <a href="./legal_terminos.html" target="_blank" rel="noopener">Términos</a>
+      <a href="./legal_cookies.html" target="_blank" rel="noopener">Cookies</a>
+      <a href="mailto:equipo@avilamorasoluciones.com?subject=PQR%20-%20Avila%20Mora%20Soluciones&body=Hola%20AMS,%0A%0AQuiero%20presentar%20una%20PQR.%0A%0ANombre:%0AAsunto:%0ADetalle:%0A" target="_blank" rel="noopener">PQR</a>
+    </div>
+    <div class="ams-footer-personal" aria-label="LinkedIn de los fundadores">
+      <a class="ams-footer-person ams-footer-maria" href="https://www.linkedin.com/in/morammariaj/" target="_blank" rel="noopener" aria-label="LinkedIn · María José Mora Martínez">
+        <i class="fa-brands fa-linkedin" aria-hidden="true"></i><span>María Mora</span>
+      </a>
+      <span class="ams-footer-person-separator" aria-hidden="true">-</span>
+      <a class="ams-footer-person ams-footer-diego" href="https://www.linkedin.com/in/avilardiegoa/" target="_blank" rel="noopener" aria-label="LinkedIn · Diego Andrés Avila Ríos">
+        <i class="fa-brands fa-linkedin" aria-hidden="true"></i><span>Diego Avila</span>
+      </a>
+    </div>
+  </div></footer>
 
   <div class="payment-modal" id="paymentModal" hidden aria-hidden="true">
     <div class="payment-modal-backdrop" data-payment-close></div>
