@@ -90,7 +90,7 @@ end;
 $$;
 
 revoke all on function public.ams_fly_register_participant(varchar(18),varchar(2),varchar(32),varchar(30),integer) from public;
-grant execute on function public.ams_fly_register_participant(varchar(18),varchar(2),varchar(32),varchar(30),integer) to authenticated;
+grant execute on function public.ams_fly_register_participant(varchar(18),varchar(2),varchar(32),varchar(30),integer) to anonymous,authenticated;
 
 create or replace function public.ams_fly_get_participant_profile()
 returns json
@@ -148,7 +148,7 @@ end;
 $$;
 
 revoke all on function public.ams_fly_get_participant_profile() from public;
-grant execute on function public.ams_fly_get_participant_profile() to authenticated;
+grant execute on function public.ams_fly_get_participant_profile() to anonymous,authenticated;
 
 create or replace function public.ams_fly_public_ranking()
 returns table (
