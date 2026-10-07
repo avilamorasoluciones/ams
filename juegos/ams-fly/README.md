@@ -30,7 +30,7 @@ Archivos principales:
 ### Preparación de Neon
 
 1. Habilita Neon Auth y Data API en el branch que usa el juego y confirma que `public` está entre los esquemas expuestos por Data API.
-2. Ejecuta `neon/schema.sql` y después `neon/rls-migration.sql` en Neon SQL Editor. Para reparar solo el ranking, ejecuta `neon/ranking-rpc-migration.sql`; define explícitamente `public.ams_fly_public_ranking()` sin parámetros y recarga la caché de esquema de PostgREST. Si Neon aún no reconoce la RPC, el juego usa como alternativa las columnas públicas de `ams_fly_scores`.
+2. Ejecuta `neon/schema.sql` y después `neon/rls-migration.sql` en Neon SQL Editor. Si ese despliegue ya existe pero al volver a iniciar sesión no se recupera el perfil (incluido el celular), ejecuta `neon/phone-profile-recovery-migration.sql`; repara únicamente la RPC privada de lectura del piloto y recarga la caché de esquema, sin cambiar políticas ni la puerta de Gestión. Para reparar solo el ranking, ejecuta `neon/ranking-rpc-migration.sql`; define explícitamente `public.ams_fly_public_ranking()` sin parámetros y recarga la caché de esquema de PostgREST. Si Neon aún no reconoce la RPC, el juego usa como alternativa las columnas públicas de `ams_fly_scores`.
 3. Comprueba en el SQL Editor, en el mismo branch y base de datos configurados en `neon-config.js`, que existe la firma usada por el cliente:
 
    ```sql

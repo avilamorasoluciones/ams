@@ -35,8 +35,14 @@ function friendlyNeonSyncError(error){
   if(key.includes("invalid participant")){
     return "Neon rechazó los datos del piloto. Revisa nombre, país, ave y celular.";
   }
-  if(key.includes("ams fly register participant")||key.includes("pgrst202")||key.includes("function")&&key.includes("not found")){
+  if(key.includes("ams fly get participant profile")){
+    return "Neon no tiene habilitada la recuperación del perfil. Ejecuta neon/phone-profile-recovery-migration.sql.";
+  }
+  if(key.includes("ams fly register participant")){
     return "Falta habilitar el registro de pilotos en Neon. Revisa la migración de AMS Fly.";
+  }
+  if(key.includes("pgrst202")||key.includes("function")&&key.includes("not found")){
+    return "Falta habilitar una función de AMS Fly en Neon. Revisa las migraciones del juego.";
   }
   return "No pudimos sincronizar con Neon."+(raw?" Detalle: "+raw.slice(0,180):" Intenta de nuevo.");
 }
@@ -71,27 +77,24 @@ async function getCurrentAuthUser(){
 }
 async function getRemoteParticipantProfile(user){
   if(!user || !NEON_DATA_READY()) return null;
-  try{
-    const client=await getPublicNeonClient();
-    const result=await client.rpc("ams_fly_get_participant_profile",{});
-    if(result?.error) return null;
-    const data=Array.isArray(result.data)?result.data[0]:(result.data||null);
-    if(!data?.participant_id) return null;
-    return {
-      participantId:data.participant_id,
-      name:String(data.name||"").trim(),
-      firstName:String(data.first_name||"").trim(),
-      lastName:String(data.last_name||"").trim(),
-      country:String(data.country||"CO").toUpperCase(),
-      birdId:String(data.bird_id||""),
-      phone:String(data.phone||""),
-      dial:String(data.dial||"57"),
-      prizeEligible:data.prize_eligible!==false,
-      termsAccepted:data.terms_accepted===true
-    };
-  }catch(_){
-    return null;
-  }
+  const client=await getPublicNeonClient();
+  const result=await client.rpc("ams_fly_get_participant_profile",{});
+  if(result?.error)throw result.error;
+  const data=Array.isArray(result.data)?result.data[0]:(result.data||null);
+  if(data?.found===false)return null;
+  if(!data?.participant_id)throw new Error("participant_profile_invalid_response");
+  return {
+    participantId:data.participant_id,
+    name:String(data.name||"").trim(),
+    firstName:String(data.first_name||"").trim(),
+    lastName:String(data.last_name||"").trim(),
+    country:String(data.country||"CO").toUpperCase(),
+    birdId:String(data.bird_id||""),
+    phone:String(data.phone||""),
+    dial:String(data.dial||"57"),
+    prizeEligible:data.prize_eligible!==false,
+    termsAccepted:data.terms_accepted===true
+  };
 }
 const RANKING_LIMIT = 50;
 async function loadRankingFromScores(client){
@@ -1134,10 +1137,24 @@ async function refreshAuthUI(){
     els.registerFields.hidden=true;
     els.accountDetails.hidden=!signedIn;
     if(signedIn){
-      await loadAccountProfile(user);populateAccountFields();
       els.accountTitle.textContent="Tu cuenta";
       els.accountSubtitle.textContent="Tu identidad queda vinculada a tu participación. El correo es permanente.";
       setAuthStatus(els.authStatus,"");
+      try{
+        await loadAccountProfile(user);
+        populateAccountFields();
+        if(els.saveAccountBtn)els.saveAccountBtn.disabled=false;
+        setAuthStatus(els.accountStatus,"");
+      }catch(error){
+        const email=String(user.email||"").toLowerCase();
+        const local=safeParse(STORAGE_KEY,null);
+        const parsed=splitStoredName(user.name||"");
+        profile=local?.email===email?{...local}:{email,name:String(user.name||"").trim(),firstName:parsed.first,lastName:parsed.last,country:"CO",birdId:selectedBirdId,phone:"",dial:"57",participantId:null};
+        populateAccountFields();
+        if(els.saveAccountBtn)els.saveAccountBtn.disabled=true;
+        setAuthStatus(els.accountStatus,friendlyNeonSyncError(error),true);
+        console.error("AMS Fly: no se pudo recuperar el perfil desde Neon",error);
+      }
     }else{
       els.accountTitle.textContent="Inicia sesión";
       els.accountSubtitle.textContent="Usa tu correo y contraseña para participar en el evento y guardar tu piloto.";
@@ -1178,8 +1195,14 @@ async function signInPlayer(){
     }
     const user=await getCurrentAuthUser();
     if(!user)throw new Error("No se pudo recuperar la sesión después de iniciar sesión.");
-    await loadAccountProfile(user);
-    if(profile?.name&&profile.name.length>=2&&/^\+[1-9]\d{7,14}$/.test(String(profile.phone||""))){
+    let profileLoaded=true;
+    try{
+      await loadAccountProfile(user);
+    }catch(profileError){
+      profileLoaded=false;
+      console.error("AMS Fly: no se pudo cargar el perfil después del inicio de sesión",profileError);
+    }
+    if(profileLoaded&&profile?.name&&profile.name.length>=2&&/^\+[1-9]\d{7,14}$/.test(String(profile.phone||""))){
       try{
         await syncParticipantProfile(user);
         saveProfile();

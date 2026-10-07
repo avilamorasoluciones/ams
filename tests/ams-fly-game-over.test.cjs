@@ -254,8 +254,8 @@ test("AMS Fly ranking RPC matches its public migration and Neon cache-busting as
   assert.match(fullMigration, /create or replace function public\.ams_fly_public_ranking\(\)/);
   assert.match(game, /result\.error\.code[\s\S]*PGRST202/);
   assert.match(game, /from\("ams_fly_scores"\)[\s\S]*participant_id,player_name,country_code,bird_id,score,created_at/);
-  assert.match(page, /game\.js\?v=87/);
-  assert.match(worker, /ams-fly-v94/);
-  assert.match(worker, /game\.js\?v=87/);
+  assert.match(page, /game\.js\?v=88/);
+  assert.match(worker, /ams-fly-v95/);
+  assert.match(worker, /game\.js\?v=88/);
   assert.doesNotMatch(migration, /create schema|ams_fly\.public_ranking/i);
 });
