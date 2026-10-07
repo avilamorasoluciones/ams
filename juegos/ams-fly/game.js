@@ -96,6 +96,25 @@ async function getRemoteParticipantProfile(user){
     termsAccepted:data.terms_accepted===true
   };
 }
+
+async function getRemoteParticipantStats(user){
+  if(!user || !NEON_DATA_READY()) return null;
+  const client=await getPublicNeonClient();
+  const result=await client.rpc("ams_fly_get_participant_stats",{});
+  if(result?.error)throw result.error;
+  const data=Array.isArray(result.data)?result.data[0]:(result.data||null);
+  if(!data || data.found===false){
+    stats={games:0,best:0};
+    updateStatsUI();
+    return stats;
+  }
+  stats={
+    games:Math.max(0,Number(data.games||0)),
+    best:Math.max(0,Number(data.best_score||0))
+  };
+  updateStatsUI();
+  return stats;
+}
 const RANKING_LIMIT = 50;
 async function loadRankingFromScores(client){
   const pageSize=500;
@@ -374,6 +393,12 @@ function safeParse(key, fallback){
 }
 function saveProfile(){}
 function saveStats(){}
+function updateStatsUI(){
+  if(els.homeBest)els.homeBest.textContent=String(Math.max(0,Number(stats.best||0)));
+  if(els.homeGames)els.homeGames.textContent=String(Math.max(0,Number(stats.games||0)));
+  if(els.resultBest)els.resultBest.textContent=String(Math.max(0,Number(stats.best||0)));
+  if(els.resultGames)els.resultGames.textContent=String(Math.max(0,Number(stats.games||0)));
+}
 function getCountry(code){return countries.find(c=>c.code===code) || countries[0]}
 function getBird(id){return birds.find(b=>b.id===id) || birds[0]}
 function birdMarkup(bird,scale="1"){
@@ -391,8 +416,7 @@ function showOnly(target){
 }
 function hydrateStats(){
   stats={games:0,best:0};
-  els.homeBest.textContent="0";
-  els.homeGames.textContent="0";
+  updateStatsUI();
 }
 function initCountries(){
   const options=countries.map(c=>'<option value="'+c.code+'">'+c.flag+" "+c.name+'</option>').join("");
@@ -779,8 +803,7 @@ function endGame(){
 
   if(profile) publishScore({automatic:true});
   else clearPendingScore();
-  if(els.homeBest)els.homeBest.textContent=String(stats.best);
-  if(els.homeGames)els.homeGames.textContent=String(stats.games);
+  updateStatsUI();
   playTone(isRecord?880:220,.12,isRecord?"triangle":"sine");
 }
 
@@ -911,6 +934,17 @@ async function publishScoreInternal(options={}){
 
     if(result.error)throw result.error;
 
+    // Neon es la fuente de verdad del progreso de la cuenta. Después de
+    // publicar, recuperamos récord y partidas para que la pantalla de
+    // resultado y el menú queden sincronizados con la cuenta.
+    try{
+      await getRemoteParticipantStats(authUser);
+    }catch(statsError){
+      console.error("AMS Fly: no se pudo refrescar el progreso de la cuenta",statsError);
+    }
+    els.resultBest.textContent=String(stats.best);
+    els.resultGames.textContent=String(stats.games);
+
     els.submitScoreBtn.dataset.published="1";
     els.submitScoreBtn.disabled=true;
     if(els.scoreMessage)els.scoreMessage.disabled=true;
@@ -1026,6 +1060,13 @@ async function startWithProfile(){
       setAuthStatus(els.accountStatus,"Completa y guarda tus datos de cuenta para participar en el ranking.",true);
       return;
     }
+    // Al volver al menú o empezar otro vuelo, recuperamos el progreso
+    // persistido en Neon para no depender del estado del navegador.
+    try{
+      await getRemoteParticipantStats(user);
+    }catch(statsError){
+      console.error("AMS Fly: no se pudo cargar el progreso antes del vuelo",statsError);
+    }
     if(els.gameStartHint){
       els.gameStartHint.innerHTML="<strong>TOCA PARA VOLAR</strong><span>Tu cuenta está activa. Tu progreso válido se guardará en el ranking y tu participación quedará vinculada al evento.</span>";
     }
@@ -1123,6 +1164,7 @@ async function refreshAuthUI(){
       setAuthStatus(els.authStatus,"");
       try{
         await loadAccountProfile(user);
+        await getRemoteParticipantStats(user);
         populateAccountFields();
         if(els.saveAccountBtn)els.saveAccountBtn.disabled=false;
         setAuthStatus(els.accountStatus,"");
@@ -1137,6 +1179,8 @@ async function refreshAuthUI(){
         console.error("AMS Fly: no se pudo recuperar el perfil desde Neon",error);
       }
     }else{
+      stats={games:0,best:0};
+      updateStatsUI();
       els.accountTitle.textContent="Inicia sesión";
       els.accountSubtitle.textContent="Usa tu correo y contraseña para participar en el evento y guardar tu piloto.";
       els.authEmail.value="";els.authPassword.value="";
@@ -1322,7 +1366,7 @@ async function saveAccount(){
   }
 }
 async function signOutPlayer(){
-  try{const client=await getNeonClient();await client.auth.signOut();profile=null;pendingRegistration=null;pendingScore=null;renderHomeBird();await refreshAuthUI();navigateTo("play")}
+  try{const client=await getNeonClient();await client.auth.signOut();profile=null;pendingRegistration=null;pendingScore=null;hydrateStats();renderHomeBird();await refreshAuthUI();navigateTo("play")}
   catch(error){
     console.error("AMS Fly: error al cerrar sesión",error);
     setAuthStatus(els.accountStatus,"No pudimos cerrar tu sesión. Intenta nuevamente.",true);
