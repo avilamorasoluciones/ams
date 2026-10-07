@@ -28,6 +28,8 @@ const Duelo = (() => {
   let countdownTimer = null;
   let countdownActive = false;
   let countdownSeconds = 5;
+  let matchBreakActive = false;
+  let matchBreakSeconds = 6;
   let currentMatchPoints = {a:0,b:0};
   let timerEndsAt = 0;
   let remainingMs = 0;
@@ -158,7 +160,7 @@ const Duelo = (() => {
   function save() {
     if (currentScreen === "du-scr-lobby") captureLobbyConfig();
     window.GameSession?.save("duelo", {
-      schemaVersion: 5, players, mode, time, targetPoints, currentCategory, currentMatchPoints,
+      schemaVersion: 6, players, mode, time, targetPoints, currentCategory, currentMatchPoints, matchBreakActive, matchBreakSeconds,
       participants, matches, matchIndex, playerScores, teamScores, tournamentRound, current, questionDeck,
       lastQuestionIndex, timerEndsAt, remainingMs, paused, phase, history, screen: currentScreen
     });
@@ -230,6 +232,10 @@ const Duelo = (() => {
       : "";
     $("du-countdown").hidden = !countdownActive;
     $("du-countdown-number").textContent = String(Math.max(0, countdownActive ? countdownSeconds : 0));
+    const countdownHint = $("du-countdown")?.querySelector("small");
+    if (countdownHint) countdownHint.textContent = matchBreakActive
+      ? "Siguiente duelo. Prepárense los próximos jugadores."
+      : "Prepárense. Empieza el duelo.";
     $("du-pause-banner").hidden = !paused;
     $("du-pause").hidden = phase !== "answer";
     $("du-pause").textContent = paused ? "Continuar" : "Pausar";
@@ -241,7 +247,9 @@ const Duelo = (() => {
         : "");
 
     if (countdownActive) {
-      $("du-status").textContent = "Prepárense…";
+      $("du-status").textContent = matchBreakActive
+        ? "Cambio de jugadores. Tómense un momento para prepararse."
+        : "Prepárense…";
     } else if (paused) {
       $("du-status").textContent = "Duelo en pausa.";
     } else if (phase === "answer") {
@@ -256,6 +264,7 @@ const Duelo = (() => {
     clearInterval(timer);
     timer = null;
     countdownActive = true;
+    matchBreakActive = false;
     countdownSeconds = 5;
     phase = "countdown";
     render();
@@ -277,6 +286,35 @@ const Duelo = (() => {
       }
       window.emitSound?.(620 + (5 - countdownSeconds) * 55, 0.08, "sine", 0.16);
       render();
+    }, 1000);
+  }
+
+  function startNextMatchCountdown() {
+    clearInterval(countdownTimer);
+    clearInterval(timer);
+    timer = null;
+    countdownActive = true;
+    matchBreakActive = true;
+    countdownSeconds = matchBreakSeconds;
+    phase = "countdown";
+    current = null;
+    timerEndsAt = 0;
+    render();
+    showScreen("du-scr-game");
+    window.emitSound?.(520, 0.08, "sine", 0.14);
+    countdownTimer = setInterval(() => {
+      countdownSeconds -= 1;
+      if (countdownSeconds <= 0) {
+        clearInterval(countdownTimer);
+        countdownTimer = null;
+        countdownActive = false;
+        matchBreakActive = false;
+        beginMatch();
+        return;
+      }
+      window.emitSound?.(520 + (matchBreakSeconds - countdownSeconds) * 45, 0.07, "sine", 0.14);
+      render();
+      save();
     }, 1000);
   }
 
@@ -472,7 +510,7 @@ const Duelo = (() => {
       if (mode === "tournament" && matchIndex >= matches.length) {
         prepareNextTournamentRound();
       } else {
-        beginMatch();
+        startNextMatchCountdown();
       }
       return;
     }
@@ -530,16 +568,40 @@ const Duelo = (() => {
     paused = false;
     phase = "result";
     const playedHistory = history.filter(item => item.question);
+    const matchGroups = new Map();
+    playedHistory.forEach(item => {
+      const key = item.round + ":" + item.match;
+      if (!matchGroups.has(key)) matchGroups.set(key, {
+        round: item.round,
+        match: item.match,
+        a: item.a,
+        b: item.b,
+        aPoints: 0,
+        bPoints: 0,
+        questions: 0,
+        winner: ""
+      });
+      const group = matchGroups.get(key);
+      group.questions += 1;
+      if (item.pointWinner === item.a) group.aPoints += 1;
+      if (item.pointWinner === item.b) group.bPoints += 1;
+      if (item.winner) group.winner = item.winner;
+    });
+    const compactHistory = Array.from(matchGroups.values()).map(group => {
+      const a = getParticipant(group.a)?.name || "Jugador";
+      const b = getParticipant(group.b)?.name || "Jugador";
+      const winner = group.winner ? getParticipant(group.winner)?.name : null;
+      const score = group.aPoints + " - " + group.bPoints;
+      const title = winner
+        ? "Ganó " + esc(winner)
+        : "Enfrentamiento";
+      return '<div><strong>Ronda ' + group.round + " · Duelo " + group.match + '</strong><br>' +
+        '<span>' + esc(a) + " <strong>" + score + "</strong> " + esc(b) + '</span><br>' +
+        '<small>' + title + " · " + group.questions + (group.questions === 1 ? " pregunta" : " preguntas") + "</small></div>";
+    }).join("");
     $("du-result-body").innerHTML = resultSummary() +
-      '<div class="du-history"><strong>Preguntas jugadas</strong>' +
-      (playedHistory.length ? playedHistory.map(item => {
-        const a = getParticipant(item.a)?.name || "Jugador";
-        const b = getParticipant(item.b)?.name || "Jugador";
-        const winner = item.winner ? (getParticipant(item.winner)?.name || "Jugador") : "Nadie sumó";
-        return '<div><strong>Duelo ' + item.match + " · " + esc(winner) + '</strong><br>' +
-          '<small>' + esc(a) + " vs. " + esc(b) + " · " + esc(item.category) +
-          "<br>" + esc(item.question) + " · respuesta: " + esc(item.answer) + "</small></div>";
-      }).join("") : '<p class="muted">No hay duelos registrados.</p>') + "</div>";
+      '<div class="du-history"><strong>Historial de enfrentamientos</strong>' +
+      (compactHistory || '<p class="muted">No hay enfrentamientos registrados.</p>') + "</div>";
     showScreen("du-scr-result");
   }
 
@@ -578,6 +640,8 @@ const Duelo = (() => {
     phase = "idle";
     countdownActive = false;
     countdownSeconds = 5;
+    matchBreakActive = false;
+    matchBreakSeconds = 6;
     history = [];
     questionDeck = [];
     paused = false;
@@ -589,7 +653,7 @@ const Duelo = (() => {
   }
 
   function restore(state) {
-    if (!state || ![3,4,5].includes(state.schemaVersion)) return false;
+    if (!state || ![3,4,5,6].includes(state.schemaVersion)) return false;
     players = Array.isArray(state.players) ? state.players.filter(name => typeof name === "string" && name.trim()) : players;
     mode = state.mode === "tournament" || state.mode === "teams" ? state.mode : "duel";
     time = Number(state.time || 12);
@@ -599,6 +663,8 @@ const Duelo = (() => {
     participants = Array.isArray(state.participants) ? state.participants : [];
     matches = Array.isArray(state.matches) ? state.matches : [];
     currentMatchPoints = state.currentMatchPoints && typeof state.currentMatchPoints === "object" ? state.currentMatchPoints : {a:0,b:0};
+    matchBreakActive = Boolean(state.matchBreakActive);
+    matchBreakSeconds = Number(state.matchBreakSeconds || 6);
     matchIndex = Math.max(0, Number(state.matchIndex || 0));
     playerScores = state.playerScores && typeof state.playerScores === "object" ? state.playerScores : {};
     teamScores = state.teamScores && typeof state.teamScores === "object" ? state.teamScores : {0:0,1:0};
@@ -626,7 +692,10 @@ const Duelo = (() => {
       render();
       showScreen("du-scr-game");
       if (phase === "answer" && !paused) startTimer(timerEndsAt, remainingMs);
-      if (phase === "countdown") startCountdown();
+      if (phase === "countdown") {
+        if (matchBreakActive) startNextMatchCountdown();
+        else startCountdown();
+      }
       return true;
     }
     if (currentScreen === "du-scr-result") {
@@ -664,6 +733,8 @@ const Duelo = (() => {
     phase = "idle";
     countdownActive = false;
     countdownSeconds = 5;
+    matchBreakActive = false;
+    matchBreakSeconds = 6;
     history = [];
     questionDeck = [];
     paused = false;
