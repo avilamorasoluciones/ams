@@ -449,6 +449,8 @@ const Duelo = (() => {
     current = null;
     countdownActive = false;
     countdownSeconds = 5;
+    matchBreakActive = false;
+    matchBreakSeconds = 6;
     questionDeck = [];
     lastQuestionIndex = -1;
     showError("");
@@ -529,7 +531,7 @@ const Duelo = (() => {
     matches = buildMatches(winners.map(id => getParticipant(id)).filter(Boolean));
     matchIndex = 0;
     history.push({ round: tournamentRound, transition: true, winner: "" });
-    beginMatch();
+    startNextMatchCountdown();
   }
 
   function advance() {
