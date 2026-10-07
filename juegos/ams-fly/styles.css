@@ -739,6 +739,3 @@ button{cursor:pointer}
   font-size:.58rem;
   letter-spacing:.04em;
 }
-@media(max-width:699px){
-  .ams-fly-device-gate{display:none!important}
-}
