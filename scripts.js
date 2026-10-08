@@ -133,13 +133,19 @@ const sections = ["inicio", "servicios", "planes", "gestion", "portafolio", "rec
 const setActive = (id) => {
   navLinks.forEach((a) => {
     const href = a.getAttribute("href") || "";
-    a.classList.toggle("active", href === "#" + id);
+    const active = href === "#" + id;
+    a.classList.toggle("active", active);
+    if (active) a.setAttribute("aria-current", "location");
+    else a.removeAttribute("aria-current");
   });
 
   // También mantiene visible la zona activa en el menú móvil.
   document.querySelectorAll("#mobilePanel a").forEach((a) => {
     const href = a.getAttribute("href") || "";
-    a.classList.toggle("active", href === "#" + id);
+    const active = href === "#" + id;
+    a.classList.toggle("active", active);
+    if (active) a.setAttribute("aria-current", "location");
+    else a.removeAttribute("aria-current");
   });
 };
 
