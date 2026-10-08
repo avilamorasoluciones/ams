@@ -38,23 +38,6 @@ if (aosDesktop && !prefersReduced) {
   }
 }
 
-let aosRefreshTimer = 0;
-const queueAOSRefresh = () => {
-  if (!aosDesktop || !window.AOS || prefersReduced) return;
-  window.clearTimeout(aosRefreshTimer);
-  aosRefreshTimer = window.setTimeout(() => {
-    try { AOS.refreshHard(); } catch (_) {}
-  }, 160);
-};
-
-window.addEventListener("load", queueAOSRefresh, { once: true });
-window.addEventListener("resize", queueAOSRefresh, { passive: true });
-window.addEventListener("orientationchange", queueAOSRefresh, { passive: true });
-
-if (window.visualViewport) {
-  window.visualViewport.addEventListener("resize", queueAOSRefresh, { passive: true });
-}
-
 // ===== Navbar compact + ToTop =====
 const nav = document.getElementById("nav");
 const toTop = document.getElementById("toTop");
