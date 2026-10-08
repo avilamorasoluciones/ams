@@ -17,6 +17,7 @@ function initAOS() {
   });
 
   document.documentElement.classList.add("aos-ready");
+  window.setTimeout(() => AOS.refreshHard(), 60);
 }
 
 const tryInitAOS = () => {
@@ -37,9 +38,32 @@ if (aosDesktop && !prefersReduced) {
   }
 }
 
+let aosRefreshTimer = 0;
+const queueAOSRefresh = () => {
+  if (!aosDesktop || !window.AOS || prefersReduced) return;
+  window.clearTimeout(aosRefreshTimer);
+  aosRefreshTimer = window.setTimeout(() => {
+    try { AOS.refreshHard(); } catch (_) {}
+  }, 160);
+};
+
+window.addEventListener("load", queueAOSRefresh, { once: true });
+window.addEventListener("resize", queueAOSRefresh, { passive: true });
+window.addEventListener("orientationchange", queueAOSRefresh, { passive: true });
+
+if (window.visualViewport) {
+  window.visualViewport.addEventListener("resize", queueAOSRefresh, { passive: true });
+}
+
+
 // ===== Navbar compact + ToTop =====
 const nav = document.getElementById("nav");
 const toTop = document.getElementById("toTop");
+
+window.addEventListener("scroll", () => {
+  nav.classList.toggle("compact", window.scrollY > 40);
+  toTop.classList.toggle("show", window.scrollY > 600);
+});
 
 toTop.addEventListener("click", () => {
   window.scrollTo({ top: 0, behavior: prefersReduced ? "auto" : "smooth" });
@@ -139,10 +163,7 @@ const setActive = (id) => {
   // También mantiene visible la zona activa en el menú móvil.
   document.querySelectorAll("#mobilePanel a").forEach((a) => {
     const href = a.getAttribute("href") || "";
-    const active = href === "#" + id;
-    a.classList.toggle("active", active);
-    if (active) a.setAttribute("aria-current", "location");
-    else a.removeAttribute("aria-current");
+    a.classList.toggle("active", href === "#" + id);
   });
 };
 
@@ -152,9 +173,6 @@ const setActive = (id) => {
 let scrollSpyTick = false;
 
 const updateActiveSection = () => {
-  nav.classList.toggle("compact", window.scrollY > 40);
-  toTop.classList.toggle("show", window.scrollY > 600);
-
   const marker = window.scrollY + getNavOffset() + 40;
   let current = sections[0]?.id || "inicio";
 
@@ -304,7 +322,6 @@ function applyTheme(theme) {
   if (themeColorMeta && themeColorMeta.getAttribute("content") !== desiredBackground) {
     themeColorMeta.setAttribute("content", desiredBackground);
   }
-
 }
 
 function initTheme() {
