@@ -98,47 +98,37 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 
-  <!-- Font Awesome se carga de forma no bloqueante; sus fuentes no se priorizan sobre el contenido principal. -->
+  <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" as="style" />
+  <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/webfonts/fa-solid-900.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/webfonts/fa-brands-400.woff2" as="font" type="font/woff2" crossorigin />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" media="print" onload="this.media='all'" />
   <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" /></noscript>
-  <!-- La tipografía conserva swap; evitamos competir con el contenido crítico mediante preloads adicionales. -->
+  <link rel="preload" href="https://fonts.gstatic.com/s/montserrat/v31/JTUSjIg1_i6t8kCHKm459WlhyyTh89Y.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700;800;900&display=swap" as="style" />
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700;800;900&display=swap" rel="stylesheet" media="print" onload="this.media='all'" />
   <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700;800;900&display=swap" /></noscript>
+  <script id="ams-aos-css-loader">
+    (() => {
+      if (!window.matchMedia("(min-width: 741px)").matches) return;
+      const l = document.createElement("link");
+      l.rel = "stylesheet";
+      l.href = "https://unpkg.com/aos@2.3.1/dist/aos.css";
+      document.head.appendChild(l);
+    })();
+  </script>
   <script id="ams-aos-loader">
   (() => {
-    if (!window.matchMedia("(min-width: 741px)").matches || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-    const loadAOS = () => {
-      if (document.getElementById("ams-aos-js")) return;
-      const css = document.createElement("link");
-      css.rel = "stylesheet";
-      css.href = "https://unpkg.com/aos@2.3.1/dist/aos.css";
-      document.head.appendChild(css);
-      const s = document.createElement("script");
-      s.src = "https://unpkg.com/aos@2.3.1/dist/aos.js";
-      s.id = "ams-aos-js";
-      s.async = true;
-      s.onload = () => window.dispatchEvent(new Event("ams-aos-ready"));
-      document.head.appendChild(s);
-    };
-    if (document.readyState === "complete") window.setTimeout(loadAOS, 0);
-    else window.addEventListener("load", loadAOS, { once: true });
+    if (!window.matchMedia("(min-width: 741px)").matches) return;
+    const s = document.createElement("script");
+    s.src = "https://unpkg.com/aos@2.3.1/dist/aos.js";
+    s.id = "ams-aos-js";
+    s.async = true;
+    s.onload = () => window.dispatchEvent(new Event("ams-aos-ready"));
+    document.head.appendChild(s);
   })();
 </script>
-  <style id="ams-critical-css">
-:root{--primary:#6366f1;--secondary:#ec4899;--tertiary:#10b981;--gold:#f59e0b;--dark:#0f172a;--dark-2:#070b18;--light:#f8fafc;--muted:#94a3b8;--muted-2:#cbd5e1;--gradient:linear-gradient(135deg,var(--primary),var(--secondary));--shadow:0 20px 50px rgba(0,0,0,.35);--radius:26px;--radius-lg:34px;--container:1220px;--navH:88px;--safe-left:env(safe-area-inset-left,0px);--safe-right:env(safe-area-inset-right,0px);--safe-top:env(safe-area-inset-top,0px);--safe-bottom:env(safe-area-inset-bottom,0px)}
-*{box-sizing:border-box;min-width:0}html{width:100%;max-width:100%;overflow-x:clip;background:var(--dark)}body{margin:0;width:100%;max-width:100%;overflow-x:clip;overscroll-behavior-x:none;-webkit-text-size-adjust:100%;text-rendering:optimizeLegibility;font-family:"Montserrat",Arial,sans-serif;line-height:1.6;color:var(--light);background:linear-gradient(180deg,var(--dark),var(--dark-2))}a{color:inherit;text-decoration:none}img,svg{display:block;max-width:100%;height:auto}.container{width:min(var(--container),100%);margin:0 auto;padding-left:max(16px,var(--safe-left));padding-right:max(16px,var(--safe-right));position:relative;z-index:1}
-nav{position:fixed;top:0;left:0;right:0;z-index:2000;padding:calc(14px + var(--safe-top)) 0 14px;background:rgba(15,23,42,.72);backdrop-filter:blur(14px);border-bottom:1px solid rgba(255,255,255,.1)}.nav-inner{display:flex;align-items:center;justify-content:space-between;gap:16px}.brand{display:inline-flex;align-items:center;gap:12px;user-select:none;min-width:0;flex:0 1 auto}.brand-dot{width:14px;height:14px;border-radius:999px;background:var(--gradient);box-shadow:0 0 0 6px rgba(99,102,241,.1);flex:0 0 auto}.brand-wrap{min-width:0}.brand-text{font-size:1.55rem;font-weight:900;line-height:1;letter-spacing:-1px;white-space:nowrap;background:var(--gradient);-webkit-background-clip:text;-webkit-text-fill-color:transparent}.brand-sub{font-size:12px;color:var(--muted);margin-top:3px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;white-space:nowrap}
-.nav-links,.nav-cta,.nav-extra{display:none}.mobile-utilities{display:flex;align-items:center;gap:6px;margin-left:auto;flex-shrink:0}.mobile-utilities .nav-shortcut{width:32px;height:32px;border-radius:10px;display:inline-flex;align-items:center;justify-content:center;text-decoration:none;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.045);padding:0}.mobile-utilities .nav-shortcut i{font-size:.78rem}.nav-compact-payment{display:inline-flex!important;width:38px!important;min-width:38px!important;height:32px!important;padding:4px!important;border-radius:10px!important}.nav-compact-payment span{display:none}.menu-btn{display:block;width:46px;height:46px;border-radius:14px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.05);color:var(--light);cursor:pointer;flex:0 0 auto}.mobile-panel{display:none}
-header.hero{min-height:100vh;min-height:100svh;padding:calc(var(--navH) + 32px + var(--safe-top)) 0 calc(72px + var(--safe-bottom));display:grid;align-items:center;position:relative;overflow:clip}.hero-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:40px;align-items:center}.badge-row{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:18px}.badge{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border-radius:999px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.04);color:rgba(248,250,252,.92);font-weight:800;font-size:12px;max-width:100%}.hero h1{font-size:clamp(2.2rem,4.2vw,4.2rem);line-height:1.08;margin:0 0 16px;letter-spacing:-1.2px;font-weight:900;text-wrap:balance}.hero h1 .accent{color:var(--tertiary)}.hero .lead{font-size:clamp(1.05rem,1.6vw,1.3rem);color:var(--muted);margin:0 0 22px;max-width:56ch;font-weight:500}.hero .lead strong{color:var(--light)}.hero-actions{display:flex;gap:12px;flex-wrap:wrap;margin:22px 0 18px;align-items:stretch}.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;padding:14px 20px;border-radius:999px;font-weight:900;font-size:.98rem;border:1px solid rgba(255,255,255,.1);cursor:pointer;white-space:nowrap;user-select:none;min-width:0;max-width:100%}.btn-primary{background:var(--gradient);border-color:transparent;color:#fff}.btn-ghost{background:rgba(255,255,255,.04)}.btn-wa{background:#15803d;border-color:transparent;color:#fff}.hero-note{display:flex;gap:14px;flex-wrap:wrap;margin-top:18px;color:rgba(148,163,184,.95);font-weight:700;font-size:13px}.hero-note span{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border-radius:14px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.1)}.hero-card{border-radius:var(--radius-lg);border:1px solid rgba(255,255,255,.12);background:linear-gradient(180deg,rgba(255,255,255,.05),rgba(255,255,255,.02));box-shadow:var(--shadow);overflow:hidden;position:relative}.hero-card-inner{position:relative;padding:22px}.mini-title{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px}.mini-title h2{margin:0;font-size:1.05rem;font-weight:900}.pill{font-size:12px;font-weight:900;padding:6px 10px;border-radius:999px;background:rgba(16,185,129,.12);border:1px solid rgba(16,185,129,.22);color:rgba(236,253,245,.95);white-space:nowrap}.hero-checklist{display:flex;flex-direction:column;gap:18px;padding:0;margin:20px 0;list-style:none}.hero-checklist li{display:flex;align-items:flex-start;gap:12px;position:static;height:auto;line-height:1.4}.hero-checklist i{color:#10b981;font-size:1.2rem;margin-top:2px;flex-shrink:0}.chk-text{display:flex;flex-direction:column;gap:4px}.chk-text strong{font-size:1.05rem}
-body.light-theme{--dark:#f1f5f9;--dark-2:#e2e8f0;--light:#1e293b;--muted:#475569;--muted-2:#64748b;color:var(--light);background:linear-gradient(180deg,var(--dark),var(--dark-2))}body.light-theme nav{background:rgba(241,245,249,.85);border-bottom-color:rgba(15,23,42,.08)}
-@media(min-width:1501px){.nav-links{display:flex;gap:26px;align-items:center;list-style:none;padding:0;margin:0;flex-wrap:nowrap}.nav-links a{display:inline-flex;align-items:center;padding:8px 2px 10px;font-weight:800;font-size:.95rem;white-space:nowrap}.nav-cta{display:flex;gap:10px;align-items:center}.nav-extra{display:flex;align-items:center;gap:9px;margin-left:auto;flex-shrink:0}.mobile-utilities,.menu-btn{display:none}}
-@media(max-width:740px){nav{padding:calc(10px + var(--safe-top)) 0 10px}.nav-inner{gap:10px}.brand-text{font-size:1.38rem}.brand-sub{font-size:9px}.menu-btn{width:42px;height:42px;border-radius:12px}header.hero{padding-top:calc(74px + var(--safe-top));padding-bottom:48px}.hero-grid{grid-template-columns:1fr;gap:22px}.hero h1{font-size:clamp(2rem,9vw,3rem)}.hero .lead{font-size:1rem}.hero-actions{gap:9px}.hero-actions .btn{flex:1 1 100%}.hero-note{gap:8px}.hero-note span{width:100%;justify-content:flex-start}.hero-card-inner{padding:18px}.badge{font-size:11px;padding:7px 10px}}
-@media(max-width:390px){.nav-inner{gap:6px}.brand-text{font-size:1.28rem;letter-spacing:-.8px}.brand-sub{font-size:9px}.mobile-utilities{gap:3px}.mobile-utilities .nav-shortcut{width:28px;height:28px;border-radius:9px}.mobile-utilities .nav-shortcut i{font-size:.68rem}.mobile-utilities .nav-compact-payment{width:32px!important;min-width:32px!important;height:28px!important;border-radius:9px!important;padding:3px!important}}
-</style>
-
-  <!-- CSS completo no bloqueante; el CSS crítico anterior cubre la primera pantalla. -->
-  <link rel="preload" href="styles.css?v=20261007-1" as="style" onload="this.onload=null;this.rel='stylesheet'">
-  <noscript><link rel="stylesheet" href="styles.css?v=20261007-1"></noscript>
+  <!-- CSS principal local: descubrimiento temprano para reducir el LCP en conexiones lentas. -->
+  <link rel="stylesheet" href="styles.css?v=20261006-2" />
 
   <style>
     @media (max-width: 740px){
@@ -1230,7 +1220,7 @@ body.light-theme{--dark:#f1f5f9;--dark-2:#e2e8f0;--light:#1e293b;--muted:#475569
       .ams-footer-person{position:relative;display:inline-flex;align-items:center;gap:5px;padding:4px 8px;border-radius:999px;color:#fff!important;text-decoration:none;font-size:.58rem;font-weight:800;line-height:1;box-shadow:0 4px 12px rgba(0,0,0,.16);transition:transform .2s ease,filter .2s ease}
       .ams-footer-person i{font-size:.68rem}
       .ams-footer-person:hover{transform:translateY(-1px);filter:brightness(1.08)}
-      .ams-footer-maria{background:#7c3aed}
+      .ams-footer-maria{background:#8b5cf6}
       .ams-footer-diego{background:#2563eb}
       .ams-footer-person-separator{color:var(--text-muted,#94a3b8);font-weight:800;font-size:.7rem}
       @media(max-width:520px){
@@ -1302,9 +1292,40 @@ body.light-theme{--dark:#f1f5f9;--dark-2:#e2e8f0;--light:#1e293b;--muted:#475569
   <button class="to-top" id="toTop" aria-label="Volver arriba" title="Volver arriba"><i class="fa-solid fa-arrow-up"></i></button>
 
 
-  <script src="scripts.js?v=20261007-1" defer></script>
-  <script src="contacto.js?v=20261007-1" defer></script>
-
+  <script src="scripts.js?v=20261006-3" defer></script>
+  <script src="contacto.js?v=20260928-4" defer></script>
+<script id="ams-open-links-blank">
+(function(){
+  function normalize(link){
+    if(!link || !link.getAttribute) return;
+    var href=(link.getAttribute('href') || '').trim();
+    if(!href || href.startsWith('#') || href.startsWith('javascript:')) return;
+    try{
+      var url=new URL(href, window.location.href);
+      link.setAttribute('target','_blank');
+      var rel=new Set((link.getAttribute('rel') || '').split(/\s+/).filter(Boolean));
+      rel.add('noopener');
+      link.setAttribute('rel',Array.from(rel).join(' '));
+    }catch(_){} 
+  }
+  function normalizeLinks(root){
+    if(root && root.matches && root.matches('a[href]')) normalize(root);
+    (root || document).querySelectorAll('a[href]').forEach(normalize);
+  }
+  normalizeLinks(document);
+  document.addEventListener('click',function(e){
+    var link=e.target && e.target.closest ? e.target.closest('a[href]') : null;
+    if(link) normalize(link);
+  },true);
+  new MutationObserver(function(mutations){
+    mutations.forEach(function(m){
+      m.addedNodes.forEach(function(node){
+        if(node.nodeType===1) normalizeLinks(node);
+      });
+    });
+  }).observe(document.documentElement,{childList:true,subtree:true});
+})();
+</script>
   <script>
     document.getElementById("emailCta")?.addEventListener("click", () => {
       const panel = document.getElementById("emailQuick");
