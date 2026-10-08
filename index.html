@@ -488,7 +488,7 @@
       const loader = document.getElementById("loader");
       if (!loader) return;
       const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-      const delay = reduced ? 100 : (window.matchMedia("(max-width: 740px)").matches ? 220 : 280);
+      const delay = reduced ? 100 : (window.matchMedia("(max-width: 740px)").matches ? 0 : 280);
       window.setTimeout(() => {
         loader.classList.add("hidden");
         window.setTimeout(() => loader.remove(), reduced ? 180 : 620);
