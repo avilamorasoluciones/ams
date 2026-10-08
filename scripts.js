@@ -301,6 +301,11 @@ function applyTheme(theme) {
   if (themeColorMeta && themeColorMeta.getAttribute("content") !== desiredBackground) {
     themeColorMeta.setAttribute("content", desiredBackground);
   }
+
+  themeToggles.forEach((toggle) => {
+    toggle.setAttribute("aria-pressed", String(isLight));
+    toggle.setAttribute("aria-label", isLight ? "Cambiar a tema oscuro" : "Cambiar a tema claro");
+  });
 }
 
 function initTheme() {
