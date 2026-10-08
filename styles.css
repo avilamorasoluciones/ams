@@ -299,8 +299,8 @@ nav.compact {
 }
 
 @keyframes pulse {
-  0%, 100% { transform: scale(1); box-shadow: 0 0 0 6px rgba(99, 102, 241, 0.10); }
-  50% { transform: scale(1.05); box-shadow: 0 0 0 10px rgba(236, 72, 153, 0.10); }
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
 }
 
 .brand-wrap { min-width: 0; }

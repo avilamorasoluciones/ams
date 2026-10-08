@@ -333,6 +333,14 @@ test("Public-site mobile navigation can be dismissed with Escape and returns foc
   assert.match(read("index.html"), /aria-controls="mobilePanel" aria-expanded="false"/);
 });
 
+test("Homepage preloads Montserrat and keeps startup animations composited", () => {
+  const html = read("index.html");
+  const styles = read("styles.css");
+
+  assert.match(html, /<link rel="preload" href="https:\/\/fonts\.gstatic\.com\/s\/montserrat\/v31\/JTUSjIg1_i6t8kCHKm459WlhyyTh89Y\.woff2" as="font" type="font\/woff2" crossorigin/);
+  assert.doesNotMatch(styles, /@keyframes pulse\s*\{[^}]*box-shadow/s);
+});
+
 test("Aura Studio demo navigation and FAQ use keyboard-accessible controls", () => {
   for (const page of ["multipages/index.html", "multipages/servicios.html", "multipages/contacto.html"]) {
     const html = read(page);
