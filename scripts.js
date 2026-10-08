@@ -17,7 +17,6 @@ function initAOS() {
   });
 
   document.documentElement.classList.add("aos-ready");
-  window.setTimeout(() => AOS.refreshHard(), 60);
 }
 
 const tryInitAOS = () => {
