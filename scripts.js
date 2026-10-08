@@ -41,11 +41,6 @@ if (aosDesktop && !prefersReduced) {
 const nav = document.getElementById("nav");
 const toTop = document.getElementById("toTop");
 
-window.addEventListener("scroll", () => {
-  nav.classList.toggle("compact", window.scrollY > 40);
-  toTop.classList.toggle("show", window.scrollY > 600);
-});
-
 toTop.addEventListener("click", () => {
   window.scrollTo({ top: 0, behavior: prefersReduced ? "auto" : "smooth" });
 });
@@ -154,6 +149,9 @@ const setActive = (id) => {
 let scrollSpyTick = false;
 
 const updateActiveSection = () => {
+  nav.classList.toggle("compact", window.scrollY > 40);
+  toTop.classList.toggle("show", window.scrollY > 600);
+
   const marker = window.scrollY + getNavOffset() + 40;
   let current = sections[0]?.id || "inicio";
 
