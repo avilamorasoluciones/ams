@@ -125,12 +125,17 @@
   <script id="ams-aos-loader">
   (() => {
     if (!window.matchMedia("(min-width: 741px)").matches) return;
-    const s = document.createElement("script");
-    s.src = "https://unpkg.com/aos@2.3.1/dist/aos.js";
-    s.id = "ams-aos-js";
-    s.async = true;
-    s.onload = () => window.dispatchEvent(new Event("ams-aos-ready"));
-    document.head.appendChild(s);
+    const loadAOS = () => {
+      if (document.getElementById("ams-aos-js")) return;
+      const s = document.createElement("script");
+      s.src = "https://unpkg.com/aos@2.3.1/dist/aos.js";
+      s.id = "ams-aos-js";
+      s.async = true;
+      s.onload = () => window.dispatchEvent(new Event("ams-aos-ready"));
+      document.head.appendChild(s);
+    };
+    if (document.readyState === "complete") window.setTimeout(loadAOS, 0);
+    else window.addEventListener("load", loadAOS, { once: true });
   })();
 </script>
   <!-- CSS principal local: descubrimiento temprano para reducir el LCP en conexiones lentas. -->
