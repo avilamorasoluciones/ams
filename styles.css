@@ -737,6 +737,7 @@ body.light-theme .to-top { background: #ffffff; border-color: rgba(15, 23, 42, 0
 
 body.light-theme footer { background: #e2e8f0; border-top: 1px solid rgba(15, 23, 42, 0.08); color: var(--muted); }
 body.light-theme footer span { background: #ffffff !important; border-color: rgba(15, 23, 42, 0.1) !important; color: var(--light) !important; }
+body.light-theme footer .ams-footer-person > span { background: transparent !important; color: inherit !important; }
 
 body.light-theme .cta-note { background: rgba(255, 255, 255, 0.9); }
 

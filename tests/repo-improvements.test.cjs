@@ -343,6 +343,27 @@ test("Homepage preloads Montserrat and keeps startup animations composited", () 
   assert.doesNotMatch(styles, /@keyframes pulse\s*\{[^}]*box-shadow/s);
 });
 
+test("Homepage founder names meet contrast requirements in both themes", () => {
+  const html = read("index.html");
+  const styles = read("styles.css");
+  const rgb = hex => hex.match(/[a-f\d]{2}/gi).map(channel => parseInt(channel, 16) / 255)
+    .map(channel => channel <= 0.04045 ? channel / 12.92 : ((channel + 0.055) / 1.055) ** 2.4);
+  const luminance = hex => {
+    const [r, g, b] = rgb(hex);
+    return 0.2126 * r + 0.7152 * g + 0.0722 * b;
+  };
+  const contrast = (foreground, background) => {
+    const values = [luminance(foreground), luminance(background)].sort((a, b) => b - a);
+    return (values[0] + 0.05) / (values[1] + 0.05);
+  };
+
+  for (const background of ["#7c3aed", "#2563eb"]) {
+    assert.ok(contrast("#ffffff", background) >= 4.5, `${background} must provide WCAG AA text contrast`);
+  }
+  assert.match(styles, /body\.light-theme footer \.ams-footer-person > span\s*\{\s*background:\s*transparent !important;\s*color:\s*inherit !important;/);
+  assert.match(html, /\.ams-footer-maria\{background:#7c3aed\}/);
+});
+
 test("Aura Studio demo navigation and FAQ use keyboard-accessible controls", () => {
   for (const page of ["multipages/index.html", "multipages/servicios.html", "multipages/contacto.html"]) {
     const html = read(page);
