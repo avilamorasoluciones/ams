@@ -183,16 +183,16 @@ const updateActiveSection = () => {
   scrollSpyTick = false;
 };
 
-window.addEventListener("scroll", () => {
-  if (!scrollSpyTick) {
-    window.requestAnimationFrame(updateActiveSection);
-    scrollSpyTick = true;
-  }
-}, { passive: true });
+const queueActiveSectionUpdate = () => {
+  if (scrollSpyTick) return;
+  scrollSpyTick = true;
+  window.requestAnimationFrame(updateActiveSection);
+};
 
-window.addEventListener("resize", updateActiveSection);
-window.addEventListener("load", updateActiveSection);
-updateActiveSection();
+window.addEventListener("scroll", queueActiveSectionUpdate, { passive: true });
+window.addEventListener("resize", queueActiveSectionUpdate);
+window.addEventListener("load", queueActiveSectionUpdate, { once: true });
+setActive("inicio");
 
 // ===== Corrige entrada con hash =====
 window.addEventListener("load", () => {
