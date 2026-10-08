@@ -66,6 +66,14 @@
   window.AMSContact = { PHONE, EMAIL, openWhatsApp, openEmail };
   const boot = () => {
     decorateWhatsapp();
+    const observer = new MutationObserver((mutations) => {
+      mutations.forEach((mutation) => {
+        mutation.addedNodes.forEach((node) => {
+          if (node.nodeType === 1) applyBlankTargets(node);
+        });
+      });
+    });
+    observer.observe(document.documentElement, { childList: true, subtree: true });
   };
 
   if (document.readyState === "loading") {
