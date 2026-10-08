@@ -97,46 +97,38 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link rel="preload" href="https://fonts.gstatic.com/s/montserrat/v31/JTUSjIg1_i6t8kCHKm459WlhyyTh89Y.woff2" as="font" type="font/woff2" crossorigin />
 
+  <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" as="style" />
+  <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/webfonts/fa-solid-900.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/webfonts/fa-brands-400.woff2" as="font" type="font/woff2" crossorigin />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" media="print" onload="this.media='all'" />
   <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" /></noscript>
+  <link rel="preload" href="https://fonts.gstatic.com/s/montserrat/v31/JTUSjIg1_i6t8kCHKm459WlhyyTh89Y.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700;800;900&display=swap" as="style" />
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700;800;900&display=swap" rel="stylesheet" media="print" onload="this.media='all'" />
   <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700;800;900&display=swap" /></noscript>
   <script id="ams-aos-css-loader">
     (() => {
       if (!window.matchMedia("(min-width: 741px)").matches) return;
-      const loadAOSCSS = () => {
-        if (document.getElementById("ams-aos-css")) return;
-        const l = document.createElement("link");
-        l.rel = "stylesheet";
-        l.id = "ams-aos-css";
-        l.href = "https://unpkg.com/aos@2.3.1/dist/aos.css";
-        document.head.appendChild(l);
-      };
-      if (document.readyState === "complete") window.setTimeout(loadAOSCSS, 0);
-      else window.addEventListener("load", loadAOSCSS, { once: true });
+      const l = document.createElement("link");
+      l.rel = "stylesheet";
+      l.href = "https://unpkg.com/aos@2.3.1/dist/aos.css";
+      document.head.appendChild(l);
     })();
   </script>
   <script id="ams-aos-loader">
   (() => {
     if (!window.matchMedia("(min-width: 741px)").matches) return;
-    const loadAOS = () => {
-      if (document.getElementById("ams-aos-js")) return;
-      const s = document.createElement("script");
-      s.src = "https://unpkg.com/aos@2.3.1/dist/aos.js";
-      s.id = "ams-aos-js";
-      s.async = true;
-      s.onload = () => window.dispatchEvent(new Event("ams-aos-ready"));
-      document.head.appendChild(s);
-    };
-    if (document.readyState === "complete") window.setTimeout(loadAOS, 0);
-    else window.addEventListener("load", loadAOS, { once: true });
+    const s = document.createElement("script");
+    s.src = "https://unpkg.com/aos@2.3.1/dist/aos.js";
+    s.id = "ams-aos-js";
+    s.async = true;
+    s.onload = () => window.dispatchEvent(new Event("ams-aos-ready"));
+    document.head.appendChild(s);
   })();
 </script>
   <!-- CSS principal local: descubrimiento temprano para reducir el LCP en conexiones lentas. -->
-  <link rel="preload" href="styles.css?v=20261007-4" as="style" fetchpriority="high" />
-  <link rel="stylesheet" href="styles.css?v=20261007-4" />
+  <link rel="stylesheet" href="styles.css?v=20261006-2" />
 
   <style>
     @media (max-width: 740px){
@@ -247,8 +239,7 @@
     .ams-resource-card:hover::before{transform:translateX(110%)}
     .ams-resource-glow{position:absolute;width:190px;height:190px;right:-80px;top:-75px;border-radius:50%;background:var(--rc);opacity:.11;filter:blur(18px);z-index:-1;transition:opacity .3s ease,transform .3s ease}
     .ams-resource-card:hover .ams-resource-glow{opacity:.18;transform:scale(1.12)}
-    .ams-resource-top{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:24px;color:#94a3b8;font-size:.67rem;font-weight:900;letter-spacing:.14em}
-     .light-theme .ams-resource-top{color:#475569}
+    .ams-resource-top{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:24px;color:var(--text-muted);font-size:.67rem;font-weight:900;letter-spacing:.14em}
     .ams-resource-index{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--rc);opacity:.9}
     .ams-resource-status{display:inline-flex;align-items:center;gap:6px;padding:5px 8px;border:1px solid rgba(255,255,255,.08);border-radius:999px;background:rgba(255,255,255,.025);white-space:nowrap}
     .ams-resource-status i{font-size:.38rem;color:var(--rc);text-shadow:0 0 8px var(--rc)}
@@ -1301,8 +1292,8 @@
   <button class="to-top" id="toTop" aria-label="Volver arriba" title="Volver arriba"><i class="fa-solid fa-arrow-up"></i></button>
 
 
-  <script src="scripts.js?v=20261007-3" defer></script>
-  <script src="contacto.js?v=20261007-1" defer></script>
+  <script src="scripts.js?v=20261006-3" defer></script>
+  <script src="contacto.js?v=20260928-4" defer></script>
 <script id="ams-open-links-blank">
 (function(){
   function normalize(link){
@@ -1326,6 +1317,13 @@
     var link=e.target && e.target.closest ? e.target.closest('a[href]') : null;
     if(link) normalize(link);
   },true);
+  new MutationObserver(function(mutations){
+    mutations.forEach(function(m){
+      m.addedNodes.forEach(function(node){
+        if(node.nodeType===1) normalizeLinks(node);
+      });
+    });
+  }).observe(document.documentElement,{childList:true,subtree:true});
 })();
 </script>
   <script>
