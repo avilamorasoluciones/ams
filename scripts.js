@@ -38,15 +38,6 @@ if (aosDesktop && !prefersReduced) {
   }
 }
 
-let aosRefreshTimer = 0;
-const queueAOSRefresh = () => {
-  if (!aosDesktop || !window.AOS || prefersReduced) return;
-  window.clearTimeout(aosRefreshTimer);
-  aosRefreshTimer = window.setTimeout(() => {
-    try { AOS.refreshHard(); } catch (_) {}
-  }, 160);
-};
-
 // AOS se inicializa una sola vez cuando su recurso termina de cargar.
 // Evitamos refreshHard() durante load/resize porque fuerza recalculos de layout.
 
