@@ -1,3 +1,28 @@
+/* ===== Accesibilidad: navegación por teclado ===== */
+.skip-link{
+  position:fixed;
+  top:10px;
+  left:10px;
+  z-index:10000;
+  padding:10px 14px;
+  border-radius:10px;
+  background:#0f172a;
+  color:#fff;
+  font-weight:800;
+  text-decoration:none;
+  transform:translateY(-180%);
+  transition:transform .18s ease;
+}
+.skip-link:focus{transform:translateY(0)}
+:focus-visible{
+  outline:3px solid #a78bfa;
+  outline-offset:3px;
+}
+body.light-theme :focus-visible{
+  outline-color:#4338ca;
+}
+#main-content:focus{outline:none}
+
 :root {
   --primary: #6366f1;
   --secondary: #ec4899;
