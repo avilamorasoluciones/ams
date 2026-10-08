@@ -338,6 +338,8 @@ test("Homepage preloads Montserrat and keeps startup animations composited", () 
   const scripts = read("scripts.js");
   const styles = read("styles.css");
 
+  assert.match(html, /<link rel="preload" href="styles\.css\?v=20261007-1" as="style" fetchpriority="high"\s*\/>\s*<title>/);
+  assert.match(html, /<link rel="stylesheet" href="styles\.css\?v=20261007-1"/);
   assert.match(html, /<link rel="preload" href="https:\/\/fonts\.gstatic\.com\/s\/montserrat\/v31\/JTUSjIg1_i6t8kCHKm459WlhyyTh89Y\.woff2" as="font" type="font\/woff2" crossorigin/);
   assert.match(scripts, /window\.addEventListener\("load", queueActiveSectionUpdate, \{ once: true \}\);\s*setActive\("inicio"\);/);
   assert.doesNotMatch(styles, /@keyframes pulse\s*\{[^}]*box-shadow/s);
