@@ -488,7 +488,7 @@
       const loader = document.getElementById("loader");
       if (!loader) return;
       const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-      const delay = reduced ? 100 : (window.matchMedia("(max-width: 740px)").matches ? 120 : 160);
+      const delay = reduced ? 100 : (window.matchMedia("(max-width: 740px)").matches ? 220 : 280);
       window.setTimeout(() => {
         loader.classList.add("hidden");
         window.setTimeout(() => loader.remove(), reduced ? 180 : 620);
@@ -1306,7 +1306,7 @@
       var rel=new Set((link.getAttribute('rel') || '').split(/\s+/).filter(Boolean));
       rel.add('noopener');
       link.setAttribute('rel',Array.from(rel).join(' '));
-    }catch(_){} 
+    }catch(_){}
   }
   function normalizeLinks(root){
     if(root && root.matches && root.matches('a[href]')) normalize(root);
