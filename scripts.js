@@ -55,7 +55,6 @@ if (window.visualViewport) {
   window.visualViewport.addEventListener("resize", queueAOSRefresh, { passive: true });
 }
 
-
 // ===== Navbar compact + ToTop =====
 const nav = document.getElementById("nav");
 const toTop = document.getElementById("toTop");
