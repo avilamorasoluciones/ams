@@ -133,10 +133,7 @@ const sections = ["inicio", "servicios", "planes", "gestion", "portafolio", "rec
 const setActive = (id) => {
   navLinks.forEach((a) => {
     const href = a.getAttribute("href") || "";
-    const active = href === "#" + id;
-    a.classList.toggle("active", active);
-    if (active) a.setAttribute("aria-current", "location");
-    else a.removeAttribute("aria-current");
+    a.classList.toggle("active", href === "#" + id);
   });
 
   // También mantiene visible la zona activa en el menú móvil.
@@ -308,10 +305,6 @@ function applyTheme(theme) {
     themeColorMeta.setAttribute("content", desiredBackground);
   }
 
-  themeToggles.forEach((toggle) => {
-    toggle.setAttribute("aria-pressed", String(isLight));
-    toggle.setAttribute("aria-label", isLight ? "Cambiar a tema oscuro" : "Cambiar a tema claro");
-  });
 }
 
 function initTheme() {
