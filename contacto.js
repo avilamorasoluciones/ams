@@ -65,15 +65,10 @@
   };
   window.AMSContact = { PHONE, EMAIL, openWhatsApp, openEmail };
   const boot = () => {
+    // La página principal no genera enlaces externos dinámicos de contacto.
+    // Evitamos un MutationObserver global que obligue al navegador a revisar
+    // cada cambio del DOM durante la vida de la página.
     decorateWhatsapp();
-    const observer = new MutationObserver((mutations) => {
-      mutations.forEach((mutation) => {
-        mutation.addedNodes.forEach((node) => {
-          if (node.nodeType === 1) applyBlankTargets(node);
-        });
-      });
-    });
-    observer.observe(document.documentElement, { childList: true, subtree: true });
   };
 
   if (document.readyState === "loading") {
