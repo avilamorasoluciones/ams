@@ -1323,13 +1323,6 @@
     var link=e.target && e.target.closest ? e.target.closest('a[href]') : null;
     if(link) normalize(link);
   },true);
-  new MutationObserver(function(mutations){
-    mutations.forEach(function(m){
-      m.addedNodes.forEach(function(node){
-        if(node.nodeType===1) normalizeLinks(node);
-      });
-    });
-  }).observe(document.documentElement,{childList:true,subtree:true});
 })();
 </script>
   <script>
