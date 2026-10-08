@@ -190,7 +190,7 @@ section, header, nav, footer {
 @keyframes amsCardSystem{0%,100%{transform:translateY(-6px)}50%{transform:translateY(11px)}}
 @keyframes amsCardShop{0%,100%{transform:translateY(8px)}50%{transform:translateY(-8px)}}
 @keyframes amsCardTools{0%,100%{transform:translateY(-5px)}50%{transform:translateY(10px)}}
-@keyframes amsCoreLift{0%,100%{transform:translateY(3px);opacity:.94}50%{transform:translateY(-4px);opacity:1}}
+@keyframes amsCoreLift{0%,100%{transform:translateY(3px);filter:brightness(.94)}50%{transform:translateY(-4px);filter:brightness(1.12)}}
 @keyframes amsCoreShape{0%,100%{transform:rotate(45deg) scale(.88)}50%{transform:rotate(225deg) scale(1.03)}}
 @keyframes amsScan{0%{transform:translateX(-22%);opacity:0}35%{opacity:.55}65%{opacity:.55}100%{transform:translateX(22%);opacity:0}}
 @keyframes amsProgress{0%{transform:translateX(-180%)}100%{transform:translateX(420%)}}
@@ -363,7 +363,7 @@ header.hero { min-height: 100vh; min-height: 100svh; padding: calc(var(--navH) +
 .badge-row { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 18px; }
 .badge { display: inline-flex; align-items: center; gap: 8px; padding: 8px 12px; border-radius: 999px; border: 1px solid rgba(255, 255, 255, 0.12); background: rgba(255, 255, 255, 0.04); color: rgba(248, 250, 252, 0.92); font-weight: 800; font-size: 12px; max-width: 100%; }
 .badge i { color: var(--gold); flex: 0 0 auto; }
-.hero h1 { font-size: clamp(2.2rem, 4.2vw, 4.2rem); line-height: 1.08; margin: 0 0 16px; letter-spacing: -1.2px; font-weight: 900; text-wrap: wrap; }
+.hero h1 { font-size: clamp(2.2rem, 4.2vw, 4.2rem); line-height: 1.08; margin: 0 0 16px; letter-spacing: -1.2px; font-weight: 900; text-wrap: balance; }
 .hero h1 .accent { color: var(--tertiary); text-shadow: 0 0 22px rgba(16, 185, 129, 0.25); }
 .hero .lead { font-size: clamp(1.05rem, 1.6vw, 1.3rem); color: var(--muted); margin: 0 0 22px; max-width: 56ch; font-weight: 500; }
 .hero .lead strong { color: var(--light); }
