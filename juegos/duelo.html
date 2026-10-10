@@ -62,7 +62,7 @@
       .du-point-actions{grid-template-columns:1fr;gap:18px}
       .du-point-actions button{min-height:72px}
     }
-  </style>
+  .du-category-field{grid-column:1/-1;min-width:0}.du-category-field legend{font-weight:800}.du-category-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:8px}.du-config-grid .game-category-option{display:flex;align-items:center;gap:9px;padding:10px 12px;border:1px solid var(--border-light);border-radius:12px;background:var(--player-bg);cursor:pointer;min-height:44px}.du-config-grid .game-category-option input{margin:0;width:18px;height:18px;accent-color:var(--accent,var(--primary))}@media(max-width:640px){.du-category-list{grid-template-columns:1fr}}</style>
 </head>
 <body class="game-duelo">
   <header class="topbar">
@@ -90,7 +90,7 @@
           <h2 class="section-title">Partida</h2>
           <div class="du-config-grid">
             <label>Modo de juego<select id="du-mode"><option value="all" selected>👥 Todos contra todos</option><option value="tournament">🏆 Torneo contra todos</option><option value="teams">🤝 Equipos</option><option value="teamTournament">🏆 Torneo por equipos</option></select></label>
-            <label>Categoría<select id="du-cat"></select></label>
+            <fieldset class="du-category-field"><legend>Categorías</legend><p class="muted">Marca todas las categorías que quieras incluir en el juego.</p><div id="du-categories" class="du-category-list"></div></fieldset>
             <label>Tiempo por pregunta<select id="du-time"><option value="8">8 segundos</option><option value="12" selected>12 segundos</option><option value="20">20 segundos</option><option value="30">30 segundos</option><option value="60">1 minuto</option></select></label>
             <label>Puntos para ganar<select id="du-target"><option value="5">5 puntos</option><option value="10" selected>10 puntos</option><option value="20">20 puntos</option><option value="custom">Personalizado</option></select></label>
             <label id="du-custom-target-wrap" hidden>Puntos personalizados<input id="du-custom-target" type="number" min="1" max="1000" value="10" inputmode="numeric"></label>
@@ -187,6 +187,6 @@
   </main>
   <script src="scripts.js?v=20261006-54" defer></script>
   <script src="datos_nuevos.js?v=20261005-02" defer></script>
-  <script src="duelo.js?v=20261006-12" defer></script>
+  <script src="duelo.js?v=20261010-01" defer></script>
 </body>
 </html>
