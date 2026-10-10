@@ -14,7 +14,7 @@ const Duelo = (() => {
   let mode = "all";
   let time = 12;
   let targetPoints = 10;
-  let currentCategory = "Todas";
+  let currentCategories = ranges.map(range => range[0]);
   let teamNames = ["Equipo 1", "Equipo 2"];
   let teamCount = 2;
   let teams = [];
@@ -73,7 +73,7 @@ const Duelo = (() => {
   function candidateIndices() {
     return DB.map((question, index) => ({ question, index }))
       .filter(item => validQuestion(item.question)
-        && (currentCategory === "Todas" || categoryOf(item.index) === currentCategory))
+        && (currentCategories.includes(categoryOf(item.index))))
       .map(item => item.index);
   }
 
@@ -82,10 +82,20 @@ const Duelo = (() => {
     return Math.min(1000, Math.max(1, Number.isFinite(points) ? Math.round(points) : 10));
   }
 
+  function displayCategory(value) { return value === "Colombia" ? "Nacional - CO" : value; }
+  function selectedCategoryValues(containerId, fallback = []) {
+    const container = $(containerId);
+    if (!container) return fallback;
+    return Array.from(container.querySelectorAll('input[type="checkbox"][data-category]:checked')).map(input => input.value);
+  }
   function renderCategories() {
-    $("du-cat").innerHTML = '<option value="Todas">Todas las categorías</option>' +
-      ranges.map(range => '<option value="' + esc(range[0]) + '">' + esc(range[0]) + "</option>").join("");
-    $("du-cat").value = currentCategory;
+    const container = $("du-categories");
+    container.innerHTML = ranges.map(range => {
+      const value = range[0];
+      return '<label class="game-category-option"><input type="checkbox" data-category value="' +
+        esc(value) + '"' + (currentCategories.includes(value) ? " checked" : "") +
+        '><span>' + esc(displayCategory(value)) + '</span></label>';
+    }).join("");
   }
 
   function savePlayers() {
@@ -156,7 +166,7 @@ const Duelo = (() => {
     const targetSelect = $("du-target")?.value || "10";
     const customTarget = Number($("du-custom-target")?.value || 10);
     targetPoints = normalizeTargetPoints(targetSelect === "custom" ? customTarget : Number(targetSelect));
-    currentCategory = $("du-cat")?.value || "Todas";
+    currentCategories = selectedCategoryValues("du-categories", currentCategories);
     teamCount = Math.min(5, Math.max(2, Number($("du-team-count")?.value || 2)));
     teamNames = Array.from({ length: teamCount }, (_, index) =>
       ($("du-team-name-" + index)?.value || "Equipo " + (index + 1)).trim() || "Equipo " + (index + 1)
@@ -167,7 +177,7 @@ const Duelo = (() => {
     if (currentScreen === "du-scr-lobby") captureLobbyConfig();
     window.GameSession?.save("duelo", {
       schemaVersion: 9,
-      players, mode, time, targetPoints, currentCategory, teamNames, teamCount, teams,
+      players, mode, time, targetPoints, currentCategories, currentCategory: currentCategories.length === ranges.length ? "Todas" : currentCategories[0] || "", teamNames, teamCount, teams,
       currentMatchPoints, participants, matches, matchIndex, playerScores, teamScores,
       tournamentRound, current, questionDeck, lastQuestionIndex, timerEndsAt,
       remainingMs, paused, phase, history, eliminated, teamMatchFinished,
@@ -278,7 +288,7 @@ const Duelo = (() => {
         : mode === "teamTournament"
           ? "Torneo por equipos · Ronda " + tournamentRound
           : "Equipos";
-    $("du-cat-label").textContent = current?.category || "Categoría";
+    $("du-cat-label").textContent = current ? displayCategory(current.category) : (currentCategories.length === 1 ? displayCategory(currentCategories[0]) : "Varias categorías");
     $("du-name-a").textContent = sideLabel(match, "a");
     $("du-name-b").textContent = sideLabel(match, "b");
     $("du-team-a-label").textContent = sideSubLabel(match, "a");
@@ -912,8 +922,8 @@ const Duelo = (() => {
     mode = ["all", "tournament", "teams", "teamTournament"].includes(state.mode) ? state.mode : "all";
     time = Number(state.time || 12);
     targetPoints = normalizeTargetPoints(state.targetPoints || 10);
-    currentCategory = state.currentCategory === "Todas" || ranges.some(range => range[0] === state.currentCategory)
-      ? state.currentCategory : "Todas";
+    currentCategories = Array.isArray(state.currentCategories) ? state.currentCategories.filter(value => ranges.some(range => range[0] === value)) : (state.currentCategory && state.currentCategory !== "Todas" && ranges.some(range => range[0] === state.currentCategory) ? [state.currentCategory] : ranges.map(range => range[0]));
+    if (!currentCategories.length && state.currentCategory === "Todas") currentCategories = ranges.map(range => range[0]);
     teamCount = Math.min(5, Math.max(2, Number(state.teamCount || state.teamNames?.length || 2)));
     teamNames = Array.isArray(state.teamNames) ? state.teamNames.map(String).slice(0, teamCount) : [];
     while (teamNames.length < teamCount) teamNames.push("Equipo " + (teamNames.length + 1));
@@ -929,7 +939,7 @@ const Duelo = (() => {
     current = state.current && typeof state.current.text === "string" ? state.current : null;
     questionDeck = Array.isArray(state.questionDeck)
       ? state.questionDeck.filter(index => Number.isInteger(index) && validQuestion(DB[index])
-        && (currentCategory === "Todas" || categoryOf(index) === currentCategory))
+        && (currentCategories.includes(categoryOf(index))))
       : [];
     lastQuestionIndex = Number.isInteger(state.lastQuestionIndex) ? state.lastQuestionIndex : -1;
     timerEndsAt = Number(state.timerEndsAt || 0);
@@ -1039,8 +1049,9 @@ const Duelo = (() => {
       if (btn) removePlayer(btn.getAttribute("data-remove"));
     };
     $("du-time").onchange = () => save();
-    $("du-cat").onchange = event => {
-      currentCategory = event.target.value;
+    $("du-categories").onchange = event => {
+      if (!event.target.matches('input[type="checkbox"][data-category]')) return;
+      currentCategories = selectedCategoryValues("du-categories", currentCategories);
       questionDeck = [];
       save();
     };
