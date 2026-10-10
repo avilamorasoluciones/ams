@@ -21,7 +21,7 @@ const Apuesta = (() => {
   let choice = -1;
   let phase = "idle";
   let history = [];
-  let category = "Todas";
+  let categories = ranges.map(range => range[0]);
   let questionDeck = [];
   let lastQuestionIndex = -1;
   let currentScreen = "ap-scr-lobby";
@@ -59,7 +59,7 @@ const Apuesta = (() => {
     return DB
       .map((question, index) => ({ question, index }))
       .filter(({ question, index }) => validQuestion(question)
-        && (category === "Todas" || categoryOf(index) === category))
+        && (categories.includes(categoryOf(index))))
       .map(({ index }) => index);
   }
 
@@ -95,11 +95,11 @@ const Apuesta = (() => {
       if (draft.length) names = draft;
       startCoins = Number($("ap-start-coins")?.value || startCoins);
       rounds = Number($("ap-rounds")?.value || rounds);
-      category = $("ap-cat")?.value || category;
+      categories = selectedCategoryValues("ap-categories", categories);
     }
     window.GameSession?.save("apuesta", {
       names, coins, round, rounds, startCoins, active, current, bet, choice, phase,
-      history, category, questionDeck, lastQuestionIndex, screen: currentScreen
+      history, categories, category: categories.length === ranges.length ? "Todas" : categories[0] || "", questionDeck, lastQuestionIndex, screen: currentScreen
     });
   }
 
@@ -118,10 +118,20 @@ const Apuesta = (() => {
     error.hidden = !message;
   }
 
+  function displayCategory(value) { return value === "Colombia" ? "Nacional - CO" : value; }
+  function selectedCategoryValues(containerId, fallback = []) {
+    const container = $(containerId);
+    if (!container) return fallback;
+    return Array.from(container.querySelectorAll('input[type="checkbox"][data-category]:checked')).map(input => input.value);
+  }
   function renderCategories() {
-    $("ap-cat").innerHTML = '<option value="Todas">Todas</option>' +
-      ranges.map(range => '<option value="' + esc(range[0]) + '">' + esc(range[0]) + '</option>').join("");
-    $("ap-cat").value = category;
+    const container = $("ap-categories");
+    container.innerHTML = ranges.map(range => {
+      const value = range[0];
+      return '<label class="game-category-option"><input type="checkbox" data-category value="' +
+        esc(value) + '"' + (categories.includes(value) ? " checked" : "") +
+        '><span>' + esc(displayCategory(value)) + '</span></label>';
+    }).join("");
   }
 
   function renderInputs() {
@@ -183,7 +193,7 @@ const Apuesta = (() => {
   function render() {
     const question = current;
     $("ap-round-label").textContent = "Ronda " + round + " de " + rounds;
-    $("ap-cat-label").textContent = current ? categoryOf(current.index) : category;
+    $("ap-cat-label").textContent = current ? displayCategory(categoryOf(current.index)) : (categories.length === 1 ? displayCategory(categories[0]) : "Varias categorías");
     $("ap-turn-label").textContent = "Turno: " + (names[active] || "");
     renderBank();
 
@@ -220,7 +230,7 @@ const Apuesta = (() => {
 
   function startGame() {
     window.emitSound?.(440, 0.03, "sine", 0.035);
-    category = $("ap-cat").value || "Todas";
+    categories = selectedCategoryValues("ap-categories", categories);
     if (!candidateIndices().length) {
       showError("No hay preguntas disponibles en esta categoría. Elige otra categoría.");
       return;
@@ -316,7 +326,7 @@ const Apuesta = (() => {
     $("ap-count").value = String(names.length || 4);
     $("ap-start-coins").value = String(startCoins);
     $("ap-rounds").value = String(rounds);
-    $("ap-cat").value = category;
+    renderCategories();
     renderInputs();
   }
 
@@ -358,8 +368,9 @@ const Apuesta = (() => {
     choice = Number.isInteger(state.choice) ? state.choice : -1;
     phase = state.phase || "choose";
     history = Array.isArray(state.history) ? state.history : [];
-    category = ranges.some(range => range[0] === state.category) || state.category === "Todas" ? state.category : "Todas";
-    questionDeck = Array.isArray(state.questionDeck) ? state.questionDeck.filter(index => Number.isInteger(index) && validQuestion(DB[index]) && (category === "Todas" || categoryOf(index) === category)) : [];
+    categories = Array.isArray(state.categories) ? state.categories.filter(value => ranges.some(range => range[0] === value)) : (state.category && state.category !== "Todas" && ranges.some(range => range[0] === state.category) ? [state.category] : ranges.map(range => range[0]));
+    if (!categories.length && state.category === "Todas") categories = ranges.map(range => range[0]);
+    questionDeck = Array.isArray(state.questionDeck) ? state.questionDeck.filter(index => Number.isInteger(index) && validQuestion(DB[index]) && categories.includes(categoryOf(index))) : [];
     lastQuestionIndex = Number.isInteger(state.lastQuestionIndex) ? state.lastQuestionIndex : current?.index ?? -1;
     currentScreen = state.screen || "ap-scr-lobby";
 
@@ -393,8 +404,9 @@ const Apuesta = (() => {
     $("ap-player-inputs").oninput = save;
     $("ap-start-coins").onchange = save;
     $("ap-rounds").onchange = save;
-    $("ap-cat").onchange = event => {
-      category = event.target.value;
+    $("ap-categories").onchange = event => {
+      if (!event.target.matches('input[type="checkbox"][data-category]')) return;
+      categories = selectedCategoryValues("ap-categories", categories);
       questionDeck = [];
       save();
     };
