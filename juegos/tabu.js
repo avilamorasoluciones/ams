@@ -5,6 +5,8 @@ const TabuGame = (() => {
   let teamNameDrafts = [];
   let pool = [];
   let usedWords = [];
+  const allCategories = [...new Set((Array.isArray(DB_TABU) ? DB_TABU : []).map(card => String(card?.cat || "").trim().toLocaleLowerCase("es")).filter(Boolean))];
+  let selectedCategories = [...allCategories];
   
   let currentRound = 1;
   let maxRounds = 3;
@@ -36,7 +38,7 @@ const TabuGame = (() => {
   }
 
   function saveSession(screen = document.querySelector(".im-screen.active")?.id || "t-scr-lobby") {
-    window.GameSession?.save("tabu", { players, teams, teamNameDrafts, pool, usedWords, currentRound, maxRounds, activeTeamIndex, timePerTurn, secondsLeft, timerEndsAt, currentWord, turnStats, screen, savedAt: Date.now() });
+    window.GameSession?.save("tabu", { players, teams, teamNameDrafts, pool, usedWords, selectedCategories, currentRound, maxRounds, activeTeamIndex, timePerTurn, secondsLeft, timerEndsAt, currentWord, turnStats, screen, savedAt: Date.now() });
   }
 
   function changeScreen(id) {
@@ -75,7 +77,31 @@ const TabuGame = (() => {
     window.emitSound(250, 0.12, "sawtooth");
   }
 
+  function displayCategory(category) {
+    const value = String(category || "").trim();
+    if (value.toLocaleLowerCase("es") === "colombia") return "Nacional - CO";
+    return value ? value.charAt(0).toLocaleUpperCase("es") + value.slice(1) : "";
+  }
+
+  function renderCategories() {
+    const container = $("t-categories");
+    if (!container) return;
+    container.innerHTML = allCategories.map(category => {
+      const checked = selectedCategories.includes(category) ? " checked" : "";
+      const safeCategory = window.Utils.escapeHTML(category);
+      const label = window.Utils.escapeHTML(displayCategory(category));
+      return `<label class="game-category-option"><input type="checkbox" data-category value="${safeCategory}"${checked}><span>${label}</span></label>`;
+    }).join("");
+  }
+
+  function readSelectedCategories() {
+    const container = $("t-categories");
+    return container ? Array.from(container.querySelectorAll('input[type="checkbox"][data-category]:checked')).map(input => input.value) : [...selectedCategories];
+  }
+
   function startGame() {
+    selectedCategories = readSelectedCategories();
+    if (!selectedCategories.length) return alert("Selecciona al menos una categoría para jugar.");
     const numTeams = parseInt($("t-selTeams").value);
     if (players.length < numTeams * 2) {
       return alert(`Para ${numTeams} equipos, necesitas al menos ${numTeams * 2} jugadores.`);
@@ -89,6 +115,7 @@ const TabuGame = (() => {
     // a recibir una palabra que ya haya salido en una ronda anterior.
     const seenWords = new Set();
     const uniqueCards = DB_TABU.filter(card => {
+      if (!selectedCategories.includes(String(card?.cat || "").trim().toLocaleLowerCase("es"))) return false;
       const key = normalizeWord(card?.word);
       if (!key || seenWords.has(key)) return false;
       seenWords.add(key);
@@ -315,7 +342,7 @@ const TabuGame = (() => {
     }
 
     currentWord = nextWord;
-    $("t-catBadge").textContent = currentWord.cat.toUpperCase();
+    $("t-catBadge").textContent = displayCategory(currentWord.cat);
     $("t-txtMainWord").textContent = currentWord.word;
     $("t-uiForbiddenList").innerHTML = currentWord.forbidden.map(w => `<li>${w}</li>`).join("");
     return true;
@@ -480,6 +507,11 @@ const TabuGame = (() => {
       }
     };
 
+    renderCategories();
+    $("t-categories")?.addEventListener("change", () => {
+      selectedCategories = readSelectedCategories();
+      saveSession();
+    });
     $("t-btnStart").onclick = startGame;
     $("t-btnConfirmTeams").onclick = confirmTeamNames;
     $("t-btnStartTurn").onclick = startCountdown;
@@ -499,6 +531,10 @@ const TabuGame = (() => {
     renderPlayers();
     window.GameSession?.register(saveSession);
     const saved = window.GameSession?.load("tabu");
+    if (Array.isArray(saved?.selectedCategories)) {
+      selectedCategories = saved.selectedCategories.map(value => String(value || "").trim().toLocaleLowerCase("es")).filter(value => allCategories.includes(value));
+    }
+    renderCategories();
     if (saved && saved.screen !== "t-scr-lobby" && Array.isArray(saved.teams) && saved.teams.length) {
       players = Array.isArray(saved.players) ? saved.players : players;
       teams = saved.teams;
@@ -533,7 +569,7 @@ const TabuGame = (() => {
         `).join("");
       }
       if (currentWord) {
-        $("t-catBadge").textContent = currentWord.cat?.toUpperCase() || "";
+        $("t-catBadge").textContent = displayCategory(currentWord.cat);
         $("t-txtMainWord").textContent = currentWord.word || "";
         $("t-uiForbiddenList").innerHTML = (currentWord.forbidden || []).map(w => `<li>${w}</li>`).join("");
       }

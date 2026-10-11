@@ -53,6 +53,12 @@
     .tabu-countdown-number { font-size: clamp(5rem, 25vw, 10rem); line-height:1; font-weight:1000; color:#fff; text-shadow: 0 8px 30px rgba(0,0,0,.35); animation: tabu-count-pop .7s ease both; }
     @keyframes tabu-count-pop { 0% { transform:scale(.55); opacity:.2; } 60% { transform:scale(1.08); opacity:1; } 100% { transform:scale(1); opacity:1; } }
     .tabu-next-note { margin: 0; }
+    .tabu-category-field { min-width:0; margin:12px 0; }
+    .tabu-category-field legend { font-weight:800; }
+    .tabu-category-list { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:8px; margin-top:8px; }
+    .tabu-category-list .game-category-option { display:flex; align-items:center; gap:9px; padding:10px 12px; border:1px solid var(--border-light); border-radius:12px; background:var(--player-bg); cursor:pointer; min-height:44px; }
+    .tabu-category-list input { margin:0; width:18px; height:18px; accent-color:var(--accent,var(--primary)); }
+    @media(max-width:520px){ .tabu-category-list { grid-template-columns:1fr; } }
     .tabu-cancel-btn { position:absolute; top:10px; right:10px; width:42px; height:42px; border-radius:50%; z-index:2; }
     .tabu-game-cancel-btn { width:100%; min-height:52px; margin-bottom:10px; border-radius:12px; font-weight:900; }
     #t-scr-game { position:relative; }
@@ -139,6 +145,12 @@
                     </select>
                   </div>
                 </div>
+
+                <fieldset class="tabu-category-field">
+                  <legend>Categorías</legend>
+                  <p class="muted">Marca todas las categorías que quieras incluir en la partida.</p>
+                  <div id="t-categories" class="tabu-category-list"></div>
+                </fieldset>
 
                 <div class="row">
                   <button type="button" class="btn danger" id="t-btnClearPlayers"><svg class="ui-icon" aria-hidden="true"><use href="ui-icons.svg#trash"></use></svg><span>Limpiar</span></button>
@@ -251,7 +263,7 @@
   </main>
   <script src="datos.js?v=20261003-48" defer></script>
   <script src="scripts.js?v=20261001-46" defer></script>
-  <script src="tabu.js?v=20261004-56" defer></script><div style="text-align:center;margin-top:18px;padding:12px 10px;border-top:1px solid rgba(255,255,255,.1);font:11px system-ui,Arial;color:#9ca9bd"><a href="../legal_privacidad.html" style="color:inherit;margin:0 7px">Privacidad</a><a href="../legal_terminos.html" style="color:inherit;margin:0 7px">Términos</a><a href="../legal_cookies.html" style="color:inherit;margin:0 7px">Cookies</a><a href="mailto:equipo@avilamorasoluciones.com" style="color:inherit;margin:0 7px">equipo@avilamorasoluciones.com</a></div>
+  <script src="tabu.js?v=20261010-01" defer></script><div style="text-align:center;margin-top:18px;padding:12px 10px;border-top:1px solid rgba(255,255,255,.1);font:11px system-ui,Arial;color:#9ca9bd"><a href="../legal_privacidad.html" style="color:inherit;margin:0 7px">Privacidad</a><a href="../legal_terminos.html" style="color:inherit;margin:0 7px">Términos</a><a href="../legal_cookies.html" style="color:inherit;margin:0 7px">Cookies</a><a href="mailto:equipo@avilamorasoluciones.com" style="color:inherit;margin:0 7px">equipo@avilamorasoluciones.com</a></div>
 <script src="../contacto.js?v=20260928-4" defer></script>
 
 <script id="ams-open-links-blank">
