@@ -85,7 +85,7 @@ const Duelo = (() => {
   function displayCategory(value) { return value === "Colombia" ? "Nacional - CO" : value; }
   function selectedCategoryValues(containerId, fallback = []) {
     const container = $(containerId);
-    if (!container) return fallback;
+    if (!container || typeof container.querySelectorAll !== "function") return fallback;
     return Array.from(container.querySelectorAll('input[type="checkbox"][data-category]:checked')).map(input => input.value);
   }
   function renderCategories() {
@@ -247,14 +247,17 @@ const Duelo = (() => {
 
   function matchTeamIndex(match, side) {
     if (!isTeamMode()) return -1;
-    return side === "a" ? Number(match?.teamAIndex) : Number(match?.teamBIndex);
+    const index = side === "a" ? match?.teamAIndex : match?.teamBIndex;
+    return index !== undefined && index !== null && !Number.isNaN(Number(index)) ? Number(index) : -1;
   }
 
   function sideLabel(match, side) {
     const members = getSideMembers(match?.[side]);
     if (isTeamMode()) {
       const teamIndex = matchTeamIndex(match, side);
-      return teams[teamIndex]?.name || teamNames[teamIndex] || "Equipo " + (teamIndex + 1);
+      if (teamIndex >= 0) {
+        return teams[teamIndex]?.name || teamNames[teamIndex] || "Equipo " + (teamIndex + 1);
+      }
     }
     return members.map(player => player.name).join(" y ") || "Jugador";
   }
@@ -312,7 +315,8 @@ const Duelo = (() => {
     $("du-official-answer").textContent = "";
     $("du-countdown").hidden = !countdownActive;
     $("du-countdown-number").textContent = String(Math.max(0, countdownActive ? countdownSeconds : 0));
-    $("du-countdown").querySelector("small").textContent = "Prepárense. Empieza el duelo.";
+    const countdownSmall = $("du-countdown")?.querySelector?.("small");
+    if (countdownSmall) countdownSmall.textContent = "Prepárense. Empieza el duelo.";
     $("du-pause-banner").hidden = !paused;
     $("du-pause").hidden = phase !== "answer";
     $("du-pause").textContent = paused ? "Continuar" : "Pausar";
@@ -678,6 +682,8 @@ const Duelo = (() => {
       round: tournamentRound,
       a: [...(match?.a || [])],
       b: [...(match?.b || [])],
+      teamAIndex: match?.teamAIndex,
+      teamBIndex: match?.teamBIndex,
       winner: match?.winner ? [...match.winner] : [],
       pointWinner,
       question: current?.text || "",
@@ -813,6 +819,21 @@ const Duelo = (() => {
     return placements;
   }
 
+  function renderPodium() {
+    const placements = isTeamMode()
+      ? getTeamPlacements()
+      : (mode === "tournament" ? getIndividualPlacements() : getPodiumByPoints());
+    if (!placements.length) return '<p class="muted">Sin posiciones registradas.</p>';
+    return placements.map(item => {
+      const title = isTeamMode()
+        ? (teams[item.team]?.name || teamNames[item.team] || "Equipo " + (item.team + 1))
+        : (item.ids || []).map(id => getParticipant(id)?.name).filter(Boolean).join(" y ");
+      const scoreText = Number.isInteger(item.score) ? " · " + item.score + " pts" : "";
+      return '<div class="du-result-row"><span>' + item.medal + " <strong>" + esc(item.label) + ":</strong> " + esc(title) + '</span>' +
+        '<strong>' + scoreText + '</strong></div>';
+    }).join("");
+  }
+
   function resultSummary() {
     return '<div class="du-result-podium"><strong>Clasificación final</strong>' + renderPodium() + '</div>';
   }
@@ -834,6 +855,8 @@ const Duelo = (() => {
           match: item.match,
           a: item.a,
           b: item.b,
+          teamAIndex: item.teamAIndex,
+          teamBIndex: item.teamBIndex,
           aPoints: 0,
           bPoints: 0,
           questions: 0,
