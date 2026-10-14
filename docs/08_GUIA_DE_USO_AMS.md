@@ -125,7 +125,7 @@ Las pantallas internas de GitHub Pages y su contraseña JavaScript no constituye
 ## 11. Infraestructura actual y evolución
 
 - Porkbun: dominio.
-- Zoho Mail: correo.
+- Correo profesional: `equipo@avilamorasoluciones.com`.
 - GitHub: código y GitHub Pages.
 - Google: Search Console.
 - Wompi: pagos.
