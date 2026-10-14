@@ -66,6 +66,16 @@ window.uiIcon = uiIcon;
  ********************/
 let audioCtx;
 
+function unlockAudioContext() {
+  if (audioCtx && audioCtx.state === "suspended") {
+    audioCtx.resume().catch(() => {});
+  }
+}
+if (typeof window !== "undefined" && typeof window.addEventListener === "function") {
+  window.addEventListener("pointerdown", unlockAudioContext, { once: true, passive: true });
+  window.addEventListener("keydown", unlockAudioContext, { once: true, passive: true });
+}
+
 function emitSound(frequency, duration, waveType = "sine", volume = 0.5) {
   try {
     if (!audioCtx) {

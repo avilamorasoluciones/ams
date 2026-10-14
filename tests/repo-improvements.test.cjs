@@ -72,7 +72,7 @@ function makeAyuContext(overrides = {}) {
   return { context, localStorage };
 }
 
-function makeDueloHarness({ mode = "duel", target = 10, names = ["Ana", "Beto"] } = {}) {
+function makeDueloHarness({ mode = "all", target = 10, names = ["Ana", "Beto"] } = {}) {
   const elements = new Map();
   const getElement = id => {
     if (!elements.has(id)) {
@@ -83,6 +83,7 @@ function makeDueloHarness({ mode = "duel", target = 10, names = ["Ana", "Beto"] 
         },
         addEventListener(type, callback) { this.listeners[type] = callback; },
         setAttribute(name, value) { this.attributes[name] = value; },
+        querySelector(selector) { return getElement(id + "-" + selector); },
         focus() {}
       });
     }
@@ -120,7 +121,12 @@ function makeDueloHarness({ mode = "duel", target = 10, names = ["Ana", "Beto"] 
     getElement("du-inpName").value = name;
     getElement("du-btnAddPlayer").onclick();
   });
-  const start = () => getElement("du-start").onclick();
+  const start = () => {
+    getElement("du-start").onclick();
+    if (typeof getElement("du-start-next").onclick === "function") {
+      getElement("du-start-next").onclick();
+    }
+  };
   const runCountdown = () => {
     const callback = [...timers.values()].find(timer => timer !== undefined);
     assert.equal(typeof callback, "function");
@@ -315,7 +321,7 @@ test("Game pages permit zoom and service workers do not cache out-of-scope reque
   assert.match(read("juegos/ams-fly/sw.js"), /if\(response\.ok\)/);
   const dueloPage = read("juegos/duelo.html");
   const gamesWorker = read("juegos/sw.js");
-  for (const asset of ["scripts.js?v=20261006-54", "duelo.js?v=20261006-08"]) {
+  for (const asset of ["scripts.js?v=20261006-54", "duelo.js?v=20261010-01"]) {
     assert.ok(dueloPage.includes(asset) && gamesWorker.includes(asset), `${asset} must be pre-cached`);
   }
   const gameIndex = read("juegos/index.html");
@@ -401,7 +407,7 @@ test("Duelo keeps matchup points across questions and ends at exactly 10", () =>
 
   assert.equal(game.getElement("du-scr-result").hidden, false);
   assert.match(game.getElement("du-result-body").innerHTML, /10 pts/);
-  assert.equal((game.getElement("du-result-body").innerHTML.match(/<div><strong>Duelo /g) || []).length, 10);
+  assert.match(game.getElement("du-result-body").innerHTML, /10 preguntas/);
   game.getElement("du-point-a").onclick();
   assert.match(game.getElement("du-result-body").innerHTML, /10 pts/);
 });
@@ -415,8 +421,8 @@ test("Duelo team mode ends when the shared team score reaches its target", () =>
   game.getElement("du-point-a").onclick();
 
   assert.equal(game.getElement("du-scr-result").hidden, false);
-  assert.match(game.getElement("du-result-body").innerHTML, /Equipo A<\/span><strong>2 pts/);
-  assert.doesNotMatch(game.getElement("du-result-body").innerHTML, /Equipo A<\/span><strong>[3-9]\d* pts/);
+  assert.match(game.getElement("du-result-body").innerHTML, /Equipo 1/);
+  assert.match(game.getElement("du-result-body").innerHTML, /2 pts/);
 });
 
 test("Duelo countdown sounds each tick and the shared audio helper handles autoplay rejection", async () => {

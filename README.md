@@ -77,7 +77,7 @@ La interfaz y el flujo de negocio no deberían cambiar.
 ## Antes de iniciar actividad comercial real
 Quedan fuera del código y requieren revisión de ustedes:
 1. Comprar/configurar el dominio Avila Mora Soluciones.
-2. Configurar Zoho Mail y `equipo@avilamorasoluciones.com`.
+2. Configurar el correo oficial `equipo@avilamorasoluciones.com`.
 3. Crear y probar el briefing en Microsoft Forms.
 4. Revisar la identificación pública real del titular antes de publicar datos legales definitivos.
 5. Configurar el medio de pago real.

@@ -1,0 +1,288 @@
+
+/* ===== JUEGOS (INVERSA) ===== */
+.section-inverted {
+  background: #f8fafc; /* Claro por defecto (para cuando el tema de la web es oscuro) */
+  color: #0f172a;
+  padding-bottom: 120px !important; /* Le da mucho aire abajo antes del choque con el degradado */
+}
+.section-inverted .section-title {
+  background: var(--gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.section-inverted .section-sub {
+  color: #475569;
+}
+
+.games-cta {
+  text-align: center;
+  padding: 40px 20px 20px; /* Separa un poco más el botón del texto de arriba */
+}
+
+.btn-game {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 32px;
+  background: var(--gradient);
+  color: #fff;
+  font-weight: 900;
+  border-radius: 999px;
+  font-size: 1.1rem;
+  transition: transform 0.3s ease;
+  animation: playful-bounce 2s infinite ease-in-out;
+  border: none;
+  box-shadow: 0 10px 25px rgba(99, 102, 241, 0.4);
+}
+
+@keyframes playful-bounce {
+  0%, 100% { transform: translateY(0) rotate(-2deg); }
+  50% { transform: translateY(-8px) rotate(2deg); }
+}
+
+.btn-game:hover {
+  animation: none;
+  transform: scale(1.05);
+  color: #fff;
+}
+/* =========================================
+   RESCATE DE SOLAPAMIENTOS Y ERRORES VISUALES
+   ========================================= */
+
+/* 1. Arreglo del Menú de Navegación */
+.nav-inner {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    align-items: center !important;
+    gap: 15px !important;
+}
+
+.nav-links {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    gap: 20px !important; /* Forza la separación entre palabras */
+    margin: 0 !important;
+    padding: 0 !important;
+    align-items: center !important;
+}
+
+.nav-links li {
+    list-style: none !important;
+}
+
+.nav-links a {
+    white-space: nowrap !important; /* Evita que las palabras se corten por la mitad */
+    font-size: 0.95rem !important;
+    text-decoration: none !important;
+}
+
+/* 2. Arreglo de la Tarjeta de Beneficios (Checklist Hero) */
+.hero-checklist {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 18px !important; /* Forza el espacio vertical entre cada beneficio */
+    padding: 0 !important;
+    margin: 20px 0 !important;
+    list-style: none !important;
+}
+
+.hero-checklist li {
+    display: flex !important;
+    align-items: flex-start !important;
+    gap: 12px !important; /* Espacio entre el chulito verde y el texto */
+    position: static !important;
+    height: auto !important; /* Elimina cualquier altura fija que cause solapamiento */
+    line-height: 1.4 !important;
+}
+
+.hero-checklist i {
+    color: #10b981 !important; /* Verde de éxito */
+    font-size: 1.2rem !important;
+    margin-top: 2px !important;
+    flex-shrink: 0 !important; /* Evita que el chulito se aplaste */
+}
+
+.chk-text {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 4px !important;
+}
+
+.chk-text strong {
+    color: var(--primary, #0f172a) !important;
+    font-size: 1.05rem !important;
+}
+/* 1. Arreglo del Menú de Navegación (CORREGIDO PARA BOTONES) */
+.nav-inner {
+    display: flex !important;
+    flex-wrap: nowrap !important; /* Obliga a que TODO se mantenga en una sola línea */
+    justify-content: space-between !important; /* Empuja el logo a la izq y botones a la der */
+    align-items: center !important;
+    width: 100% !important;
+}
+
+.nav-links {
+    display: flex !important;
+    gap: 20px !important;
+    margin: 0 auto !important; /* Centra los links en el medio */
+    padding: 0 !important;
+    align-items: center !important;
+}
+
+.nav-links li {
+    list-style: none !important;
+}
+
+.nav-links a {
+    white-space: nowrap !important;
+    font-size: 0.95rem !important;
+    text-decoration: none !important;
+}
+
+.nav-cta {
+    display: flex !important;
+    gap: 15px !important;
+    align-items: center !important;
+    white-space: nowrap !important; /* Evita que los botones se deformen */
+}
+
+/* Ocultar botones y links en celulares para que solo salga la "hamburguesa" */
+@media (max-width: 1500px) {
+    .nav-links, .nav-cta {
+        display: none !important;
+    }
+}
+
+/* Ajuste específico para las tarjetas de Recursos */
+.resource-card {
+    background: rgba(255, 255, 255, 0.05); /* Base por defecto */
+    border: 1px solid rgba(0,0,0,0.1);
+}
+
+/* Cuando el modo claro está activo (asumiendo que tu script añade clase .light-theme al body) */
+.light-theme .resource-card {
+    background: rgba(0, 0, 0, 0.03);
+    border: 1px solid rgba(0,0,0,0.1);
+}
+
+.resource-card h3 { color: var(--primary) !important; }
+.light-theme .resource-card h3 { color: #0f172a !important; }
+.resource-card p { color: var(--text-muted) !important; }
+
+/* Asegurar que el botón se vea bien en ambos modos */
+.btn-res { color: white !important; }
+.light-theme .btn-res { color: white !important; }
+
+/* ===== Carga mínima sin isotipo ===== */
+.ams-loading-minimal{width:min(420px,72vw);display:grid;gap:12px;place-items:center}
+.ams-loading-track{position:relative;width:100%;height:4px;overflow:hidden;border-radius:999px;background:rgba(255,255,255,.08);box-shadow:0 0 22px rgba(123,109,255,.10)}
+.ams-loading-track span{position:absolute;left:-42%;top:0;width:42%;height:100%;border-radius:inherit;background:linear-gradient(90deg,#6d43ff,#a78bfa,#ff4eb9);box-shadow:0 0 14px rgba(167,139,250,.7),0 0 25px rgba(255,78,185,.25);animation:ams-minimal-load 1.25s ease-in-out infinite}
+.ams-loading-glow{position:absolute;width:min(260px,48vw);height:80px;border-radius:50%;background:radial-gradient(ellipse,rgba(123,109,255,.15),transparent 70%);filter:blur(14px);animation:ams-minimal-pulse 1.8s ease-in-out infinite}
+.ams-loading-dots{display:flex;gap:7px;justify-content:center}
+.ams-loading-dots i{width:5px;height:5px;border-radius:50%;background:#8b7cff;box-shadow:0 0 9px rgba(139,124,255,.65);animation:ams-minimal-dot 1s ease-in-out infinite}
+.ams-loading-dots i:nth-child(2){animation-delay:.14s}.ams-loading-dots i:nth-child(3){animation-delay:.28s}
+@keyframes ams-minimal-load{0%{transform:translateX(0)}100%{transform:translateX(340%)}}
+@keyframes ams-minimal-pulse{0%,100%{opacity:.35;transform:scale(.8)}50%{opacity:.8;transform:scale(1.05)}}
+@keyframes ams-minimal-dot{0%,100%{opacity:.25;transform:translateY(0)}50%{opacity:1;transform:translateY(-2px)}}
+@media(prefers-reduced-motion:reduce){.ams-loading-track span,.ams-loading-glow,.ams-loading-dots i{animation:none}.ams-loading-track span{left:0;width:100%}}
+
+
+/* ===== Modal de pago Wompi ===== */
+.payment-modal{
+  position:fixed;
+  inset:0;
+  z-index:6000;
+  display:grid;
+  place-items:center;
+  padding:20px;
+}
+.payment-modal[hidden]{display:none}
+.payment-modal-backdrop{
+  position:absolute;
+  inset:0;
+  background:rgba(2,6,23,.72);
+  backdrop-filter:blur(8px);
+  -webkit-backdrop-filter:blur(8px);
+}
+.payment-modal-card{
+  position:relative;
+  z-index:1;
+  width:min(100%,500px);
+  padding:34px 30px 26px;
+  border:1px solid var(--glass-border);
+  border-radius:26px;
+  background:linear-gradient(180deg,rgba(15,23,42,.98),rgba(7,11,24,.98));
+  box-shadow:0 28px 90px rgba(0,0,0,.48);
+  text-align:center;
+  animation:paymentModalIn .22s ease-out;
+}
+.payment-modal-icon{
+  width:54px;
+  height:54px;
+  margin:0 auto 16px;
+  display:grid;
+  place-items:center;
+  border-radius:16px;
+  background:rgba(99,102,241,.14);
+  color:#a5b4fc;
+  font-size:1.25rem;
+}
+.payment-modal-card h2{
+  margin:0;
+  font-size:1.55rem;
+  letter-spacing:-.02em;
+}
+.payment-modal-lead{
+  margin:9px auto 18px;
+  max-width:390px;
+  color:var(--muted-2);
+  font-size:.92rem;
+}
+.payment-modal-note{
+  display:flex;
+  align-items:flex-start;
+  gap:10px;
+  margin:0 auto 22px;
+  max-width:410px;
+  padding:13px 14px;
+  border:1px solid rgba(255,255,255,.09);
+  border-radius:15px;
+  background:rgba(255,255,255,.035);
+  color:var(--muted);
+  text-align:left;
+  font-size:.78rem;
+  line-height:1.5;
+}
+.payment-modal-note i{
+  margin-top:2px;
+  color:#a5b4fc;
+}
+.payment-modal-action{
+  width:100%;
+  justify-content:center;
+}
+.payment-modal-close{
+  position:absolute;
+  top:12px;
+  right:12px;
+  width:38px;
+  height:38px;
+  display:grid;
+  place-items:center;
+  border:1px solid rgba(255,255,255,.08);
+  border-radius:50%;
+  background:rgba(255,255,255,.04);
+  color:var(--muted-2);
+  cursor:pointer;
+}
+.payment-modal-close:hover{background:rgba(255,255,255,.08);color:var(--light)}
+.payment-modal-cancel{
+  margin-top:13px;
+  border:0;
+  background:transparent;
+  color:var(--muted);
+  font:inherit;
+  font-size:.78rem;
+  cursor:pointer;
+}
+.payment-modal-cancel:hover{color:var(--light)}

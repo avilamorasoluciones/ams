@@ -1318,7 +1318,19 @@ function save(s){
   if(CLOUD_USER){ clearTimeout(cloudSaveTimer); cloudSaveTimer=setTimeout(()=>cloudSave(clean),250); }
 }
 
-function setCloudStatus(msg){ const el=$("cloudStatus"); if(el) el.textContent=msg; }
+let lastCloudStatusMsg = "☁️ Sin sesión · datos locales";
+function setCloudStatus(msg){
+  if(msg) lastCloudStatusMsg = msg;
+  const el=$("cloudStatus");
+  if(!el) return;
+  const statusText = (!navigator.onLine)
+    ? "🌐 Sin conexión · Cambios guardados en este dispositivo"
+    : lastCloudStatusMsg;
+  el.textContent = statusText;
+  el.setAttribute("aria-live", "polite");
+}
+window.addEventListener("online", () => setCloudStatus());
+window.addEventListener("offline", () => setCloudStatus());
 
 let ayukcalAudioCtx=null;
 
