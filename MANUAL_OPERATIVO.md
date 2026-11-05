@@ -1,125 +1,199 @@
-# Manual Operativo Avila Mora Soluciones
+# Manual Operativo — Avila Mora Soluciones (AMS)
+**Actualizado:** 5 de noviembre de 2026
 
-## 1. Regla principal
-Avila Mora Soluciones opera actualmente con GitHub Pages y el dominio oficial `https://avilamorasoluciones.com/`. La URL heredada `https://avilamorasoluciones.github.io/ams/...` se conserva para compatibilidad y redirección. No migrar a OVHcloud/Coolify hasta que el flujo real de clientes y los requisitos técnicos justifiquen infraestructura propia.
+## 1. Estado y fuente de verdad
 
-## 2. Contacto rápido
-La web oficial publica `equipo@avilamorasoluciones.com` y WhatsApp +57 305 254 7072. Los botones de WhatsApp llevan un mensaje prellenado. Los botones de correo pueden abrir Gmail, Outlook o el cliente de correo predeterminado con asunto y mensaje prellenados.
+- Web pública: https://avilamorasoluciones.com/
+- Repositorio: https://github.com/avilamorasoluciones/ams
+- Gestión interna: https://avilamorasoluciones.com/gestion/
+- La web pública y las demos estáticas se publican mediante GitHub Pages.
+- Gestión AMS conserva almacenamiento local del navegador. No sincroniza automáticamente entre PC y móvil.
+- AMS tiene un entorno Hetzner/Coolify referido para operación de clientes. Antes de comprar otro servidor, verificar CPU, RAM, disco, cargas y compromisos existentes.
+- OVH VPS-2 es una opción de ampliación/infraestructura propia considerada, no debe afirmarse como servidor de producción activo hasta contratarlo, configurarlo y probarlo.
+- La arquitectura de despliegue objetivo es GitHub + pruebas en GitHub Actions + Coolify en un VPS + bases de datos aisladas. No instalar CloudPanel y Coolify simultáneamente en el mismo servidor.
 
-## 3. Flujo comercial
-1. Cliente llega por web/WhatsApp.
-2. Se entiende la necesidad.
-3. Se envía propuesta con alcance, precio, tiempos y servicios.
-4. Cliente acepta.
-5. Se comparte el enlace de pago acordado (Wompi cuando corresponda), se confirma el estado directamente en el panel del proveedor y se registra el pago en Gestión → Finanzas. No marcar como pagado basándose únicamente en una captura enviada por el cliente.
-6. Cliente completa el Formulario de Proyecto en Microsoft Forms.
-7. Se crea o actualiza el proyecto en Gestión → Operación.
-8. Se prepara staging/demo.
-9. Se desarrolla y prueba.
-10. Se muestra el proyecto mediante un enlace.
-11. Cliente revisa; se corrigen cambios dentro del alcance.
-12. Aprobación.
-13. Publicación.
-14. Entrega.
-15. Mantenimiento/renovación si corresponde.
+Documentos fuente:
+- `AGENTS.md`: reglas permanentes de desarrollo y operación.
+- `PROMPT_MAESTRO_ANTIGRAVITY_AMS.md`: prompt reutilizable para construir proyectos.
+- `POLITICA_PLANES_Y_PRECIOS.md`: alcance y tarifas públicas.
+- `LANZAMIENTO.md`: checklist de puesta en marcha.
 
-## 4. Formulario de Proyecto
-Debe recoger datos del cliente, objetivo, negocio, contenido, diseño, funciones, situación actual, dominio, referencias, prioridades, fecha y observaciones.
-No pedir contraseñas, tarjetas, códigos de autenticación ni datos bancarios sensibles.
-El formulario debe conservarse como registro del proyecto.
+La sección `#planes` de la web y `POLITICA_PLANES_Y_PRECIOS.md` deben coincidir. El cotizador interno antiguo no es la fuente de precios públicos; no usarlo para sustituir el tarifario.
 
-## 5. Staging
-- No esperar al dominio.
-- GitHub Pages/demo mientras Avila Mora Soluciones arranca.
-- No subir datos privados del cliente a demos públicas.
-- Con infraestructura propia: staging protegido y producción separada.
-- La URL de demo se comparte cuando el proyecto esté listo para revisión.
+## 2. Modelo comercial AMS
 
-## 6. Dominio
-- Si el cliente ya tiene dominio: recopilar solo los datos DNS necesarios para publicar.
-- Si no tiene: comprar después de aceptación, pago y autorización.
-- Preferir registro/control del cliente y administración técnica por Avila Mora Soluciones cuando corresponda.
-- Renovaciones deben quedar registradas en Operación/Suscripciones.
+AMS ofrece una solución completa, no solo espacio de hosting:
+1. Desarrollo inicial, cobrado una sola vez.
+2. Administración mensual, que cubre alojamiento gestionado, dominio estándar .com, conexión segura, copias programadas, mantenimiento y soporte del plan.
+3. Ampliaciones y servicios de terceros, cotizados por separado.
 
-## 6.1 Tiendas virtuales
+La propuesta debe describir qué incluye el alcance, los límites, el precio inicial, la mensualidad, la renovación y las exclusiones.
 
-Cuando el proyecto sea una tienda virtual, el enfoque base de Avila Mora Soluciones es catálogo + carrito + pedido por WhatsApp + gestión del pedido según el alcance. La parte de pagos en línea se evalúa por separado cuando el cliente ya tiene una integración que deba conservarse.
+El cliente no debe tener que administrar paneles técnicos, servidores, DNS ni bases de datos en el uso diario. AMS gestiona esa parte.
 
-## 7. Operación Avila Mora Soluciones
-La información operativa se administra desde `/gestion/`, en Operación. El cliente se guarda como registro maestro y los proyectos quedan vinculados a ese cliente.
-Etapas: Contacto inicial (Lead) → Calificado → Propuesta → Aceptado → Pago pendiente → Producción → Revisión cliente → Entrega → Mantenimiento → Cerrado.
-**Contacto inicial (Lead)** significa que una persona o negocio acaba de llegar, preguntar o mostrar interés; todavía no es una venta.
+## 3. Planes públicos
 
-## 8. Caja Avila Mora Soluciones
-- Ingreso: dinero que entra.
-- Gasto: dinero utilizado para operar.
-- Aporte: dinero personal puesto temporalmente en Avila Mora Soluciones.
-- Retiro: dinero que sale hacia los propietarios.
-La Caja es control interno para saber qué dinero entró, qué dinero salió y qué pagos quedan por atender. Para los cobros por Wompi, registrar por separado el valor cobrado, las comisiones, las retenciones y el valor neto desembolsado cuando esos datos estén disponibles.
+| Plan | Desarrollo | Administración |
+|---|---:|---:|
+| Pequeño | COP $690.000 | COP $89.900/mes |
+| Mediano | COP $1.490.000 | COP $149.900/mes |
+| Grande | COP $3.490.000 | COP $299.900/mes |
+| Personalizado | Desde COP $5.900.000 | Desde COP $499.900/mes |
 
-## 9. Clientes y Suscripciones
-Registrar o editar el cliente maestro y su suscripción: precio, moneda, periodicidad, inicio, vencimiento, días de gracia, último pago y estado.
-Un cliente debe existir una sola vez. Operación y Documentos reutilizan este registro.
-El panel actual usa almacenamiento local y no sincroniza automáticamente entre dispositivos. Existe un respaldo completo de Gestión que incluye clientes, proyectos, movimientos y checklist.
+Alcances:
+- Pequeño: web de hasta 5 páginas, formulario, WhatsApp/redes, SEO inicial y mini catálogo de hasta 20 productos.
+- Mediano: web de hasta 10 páginas, catálogo de hasta 50 productos y pedidos por WhatsApp. No incluye pasarela de pago ni inventario sincronizado.
+- Grande: aplicación web con una base de datos, hasta 10 usuarios nominativos y 3 módulos definidos.
+- Personalizado: más usuarios/módulos, integraciones, pagos, automatizaciones, recursos especiales o procesos más complejos.
 
-## 10. Documentos
-Gestión → Documentos se limita a los PDFs realmente útiles para el emprendimiento:
-- propuesta comercial / cotización;
-- acta de entrega;
-- comprobante de pago;
-- ficha interna de cliente/proyecto.
+La administración de cada plan incluye un dominio .com estándar mientras el plan esté activo, alojamiento, HTTPS/SSL, copias programadas, mantenimiento y soporte en días hábiles. El correo corporativo, las comisiones de pago y las licencias de terceros no están incluidos.
 
-Cada tipo tiene un formulario propio y puede usar una plantilla de servicio para ahorrar trabajo repetitivo.
-No se incorporan módulos administrativos adicionales mientras no sean necesarios para la operación real.
+Pago anual anticipado: 11 mensualidades por 12 meses de servicio. El desarrollo inicial se cobra aparte.
 
-## 11. Datos y privacidad
-AMS limita la información a la necesaria para cada finalidad.
-Las solicitudes de titulares se atienden por el canal comercial definido.
-No almacenar secretos en GitHub, almacenamiento público, formularios, WhatsApp o documentos públicos.
+Consultar límites y exclusiones completos en `POLITICA_PLANES_Y_PRECIOS.md`.
 
-## 12. Seguridad
-Nunca subir al repositorio contraseñas, API keys/tokens, claves privadas, credenciales de hosting, tarjetas o datos privados de clientes.
-Las pantallas internas publicadas en GitHub Pages no son seguridad real. Cuando haya información sensible o varios usuarios, migrar a backend con autenticación real.
+## 4. Dominio y Porkbun
 
-## 13. Backups
-- Código: GitHub.
-- Gestión: usar el respaldo completo desde el inicio de Gestión.
-- Documentos: conservar los PDFs finales y los borradores importantes.
-- Con infraestructura propia: backups automáticos y restauración probada.
+- Porkbun es el registrador preferido para dominios nuevos.
+- El titular del dominio es siempre el cliente. AMS administra técnicamente con autorización.
+- Si el cliente ya tiene dominio, no transferirlo por defecto. Configurar los registros DNS necesarios y conservar MX/SPF/DKIM/DMARC del correo existente.
+- Si el cliente requiere dominio nuevo, registrar el dominio a nombre del cliente mediante Porkbun.
+- El plan contempla un dominio .com estándar. Extensiones más costosas, premium o adicionales se cotizan por la diferencia y se autorizan antes de comprar.
+- No publicar API keys de Porkbun ni solicitar contraseñas por WhatsApp o formularios.
+- El correo con dominio es un producto aparte. Tener dominio no incluye automáticamente buzones.
 
-## 14. Compras y movimientos
-1. Revisar Caja Avila Mora Soluciones.
-2. Identificar el gasto.
-3. Registrar el movimiento.
-4. Si falta caja, registrar un aporte separado.
-5. No mezclar gasto personal con gasto de Avila Mora Soluciones.
+## 5. Flujo de trabajo de cada cliente
 
-## 15. Cuando llegue OVHcloud/Coolify
-Debe incluir staging protegido, producción separada, variables de entorno, backups automáticos, monitorización, backend/base de datos cuando haga falta y autenticación real para herramientas internas.
-La migración no debe cambiar el flujo comercial.
+1. Contacto por web, WhatsApp o recomendación.
+2. Briefing: entender negocio, problema, usuarios y procesos.
+3. Definir alcance y plan AMS (o Personalizado).
+4. Propuesta: separar desarrollo inicial, administración y servicios extra.
+5. Aceptación y pago según acuerdo.
+6. Crear repositorio independiente del cliente en GitHub.
+7. Construir prototipo local con Antigravity, Bootstrap CDN, CSS propio y JavaScript.
+8. Probar con datos ficticios; abrir con doble clic en `index.html`.
+9. Publicar preview estático por GitHub Pages cuando el contenido pueda ser público; si no, usar staging protegido.
+10. Mostrar al cliente y corregir dentro del alcance.
+11. Con aprobación, preparar backend/base de datos si el proyecto lo necesita.
+12. Probar integración real en staging con datos de prueba.
+13. Autorizar despliegue a producción.
+14. Conectar dominio, HTTPS, respaldos y monitoreo.
+15. Entregar instrucciones de uso y registrar mantenimiento/renovación.
 
-## 16. Checklist antes de entregar
-Contenido correcto · móvil · tablet · PC · enlaces · formularios · WhatsApp · dominio · HTTPS · SEO básico · PDF si aplica · permisos · backup · aprobación del cliente · documento comercial correspondiente · instrucciones de uso.
+## 6. Prompt y reglas de desarrollo
 
-## 17. Fuente de verdad
-1. Web pública = captación.
-2. Formulario de Proyecto = requisitos del cliente.
-3. Propuesta = alcance vendido.
-4. Documentos = soporte comercial del caso.
-5. Cliente maestro = datos de la persona/empresa.
-6. Operación = proyectos y próximos pasos.
-7. Suscripciones = servicio recurrente y renovaciones.
-8. Finanzas = único libro de movimientos de caja.
-9. Procesos = checklist persistente por proyecto.
-10. Backups = recuperación.
+- Antigravity construye el prototipo local.
+- El prompt reutilizable está en `PROMPT_MAESTRO_ANTIGRAVITY_AMS.md`.
+- `AGENTS.md` define reglas permanentes que deben respetarse en cada repositorio.
+- Bootstrap 5.3.8 por CDN oficial, CSS personalizado y JavaScript Vanilla son el estándar.
+- Se permiten librerías de animación, carruseles o gráficas por CDN cuando aporten valor y estén justificadas.
+- No cargar Bootstrap ni librerías en el repositorio.
+- El prototipo local funciona con scripts clásicos y datos ficticios; no necesita Node/Python/Docker local.
+- No fingir que localStorage es una base central. No incluir datos reales en demos.
 
-## 18. Regla de cambio de infraestructura
-No pagar servidor propio por anticipación. Cuando haya 2 clientes activos a la vez, evaluar OVHcloud/Coolify u otra infraestructura similar y confirmar que los ingresos recurrentes justifican el costo.
+## 7. GitHub, demos y ramas
 
-## 19. Texto de privacidad del briefing
-En la descripción de Microsoft Forms, cuando el formulario vaya a utilizarse para captar datos reales, incluir un enlace visible a `legal_privacidad.html` y explicar de forma clara para qué se usarán los datos.
+GitHub es la fuente oficial del código y su historial.
 
-Mantener como preguntas obligatorias solo las confirmaciones y datos esenciales. No solicitar contraseñas, tarjetas, códigos de autenticación ni datos bancarios sensibles.
+- Cada cliente tiene su propio repositorio privado.
+- No almacenar secretos, .env real, bases de datos reales ni backups de producción.
+- Los commits deben ser descriptivos.
+- No crear PR por rutina para cambios AMS si el responsable trabaja directamente en `main`; respetar las instrucciones específicas del proyecto.
+- GitHub Pages solo sirve frontend estático. No ejecuta Express ni bases de datos.
+- Pages debe usar datos ficticios y se considera público, aunque el repositorio fuente sea privado, salvo modalidad de acceso privado compatible con el plan de GitHub.
+- Si el código o contenido debe permanecer restringido, usar staging protegido.
+- Mantener demo y producción separadas. Un commit de prueba no debe publicar automáticamente a la web real.
+- Producción se actualiza solo mediante promoción aprobada.
 
-## 20. Nota de situación
-Avila Mora Soluciones es un emprendimiento y marca comercial de servicios digitales. El repositorio no debe afirmar que existe una sociedad, registro, certificación o condición jurídica concreta si esa información no ha sido formalizada o verificada.
+## 8. Arquitectura de producción
+
+Arquitectura objetivo:
+- VPS (Hetzner existente si tiene capacidad o nuevo OVH VPS-2 cuando se justifique).
+- Coolify como panel único de despliegue.
+- GitHub y GitHub Actions para código/pruebas.
+- Node.js LTS + Express cuando exista API.
+- MariaDB/MySQL como base de datos estándar.
+- PostgreSQL solo cuando exista justificación técnica.
+- HTTPS y proxy gestionado por Coolify.
+
+Reglas:
+- No instalar CloudPanel y Coolify en el mismo VPS para administrar el mismo proxy/servicios.
+- Landing/web estática no necesita backend.
+- Catálogo WhatsApp puede ser estático si no requiere inventario o cuentas.
+- Sistemas con usuarios, roles, información compartida, historial, pagos o sincronización requieren API y base persistente.
+- Una base de datos y credenciales independientes por cliente como estándar.
+- No abrir públicamente el puerto de base de datos.
+- No usar root para despliegues.
+- Variables de entorno fuera del repositorio.
+- Backups externos y prueba de restauración.
+- Desplegar código sin borrar volúmenes ni datos persistentes.
+- Tener rollback antes de un cambio importante.
+
+## 9. Capacidad y rentabilidad del servidor
+
+- El VPS-2 de OVH fue consultado a US$8,50/mes; AMS presupuesta US$10/mes equivalente (US$120/año) para planificación.
+- Antes de comprarlo, medir si el Hetzner ya disponible puede alojar el piloto sin comprometer otros proyectos.
+- No vender “50 clientes garantizados” ni asociar cantidad fija de sitios a un VPS sin medición.
+- La capacidad depende de CPU, RAM, disco, procesos, base de datos, almacenamiento, visitas, concurrencia y comportamiento de cada aplicación.
+- Medir recursos por proyecto y dejar margen de seguridad.
+- Los sistemas de alto uso se revisan y cotizan como Personalizado o en infraestructura separada.
+- La rentabilidad se mide sobre ingresos recurrentes totales menos VPS, dominios, backups, pasarela, licencias y operación. No cambiar la tarifa individual por alterar una cantidad hipotética de clientes.
+
+## 10. USD/COP en la web
+
+- Precios contractuales fijos en COP.
+- Equivalencias USD informativas, usando la TRM oficial diaria del dataset mcec-87by más COP $300/USD de margen AMS.
+- La tasa oficial se actualiza diariamente; no presentarla como mercado en vivo por segundo.
+- Mostrar fecha de vigencia y fuente.
+- Si falla la consulta, conservar última tasa válida en caché y no ocultar los precios COP.
+
+## 11. Pagos e integraciones
+
+Wompi:
+- No guardar llaves privadas en GitHub ni frontend.
+- Confirmar el pago desde panel/API/webhook del proveedor.
+- Verificar firma y procesar eventos de forma idempotente.
+- No marcar pagado por captura del cliente o redirección del navegador.
+- Registrar valor, moneda, comisión, referencia y desembolso neto disponible.
+
+WhatsApp:
+- Enlace oficial para contacto simple.
+- Automatizaciones solo mediante plataforma oficial y backend.
+
+Bancolombia:
+- Usar únicamente métodos autorizados.
+- No automatizar accesos de banca personal.
+
+Servicios externos:
+- Informar costos y renovaciones antes de contratar.
+
+## 12. Gestión interna, finanzas y datos
+
+- Gestión AMS vive en `/gestion/`.
+- Los módulos internos actuales usan localStorage y pertenecen al navegador/origen; no sincronizan automáticamente entre dispositivos.
+- Mantener respaldo completo periódico.
+- No cambiar esquemas ni datos de clientes al actualizar la aplicación.
+- Caja AMS es control interno: ingreso, gasto, aporte y retiro son conceptos separados.
+- Aportes no son ventas; retiros no son gastos.
+- Registrar comisiones, retenciones y desembolso neto de Wompi por separado cuando estén disponibles.
+
+## 13. Checklist antes de entregar a un cliente
+
+- Alcance y plan aprobado.
+- Desarrollo inicial cobrado según acuerdo.
+- Mensualidad y dominio explicados.
+- Móvil, tablet y escritorio revisados.
+- Formularios, cálculos y enlaces probados.
+- Datos de demostración retirados de producción.
+- Usuarios y permisos revisados.
+- HTTPS activo.
+- DNS y correo preservados.
+- Backups configurados y restauración considerada.
+- Staging aprobado.
+- Producción autorizada.
+- Instrucciones de uso entregadas.
+- Próxima renovación registrada.
+
+## 14. Principio operativo
+
+AMS debe encargarse de la complejidad técnica para que el cliente use su web o sistema sin administrar servidores, paneles, DNS ni bases de datos. La tecnología se mantiene simple por dentro, pero la seguridad y la continuidad no se improvisan.
