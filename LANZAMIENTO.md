@@ -1,22 +1,18 @@
 # Lanzamiento AMS · checklist final
 
-## Mientras sigamos en GitHub Pages
-- Mantener funcionales las URLs `avilamorasoluciones.github.io/ams/...`.
-- No crear todavía `CNAME` ni forzar redirecciones.
-- No subir secretos ni datos reales de clientes al repositorio.
-- Mantener el dominio propio como destino preparado en el contenido.
+## Estado actual del sitio y dominio
+- El sitio público está publicado en `https://avilamorasoluciones.com/` mediante GitHub Pages.
+- El dominio, DNS, CNAME y HTTPS ya están configurados.
+- La URL heredada `avilamorasoluciones.github.io/ams/...` se conserva para compatibilidad.
+- No subir secretos ni datos privados de clientes al repositorio.
 
-## Cuando se compre y configure el dominio
-1. Configurar `avilamorasoluciones.com` en GitHub Pages.
-2. Crear el `CNAME` de GitHub Pages.
-3. Verificar HTTPS.
-4. Cambiar canonical/sitemap de GitHub Pages al dominio propio.
-5. Mantener las rutas del repositorio funcionando y evaluar redirecciones solo después de verificar el dominio.
-6. Configurar `equipo@avilamorasoluciones.com`.
-7. Conectar Wompi y sus webhooks en un backend seguro.
-8. Revisar los datos públicos del titular y de contacto.
-9. Comprobar privacidad, términos y canales de atención con la operación real.
-10. Activar funciones adicionales de comercio electrónico solo cuando realmente vayan a utilizarse.
+## Pendientes reales
+1. Confirmar que el buzón `equipo@avilamorasoluciones.com` está creado y recibe/envía correctamente; la dirección está publicada, pero eso no confirma el estado del servicio de correo.
+2. Mantener actualizados los datos de identificación y contacto del titular en los documentos y avisos que correspondan.
+3. Revisar privacidad, términos y canales de atención frente a la operación real.
+4. Mantener la cuenta Wompi activa y revisar periódicamente sus condiciones y cuenta de desembolso.
+5. Implementar un backend seguro con webhooks solo si se requiere automatizar la confirmación de pagos o las suscripciones.
+6. Activar funciones adicionales de comercio electrónico solo cuando realmente vayan a utilizarse.
 
 ## Pago y suscripciones
 - No guardar llaves secretas de Wompi en GitHub Pages.

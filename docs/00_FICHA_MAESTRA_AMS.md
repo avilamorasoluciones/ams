@@ -2,9 +2,9 @@
 
 ## Identidad del proyecto
 - Nombre comercial: Avila Mora Soluciones
-- Tipo de operación actual: marca comercial y proveedor de servicios digitales.
-- País de operación previsto: Colombia.
-- Titular operativo: [POR COMPLETAR INTERNAMENTE]
+- Tipo de operación actual: emprendimiento y marca comercial de servicios digitales, operado por una persona natural.
+- País de operación: Colombia.
+- Titular operativo: persona natural; los datos completos de identificación se conservan fuera del repositorio público.
 - Domicilio/canal legal público: [POR DEFINIR Y VERIFICAR SEGÚN LA INFORMACIÓN LEGAL VIGENTE]
 
 No guardar en este repositorio documentos de identidad completos, RUT, datos bancarios ni otros datos que deban permanecer privados.
@@ -20,7 +20,7 @@ No guardar en este repositorio documentos de identidad completos, RUT, datos ban
 - Estado actual: GitHub Pages.
 - Dominio propio: configurado.
 - Correo del dominio: pendiente de configuración.
-- Wompi: pendiente de alta e integración.
+- Wompi: cuenta activa a nombre de persona natural y enlace de pago publicado en el sitio; integración propia con backend/webhooks pendiente.
 - Backend seguro: pendiente para pagos/webhooks y herramientas internas que necesiten protección real.
 - OVHcloud/Coolify: evaluar cuando el volumen operativo lo justifique.
 

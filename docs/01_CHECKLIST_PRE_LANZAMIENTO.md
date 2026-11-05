@@ -36,11 +36,13 @@
 - [ ] Revisar indexación y cobertura después de los primeros rastreos.
 
 ## Pagos
-- [ ] Crear Wompi cuando corresponda.
-- [ ] Verificar titularidad y cuenta de desembolso.
-- [ ] Diseñar backend para webhooks.
+- [x] Cuenta Wompi activa a nombre de persona natural.
+- [x] Enlace de pago Wompi publicado en el sitio web.
+- [ ] Confirmar periódicamente que el titular y la cuenta de desembolso sigan correctos.
+- [ ] Diseñar backend seguro para webhooks si se requiere automatizar confirmaciones o suscripciones.
 - [ ] Nunca poner secretos Wompi en GitHub Pages.
-- [ ] Probar los estados del flujo antes de cobrar en línea.
+- [ ] Probar el flujo y conciliar cada pago con el movimiento correspondiente en Gestión.
+- [ ] Verificar en el panel de Wompi las franquicias, países, tarifas y condiciones vigentes del plan contratado.
 
 ## Protección de datos y comercio
 - [x] Política de privacidad publicada.

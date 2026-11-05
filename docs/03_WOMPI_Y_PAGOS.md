@@ -1,64 +1,49 @@
 # Wompi y pagos · Avila Mora Soluciones
 
-## Estado
-Wompi todavía no está conectado. La integración se hará después de tener el dominio y el correo listos.
+## Estado actual
+- AMS utiliza una cuenta Wompi activa registrada a nombre de una persona natural.
+- El sitio público incluye un enlace de pago alojado por Wompi. El cliente completa el pago en la plataforma de Wompi.
+- Este enlace permite recibir pagos puntuales; no significa que exista un checkout propio integrado al catálogo, una API conectada al sitio ni una automatización de suscripciones.
+- La cuenta se utiliza para cobrar servicios de Avila Mora Soluciones. La marca comercial no se presenta como una sociedad independiente.
+- El plan, las franquicias admitidas, los países, las tarifas, los plazos de desembolso y las retenciones deben comprobarse en el panel y las condiciones vigentes de Wompi. No prometer aceptación universal de todas las tarjetas o países.
 
-## Datos a tener a mano
-- Titular de la cuenta [CONFIRMAR EN EL ALTA].
-- Documento de identidad solicitado por Wompi.
-- Cuenta de desembolso aceptada por Wompi.
-- Correo de acceso.
-- Teléfono.
-- Descripción de la actividad.
-- Datos que solicite Wompi para la modalidad elegida.
+## Modalidad de operación
+1. AMS acuerda el servicio, valor, moneda y condiciones con el cliente.
+2. Se comparte el enlace de pago de Wompi publicado en el sitio o un enlace específico cuando corresponda.
+3. El cliente realiza el pago en el entorno alojado por Wompi.
+4. AMS verifica el resultado en Wompi y registra el pago en Gestión → Finanzas.
+5. Se conserva la referencia y el soporte de la transacción.
 
-Wompi debe ser la fuente final para los requisitos del alta porque pueden variar según producto y modalidad.
+No registrar como pagado un pedido únicamente porque el cliente haya enviado una captura. Confirmar el estado en el panel o soporte de Wompi.
 
-Fuente de alta:
-https://wompi.com/es/co/ayuda/como-crear-cuenta
+## Integración técnica pendiente
+El repositorio no contiene una integración de backend propia para crear transacciones, recibir webhooks o confirmar automáticamente pagos. Si se implementa más adelante:
+- las credenciales privadas deben vivir en backend/variables de entorno;
+- no guardar llaves secretas en GitHub Pages;
+- verificar la firma/autenticidad de cada evento recibido;
+- procesar estados de forma idempotente;
+- actualizar suscripciones solo después de validar el pago en servidor;
+- registrar errores y permitir conciliación manual.
 
-## Arquitectura
-Cliente
-→ checkout Wompi
-→ pago
-→ backend Avila Mora Soluciones
-→ webhook verificado
-→ registro de pago
-→ actualización de suscripción
-
-GitHub Pages NO debe guardar secretos de Wompi.
-
-## Estados mínimos
-- iniciado
-- aprobado
-- rechazado
-- cancelado
-- pendiente
-- reembolsado [cuando aplique]
-
-## Para pagos recurrentes
-Antes de publicarlo:
-- confirmar que el producto/modalidad de Wompi permite el flujo requerido;
-- obtener la autorización del cliente;
-- almacenar solo identificadores necesarios;
-- procesar eventos por backend;
-- verificar la autenticidad de los eventos;
-- registrar fecha, importe, moneda y referencia;
-- actualizar la próxima renovación solo después de confirmar el resultado.
+## Pagos internacionales
+El propósito de Wompi para AMS incluye facilitar cobros con tarjetas Visa, Mastercard y otras franquicias que estén habilitadas en el plan y para el país del comprador. La aceptación depende de las reglas de Wompi, del emisor de la tarjeta y de controles antifraude; no debe anunciarse como garantía de que cualquier tarjeta o país será aceptado. Los cobros y desembolsos de AMS se gestionan en COP salvo que el producto contratado indique expresamente otra cosa. El banco emisor puede aplicar conversión de moneda o cargos propios.
 
 ## Conciliación interna
-Por cada pago guardar:
-- fecha;
-- cliente;
-- importe;
-- moneda;
-- referencia;
-- estado;
-- identificador de Wompi;
-- servicio/período;
-- movimiento correspondiente en Gestión.
+Por cada pago guardar en Gestión:
+- fecha de pago y fecha de desembolso cuando estén disponibles;
+- cliente y servicio/período;
+- importe y moneda cobrados;
+- comisión, retenciones y valor neto desembolsado, según el soporte de Wompi;
+- referencia e identificador de transacción;
+- estado final;
+- movimiento correspondiente en Caja AMS.
 
-No guardar datos completos de tarjeta.
+Distinguir el valor cobrado al cliente, la comisión de Wompi, las retenciones y el valor neto recibido. Los movimientos entre cuentas propias, aportes y retiros no deben registrarse como ventas por el solo hecho de aparecer en una cuenta.
 
-## Regla
-La página pública solo debe mostrar la información necesaria para iniciar el pago. La lógica sensible vive en backend.
+No almacenar números completos de tarjeta, CVV, PIN, claves ni credenciales bancarias. Wompi debe procesar los datos de tarjeta en su propio entorno.
+
+## Fuentes y verificación
+- Ayuda oficial de creación de cuenta: https://wompi.com/es/co/ayuda/como-crear-cuenta
+- Tarifas y condiciones: consultar el plan vigente directamente en Wompi antes de cotizar o cambiar precios.
+
+La página pública puede iniciar el pago mediante el enlace alojado por Wompi. La lógica sensible y cualquier automatización futura deben ejecutarse en un backend seguro.

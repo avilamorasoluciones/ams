@@ -1,6 +1,6 @@
 # Kit documental Avila Mora Soluciones
 
-Documentos de trabajo para operar Avila Mora Soluciones con orden antes y después del dominio propio. Las herramientas operativas viven en `/gestion/`; esta carpeta contiene documentación de proceso, privacidad, pagos, seguridad y operación.
+Documentos de trabajo para operar Avila Mora Soluciones con orden sobre su dominio propio y su despliegue actual en GitHub Pages. Las herramientas operativas viven en `/gestion/`; esta carpeta contiene documentación de proceso, privacidad, pagos, seguridad y operación.
 
 1. [Ficha maestra de Avila Mora Soluciones](00_FICHA_MAESTRA_AMS.md)
 2. [Checklist de pre-lanzamiento](01_CHECKLIST_PRE_LANZAMIENTO.md)

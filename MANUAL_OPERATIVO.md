@@ -11,7 +11,7 @@ La web oficial publica `equipo@avilamorasoluciones.com` y WhatsApp +57 305 254 7
 2. Se entiende la necesidad.
 3. Se envía propuesta con alcance, precio, tiempos y servicios.
 4. Cliente acepta.
-5. Se registra el pago.
+5. Se comparte el enlace de pago acordado (Wompi cuando corresponda), se confirma el estado directamente en el panel del proveedor y se registra el pago en Gestión → Finanzas. No marcar como pagado basándose únicamente en una captura enviada por el cliente.
 6. Cliente completa el Formulario de Proyecto en Microsoft Forms.
 7. Se crea o actualiza el proyecto en Gestión → Operación.
 8. Se prepara staging/demo.
@@ -55,7 +55,7 @@ Etapas: Contacto inicial (Lead) → Calificado → Propuesta → Aceptado → Pa
 - Gasto: dinero utilizado para operar.
 - Aporte: dinero personal puesto temporalmente en Avila Mora Soluciones.
 - Retiro: dinero que sale hacia los propietarios.
-La Caja es control interno para saber qué dinero entró, qué dinero salió y qué pagos quedan por atender.
+La Caja es control interno para saber qué dinero entró, qué dinero salió y qué pagos quedan por atender. Para los cobros por Wompi, registrar por separado el valor cobrado, las comisiones, las retenciones y el valor neto desembolsado cuando esos datos estén disponibles.
 
 ## 9. Clientes y Suscripciones
 Registrar o editar el cliente maestro y su suscripción: precio, moneda, periodicidad, inicio, vencimiento, días de gracia, último pago y estado.
