@@ -1,4 +1,4 @@
-# Avila Mora Soluciones · Avila Mora Soluciones
+# Avila Mora Soluciones (AMS)
 
 ## Documentación y operación
 El procedimiento operativo completo está en `MANUAL_OPERATIVO.md`. Las páginas públicas cuentan con privacidad, términos y cookies. Las demos de portafolio se identifican como demos y no se indexan. Actualmente el sitio no despliega analítica ni publicidad propia.
@@ -74,16 +74,17 @@ La migración debe añadir:
 
 La interfaz y el flujo de negocio no deberían cambiar.
 
-## Antes de iniciar actividad comercial real
-Quedan fuera del código y requieren revisión de ustedes:
-1. Comprar/configurar el dominio Avila Mora Soluciones.
-2. Configurar el correo oficial `equipo@avilamorasoluciones.com`.
-3. Crear y probar el briefing en Microsoft Forms.
-4. Revisar la identificación pública real del titular antes de publicar datos legales definitivos.
-5. Configurar el medio de pago real.
-6. Revisar que privacidad, términos y canales de atención describan la operación real.
-7. Definir el procedimiento real de backups.
-8. Configurar OVHcloud/Coolify solo cuando el volumen y el flujo de trabajo lo justifiquen.
+## Pendientes de consolidación operativa
+El sitio, el dominio y el enlace de pago Wompi ya están publicados. La cuenta Wompi se utiliza a nombre de una persona natural; esto no implica que exista una sociedad ni una integración técnica propia.
+
+Quedan por verificar o completar, según la operación real:
+1. Confirmar que el buzón `equipo@avilamorasoluciones.com` recibe y envía correctamente; que la dirección aparezca en la web no demuestra por sí sola que el buzón esté configurado.
+2. Completar y mantener actualizada la identificación legal del titular en los documentos y avisos que correspondan, sin publicar datos privados innecesarios en GitHub.
+3. Crear y probar el briefing en Microsoft Forms y revisar sus permisos.
+4. Revisar que privacidad, términos y canales de atención describan la operación real.
+5. Mantener copias externas y probar la restauración de los respaldos de Gestión.
+6. Implementar backend/webhooks solo si se necesita automatizar la confirmación de pagos o las suscripciones.
+7. Configurar OVHcloud/Coolify solo cuando el volumen y los requisitos técnicos lo justifiquen.
 
 **Nota:** Avila Mora Soluciones debe mantener sus textos públicos ajustados a su operación real y no afirmar una sociedad, registro, certificación o condición jurídica concreta sin haberla formalizado o verificado.
 
