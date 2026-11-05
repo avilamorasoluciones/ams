@@ -71,7 +71,7 @@ const api={
   if(!alreadyPaid){
    const anchor=dayOf(s.renewalDay?"2000-01-"+String(s.renewalDay).padStart(2,"0"):(s.start||s.due||paid),dayOf(paid));
    const dueOrdinal=s.due?dateOrdinal(s.due):null,paidOrdinal=dateOrdinal(paid);
-   const baseText=s.due&&dueOrdinal!==null&&paidOrdinal!==null&&dueOrdinal>paidOrdinal?s.due:paid;
+   const baseText=s.due&&dueOrdinal!==null?s.due:paid;
    let nextDue=api.advanceDue(baseText,s.period,anchor),guard=0;
    while(dateOrdinal(nextDue)!==null&&paidOrdinal!==null&&dateOrdinal(nextDue)<=paidOrdinal&&guard<120){nextDue=api.advanceDue(nextDue,s.period,anchor);guard++}
    s.renewalDay=anchor;s.lastPayment=paid;s.due=nextDue;
