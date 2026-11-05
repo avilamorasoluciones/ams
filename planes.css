@@ -1,0 +1,50 @@
+/* Planes AMS: tarjetas comerciales, valores y diseño responsive */
+.ams-plans-section{position:relative;overflow:hidden}
+.ams-plans-eyebrow{display:inline-flex;align-items:center;gap:8px;margin-bottom:12px;padding:7px 12px;border:1px solid rgba(99,102,241,.28);border-radius:999px;background:rgba(99,102,241,.09);color:var(--primary,#6366f1);font-size:.72rem;font-weight:900;letter-spacing:.08em;text-transform:uppercase}
+.ams-plan-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:15px;align-items:stretch;margin-top:28px}
+.ams-plan-card{position:relative;isolation:isolate;display:flex;flex-direction:column;min-width:0;padding:20px 18px 18px;border:1px solid rgba(148,163,184,.24);border-radius:22px;background:linear-gradient(155deg,rgba(255,255,255,.075),rgba(255,255,255,.025));box-shadow:0 16px 42px rgba(0,0,0,.14),inset 0 1px 0 rgba(255,255,255,.055);transition:transform .25s ease,border-color .25s ease,box-shadow .25s ease}
+.ams-plan-card:hover{transform:translateY(-5px);border-color:rgba(99,102,241,.45);box-shadow:0 22px 48px rgba(0,0,0,.2)}
+.ams-plan-card-featured{border:1.5px solid rgba(99,102,241,.7);background:linear-gradient(155deg,rgba(99,102,241,.14),rgba(255,255,255,.035) 55%);box-shadow:0 18px 48px rgba(99,102,241,.12),inset 0 1px 0 rgba(255,255,255,.08)}
+.ams-plan-ribbon{position:absolute;top:0;right:0;padding:7px 11px;border-radius:0 20px 0 12px;background:linear-gradient(105deg,#6366f1,#8b5cf6);color:white;font-size:.56rem;font-weight:950;letter-spacing:.1em}
+.ams-plan-top{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:13px}
+.ams-plan-number{color:var(--muted,#94a3b8);font-size:.58rem;font-weight:900;letter-spacing:.12em}
+.ams-plan-icon{width:38px;height:38px;display:grid;place-items:center;border:1px solid rgba(148,163,184,.24);border-radius:12px;background:rgba(99,102,241,.1);color:var(--primary,#6366f1);font-size:1rem}
+.ams-plan-card h3{margin:0 0 7px;color:var(--text,#f8fafc);font-size:1.28rem;font-weight:950;letter-spacing:-.035em}
+.ams-plan-description{min-height:64px;margin:0 0 14px;color:var(--muted-2,#cbd5e1);font-size:.72rem;line-height:1.5}
+.ams-plan-prices{display:grid;gap:8px;margin:0 0 15px}
+.ams-plan-price-block,.ams-plan-monthly{padding:11px 12px;border:1px solid rgba(148,163,184,.2);border-radius:13px;background:rgba(15,23,42,.28)}
+.ams-plan-price-block>span,.ams-plan-monthly>span{display:block;color:var(--muted,#94a3b8);font-size:.58rem;font-weight:750;line-height:1.35}
+.ams-plan-price-block>strong{display:block;margin-top:5px;color:var(--text,#f8fafc);font-size:1.13rem;font-weight:950;letter-spacing:-.025em}
+.ams-plan-monthly{border-color:rgba(16,185,129,.28);background:rgba(16,185,129,.07)}
+.ams-plan-monthly>strong{display:block;margin-top:4px;color:var(--tertiary,#10b981);font-size:1.35rem;font-weight:950;letter-spacing:-.04em;white-space:nowrap}
+.ams-plan-monthly>strong small{font-size:.64rem;font-weight:800;letter-spacing:0}
+.ams-usd-equivalent{display:block;margin-top:3px;color:var(--muted,#94a3b8);font-size:.59rem;font-weight:650}
+.ams-plan-features{display:grid;gap:9px;margin:0 0 15px;padding:0;list-style:none}
+.ams-plan-features li{display:flex;align-items:flex-start;gap:8px;color:var(--text,#f8fafc);font-size:.67rem;line-height:1.42}
+.ams-plan-features li i{flex:0 0 13px;margin-top:2px;color:var(--tertiary,#10b981);font-size:.68rem}
+.ams-plan-fit{margin-top:auto;padding:10px 11px;border-radius:11px;background:rgba(148,163,184,.08);color:var(--muted-2,#cbd5e1);font-size:.62rem;line-height:1.45}
+.ams-plan-fit strong{color:var(--text,#f8fafc)}
+.ams-plan-button{display:flex;align-items:center;justify-content:center;gap:8px;min-height:43px;margin-top:12px;padding:10px 12px;border:1px solid rgba(99,102,241,.38);border-radius:11px;background:linear-gradient(110deg,#6366f1,#8b5cf6);color:#fff!important;font-size:.68rem;font-weight:900;text-decoration:none!important;transition:transform .2s ease,filter .2s ease,box-shadow .2s ease}
+.ams-plan-button:hover{transform:translateY(-2px);filter:brightness(1.08);box-shadow:0 9px 20px rgba(99,102,241,.24)}
+.ams-plan-includes{margin-top:18px;padding:17px 18px;border:1px solid rgba(16,185,129,.24);border-radius:17px;background:linear-gradient(120deg,rgba(16,185,129,.075),rgba(99,102,241,.045))}
+.ams-plan-includes-title{display:flex;align-items:center;gap:9px;margin-bottom:12px;color:var(--text,#f8fafc);font-size:.82rem;font-weight:900}
+.ams-plan-includes-title i{color:var(--tertiary,#10b981)}
+.ams-plan-includes-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px 16px}
+.ams-plan-includes-grid span{display:flex;align-items:flex-start;gap:8px;color:var(--muted-2,#cbd5e1);font-size:.65rem;line-height:1.4}
+.ams-plan-includes-grid i{margin-top:2px;color:var(--tertiary,#10b981)}
+.ams-plan-terms{margin-top:12px;padding:0 3px;color:var(--muted,#94a3b8);font-size:.66rem;line-height:1.6}
+.ams-plan-terms p{margin:7px 0}
+.ams-plan-terms strong{color:var(--text,#f8fafc)}
+.ams-fx-note{display:flex;align-items:flex-start;gap:7px;color:var(--muted,#94a3b8);font-size:.59rem}
+.ams-fx-note::before{content:"↻";color:var(--tertiary,#10b981);font-weight:900}
+body.light-theme .ams-plan-card{background:linear-gradient(155deg,#fff,#f8fafc);border-color:rgba(15,23,42,.12);box-shadow:0 14px 35px rgba(15,23,42,.07)}
+body.light-theme .ams-plan-card-featured{background:linear-gradient(155deg,#eef2ff,#fff);border-color:rgba(99,102,241,.48)}
+body.light-theme .ams-plan-card h3,body.light-theme .ams-plan-price-block>strong,body.light-theme .ams-plan-features li,body.light-theme .ams-plan-fit strong,body.light-theme .ams-plan-includes-title,body.light-theme .ams-plan-terms strong{color:#0f172a}
+body.light-theme .ams-plan-description,body.light-theme .ams-plan-features li,body.light-theme .ams-plan-fit,body.light-theme .ams-plan-includes-grid span{color:#475569}
+body.light-theme .ams-plan-price-block,body.light-theme .ams-plan-fit{background:#f1f5f9;border-color:rgba(15,23,42,.09)}
+body.light-theme .ams-plan-monthly{background:#ecfdf5;border-color:rgba(16,185,129,.25)}
+body.light-theme .ams-plan-includes{background:linear-gradient(120deg,#ecfdf5,#f8fafc);border-color:rgba(16,185,129,.22)}
+@media(max-width:1150px){.ams-plan-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.ams-plan-card{padding:21px}.ams-plan-description{min-height:48px}}
+@media(max-width:740px){.ams-plan-grid{display:flex;flex-wrap:nowrap;overflow-x:auto;overflow-y:hidden;gap:13px;margin-left:-16px;margin-right:-16px;padding:3px 8vw 15px;scroll-snap-type:x mandatory;scroll-padding-inline:8vw;-webkit-overflow-scrolling:touch;scrollbar-width:none;overscroll-behavior-x:contain;touch-action:pan-x pan-y}.ams-plan-grid::-webkit-scrollbar{display:none}.ams-plan-card{flex:0 0 min(84vw,365px);width:min(84vw,365px);max-width:none;scroll-snap-align:center;scroll-snap-stop:always;min-height:0}.ams-plan-description{min-height:0}.ams-plan-includes{padding:14px}.ams-plan-includes-grid{grid-template-columns:1fr 1fr;gap:9px 12px}.ams-plan-terms{font-size:.64rem}}
+@media(max-width:390px){.ams-plan-card{flex-basis:88vw;width:88vw;padding:18px 16px}.ams-plan-monthly>strong{font-size:1.24rem}.ams-plan-includes-grid{grid-template-columns:1fr}}
+@media(prefers-reduced-motion:reduce){.ams-plan-card,.ams-plan-button{transition:none}}
