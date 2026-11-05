@@ -1,6 +1,6 @@
 # Base legal práctica Avila Mora Soluciones
 
-Última revisión: 28/09/2026.
+Última revisión: 05/11/2026.
 
 Este archivo sirve como lista interna de preparación. No afirma que Avila Mora Soluciones tenga una inscripción, sociedad, certificación o condición jurídica determinada.
 
