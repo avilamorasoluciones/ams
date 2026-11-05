@@ -1,92 +1,95 @@
 # Avila Mora Soluciones (AMS)
 
-## Documentación y operación
-El procedimiento operativo completo está en `MANUAL_OPERATIVO.md`. Las páginas públicas cuentan con privacidad, términos y cookies. Las demos de portafolio se identifican como demos y no se indexan. Actualmente el sitio no despliega analítica ni publicidad propia.
+Repositorio principal de la web pública, documentación operativa, herramientas internas y demostraciones de Avila Mora Soluciones.
 
-## Estado
-Avila Mora Soluciones opera como marca comercial y proveedor de servicios digitales con sitio oficial, dominio propio, HTTPS y publicación mediante **GitHub Pages**. No se incorpora OVHcloud/Coolify hasta que el flujo real de clientes o los requisitos técnicos lo justifiquen.
+## Documentación fuente
 
-## Estructura
-- `/` — web pública y captación.
-- `/gestion/` — centro interno con Calculadora, Clientes/Suscripciones, Documentos, Finanzas y Operación.
-- `/legal_privacidad.html` — privacidad y tratamiento de datos.
-- `/legal_terminos.html` — términos de uso y de los servicios.
-- `/legal_cookies.html` — cookies y tecnologías similares.
-- `/MANUAL_OPERATIVO.md` — manual operativo.
-- `/LANZAMIENTO.md` — checklist para dominio, correo y pagos.
-- Demos y juegos — carpetas públicas independientes.
+Leer estos documentos antes de construir o modificar proyectos:
+
+- **`AGENTS.md`** — reglas permanentes de arquitectura, desarrollo, seguridad, GitHub, hosting y operación.
+- **`PROMPT_MAESTRO_ANTIGRAVITY_AMS.md`** — prompt completo y reutilizable para crear nuevos proyectos con Antigravity, desde prototipo local hasta producción.
+- **`MANUAL_OPERATIVO.md`** — flujo comercial y operativo de cada cliente.
+- **`POLITICA_PLANES_Y_PRECIOS.md`** — alcance, límites, precios y exclusiones de los cuatro planes públicos.
+- **`LANZAMIENTO.md`** — checklist de publicación, dominio, pagos, privacidad y datos.
+
+La web pública muestra cuatro planes: Pequeño, Mediano, Grande y Personalizado. El desarrollo se cobra una sola vez; la administración se cobra de forma recurrente. Los valores contractuales están fijos en COP. Las equivalencias USD son informativas y se actualizan con la TRM oficial diaria más COP $300 por USD.
+
+## Estado e infraestructura
+
+- Web oficial: https://avilamorasoluciones.com/
+- Publicación pública: GitHub Pages.
+- Dominio oficial y HTTPS: configurados.
+- Gestión interna: `/gestion/`.
+- Gestión AMS utiliza almacenamiento local del navegador. Sus datos no se sincronizan automáticamente entre dispositivos; usar el respaldo completo.
+- El entorno Hetzner/Coolify existente debe revisarse antes de comprar infraestructura adicional.
+- OVH VPS-2 + Coolify es una arquitectura objetivo/evaluada, no debe presentarse como producción activa hasta que se contrate, configure y pruebe.
+- No instalar CloudPanel y Coolify simultáneamente como administradores del mismo servidor.
+- GitHub Pages sirve frontend estático y demos; no ejecuta backend ni bases de datos.
+
+## Estructura principal
+
+- `/index.html` — web pública, servicios, planes, hosting y dominios.
+- `/planes.css` — estilos responsive de las cuatro tarjetas públicas.
+- `/planes.js` — equivalencias USD mediante TRM oficial diaria + margen AMS.
+- `/gestion/` — Clientes/Suscripciones, Cotizador interno, Documentos, Finanzas y Operación.
+- `/legal_privacidad.html` — privacidad.
+- `/legal_terminos.html` — términos.
+- `/legal_cookies.html` — cookies.
+- `/MANUAL_OPERATIVO.md` — operación.
+- `/AGENTS.md` — reglas permanentes.
+- `/PROMPT_MAESTRO_ANTIGRAVITY_AMS.md` — prompt para nuevos proyectos.
+- `/POLITICA_PLANES_Y_PRECIOS.md` — tarifario y límites.
+- `/LANZAMIENTO.md` — lista de lanzamiento.
+- Demos y juegos — carpetas independientes; las demos públicas no deben contener datos privados.
+
+## Stack de proyectos AMS
+
+Frontend estándar: HTML5 + Bootstrap 5.3.8 por CDN + CSS propio + JavaScript Vanilla. Se pueden añadir librerías especializadas por CDN cuando aporten valor. Versiones exactas y SRI cuando esté disponible. No combinar Bootstrap y Tailwind.
+
+El prototipo de cada cliente debe poder abrirse directamente con doble clic en `index.html`, usando scripts clásicos y datos ficticios. No requiere instalaciones locales de Node/Python/Docker.
+
+El mismo frontend debe tener una capa de acceso a datos que permita pasar de `DemoProvider` a `ApiProvider` sin reconstruir las pantallas.
+
+## Flujo de trabajo del cliente
+
+Briefing → alcance y plan → propuesta → aceptación/pago → repositorio GitHub privado → prototipo local Antigravity → pruebas → demo/preview → aprobación del cliente → API/DB si aplica → pruebas de staging → publicación autorizada → dominio/HTTPS → mantenimiento.
+
+GitHub Pages puede mostrar demos estáticas con datos ficticios. No es backend, no almacena datos reales y no es privado por el solo hecho de que el repositorio fuente sea privado. Cuando una demo no pueda ser pública, usar staging protegido.
+
+## Seguridad e infraestructura
+
+- Nunca guardar contraseñas, API keys, tokens, .env real, tarjetas, base de datos o backups de producción en GitHub.
+- En producción, secretos fuera del directorio público y del repositorio.
+- Sistemas con usuarios o datos compartidos requieren API, autenticación/autorización en servidor y persistencia real.
+- Base de datos por cliente como estándar, con usuario y privilegios mínimos.
+- Usar consultas parametrizadas, HTTPS, control de sesiones, validaciones, rate limiting y backups externos.
+- No afirmar que una aplicación es inhackeable.
+- No desplegar cada commit experimental directamente a producción. Mantener preview y producción separados; producción requiere promoción autorizada.
+- No declarar un despliegue como completado hasta confirmar el resultado en el hosting.
 
 ## Pruebas locales
-Con Node.js, ejecuta `node --test tests/repo-improvements.test.cjs` para correr las pruebas de regresión del almacén de Gestión, el aislamiento local de AyuKcal, los contratos de AMS Fly y la navegación/demos accesibles.
 
-## Flujo de cliente
-Contacto → Formulario de proyecto → Calificación → Propuesta → Aceptación → Pago → Alta → Dominio → Staging/Demo → Producción → Revisión → Correcciones → Publicación → Entrega → Mantenimiento → Renovación.
+Con Node.js, ejecutar:
 
-## Caja Avila Mora Soluciones
-La Caja Avila Mora Soluciones es una herramienta de **control interno del dinero**, no un sistema contable.
+```bash
+node --test tests/repo-improvements.test.cjs
+```
 
-- **Ingreso:** dinero que entra a Avila Mora Soluciones.
-- **Gasto:** dinero utilizado para operar.
-- **Aporte:** dinero personal que entra temporalmente para sostener una compra u operación.
-- **Retiro:** dinero que sale de Avila Mora Soluciones hacia los propietarios.
+Esto ejecuta pruebas de regresión del almacén de Gestión, aislamiento local de AyuKcal, contratos de AMS Fly y navegación/demos accesibles.
 
-Los aportes no son ventas y los retiros no son gastos.
+Las pruebas específicas de planes públicos deben revisar: cuatro tarjetas, precios COP, equivalencias USD, carga de `planes.js`, IDs de estado, rutas y comportamiento responsive.
 
-### Regla práctica
-Antes de usar dinero personal para una compra:
-1. Revisar la Caja Avila Mora Soluciones.
-2. Registrar qué se necesita comprar.
-3. Definir si corresponde a Avila Mora Soluciones o a un cliente.
-4. Si falta caja, registrar el aporte por separado.
-5. Cuando Avila Mora Soluciones tenga caja suficiente, decidir cómo reponerlo.
+## Caja AMS
 
-No mezclar dinero personal y dinero de Avila Mora Soluciones sin registrarlo.
+La Caja es control interno, no un sistema contable.
 
-## GitHub Pages y dominio oficial
-El dominio oficial del sitio público es `https://avilamorasoluciones.com/`. El repositorio se utiliza para desarrollo, pruebas y despliegue de los proyectos.
+- Ingreso: dinero que entra a AMS.
+- Gasto: dinero utilizado para operar.
+- Aporte: dinero personal puesto temporalmente para sostener una compra/operación.
+- Retiro: dinero que sale hacia los propietarios.
 
-No usar GitHub Pages como backend seguro. No guardar allí:
-- contraseñas;
-- API keys;
-- tokens;
-- tarjetas;
-- secretos de producción;
-- información privada de clientes.
-
-Las herramientas internas actuales usan almacenamiento local del navegador. Eso significa que **PC y celular no comparten automáticamente los mismos datos**. Por ahora se debe usar el respaldo completo y mantener un dispositivo principal de operación. Cuando la operación necesite sincronización real, se migra a una base de datos/backend.
-
-## Staging y dominios
-No esperar al dominio para comenzar un proyecto.
-- Cliente con dominio existente: solicitar solo los datos DNS necesarios en la fase de publicación.
-- Cliente sin dominio: comprarlo después de autorización y según el acuerdo.
-- Mientras tanto: trabajar con staging/demo.
-- Las demos públicas deben usar contenido ficticio y no datos privados.
-
-## Cuando llegue OVHcloud/Coolify
-La migración debe añadir:
-- staging protegido;
-- producción separada por proyecto;
-- variables de entorno;
-- backups automáticos;
-- monitorización;
-- backend/base de datos cuando sea necesario;
-- autenticación real para herramientas internas.
-
-La interfaz y el flujo de negocio no deberían cambiar.
-
-## Pendientes de consolidación operativa
-El sitio, el dominio y el enlace de pago Wompi ya están publicados. La cuenta Wompi se utiliza a nombre de una persona natural; esto no implica que exista una sociedad ni una integración técnica propia.
-
-Quedan por verificar o completar, según la operación real:
-1. Confirmar que el buzón `equipo@avilamorasoluciones.com` recibe y envía correctamente; que la dirección aparezca en la web no demuestra por sí sola que el buzón esté configurado.
-2. Completar y mantener actualizada la identificación legal del titular en los documentos y avisos que correspondan, sin publicar datos privados innecesarios en GitHub.
-3. Crear y probar el briefing en Microsoft Forms y revisar sus permisos.
-4. Revisar que privacidad, términos y canales de atención describan la operación real.
-5. Mantener copias externas y probar la restauración de los respaldos de Gestión.
-6. Implementar backend/webhooks solo si se necesita automatizar la confirmación de pagos o las suscripciones.
-7. Configurar OVHcloud/Coolify solo cuando el volumen y los requisitos técnicos lo justifiquen.
-
-**Nota:** Avila Mora Soluciones debe mantener sus textos públicos ajustados a su operación real y no afirmar una sociedad, registro, certificación o condición jurídica concreta sin haberla formalizado o verificado.
+Los aportes no son ventas y los retiros no son gastos. Registrar por separado comisiones, retenciones y desembolsos netos de pasarelas cuando estén disponibles.
 
 ## Principio de desarrollo
-No agregar tecnología por moda. Cada herramienta debe ahorrar tiempo, reducir un riesgo, controlar dinero, mejorar una venta, facilitar producción o mejorar la entrega.
+
+No agregar tecnología por moda. Cada herramienta debe mejorar venta, operación, seguridad, entrega, mantenimiento o rentabilidad. Construir una sola solución que evolucione desde demo local hasta producción sin rehacer el frontend ni comprometer los datos.
