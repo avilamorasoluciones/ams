@@ -79,20 +79,20 @@ const api={
   }
   return c
  },
- backup(){const local={};for(let i=0;i<localStorage.length;i++){const k=localStorage.key(i)||"";if(k.startsWith("ams_doc_")||k==="ams_calc_v3")local[k]=localStorage.getItem(k)}return {version:3,date:new Date().toISOString(),clients:api.clients(),projects:api.projects(),finance:api.finance(),tasks:api.tasks(),local}},
+ backup(){const local={};for(let i=0;i<localStorage.length;i++){const k=localStorage.key(i)||"";if(k.startsWith("ams_doc_")||k==="ams_calc_v3"||k==="ams_fx_cache_v1"||k==="ams_fx_margin_v1")local[k]=localStorage.getItem(k)}return {version:3,date:new Date().toISOString(),clients:api.clients(),projects:api.projects(),finance:api.finance(),tasks:api.tasks(),local}},
  restore(d){
   const isObject=v=>v!==null&&typeof v==="object"&&!Array.isArray(v);
   if(!isObject(d)||!Array.isArray(d.clients)||!Array.isArray(d.projects)||!Array.isArray(d.finance)||
     !d.clients.every(isObject)||!d.projects.every(isObject)||!d.finance.every(isObject)||
     (d.tasks!==undefined&&!isObject(d.tasks))||(d.local!==undefined&&!isObject(d.local)))throw Error("Respaldo inválido");
   const localEntries=Object.entries(d.local||{});
-  if(localEntries.some(([k,v])=>(!k.startsWith("ams_doc_")&&k!=="ams_calc_v3")||typeof v!=="string"))throw Error("Respaldo inválido");
+  if(localEntries.some(([k,v])=>(!k.startsWith("ams_doc_")&&k!=="ams_calc_v3"&&k!=="ams_fx_cache_v1"&&k!=="ams_fx_margin_v1")||typeof v!=="string"))throw Error("Respaldo inválido");
   const clients=d.clients.map(c=>{
    if(c.subscription!==undefined&&!isObject(c.subscription))throw Error("Respaldo inválido");
    return normalizeClient(c);
   });
   const projects=d.projects.map(normalizeProject),finance=d.finance.map(normalizeFinance),tasks=d.tasks||{};
-  for(let i=localStorage.length-1;i>=0;i--){const k=localStorage.key(i)||"";if(k.startsWith("ams_doc_")||k==="ams_calc_v3")localStorage.removeItem(k)}
+  for(let i=localStorage.length-1;i>=0;i--){const k=localStorage.key(i)||"";if(k.startsWith("ams_doc_")||k==="ams_calc_v3"||k==="ams_fx_cache_v1"||k==="ams_fx_margin_v1")localStorage.removeItem(k)}
   write(CK,clients);write(PK,projects);write(FK,finance);write(TK,tasks);
   localEntries.forEach(([k,v])=>localStorage.setItem(k,v));
   write(MK,{at:new Date().toISOString(),version:4});writeMirrors();return true
