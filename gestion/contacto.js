@@ -6,12 +6,14 @@ const uid=p=>p+"_"+Date.now().toString(36)+"_"+Math.random().toString(36).slice(
 const text=v=>String(v??"").trim();
 const same=(a,b)=>{a=text(a).toLowerCase();b=text(b).toLowerCase();return !!a&&!!b&&a===b};
 function clientKey(c){return text(c.email).toLowerCase()||text(c.company).toLowerCase()}
-function normalizeClient(c){const s=c.subscription||{};return Object.assign({id:uid("cli"),company:"",contact:"",email:"",phone:"",country:"Colombia",city:"",address:"",webType:"",domain:"",url:"",hosting:"",created:new Date().toISOString(),updated:new Date().toISOString(),subscription:{price:0,currency:"USD",period:"monthly",start:"",due:"",grace:7,lastPayment:"",suspended:false}},c,{subscription:Object.assign({price:0,currency:"USD",period:"monthly",start:"",due:"",grace:7,lastPayment:"",suspended:false},s)})}
+function dayOf(value,fallback=1){const m=String(value||"").slice(0,10).match(/^\d{4}-\d{2}-(\d{2})$/);const n=m?Number(m[1]):Number(fallback);return Number.isInteger(n)&&n>=1&&n<=31?n:1}
+function dateOrdinal(value){const m=String(value||"").slice(0,10).match(/^(\d{4})-(\d{2})-(\d{2})$/);if(!m)return null;const y=Number(m[1]),mo=Number(m[2]),d=Number(m[3]),t=Date.UTC(y,mo-1,d),check=new Date(t);return check.getUTCFullYear()===y&&check.getUTCMonth()===mo-1&&check.getUTCDate()===d?t/86400000:null}
+function normalizeClient(c){const s=Object.assign({price:0,currency:"USD",period:"monthly",start:"",due:"",grace:7,lastPayment:"",suspended:false},c.subscription||{});s.renewalDay=dayOf(s.renewalDay?"2000-01-"+String(s.renewalDay).padStart(2,"0"):(s.start||s.due),dayOf(localToday()));return Object.assign({id:uid("cli"),company:"",contact:"",email:"",phone:"",country:"Colombia",city:"",address:"",webType:"",domain:"",url:"",hosting:"",created:new Date().toISOString(),updated:new Date().toISOString()},c,{subscription:s})}
 function normalizeProject(p){return Object.assign({id:uid("pro"),clientId:"",client:"",project:"",email:"",phone:"",service:"Landing / web",stage:"Lead",price:0,currency:"USD",domain:"",domainStatus:"No definido",staging:"",url:"",deadline:"",next:"",notes:"",created:new Date().toISOString(),updated:new Date().toISOString()},p)}
 function normalizeFinance(x){return Object.assign({id:uid("fin"),type:"Gasto",currency:"USD",amount:0,date:localToday(),clientId:"",projectId:"",party:"",category:"Otro",description:"",recurring:"no",ref:"",created:new Date().toISOString()},x)}
 function writeMirrors(){
  const cs=arr(CK),ps=arr(PK),fs=arr(FK);
- write("ams_subscriptions_v1",cs.map(c=>{const s=c.subscription||{};return {id:c.id,company:c.company,contact:c.contact,email:c.email,phone:c.phone,country:c.country,webType:c.webType,domain:c.domain,url:c.url,hosting:c.hosting,price:Number(s.price||0),currency:s.currency||"USD",period:s.period||"monthly",start:s.start||"",due:s.due||"",grace:Number(s.grace||7),suspended:!!s.suspended,created:c.created,lastPayment:s.lastPayment||""}}));
+ write("ams_subscriptions_v1",cs.map(c=>{const s=c.subscription||{};return {id:c.id,company:c.company,contact:c.contact,email:c.email,phone:c.phone,country:c.country,webType:c.webType,domain:c.domain,url:c.url,hosting:c.hosting,price:Number(s.price||0),currency:s.currency||"USD",period:s.period||"monthly",start:s.start||"",due:s.due||"",grace:Number(s.grace||7),suspended:!!s.suspended,renewalDay:Number(s.renewalDay||dayOf(s.start||s.due)),created:c.created,lastPayment:s.lastPayment||""}}));
  write("ams_ops_projects_v1",ps);
  write("ams_cash_v1",fs);
  write("ams_ops_expenses_v1",fs.filter(x=>x.type==="Gasto").map(x=>({id:x.id,concept:x.description||"Sin concepto",vendor:x.party||"",project:x.projectId||"",category:x.category||"Otro",amount:Number(x.amount||0),currency:x.currency||"USD",date:x.date||localToday(),recurring:x.recurring==="yes"?"Mensual":"No recurrente",ref:x.ref||""})));
@@ -48,8 +50,8 @@ const api={
  setTask(projectId,key,value){const all=read(TK)||{};all[projectId]=all[projectId]||{};all[projectId][key]=!!value;write(TK,all);return all[projectId]},
  projectTasks(projectId){return Object.assign({},(read(TK)||{})[projectId]||{})},
  removeTask(projectId){const all=read(TK)||{};delete all[projectId];write(TK,all)},
- advanceDue(base,period){const value=text(base)||localToday();let d=new Date(/^\d{4}-\d{2}-\d{2}$/.test(value)?value+"T12:00:00":value);if(isNaN(d))d=new Date();const day=d.getDate();if(period==="annual"){const year=d.getFullYear()+1,month=d.getMonth(),last=new Date(year,month+1,0).getDate();d.setDate(Math.min(day,last));d.setFullYear(year);return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0")}d.setDate(1);d.setMonth(d.getMonth()+1);const last=new Date(d.getFullYear(),d.getMonth()+1,0).getDate();d.setDate(Math.min(day,last));return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0")},
- subscriptionStatus(c){const s=c.subscription||{},d=new Date((s.due||localToday())+"T12:00:00"),n=Math.ceil((d-new Date())/86400000),gr=Number(s.grace||0);if(s.suspended)return {key:"suspended",days:n,label:"Suspendido"};if(n<0&&n>=-gr)return {key:"grace",days:n,label:"En gracia"};if(n<0)return {key:"overdue",days:n,label:"Vencido"};if(n<=7)return {key:"pending",days:n,label:"Por vencer"};return {key:"active",days:n,label:"Activo"}},
+ advanceDue(base,period,anchorDay){const value=(text(base)||localToday()).slice(0,10),m=value.match(/^(\d{4})-(\d{2})-(\d{2})$/);if(!m)throw Error("Fecha base inválida");const y=Number(m[1]),mo=Number(m[2])-1,sourceDay=Number(m[3]),anchor=dayOf(anchorDay?"2000-01-"+String(anchorDay).padStart(2,"0"):value,sourceDay),target=new Date(y,mo+(period==="annual"?12:1),1),year=target.getFullYear(),month=target.getMonth(),last=new Date(year,month+1,0).getDate(),day=Math.min(anchor,last);return year+"-"+String(month+1).padStart(2,"0")+"-"+String(day).padStart(2,"0")},
+ subscriptionStatus(c){const s=c.subscription||{},gr=Number(s.grace||0),n=s.due?dateOrdinal(s.due)-dateOrdinal(localToday()):null;if(s.suspended)return {key:"suspended",days:n,label:"Suspendido"};if(n===null)return {key:"missing",days:null,label:"Sin fecha"};if(n<0&&n>=-gr)return {key:"grace",days:n,label:"En gracia"};if(n<0)return {key:"overdue",days:n,label:"Vencido"};if(n<=7)return {key:"pending",days:n,label:"Por vencer"};return {key:"active",days:n,label:"Activo"}},
  recordPayment(clientId,date){
   const a=arr(CK).map(normalizeClient),i=a.findIndex(c=>c.id===clientId);
   if(i<0)throw Error("Cliente no encontrado");
@@ -67,8 +69,12 @@ const api={
    write(FK,finance);writeMirrors();
   }
   if(!alreadyPaid){
-   const baseText=s.due&&new Date(s.due+"T12:00:00")>new Date(paid+"T12:00:00")?s.due:paid;
-   s.lastPayment=paid;s.due=api.advanceDue(baseText,s.period);
+   const anchor=dayOf(s.renewalDay?"2000-01-"+String(s.renewalDay).padStart(2,"0"):(s.start||s.due||paid),dayOf(paid));
+   const dueOrdinal=s.due?dateOrdinal(s.due):null,paidOrdinal=dateOrdinal(paid);
+   const baseText=s.due&&dueOrdinal!==null&&paidOrdinal!==null&&dueOrdinal>paidOrdinal?s.due:paid;
+   let nextDue=api.advanceDue(baseText,s.period,anchor),guard=0;
+   while(dateOrdinal(nextDue)!==null&&paidOrdinal!==null&&dateOrdinal(nextDue)<=paidOrdinal&&guard<120){nextDue=api.advanceDue(nextDue,s.period,anchor);guard++}
+   s.renewalDay=anchor;s.lastPayment=paid;s.due=nextDue;
    c.subscription=s;c.updated=new Date().toISOString();a[i]=c;
    write(CK,a);writeMirrors();
   }
