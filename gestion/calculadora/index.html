@@ -167,5 +167,5 @@ $("copy").onclick=copyQuote;$("reset").onclick=reset;
 $("toggleInternal").onclick=()=>{const box=document.querySelector(".internal-box"),btn=$("toggleInternal");box.style.display=box.style.display==="none"?"block":"none";btn.innerHTML=box.style.display==="none"?'<i class="fa-solid fa-eye"></i> Mostrar referencia interna':'<i class="fa-solid fa-eye-slash"></i> Ocultar referencia interna'};
 loadState();try{const fx=JSON.parse(localStorage.getItem(FX_KEY)||"null");if(fx&&Number(fx.rate)>0){fxRate=fx;renderFx()}}catch(e){}calc();refreshFx(false);
 </script>
-<script>if("serviceWorker" in navigator){window.addEventListener("load",()=>navigator.serviceWorker.register("./sw.js").catch(()=>{}));}</script>
+<script>if("serviceWorker" in navigator){window.addEventListener("load",()=>navigator.serviceWorker.register("./sw.js?v=5",{updateViaCache:"none"}).catch(()=>{}));}</script>
 </body></html>
