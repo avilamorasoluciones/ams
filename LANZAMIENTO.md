@@ -1,49 +1,79 @@
-# Lanzamiento AMS · checklist final
+# Lanzamiento AMS · checklist de operación y publicación
+**Actualizado:** 5 de noviembre de 2026
 
-## Estado actual del sitio y dominio
-- El sitio público está publicado en `https://avilamorasoluciones.com/` mediante GitHub Pages.
-- El dominio, DNS, CNAME y HTTPS ya están configurados.
-- La URL heredada `avilamorasoluciones.github.io/ams/...` se conserva para compatibilidad.
-- No subir secretos ni datos privados de clientes al repositorio.
+## Estado del sitio público
+- Sitio oficial: https://avilamorasoluciones.com/
+- Publicación: GitHub Pages.
+- Dominio, DNS, CNAME y HTTPS: configurados.
+- No guardar secretos ni datos privados en el repositorio.
+- La versión pública de planes tiene cuatro paquetes y equivalencia USD dinámica: `index.html`, `planes.css`, `planes.js`.
+- La equivalencia USD consulta la TRM oficial diaria (dataset `mcec-87by`) y suma COP $300 por USD como margen AMS. Los precios contractuales permanecen fijos en COP. Si la fuente falla, se conserva una tasa válida en caché; la tarifa COP sigue visible.
+- Verificar después de publicar que la tasa, la vigencia y la fuente aparezcan correctamente. No describir la equivalencia como tasa minuto a minuto.
 
-## Pendientes reales
-1. Confirmar que el buzón `equipo@avilamorasoluciones.com` está creado y recibe/envía correctamente; la dirección está publicada, pero eso no confirma el estado del servicio de correo.
-2. Mantener actualizados los datos de identificación y contacto del titular en los documentos y avisos que correspondan.
-3. Revisar privacidad, términos y canales de atención frente a la operación real.
-4. Mantener la cuenta Wompi activa y revisar periódicamente sus condiciones y cuenta de desembolso.
-5. Implementar un backend seguro con webhooks solo si se requiere automatizar la confirmación de pagos o las suscripciones.
-6. Activar funciones adicionales de comercio electrónico solo cuando realmente vayan a utilizarse.
+## Documentos fuente
+- `AGENTS.md`: reglas permanentes de desarrollo.
+- `PROMPT_MAESTRO_ANTIGRAVITY_AMS.md`: prompt de nuevos proyectos.
+- `POLITICA_PLANES_Y_PRECIOS.md`: límites, tarifas y exclusiones.
+- `MANUAL_OPERATIVO.md`: proceso de atención y entrega.
+- `README.md`: mapa del repositorio.
 
-## Pago y suscripciones
-- No guardar llaves secretas de Wompi en GitHub Pages.
-- El navegador solo recibe identificadores públicos necesarios.
-- Las credenciales y webhooks deben vivir en backend/variables de entorno.
-- Un pago aprobado debe actualizar la suscripción solo después de la verificación del servidor.
-- Registrar en Gestión fecha, importe, moneda, cliente y referencia interna.
+## Planes públicos
+| Plan | Desarrollo único | Administración |
+|---|---:|---:|
+| Pequeño | COP $690.000 | COP $89.900/mes |
+| Mediano | COP $1.490.000 | COP $149.900/mes |
+| Grande | COP $3.490.000 | COP $299.900/mes |
+| Personalizado | Desde COP $5.900.000 | Desde COP $499.900/mes |
 
-## Correo
-AMS publica `equipo@avilamorasoluciones.com`.
-Los botones de correo ofrecen Gmail, Outlook y el cliente de correo predeterminado, con asunto y mensaje prellenados.
+- Desarrollo se cobra una vez.
+- Administración se cobra recurrentemente.
+- Anual anticipado: 11 mensualidades por 12 meses de servicio.
+- Los límites publicados deben coincidir con `POLITICA_PLANES_Y_PRECIOS.md`.
+- Dominio .com estándar administrado según plan.
+- Correo corporativo, licencias externas, comisiones de pago, dominios premium/adicionales y ampliaciones se cotizan aparte.
+- El titular del dominio es el cliente. Si ya tiene dominio, no se transfiere por defecto.
 
-## Datos personales
-- Mantener briefing y respuestas en el entorno autorizado.
-- No pedir contraseñas, tarjetas completas, códigos MFA ni secretos.
-- Para AyuKcal, mantener autorización e información específica para datos sensibles cuando corresponda.
+## Pendientes reales de verificación
+1. Probar desde un navegador real que todos los enlaces, botones y tarjetas de planes funcionan en escritorio y móvil.
+2. Confirmar que `planes.js` obtiene la TRM oficial mediante el endpoint de datos.gov.co desde los navegadores objetivo; no asumir que el CORS/red está disponible hasta probarlo.
+3. Verificar que la vigencia de la TRM se muestra en el día correcto y que la equivalencia usa TRM + COP $300 por USD.
+4. Confirmar que el buzón `equipo@avilamorasoluciones.com` recibe y envía correctamente; su aparición en la web no garantiza que el servicio esté configurado.
+5. Mantener actualizados privacidad, términos, cookies y canales de atención según la operación real.
+6. Mantener la cuenta Wompi activa y revisar condiciones y cuenta de desembolso.
+7. No guardar llaves secretas de Wompi en GitHub Pages.
+8. Implementar backend/webhooks solo cuando se necesite confirmar pagos o suscripciones de forma automática.
+9. Revisar el Microsoft Forms de briefing, sus permisos y enlace de privacidad.
+10. Mantener respaldos externos y probar restauración de Gestión.
 
-## Comercio electrónico
-Antes de activar un checkout público, revisar:
-- identidad e información de contacto del proveedor;
-- precio y condiciones;
-- medios de pago;
-- condiciones de recurrencia cuando existan;
-- atención a solicitudes y reclamos;
-- privacidad y cookies actualizadas;
-- derechos del consumidor que resulten aplicables.
+## Dominio y Porkbun
+- Si el cliente ya tiene dominio, solicitar solo datos DNS necesarios y autorización; no transferirlo por defecto.
+- Si requiere dominio nuevo, comprar después de aceptación y autorización, a nombre del cliente.
+- AMS gestiona DNS y renovación según la propuesta.
+- Mantener los registros MX, SPF, DKIM y DMARC para evitar interrumpir el correo.
+- El plan contempla un .com estándar; extensiones costosas, premium o adicionales se cotizan por diferencia.
 
-No activar un checkout real únicamente porque exista un diseño de demostración.
+## Flujo de cada proyecto
+1. Briefing y calificación.
+2. Selección de plan y propuesta.
+3. Aceptación y pago.
+4. Repositorio privado del cliente.
+5. Prototipo local Antigravity con Bootstrap CDN, CSS propio y JavaScript.
+6. Pruebas con datos ficticios y doble clic en `index.html`.
+7. Demo pública en GitHub Pages solo si puede ser pública; de lo contrario staging protegido.
+8. Aprobación del cliente.
+9. Backend y base de datos solo cuando los requisitos lo exijan.
+10. Pruebas reales en staging con datos ficticios.
+11. Promoción autorizada a producción.
+12. Conexión del dominio, HTTPS, backups y entrega.
+13. Mantenimiento y renovación.
 
 ## Infraestructura
-GitHub Pages primero. Evaluar OVHcloud/Coolify cuando existan al menos dos clientes activos simultáneamente o el flujo real de operación lo justifique.
+- GitHub Pages sirve demos estáticas; no ejecuta Express ni bases de datos.
+- El entorno Hetzner/Coolify existente debe revisarse antes de comprar infraestructura adicional.
+- OVH VPS-2 + Coolify es una opción evaluada, no declararla activa hasta que esté contratada, configurada y probada.
+- No instalar CloudPanel y Coolify simultáneamente como administradores del mismo servidor.
+- No prometer un número fijo de clientes por VPS. Medir CPU, RAM, disco, bases de datos, visitas y concurrencia por aplicación.
+- Mantener staging y producción separados y no desplegar cambios experimentales automáticamente.
 
-### Datos locales antes del cambio de dominio
-Los módulos internos de Gestión AMS almacenan información en el navegador mediante `localStorage`. Ese almacenamiento pertenece al origen; al pasar de GitHub Pages a `avilamorasoluciones.com` no se copia automáticamente. Antes del cambio, usar **Respaldo completo** de Gestión y conservar los archivos JSON para restaurarlos en el dominio nuevo.
+## Datos locales antes de cambiar de origen
+Los módulos internos de Gestión AMS guardan información en `localStorage`, que pertenece al origen y al navegador. Al cambiar de GitHub Pages a `avilamorasoluciones.com` esos datos no se transfieren automáticamente. Antes del cambio, usar **Respaldo completo** y conservar los JSON para restauración controlada.
