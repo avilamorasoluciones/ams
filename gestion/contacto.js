@@ -10,7 +10,7 @@ function dayOf(value,fallback=1){const m=String(value||"").slice(0,10).match(/^\
 function dateOrdinal(value){const m=String(value||"").slice(0,10).match(/^(\d{4})-(\d{2})-(\d{2})$/);if(!m)return null;const y=Number(m[1]),mo=Number(m[2]),d=Number(m[3]),t=Date.UTC(y,mo-1,d),check=new Date(t);return check.getUTCFullYear()===y&&check.getUTCMonth()===mo-1&&check.getUTCDate()===d?t/86400000:null}
 function normalizeClient(c){const s=Object.assign({price:0,currency:"USD",period:"monthly",start:"",due:"",grace:7,lastPayment:"",suspended:false},c.subscription||{});s.renewalDay=dayOf(s.renewalDay?"2000-01-"+String(s.renewalDay).padStart(2,"0"):(s.start||s.due),dayOf(localToday()));return Object.assign({id:uid("cli"),company:"",contact:"",email:"",phone:"",country:"Colombia",city:"",address:"",webType:"",domain:"",url:"",hosting:"",created:new Date().toISOString(),updated:new Date().toISOString()},c,{subscription:s})}
 function normalizeProject(p){return Object.assign({id:uid("pro"),clientId:"",client:"",project:"",email:"",phone:"",service:"Landing / web",stage:"Lead",price:0,currency:"USD",domain:"",domainStatus:"No definido",staging:"",url:"",deadline:"",next:"",notes:"",created:new Date().toISOString(),updated:new Date().toISOString()},p)}
-function normalizeFinance(x){return Object.assign({id:uid("fin"),type:"Gasto",currency:"USD",amount:0,date:localToday(),clientId:"",projectId:"",party:"",category:"Otro",description:"",recurring:"no",ref:"",created:new Date().toISOString()},x)}
+function normalizeFinance(x){return Object.assign({id:uid("fin"),type:"Gasto",currency:"USD",amount:0,date:localToday(),clientId:"",projectId:"",party:"",category:"Otro",description:"",recurring:"no",paymentMethod:"",ref:"",created:new Date().toISOString()},x)}
 function writeMirrors(){
  const cs=arr(CK),ps=arr(PK),fs=arr(FK);
  write("ams_subscriptions_v1",cs.map(c=>{const s=c.subscription||{};return {id:c.id,company:c.company,contact:c.contact,email:c.email,phone:c.phone,country:c.country,webType:c.webType,domain:c.domain,url:c.url,hosting:c.hosting,price:Number(s.price||0),currency:s.currency||"USD",period:s.period||"monthly",start:s.start||"",due:s.due||"",grace:Number(s.grace||7),suspended:!!s.suspended,renewalDay:Number(s.renewalDay||dayOf(s.start||s.due)),created:c.created,lastPayment:s.lastPayment||""}}));
@@ -52,7 +52,7 @@ const api={
  removeTask(projectId){const all=read(TK)||{};delete all[projectId];write(TK,all)},
  advanceDue(base,period,anchorDay){const value=(text(base)||localToday()).slice(0,10),m=value.match(/^(\d{4})-(\d{2})-(\d{2})$/);if(!m)throw Error("Fecha base inválida");const y=Number(m[1]),mo=Number(m[2])-1,sourceDay=Number(m[3]),anchor=dayOf(anchorDay?"2000-01-"+String(anchorDay).padStart(2,"0"):value,sourceDay),target=new Date(y,mo+(period==="annual"?12:1),1),year=target.getFullYear(),month=target.getMonth(),last=new Date(year,month+1,0).getDate(),day=Math.min(anchor,last);return year+"-"+String(month+1).padStart(2,"0")+"-"+String(day).padStart(2,"0")},
  subscriptionStatus(c){const s=c.subscription||{},gr=Number(s.grace||0),n=s.due?dateOrdinal(s.due)-dateOrdinal(localToday()):null;if(s.suspended)return {key:"suspended",days:n,label:"Suspendido"};if(n===null)return {key:"missing",days:null,label:"Sin fecha"};if(n<0&&n>=-gr)return {key:"grace",days:n,label:"En gracia"};if(n<0)return {key:"overdue",days:n,label:"Vencido"};if(n<=7)return {key:"pending",days:n,label:"Por vencer"};return {key:"active",days:n,label:"Activo"}},
- recordPayment(clientId,date){
+ recordPayment(clientId,date,details){
   const a=arr(CK).map(normalizeClient),i=a.findIndex(c=>c.id===clientId);
   if(i<0)throw Error("Cliente no encontrado");
   const c=a[i],s=c.subscription||{},paid=date||localToday(),finance=api.finance();
@@ -64,7 +64,7 @@ const api={
    finance.push(normalizeFinance({
     id:paymentId,type:"Ingreso",currency:s.currency||"USD",amount:Number(s.price||0),date:paid,
     clientId,party:c.company||"",category:"Suscripción",
-    description:"Pago de suscripción — "+(c.company||"Cliente"),recurring:"yes",ref:"Suscripción"
+    description:"Pago de suscripción — "+(c.company||"Cliente"),recurring:"yes",paymentMethod:text(details&&details.method),ref:text(details&&details.reference)||"Suscripción"
    }));
    write(FK,finance);writeMirrors();
   }
