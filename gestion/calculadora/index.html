@@ -41,11 +41,11 @@ main{padding-bottom:40px}.hero{padding:34px 0 30px}.eyebrow{display:inline-flex;
 <div class="choice-grid">
 <label class="choice active"><input type="radio" name="traffic" value="low" checked><span class="fake"><i class="fa-solid fa-gauge"></i></span><span><strong>Tráfico bajo</strong><small>Web pequeña, visitas normales.</small></span></label>
 <label class="choice"><input type="radio" name="traffic" value="normal"><span class="fake"><i class="fa-solid fa-chart-simple"></i></span><span><strong>Tráfico normal</strong><small>Negocio activo y visitas constantes.</small></span></label>
-<label class="choice"><input type="radio" name="traffic" value="high"><span class="fake"><i class="fa-solid fa-chart-line"></i></span><span><strong>Tráfico alto</strong><small>Más consumo o picos frecuentes.</small></span></label>
-<label class="choice"><input type="radio" name="traffic" value="veryhigh"><span class="fake"><i class="fa-solid fa-fire"></i></span><span><strong>Tráfico muy alto</strong><small>Requiere revisar infraestructura.</small></span></label>
+<label class="choice"><input type="radio" name="traffic" value="high"><span class="fake"><i class="fa-solid fa-chart-line"></i></span><span><strong>Tráfico alto</strong><small>Más consumo o picos frecuentes (+$4/mes).</small></span></label>
+<label class="choice"><input type="radio" name="traffic" value="veryhigh"><span class="fake"><i class="fa-solid fa-fire"></i></span><span><strong>Tráfico muy alto</strong><small>Consumo elevado; revisar infraestructura (+$8/mes).</small></span></label>
 </div>
 <div class="two section-line">
-<div><div class="small-label mb-2">Soporte</div><select id="support" class="form-select"><option value="basic">Básico — incluido</option><option value="standard">Estándar — +$2/mes</option><option value="priority">Prioritario — +$5/mes</option></select></div>
+<div><div class="small-label mb-2">Soporte</div><select id="support" class="form-select"><option value="basic">Básico — incluido</option><option value="standard">Estándar — +$3/mes</option><option value="priority">Prioritario — +$7/mes</option></select></div>
 <div><div class="small-label mb-2">Dominio</div><select id="domain" class="form-select"><option value="com">.com — $12/año</option><option value="net">.net — $13/año</option><option value="co">.co — $32/año</option><option value="other">Otro / especial — $20/año*</option></select></div>
 </div>
 
@@ -54,7 +54,7 @@ main{padding-bottom:40px}.hero{padding:34px 0 30px}.eyebrow{display:inline-flex;
 <div class="choice-grid">
 <label class="choice active"><input type="checkbox" id="managedHosting" checked disabled><span class="fake"><i class="fa-solid fa-server"></i></span><span><strong>Alojamiento administrado por AMS</strong><small>Incluido en la mensualidad.</small></span></label>
 <label class="choice active"><input type="checkbox" id="managedDomain" checked disabled><span class="fake"><i class="fa-solid fa-globe"></i></span><span><strong>Dominio administrado por AMS</strong><small>Incluido en la mensualidad.</small></span></label>
-<label class="choice"><input type="checkbox" id="external"><span class="fake"><i class="fa-solid fa-plug"></i></span><span><strong>Servicio externo pagado</strong><small>Solo cuando exista un costo mensual real.</small></span></label>
+<label class="choice"><input type="checkbox" id="external"><span class="fake"><i class="fa-solid fa-plug"></i></span><span><strong>Servicio externo pagado</strong><small>Suma el costo indicado y $3/mes por gestión.</small></span></label>
 </div>
 </div>
 
@@ -101,7 +101,7 @@ const SERVICE={
  advanced:{label:"Sistema avanzado / integraciones",base:50,friend:42,business:65,dev:850}
 };
 const TRAFFIC={low:{label:"bajo",add:0},normal:{label:"normal",add:0},high:{label:"alto",add:4},veryhigh:{label:"muy alto",add:8}};
-const DOMAIN={com:12,net:13,co:32,other:30};
+const DOMAIN={com:12,net:13,co:32,other:20};
 let billView="both";
 function money(n){return "$"+Number(n||0).toFixed(2)+" USD"}
 function selectedRadio(name){return document.querySelector('input[name="'+name+'"]:checked')?.value||""}
