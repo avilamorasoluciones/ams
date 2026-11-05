@@ -1,4 +1,4 @@
-const CACHE_NAME='ams-calculadora-v5';
+const CACHE_NAME='ams-calculadora-v6';
 const CACHE_PREFIX = "ams-calculadora-";
 const APP_SHELL=['./','./index.html','./manifest.webmanifest','./icon-192.svg','./icon-512.svg'];
 self.addEventListener('install',e=>e.waitUntil(caches.open(CACHE_NAME).then(c=>c.addAll(APP_SHELL)).then(()=>self.skipWaiting())));
