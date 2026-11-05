@@ -59,7 +59,7 @@ const api={
   const paymentId="fin_sub_"+encodeURIComponent(clientId)+"_"+paid;
   const payment=finance.find(x=>x.id===paymentId);
   const legacyPayment=finance.some(x=>x.type==="Ingreso"&&x.category==="Suscripción"&&x.clientId===clientId&&x.date===paid);
-  const alreadyPaid=s.lastPayment===paid;
+  const alreadyPaid=s.lastPayment===paid,olderThanLast=!!s.lastPayment&&dateOrdinal(paid)!==null&&dateOrdinal(s.lastPayment)!==null&&dateOrdinal(paid)<dateOrdinal(s.lastPayment);
   if(!payment&&!legacyPayment&&Number(s.price||0)>0){
    finance.push(normalizeFinance({
     id:paymentId,type:"Ingreso",currency:s.currency||"USD",amount:Number(s.price||0),date:paid,
@@ -68,7 +68,7 @@ const api={
    }));
    write(FK,finance);writeMirrors();
   }
-  if(!alreadyPaid){
+  if(!alreadyPaid&&!olderThanLast){
    const anchor=dayOf(s.renewalDay?"2000-01-"+String(s.renewalDay).padStart(2,"0"):(s.start||s.due||paid),dayOf(paid));
    const dueOrdinal=s.due?dateOrdinal(s.due):null,paidOrdinal=dateOrdinal(paid);
    const baseText=s.due&&dueOrdinal!==null?s.due:paid;
