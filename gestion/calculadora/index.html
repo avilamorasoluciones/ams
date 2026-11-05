@@ -146,13 +146,25 @@ function calc(){
 }
 function applyChoiceState(){document.querySelectorAll(".choice").forEach(c=>{const i=c.querySelector("input");if(i)c.classList.toggle("active",i.checked)});const dbChoice=document.getElementById("dbChoice");if(dbChoice)dbChoice.style.display=["store","app","system","advanced"].includes($("service").value)?"flex":"none"}
 function copyQuote(){
- const service=SERVICE[$("service").value],t=$("clientType").value,r=Number($("mainPrice").textContent.replace(/[^0-9.]/g,""))||0;
- const monthly=selectedBillingAnnual()?r/11:r;
- const annual=Number($("annualPrice").textContent.replace(/[^0-9.]/g,""))||0;
+ const service=SERVICE[$("service").value],r=Number($("mainPrice").textContent.replace(/[^0-9.]/g,""))||0;
+ const monthly=selectedBillingAnnual()?r/11:r,annual=Number($("annualPrice").textContent.replace(/[^0-9.]/g,""))||0;
  const rate=appliedFx(),margin=Math.max(0,Number($("fxMargin").value)||0),cop=n=>rate>0?copMoney(n*rate):"Pendiente";
- const domainText=$("domain").value==="none"?"Dominio existente del cliente (sin cobro de registro/renovación por AMS)":$("domain").selectedOptions[0].textContent+" · gestionado por AMS";
- const techText=$("technicalLevel").selectedOptions[0].textContent,trafficText=TRAFFIC[selectedRadio("traffic")].label,supportText=$("support").selectedOptions[0].textContent;
- const txt="Avila Mora Soluciones\\nServicio: "+service.label+"\\nTráfico estimado: "+trafficText+"\\nExigencia técnica: "+techText+"\\nSoporte: "+supportText+"\\nDominio: "+domainText+"\\nMensualidad: "+money(monthly)+" / mes · "+cop(monthly)+" COP\\nPago anual: "+money(annual)+" · "+cop(annual)+" COP / 12 meses\\nReferencia USD/COP: "+(fxRate?copMoney(fxRate.rate):"No disponible")+"\\nTasa AMS aplicada: "+(rate>0?copMoney(rate):"Pendiente")+" (incluye +"+copMoney(margin)+" por USD)\\nIncluye: alojamiento administrado, copias de seguridad, operación y soporte según el nivel elegido.\\nDesarrollo inicial: desde "+money(service.dev)+" ("+cop(service.dev)+" COP; se define según alcance).";
+ const domainText=$("domain").value==="none"?"Dominio existente del cliente":$("domain").selectedOptions[0].textContent+" · gestionado por AMS";
+ const lines=[
+  "Avila Mora Soluciones",
+  "Servicio: "+service.label,
+  "Tráfico estimado: "+TRAFFIC[selectedRadio("traffic")].label,
+  "Exigencia técnica: "+$("technicalLevel").selectedOptions[0].textContent,
+  "Soporte: "+$("support").selectedOptions[0].textContent,
+  "Dominio: "+domainText,
+  "Mensualidad: "+money(monthly)+" / mes · "+cop(monthly)+" COP",
+  "Pago anual: "+money(annual)+" · "+cop(annual)+" COP / 12 meses",
+  "Referencia USD/COP: "+(fxRate?copMoney(fxRate.rate):"No disponible"),
+  "Tasa AMS aplicada: "+(rate>0?copMoney(rate):"Pendiente")+" (incluye +"+copMoney(margin)+" por USD)",
+  "Incluye: alojamiento administrado, copias de seguridad, operación y soporte según el nivel elegido.",
+  "Desarrollo inicial: desde "+money(service.dev)+" ("+cop(service.dev)+" COP; se define según alcance)."
+ ];
+ const txt=lines.join(String.fromCharCode(10));
  navigator.clipboard?.writeText(txt).then(()=>{setStatus("Cotización copiada con los valores correctos.")}).catch(()=>setStatus("No se pudo copiar automáticamente."));
 }
 function selectedBillingAnnual(){return billView==="annual"}
