@@ -43,10 +43,13 @@
 
   function formatDate(value) {
     if (!value) return "fecha no disponible";
-    const date = new Date(value);
+    const datePart = String(value).slice(0, 10);
+    const date = /^\d{4}-\d{2}-\d{2}$/.test(datePart)
+      ? new Date(datePart + "T12:00:00Z")
+      : new Date(value);
     if (Number.isNaN(date.getTime())) return String(value);
     return new Intl.DateTimeFormat("es-CO", {
-      day: "2-digit", month: "short", year: "numeric", timeZone: "America/Bogota"
+      day: "2-digit", month: "short", year: "numeric", timeZone: "UTC"
     }).format(date);
   }
 
