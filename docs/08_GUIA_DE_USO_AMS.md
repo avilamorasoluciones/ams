@@ -125,9 +125,9 @@ Las pantallas internas de GitHub Pages y su contraseña JavaScript no constituye
 ## 11. Infraestructura actual y evolución
 
 - Porkbun: dominio.
-- Correo profesional: `equipo@avilamorasoluciones.com`.
+- Correo de contacto publicado: `equipo@avilamorasoluciones.com` (verificar por separado que el buzón esté configurado y operativo).
 - GitHub: código y GitHub Pages.
-- Google: Search Console.
-- Wompi: pagos.
+- Google: Search Console (verificar la propiedad y el estado de indexación en la cuenta correspondiente).
+- Wompi: cuenta activa y enlaces de pago; la confirmación automática mediante backend/webhooks no está implementada.
 - OVHcloud: servidor.
 - Coolify: despliegue y administración del servidor.
