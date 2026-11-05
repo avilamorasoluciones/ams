@@ -253,5 +253,5 @@ $("copy").addEventListener("click",copyQuote);$("reset").addEventListener("click
 $("toggleInternal").addEventListener("click",()=>{const box=$("quoteInternal"),hidden=box.style.display==="none";box.style.display=hidden?"block":"none";$("toggleInternal").innerHTML=hidden?'<i class="fa-solid fa-eye-slash"></i> Ocultar desglose interno':'<i class="fa-solid fa-eye"></i> Mostrar desglose interno'});
 loadState();try{const fx=JSON.parse(localStorage.getItem(FX_KEY)||"null");if(fx?.rate)fxRate=fx}catch(e){}updateChoiceState();calculate();refreshFx(false);
 </script>
-<script>if("serviceWorker" in navigator)window.addEventListener("load",()=>navigator.serviceWorker.register("./sw.js?v=7",{updateViaCache:"none"}).catch(()=>{}));</script>
+<script>if("serviceWorker" in navigator)window.addEventListener("load",()=>navigator.serviceWorker.register("./sw.js?v=8",{updateViaCache:"none"}).catch(()=>{}));</script>
 </body></html>
