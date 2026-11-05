@@ -70,8 +70,9 @@ No utilizar estas equivalencias históricas para facturar después; consultar la
 
 **Desarrollo incluido**
 - Web de hasta 10 páginas/secciones.
-- Catálogo de hasta 50 productos.
+- Catálogo informativo de hasta 50 productos, con carga inicial a partir del material entregado por el cliente.
 - Categorías, búsqueda/filtros sencillos y resumen de pedido por WhatsApp.
+- No incluye inventario automático, panel autónomo de productos, pagos en línea ni sincronización con caja/POS. Las actualizaciones recurrentes de catálogo se acuerdan y cotizan según su volumen.
 - Formularios, enlaces de contacto, SEO inicial y analítica básica cuando aplique.
 - Hasta 5 GB de archivos e imágenes.
 
@@ -88,7 +89,7 @@ No utilizar estas equivalencias históricas para facturar después; consultar la
 **Desarrollo incluido**
 - Una aplicación web para un proceso de negocio concreto.
 - Hasta 10 usuarios nominativos.
-- Hasta 3 módulos funcionales acordados (por ejemplo: producción, inventario y reportes).
+- Hasta 3 áreas de trabajo acordadas (por ejemplo: producción, inventario y reportes). Cada área corresponde a un proceso definido con formularios, consultas, operaciones y reportes básicos; no a un ERP ilimitado.
 - Una base de datos independiente del cliente.
 - Roles/permisos básicos.
 - Panel, consultas y reportes dentro del alcance.
@@ -119,7 +120,7 @@ Se usa cuando el proyecto supera los límites anteriores, necesita más usuarios
 
 Todos los planes administrados incluyen:
 - Alojamiento gestionado por AMS.
-- Gestión técnica de un dominio .com estándar.
+- Registro y renovación de un dominio .com estándar nuevo a nombre del cliente, o gestión técnica de su dominio existente sin transferencia.
 - Certificado HTTPS/SSL.
 - Copias de seguridad programadas.
 - Supervisión básica y mantenimiento técnico.
