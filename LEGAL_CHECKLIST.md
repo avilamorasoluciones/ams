@@ -24,14 +24,15 @@ Mantener un canal escrito para consultas y reclamos relacionados con datos perso
 La SIC informa que existen plazos generales para consultas y reclamos, sujetos a las reglas y prórrogas aplicables.
 
 ## 4. Comercio electrónico
-Este apartado solo se activa cuando Avila Mora Soluciones venda directamente por un checkout público.
-Antes de habilitarlo, revisar la información que debe mostrarse al consumidor, condiciones de compra, medios de pago, recurrencia, atención de solicitudes y reclamos, privacidad, cookies y demás reglas que resulten aplicables a la actividad concreta.
+Avila Mora Soluciones ya recibe pagos mediante enlaces de pago alojados por Wompi. Esto no equivale a una tienda con carrito, checkout integrado al sitio ni cobros recurrentes automatizados. Antes de ampliar el flujo a un checkout propio o a pagos recurrentes, revisar la información que debe mostrarse al consumidor, condiciones de compra, medios de pago, recurrencia, atención de solicitudes y reclamos, privacidad, cookies y demás reglas aplicables a la actividad concreta.
 
 ## 5. Wompi
-- Wompi todavía no está conectado.
+- La cuenta de Wompi está activa a nombre de una persona natural y AMS dispone de un enlace de pago publicado en su sitio.
+- El enlace alojado por Wompi permite cobrar sin que AMS almacene datos de tarjeta.
+- No se debe confundir el enlace de pago activo con una integración técnica propia: el backend y la recepción/verificación automática de webhooks siguen pendientes.
 - No guardar secretos de Wompi en GitHub Pages.
 - Las credenciales privadas y webhooks deben permanecer en backend/variables de entorno.
-- Probar pagos aprobados, rechazados, cancelados y pendientes antes de habilitar el flujo real.
+- Antes de automatizar pagos o suscripciones, probar los estados aprobados, rechazados, cancelados, pendientes y reembolsados cuando aplique.
 
 ## 6. Regla de actualización
 Si cambia el modo de operar Avila Mora Soluciones, se debe actualizar primero la Política de Privacidad, los Términos y esta guía antes de afirmar públicamente una condición nueva.
