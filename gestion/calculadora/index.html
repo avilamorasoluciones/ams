@@ -81,7 +81,7 @@ main{padding-bottom:40px}.hero{padding:34px 0 30px}.eyebrow{display:inline-flex;
 <div id="recommended" class="label">Mensualidad sugerida</div><div id="mainPrice" class="big">$0.00</div><div id="unit" class="unit">USD / mes</div><div id="explain" class="explain"></div>
 <div class="summary"><div class="sum-box"><span>12 meses pagando mensual</span><strong id="monthlyYear">$0.00</strong><small>12 pagos</small></div><div class="sum-box"><span>Pago anual</span><strong id="annualPrice">$0.00</strong><small>11 mensualidades · 12 meses</small></div></div>
 <div class="included"><strong><i class="fa-solid fa-circle-check"></i> Qué cubre la mensualidad</strong><ul id="included"></ul></div>
-<div class="internal-box"><b>Referencia interna</b><div><span>Costo compartido estimado</span><strong id="costRef">$0.00/mes</strong></div><div><span>Margen sobre costo</span><strong id="marginRef">—</strong></div></div>
+<div class="internal-box"><b>Referencia interna</b><div><span>Costo compartido estimado</span><strong id="costRef">$0.00/mes</strong></div><div><span>Margen estimado</span><strong id="marginRef">—</strong></div></div>
 <div class="actions"><button id="toggleInternal" class="btn-soft" type="button"><i class="fa-solid fa-eye"></i> Ocultar referencia interna</button></div>
 <div class="footnote">AMS busca cobrar lo suficiente para mantener el servicio rentable sin convertir el hosting o el dominio en un sobreprecio. Los cambios grandes, nuevas funciones y desarrollos adicionales se cotizan aparte.</div>
 </div></aside>
@@ -103,7 +103,7 @@ let billView="both";
 function money(n){return "$"+Number(n||0).toFixed(2)+" USD"}
 function selectedRadio(name){return document.querySelector('input[name="'+name+'"]:checked')?.value||""}
 function baseFor(type,service){const s=SERVICE[service];if(type==="friend")return s.friend;if(type==="business")return s.business;return s.base}
-function domainAnnual(){const k=$("domain").value;if(k==="com")return +$("domainCost").value||12;return DOMAIN[k]??20}
+function domainAnnual(){const k=$("domain").value;if(k==="com"){const n=Number($("domainCost").value);return Number.isFinite(n)&&n>=0?n:12}return DOMAIN[k]??20}
 function monthlyCostEstimate(monthlyPrice){const vps=(+$("vpsCost").value||0),cap=Math.max(1,+$("capacity").value||1),ops=+$("opsReserve").value||0,domain=domainAnnual()/12,ext=$("external").checked?(+$("externalMonthly").value||0):0,pay=(+$("paymentReserve").value||0)/100*monthlyPrice;return vps/cap+ops+domain+ext+pay}
 function calc(){
  const client=$("clientType").value,service=$("service").value,s=SERVICE[service],traffic=selectedRadio("traffic"),support=$("support").value;
@@ -141,9 +141,10 @@ function copyQuote(){
 }
 function selectedBillingAnnual(){return billView==="annual"}
 function setStatus(s){$("status").textContent=s;setTimeout(()=>{if($("status").textContent===s)$("status").textContent=""},2800)}
-function saveState(){try{const d={clientType:$("clientType").value,service:$("service").value,traffic:selectedRadio("traffic"),support:$("support").value,domain:$("domain").value,external:$("external").checked};localStorage.setItem("ams_calc_v3",JSON.stringify(d))}catch(e){}}
-function loadState(){try{const d=JSON.parse(localStorage.getItem("ams_calc_v3")||"null");if(!d)return;$("clientType").value=d.clientType||"normal";$("service").value=d.service||"landing";$("support").value=d.support||"basic";$("domain").value=d.domain||"com";$("external").checked=!!d.external;if(d.traffic){const r=document.querySelector('input[name="traffic"][value="'+d.traffic+'"]');if(r)r.checked=true}}catch(e){}}
-function reset(){["clientType","service","support","domain"].forEach(()=>{});$("clientType").value="normal";$("service").value="landing";$("support").value="basic";$("domain").value="com";document.querySelectorAll('input[name="traffic"]').forEach(x=>x.checked=x.value==="low");$("external").checked=false;billView="both";document.querySelectorAll(".bill").forEach(x=>x.classList.toggle("active",x.dataset.bill==="both"));calc();setStatus("Calculadora restablecida.")}
+const CALC_NUMERIC=["vpsCost","capacity","opsReserve","domainCost","externalMonthly","paymentReserve"];
+function saveState(){try{const d={clientType:$("clientType").value,service:$("service").value,traffic:selectedRadio("traffic"),support:$("support").value,domain:$("domain").value,external:$("external").checked,billView,values:{}};CALC_NUMERIC.forEach(id=>d.values[id]=$(id).value);localStorage.setItem("ams_calc_v3",JSON.stringify(d))}catch(e){}}
+function loadState(){try{const d=JSON.parse(localStorage.getItem("ams_calc_v3")||"null");if(!d)return;$("clientType").value=d.clientType||"normal";$("service").value=d.service||"landing";$("support").value=d.support||"basic";$("domain").value=d.domain||"com";$("external").checked=!!d.external;if(d.traffic){const r=document.querySelector('input[name="traffic"][value="'+d.traffic+'"]');if(r)r.checked=true}if(d.values&&typeof d.values==="object")CALC_NUMERIC.forEach(id=>{const n=Number(d.values[id]);if(d.values[id]!==undefined&&Number.isFinite(n)&&n>=0)$(id).value=String(d.values[id])});if(["both","monthly","annual"].includes(d.billView))billView=d.billView;document.querySelectorAll(".bill").forEach(b=>b.classList.toggle("active",b.dataset.bill===billView))}catch(e){}}
+function reset(){$("clientType").value="normal";$("service").value="landing";$("support").value="basic";$("domain").value="com";$("vpsCost").value="4.54";$("capacity").value="10";$("opsReserve").value="1.50";$("domainCost").value="12";$("externalMonthly").value="0";$("paymentReserve").value="4";document.querySelectorAll('input[name="traffic"]').forEach(x=>x.checked=x.value==="low");$("external").checked=false;billView="both";document.querySelectorAll(".bill").forEach(x=>x.classList.toggle("active",x.dataset.bill==="both"));calc();setStatus("Calculadora restablecida.")}
 document.querySelectorAll("input,select").forEach(e=>{e.addEventListener("input",calc);e.addEventListener("change",calc)});
 document.querySelectorAll(".bill").forEach(b=>b.onclick=()=>{billView=b.dataset.bill;document.querySelectorAll(".bill").forEach(x=>x.classList.toggle("active",x===b));calc()});
 $("copy").onclick=copyQuote;$("reset").onclick=reset;
