@@ -208,7 +208,7 @@
     async function hash(v){const x=await crypto.subtle.digest("SHA-256",new TextEncoder().encode(v));return Array.from(new Uint8Array(x)).map(b=>b.toString(16).padStart(2,"0")).join("")}
     const auth=$("auth"),app=$("app"),home=$("home"),workspace=$("workspace"),frame=$("frame"),title=$("title"),searchModal=$("searchModal"),globalSearch=$("globalSearch"),searchResults=$("searchResults");
     const mods={
-      calculadora:["calculadora/index.html?v=20261105-7","Cotizador"],
+      calculadora:["calculadora/index.html?v=20261105-8","Cotizador"],
       suscripciones:["suscripciones/index.html?v=20261105-2","Clientes y cobros"],
       documentos:["documentos/index.html?v=20261105-2","Documentos"],
       finanzas:["finanzas/index.html?v=20261105-2","Finanzas"],
