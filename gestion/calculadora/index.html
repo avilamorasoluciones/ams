@@ -81,6 +81,7 @@ main{padding-bottom:42px}.hero{padding:30px 0 24px}.hero h1{font-size:clamp(2rem
 <label>Aplicación web<input id="mixApp" class="form-control" type="number" min="0" step="1" value="4"></label>
 <label>Sistema empresarial<input id="mixSystem" class="form-control" type="number" min="0" step="1" value="3"></label>
 <label>Sistema avanzado<input id="mixAdvanced" class="form-control" type="number" min="0" step="1" value="1"></label>
+<label>Clientes con pago anual anticipado (%)<input id="portfolioAnnualPercent" class="form-control" type="number" min="0" max="100" step="5" value="0"></label>
 </div>
 <div class="portfolio-results">
 <div><span>Contratos proyectados</span><strong id="portfolioClients">50</strong></div>
@@ -138,7 +139,7 @@ const SERVICES={
 };
 const TRAFFIC={standard:{label:"estándar",add:0},high:{label:"alto",add:5},veryhigh:{label:"intensivo",add:10}};
 const SUPPORT={standard:{label:"Estándar",add:0},priority:{label:"Prioritario",add:5}};
-const SETTINGS=["vpsCost","fixedOps","opsPerClient","paymentReserve","domainCom","domainNet","domainCoFirst","domainCoRenew","domainOther","fxMargin","mixLanding","mixCorporate","mixStore","mixApp","mixSystem","mixAdvanced"];
+const SETTINGS=["vpsCost","fixedOps","opsPerClient","paymentReserve","domainCom","domainNet","domainCoFirst","domainCoRenew","domainOther","fxMargin","mixLanding","mixCorporate","mixStore","mixApp","mixSystem","mixAdvanced","portfolioAnnualPercent"];
 const FX_KEY="ams_fx_cache_v1",STATE_KEY="ams_calc_v4";
 let fxRate=null,fxBusy=false;
 const money=n=>"$"+Number(n||0).toFixed(2)+" USD";
@@ -200,8 +201,9 @@ function updatePortfolio(){
  const revenue=counts.reduce((sum,count,i)=>sum+count*SERVICES[keys[i]].monthly,0);
  const fee=Math.min(.3,Math.max(0,Number($("paymentReserve").value)||0)/100);
  const vps=Math.max(0,Number($("vpsCost").value)||0),fixed=Math.max(0,Number($("fixedOps").value)||0),perClient=Math.max(0,Number($("opsPerClient").value)||0);
- const payments=revenue*fee,variable=clients*perClient,costs=vps+fixed+variable+payments,contribution=revenue-costs;
- const avg=clients?revenue/clients:0,unit=avg*(1-fee)-perClient,breakeven=unit>0?Math.ceil((vps+fixed)/unit):"—",margin=revenue>0?contribution/revenue*100:0;
+ const annualShare=Math.min(100,Math.max(0,Number($("portfolioAnnualPercent").value)||0))/100;
+ const billedRevenue=revenue*(1-annualShare/12),payments=billedRevenue*fee,variable=clients*perClient,costs=vps+fixed+variable+payments,contribution=billedRevenue-costs;
+ const avg=clients?billedRevenue/clients:0,unit=avg*(1-fee)-perClient,breakeven=unit>0?Math.ceil((vps+fixed)/unit):"—",margin=billedRevenue>0?contribution/billedRevenue*100:0;
  $("portfolioClients").textContent=clients;
  $("portfolioRevenue").textContent=money(revenue);
  $("portfolioCosts").textContent=money(costs);
@@ -211,9 +213,9 @@ function updatePortfolio(){
  $("portfolioContribution").classList.toggle("positive",contribution>=0);
 }
 function updateChoiceState(){document.querySelectorAll(".choice").forEach(el=>{const input=el.querySelector("input");if(input)el.classList.toggle("active",input.checked)})}
-function saveState(){try{const state={service:$("service").value,scope:$("scope").value,projectExtra:$("projectExtra").value,traffic:selectedTraffic(),support:$("support").value,domain:$("domain").value,external:$("external").checked,externalMonthly:$("externalMonthly").value,billing:$("billing").value,values:{}};SETTINGS.forEach(id=>state.values[id]=$(id).value);localStorage.setItem(STATE_KEY,JSON.stringify(state))}catch(e){}}
-function loadState(){try{const state=JSON.parse(localStorage.getItem(STATE_KEY)||"null");if(!state)return;["service","scope","projectExtra","support","domain","externalMonthly","billing"].forEach(id=>{if(state[id]!==undefined&&$(id))$(id).value=state[id]});$("external").checked=!!state.external;if(state.traffic){const r=document.querySelector('input[name="traffic"][value="'+state.traffic+'"]');if(r)r.checked=true}if(state.values)SETTINGS.forEach(id=>{if(state.values[id]!==undefined&&$(id))$(id).value=state.values[id]})}catch(e){}}
-function reset(){localStorage.removeItem(STATE_KEY);$("service").value="landing";$("scope").value="1";$("projectExtra").value="0";$("support").value="standard";$("domain").value="existing";$("external").checked=false;$("externalMonthly").value="0";$("billing").value="monthly";document.querySelectorAll('input[name="traffic"]').forEach(x=>x.checked=x.value==="standard");$("vpsCost").value="10";$("fixedOps").value="20";$("opsPerClient").value="5";$("paymentReserve").value="4";$("domainCom").value="11.08";$("domainNet").value="12.52";$("domainCoFirst").value="15.76";$("domainCoRenew").value="31.20";$("domainOther").value="20";$("fxMargin").value="300";["mixLanding","mixCorporate","mixStore","mixApp","mixSystem","mixAdvanced"].forEach((id,i)=>$(id).value=[20,15,7,4,3,1][i]);updateChoiceState();calculate();setStatus("Cotizador restablecido a las tarifas AMS.");}
+function saveState(){try{const state={service:$("service").value,scope:$("scope").value,projectExtra:$("projectExtra").value,traffic:selectedTraffic(),support:$("support").value,domain:$("domain").value,external:$("external").checked,externalMonthly:$("externalMonthly").value,billing:$("billing").value,values:{}};SETTINGS.forEach(id=>state.values[id]=$(id).value);localStorage.setItem(STATE_KEY,JSON.stringify(state));localStorage.setItem("ams_fx_margin_v1",String(Math.max(0,Number($("fxMargin").value)||0)))}catch(e){}}
+function loadState(){try{const state=JSON.parse(localStorage.getItem(STATE_KEY)||"null");if(state){["service","scope","projectExtra","support","domain","externalMonthly","billing"].forEach(id=>{if(state[id]!==undefined&&$(id))$(id).value=state[id]});$("external").checked=!!state.external;if(state.traffic){const r=document.querySelector('input[name="traffic"][value="'+state.traffic+'"]');if(r)r.checked=true}if(state.values)SETTINGS.forEach(id=>{if(state.values[id]!==undefined&&$(id))$(id).value=state.values[id]})}else{const oldMargin=localStorage.getItem("ams_fx_margin_v1");if(oldMargin!==null&&Number.isFinite(Number(oldMargin)))$("fxMargin").value=oldMargin}}catch(e){}}
+function reset(){localStorage.removeItem(STATE_KEY);$("service").value="landing";$("scope").value="1";$("projectExtra").value="0";$("support").value="standard";$("domain").value="existing";$("external").checked=false;$("externalMonthly").value="0";$("billing").value="monthly";document.querySelectorAll('input[name="traffic"]').forEach(x=>x.checked=x.value==="standard");$("vpsCost").value="10";$("fixedOps").value="20";$("opsPerClient").value="5";$("paymentReserve").value="4";$("domainCom").value="11.08";$("domainNet").value="12.52";$("domainCoFirst").value="15.76";$("domainCoRenew").value="31.20";$("domainOther").value="20";$("fxMargin").value="300";$("portfolioAnnualPercent").value="0";["mixLanding","mixCorporate","mixStore","mixApp","mixSystem","mixAdvanced"].forEach((id,i)=>$(id).value=[20,15,7,4,3,1][i]);updateChoiceState();calculate();setStatus("Cotizador restablecido a las tarifas AMS.");}
 function setStatus(message){$("status").textContent=message}
 function copyQuote(){
  const service=SERVICES[$("service").value],domain=domainCosts(),scope=Number($("scope").value)||1;
