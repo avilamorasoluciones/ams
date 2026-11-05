@@ -804,7 +804,7 @@
             <div class="ams-plan-monthly">
               <span>Administración mensual</span>
               <strong>COP $89.900<small>/mes</small></strong>
-              <small class="ams-usd-equivalent" data-cop-value="89900">≈ US$25,53/mes</small>
+              <small class="ams-usd-equivalent" data-cop-value="89900" data-monthly="true">≈ US$25,53/mes</small>
             </div>
           </div>
           <ul class="ams-plan-features">
@@ -835,7 +835,7 @@
             <div class="ams-plan-monthly">
               <span>Administración mensual</span>
               <strong>COP $149.900<small>/mes</small></strong>
-              <small class="ams-usd-equivalent" data-cop-value="149900">≈ US$42,57/mes</small>
+              <small class="ams-usd-equivalent" data-cop-value="149900" data-monthly="true">≈ US$42,57/mes</small>
             </div>
           </div>
           <ul class="ams-plan-features">
@@ -865,7 +865,7 @@
             <div class="ams-plan-monthly">
               <span>Administración mensual</span>
               <strong>COP $299.900<small>/mes</small></strong>
-              <small class="ams-usd-equivalent" data-cop-value="299900">≈ US$85,17/mes</small>
+              <small class="ams-usd-equivalent" data-cop-value="299900" data-monthly="true">≈ US$85,17/mes</small>
             </div>
           </div>
           <ul class="ams-plan-features">
@@ -895,7 +895,7 @@
             <div class="ams-plan-monthly">
               <span>Administración mensual · desde</span>
               <strong>COP $499.900<small>/mes</small></strong>
-              <small class="ams-usd-equivalent" data-cop-value="499900">≈ US$141,97/mes</small>
+              <small class="ams-usd-equivalent" data-cop-value="499900" data-monthly="true">≈ US$141,97/mes</small>
             </div>
           </div>
           <ul class="ams-plan-features">
@@ -946,12 +946,12 @@
         <article class="card" data-aos="fade-right">
           <div class="card-body">
             <h3 class="accent-heading accent-primary"><i class="fa-solid fa-handshake"></i> Nos encargamos de todo</h3>
-            <p>Nos encargamos de que tu página o sistema esté en línea. Tú lo utilizas; nosotros cuidamos la parte técnica.</p>
+            <p>Tu web o sistema queda alojado y atendido por AMS. Tú te concentras en utilizarlo; nosotros nos ocupamos del funcionamiento técnico y del mantenimiento incluido en tu plan.</p>
             <ul class="bullets">
-              <li><i class="fa-solid fa-check" style="color:var(--tertiary);"></i> Alojamiento y certificado de seguridad.</li>
+              <li><i class="fa-solid fa-check" style="color:var(--tertiary);"></i> Alojamiento y conexión segura.</li>
               <li><i class="fa-solid fa-check" style="color:var(--tertiary);"></i> Copias de seguridad programadas.</li>
-              <li><i class="fa-solid fa-check" style="color:var(--tertiary);"></i> Dominio y renovaciones según tu plan.</li>
-              <li><i class="fa-solid fa-check" style="color:var(--tertiary);"></i> Mantenimiento y soporte incluidos.</li>
+              <li><i class="fa-solid fa-check" style="color:var(--tertiary);"></i> Gestión de un dominio .com.</li>
+              <li><i class="fa-solid fa-check" style="color:var(--tertiary);"></i> Mantenimiento y soporte en días hábiles.</li>
             </ul>
           </div>
         </article>
@@ -959,12 +959,12 @@
         <article class="card" data-aos="fade-left">
           <div class="card-body">
             <h3 class="accent-heading accent-secondary"><i class="fa-solid fa-sliders"></i> O trabajamos con lo que ya tienes</h3>
-            <p>Si ya tienes dominio, no tienes que transferirlo ni volver a comprarlo. Con tu autorización, configuramos la conexión para que tu web funcione con nosotros, mientras tú conservas la titularidad.</p>
+            <p>Si ya tienes un dominio, lo dejamos en el proveedor donde está registrado. Con tu autorización lo conectamos a tu sitio y gestionamos su configuración, sin transferirlo ni registrarlo de nuevo.</p>
             <ul class="bullets">
-              <li><i class="fa-solid fa-check" style="color:var(--tertiary);"></i> Conservas el dominio a tu nombre.</li>
-              <li><i class="fa-solid fa-check" style="color:var(--tertiary);"></i> No cambiamos de proveedor sin necesidad.</li>
-              <li><i class="fa-solid fa-check" style="color:var(--tertiary);"></i> Administramos DNS y renovación con autorización.</li>
-              <li><i class="fa-solid fa-check" style="color:var(--tertiary);"></i> Si ya pagaste tu dominio, no volvemos a cobrar el registro.</li>
+              <li><i class="fa-solid fa-check" style="color:var(--tertiary);"></i> El dominio sigue siendo tuyo.</li>
+              <li><i class="fa-solid fa-check" style="color:var(--tertiary);"></i> No tienes que cambiar de proveedor.</li>
+              <li><i class="fa-solid fa-check" style="color:var(--tertiary);"></i> Lo conectamos y revisamos su configuración.</li>
+              <li><i class="fa-solid fa-check" style="color:var(--tertiary);"></i> No vuelves a pagar un registro que ya tienes.</li>
             </ul>
           </div>
         </article>
@@ -985,7 +985,7 @@
         <article class="card" data-aos="fade-right">
           <div class="card-body">
             <h3 class="accent-heading accent-gold"><i class="fa-solid fa-id-card"></i> Tu dominio, bien administrado</h3>
-            <p>Cuando necesitas un dominio nuevo, lo registramos a tu nombre en nuestro proveedor de dominios y gestionamos la configuración y renovación. Si ya tienes uno, lo conectamos sin transferirlo.</p>
+            <p>Si necesitas uno nuevo, gestionamos el registro de un dominio .com a tu nombre mediante nuestro proveedor. Nos ocupamos de conectarlo y de su renovación mientras el plan esté activo. Si ya tienes dominio, lo conservas y solo lo conectamos.</p>
           </div>
         </article>
 
@@ -1255,8 +1255,23 @@
           </details>
 
           <details>
+            <summary>¿Incluye correo con mi dominio? <i class="fa-solid fa-chevron-down chev"></i></summary>
+            <p>El dominio puede utilizarse para correo, pero los buzones corporativos (por ejemplo, Microsoft 365 o Google Workspace) son servicios aparte. Te ayudamos a configurarlos si los contratas.</p>
+          </details>
+
+          <details>
+            <summary>¿Puedo recibir pagos en línea? <i class="fa-solid fa-chevron-down chev"></i></summary>
+            <p>Sí. La integración de Wompi u otra pasarela se define según el proyecto. Las comisiones que cobre el proveedor de pagos no están incluidas en la mensualidad de AMS.</p>
+          </details>
+
+          <details>
+            <summary>¿Qué no está incluido en la mensualidad? <i class="fa-solid fa-chevron-down chev"></i></summary>
+            <p>Correo corporativo, licencias, servicios externos, comisiones de pago, mensajes SMS y nuevas funciones que amplíen el proyecto. Te informamos cualquier costo antes de contratarlo.</p>
+          </details>
+
+          <details>
             <summary>¿Qué pasa si después necesito más cosas? <i class="fa-solid fa-chevron-down chev"></i></summary>
-            <p>El proyecto puede crecer. Las nuevas funciones o cambios de mayor alcance se cotizan aparte; el mantenimiento mensual cubre únicamente lo que se haya acordado en el servicio.</p>
+            <p>Claro. Si necesitas más páginas, usuarios, módulos o capacidad, revisamos el uso y te proponemos el siguiente plan o una ampliación. Las funciones nuevas y los servicios externos se cotizan antes de realizarlos.</p>
           </details>
         </div>
 
