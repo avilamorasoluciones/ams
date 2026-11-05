@@ -50,7 +50,7 @@ main{padding-bottom:40px}.hero{padding:34px 0 30px}.eyebrow{display:inline-flex;
 </div>
 <div class="two section-line">
 <div><div class="small-label mb-2">Dominio</div><select id="domain" class="form-select"><option value="com">.com — $12/año</option><option value="net">.net — $13/año</option><option value="co">.co — $32/año</option><option value="other">Otro / especial — $20/año*</option><option value="none">El cliente ya tiene dominio — $0/año</option></select></div>
-<div><div class="small-label mb-2">Servicios externos</div><div class="hint">Activa esta opción solo cuando el proyecto requiera una licencia o plataforma de pago. El costo mensual se suma a la cotización.</div></div>
+<div><div class="small-label mb-2">Dominio del cliente</div><div class="hint">Puede conservar el dominio que ya pagó. AMS se encarga de conectarlo y administrarlo; solo se suma renovación cuando seleccionas un dominio nuevo.</div></div>
 </div>
 
 <div class="section-line">
@@ -188,5 +188,5 @@ $("copy").onclick=copyQuote;$("reset").onclick=reset;
 $("toggleInternal").onclick=()=>{const box=document.querySelector(".internal-box"),btn=$("toggleInternal");box.style.display=box.style.display==="none"?"block":"none";btn.innerHTML=box.style.display==="none"?'<i class="fa-solid fa-eye"></i> Mostrar referencia interna':'<i class="fa-solid fa-eye-slash"></i> Ocultar referencia interna'};
 loadState();try{const fx=JSON.parse(localStorage.getItem(FX_KEY)||"null");if(fx&&Number(fx.rate)>0){fxRate=fx;renderFx()}}catch(e){}calc();refreshFx(false);
 </script>
-<script>if("serviceWorker" in navigator){window.addEventListener("load",()=>navigator.serviceWorker.register("./sw.js?v=5",{updateViaCache:"none"}).catch(()=>{}));}</script>
+<script>if("serviceWorker" in navigator){window.addEventListener("load",()=>navigator.serviceWorker.register("./sw.js?v=6",{updateViaCache:"none"}).catch(()=>{}));}</script>
 </body></html>
