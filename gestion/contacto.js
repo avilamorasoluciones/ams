@@ -79,7 +79,7 @@ const api={
   }
   return c
  },
- backup(){const local={};for(let i=0;i<localStorage.length;i++){const k=localStorage.key(i)||"";if(k.startsWith("ams_doc_")||k==="ams_calc_v3"||k==="ams_fx_cache_v1"||k==="ams_fx_margin_v1")local[k]=localStorage.getItem(k)}return {version:3,date:new Date().toISOString(),clients:api.clients(),projects:api.projects(),finance:api.finance(),tasks:api.tasks(),local}},
+ backup(){const local={};for(let i=0;i<localStorage.length;i++){const k=localStorage.key(i)||"";if(k.startsWith("ams_doc_")||k==="ams_calc_v3"||k==="ams_fx_cache_v1"||k==="ams_fx_margin_v1")local[k]=localStorage.getItem(k)}return {version:4,date:new Date().toISOString(),clients:api.clients(),projects:api.projects(),finance:api.finance(),tasks:api.tasks(),local}},
  restore(d){
   const isObject=v=>v!==null&&typeof v==="object"&&!Array.isArray(v);
   if(!isObject(d)||!Array.isArray(d.clients)||!Array.isArray(d.projects)||!Array.isArray(d.finance)||
