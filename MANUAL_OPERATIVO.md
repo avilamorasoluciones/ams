@@ -142,7 +142,7 @@ Reglas:
 ## 10. USD/COP en la web
 
 - Precios contractuales fijos en COP.
-- Equivalencias USD informativas, usando la TRM oficial diaria del dataset mcec-87by más COP $300/USD de margen AMS.
+- La sección de precios inicia en COP y permite cambiar a USD con un selector. Equivalencias USD informativas, usando la TRM oficial diaria del dataset mcec-87by más COP $300/USD de margen AMS.
 - La tasa oficial se actualiza diariamente; no presentarla como mercado en vivo por segundo.
 - Mostrar fecha de vigencia y fuente.
 - Si falla la consulta, conservar última tasa válida en caché y no ocultar los precios COP.
