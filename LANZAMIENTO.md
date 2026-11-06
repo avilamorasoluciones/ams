@@ -7,8 +7,7 @@
 - Dominio, DNS, CNAME y HTTPS: configurados.
 - No guardar secretos ni datos privados en el repositorio.
 - La versión pública de planes tiene cuatro paquetes y selector COP/USD (COP por defecto): `index.html`, `planes.css`, `planes.js`.
-- Al elegir USD, la página consulta la TRM oficial diaria (dataset `mcec-87by`) y suma COP $300 por USD como margen AMS. Los precios contractuales permanecen fijos en COP. Si la fuente falla, se conserva una tasa válida en caché; la tarifa COP sigue visible.
-- Verificar después de publicar que la tasa, la vigencia y la fuente aparezcan correctamente. No describir la equivalencia como tasa minuto a minuto.
+- El selector COP/USD muestra dos listas independientes de tarifas fijas. No consulta la TRM, no convierte importes ni requiere conexión a datos.gov.co.
 
 ## Documentos fuente
 - `AGENTS.md`: reglas permanentes de desarrollo.
@@ -18,12 +17,12 @@
 - `README.md`: mapa del repositorio.
 
 ## Planes públicos
-| Plan | Desarrollo único | Administración mensual | Administración anual |
+| Plan | Desarrollo COP / USD | Mensual COP / USD | Anual COP / USD |
 |---|---:|---:|---:|
-| Presencia | COP $450.000 | COP $59.900 | COP $599.000 |
-| Comercio | COP $890.000 | COP $99.900 | COP $999.000 |
-| Gestión | COP $2.190.000 | COP $199.900 | COP $1.999.000 |
-| Empresarial | Desde COP $3.990.000 | Desde COP $349.900 | Desde COP $3.499.000 |
+| Presencia | $500.000 / US$ 125 | $60.000 / US$ 15 | $600.000 / US$ 150 |
+| Comercio | $1.000.000 / US$ 250 | $100.000 / US$ 25 | $1.000.000 / US$ 250 |
+| Gestión | $2.400.000 / US$ 600 | $200.000 / US$ 50 | $2.000.000 / US$ 500 |
+| Empresarial | Desde $4.000.000 / US$ 1.000 | Desde $360.000 / US$ 90 | Desde $3.600.000 / US$ 900 |
 
 - Desarrollo se cobra una vez.
 - Anual anticipado: se pagan 10 mensualidades y se reciben 12 meses de servicio; el cliente ahorra dos mensualidades.
@@ -34,8 +33,8 @@
 
 ## Pendientes reales de verificación
 1. Probar desde un navegador real que todos los enlaces, botones y tarjetas de planes funcionan en escritorio y móvil.
-2. Confirmar que `planes.js` obtiene la TRM oficial mediante el endpoint de datos.gov.co desde los navegadores objetivo; no asumir que el CORS/red está disponible hasta probarlo.
-3. Verificar que la vigencia de la TRM se muestra en el día correcto y que la equivalencia usa TRM + COP $300 por USD.
+2. Probar que el selector COP/USD cambia todos los importes de desarrollo, mensualidad, anualidad y ahorro.
+3. Confirmar que ambos juegos de tarifas coinciden con `POLITICA_PLANES_Y_PRECIOS.md` y que no dependen de la TRM.
 4. Confirmar que el buzón `equipo@avilamorasoluciones.com` recibe y envía correctamente; su aparición en la web no garantiza que el servicio esté configurado.
 5. Mantener actualizados privacidad, términos, cookies y canales de atención según la operación real.
 6. Mantener la cuenta Wompi activa y revisar condiciones y cuenta de desembolso.
