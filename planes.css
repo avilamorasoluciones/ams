@@ -96,3 +96,22 @@ body.light-theme .ams-plan-monthly>strong{color:#047857}
 body.light-theme .ams-plan-features li i,
 body.light-theme .ams-plan-includes-title i,
 body.light-theme .ams-plan-includes-grid i{color:#047857}
+
+/* Selector de moneda centrado debajo del texto introductorio */
+.ams-currency-toolbar{
+  justify-content:center;
+  width:max-content;
+  max-width:100%;
+  margin:18px auto 0;
+  gap:12px;
+}
+.ams-currency-status.visually-hidden{
+  position:absolute!important;
+}
+@media(max-width:740px){
+  .ams-currency-toolbar{
+    justify-content:center;
+    width:100%;
+    margin:16px auto 0;
+  }
+}
