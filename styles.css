@@ -1,6 +1,6 @@
-@import url("css/variables.css");
-@import url("css/layout.css");
-@import url("css/components.css");
-@import url("css/themes.css");
+@import url("css/variables.css?v=20261105-2");
+@import url("css/layout.css?v=20261105-2");
+@import url("css/components.css?v=20261105-2");
+@import url("css/themes.css?v=20261105-2");
 
 body.light-theme footer .ams-footer-person > span { background: transparent !important; color: inherit !important; }
