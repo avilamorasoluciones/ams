@@ -213,10 +213,10 @@ Ningún sistema es “inhackeable”. Describir controles y riesgos residuales.
 ## 10. Planes públicos AMS
 
 La web pública utiliza cuatro planes:
-- Presencia: desarrollo COP $490.000; administración COP $69.900/mes; anual COP $699.000.
-- Comercio: desarrollo COP $990.000; administración COP $119.900/mes; anual COP $1.199.000.
-- Gestión: desarrollo COP $2.490.000; administración COP $229.900/mes; anual COP $2.299.000.
-- Empresarial: desarrollo desde COP $4.490.000; administración desde COP $399.900/mes; anual desde COP $3.999.000.
+- Presencia: desarrollo COP $450.000; administración COP $59.900/mes; anual COP $599.000.
+- Comercio: desarrollo COP $890.000; administración COP $99.900/mes; anual COP $999.000.
+- Gestión: desarrollo COP $2.190.000; administración COP $199.900/mes; anual COP $1.999.000.
+- Empresarial: desarrollo desde COP $3.990.000; administración desde COP $349.900/mes; anual desde COP $3.499.000.
 
 La anualidad cobra 10 mensualidades y entrega 12 meses de servicio: dos cuotas mensuales gratis. El descuento aplica a la administración, no al desarrollo.
 
