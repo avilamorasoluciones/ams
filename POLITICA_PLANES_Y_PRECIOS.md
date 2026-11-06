@@ -16,10 +16,10 @@ La oferta se mantiene deliberadamente económica para pequeños negocios y empre
 
 | Plan | Desarrollo, una sola vez | Administración mensual | Administración anual (10 meses) |
 |---|---:|---:|---:|
-| Presencia | COP $490.000 | COP $69.900 | COP $699.000 |
-| Comercio | COP $990.000 | COP $119.900 | COP $1.199.000 |
-| Gestión | COP $2.490.000 | COP $229.900 | COP $2.299.000 |
-| Empresarial | Desde COP $4.490.000 | Desde COP $399.900 | Desde COP $3.999.000 |
+| Presencia | COP $450.000 | COP $59.900 | COP $599.000 |
+| Comercio | COP $890.000 | COP $99.900 | COP $999.000 |
+| Gestión | COP $2.190.000 | COP $199.900 | COP $1.999.000 |
+| Empresarial | Desde COP $3.990.000 | Desde COP $349.900 | Desde COP $3.499.000 |
 
 La anualidad entrega 12 meses de servicio y cobra solo 10 mensualidades. El descuento corresponde a dos cuotas mensuales completas. No se aplica al desarrollo inicial.
 
@@ -29,16 +29,16 @@ TRM de referencia: COP $3.221,19 vigente el 05/11/2026. Margen de conversión AM
 
 | Plan | Desarrollo USD | Mensualidad USD | Anualidad USD |
 |---|---:|---:|---:|
-| Presencia | ≈ US$139,16 | ≈ US$19,85 | ≈ US$198,51 |
-| Comercio | ≈ US$281,15 | ≈ US$34,05 | ≈ US$340,51 |
-| Gestión | ≈ US$707,15 | ≈ US$65,29 | ≈ US$652,90 |
-| Empresarial | Desde US$1.275,14 | Desde US$113,57 | Desde US$1.135,70 |
+| Presencia | ≈ US$127,80 | ≈ US$17,01 | ≈ US$170,11 |
+| Comercio | ≈ US$252,76 | ≈ US$28,37 | ≈ US$283,71 |
+| Gestión | ≈ US$621,95 | ≈ US$56,77 | ≈ US$567,71 |
+| Empresarial | Desde US$1.133,14 | Desde US$99,37 | Desde US$993,70 |
 
 Ahorro al pagar el año anticipado:
-- Presencia: COP $139.800 (≈ US$39,70).
-- Comercio: COP $239.800 (≈ US$68,10).
-- Gestión: COP $459.800 (≈ US$130,58).
-- Empresarial: desde COP $799.800 (≈ US$227,14).
+- Presencia: COP $119.800 (≈ US$34,02).
+- Comercio: COP $199.800 (≈ US$56,74).
+- Gestión: COP $399.800 (≈ US$113,54).
+- Empresarial: desde COP $699.800 (≈ US$198,74).
 
 La tasa cambia según la TRM oficial diaria. No presentar la equivalencia como una cotización en tiempo real por segundo. El precio contractual para clientes colombianos permanece fijo en COP durante el periodo contratado. La página conserva la última TRM válida si la fuente oficial no responde.
 
@@ -115,9 +115,9 @@ El precio de Gestión solo aplica cuando los procesos caben realmente en dos ár
 
 Se utiliza cuando el proyecto supera los límites de los planes anteriores o requiere varios procesos relacionados, más usuarios, integraciones, automatizaciones, pagos, varias sedes, datos de mayor volumen o recursos especiales.
 
-- Desarrollo desde COP $4.490.000.
-- Administración desde COP $399.900/mes.
-- Anualidad desde COP $3.999.000 por 12 meses de administración.
+- Desarrollo desde COP $3.990.000.
+- Administración desde COP $349.900/mes.
+- Anualidad desde COP $3.499.000 por 12 meses de administración.
 - Nunca publicar ni prometer capacidad “ilimitada”.
 - Antes de cotizar, documentar usuarios, áreas de trabajo, datos, integraciones, concurrencia, almacenamiento, tráfico, recuperación y nivel de soporte.
 - Dimensionar costos técnicos y margen antes de aceptar el proyecto.
