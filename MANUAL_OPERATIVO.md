@@ -66,7 +66,7 @@ Consultar límites y exclusiones completos en `POLITICA_PLANES_Y_PRECIOS.md`.
 
 1. Contacto por web, WhatsApp o recomendación.
 2. Briefing: entender negocio, problema, usuarios y procesos.
-3. Definir alcance y plan AMS (o Personalizado).
+3. Definir alcance y plan AMS (o Empresarial).
 4. Propuesta: separar desarrollo inicial, administración y servicios extra.
 5. Aceptación y pago según acuerdo.
 6. Crear repositorio independiente del cliente en GitHub.
@@ -136,7 +136,7 @@ Reglas:
 - No vender “50 clientes garantizados” ni asociar cantidad fija de sitios a un VPS sin medición.
 - La capacidad depende de CPU, RAM, disco, procesos, base de datos, almacenamiento, visitas, concurrencia y comportamiento de cada aplicación.
 - Medir recursos por proyecto y dejar margen de seguridad.
-- Los sistemas de alto uso se revisan y cotizan como Personalizado o en infraestructura separada.
+- Los sistemas de alto uso se revisan y cotizan como Empresarial o en infraestructura separada.
 - La rentabilidad se mide sobre ingresos recurrentes totales menos VPS, dominios, backups, pasarela, licencias y operación. No cambiar la tarifa individual por alterar una cantidad hipotética de clientes.
 
 ## 10. USD/COP en la web
