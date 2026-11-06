@@ -33,12 +33,12 @@ El cliente no debe tener que administrar paneles técnicos, servidores, DNS ni b
 
 ## 3. Planes públicos
 
-| Plan | Desarrollo | Administración mensual | Administración anual |
+| Plan | Desarrollo COP / USD | Mensual COP / USD | Anual COP / USD |
 |---|---:|---:|---:|
-| Presencia | COP $450.000 | COP $59.900 | COP $599.000 |
-| Comercio | COP $890.000 | COP $99.900 | COP $999.000 |
-| Gestión | COP $2.190.000 | COP $199.900 | COP $1.999.000 |
-| Empresarial | Desde COP $3.990.000 | Desde COP $349.900 | Desde COP $3.499.000 |
+| Presencia | $500.000 / US$ 125 | $60.000 / US$ 15 | $600.000 / US$ 150 |
+| Comercio | $1.000.000 / US$ 250 | $100.000 / US$ 25 | $1.000.000 / US$ 250 |
+| Gestión | $2.400.000 / US$ 600 | $200.000 / US$ 50 | $2.000.000 / US$ 500 |
+| Empresarial | Desde $4.000.000 / US$ 1.000 | Desde $360.000 / US$ 90 | Desde $3.600.000 / US$ 900 |
 
 Alcances:
 - Presencia: web de hasta 3 páginas, formulario, WhatsApp/redes, SEO inicial y mini catálogo de hasta 10 productos.
@@ -142,10 +142,10 @@ Reglas:
 ## 10. USD/COP en la web
 
 - Precios contractuales fijos en COP.
-- La sección de precios inicia en COP y permite cambiar a USD con un selector. Equivalencias USD informativas, usando la TRM oficial diaria del dataset mcec-87by más COP $300/USD de margen AMS.
-- La tasa oficial se actualiza diariamente; no presentarla como mercado en vivo por segundo.
-- Mostrar fecha de vigencia y fuente.
-- Si falla la consulta, conservar última tasa válida en caché y no ocultar los precios COP.
+- La sección de precios inicia en COP y permite cambiar a USD con un selector.
+- COP y USD son listas independientes de tarifas fijas; el selector no consulta la TRM ni realiza conversiones.
+- Los importes deben coincidir con `POLITICA_PLANES_Y_PRECIOS.md` y con la web pública.
+- La anualidad debe ser exactamente diez mensualidades, con dos meses de servicio sin cobro.
 
 ## 11. Pagos e integraciones
 
