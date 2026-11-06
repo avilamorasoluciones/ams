@@ -338,3 +338,110 @@ body.light-theme .ams-plan-includes-grid i{color:#047857}
   .ams-plan-card,
   .ams-plan-button{transition:none}
 }
+
+
+/* Layout correction: fit the maximum number of readable plan cards.
+   Avoid forcing two oversized columns on laptop screens or at browser zoom. */
+.ams-plans-section .container{min-width:0}
+.ams-plan-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(min(100%,275px),1fr));
+  gap:18px;
+  align-items:stretch;
+  width:100%;
+  min-width:0;
+  margin:30px 0 0;
+  padding:0;
+  overflow:visible;
+  overflow-x:visible;
+  scroll-snap-type:none;
+  scroll-padding:0;
+  touch-action:auto;
+}
+.ams-plan-card{
+  box-sizing:border-box;
+  min-width:0;
+  width:100%;
+  max-width:none;
+  height:100%;
+  padding:clamp(16px,1.45vw,22px);
+  overflow:hidden;
+  overflow-wrap:anywhere;
+}
+.ams-plan-card h3{font-size:clamp(1.15rem,1rem + .35vw,1.35rem);line-height:1.18;overflow-wrap:anywhere}
+.ams-plan-description{min-height:0;font-size:clamp(.76rem,.72rem + .12vw,.84rem);line-height:1.48;overflow-wrap:anywhere}
+.ams-plan-ribbon{z-index:3;max-width:calc(100% - 16px);white-space:normal;text-align:center;line-height:1.2}
+.ams-plan-prices,
+.ams-plan-price-block,
+.ams-plan-monthly,
+.ams-plan-annual{min-width:0;max-width:100%;width:100%}
+.ams-plan-price-block,
+.ams-plan-monthly,
+.ams-plan-annual{box-sizing:border-box;padding:11px 12px}
+.ams-plan-price-block>span,
+.ams-plan-monthly>span,
+.ams-plan-annual>span{font-size:.64rem;line-height:1.4}
+.ams-plan-price-block>strong{font-size:clamp(1rem,.93rem + .22vw,1.15rem);line-height:1.28;overflow-wrap:anywhere;word-break:normal}
+.ams-plan-monthly>strong{
+  display:flex;
+  flex-wrap:wrap;
+  align-items:baseline;
+  gap:2px 5px;
+  font-size:clamp(1.05rem,.95rem + .4vw,1.3rem);
+  line-height:1.22;
+  white-space:normal;
+  overflow-wrap:anywhere;
+}
+.ams-plan-monthly>strong .ams-price-value,
+.ams-plan-price-block>strong .ams-price-value,
+.ams-plan-annual>strong .ams-price-value{white-space:nowrap}
+.ams-plan-monthly>strong small{font-size:.66rem;white-space:nowrap}
+.ams-plan-annual>strong{
+  display:flex;
+  flex-wrap:wrap;
+  align-items:baseline;
+  gap:2px 5px;
+  font-size:clamp(1rem,.93rem + .2vw,1.12rem);
+  line-height:1.25;
+  white-space:normal;
+  overflow-wrap:anywhere;
+}
+.ams-plan-annual>strong small{font-size:.63rem;white-space:nowrap}
+.ams-plan-annual em{font-size:.6rem;line-height:1.35;overflow-wrap:anywhere}
+.ams-plan-features li{font-size:clamp(.72rem,.68rem + .12vw,.79rem);line-height:1.45}
+.ams-plan-fit{font-size:.69rem;line-height:1.45;overflow-wrap:anywhere}
+.ams-plan-button{min-height:44px;font-size:.72rem;line-height:1.3;white-space:normal;text-align:center}
+.ams-plan-includes-grid{grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr))}
+.ams-plan-includes-grid span{min-width:0;font-size:.7rem;overflow-wrap:anywhere}
+.ams-plan-terms{font-size:.7rem;line-height:1.55}
+
+@media (min-width:681px) and (max-width:900px){
+  .ams-plan-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+  .ams-plan-card{padding:18px}
+}
+@media (max-width:680px){
+  .ams-plan-grid{
+    grid-template-columns:minmax(0,1fr);
+    gap:14px;
+    margin:22px 0 0;
+    padding:0;
+    overflow:visible;
+    overflow-x:visible;
+    overflow-y:visible;
+  }
+  .ams-plan-card{height:auto;padding:20px 18px}
+  .ams-plan-description{font-size:.85rem}
+  .ams-plan-features li{font-size:.81rem;line-height:1.5}
+  .ams-plan-fit{font-size:.75rem}
+  .ams-plan-button{min-height:48px;font-size:.8rem}
+  .ams-plan-includes-grid{grid-template-columns:minmax(0,1fr);gap:9px}
+  .ams-plan-includes-grid span{font-size:.75rem}
+  .ams-plan-terms{font-size:.73rem}
+}
+@media (max-width:360px){
+  .ams-plan-card{padding:18px 15px}
+  .ams-plan-ribbon{font-size:.55rem;padding:6px 8px}
+  .ams-plan-price-block>strong,
+  .ams-plan-monthly>strong,
+  .ams-plan-annual>strong{font-size:1rem}
+}
