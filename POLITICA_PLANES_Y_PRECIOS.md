@@ -8,7 +8,7 @@ AMS vende una solución gestionada, no únicamente espacio de hosting:
 2. **Administración:** cuota mensual o anual por alojar, conectar, proteger y mantener la solución dentro de los límites del plan.
 3. **Ampliaciones:** funciones nuevas, integraciones, recursos y servicios de terceros se cotizan antes de ejecutarse.
 
-Los valores se fijan en pesos colombianos. Las equivalencias USD son informativas y se actualizan en la web con TRM oficial diaria + COP $300 por USD. Para clientes que pagan en USD puede utilizarse la equivalencia vigente al momento de emitir la propuesta, acordando el importe final antes del pago.
+Los valores contractuales se fijan en pesos colombianos. La sección pública inicia mostrando COP y dispone de un selector COP/USD que cambia todos los importes de desarrollo, mensualidad, anualidad y ahorro. Las equivalencias USD son informativas y se actualizan en la web con TRM oficial diaria + COP $300 por USD. Para clientes que pagan en USD puede utilizarse la equivalencia vigente al momento de emitir la propuesta, acordando el importe final antes del pago.
 
 La oferta se mantiene deliberadamente económica para pequeños negocios y emprendedores, incluidos clientes que necesitan presupuestos reducidos. La rentabilidad depende de respetar los límites, no regalar horas de desarrollo, agrupar infraestructura con control de consumo y cobrar aparte todo servicio externo.
 
