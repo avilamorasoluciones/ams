@@ -133,7 +133,7 @@ Todos los planes administrados incluyen:
 - Soporte en días hábiles por los canales de AMS.
 - Corrección de defectos reproducibles atribuibles al software entregado, dentro del alcance acordado.
 
-La administración no incluye desarrollo ilimitado ni atención 24/7. Las mejoras, nuevas funciones y cambios de alcance se cotizan por separado.
+La administración cubre el mantenimiento técnico de la solución entregada, correcciones de defectos atribuibles al desarrollo, actualizaciones compatibles, SSL, backups y soporte en días hábiles. No incluye desarrollo ilimitado, carga recurrente de catálogo, cambios de contenido sin límite, rediseños ni atención 24/7. Las mejoras, nuevas funciones y cambios de alcance se cotizan por separado.
 
 La infraestructura se comparte con control de uso. AMS no promete recursos infinitos ni cantidad fija de usuarios concurrentes. Si una aplicación excede el uso razonable, se revisa y se propone ampliación o infraestructura separada.
 
