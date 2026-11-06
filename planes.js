@@ -1,6 +1,4 @@
-/* Equivalencias USD de los planes AMS.
-   Los precios contractuales permanecen fijos en COP.
-   La TRM oficial se publica diariamente; no es una cotización Forex minuto a minuto. */
+/* Selector COP/USD para los planes públicos de AMS. */
 (() => {
   "use strict";
 
@@ -8,28 +6,30 @@
   const CACHE_KEY = "ams_public_trm_v1";
   const CACHE_MAX_AGE = 6 * 60 * 60 * 1000;
   const AMS_MARGIN_COP = 300;
-  const nodes = Array.from(document.querySelectorAll("[data-cop-value]"));
+
+  const priceNodes = Array.from(document.querySelectorAll("[data-cop-value]"));
+  const currencyButtons = Array.from(document.querySelectorAll("[data-currency]"));
   const statusNode = document.getElementById("amsFxStatus");
-  let loading = false;
 
   const copFormatter = new Intl.NumberFormat("es-CO", {
-    style: "currency",
-    currency: "COP",
-    maximumFractionDigits: 2
+    maximumFractionDigits: 0
   });
-  const usdFormatter = new Intl.NumberFormat("en-US", {
-    style: "currency",
-    currency: "USD",
+  const usdFormatter = new Intl.NumberFormat("es-CO", {
     minimumFractionDigits: 2,
     maximumFractionDigits: 2
   });
+
+  let selectedCurrency = "COP";
+  let rateData = null;
+  let rateRequest = null;
 
   function readCache() {
     try {
       const raw = localStorage.getItem(CACHE_KEY);
       if (!raw) return null;
       const data = JSON.parse(raw);
-      if (!data || !Number.isFinite(Number(data.rate)) || Number(data.rate) < 1000) return null;
+      const rate = Number(data && data.rate);
+      if (!Number.isFinite(rate) || rate < 1000 || rate > 10000) return null;
       return data;
     } catch (_) {
       return null;
@@ -37,49 +37,45 @@
   }
 
   function saveCache(data) {
-    try { localStorage.setItem(CACHE_KEY, JSON.stringify(data)); } catch (_) {}
-  }
-
-  function formatDate(value) {
-    if (!value) return "fecha no disponible";
-    const datePart = String(value).slice(0, 10);
-    const date = /^\d{4}-\d{2}-\d{2}$/.test(datePart)
-      ? new Date(datePart + "T12:00:00Z")
-      : new Date(value);
-    if (Number.isNaN(date.getTime())) return String(value);
-    return new Intl.DateTimeFormat("es-CO", {
-      day: "2-digit", month: "short", year: "numeric", timeZone: "UTC"
-    }).format(date);
-  }
-
-  function render(rateData, sourceLabel) {
-    const trm = Number(rateData.rate);
-    if (!Number.isFinite(trm) || trm < 1000 || trm > 10000) return;
-    const appliedRate = trm + AMS_MARGIN_COP;
-
-    nodes.forEach((node) => {
-      const cop = Number(node.dataset.copValue);
-      if (!Number.isFinite(cop) || cop <= 0) return;
-      const period = node.dataset.period || (node.dataset.monthly === "true" ? "monthly" : "once");
-      const suffix = period === "monthly" ? "/mes" : period === "annual" ? "/año" : "";
-      node.textContent = "≈ " + usdFormatter.format(cop / appliedRate) + suffix;
-      node.setAttribute("title",
-        copFormatter.format(cop) + " ÷ " + copFormatter.format(appliedRate) + " por USD");
-    });
-
-    if (statusNode) {
-      statusNode.textContent =
-        "Equivalencia informativa: TRM " + copFormatter.format(trm) +
-        " + margen AMS " + copFormatter.format(AMS_MARGIN_COP) +
-        " = " + copFormatter.format(appliedRate) +
-        " por USD. Vigencia: " + formatDate(rateData.validFrom) +
-        ". " + (sourceLabel || "Fuente: datos oficiales de la Superintendencia Financiera.");
+    try {
+      localStorage.setItem(CACHE_KEY, JSON.stringify(data));
+    } catch (_) {
+      // La moneda sigue funcionando durante esta visita aunque el navegador no permita guardar caché.
     }
+  }
+
+  function setStatus(message) {
+    if (statusNode) statusNode.textContent = message;
+  }
+
+  function updateButtons() {
+    currencyButtons.forEach((button) => {
+      const active = button.dataset.currency === selectedCurrency;
+      button.classList.toggle("is-active", active);
+      button.setAttribute("aria-pressed", active ? "true" : "false");
+    });
+  }
+
+  function renderPrices() {
+    priceNodes.forEach((node) => {
+      const copValue = Number(node.dataset.copValue);
+      if (!Number.isFinite(copValue) || copValue < 0) return;
+
+      const prefix = node.dataset.prefix || "";
+      if (selectedCurrency === "USD") {
+        if (!rateData) return;
+        const appliedRate = Number(rateData.rate) + AMS_MARGIN_COP;
+        node.textContent = prefix + "US$ " + usdFormatter.format(copValue / appliedRate);
+      } else {
+        node.textContent = prefix + "COP $" + copFormatter.format(copValue);
+      }
+    });
   }
 
   async function fetchTRM() {
     const controller = typeof AbortController !== "undefined" ? new AbortController() : null;
     const timeout = controller ? window.setTimeout(() => controller.abort(), 7000) : null;
+
     try {
       const response = await fetch(ENDPOINT, {
         method: "GET",
@@ -87,13 +83,15 @@
         headers: { "Accept": "application/json" },
         ...(controller ? { signal: controller.signal } : {})
       });
-      if (!response.ok) throw new Error("HTTP " + response.status);
+      if (!response.ok) throw new Error("No se pudo consultar la tasa");
       const rows = await response.json();
-      if (!Array.isArray(rows) || !rows.length) throw new Error("La fuente no devolvió registros");
+      if (!Array.isArray(rows) || !rows.length) throw new Error("No hay una tasa disponible");
+
       const rate = Number(rows[0].valor);
       if (!Number.isFinite(rate) || rate < 1000 || rate > 10000) {
-        throw new Error("La TRM recibida no es válida");
+        throw new Error("La tasa recibida no es válida");
       }
+
       return {
         rate,
         validFrom: rows[0].vigenciadesde || null,
@@ -104,37 +102,68 @@
     }
   }
 
-  async function init() {
-    if (loading || !nodes.length) return;
-    loading = true;
-    const cached = readCache();
-    if (cached) render(cached, "Última tasa guardada.");
+  function refreshRate() {
+    if (rateRequest) return rateRequest;
 
-    const cacheAge = cached && cached.fetchedAt
-      ? Date.now() - new Date(cached.fetchedAt).getTime()
-      : Infinity;
+    rateRequest = fetchTRM()
+      .then((latest) => {
+        rateData = latest;
+        saveCache(latest);
+        if (selectedCurrency === "USD") renderPrices();
+        return latest;
+      })
+      .catch((error) => {
+        rateRequest = null;
+        throw error;
+      });
 
-    if (cached && cacheAge >= 0 && cacheAge < CACHE_MAX_AGE) {
-      if (statusNode) statusNode.textContent += " Consulta en caché (actualizada recientemente).";
-      loading = false;
-      return;
-    }
-
-    try {
-      const latest = await fetchTRM();
-      saveCache(latest);
-      render(latest, "Fuente: TRM oficial de datos.gov.co / Superintendencia Financiera.");
-    } catch (error) {
-      if (cached) {
-        if (statusNode) statusNode.textContent += " No se pudo actualizar; se conserva la última TRM guardada.";
-      } else if (statusNode) {
-        statusNode.textContent =
-          "No fue posible consultar la TRM. Los valores COP siguen vigentes; la equivalencia USD inicial es solo orientativa.";
-      }
-    } finally {
-      loading = false;
-    }
+    return rateRequest;
   }
 
-  init();
+  async function selectCurrency(nextCurrency) {
+    if (nextCurrency !== "COP" && nextCurrency !== "USD") return;
+
+    if (nextCurrency === "USD" && !rateData) {
+      setStatus("Consultando el valor en dólares…");
+      try {
+        await refreshRate();
+      } catch (_) {
+        selectedCurrency = "COP";
+        updateButtons();
+        renderPrices();
+        setStatus("No pudimos actualizar el dólar. Puedes consultar los precios en COP.");
+        return;
+      }
+    }
+
+    selectedCurrency = nextCurrency;
+    updateButtons();
+    renderPrices();
+    setStatus(nextCurrency === "USD"
+      ? "Valores aproximados en dólares."
+      : "Precios en pesos colombianos.");
+  }
+
+  currencyButtons.forEach((button) => {
+    button.addEventListener("click", () => {
+      selectCurrency(button.dataset.currency);
+    });
+  });
+
+  const cached = readCache();
+  if (cached) rateData = cached;
+
+  updateButtons();
+  renderPrices();
+  setStatus("Precios en pesos colombianos.");
+
+  const cacheAge = cached && cached.fetchedAt
+    ? Date.now() - new Date(cached.fetchedAt).getTime()
+    : Infinity;
+
+  if (!cached || cacheAge < 0 || cacheAge >= CACHE_MAX_AGE) {
+    refreshRate().catch(() => {
+      // La cotización COP siempre permanece disponible aunque la fuente de cambio falle.
+    });
+  }
 })();
