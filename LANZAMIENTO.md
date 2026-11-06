@@ -6,8 +6,8 @@
 - Publicación: GitHub Pages.
 - Dominio, DNS, CNAME y HTTPS: configurados.
 - No guardar secretos ni datos privados en el repositorio.
-- La versión pública de planes tiene cuatro paquetes y equivalencia USD dinámica: `index.html`, `planes.css`, `planes.js`.
-- La equivalencia USD consulta la TRM oficial diaria (dataset `mcec-87by`) y suma COP $300 por USD como margen AMS. Los precios contractuales permanecen fijos en COP. Si la fuente falla, se conserva una tasa válida en caché; la tarifa COP sigue visible.
+- La versión pública de planes tiene cuatro paquetes y selector COP/USD (COP por defecto): `index.html`, `planes.css`, `planes.js`.
+- Al elegir USD, la página consulta la TRM oficial diaria (dataset `mcec-87by`) y suma COP $300 por USD como margen AMS. Los precios contractuales permanecen fijos en COP. Si la fuente falla, se conserva una tasa válida en caché; la tarifa COP sigue visible.
 - Verificar después de publicar que la tasa, la vigencia y la fuente aparezcan correctamente. No describir la equivalencia como tasa minuto a minuto.
 
 ## Documentos fuente
