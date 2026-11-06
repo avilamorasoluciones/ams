@@ -33,22 +33,22 @@ El cliente no debe tener que administrar paneles técnicos, servidores, DNS ni b
 
 ## 3. Planes públicos
 
-| Plan | Desarrollo | Administración |
-|---|---:|---:|
-| Pequeño | COP $690.000 | COP $89.900/mes |
-| Mediano | COP $1.490.000 | COP $149.900/mes |
-| Grande | COP $3.490.000 | COP $299.900/mes |
-| Personalizado | Desde COP $5.900.000 | Desde COP $499.900/mes |
+| Plan | Desarrollo | Administración mensual | Administración anual |
+|---|---:|---:|---:|
+| Presencia | COP $490.000 | COP $69.900 | COP $699.000 |
+| Comercio | COP $990.000 | COP $119.900 | COP $1.199.000 |
+| Gestión | COP $2.490.000 | COP $229.900 | COP $2.299.000 |
+| Empresarial | Desde COP $4.490.000 | Desde COP $399.900 | Desde COP $3.999.000 |
 
 Alcances:
-- Pequeño: web de hasta 5 páginas, formulario, WhatsApp/redes, SEO inicial y mini catálogo de hasta 20 productos.
-- Mediano: web de hasta 10 páginas, catálogo de hasta 50 productos y pedidos por WhatsApp. No incluye pasarela de pago ni inventario sincronizado.
-- Grande: aplicación web con una base de datos, hasta 10 usuarios nominativos y 3 módulos definidos.
-- Personalizado: más usuarios/módulos, integraciones, pagos, automatizaciones, recursos especiales o procesos más complejos.
+- Presencia: web de hasta 3 páginas, formulario, WhatsApp/redes, SEO inicial y mini catálogo de hasta 10 productos.
+- Comercio: web de hasta 6 páginas, catálogo de hasta 40 productos y pedidos por WhatsApp; sin inventario automático ni pagos en línea.
+- Gestión: aplicación web con base de datos, hasta 5 usuarios y 2 áreas de trabajo.
+- Empresarial: proyectos que superan los límites anteriores o requieren integraciones, automatizaciones, pagos o recursos especiales.
 
-La administración de cada plan incluye un dominio .com estándar mientras el plan esté activo, alojamiento, HTTPS/SSL, copias programadas, mantenimiento y soporte en días hábiles. El correo corporativo, las comisiones de pago y las licencias de terceros no están incluidos.
+La administración incluye un dominio .com estándar nuevo registrado a nombre del cliente y su renovación mientras el plan esté activo, o gestión técnica del dominio existente sin transferencia. Incluye alojamiento, HTTPS/SSL, copias programadas, mantenimiento y soporte en días hábiles. El correo corporativo, las comisiones de pago y las licencias de terceros no están incluidos.
 
-Pago anual anticipado: 11 mensualidades por 12 meses de servicio. El desarrollo inicial se cobra aparte.
+**Anualidad:** se pagan 10 mensualidades y se reciben 12 meses de servicio. Se ahorran dos mensualidades completas. El desarrollo inicial se cobra aparte.
 
 Consultar límites y exclusiones completos en `POLITICA_PLANES_Y_PRECIOS.md`.
 
