@@ -20,10 +20,10 @@
 ## Planes públicos
 | Plan | Desarrollo único | Administración mensual | Administración anual |
 |---|---:|---:|---:|
-| Presencia | COP $490.000 | COP $69.900 | COP $699.000 |
-| Comercio | COP $990.000 | COP $119.900 | COP $1.199.000 |
-| Gestión | COP $2.490.000 | COP $229.900 | COP $2.299.000 |
-| Empresarial | Desde COP $4.490.000 | Desde COP $399.900 | Desde COP $3.999.000 |
+| Presencia | COP $450.000 | COP $59.900 | COP $599.000 |
+| Comercio | COP $890.000 | COP $99.900 | COP $999.000 |
+| Gestión | COP $2.190.000 | COP $199.900 | COP $1.999.000 |
+| Empresarial | Desde COP $3.990.000 | Desde COP $349.900 | Desde COP $3.499.000 |
 
 - Desarrollo se cobra una vez.
 - Anual anticipado: se pagan 10 mensualidades y se reciben 12 meses de servicio; el cliente ahorra dos mensualidades.
