@@ -10,7 +10,6 @@
   const AMS_MARGIN_COP = 300;
   const nodes = Array.from(document.querySelectorAll("[data-cop-value]"));
   const statusNode = document.getElementById("amsFxStatus");
-  let currentTRM = null;
   let loading = false;
 
   const copFormatter = new Intl.NumberFormat("es-CO", {
@@ -56,14 +55,14 @@
   function render(rateData, sourceLabel) {
     const trm = Number(rateData.rate);
     if (!Number.isFinite(trm) || trm < 1000 || trm > 10000) return;
-    currentTRM = trm;
     const appliedRate = trm + AMS_MARGIN_COP;
 
     nodes.forEach((node) => {
       const cop = Number(node.dataset.copValue);
       if (!Number.isFinite(cop) || cop <= 0) return;
-      node.textContent = "≈ " + usdFormatter.format(cop / appliedRate) +
-        (node.dataset.monthly === "true" ? "/mes" : "");
+      const period = node.dataset.period || (node.dataset.monthly === "true" ? "monthly" : "once");
+      const suffix = period === "monthly" ? "/mes" : period === "annual" ? "/año" : "";
+      node.textContent = "≈ " + usdFormatter.format(cop / appliedRate) + suffix;
       node.setAttribute("title",
         copFormatter.format(cop) + " ÷ " + copFormatter.format(appliedRate) + " por USD");
     });
