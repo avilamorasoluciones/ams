@@ -63,3 +63,31 @@ body.light-theme .ams-plan-annual{background:#f0fdf4;border-color:rgba(22,163,74
 body.light-theme .ams-plan-annual>span{color:#475569}
 body.light-theme .ams-plan-annual>strong{color:#166534}
 body.light-theme .ams-plan-annual em{color:#15803d}
+
+
+/* Selector de moneda: COP por defecto, USD bajo demanda */
+.ams-currency-toolbar{display:flex;align-items:center;justify-content:flex-end;gap:10px;margin:0 0 18px}
+.ams-currency-label{color:var(--muted-2);font-size:.74rem;font-weight:750}
+.ams-currency-switch{display:inline-flex;align-items:center;gap:3px;padding:4px;border:1px solid var(--glass-border);border-radius:999px;background:rgba(148,163,184,.12)}
+.ams-currency-switch button{min-width:54px;padding:7px 12px;border:0;border-radius:999px;background:transparent;color:var(--muted-2);font:inherit;font-size:.72rem;font-weight:900;cursor:pointer;transition:background .18s ease,color .18s ease,box-shadow .18s ease}
+.ams-currency-switch button.is-active{background:var(--gradient);color:#fff;box-shadow:0 3px 12px rgba(99,102,241,.24)}
+.ams-currency-switch button:focus-visible{outline:3px solid var(--primary);outline-offset:3px}
+.ams-currency-status{min-width:145px;color:var(--muted);font-size:.65rem}
+.ams-price-value{font-variant-numeric:tabular-nums;white-space:nowrap}
+.ams-plan-price-block>strong,.ams-plan-monthly>strong,.ams-plan-annual>strong{font-variant-numeric:tabular-nums}
+.ams-plan-price-block>strong{overflow-wrap:anywhere}
+.ams-currency-note{margin:5px 0 0;color:var(--muted);font-size:.63rem;line-height:1.4}
+.ams-plan-terms{margin-top:12px}
+body.light-theme .ams-currency-label{color:#475569}
+body.light-theme .ams-currency-switch{background:#e2e8f0;border-color:rgba(15,23,42,.1)}
+body.light-theme .ams-currency-switch button{color:#475569}
+body.light-theme .ams-currency-switch button.is-active{color:#fff}
+body.light-theme .ams-currency-status{color:#64748b}
+body.light-theme .ams-currency-note{color:#64748b}
+@media(max-width:740px){
+  .ams-currency-toolbar{justify-content:center;flex-wrap:wrap;gap:8px;margin-bottom:14px}
+  .ams-currency-label{font-size:.68rem}
+  .ams-currency-status{flex:0 0 100%;min-width:0;text-align:center}
+  .ams-plan-price-block>strong,.ams-plan-monthly>strong,.ams-plan-annual>strong{font-size:1.12rem}
+}
+@media(prefers-reduced-motion:reduce){.ams-currency-switch button{transition:none}}
