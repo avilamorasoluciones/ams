@@ -12,7 +12,7 @@ Leer estos documentos antes de construir o modificar proyectos:
 - **`POLITICA_PLANES_Y_PRECIOS.md`** — alcance, límites, precios y exclusiones de los cuatro planes públicos.
 - **`LANZAMIENTO.md`** — checklist de publicación, dominio, pagos, privacidad y datos.
 
-La web pública muestra cuatro planes: Presencia, Comercio, Gestión y Empresarial. El desarrollo se cobra una sola vez; la administración puede ser mensual o anual. La anualidad cobra 10 mensualidades por 12 meses de servicio (dos meses gratis). La sección de precios inicia en COP y permite cambiar a USD con un selector. Ambas monedas tienen listas independientes de tarifas fijas; el selector no consulta la TRM ni convierte importes automáticamente.
+La web pública muestra cuatro planes: Presencia, Comercio, Gestión y Personalizado. Los tres primeros tienen tarifas publicadas; Personalizado se cotiza según el alcance. El desarrollo se cobra una sola vez; la administración puede ser mensual o anual. La anualidad cobra 10 mensualidades por 12 meses de servicio (dos meses gratis). La sección de precios inicia en COP y permite cambiar a USD con un selector. Ambas monedas tienen listas independientes de tarifas fijas; el selector no consulta la TRM ni convierte importes automáticamente.
 
 ## Estado e infraestructura
 
@@ -28,7 +28,7 @@ La web pública muestra cuatro planes: Presencia, Comercio, Gestión y Empresari
 
 ## Estructura principal
 
-- `/index.html` — web pública, servicios, planes, hosting y dominios.
+- `/index.html` — web pública, navegación por secciones, servicios, planes, portafolio, recursos, preguntas y contacto.
 - `/planes.css` — estilos responsive de las cuatro tarjetas públicas.
 - `/planes.js` — selector COP/USD con tarifas independientes y fijas en ambas monedas.
 - `/gestion/` — Clientes/Suscripciones, Cotizador interno, Documentos, Finanzas y Operación.
