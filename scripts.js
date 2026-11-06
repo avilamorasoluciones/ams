@@ -149,21 +149,20 @@ allMenuLinks.forEach((a) => {
 });
 
 // ===== Link activo =====
-const sections = ["inicio", "servicios", "planes", "gestion", "portafolio", "recursos", "faq", "contacto"]
+const sections = ["inicio", "sistemas", "servicios", "planes", "gestion", "portafolio", "recursos", "proceso", "faq", "contacto"]
   .map((id) => document.getElementById(id))
   .filter(Boolean);
 
 const setActive = (id) => {
-  navLinks.forEach((a) => {
-    const href = a.getAttribute("href") || "";
-    a.classList.toggle("active", href === "#" + id);
-  });
+  const updateLink = (a) => {
+    const isActive = (a.getAttribute("href") || "") === "#" + id;
+    a.classList.toggle("active", isActive);
+    if (isActive) a.setAttribute("aria-current", "location");
+    else a.removeAttribute("aria-current");
+  };
 
-  // También mantiene visible la zona activa en el menú móvil.
-  document.querySelectorAll("#mobilePanel a").forEach((a) => {
-    const href = a.getAttribute("href") || "";
-    a.classList.toggle("active", href === "#" + id);
-  });
+  navLinks.forEach(updateLink);
+  document.querySelectorAll("#mobilePanel .menu-group-links a").forEach(updateLink);
 };
 
 // Scroll-spy estable: en lugar de depender de intersecciones que pueden
@@ -364,7 +363,9 @@ initTheme();
 
   const openPaymentModal = (event) => {
     event.preventDefault();
-    lastFocused = event.currentTarget;
+    const fromMenu = Boolean(event.currentTarget.closest("#mobilePanel"));
+    lastFocused = fromMenu ? menuBtn : event.currentTarget;
+    closeMobile();
     modal.hidden = false;
     modal.setAttribute("aria-hidden", "false");
     document.body.classList.add("payment-modal-open");
