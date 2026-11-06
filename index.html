@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <link rel="preload" href="styles.css?v=20261105-2" as="style" fetchpriority="high" />
+  <link rel="preload" href="styles.css?v=20261106-1" as="style" fetchpriority="high" />
   <title>Avila Mora Soluciones | Desarrollo web y sistemas Colombia</title>
   <meta name="description" content="Desarrollo web, sistemas a medida, tiendas online y automatización para negocios en Colombia. Soluciones digitales claras y adaptadas a cada proyecto." />
   <meta name="theme-color" content="#0f172a" />
@@ -129,7 +129,7 @@
   })();
 </script>
   <!-- CSS principal local: descubrimiento temprano para reducir el LCP en conexiones lentas. -->
-  <link rel="stylesheet" href="styles.css?v=20261105-2" />
+  <link rel="stylesheet" href="styles.css?v=20261106-1" />
 
   <style>
     @media (max-width: 740px){
@@ -504,7 +504,7 @@
     <div class="blob b3"></div>
   </div>
 
-  <nav id="nav">
+  <nav id="nav" aria-label="Navegación principal">
     <div class="container nav-inner">
       <a class="brand" href="#inicio" aria-label="Avila Mora Soluciones inicio">
         <span class="brand-dot" aria-hidden="true"></span>
@@ -514,14 +514,14 @@
         </span>
       </a>
 
-      <ul class="nav-links" id="navLinks">
+      <ul class="nav-links" id="navLinks" aria-label="Secciones principales">
         <li><a href="#inicio">Inicio</a></li>
+        <li><a href="#sistemas">Sistemas</a></li>
         <li><a href="#servicios">Servicios</a></li>
         <li><a href="#planes">Planes</a></li>
-        <li><a href="#gestion">Gestión</a></li>
         <li><a href="#portafolio">Ejemplos</a></li>
-        <li><a href="#recursos">Recursos</a></li>
-        <li><a href="#faq">Preguntas</a></li>
+        <li><a href="#proceso">Proceso</a></li>
+        <li><a href="#contacto">Contacto</a></li>
       </ul>
 
       <div class="nav-extra" aria-label="Accesos y recursos">
@@ -598,119 +598,120 @@
     </div>
   </nav>
 
-  <div class="mobile-panel" id="mobilePanel" aria-hidden="true">
-    <a href="#inicio">Inicio <i class="fa-solid fa-arrow-right"></i></a>
-    <a href="#servicios">Servicios <i class="fa-solid fa-arrow-right"></i></a>
-    <a href="#planes">Planes <i class="fa-solid fa-arrow-right"></i></a>
-    <a href="#gestion">Gestión <i class="fa-solid fa-arrow-right"></i></a>
-    <a href="#portafolio">Ejemplos <i class="fa-solid fa-arrow-right"></i></a>
-    <a href="#recursos">Recursos <i class="fa-solid fa-arrow-right"></i></a>
-    <a href="#faq">Preguntas <i class="fa-solid fa-arrow-right"></i></a>
-    <a href="#contacto">Contacto <i class="fa-solid fa-arrow-right"></i></a>
-    <a class="mobile-payment" href="#pago" data-payment-trigger aria-label="Pagar" title="Pagar">
-      <span><i class="fa-solid fa-credit-card" aria-hidden="true"></i> Pagar</span>
-      <b>Pago seguro</b>
+  <div class="mobile-panel" id="mobilePanel" aria-hidden="true" role="region" aria-label="Menú principal">
+    <div class="menu-panel-heading">
+      <strong>Explora Avila Mora Soluciones</strong>
+      <span>Accede directamente a cada sección.</span>
+    </div>
+    <div class="menu-groups">
+      <div class="menu-group">
+        <span class="menu-group-label">Explorar</span>
+        <div class="menu-group-links">
+          <a href="#inicio">Inicio <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
+          <a href="#sistemas">Sistemas <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
+          <a href="#servicios">Servicios <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
+          <a href="#portafolio">Ejemplos <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
+          <a href="#recursos">Recursos <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
+        </div>
+      </div>
+      <div class="menu-group">
+        <span class="menu-group-label">Tu proyecto</span>
+        <div class="menu-group-links">
+          <a href="#planes">Planes <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
+          <a href="#gestion">Dominio y continuidad <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
+          <a href="#proceso">Cómo trabajamos <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
+        </div>
+      </div>
+      <div class="menu-group">
+        <span class="menu-group-label">Ayuda y contacto</span>
+        <div class="menu-group-links">
+          <a href="#faq">Preguntas frecuentes <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
+          <a href="#contacto">Contacto <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
+        </div>
+      </div>
+    </div>
+    <a class="mobile-payment" href="#pago" data-payment-trigger aria-label="Abrir opciones de pago">
+      <span><i class="fa-solid fa-credit-card" aria-hidden="true"></i> Realizar un pago</span>
+      <b>Wompi</b>
     </a>
-
-    <div class="mobile-shortcuts" aria-label="Accesos rápidos">
+    <div class="mobile-shortcuts" aria-label="Recursos rápidos">
       <a class="mobile-shortcut shortcut-ayukcal" href="./ayukcal/"><i class="fa-solid fa-heart-pulse" aria-hidden="true"></i><span>AyuKcal</span></a>
-      <a class="mobile-shortcut shortcut-juegos" href="./juegos/"><i class="fa-solid fa-gamepad" aria-hidden="true"></i><span>Juegos</span></a>
       <a class="mobile-shortcut shortcut-herramientas" href="./herramientas/"><i class="fa-solid fa-toolbox" aria-hidden="true"></i><span>Herramientas</span></a>
+      <a class="mobile-shortcut shortcut-juegos" href="./juegos/"><i class="fa-solid fa-gamepad" aria-hidden="true"></i><span>Juegos</span></a>
     </div>
   </div>
-
   <main id="main-content">
-  <header class="hero" id="inicio">
+    <header class="hero" id="inicio">
     <div class="container hero-grid">
       <div class="hero-copy">
         <div class="badge-row">
-          <span class="badge"><i class="fa-solid fa-wand-magic-sparkles"></i> Hecho a medida</span>
-          <span class="badge"><i class="fa-solid fa-file-invoice-dollar"></i> Planes desde COP $60.000/mes</span>
-          <span class="badge"><i class="fa-solid fa-headset"></i> Acompañamiento real</span>
+          <span class="badge"><i class="fa-solid fa-wand-magic-sparkles" aria-hidden="true"></i> Diseño a medida</span>
+          <span class="badge"><i class="fa-solid fa-headset" aria-hidden="true"></i> Atención directa</span>
         </div>
-
         <h1>
-          Páginas web, sistemas y tiendas para tu negocio.
+          Páginas web, tiendas y sistemas para tu negocio.
           <br />
-          <span class="accent">Una solución que funcione.</span>
+          <span class="accent">Soluciones digitales que sí funcionan.</span>
         </h1>
-
         <p class="lead">
-          Creamos <strong>páginas web, sistemas y tiendas a medida</strong> para negocios y equipos que necesitan trabajar mejor. También podemos encargarnos de mantener tu solución y gestionar su dominio.
+          Diseñamos herramientas digitales según la forma en que trabaja tu negocio. También podemos encargarnos de su administración técnica después de la entrega.
         </p>
-
         <div class="hero-actions">
           <a class="btn btn-primary" href="https://forms.cloud.microsoft/r/nrTBEJ1E3C" target="_blank" rel="noopener">
-            <i class="fa-solid fa-clipboard-list"></i> Cuéntanos tu proyecto
+            <i class="fa-solid fa-clipboard-list" aria-hidden="true"></i> Cuéntanos tu proyecto
           </a>
-          <a class="btn btn-ghost" href="#servicios">
-            <i class="fa-solid fa-layer-group"></i> Ver servicios
+          <a class="btn btn-ghost" href="#planes">
+            <i class="fa-solid fa-tags" aria-hidden="true"></i> Ver planes
           </a>
-          <a class="btn btn-wa" href="https://wa.me/573052547072?text=Hola%20Avila%20Mora%20Soluciones!%20Quiero%20cotizar%20un%20proyecto." target="_blank" rel="noopener" aria-label="WhatsApp · Cotizar">
-            <i class="fa-brands fa-whatsapp" aria-hidden="true"></i> WhatsApp
-          </a>
-        </div>
-
-        <div class="hero-note">
-          <span><i class="fa-solid fa-check"></i> Desarrollo desde COP $500.000</span>
-          <span><i class="fa-solid fa-check"></i> Administración desde COP $60.000/mes</span>
         </div>
       </div>
-
       <div class="hero-card">
         <div class="hero-card-inner">
           <div class="mini-title">
-            <h2>¿Qué hacemos por ti?</h2>
-            <span class="pill">TODO EN UNO</span>
+            <h2>Un proceso claro, de principio a fin.</h2>
+            <span class="pill">AMS</span>
           </div>
           <ul class="hero-checklist">
-            <li><i class="fa-solid fa-circle-check"></i><div class="chk-text"><strong>Construimos:</strong> la web, sistema o tienda que necesita tu negocio.</div></li>
-            <li><i class="fa-solid fa-circle-check"></i><div class="chk-text"><strong>Nos encargamos:</strong> del alojamiento y del dominio, si quieres dejar esa parte en nuestras manos.</div></li>
-            <li><i class="fa-solid fa-circle-check"></i><div class="chk-text"><strong>Mantenemos:</strong> soporte, correcciones y pequeñas mejoras según el servicio contratado.</div></li>
-            <li><i class="fa-solid fa-circle-check"></i><div class="chk-text"><strong>También en celular:</strong> diseñamos para que puedas usar tu web o sistema cómodamente desde el teléfono o la tableta.</div></li>
-            <li><i class="fa-solid fa-circle-check"></i><div class="chk-text"><strong>Te dejamos claro:</strong> qué incluye tu proyecto y cuánto cuesta, sin paquetes obligatorios.</div></li>
+            <li><i class="fa-solid fa-circle-check" aria-hidden="true"></i><div class="chk-text"><strong>Entendemos:</strong> revisamos tu necesidad y cómo trabajas actualmente.</div></li>
+            <li><i class="fa-solid fa-circle-check" aria-hidden="true"></i><div class="chk-text"><strong>Definimos:</strong> acordamos alcance, precio y condiciones antes de iniciar.</div></li>
+            <li><i class="fa-solid fa-circle-check" aria-hidden="true"></i><div class="chk-text"><strong>Construimos:</strong> diseñamos, desarrollamos y probamos contigo.</div></li>
+            <li><i class="fa-solid fa-circle-check" aria-hidden="true"></i><div class="chk-text"><strong>Acompañamos:</strong> puedes contratar la administración técnica de tu solución.</div></li>
           </ul>
         </div>
       </div>
     </div>
   </header>
 
-  <section class="section" id="sistemas">
+    <section class="section" id="sistemas">
     <div class="container">
       <div class="section-head" data-aos="fade-up">
-        <h2 class="section-title">Convertimos tu Excel en un sistema.</h2>
-        <p class="section-sub">Avila Mora Soluciones nació de un proyecto compartido y de la idea de convertir procesos que ya existen en herramientas más claras, rápidas y hechas a la medida. Si ya trabajas con Excel, un programa antiguo o procesos manuales, no siempre hay que empezar desde cero: podemos organizar y modernizar lo que ya tienes.</p>
+        <h2 class="section-title">¿Excel ya no alcanza para tu operación?</h2>
+        <p class="section-sub">Cuando el equipo repite tareas, maneja varias versiones o consolida datos a mano, podemos convertir ese proceso en una herramienta más ordenada.</p>
       </div>
-
       <div class="grid-2">
         <article class="card" data-aos="fade-right">
           <div class="card-media">
-            <img src="img/ams-excel-chaos.svg" alt="Procesos de negocio desordenados entre hojas de cálculo, documentos y datos desconectados" loading="lazy" decoding="async">
+            <img src="img/ams-excel-chaos.svg" alt="Información y procesos de negocio repartidos entre hojas de cálculo y documentos" loading="lazy" decoding="async">
           </div>
           <div class="card-body">
-            <h3 style="color:#ef4444;">Cuando Excel ya no alcanza</h3>
-            <p>Muchas empresas empiezan con Excel y funciona. El problema aparece cuando el negocio crece y el archivo ya no da para todo.</p>
+            <h3 style="color:#ef4444;">Señales de que necesitas algo más</h3>
             <ul class="bullets danger">
-              <li><i class="fa-solid fa-circle-xmark"></i> Información repetida o difícil de encontrar.</li>
-              <li><i class="fa-solid fa-circle-xmark"></i> Procesos manuales que consumen tiempo.</li>
-              <li><i class="fa-solid fa-circle-xmark"></i> Reportes y cálculos cada vez más complicados.</li>
-              <li><i class="fa-solid fa-circle-xmark"></i> Varias personas trabajando sobre procesos que no están conectados.</li>
+              <li><i class="fa-solid fa-circle-xmark" aria-hidden="true"></i> La misma información se registra varias veces.</li>
+              <li><i class="fa-solid fa-circle-xmark" aria-hidden="true"></i> Los reportes dependen de tareas manuales.</li>
+              <li><i class="fa-solid fa-circle-xmark" aria-hidden="true"></i> El equipo trabaja con archivos o procesos desconectados.</li>
             </ul>
           </div>
         </article>
-
         <article class="card" data-aos="fade-left">
           <div class="card-media">
-            <img src="img/ams-system-unified.svg" alt="Sistema digital unificado con datos, inventario, automatización y dispositivos conectados" loading="lazy" decoding="async">
+            <img src="img/ams-system-unified.svg" alt="Sistema digital que organiza datos, procesos y tareas de un negocio" loading="lazy" decoding="async">
           </div>
           <div class="card-body">
-            <h3 class="accent-heading accent-tertiary">Lo convertimos en un sistema</h3>
-            <p>Partimos de lo que ya haces, entendemos tu proceso y construimos una solución que se adapte a tu negocio.</p>
+            <h3 class="accent-heading accent-tertiary">Partimos de cómo trabajas</h3>
             <ul class="bullets success">
-              <li><i class="fa-solid fa-circle-check"></i> Datos y procesos organizados en un solo lugar.</li>
-              <li><i class="fa-solid fa-circle-check"></i> Usuarios, accesos y funciones según tu operación.</li>
-              <li><i class="fa-solid fa-circle-check"></i> Reportes, PDFs, cálculos y automatizaciones cuando aporten.</li>
-              <li><i class="fa-solid fa-circle-check"></i> Web, escritorio u online según lo que realmente necesites.</li>
+              <li><i class="fa-solid fa-circle-check" aria-hidden="true"></i> Organizamos tus datos y pasos de trabajo.</li>
+              <li><i class="fa-solid fa-circle-check" aria-hidden="true"></i> Definimos usuarios, permisos y funciones necesarias.</li>
+              <li><i class="fa-solid fa-circle-check" aria-hidden="true"></i> Modernizamos lo que ya tienes cuando es viable.</li>
             </ul>
           </div>
         </article>
@@ -718,54 +719,36 @@
     </div>
   </section>
 
-  <section class="section" id="servicios">
+    <section class="section" id="servicios">
     <div class="container">
       <div class="section-head" data-aos="fade-up">
-        <h2 class="section-title">Lo que podemos construir</h2>
-        <p class="section-sub">Nos cuentas qué necesitas y encontramos una forma práctica de resolverlo.</p>
+        <h2 class="section-title">Soluciones para lo que tu negocio necesita</h2>
+        <p class="section-sub">Elegimos las funciones según tu objetivo. No tienes que contratar herramientas que no vas a utilizar.</p>
       </div>
       <div class="services-grid">
         <div class="service" data-aos="zoom-in" data-aos-delay="50">
-          <i class="fa-solid fa-globe"></i>
+          <i class="fa-solid fa-globe" aria-hidden="true"></i>
           <h3>Páginas web</h3>
-          <p>Desde una página sencilla hasta un sitio completo para presentar tu negocio y recibir contactos.</p>
-          <div class="micro"><span class="tag">A tu medida</span><span class="tag">Adaptable a móviles</span></div>
+          <p>Presenta tu negocio, tus servicios y tus canales de contacto con una web clara y adaptable a cualquier pantalla.</p>
+          <div class="micro"><span class="tag">Sitios informativos</span><span class="tag">Landing pages</span></div>
         </div>
         <div class="service" data-aos="zoom-in" data-aos-delay="100">
-          <i class="fa-solid fa-table-cells-large"></i>
+          <i class="fa-solid fa-table-cells-large" aria-hidden="true"></i>
           <h3>Sistemas a medida</h3>
-          <p>Organiza ventas, inventario, producción, cotizaciones, reportes, clientes y tareas que hoy haces manualmente.</p>
-          <div class="micro"><span class="tag">Más orden</span><span class="tag">Menos tareas repetidas</span></div>
-        </div>
-        <div class="service" data-aos="zoom-in" data-aos-delay="125">
-          <i class="fa-solid fa-mobile-screen-button"></i>
-          <h3>Tu sistema también en el celular</h3>
-          <p>Cuando el proyecto lo permite, puedes instalar un acceso en tu celular y abrirlo como una aplicación.</p>
-          <div class="micro"><span class="tag">Acceso fácil</span><span class="tag">Celular y tablet</span></div>
+          <p>Organiza producción, inventario, ventas, cotizaciones, clientes y reportes en una herramienta ajustada a tu operación.</p>
+          <div class="micro"><span class="tag">Procesos</span><span class="tag">Información centralizada</span></div>
         </div>
         <div class="service" data-aos="zoom-in" data-aos-delay="150">
-          <i class="fa-solid fa-cart-shopping"></i>
+          <i class="fa-solid fa-cart-shopping" aria-hidden="true"></i>
           <h3>Tiendas y catálogos</h3>
-          <p>Muestra tus productos, recibe pedidos por WhatsApp y organiza las ventas según la forma en que trabaja tu negocio.</p>
+          <p>Publica tus productos y recibe pedidos por WhatsApp. Los pagos en línea y otras funciones se definen según el proyecto.</p>
           <div class="micro"><span class="tag">Catálogo</span><span class="tag">Pedidos</span></div>
         </div>
         <div class="service" data-aos="zoom-in" data-aos-delay="200">
-          <i class="fa-solid fa-bolt"></i>
-          <h3>Automatización</h3>
-          <p>Conectamos tareas y herramientas para reducir pasos repetitivos y ahorrar tiempo a tu equipo.</p>
-          <div class="micro"><span class="tag">Ahorra tiempo</span><span class="tag">Más organización</span></div>
-        </div>
-        <div class="service" data-aos="zoom-in" data-aos-delay="250">
-          <i class="fa-solid fa-server"></i>
-          <h3>Dominio y alojamiento</h3>
-          <p>Nos ocupamos de la dirección de tu web, el espacio donde funciona y su atención diaria para que no tengas que gestionar varios proveedores.</p>
-          <div class="micro"><span class="tag">Un solo equipo</span><span class="tag">Administrado por AMS</span></div>
-        </div>
-        <div class="service" data-aos="zoom-in" data-aos-delay="300">
-          <i class="fa-solid fa-screwdriver-wrench"></i>
-          <h3>Mantenimiento y soporte</h3>
-          <p>Seguimos contigo después de la entrega para cuidar el funcionamiento y resolver los problemas incluidos en tu plan.</p>
-          <div class="micro"><span class="tag">Acompañamiento</span><span class="tag">Soporte</span></div>
+          <i class="fa-solid fa-diagram-project" aria-hidden="true"></i>
+          <h3>Automatización e integraciones</h3>
+          <p>Conecta tareas y servicios para reducir pasos repetitivos y evitar registrar la misma información en varios lugares.</p>
+          <div class="micro"><span class="tag">Menos tareas manuales</span><span class="tag">Conexiones útiles</span></div>
         </div>
       </div>
     </div>
@@ -775,7 +758,7 @@
     <div class="container">
       <div class="section-head" data-aos="fade-up">
         <h2 class="section-title">Una solución a tu medida.</h2>
-        <p class="section-sub">Pagas una sola vez por el desarrollo y eliges cómo administrar tu web o sistema: mes a mes o con dos meses gratis al pagar el año.</p>
+        <p class="section-sub">Compara el desarrollo inicial y las opciones de administración de cada plan.</p>
         <div class="ams-currency-toolbar">
           <span class="ams-currency-label">Ver precios en</span>
           <div class="ams-currency-switch" role="group" aria-label="Seleccionar moneda">
@@ -920,8 +903,7 @@
       </div>
 
       <div class="ams-plan-terms">
-        <p>En Presencia, Comercio y Gestión, el desarrollo se paga una sola vez y la administración puede pagarse mes a mes o por año: pagas 10 meses y recibes 12. En Personalizado, el desarrollo y la administración mensual se cotizan según el alcance, los usuarios, las integraciones y los recursos requeridos. Si ya tienes dominio, lo conservas y lo conectamos; si necesitas uno nuevo, gestionamos un .com a tu nombre. El correo empresarial, las licencias y las funciones adicionales se cotizan por separado.</p>
-        <p class="ams-currency-note" id="amsFxStatusNote">Los precios publicados en COP y USD son tarifas fijas independientes para Presencia, Comercio y Gestión. Personalizado se cotiza según el proyecto en la moneda acordada; las tarifas en dólares no cambian con la TRM diaria.</p>
+        <p class="ams-currency-note" id="amsFxStatusNote">Las tarifas COP y USD son listas fijas e independientes; no se recalculan con la TRM. Personalizado se cotiza en la moneda y bajo las condiciones acordadas en la propuesta.</p>
       </div>
 
       <div class="briefing-box" data-aos="fade-up">
@@ -931,35 +913,35 @@
     </div>
   </section>
 
-  <section class="section" id="gestion">
+    <section class="section" id="gestion">
     <div class="container">
       <div class="section-head" data-aos="fade-up">
-        <h2 class="section-title">Nos ocupamos de la parte técnica.</h2>
-        <p class="section-sub">Tú te concentras en tu negocio. Nosotros cuidamos que tu web o sistema esté disponible y bien atendido.</p>
+        <h2 class="section-title">Tu dominio y tu proyecto siguen bajo tu control.</h2>
+        <p class="section-sub">Podemos administrar la parte técnica sin asumir la titularidad de tu dominio ni cambiar las condiciones de tus entregables.</p>
       </div>
       <div class="grid-2">
         <article class="card" data-aos="fade-right">
           <div class="card-body">
-            <h3 class="accent-heading accent-primary"><i class="fa-solid fa-house-laptop"></i> ¿Qué es el alojamiento web?</h3>
-            <p>Es el servicio que mantiene tu página o sistema disponible en Internet. AMS se encarga de alojarlo, protegerlo, guardar copias y atender su mantenimiento.</p>
+            <h3 class="accent-heading accent-primary"><i class="fa-solid fa-globe" aria-hidden="true"></i> Tu dominio, a tu nombre</h3>
+            <p>Si ya tienes un dominio, lo conectamos con tu autorización y permanece en el proveedor donde está registrado. Si necesitas uno nuevo, se registra a tu nombre.</p>
           </div>
         </article>
         <article class="card" data-aos="fade-left">
           <div class="card-body">
-            <h3 class="accent-heading accent-secondary"><i class="fa-solid fa-globe"></i> ¿Qué pasa con mi dominio?</h3>
-            <p>El dominio es la dirección de tu web, por ejemplo, <strong>tunegocio.com</strong>. Si ya tienes uno, sigue siendo tuyo y lo conectamos sin trasladarlo. Si necesitas uno nuevo, lo gestionamos a tu nombre.</p>
+            <h3 class="accent-heading accent-secondary"><i class="fa-solid fa-arrow-right-arrow-left" aria-hidden="true"></i> ¿Ya tienes una web o sistema?</h3>
+            <p>Revisamos su tecnología y compatibilidad antes de proponer una migración o administración. Te informamos el alcance y cualquier costo antes de intervenir.</p>
           </div>
         </article>
         <article class="card" data-aos="fade-right">
           <div class="card-body">
-            <h3 class="accent-heading accent-primary"><i class="fa-solid fa-arrow-right-arrow-left"></i> ¿Ya tienes una página o sistema?</h3>
-            <p>Podemos revisar lo que tienes y, si es compatible, trasladarlo para que también lo administremos. Primero revisamos el proyecto y te explicamos cualquier costo antes de hacer cambios.</p>
+            <h3 class="accent-heading accent-tertiary"><i class="fa-solid fa-file-contract" aria-hidden="true"></i> Entregables definidos</h3>
+            <p>La propuesta especifica qué se entrega y qué derechos de uso o transferencia aplican. Los componentes de terceros conservan sus propias licencias.</p>
           </div>
         </article>
         <article class="card" data-aos="fade-left">
           <div class="card-body">
-            <h3 class="accent-heading accent-tertiary"><i class="fa-solid fa-handshake"></i> Tu proyecto sigue siendo tuyo</h3>
-            <p>El dominio y la información que te pertenecen siguen a tu nombre. Si algún día decides continuar con otro proveedor, acordamos la entrega y transición de tu proyecto.</p>
+            <h3 class="accent-heading accent-primary"><i class="fa-solid fa-right-from-bracket" aria-hidden="true"></i> Continuidad sin sorpresas</h3>
+            <p>Si más adelante cambias de proveedor, acordamos la entrega y transición conforme a la propuesta y a los términos del servicio.</p>
           </div>
         </article>
       </div>
@@ -970,7 +952,7 @@
     <div class="container">
       <div class="section-head" data-aos="fade-up">
         <h2 class="section-title">Ejemplos de lo que hacemos</h2>
-        <p class="section-sub">No vendemos una plantilla única. Estos ejemplos sirven para que veas el tipo de solución que podemos adaptar a cada negocio.</p>
+        <p class="section-sub">Explora ejemplos de páginas y sistemas que resuelven necesidades distintas. Cada proyecto se adapta a su contexto.</p>
       </div>
 
       <div class="block" data-aos="fade-up">
@@ -980,7 +962,7 @@
             <div class="demo-top"><i class="fa-solid fa-rocket"></i></div>
             <div class="demo-body">
               <h4>Landing</h4>
-              <p>Una página directa para presentar un servicio, producto o negocio y facilitar el contacto.</p>
+              <p>Presenta una oferta y facilita que los clientes contacten al negocio.</p>
               <div class="demo-actions"><a class="btn btn-primary btn-wide" href="./landing/" target="_blank" rel="noopener"><i class="fa-solid fa-arrow-up-right-from-square"></i> Ver ejemplo</a></div>
             </div>
           </div>
@@ -989,7 +971,7 @@
             <div class="demo-top"><i class="fa-solid fa-layer-group"></i></div>
             <div class="demo-body">
               <h4>Web Corporativa</h4>
-              <p>Varias secciones para empresas que necesitan explicar quiénes son, qué hacen y cómo contactarlas.</p>
+              <p>Organiza servicios, información de la empresa y canales de contacto en varias secciones.</p>
               <div class="demo-actions"><a class="btn btn-primary btn-wide" href="./multipages/" target="_blank" rel="noopener"><i class="fa-solid fa-arrow-up-right-from-square"></i> Ver ejemplo</a></div>
             </div>
           </div>
@@ -998,7 +980,7 @@
             <div class="demo-top"><i class="fa-solid fa-cart-shopping"></i></div>
             <div class="demo-body">
               <h4>Tienda Virtual</h4>
-              <p>Catálogo amplio, carrito y pedidos por WhatsApp, pensado para que el cliente consulte, arme su pedido y termine la compra hablando con el negocio.</p>
+              <p>Permite explorar productos, preparar un pedido y enviarlo al negocio por WhatsApp.</p>
               <div class="demo-actions"><a class="btn btn-primary btn-wide" href="./ecommerce/" target="_blank" rel="noopener"><i class="fa-solid fa-arrow-up-right-from-square"></i> Ver ejemplo</a></div>
             </div>
           </div>
@@ -1052,7 +1034,7 @@
     <div class="container">
       <div class="section-head" data-aos="fade-up">
         <h2 class="section-title">Recursos de la Casa 🎁</h2>
-        <p class="section-sub">Proyectos y herramientas gratuitas que también hacemos por aquí. Úsalos, pruébalos y mira el tipo de trabajo que nos gusta construir.</p>
+        <p class="section-sub">Herramientas y proyectos propios que puedes abrir y probar desde el navegador.</p>
       </div>
 
       <div class="ams-resource-grid">
@@ -1104,159 +1086,113 @@
     </div>
   </section>
 
-  <section class="section" id="proceso">
+    <section class="section" id="proceso">
     <div class="container">
       <div class="section-head" data-aos="fade-up">
-        <h2 class="section-title">Así trabajamos</h2>
-        <p class="section-sub">Simple: primero entendemos, después cotizamos y luego construimos.</p>
+        <h2 class="section-title">Cómo llevamos tu proyecto a producción</h2>
+        <p class="section-sub">Un proceso sencillo, con alcance y condiciones definidos antes de empezar.</p>
       </div>
-
       <div class="process">
         <div class="step" data-aos="fade-up" data-aos-delay="60">
           <div class="num">1</div>
-          <h3>Formulario de proyecto</h3>
-          <p>Nos cuentas qué hace tu negocio, qué necesitas y cómo trabajas hoy.</p>
+          <h3>Entendemos</h3>
+          <p>Revisamos tu objetivo, el proceso actual, los usuarios y las herramientas que utilizas.</p>
         </div>
         <div class="step" data-aos="fade-up" data-aos-delay="120">
           <div class="num">2</div>
-          <h3>Propuesta</h3>
-          <p>Definimos alcance, desarrollo inicial y, si aplica, el servicio mensual o anual.</p>
+          <h3>Cotizamos</h3>
+          <p>Recibes alcance, precio, tiempos estimados y condiciones del servicio.</p>
         </div>
         <div class="step" data-aos="fade-up" data-aos-delay="180">
           <div class="num">3</div>
-          <h3>Construcción</h3>
-          <p>Diseñamos, programamos, probamos y vamos mostrando avances.</p>
+          <h3>Construimos y probamos</h3>
+          <p>Diseñamos, desarrollamos y validamos la solución contigo antes de publicarla.</p>
         </div>
         <div class="step" data-aos="fade-up" data-aos-delay="240">
           <div class="num">4</div>
-          <h3>Entrega y acompañamiento</h3>
-          <p>Entregamos el proyecto y, si contrataste servicio mensual, seguimos gestionándolo contigo.</p>
+          <h3>Entregamos</h3>
+          <p>Publicamos lo aprobado y, si contrataste administración, continuamos con el servicio acordado.</p>
         </div>
       </div>
-
-      <div class="briefing-box" data-aos="fade-up">
-        <p><strong>¿Listo para contarnos qué necesitas?</strong><br>El formulario nos ayuda a llegar a la conversación con una idea mucho más clara.</p>
-        <a class="btn btn-primary" href="https://forms.cloud.microsoft/r/nrTBEJ1E3C" target="_blank" rel="noopener"><i class="fa-solid fa-clipboard-list"></i> Llenar formulario</a>
-      </div>
     </div>
   </section>
 
-  <section class="section" id="claro">
-    <div class="container">
-      <div class="section-head" data-aos="fade-up">
-        <h2 class="section-title">Todo claro desde el principio.</h2>
-        <p class="section-sub">Sabes qué recibes, cuánto pagas y quién se encarga de cada cosa.</p>
-      </div>
-      <div class="grid-2">
-        <article class="card" data-aos="fade-right">
-          <div class="card-body">
-            <h3><i class="fa-solid fa-shield-halved"></i> Tu proyecto y tu información</h3>
-            <p>Tu página, sistema y la información de tu negocio siguen siendo tuyos. Cuidamos su funcionamiento según lo acordado.</p>
-          </div>
-        </article>
-        <article class="card" data-aos="fade-left">
-          <div class="card-body">
-            <h3><i class="fa-solid fa-handshake"></i> Un solo equipo a cargo</h3>
-            <p>Podemos encargarnos del alojamiento, el dominio, las copias y el mantenimiento para que no tengas que coordinar varios proveedores.</p>
-          </div>
-        </article>
-      </div>
-      <div class="briefing-box" data-aos="fade-up">
-        <p><strong>¿Necesitas algo adicional?</strong><br>Te explicamos cualquier servicio o costo extra antes de contratarlo.</p>
-      </div>
-    </div>
-  </section>
+  
 
-  <section class="section" id="faq">
+    <section class="section" id="faq">
     <div class="container">
       <div class="section-head" data-aos="fade-up">
         <h2 class="section-title">Preguntas frecuentes</h2>
-        <p class="section-sub">Lo importante, sin vueltas.</p>
+        <p class="section-sub">Respuestas directas sobre alcance, pagos y funcionamiento.</p>
       </div>
       <div class="faq">
         <div class="faq-list" data-aos="fade-right">
           <details>
-            <summary>¿Cuánto cuesta un proyecto? <i class="fa-solid fa-chevron-down chev"></i></summary>
-            <p>Tenemos tres planes con tarifas publicadas y un plan Personalizado. En los tres primeros, el desarrollo se paga una sola vez y la administración puede pagarse mensual o anualmente. En Personalizado, tanto el desarrollo como la administración mensual se cotizan según el alcance y las necesidades del proyecto.</p>
+            <summary>¿Cuánto cuesta desarrollar mi proyecto? <i class="fa-solid fa-chevron-down chev" aria-hidden="true"></i></summary>
+            <p>Presencia, Comercio y Gestión tienen precios publicados. Personalizado se cotiza según procesos, usuarios, integraciones y recursos requeridos. El alcance y el valor quedan definidos en la propuesta.</p>
           </details>
           <details>
-            <summary>¿Qué incluye la administración? <i class="fa-solid fa-chevron-down chev"></i></summary>
-            <p>Incluye alojamiento, cuidado de tu sitio o sistema, copias de seguridad, mantenimiento, soporte en días hábiles y gestión de un dominio .com. El correo empresarial y los servicios adicionales se contratan aparte.</p>
+            <summary>¿Qué cubre la administración mensual? <i class="fa-solid fa-chevron-down chev" aria-hidden="true"></i></summary>
+            <p>Según el plan, incluye alojamiento, HTTPS/SSL, copias de seguridad, mantenimiento técnico, soporte en días hábiles y gestión de un dominio .com estándar. No equivale a cambios ilimitados ni incluye correo empresarial, licencias o servicios externos.</p>
           </details>
           <details>
-            <summary>¿Cómo funciona el pago anual? <i class="fa-solid fa-chevron-down chev"></i></summary>
-            <p>Pagas 10 mensualidades y recibes 12 meses de servicio. Así ahorras el equivalente a dos meses. El desarrollo inicial se paga una sola vez y por separado.</p>
+            <summary>¿Cómo funciona el pago anual? <i class="fa-solid fa-chevron-down chev" aria-hidden="true"></i></summary>
+            <p>En Presencia, Comercio y Gestión pagas 10 mensualidades y recibes 12 meses de administración. El desarrollo inicial se cobra por separado. En Personalizado, la periodicidad se define en la propuesta.</p>
           </details>
           <details>
-            <summary>¿Y si ya tengo un dominio? <i class="fa-solid fa-chevron-down chev"></i></summary>
-            <p>Lo conservas a tu nombre y en el proveedor donde está registrado. Con tu autorización lo conectamos a tu página o sistema, sin transferirlo ni volver a cobrar su registro.</p>
+            <summary>¿Puedo conservar mi dominio o migrar mi sitio actual? <i class="fa-solid fa-chevron-down chev" aria-hidden="true"></i></summary>
+            <p>Sí. El dominio existente permanece en tu proveedor y lo conectamos con autorización. Antes de migrar una web o sistema, revisamos su compatibilidad, el alcance y cualquier costo. Las condiciones de entrega de código y componentes se especifican en la propuesta.</p>
           </details>
           <details>
-            <summary>¿Ya tengo una página o sistema, pueden atenderlo? <i class="fa-solid fa-chevron-down chev"></i></summary>
-            <p>Sí. Revisamos lo que tienes y, si es compatible, podemos trasladarlo y administrarlo. Antes te explicamos el proceso y cualquier costo adicional.</p>
+            <summary>¿La solución funciona en celulares y tabletas? <i class="fa-solid fa-chevron-down chev" aria-hidden="true"></i></summary>
+            <p>Diseñamos las interfaces para móvil, tableta y computador. Cuando la tecnología del proyecto lo permite, también puede instalarse como aplicación web desde el navegador.</p>
           </details>
           <details>
-            <summary>¿Puedo abrir mi sistema desde el celular? <i class="fa-solid fa-chevron-down chev"></i></summary>
-            <p>Sí. Diseñamos las soluciones para adaptarse a celulares, tabletas y computadores. Algunos proyectos también pueden instalarse en el celular como una aplicación.</p>
+            <summary>¿Puedo recibir pedidos y pagos en línea? <i class="fa-solid fa-chevron-down chev" aria-hidden="true"></i></summary>
+            <p>Comercio permite mostrar productos y recibir pedidos por WhatsApp. Una pasarela de pago, inventario sincronizado o un proceso de compra más avanzado se cotiza según el proyecto. Las comisiones del proveedor de pagos se cobran aparte.</p>
           </details>
           <details>
-            <summary>¿Puedo recibir pedidos por WhatsApp? <i class="fa-solid fa-chevron-down chev"></i></summary>
-            <p>Sí. Podemos crear un catálogo o tienda que permita elegir productos y enviar el pedido directamente a WhatsApp.</p>
+            <summary>¿Qué servicios o costos se cobran por separado? <i class="fa-solid fa-chevron-down chev" aria-hidden="true"></i></summary>
+            <p>Correo empresarial, licencias, comisiones de pasarela, APIs de pago, ampliaciones, migraciones complejas y funciones fuera del alcance. Te informamos y solicitamos aprobación antes de contratar o ejecutar esos trabajos.</p>
           </details>
           <details>
-            <summary>¿Puedo recibir pagos en línea? <i class="fa-solid fa-chevron-down chev"></i></summary>
-            <p>Sí. Podemos integrar una opción de pago según las necesidades del proyecto. Las comisiones que cobre el proveedor de pagos no están incluidas en la mensualidad.</p>
-          </details>
-          <details>
-            <summary>¿Incluye correo con mi dominio? <i class="fa-solid fa-chevron-down chev"></i></summary>
-            <p>El dominio puede utilizarse para correo, pero los buzones empresariales son un servicio aparte. Podemos ayudarte a configurarlos.</p>
-          </details>
-          <details>
-            <summary>¿Qué no está incluido en la mensualidad? <i class="fa-solid fa-chevron-down chev"></i></summary>
-            <p>Correo empresarial, licencias, comisiones de pago y funciones nuevas que amplíen el proyecto. Siempre te informamos cualquier costo antes de realizarlo.</p>
-          </details>
-          <details>
-            <summary>¿Qué pasa si después necesito más funciones? <i class="fa-solid fa-chevron-down chev"></i></summary>
-            <p>Revisamos lo que necesitas y te proponemos una ampliación o un plan diferente. No agregamos cargos sin tu aprobación.</p>
+            <summary>¿Qué pasa si después necesito más funciones? <i class="fa-solid fa-chevron-down chev" aria-hidden="true"></i></summary>
+            <p>Revisamos el cambio, evaluamos su impacto y te enviamos una propuesta adicional. No ampliamos el alcance ni agregamos cargos sin tu aprobación.</p>
           </details>
         </div>
         <aside class="faq-card" data-aos="fade-left">
-          <h3>¿Qué necesitamos para empezar?</h3>
-          <p>Cuéntanos lo básico:</p>
+          <h3>Para preparar tu cotización</h3>
+          <p>Nos ayuda conocer:</p>
           <ul class="mini">
-            <li><i class="fa-solid fa-building"></i> Qué hace tu negocio.</li>
-            <li><i class="fa-solid fa-list-check"></i> Qué quieres solucionar.</li>
-            <li><i class="fa-solid fa-laptop"></i> Qué utilizas actualmente.</li>
-            <li><i class="fa-solid fa-globe"></i> Si ya tienes una página o dominio.</li>
+            <li><i class="fa-solid fa-bullseye" aria-hidden="true"></i> El resultado que buscas.</li>
+            <li><i class="fa-solid fa-list-check" aria-hidden="true"></i> Los procesos y usuarios involucrados.</li>
+            <li><i class="fa-solid fa-laptop" aria-hidden="true"></i> Las herramientas o archivos actuales.</li>
+            <li><i class="fa-solid fa-globe" aria-hidden="true"></i> Tu web o dominio, si ya tienes uno.</li>
           </ul>
-          <a class="btn btn-primary btn-wide" href="https://forms.cloud.microsoft/r/nrTBEJ1E3C" target="_blank" rel="noopener"><i class="fa-solid fa-clipboard-list"></i> Cuéntanos tu proyecto</a>
+          <a class="btn btn-primary btn-wide" href="https://forms.cloud.microsoft/r/nrTBEJ1E3C" target="_blank" rel="noopener"><i class="fa-solid fa-clipboard-list" aria-hidden="true"></i> Cuéntanos tu proyecto</a>
         </aside>
       </div>
     </div>
   </section>
 
-  <section class="cta" id="contacto">
+    <section class="cta" id="contacto">
     <div class="container" data-aos="zoom-in">
-      <h2>Cuéntanos qué quieres construir.</h2>
-      <p>Nosotros nos encargamos de aterrizarlo, cotizarlo y explicarte qué opción tiene más sentido para tu proyecto.</p>
-
+      <h2>Hablemos de lo que necesita tu negocio.</h2>
+      <p>Cuéntanos el reto. Revisaremos el alcance y te indicaremos el siguiente paso.</p>
       <div class="hero-actions" style="justify-content:center;">
-        <a class="btn btn-primary" href="https://forms.cloud.microsoft/r/nrTBEJ1E3C" target="_blank" rel="noopener"><i class="fa-solid fa-clipboard-list"></i> Llenar formulario</a>
-        <a class="btn btn-wa" href="https://wa.me/573052547072?text=Hola%20Avila%20Mora%20Soluciones!%20Quiero%20hablar%20sobre%20un%20proyecto." target="_blank" rel="noopener"><i class="fa-brands fa-whatsapp"></i> Hablar por WhatsApp</a>
-        <a class="btn btn-ghost" href="#pago" data-payment-trigger><i class="fa-solid fa-credit-card"></i> Pagar</a>
-        <button class="btn btn-ghost" type="button" id="emailCta"><i class="fa-solid fa-envelope"></i> Escribir por correo</button>
-        <a class="btn btn-ghost" href="#portafolio"><i class="fa-solid fa-eye"></i> Ver ejemplos</a>
+        <a class="btn btn-primary" href="https://forms.cloud.microsoft/r/nrTBEJ1E3C" target="_blank" rel="noopener"><i class="fa-solid fa-clipboard-list" aria-hidden="true"></i> Enviar proyecto</a>
+        <a class="btn btn-wa" href="https://wa.me/573052547072?text=Hola%20Avila%20Mora%20Soluciones!%20Quiero%20hablar%20sobre%20un%20proyecto." target="_blank" rel="noopener"><i class="fa-brands fa-whatsapp" aria-hidden="true"></i> Hablar por WhatsApp</a>
+        <button class="btn btn-ghost" type="button" id="emailCta"><i class="fa-solid fa-envelope" aria-hidden="true"></i> Escribir por correo</button>
         <div id="emailQuick" hidden style="width:100%;max-width:760px;margin:12px auto 0;padding:12px;border:1px solid rgba(255,255,255,.12);border-radius:16px;background:rgba(255,255,255,.04)">
           <div style="font-size:.78rem;margin-bottom:9px"><strong>equipo@avilamorasoluciones.com</strong><br><span style="opacity:.72">Mensaje prellenado para que solo revises y envíes.</span></div>
           <div style="display:flex;justify-content:center;gap:8px;flex-wrap:wrap">
-            <button class="btn btn-ghost" type="button" onclick="AMSContact.openEmail('gmail')"><i class="fa-brands fa-google"></i> Gmail</button>
-            <button class="btn btn-ghost" type="button" onclick="AMSContact.openEmail('outlook')"><i class="fa-brands fa-microsoft"></i> Outlook</button>
-            <button class="btn btn-ghost" type="button" onclick="AMSContact.openEmail('default')"><i class="fa-solid fa-at"></i> Correo predeterminado</button>
+            <button class="btn btn-ghost" type="button" onclick="AMSContact.openEmail('gmail')"><i class="fa-brands fa-google" aria-hidden="true"></i> Gmail</button>
+            <button class="btn btn-ghost" type="button" onclick="AMSContact.openEmail('outlook')"><i class="fa-brands fa-microsoft" aria-hidden="true"></i> Outlook</button>
+            <button class="btn btn-ghost" type="button" onclick="AMSContact.openEmail('default')"><i class="fa-solid fa-at" aria-hidden="true"></i> Correo predeterminado</button>
           </div>
         </div>
       </div>
-
-      <div class="cta-note"><i class="fa-solid fa-lock"></i> Tratamos la información de cada proyecto con confidencialidad.</div>
+      <div class="cta-note"><i class="fa-solid fa-shield-halved" aria-hidden="true"></i> No envíes contraseñas, datos completos de tarjetas ni códigos de autenticación por estos canales.</div>
     </div>
   </section>
 
@@ -1357,7 +1293,7 @@
 
 
   <script src="planes.js?v=20261105-5" defer></script>
-  <script src="scripts.js?v=20261006-3" defer></script>
+  <script src="scripts.js?v=20261106-1" defer></script>
   <script src="contacto.js?v=20260928-4" defer></script>
 <script id="ams-open-links-blank">
 (function(){
