@@ -260,9 +260,9 @@ Los planes vigentes son:
 - Presencia: desarrollo COP $500.000 / US$ 125; administración COP $60.000/mes / US$ 15/mes; anual COP $600.000 / US$ 150.
 - Comercio: desarrollo COP $1.000.000 / US$ 250; administración COP $100.000/mes / US$ 25/mes; anual COP $1.000.000 / US$ 250.
 - Gestión: desarrollo COP $2.400.000 / US$ 600; administración COP $200.000/mes / US$ 50/mes; anual COP $2.000.000 / US$ 500.
-- Empresarial: desarrollo desde COP $4.000.000 / US$ 1.000; administración desde COP $360.000/mes / US$ 90/mes; anual desde COP $3.600.000 / US$ 900.
+- Personalizado: desarrollo y administración mensual cotizados individualmente según alcance, complejidad, usuarios, integraciones, infraestructura y soporte. Cualquier modalidad anual se define en la propuesta.
 
-Las listas COP y USD son independientes y fijas. El selector de la web no utiliza TRM ni convierte automáticamente una moneda desde la otra. La anualidad cuesta exactamente 10 mensualidades por 12 meses de servicio.
+Las listas COP y USD son independientes y fijas para Presencia, Comercio y Gestión. El selector de la web no utiliza TRM ni convierte automáticamente una moneda desde la otra. La anualidad de esos tres planes cuesta exactamente 10 mensualidades por 12 meses de servicio. En Personalizado, cualquier modalidad anual se define en la propuesta.
 
 La anualidad cobra 10 mensualidades y entrega 12 meses de servicio. No reducir el precio del desarrollo al aplicar el beneficio anual. Consulta los límites completos en POLITICA_PLANES_Y_PRECIOS.md y no prometas funciones fuera del plan elegido.
 
