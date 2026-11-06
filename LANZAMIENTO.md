@@ -22,10 +22,12 @@
 | Presencia | $500.000 / US$ 125 | $60.000 / US$ 15 | $600.000 / US$ 150 |
 | Comercio | $1.000.000 / US$ 250 | $100.000 / US$ 25 | $1.000.000 / US$ 250 |
 | Gestión | $2.400.000 / US$ 600 | $200.000 / US$ 50 | $2.000.000 / US$ 500 |
-| Empresarial | Desde $4.000.000 / US$ 1.000 | Desde $360.000 / US$ 90 | Desde $3.600.000 / US$ 900 |
+| Personalizado | Cotizado según alcance | Cotizado mensualmente | Según propuesta |
 
 - Desarrollo se cobra una vez.
-- Anual anticipado: se pagan 10 mensualidades y se reciben 12 meses de servicio; el cliente ahorra dos mensualidades.
+- Comercio se destaca como “Más rentable” y Personalizado como “Más elegido”.
+- Personalizado se cotiza según alcance, complejidad, usuarios, integraciones, infraestructura y soporte; el precio anual, si aplica, se define en la propuesta.
+- La anualidad de los tres planes con tarifas fijas cobra 10 mensualidades y entrega 12 meses de servicio; el cliente ahorra dos mensualidades.
 - Los límites publicados deben coincidir con `POLITICA_PLANES_Y_PRECIOS.md`.
 - Un dominio .com estándar nuevo se registra y renueva a nombre del cliente, según el plan.
 - Correo corporativo, licencias externas, comisiones de pago, dominios premium/adicionales y ampliaciones se cotizan aparte.
