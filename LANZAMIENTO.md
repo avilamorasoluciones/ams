@@ -18,18 +18,17 @@
 - `README.md`: mapa del repositorio.
 
 ## Planes públicos
-| Plan | Desarrollo único | Administración |
-|---|---:|---:|
-| Pequeño | COP $690.000 | COP $89.900/mes |
-| Mediano | COP $1.490.000 | COP $149.900/mes |
-| Grande | COP $3.490.000 | COP $299.900/mes |
-| Personalizado | Desde COP $5.900.000 | Desde COP $499.900/mes |
+| Plan | Desarrollo único | Administración mensual | Administración anual |
+|---|---:|---:|---:|
+| Presencia | COP $490.000 | COP $69.900 | COP $699.000 |
+| Comercio | COP $990.000 | COP $119.900 | COP $1.199.000 |
+| Gestión | COP $2.490.000 | COP $229.900 | COP $2.299.000 |
+| Empresarial | Desde COP $4.490.000 | Desde COP $399.900 | Desde COP $3.999.000 |
 
 - Desarrollo se cobra una vez.
-- Administración se cobra recurrentemente.
-- Anual anticipado: 11 mensualidades por 12 meses de servicio.
+- Anual anticipado: se pagan 10 mensualidades y se reciben 12 meses de servicio; el cliente ahorra dos mensualidades.
 - Los límites publicados deben coincidir con `POLITICA_PLANES_Y_PRECIOS.md`.
-- Dominio .com estándar administrado según plan.
+- Un dominio .com estándar nuevo se registra y renueva a nombre del cliente, según el plan.
 - Correo corporativo, licencias externas, comisiones de pago, dominios premium/adicionales y ampliaciones se cotizan aparte.
 - El titular del dominio es el cliente. Si ya tiene dominio, no se transfiere por defecto.
 
