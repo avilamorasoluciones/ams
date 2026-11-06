@@ -38,13 +38,13 @@ El cliente no debe tener que administrar paneles técnicos, servidores, DNS ni b
 | Presencia | $500.000 / US$ 125 | $60.000 / US$ 15 | $600.000 / US$ 150 |
 | Comercio | $1.000.000 / US$ 250 | $100.000 / US$ 25 | $1.000.000 / US$ 250 |
 | Gestión | $2.400.000 / US$ 600 | $200.000 / US$ 50 | $2.000.000 / US$ 500 |
-| Empresarial | Desde $4.000.000 / US$ 1.000 | Desde $360.000 / US$ 90 | Desde $3.600.000 / US$ 900 |
+| Personalizado | Cotizado según alcance | Cotizado mensualmente | Según propuesta |
 
 Alcances:
 - Presencia: web de hasta 3 páginas, formulario, WhatsApp/redes, SEO inicial y mini catálogo de hasta 10 productos.
 - Comercio: web de hasta 6 páginas, catálogo de hasta 40 productos y pedidos por WhatsApp; sin inventario automático ni pagos en línea.
 - Gestión: aplicación web con base de datos, hasta 5 usuarios y 2 áreas de trabajo.
-- Empresarial: proyectos que superan los límites anteriores o requieren integraciones, automatizaciones, pagos o recursos especiales.
+- Personalizado: proyectos a medida que superan los límites de los planes fijos o requieren integraciones, automatizaciones, pagos, infraestructura o soporte especiales. El desarrollo y la administración mensual se cotizan individualmente; cualquier modalidad anual se define en la propuesta.
 
 La administración incluye un dominio .com estándar nuevo registrado a nombre del cliente y su renovación mientras el plan esté activo, o gestión técnica del dominio existente sin transferencia. Incluye alojamiento, HTTPS/SSL, copias programadas, mantenimiento y soporte en días hábiles. El correo corporativo, las comisiones de pago y las licencias de terceros no están incluidos.
 
@@ -66,7 +66,7 @@ Consultar límites y exclusiones completos en `POLITICA_PLANES_Y_PRECIOS.md`.
 
 1. Contacto por web, WhatsApp o recomendación.
 2. Briefing: entender negocio, problema, usuarios y procesos.
-3. Definir alcance y plan AMS (o Empresarial).
+3. Definir alcance y plan AMS (o Personalizado).
 4. Propuesta: separar desarrollo inicial, administración y servicios extra.
 5. Aceptación y pago según acuerdo.
 6. Crear repositorio independiente del cliente en GitHub.
@@ -136,7 +136,7 @@ Reglas:
 - No vender “50 clientes garantizados” ni asociar cantidad fija de sitios a un VPS sin medición.
 - La capacidad depende de CPU, RAM, disco, procesos, base de datos, almacenamiento, visitas, concurrencia y comportamiento de cada aplicación.
 - Medir recursos por proyecto y dejar margen de seguridad.
-- Los sistemas de alto uso se revisan y cotizan como Empresarial o en infraestructura separada.
+- Los sistemas de alto uso se revisan y cotizan como Personalizado o en infraestructura separada.
 - La rentabilidad se mide sobre ingresos recurrentes totales menos VPS, dominios, backups, pasarela, licencias y operación. No cambiar la tarifa individual por alterar una cantidad hipotética de clientes.
 
 ## 10. USD/COP en la web
