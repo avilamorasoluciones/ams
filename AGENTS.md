@@ -213,14 +213,14 @@ Ningún sistema es “inhackeable”. Describir controles y riesgos residuales.
 ## 10. Planes públicos AMS
 
 La web pública utiliza cuatro planes:
-- Presencia: desarrollo COP $450.000; administración COP $59.900/mes; anual COP $599.000.
-- Comercio: desarrollo COP $890.000; administración COP $99.900/mes; anual COP $999.000.
-- Gestión: desarrollo COP $2.190.000; administración COP $199.900/mes; anual COP $1.999.000.
-- Empresarial: desarrollo desde COP $3.990.000; administración desde COP $349.900/mes; anual desde COP $3.499.000.
+- Presencia: desarrollo COP $500.000 / US$ 125; administración COP $60.000 / US$ 15 al mes; anual COP $600.000 / US$ 150.
+- Comercio: desarrollo COP $1.000.000 / US$ 250; administración COP $100.000 / US$ 25 al mes; anual COP $1.000.000 / US$ 250.
+- Gestión: desarrollo COP $2.400.000 / US$ 600; administración COP $200.000 / US$ 50 al mes; anual COP $2.000.000 / US$ 500.
+- Empresarial: desarrollo desde COP $4.000.000 / US$ 1.000; administración desde COP $360.000 / US$ 90 al mes; anual desde COP $3.600.000 / US$ 900.
 
 La anualidad cobra 10 mensualidades y entrega 12 meses de servicio: dos cuotas mensuales gratis. El descuento aplica a la administración, no al desarrollo.
 
-El selector de precios de la web inicia en COP y permite cambiar toda la sección a USD. Los valores en USD son aproximados, calculados con TRM oficial diaria + margen AMS de COP $300/USD. El precio contractual para Colombia permanece fijo en COP; no cotizar ni facturar en USD salvo acuerdo explícito.
+La web mantiene dos listas independientes de tarifas fijas: COP para Colombia y USD para pagos internacionales. El selector cambia todos los valores, incluidos ahorros, sin consultar la TRM ni convertir una tarifa desde la otra. Acordar la moneda de la propuesta y del pago antes de contratar.
 
 Los planes tienen límites de páginas, productos, usuarios, áreas de trabajo y almacenamiento descritos en `POLITICA_PLANES_Y_PRECIOS.md`. No prometer recursos ilimitados.
 
