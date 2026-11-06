@@ -254,6 +254,16 @@ Reglas:
 - Entregar el enlace de demo cuando esté listo.
 - Las correcciones en la demo no deben publicar automáticamente a producción.
 
+# 9.1 PLANES COMERCIALES AMS
+
+Los planes vigentes son:
+- Presencia: desarrollo COP $490.000; administración COP $69.900/mes o COP $699.000/año.
+- Comercio: desarrollo COP $990.000; administración COP $119.900/mes o COP $1.199.000/año.
+- Gestión: desarrollo COP $2.490.000; administración COP $229.900/mes o COP $2.299.000/año.
+- Empresarial: desarrollo desde COP $4.490.000; administración desde COP $399.900/mes o COP $3.999.000/año.
+
+La anualidad cobra 10 mensualidades y entrega 12 meses de servicio. No reducir el precio del desarrollo al aplicar el beneficio anual. Consulta los límites completos en POLITICA_PLANES_Y_PRECIOS.md y no prometas funciones fuera del plan elegido.
+
 # 10. APROBACIÓN Y FASE DE PRODUCCIÓN
 
 No desplegar producción hasta que AMS lo autorice expresamente.
