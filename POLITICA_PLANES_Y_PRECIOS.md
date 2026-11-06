@@ -1,5 +1,5 @@
 # Política interna de planes y precios AMS
-**Versión:** 1.1 · **Fecha de referencia:** 5 de noviembre de 2026
+**Versión:** 1.2 · **Actualizado:** 5 de noviembre de 2026
 
 ## 1. Modelo comercial
 
@@ -8,7 +8,7 @@ AMS vende una solución gestionada, no únicamente espacio de hosting:
 2. **Administración:** cuota mensual o anual por alojar, conectar, proteger y mantener la solución dentro de los límites del plan.
 3. **Ampliaciones:** funciones nuevas, integraciones, recursos y servicios de terceros se cotizan antes de ejecutarse.
 
-Los valores contractuales se fijan en pesos colombianos. La sección pública inicia mostrando COP y dispone de un selector COP/USD que cambia todos los importes de desarrollo, mensualidad, anualidad y ahorro. Las equivalencias USD son informativas y se actualizan en la web con TRM oficial diaria + COP $300 por USD. Para clientes que pagan en USD puede utilizarse la equivalencia vigente al momento de emitir la propuesta, acordando el importe final antes del pago.
+AMS mantiene dos listas de precios independientes y fijas: COP para clientes en Colombia y USD para pagos internacionales. El selector público COP/USD cambia todos los importes de desarrollo, mensualidad, anualidad y ahorro sin consultar la TRM ni recalcular una moneda desde la otra. La moneda de la propuesta y del pago se acuerda antes de contratar.
 
 La oferta se mantiene deliberadamente económica para pequeños negocios y emprendedores, incluidos clientes que necesitan presupuestos reducidos. La rentabilidad depende de respetar los límites, no regalar horas de desarrollo, agrupar infraestructura con control de consumo y cobrar aparte todo servicio externo.
 
@@ -16,33 +16,29 @@ La oferta se mantiene deliberadamente económica para pequeños negocios y empre
 
 | Plan | Desarrollo, una sola vez | Administración mensual | Administración anual (10 meses) |
 |---|---:|---:|---:|
-| Presencia | COP $450.000 | COP $59.900 | COP $599.000 |
-| Comercio | COP $890.000 | COP $99.900 | COP $999.000 |
-| Gestión | COP $2.190.000 | COP $199.900 | COP $1.999.000 |
-| Empresarial | Desde COP $3.990.000 | Desde COP $349.900 | Desde COP $3.499.000 |
+| Presencia | COP $500.000 | COP $60.000 | COP $600.000 |
+| Comercio | COP $1.000.000 | COP $100.000 | COP $1.000.000 |
+| Gestión | COP $2.400.000 | COP $200.000 | COP $2.000.000 |
+| Empresarial | Desde COP $4.000.000 | Desde COP $360.000 | Desde COP $3.600.000 |
 
 La anualidad entrega 12 meses de servicio y cobra solo 10 mensualidades. El descuento corresponde a dos cuotas mensuales completas. No se aplica al desarrollo inicial.
 
-### 2.1 Equivalencias USD informativas
+### 2.1 Tarifas fijas para pagos en USD
 
-TRM de referencia: COP $3.221,19 vigente el 05/11/2026. Margen de conversión AMS: COP $300 por USD. Tasa aplicada: COP $3.521,19 por USD.
-
-| Plan | Desarrollo USD | Mensualidad USD | Anualidad USD |
+| Plan | Desarrollo, una sola vez | Administración mensual | Administración anual (10 meses) |
 |---|---:|---:|---:|
-| Presencia | ≈ US$127,80 | ≈ US$17,01 | ≈ US$170,11 |
-| Comercio | ≈ US$252,76 | ≈ US$28,37 | ≈ US$283,71 |
-| Gestión | ≈ US$621,95 | ≈ US$56,77 | ≈ US$567,71 |
-| Empresarial | Desde US$1.133,14 | Desde US$99,37 | Desde US$993,70 |
+| Presencia | US$ 125 | US$ 15 | US$ 150 |
+| Comercio | US$ 250 | US$ 25 | US$ 250 |
+| Gestión | US$ 600 | US$ 50 | US$ 500 |
+| Empresarial | Desde US$ 1.000 | Desde US$ 90 | Desde US$ 900 |
 
 Ahorro al pagar el año anticipado:
-- Presencia: COP $119.800 (≈ US$34,02).
-- Comercio: COP $199.800 (≈ US$56,74).
-- Gestión: COP $399.800 (≈ US$113,54).
-- Empresarial: desde COP $699.800 (≈ US$198,74).
+- Presencia: COP $120.000 o US$ 30.
+- Comercio: COP $200.000 o US$ 50.
+- Gestión: COP $400.000 o US$ 100.
+- Empresarial: desde COP $720.000 o US$ 180.
 
-La tasa cambia según la TRM oficial diaria. No presentar la equivalencia como una cotización en tiempo real por segundo. El precio contractual para clientes colombianos permanece fijo en COP durante el periodo contratado. La página conserva la última TRM válida si la fuente oficial no responde.
-
-Fuente TRM: https://www.datos.gov.co/resource/mcec-87by.json
+Las tarifas COP y USD son montos publicados independientes y no se actualizan automáticamente por la TRM. La anualidad equivale exactamente a diez mensualidades y entrega 12 meses de servicio.
 
 ## 3. Definición precisa de los planes
 
@@ -115,9 +111,9 @@ El precio de Gestión solo aplica cuando los procesos caben realmente en dos ár
 
 Se utiliza cuando el proyecto supera los límites de los planes anteriores o requiere varios procesos relacionados, más usuarios, integraciones, automatizaciones, pagos, varias sedes, datos de mayor volumen o recursos especiales.
 
-- Desarrollo desde COP $3.990.000.
-- Administración desde COP $349.900/mes.
-- Anualidad desde COP $3.499.000 por 12 meses de administración.
+- Desarrollo desde COP $4.000.000 o US$ 1.000.
+- Administración desde COP $360.000/mes o US$ 90/mes.
+- Anualidad desde COP $3.600.000 o US$ 900 por 12 meses de administración.
 - Nunca publicar ni prometer capacidad “ilimitada”.
 - Antes de cotizar, documentar usuarios, áreas de trabajo, datos, integraciones, concurrencia, almacenamiento, tráfico, recuperación y nivel de soporte.
 - Dimensionar costos técnicos y margen antes de aceptar el proyecto.
@@ -197,8 +193,8 @@ La política de precio accesible no autoriza a:
 
 ## 10. Cambios de precio
 
-- Los valores COP publicados son la fuente contractual para clientes en Colombia.
-- No cambiar valores COP automáticamente por variaciones del dólar.
+- Las tarifas COP publicadas son fijas para clientes en Colombia y las tarifas USD publicadas son fijas para pagos internacionales.
+- No recalcular automáticamente una tarifa desde la otra ni cambiar importes por variaciones diarias de la TRM.
 - Revisar trimestralmente costos de dominio, hosting, respaldo, pasarela y carga de soporte.
-- Documentar cambios y actualizar la web, este archivo, el manual y las plantillas comerciales simultáneamente.
+- Documentar cualquier ajuste y actualizar la web, este archivo, el manual y las plantillas comerciales simultáneamente.
 - Mantener historial de tarifas anteriores.
