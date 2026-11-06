@@ -140,8 +140,8 @@ header.hero { min-height: 100vh; min-height: 100svh; padding: calc(var(--navH) +
 .hero-img img { width: 100%; aspect-ratio: 16 / 10; object-fit: cover; filter: saturate(1.04) contrast(1.03); transform: scale(1.02); }
 
 /* ===== Sections ===== */
-section.section { padding: 92px 0; }
-.section-head { text-align: center; margin-bottom: 52px; }
+section.section { padding: 64px 0; }
+.section-head { text-align: center; margin-bottom: 34px; }
 .section-title { margin: 0 0 12px; font-size: clamp(2rem, 3.6vw, 3.2rem); font-weight: 900; letter-spacing: -1px; background: var(--gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; display: inline-block; text-wrap: balance; }
 .section-sub { margin: 0 auto; color: var(--muted); max-width: 78ch; font-size: 1.1rem; font-weight: 500; }
 
