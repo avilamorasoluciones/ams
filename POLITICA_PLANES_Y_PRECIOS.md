@@ -8,7 +8,7 @@ AMS vende una solución gestionada, no únicamente espacio de hosting:
 2. **Administración:** cuota mensual o anual por alojar, conectar, proteger y mantener la solución dentro de los límites del plan.
 3. **Ampliaciones:** funciones nuevas, integraciones, recursos y servicios de terceros se cotizan antes de ejecutarse.
 
-AMS mantiene dos listas de precios independientes y fijas: COP para clientes en Colombia y USD para pagos internacionales. El selector público COP/USD cambia todos los importes de desarrollo, mensualidad, anualidad y ahorro sin consultar la TRM ni recalcular una moneda desde la otra. La moneda de la propuesta y del pago se acuerda antes de contratar.
+AMS mantiene dos listas de precios independientes y fijas para Presencia, Comercio y Gestión: COP para clientes en Colombia y USD para pagos internacionales. El selector público COP/USD cambia esos importes sin consultar la TRM ni recalcular una moneda desde la otra. El plan Personalizado no tiene tarifas estándar: tanto el desarrollo como la administración mensual se cotizan según el alcance, los usuarios, las integraciones, los recursos y el nivel de soporte. La moneda de la propuesta y del pago se acuerda antes de contratar.
 
 La oferta se mantiene deliberadamente económica para pequeños negocios y emprendedores, incluidos clientes que necesitan presupuestos reducidos. La rentabilidad depende de respetar los límites, no regalar horas de desarrollo, agrupar infraestructura con control de consumo y cobrar aparte todo servicio externo.
 
@@ -19,7 +19,7 @@ La oferta se mantiene deliberadamente económica para pequeños negocios y empre
 | Presencia | COP $500.000 | COP $60.000 | COP $600.000 |
 | Comercio | COP $1.000.000 | COP $100.000 | COP $1.000.000 |
 | Gestión | COP $2.400.000 | COP $200.000 | COP $2.000.000 |
-| Empresarial | Desde COP $4.000.000 | Desde COP $360.000 | Desde COP $3.600.000 |
+| Personalizado | Cotizado según alcance | Cotizada según alcance | Según propuesta |
 
 La anualidad entrega 12 meses de servicio y cobra solo 10 mensualidades. El descuento corresponde a dos cuotas mensuales completas. No se aplica al desarrollo inicial.
 
@@ -30,13 +30,13 @@ La anualidad entrega 12 meses de servicio y cobra solo 10 mensualidades. El desc
 | Presencia | US$ 125 | US$ 15 | US$ 150 |
 | Comercio | US$ 250 | US$ 25 | US$ 250 |
 | Gestión | US$ 600 | US$ 50 | US$ 500 |
-| Empresarial | Desde US$ 1.000 | Desde US$ 90 | Desde US$ 900 |
+| Personalizado | Cotizado según alcance | Cotizada según alcance | Según propuesta |
 
 Ahorro al pagar el año anticipado:
 - Presencia: COP $120.000 o US$ 30.
 - Comercio: COP $200.000 o US$ 50.
 - Gestión: COP $400.000 o US$ 100.
-- Empresarial: desde COP $720.000 o US$ 180.
+
 
 Las tarifas COP y USD son montos publicados independientes y no se actualizan automáticamente por la TRM. La anualidad equivale exactamente a diez mensualidades y entrega 12 meses de servicio.
 
@@ -103,20 +103,20 @@ Las tarifas COP y USD son montos publicados independientes y no se actualizan au
 - Mantenimiento técnico y soporte en días hábiles.
 - Revisión básica de errores y capacidad.
 
-**No incluye:** ERP completo, nómina, contabilidad certificada, aplicación móvil nativa, más de 5 usuarios, más de 2 áreas de trabajo, integraciones bancarias/pasarelas, automatizaciones complejas, migraciones masivas ni almacenamiento adicional. Esos alcances pasan a Empresarial.
+**No incluye:** ERP completo, nómina, contabilidad certificada, aplicación móvil nativa, más de 5 usuarios, más de 2 áreas de trabajo, integraciones bancarias/pasarelas, automatizaciones complejas, migraciones masivas ni almacenamiento adicional. Esos alcances pasan al plan Personalizado.
 
 El precio de Gestión solo aplica cuando los procesos caben realmente en dos áreas de trabajo, usan reglas de negocio acotadas y no requieren integraciones externas complejas. No vender como Gestión un ERP disfrazado.
 
-### 3.4 Empresarial
+### 3.4 Personalizado
 
 Se utiliza cuando el proyecto supera los límites de los planes anteriores o requiere varios procesos relacionados, más usuarios, integraciones, automatizaciones, pagos, varias sedes, datos de mayor volumen o recursos especiales.
 
-- Desarrollo desde COP $4.000.000 o US$ 1.000.
-- Administración desde COP $360.000/mes o US$ 90/mes.
-- Anualidad desde COP $3.600.000 o US$ 900 por 12 meses de administración.
-- Nunca publicar ni prometer capacidad “ilimitada”.
+- Desarrollo: cotización individual según alcance, complejidad y entregables.
+- Administración mensual: cotización individual según infraestructura, consumo, usuarios, integraciones y soporte.
+- La modalidad anual, si aplica, se define expresamente en la propuesta; no se promete un descuento estándar.
+- No publicar precios mínimos ni prometer capacidad “ilimitada”.
 - Antes de cotizar, documentar usuarios, áreas de trabajo, datos, integraciones, concurrencia, almacenamiento, tráfico, recuperación y nivel de soporte.
-- Dimensionar costos técnicos y margen antes de aceptar el proyecto.
+- Dimensionar costos técnicos, horas de trabajo, margen y capacidad operativa antes de aceptar el proyecto.
 
 ## 4. Qué incluye la administración
 
@@ -189,7 +189,7 @@ La política de precio accesible no autoriza a:
 - Evaluar ingresos recurrentes totales menos VPS, dominios, backups, pasarela, licencias, almacenamiento y operación.
 - No dividir arbitrariamente el servidor entre una cantidad teórica de clientes para fijar el precio individual.
 - Medir CPU, RAM, disco, bases de datos, tráfico, concurrencia y backups por aplicación.
-- Sistemas que superen la capacidad prevista se cotizan como Empresarial o se separan en otra infraestructura.
+- Sistemas que superen la capacidad prevista se cotizan como Personalizado o se separan en otra infraestructura.
 
 ## 10. Cambios de precio
 

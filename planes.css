@@ -5,7 +5,9 @@
 .ams-plan-card{position:relative;isolation:isolate;display:flex;flex-direction:column;min-width:0;padding:20px 18px 18px;border:1px solid rgba(148,163,184,.24);border-radius:22px;background:linear-gradient(155deg,rgba(255,255,255,.075),rgba(255,255,255,.025));box-shadow:0 16px 42px rgba(0,0,0,.14),inset 0 1px 0 rgba(255,255,255,.055);transition:transform .25s ease,border-color .25s ease,box-shadow .25s ease}
 .ams-plan-card:hover{transform:translateY(-5px);border-color:rgba(99,102,241,.45);box-shadow:0 22px 48px rgba(0,0,0,.2)}
 .ams-plan-card-featured{border:1.5px solid rgba(99,102,241,.7);background:linear-gradient(155deg,rgba(99,102,241,.14),rgba(255,255,255,.035) 55%);box-shadow:0 18px 48px rgba(99,102,241,.12),inset 0 1px 0 rgba(255,255,255,.08)}
+.ams-plan-card-profitable{border:1.5px solid rgba(16,185,129,.62);background:linear-gradient(155deg,rgba(16,185,129,.12),rgba(255,255,255,.035) 55%);box-shadow:0 18px 44px rgba(16,185,129,.1),inset 0 1px 0 rgba(255,255,255,.08)}
 .ams-plan-ribbon{position:absolute;top:0;right:0;padding:7px 11px;border-radius:0 20px 0 12px;background:linear-gradient(105deg,#6366f1,#8b5cf6);color:white;font-size:.56rem;font-weight:950;letter-spacing:.1em}
+.ams-plan-ribbon-profitable{background:linear-gradient(105deg,#059669,#10b981)}
 .ams-plan-top{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:13px}
 .ams-plan-number{color:var(--muted,#94a3b8);font-size:.58rem;font-weight:900;letter-spacing:.12em}
 .ams-plan-icon{width:38px;height:38px;display:grid;place-items:center;border:1px solid rgba(148,163,184,.24);border-radius:12px;background:rgba(99,102,241,.1);color:var(--primary,#6366f1);font-size:1rem}
@@ -39,6 +41,7 @@
 .ams-fx-note::before{content:"↻";color:var(--tertiary,#10b981);font-weight:900}
 body.light-theme .ams-plan-card{background:linear-gradient(155deg,#fff,#f8fafc);border-color:rgba(15,23,42,.12);box-shadow:0 14px 35px rgba(15,23,42,.07)}
 body.light-theme .ams-plan-card-featured{background:linear-gradient(155deg,#eef2ff,#fff);border-color:rgba(99,102,241,.48)}
+body.light-theme .ams-plan-card-profitable{background:linear-gradient(155deg,#ecfdf5,#fff);border-color:rgba(5,150,105,.4)}
 body.light-theme .ams-plan-card h3,body.light-theme .ams-plan-price-block>strong,body.light-theme .ams-plan-features li,body.light-theme .ams-plan-fit strong,body.light-theme .ams-plan-includes-title,body.light-theme .ams-plan-terms strong{color:#0f172a}
 body.light-theme .ams-plan-description,body.light-theme .ams-plan-features li,body.light-theme .ams-plan-fit,body.light-theme .ams-plan-includes-grid span{color:#475569}
 body.light-theme .ams-plan-price-block,body.light-theme .ams-plan-fit{background:#f1f5f9;border-color:rgba(15,23,42,.09)}
