@@ -12,7 +12,7 @@ Leer estos documentos antes de construir o modificar proyectos:
 - **`POLITICA_PLANES_Y_PRECIOS.md`** — alcance, límites, precios y exclusiones de los cuatro planes públicos.
 - **`LANZAMIENTO.md`** — checklist de publicación, dominio, pagos, privacidad y datos.
 
-La web pública muestra cuatro planes: Pequeño, Mediano, Grande y Personalizado. El desarrollo se cobra una sola vez; la administración se cobra de forma recurrente. Los valores contractuales están fijos en COP. Las equivalencias USD son informativas y se actualizan con la TRM oficial diaria más COP $300 por USD.
+La web pública muestra cuatro planes: Presencia, Comercio, Gestión y Empresarial. El desarrollo se cobra una sola vez; la administración puede ser mensual o anual. La anualidad cobra 10 mensualidades por 12 meses de servicio (dos meses gratis). Los valores contractuales están fijos en COP. Las equivalencias USD son informativas y se actualizan con la TRM oficial diaria más COP $300 por USD.
 
 ## Estado e infraestructura
 
