@@ -1,188 +1,204 @@
 # Política interna de planes y precios AMS
-**Versión:** 1.0 · **Fecha de referencia:** 5 de noviembre de 2026
+**Versión:** 1.1 · **Fecha de referencia:** 5 de noviembre de 2026
 
 ## 1. Modelo comercial
 
-AMS no vende únicamente espacio de hosting. Vende:
-1. **Desarrollo inicial:** pago único por diseñar, construir y entregar el alcance definido.
-2. **Administración mensual:** hosting gestionado, dominio, conexión segura, copias programadas, mantenimiento y soporte dentro del plan.
-3. **Ampliaciones:** nuevas funciones, integraciones y recursos que superen los límites se cotizan antes de ejecutarse.
+AMS vende una solución gestionada, no únicamente espacio de hosting:
+1. **Desarrollo inicial:** pago único por diseñar, construir, probar y entregar el alcance definido.
+2. **Administración:** cuota mensual o anual por alojar, conectar, proteger y mantener la solución dentro de los límites del plan.
+3. **Ampliaciones:** funciones nuevas, integraciones, recursos y servicios de terceros se cotizan antes de ejecutarse.
 
-La mensualidad no sustituye el precio de desarrollo. Un sitio puede ser sencillo de mantener pero necesitar trabajo inicial; un sistema con usuarios y bases de datos exige mayor administración.
+Los valores se fijan en pesos colombianos. Las equivalencias USD son informativas y se actualizan en la web con TRM oficial diaria + COP $300 por USD. Para clientes que pagan en USD puede utilizarse la equivalencia vigente al momento de emitir la propuesta, acordando el importe final antes del pago.
 
-## 2. Tarifas públicas fijas
+La oferta se mantiene deliberadamente económica para pequeños negocios y emprendedores, incluidos clientes que necesitan presupuestos reducidos. La rentabilidad depende de respetar los límites, no regalar horas de desarrollo, agrupar infraestructura con control de consumo y cobrar aparte todo servicio externo.
 
-| Plan | Desarrollo (una sola vez) | Administración mensual | Alcance resumido |
-|---|---:|---:|---|
-| Pequeño | COP $690.000 | COP $89.900 | Web de hasta 5 páginas, formulario, WhatsApp/redes y mini catálogo de hasta 20 productos |
-| Mediano | COP $1.490.000 | COP $149.900 | Web de hasta 10 páginas y catálogo de hasta 50 productos con pedidos por WhatsApp |
-| Grande | COP $3.490.000 | COP $299.900 | Aplicación web con base de datos, hasta 10 usuarios y 3 módulos |
-| Personalizado | Desde COP $5.900.000 | Desde COP $499.900 | Sistemas que exceden límites o requieren integraciones/arquitectura especial |
+## 2. Tarifas públicas vigentes
 
-El alcance público vigente está en la sección `#planes` de `index.html`. Esta política y la web deben mantenerse sincronizadas.
+| Plan | Desarrollo, una sola vez | Administración mensual | Administración anual (10 meses) |
+|---|---:|---:|---:|
+| Presencia | COP $490.000 | COP $69.900 | COP $699.000 |
+| Comercio | COP $990.000 | COP $119.900 | COP $1.199.000 |
+| Gestión | COP $2.490.000 | COP $229.900 | COP $2.299.000 |
+| Empresarial | Desde COP $4.490.000 | Desde COP $399.900 | Desde COP $3.999.000 |
 
-### 2.1 Equivalencia USD
+La anualidad entrega 12 meses de servicio y cobra solo 10 mensualidades. El descuento corresponde a dos cuotas mensuales completas. No se aplica al desarrollo inicial.
 
-- El precio contractual y de cobro al cliente colombiano permanece fijo en COP.
-- La web muestra equivalencia USD informativa, no un segundo precio contractual.
-- Tasa aplicada: TRM oficial diaria + COP $300 por USD como margen de conversión de AMS.
-- Fuente primaria: dataset oficial TRM de datos.gov.co, suministrado por la Superintendencia Financiera: https://www.datos.gov.co/resource/mcec-87by.json
-- Fecha de referencia de esta versión: 05/11/2026.
-- TRM publicada para 05/11/2026: COP $3.221,19.
-- Tasa usada para equivalencias: COP $3.521,19 por USD.
-- La TRM es diaria, no una cotización de divisas segundo a segundo. La web consulta el dato oficial automáticamente y conserva la última tasa válida en caché. Si falla la consulta, los precios COP siguen visibles y el sitio informa que la equivalencia USD no pudo actualizarse.
-- No modificar las cifras COP por cambios de TRM. Revisar los precios COP solo mediante decisión comercial de AMS.
+### 2.1 Equivalencias USD informativas
 
-Equivalencias de referencia al 05/11/2026:
+TRM de referencia: COP $3.221,19 vigente el 05/11/2026. Margen de conversión AMS: COP $300 por USD. Tasa aplicada: COP $3.521,19 por USD.
 
-| Plan | Desarrollo | Administración |
-|---|---:|---:|
-| Pequeño | ≈ US$195,96 | ≈ US$25,53/mes |
-| Mediano | ≈ US$423,15 | ≈ US$42,57/mes |
-| Grande | ≈ US$991,14 | ≈ US$85,17/mes |
-| Personalizado | desde ≈ US$1.675,57 | desde ≈ US$141,97/mes |
+| Plan | Desarrollo USD | Mensualidad USD | Anualidad USD |
+|---|---:|---:|---:|
+| Presencia | ≈ US$139,16 | ≈ US$19,85 | ≈ US$198,51 |
+| Comercio | ≈ US$281,15 | ≈ US$34,05 | ≈ US$340,51 |
+| Gestión | ≈ US$707,15 | ≈ US$65,29 | ≈ US$652,90 |
+| Empresarial | Desde US$1.275,14 | Desde US$113,57 | Desde US$1.135,70 |
 
-No utilizar estas equivalencias históricas para facturar después; consultar la tasa que muestre la web al momento de preparar la propuesta.
+Ahorro al pagar el año anticipado:
+- Presencia: COP $139.800 (≈ US$39,70).
+- Comercio: COP $239.800 (≈ US$68,10).
+- Gestión: COP $459.800 (≈ US$130,58).
+- Empresarial: desde COP $799.800 (≈ US$227,14).
 
-## 3. Definición precisa de cada plan
+La tasa cambia según la TRM oficial diaria. No presentar la equivalencia como una cotización en tiempo real por segundo. El precio contractual para clientes colombianos permanece fijo en COP durante el periodo contratado. La página conserva la última TRM válida si la fuente oficial no responde.
 
-### Pequeño
+Fuente TRM: https://www.datos.gov.co/resource/mcec-87by.json
+
+## 3. Definición precisa de los planes
+
+### 3.1 Presencia
 
 **Desarrollo incluido**
-- Una landing o web informativa de hasta 5 páginas/secciones.
-- Adaptación responsive a móvil, tablet y escritorio.
+- Una landing o sitio informativo de hasta 3 páginas/secciones.
+- Diseño responsive para móvil, tablet y escritorio.
 - Un formulario de contacto.
 - Enlaces a WhatsApp y redes sociales.
-- Configuración SEO inicial (títulos, descripciones, estructura semántica y sitemap cuando corresponda).
-- Mini catálogo informativo de hasta 20 productos, con contacto o pedido directo a WhatsApp.
+- SEO inicial: títulos, descripciones, estructura semántica y sitemap cuando corresponda.
+- Mini catálogo informativo de hasta 10 productos, con contacto o pedido directo a WhatsApp.
+- Sin panel de administración de productos ni inventario.
 
 **Administración incluida**
-- Un sitio y un dominio estándar .com administrado por AMS.
-- Hasta 2 GB de archivos e imágenes.
+- Un sitio y un dominio .com estándar administrado por AMS.
+- Hasta 1 GB para archivos e imágenes.
 - HTTPS/SSL.
 - Copias de seguridad programadas.
 - Mantenimiento técnico y soporte en días hábiles.
 - Supervisión básica del sitio.
 
-**No incluye:** carrito complejo, pagos en línea, inventario sincronizado, cuentas de usuario, panel administrativo, integraciones externas de pago ni desarrollo recurrente de nuevas funciones.
+**No incluye:** carrito, pagos en línea, inventario, usuarios, panel de administración, integraciones de terceros ni cambios recurrentes de contenido ilimitados.
 
-### Mediano
+### 3.2 Comercio
 
 **Desarrollo incluido**
-- Web de hasta 10 páginas/secciones.
-- Catálogo informativo de hasta 50 productos, con carga inicial a partir del material entregado por el cliente.
-- Categorías, búsqueda/filtros sencillos y resumen de pedido por WhatsApp.
-- No incluye inventario automático, panel autónomo de productos, pagos en línea ni sincronización con caja/POS. Las actualizaciones recurrentes de catálogo se acuerdan y cotizan según su volumen.
-- Formularios, enlaces de contacto, SEO inicial y analítica básica cuando aplique.
-- Hasta 5 GB de archivos e imágenes.
+- Web de hasta 6 páginas/secciones.
+- Catálogo informativo de hasta 40 productos.
+- Categorías, búsqueda/filtros sencillos y resumen del pedido por WhatsApp.
+- Formularios, enlaces de contacto y SEO inicial.
+- Carga inicial del catálogo a partir de material organizado por el cliente.
+- Sin inventario automático, panel autónomo de productos, pasarela de pago ni sincronización con caja/POS.
 
 **Administración incluida**
-- Un sitio, un dominio estándar .com administrado por AMS.
+- Un sitio y un dominio .com estándar administrado por AMS.
+- Hasta 3 GB para archivos e imágenes.
 - HTTPS/SSL.
 - Copias de seguridad programadas.
-- Mantenimiento técnico, revisión de funcionamiento y soporte en días hábiles.
+- Mantenimiento técnico y soporte en días hábiles.
+- Supervisión básica de disponibilidad.
 
-**No incluye:** pagos en línea, sincronización automática con ERP/POS, inventario multibodega, cuentas de comprador, facturación electrónica, marketplace ni logística conectada. Esas funciones requieren un alcance de sistema personalizado.
+**No incluye:** pagos en línea, carrito/checkout, stock sincronizado, marketplace, cuentas de comprador, facturación electrónica, logística conectada ni integración con ERP/POS. Las actualizaciones continuas del catálogo se acuerdan y cotizan según volumen.
 
-### Grande
+### 3.3 Gestión
 
 **Desarrollo incluido**
 - Una aplicación web para un proceso de negocio concreto.
-- Hasta 10 usuarios nominativos.
-- Hasta 3 áreas de trabajo acordadas (por ejemplo: producción, inventario y reportes). Cada área corresponde a un proceso definido con formularios, consultas, operaciones y reportes básicos; no a un ERP ilimitado.
-- Una base de datos independiente del cliente.
-- Roles/permisos básicos.
-- Panel, consultas y reportes dentro del alcance.
-- Exportaciones sencillas a PDF/Excel cuando sean compatibles con el proceso acordado.
-- Hasta 5 GB para archivos/documentos del sistema.
+- Hasta 5 usuarios nominativos.
+- Hasta 2 áreas de trabajo definidas (por ejemplo, control de producción e inventario básico).
+- Una base de datos independiente.
+- Inicio de sesión y roles básicos.
+- Operaciones CRUD, panel y reportes sencillos dentro del alcance acordado.
+- Exportaciones sencillas a PDF/Excel cuando correspondan.
+- Hasta 2 GB para archivos y documentos.
 
 **Administración incluida**
-- Un sistema y un dominio estándar .com administrado por AMS.
-- Hosting de aplicación y base de datos.
+- Un sistema y un dominio .com estándar administrado por AMS.
+- Hosting para aplicación y base de datos.
 - HTTPS/SSL.
 - Copias de seguridad programadas.
 - Mantenimiento técnico y soporte en días hábiles.
 - Revisión básica de errores y capacidad.
 
-**No incluye:** ERP completo, nómina, contabilidad certificada, app móvil nativa, múltiples bases de datos, integraciones bancarias, pasarela de pago, automatización compleja, más de 10 usuarios o más de 3 módulos. Eso pasa a Personalizado.
+**No incluye:** ERP completo, nómina, contabilidad certificada, aplicación móvil nativa, más de 5 usuarios, más de 2 áreas de trabajo, integraciones bancarias/pasarelas, automatizaciones complejas, migraciones masivas ni almacenamiento adicional. Esos alcances pasan a Empresarial.
 
-### Personalizado
+El precio de Gestión solo aplica cuando los procesos caben realmente en dos áreas de trabajo, usan reglas de negocio acotadas y no requieren integraciones externas complejas. No vender como Gestión un ERP disfrazado.
 
-Se usa cuando el proyecto supera los límites anteriores, necesita más usuarios, módulos, almacenamiento, integraciones, automatizaciones, pagos, procesos críticos, varias sedes o recursos especiales.
+### 3.4 Empresarial
 
-- Desarrollo desde COP $5.900.000.
-- Administración desde COP $499.900/mes.
-- No mostrar “ilimitado”.
-- Cotizar después de identificar usuarios, módulos, datos, integraciones, concurrencia, almacenamiento, tráfico y nivel de soporte.
-- La capacidad del servidor y el costo de servicios externos deben estar calculados antes de aceptar.
+Se utiliza cuando el proyecto supera los límites de los planes anteriores o requiere varios procesos relacionados, más usuarios, integraciones, automatizaciones, pagos, varias sedes, datos de mayor volumen o recursos especiales.
 
-## 4. Qué incluye la administración mensual
+- Desarrollo desde COP $4.490.000.
+- Administración desde COP $399.900/mes.
+- Anualidad desde COP $3.999.000 por 12 meses de administración.
+- Nunca publicar ni prometer capacidad “ilimitada”.
+- Antes de cotizar, documentar usuarios, áreas de trabajo, datos, integraciones, concurrencia, almacenamiento, tráfico, recuperación y nivel de soporte.
+- Dimensionar costos técnicos y margen antes de aceptar el proyecto.
+
+## 4. Qué incluye la administración
 
 Todos los planes administrados incluyen:
-- Alojamiento gestionado por AMS.
-- Registro y renovación de un dominio .com estándar nuevo a nombre del cliente, o gestión técnica de su dominio existente sin transferencia.
-- Certificado HTTPS/SSL.
+- Hosting gestionado por AMS.
+- Un dominio .com estándar nuevo registrado a nombre del cliente y renovación mientras el plan esté activo, o gestión técnica del dominio existente sin transferencia.
+- HTTPS/SSL.
 - Copias de seguridad programadas.
 - Supervisión básica y mantenimiento técnico.
-- Soporte por los canales y en los horarios hábiles definidos por AMS.
-- Renovación de un dominio .com nuevo registrado por AMS, mientras el plan esté activo.
+- Soporte en días hábiles por los canales de AMS.
+- Corrección de defectos reproducibles atribuibles al software entregado, dentro del alcance acordado.
 
-La mensualidad no representa recursos infinitos. La infraestructura se comparte con otros proyectos y AMS vigila uso de CPU, RAM, almacenamiento, bases de datos, tráfico y concurrencia.
+La administración no incluye desarrollo ilimitado ni atención 24/7. Las mejoras, nuevas funciones y cambios de alcance se cotizan por separado.
+
+La infraestructura se comparte con control de uso. AMS no promete recursos infinitos ni cantidad fija de usuarios concurrentes. Si una aplicación excede el uso razonable, se revisa y se propone ampliación o infraestructura separada.
 
 ## 5. Dominios y Porkbun
 
-- Porkbun es el registrador preferido para nuevos dominios.
-- El titular registral debe ser el cliente. AMS administra la configuración y renovaciones mediante accesos delegados o el mecanismo autorizado.
-- Si el cliente ya tiene dominio, no se transfiere por defecto. AMS configura los registros DNS necesarios con autorización y conserva los registros de correo existentes.
-- El plan contempla la gestión de un dominio .com estándar. Si el cliente utiliza una extensión de mayor costo (por ejemplo, .co), un dominio premium o varios dominios, AMS informa y cobra la diferencia antes de comprar/renovar.
-- Como referencia consultada: Porkbun publica .com a US$11,08 por registro y renovación estándar; .co tiene precio promocional inicial y renovación estándar superior. Verificar el precio vigente en el carrito antes de registrar o renovar: https://porkbun.com/products/domains
-- El correo corporativo no está incluido en la mensualidad. Google Workspace, Microsoft 365 u otro proveedor se contrata aparte.
+- Porkbun es el registrador preferido para dominios nuevos.
+- El titular registral debe ser el cliente. AMS administra configuración y renovación mediante acceso delegado o autorización.
+- Si el cliente ya tiene dominio, no se transfiere por defecto. AMS configura los DNS necesarios y conserva los registros de correo MX, SPF, DKIM y DMARC.
+- El plan contempla un dominio .com estándar. Otras extensiones, dominios premium o dominios adicionales se cotizan por diferencia.
+- Precio consultado en Porkbun al 05/11/2026: .com US$11,81 por registro y renovación estándar. El precio puede cambiar; verificar antes de comprar o renovar: https://porkbun.com/products/domains
+- El dominio se registra a nombre del cliente. La titularidad nunca debe pasar a AMS por conveniencia operativa.
+- El correo corporativo no está incluido. Google Workspace, Microsoft 365 u otro proveedor se contrata aparte.
 
 ## 6. Qué se cotiza aparte
 
-No incluir automáticamente en ninguna mensualidad:
-- Nuevas funcionalidades o cambios grandes de alcance.
-- Rediseños completos.
-- Carga masiva o migración compleja de información.
-- Correos corporativos y licencias de terceros.
+No incluir automáticamente:
+- Funciones nuevas, rediseños o ampliaciones de alcance.
+- Carga masiva o migración compleja de datos.
+- Correo corporativo y licencias de terceros.
 - Comisiones de Wompi u otras pasarelas.
-- SMS, WhatsApp API, mapas, servicios de IA y APIs de pago.
-- Dominios adicionales, extensiones premium o renovaciones que excedan el dominio .com contemplado.
-- Almacenamiento, tráfico, concurrencia o recursos que excedan el uso razonable del plan.
+- SMS, WhatsApp API, mapas, servicios de IA y APIs pagas.
+- Dominios adicionales, extensiones más costosas o premium.
+- Almacenamiento, tráfico, concurrencia o recursos que excedan el uso razonable.
 - Atención 24/7 o SLA especial.
+- Mantenimiento de software de terceros no incluido en el acuerdo.
 
-AMS debe informar cualquier costo externo antes de contratarlo. No añadir cargos sorpresa.
+Informar cualquier costo externo antes de contratarlo. No añadir cargos sorpresa.
 
-## 7. Cobro anual
+## 7. Pago mensual y anual
 
-- Mensual: 12 pagos del valor mensual.
-- Anual anticipado: 11 mensualidades por 12 meses de servicio.
-- El descuento anual aplica sobre la administración, no sobre el desarrollo inicial, salvo promoción escrita específica.
-- No afirmar que hay débito automático si la pasarela o contrato no lo implementa.
+- Mensual: 12 pagos por 12 meses de servicio.
+- Anual anticipado: pagar 10 mensualidades y recibir 12 meses de servicio.
+- Ahorro anual: exactamente 2 mensualidades.
+- El descuento anual aplica exclusivamente sobre administración, no sobre desarrollo.
+- La cuota anual se calcula como mensualidad × 10. No calcularla como mensualidad × 12 con descuento aproximado.
+- No afirmar que existe débito automático si la pasarela o contrato no lo implementa.
+- En propuesta/contrato, dejar claro importe, fecha de inicio, periodo cubierto y fecha de renovación.
 
-## 8. Benchmarks competitivos (interno, no publicar como promesa)
+## 8. Posicionamiento competitivo
 
-Los precios de hosting puro suelen ser muy inferiores porque el cliente administra por su cuenta y el proveedor no desarrolla su solución:
-- Hostinger Colombia muestra planes promocionales desde COP $4.900/mes con 48 meses pagados por adelantado y renovación superior (por ejemplo, Single: COP $17.900/mes); Cloud Startup muestra COP $25.900/mes promocional y COP $84.900/mes de renovación. Fuente: https://www.hostinger.com/co/precios
-- HostGator Colombia muestra Personal desde COP $5.550/mes y Emprendedor desde COP $8.500/mes con plazo de 3 años. Fuente: https://www.hostgator.co/
-- La captura de GoDaddy Colombia revisada por AMS mostró Inicial COP $6.999, Económico COP $7.499, Deluxe COP $19.999 y Ultimate COP $24.999/mes para el primer periodo de un año; condiciones y renovación deben comprobarse en checkout. Referencia pública: https://www.godaddy.com/es/hosting/web-hosting
+Los precios de AMS son paquetes de solución gestionada, no hosting puro. Un proveedor de hosting vende recursos para que el usuario administre su web; AMS entrega el desarrollo y asume la administración técnica acordada.
 
-Esos precios son hosting, no una comparación equivalente con desarrollo + hosting administrado + dominio + mantenimiento y soporte. No decir que AMS es más barato que un hosting puro; explicar que AMS resuelve y administra el proyecto para que el cliente no tenga que hacerlo.
+No afirmar que AMS es más barato que un hosting de autoservicio. Explicar el valor: el cliente no tiene que aprender paneles, DNS, despliegues, certificados ni mantenimiento.
+
+La política de precio accesible no autoriza a:
+- Incluir funciones fuera del alcance.
+- Ofrecer soporte ilimitado.
+- Cubrir servicios externos sin cobrar.
+- Aceptar proyectos cuyo costo operativo supere la mensualidad.
+- Regalar migraciones o cargas masivas.
 
 ## 9. Rentabilidad interna
 
-- Presupuesto de referencia de infraestructura: OVH VPS-2 cotizado en US$8,50/mes; AMS reserva US$10/mes equivalente (US$120/año) para presupuesto.
+- Presupuesto de referencia de OVH VPS-2: USD $8,50/mes citado anteriormente; AMS reserva USD $10/mes equivalente (USD $120/año).
 - No afirmar que el servidor está activo hasta contratarlo y configurarlo.
-- Evaluar la rentabilidad sobre todos los contratos recurrentes, no dividiendo arbitrariamente el VPS por cliente.
-- No prometer número fijo de clientes por servidor. Medir consumo real de cada aplicación.
-- Registrar ingresos mensuales recurrentes, dominio, licencias, respaldos, pasarela, VPS, otros costos fijos y margen.
-- Antes de aceptar sistemas grandes, revisar CPU, RAM, almacenamiento, base de datos, concurrencia y respaldos.
-- Si una carga necesita más recursos, proponer un plan personalizado o separar la aplicación en otro nodo.
+- Revisar primero la capacidad disponible de Hetzner/Coolify antes de comprar otro VPS.
+- Evaluar ingresos recurrentes totales menos VPS, dominios, backups, pasarela, licencias, almacenamiento y operación.
+- No dividir arbitrariamente el servidor entre una cantidad teórica de clientes para fijar el precio individual.
+- Medir CPU, RAM, disco, bases de datos, tráfico, concurrencia y backups por aplicación.
+- Sistemas que superen la capacidad prevista se cotizan como Empresarial o se separan en otra infraestructura.
 
-## 10. Cambios de precios
+## 10. Cambios de precio
 
-- Los valores publicados en COP son los que controlan la oferta.
-- No cambiar precios directamente por variación de dólar.
-- Revisar trimestralmente costos de infraestructura, dominios, proveedores y carga de soporte.
-- Documentar cualquier modificación y actualizar simultáneamente la web, este documento y las plantillas comerciales.
-- Mantener una versión anterior del tarifario por trazabilidad.
+- Los valores COP publicados son la fuente contractual para clientes en Colombia.
+- No cambiar valores COP automáticamente por variaciones del dólar.
+- Revisar trimestralmente costos de dominio, hosting, respaldo, pasarela y carga de soporte.
+- Documentar cambios y actualizar la web, este archivo, el manual y las plantillas comerciales simultáneamente.
+- Mantener historial de tarifas anteriores.
