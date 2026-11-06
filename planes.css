@@ -48,3 +48,18 @@ body.light-theme .ams-plan-includes{background:linear-gradient(120deg,#ecfdf5,#f
 @media(max-width:740px){.ams-plan-grid{display:flex;flex-wrap:nowrap;overflow-x:auto;overflow-y:hidden;gap:13px;margin-left:-16px;margin-right:-16px;padding:3px 8vw 15px;scroll-snap-type:x mandatory;scroll-padding-inline:8vw;-webkit-overflow-scrolling:touch;scrollbar-width:none;overscroll-behavior-x:contain;touch-action:pan-x pan-y}.ams-plan-grid::-webkit-scrollbar{display:none}.ams-plan-card{flex:0 0 min(84vw,365px);width:min(84vw,365px);max-width:none;scroll-snap-align:center;scroll-snap-stop:always;min-height:0}.ams-plan-description{min-height:0}.ams-plan-includes{padding:14px}.ams-plan-includes-grid{grid-template-columns:1fr 1fr;gap:9px 12px}.ams-plan-terms{font-size:.64rem}}
 @media(max-width:390px){.ams-plan-card{flex-basis:88vw;width:88vw;padding:18px 16px}.ams-plan-monthly>strong{font-size:1.24rem}.ams-plan-includes-grid{grid-template-columns:1fr}}
 @media(prefers-reduced-motion:reduce){.ams-plan-card,.ams-plan-button{transition:none}}
+
+/* Alternativa anual: 10 mensualidades por 12 meses de servicio */
+.ams-plan-annual{padding:10px 12px;border:1px solid rgba(16,185,129,.28);border-radius:13px;background:rgba(16,185,129,.055)}
+.ams-plan-annual>span{display:block;color:var(--muted,#94a3b8);font-size:.58rem;font-weight:800;line-height:1.35}
+.ams-plan-annual>strong{display:block;margin-top:4px;color:var(--text,#f8fafc);font-size:1.08rem;font-weight:950;letter-spacing:-.025em;white-space:normal;line-height:1.25}
+.ams-plan-annual>strong small{font-size:.63rem;font-weight:800;letter-spacing:0}
+.ams-plan-annual em{display:block;margin-top:3px;color:var(--tertiary,#10b981);font-size:.57rem;font-style:normal;font-weight:800;line-height:1.35}
+.ams-plan-monthly,.ams-plan-annual{min-width:0}
+.ams-plan-monthly>strong,.ams-plan-annual>strong{overflow-wrap:anywhere}
+.ams-plan-features{gap:8px}
+.ams-plan-features li{font-size:.71rem;line-height:1.45}
+body.light-theme .ams-plan-annual{background:#f0fdf4;border-color:rgba(22,163,74,.22)}
+body.light-theme .ams-plan-annual>span{color:#475569}
+body.light-theme .ams-plan-annual>strong{color:#166534}
+body.light-theme .ams-plan-annual em{color:#15803d}
