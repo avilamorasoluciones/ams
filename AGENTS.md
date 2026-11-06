@@ -212,15 +212,15 @@ Ningún sistema es “inhackeable”. Describir controles y riesgos residuales.
 
 ## 10. Planes públicos AMS
 
-La web pública utiliza cuatro planes:
+La web pública utiliza cuatro planes: tres con tarifas publicadas y uno cotizado a medida.
 - Presencia: desarrollo COP $500.000 / US$ 125; administración COP $60.000 / US$ 15 al mes; anual COP $600.000 / US$ 150.
-- Comercio: desarrollo COP $1.000.000 / US$ 250; administración COP $100.000 / US$ 25 al mes; anual COP $1.000.000 / US$ 250.
+- Comercio: desarrollo COP $1.000.000 / US$ 250; administración COP $100.000 / US$ 25 al mes; anual COP $1.000.000 / US$ 250. Se destaca públicamente como “Más rentable”.
 - Gestión: desarrollo COP $2.400.000 / US$ 600; administración COP $200.000 / US$ 50 al mes; anual COP $2.000.000 / US$ 500.
-- Empresarial: desarrollo desde COP $4.000.000 / US$ 1.000; administración desde COP $360.000 / US$ 90 al mes; anual desde COP $3.600.000 / US$ 900.
+- Personalizado: desarrollo y administración mensual cotizados individualmente según alcance, complejidad, usuarios, integraciones, infraestructura y soporte. Se destaca públicamente como “Más elegido”.
 
-La anualidad cobra 10 mensualidades y entrega 12 meses de servicio: dos cuotas mensuales gratis. El descuento aplica a la administración, no al desarrollo.
+La anualidad de los tres planes con tarifas publicadas cobra 10 mensualidades y entrega 12 meses de servicio: dos cuotas mensuales gratis. El descuento aplica a la administración, no al desarrollo. En Personalizado, cualquier modalidad anual se define en la propuesta.
 
-La web mantiene dos listas independientes de tarifas fijas: COP para Colombia y USD para pagos internacionales. El selector cambia todos los valores, incluidos ahorros, sin consultar la TRM ni convertir una tarifa desde la otra. Acordar la moneda de la propuesta y del pago antes de contratar.
+La web mantiene dos listas independientes de tarifas fijas para Presencia, Comercio y Gestión: COP para Colombia y USD para pagos internacionales. El selector cambia esos valores, incluidos ahorros, sin consultar la TRM ni convertir una tarifa desde la otra. Personalizado se cotiza en la moneda acordada y no depende del selector. Acordar la moneda de la propuesta y del pago antes de contratar.
 
 Los planes tienen límites de páginas, productos, usuarios, áreas de trabajo y almacenamiento descritos en `POLITICA_PLANES_Y_PRECIOS.md`. No prometer recursos ilimitados.
 
