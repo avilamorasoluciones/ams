@@ -220,7 +220,7 @@ La web pública utiliza cuatro planes:
 
 La anualidad cobra 10 mensualidades y entrega 12 meses de servicio: dos cuotas mensuales gratis. El descuento aplica a la administración, no al desarrollo.
 
-El precio contractual para Colombia permanece fijo en COP. La web muestra equivalencia USD informativa, calculada con TRM oficial diaria + margen AMS de COP $300/USD. No cotizar ni facturar en USD salvo acuerdo explícito.
+El selector de precios de la web inicia en COP y permite cambiar toda la sección a USD. Los valores en USD son aproximados, calculados con TRM oficial diaria + margen AMS de COP $300/USD. El precio contractual para Colombia permanece fijo en COP; no cotizar ni facturar en USD salvo acuerdo explícito.
 
 Los planes tienen límites de páginas, productos, usuarios, áreas de trabajo y almacenamiento descritos en `POLITICA_PLANES_Y_PRECIOS.md`. No prometer recursos ilimitados.
 
