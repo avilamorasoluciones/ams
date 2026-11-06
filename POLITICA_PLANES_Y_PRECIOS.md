@@ -126,7 +126,7 @@ Se utiliza cuando el proyecto supera los límites de los planes anteriores o req
 
 Todos los planes administrados incluyen:
 - Hosting gestionado por AMS.
-- Un dominio .com estándar nuevo registrado a nombre del cliente y renovación mientras el plan esté activo, o gestión técnica del dominio existente sin transferencia.
+- Un dominio .com estándar nuevo registrado a nombre del cliente y renovación mientras el plan esté activo, o gestión técnica y coordinación de su renovación, sin transferencia.
 - HTTPS/SSL.
 - Copias de seguridad programadas.
 - Supervisión básica y mantenimiento técnico.
