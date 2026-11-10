@@ -1,10 +1,10 @@
-const CACHE_NAME = "ayukcal-app-v15";
+const CACHE_NAME = "ayukcal-app-v16";
 const CACHE_PREFIX = "ayukcal-app-";
 const APP_SHELL = [
   "./",
   "./index.html",
-  "../ams-shared.css?v=20261109-10",
-  "../ams-shared.js?v=20261109-8",
+  "../ams-shared.css?v=20261109-11",
+  "../ams-shared.js?v=20261109-9",
   "./db.js",
   "./supabase/config.js",
   "./manifest.webmanifest",
