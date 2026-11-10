@@ -23,7 +23,7 @@ body.ams-shared{font-family:Inter,Montserrat,system-ui,-apple-system,sans-serif!
 @media(prefers-reduced-motion:reduce){.ams-shared *,.ams-shared *::before,.ams-shared *::after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
 /* Paleta AMS y superficies para las tres experiencias */
 body.ams-shared{--primary:var(--ams-violet);--secondary:var(--ams-magenta);--tertiary:var(--ams-cyan)}
-body.ams-shared:not(.light-theme):not([data-theme=light]){color-scheme:dark}
+html:not([data-theme=light]) body.ams-shared:not(.light-theme):not([data-theme=light]){color-scheme:dark}
 body.ams-shared.light-theme,html[data-theme=light] body.ams-shared,body.ams-shared[data-theme=light]{color-scheme:light}
 body.ams-shared.light-theme .ams-shared-bar,html[data-theme=light] .ams-shared-bar,body.ams-shared[data-theme=light] .ams-shared-bar{background:rgba(248,250,252,.96);color:#172033;border-color:rgba(15,23,42,.12)}
 body.ams-shared.light-theme .ams-shared-links a,body.ams-shared.light-theme .ams-shared-theme,html[data-theme=light] .ams-shared-links a,html[data-theme=light] .ams-shared-theme,body.ams-shared[data-theme=light] .ams-shared-links a,body.ams-shared[data-theme=light] .ams-shared-theme{color:#334155!important;background:rgba(255,255,255,.8);border-color:rgba(15,23,42,.14)}
