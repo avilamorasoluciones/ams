@@ -211,7 +211,7 @@
   sidebarInner.appendChild(links);
   var foot = make('div', 'ams-nav-footnote');
   foot.appendChild(make('span', 'ams-nav-footnote-dot'));
-  foot.appendChild(make('span', '', 'Soluciones AMS · ' + META.brand));
+  foot.appendChild(make('span', '', 'Lo Quiero Ya! · Soluciones AMS'));
   sidebarInner.appendChild(foot);
   sidebar.appendChild(sidebarInner);
 
