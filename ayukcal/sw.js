@@ -4,7 +4,7 @@ const APP_SHELL = [
   "./",
   "./index.html",
   "../ams-shared.css?v=20261109-9",
-  "../ams-shared.js?v=20261109-4",
+  "../ams-shared.js?v=20261109-5",
   "./db.js",
   "./supabase/config.js",
   "./manifest.webmanifest",
