@@ -182,3 +182,9 @@ body.ams-shared.light-theme #globalFooter a,
 body.ams-shared.light-theme .footer a,
 body.ams-shared.light-theme .footer-ams a,
 html[data-theme=light] body.ams-shared .footer a{color:#6541d9!important}
+
+/* Los acentos verdes heredados de Herramientas pasan a turquesa AMS; se mantienen rojos/amarillos solo para estados semánticos. */
+body.ams-shared[data-ams-app=herramientas]{--green:var(--ams-cyan)}
+body.ams-shared[data-ams-app=herramientas] .text-green-ams,
+body.ams-shared[data-ams-app=herramientas] .icon-box.green{color:var(--ams-cyan)!important}
+body.ams-shared[data-ams-app=herramientas] .icon-box.green{box-shadow:0 0 10px rgba(37,201,220,.20)!important}
