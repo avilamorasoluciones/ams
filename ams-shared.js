@@ -103,6 +103,7 @@
         id: button.getAttribute('data-nav') || '',
         label: cleanText(button.querySelector('span')) || cleanText(button),
         iconNode: button.querySelector('i'),
+        active: button.classList.contains('active'),
         action: function () { button.click(); }
       };
     });
@@ -132,7 +133,8 @@
           label: label,
           href: node.getAttribute('href') || '#',
           iconNode: iconNode,
-          target: (node.getAttribute('href') || '').replace(/^#/, '')
+          target: (node.getAttribute('href') || '').replace(/^#/, ''),
+          active: (node.getAttribute('href') || '') === location.hash && !!location.hash
         });
       }
     });
@@ -169,7 +171,9 @@
   var brand = make('a', 'ams-brand');
   brand.href = app === 'juegos' ? root + 'juegos/' : app === 'ayukcal' ? root + 'ayukcal/' : root + 'herramientas/';
   brand.setAttribute('aria-label', META.brand + ' · ' + META.subtitle);
-  brand.appendChild(make('span', 'ams-brand-symbol', 'AMS'));
+  var brandSymbol = make('span', 'ams-brand-symbol');
+  brandSymbol.setAttribute('aria-hidden', 'true');
+  brand.appendChild(brandSymbol);
   var brandCopy = make('span', 'ams-brand-copy');
   brandCopy.appendChild(make('span', 'ams-brand-text', META.brand));
   brandCopy.appendChild(make('span', 'ams-brand-sub', META.subtitle));
@@ -190,6 +194,12 @@
         });
       } else if (item.target) {
         link.addEventListener('click', function () {
+          Array.prototype.forEach.call(sidebar.querySelectorAll('.ams-nav-link'), function (other) {
+            var selected = other === link;
+            other.classList.toggle('active', selected);
+            if (selected) other.setAttribute('aria-current', 'page');
+            else other.removeAttribute('aria-current');
+          });
           setPageTitle(item.label);
           closeSidebar();
         });
