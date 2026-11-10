@@ -1,11 +1,11 @@
-const CACHE_NAME = 'ams-tools-v27';
+const CACHE_NAME = 'ams-tools-v28';
 const CACHE_PREFIX = 'ams-tools-';
 
 const APP_SHELL = [
   './',
   './index.html',
-  '../ams-shared.css?v=20261109-10',
-  '../ams-shared.js?v=20261109-8',
+  '../ams-shared.css?v=20261109-11',
+  '../ams-shared.js?v=20261109-9',
   './manifest.webmanifest?v=18',
   './icon-192.svg?v=18',
   './icon-512.svg?v=18',
