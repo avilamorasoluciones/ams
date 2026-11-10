@@ -1,0 +1,38 @@
+/* AMS Shared Experience — extensión visual de avilamorasoluciones.com */
+:root{--ams-violet:#7657ff;--ams-violet-2:#9b7cff;--ams-magenta:#ed4ca6;--ams-cyan:#25c9dc;--ams-ink:#080b18;--ams-panel:#11172a;--ams-line:rgba(148,163,184,.19);--ams-radius:20px}
+body.ams-shared{font-family:Inter,Montserrat,system-ui,-apple-system,sans-serif!important}
+.ams-shared-bar{position:sticky;top:0;z-index:10050;width:100%;min-height:58px;padding:8px max(16px,env(safe-area-inset-right)) 8px max(16px,env(safe-area-inset-left));display:flex;align-items:center;justify-content:space-between;gap:16px;background:rgba(8,11,24,.94);border-bottom:1px solid rgba(148,163,184,.18);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);color:#f8fafc}
+.ams-shared-brand{display:flex;align-items:center;gap:10px;min-width:0;text-decoration:none!important;color:inherit!important;font-weight:850;letter-spacing:-.035em;font-size:.96rem;white-space:nowrap}
+.ams-shared-brand img{width:32px;height:32px;object-fit:contain;border-radius:10px}
+.ams-shared-brand span{background:linear-gradient(100deg,#a78bfa,#f472b6 60%,#67e8f9);background-clip:text;-webkit-background-clip:text;color:transparent}
+.ams-shared-links{display:flex;align-items:center;justify-content:flex-end;gap:6px;flex-wrap:wrap}
+.ams-shared-links a,.ams-shared-theme{display:inline-flex;align-items:center;justify-content:center;min-height:34px;padding:7px 11px;border:1px solid rgba(148,163,184,.2);border-radius:11px;background:rgba(255,255,255,.045);color:#dbe4f5!important;text-decoration:none!important;font:700 .76rem/1.1 inherit;transition:background .18s,border-color .18s,transform .18s}
+.ams-shared-links a:hover,.ams-shared-theme:hover{background:rgba(118,87,255,.17);border-color:rgba(155,124,255,.55);transform:translateY(-1px)}
+.ams-shared-links a[aria-current=page]{background:linear-gradient(110deg,rgba(118,87,255,.24),rgba(237,76,166,.13));border-color:rgba(155,124,255,.55);color:#fff!important}
+.ams-shared-theme{cursor:pointer;min-width:36px;font-size:1rem}
+.ams-shared :is(button,.btn,input,select,textarea){font-family:inherit}
+.ams-shared :is(input:not([type=checkbox]):not([type=radio]),select,textarea){max-width:100%;border-radius:12px}
+.ams-shared :is(button,.btn,a,input,select,textarea,[tabindex]):focus-visible{outline:3px solid rgba(37,201,220,.72)!important;outline-offset:3px}
+.ams-shared :is(.panel,.card,.box,.tool-card,.game-card,.hero-card,.special-event-card){border-radius:var(--ams-radius)}
+.ams-shared :is(.btn.primary,.btn-primary,.button-primary,.primary-button){background:linear-gradient(110deg,var(--ams-violet),var(--ams-magenta))!important;border-color:transparent!important;color:#fff!important;box-shadow:0 8px 24px rgba(118,87,255,.2)}
+.ams-shared footer,.ams-shared .footer,.ams-shared #globalFooter,.ams-shared .footer-ams{border-top:1px solid var(--ams-line)!important}
+.ams-shared img,.ams-shared video,.ams-shared canvas{max-width:100%}
+.ams-shared main{min-width:0}
+@media(max-width:640px){.ams-shared-bar{min-height:54px;padding:7px 10px;gap:8px}.ams-shared-brand{font-size:.82rem;gap:7px}.ams-shared-brand img{width:28px;height:28px}.ams-shared-links{gap:4px}.ams-shared-links a{font-size:.68rem;padding:7px 8px;min-height:32px}.ams-shared-links a:nth-child(1){display:none}.ams-shared-theme{min-width:32px;min-height:32px;padding:5px}}
+@media(max-width:390px){.ams-shared-brand span{max-width:104px;overflow:hidden;text-overflow:ellipsis}.ams-shared-links a{font-size:.64rem;padding:6px}}
+@media(prefers-reduced-motion:reduce){.ams-shared *,.ams-shared *::before,.ams-shared *::after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
+/* Paleta AMS y superficies para las tres experiencias */
+body.ams-shared{--primary:var(--ams-violet);--secondary:var(--ams-magenta);--tertiary:var(--ams-cyan)}
+body.ams-shared:not(.light-theme):not([data-theme=light]){color-scheme:dark}
+body.ams-shared.light-theme,html[data-theme=light] body.ams-shared,body.ams-shared[data-theme=light]{color-scheme:light}
+body.ams-shared.light-theme .ams-shared-bar,html[data-theme=light] .ams-shared-bar,body.ams-shared[data-theme=light] .ams-shared-bar{background:rgba(248,250,252,.96);color:#172033;border-color:rgba(15,23,42,.12)}
+body.ams-shared.light-theme .ams-shared-links a,body.ams-shared.light-theme .ams-shared-theme,html[data-theme=light] .ams-shared-links a,html[data-theme=light] .ams-shared-theme,body.ams-shared[data-theme=light] .ams-shared-links a,body.ams-shared[data-theme=light] .ams-shared-theme{color:#334155!important;background:rgba(255,255,255,.8);border-color:rgba(15,23,42,.14)}
+body.ams-shared.light-theme .ams-shared-links a[aria-current=page],html[data-theme=light] .ams-shared-links a[aria-current=page],body.ams-shared[data-theme=light] .ams-shared-links a[aria-current=page]{color:#4c1d95!important;background:rgba(118,87,255,.1)}
+body.ams-shared.light-theme :is(.panel,.card,.tool-card,.game-card),html[data-theme=light] body.ams-shared :is(.panel,.card,.tool-card,.game-card){border-color:rgba(15,23,42,.12)}
+/* AyuKcal conserva su semántica alimentaria; se unifica el acento sin teñirlo de verde */
+body.ams-shared[data-ams-app=ayukcal]{--primary:var(--ams-violet);--secondary:var(--ams-magenta);--tertiary:var(--ams-cyan)}
+body.ams-shared[data-ams-app=ayukcal] .nav-btn.active{border-color:rgba(118,87,255,.42)}
+/* Herramientas: corrige desbordes de formularios y grids en móviles */
+body.ams-shared[data-ams-app=herramientas] .container{max-width:1240px}
+body.ams-shared[data-ams-app=herramientas] .row{min-width:0}
+body.ams-shared[data-ams-app=herramientas] .card,body.ams-shared[data-ams-app=herramientas] .tool-card{overflow-wrap:anywhere}
