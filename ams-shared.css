@@ -50,7 +50,7 @@ body.ams-shared[data-ams-app=juegos] .site-nav{border-top:1px solid var(--ams-li
 body.ams-shared[data-ams-app=ayukcal] header .header-left>.brand,
 body.ams-shared[data-ams-app=ayukcal] header #themeBtn{display:none!important}
 body.ams-shared[data-ams-app=ayukcal] header .header-content{height:auto;min-height:54px;justify-content:center;flex-wrap:wrap;padding-top:7px;padding-bottom:7px}
-body.ams-shared[data-ams-app=ayukcal] header .header-left{display:none!important}
+body.ams-shared[data-ams-app=ayukcal] header .header-left{display:flex!important;min-width:0}\nbody.ams-shared[data-ams-app=ayukcal] header .header-left>.brand{display:none!important}
 body.ams-shared[data-ams-app=ayukcal] header .nav-menu{flex:1 1 auto;justify-content:center;min-width:0}
 body.ams-shared[data-ams-app=ayukcal] header .header-actions{margin-left:auto;flex:0 0 auto}
 body.ams-shared[data-ams-app=herramientas] .navbar .navbar-brand,
