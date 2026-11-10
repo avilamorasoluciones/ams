@@ -152,7 +152,7 @@ const PWA = (() => {
     if ("serviceWorker" in navigator &&
         (location.protocol === "https:" || location.hostname === "localhost" || location.hostname === "127.0.0.1")) {
       window.addEventListener("load", () => {
-        navigator.serviceWorker.register("./sw.js?v=20261005-49", {
+        navigator.serviceWorker.register("./sw.js?v=20261109-66", {
           scope: "./",
           updateViaCache: "none"
         }).catch(() => {});
