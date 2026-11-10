@@ -5,7 +5,7 @@ const APP_SHELL = [
   './',
   './index.html',
   '../ams-shared.css?v=20261109-9',
-  '../ams-shared.js?v=20261109-5',
+  '../ams-shared.js?v=20261109-6',
   './manifest.webmanifest?v=18',
   './icon-192.svg?v=18',
   './icon-512.svg?v=18',
