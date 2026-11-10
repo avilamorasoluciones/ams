@@ -30,7 +30,7 @@
 <title>AyuKcal | Registro de alimentación, peso y hábitos</title>
   
   <meta name="description" content="AyuKcal es una app web para registrar alimentación, calorías, agua, actividad, ayuno y peso desde un mismo lugar." />
-<meta name="theme-color" content="#0f1714" id="themeColorMeta" />
+<meta name="theme-color" content="#080b18" id="themeColorMeta" />
   <link rel="icon" href="assets/ayukcal-avocado.svg" type="image/svg+xml" />
   <link rel="apple-touch-icon" href="assets/ayukcal-avocado.svg" />
   <link rel="manifest" href="manifest.webmanifest?v=8" />
@@ -1411,7 +1411,7 @@ function toggleTheme() {
   const newTheme = currentTheme === "dark" ? "light" : "dark";
   html.setAttribute("data-theme", newTheme); document.documentElement.style.colorScheme = newTheme === "light" ? "light" : "dark"; 
   $("themeBtn").textContent = newTheme === "dark" ? "🌙" : "☀️";
-  $("themeColorMeta").setAttribute("content", newTheme === "dark" ? "#0f1714" : "#f4f9f5");
+  $("themeColorMeta").setAttribute("content", newTheme === "dark" ? "#080b18" : "#f5f6fc");
   localStorage.setItem("ayukcal_theme", newTheme); const s=state(); s.settings=s.settings||{}; s.settings.theme=newTheme; save(s); draw();
 }
 
@@ -1419,7 +1419,7 @@ function initTheme() {
   const savedTheme = state().settings?.theme || localStorage.getItem("ayukcal_theme") || "dark"; 
   document.documentElement.setAttribute("data-theme", savedTheme); document.documentElement.style.colorScheme = savedTheme === "light" ? "light" : "dark";
   $("themeBtn").textContent = savedTheme === "dark" ? "🌙" : "☀️"; 
-  $("themeColorMeta").setAttribute("content", savedTheme === "dark" ? "#0f1714" : "#f4f9f5");
+  $("themeColorMeta").setAttribute("content", savedTheme === "dark" ? "#080b18" : "#f5f6fc");
 }
 
 function setDate(val) { if(!val) return; viewDate = val; refresh(); }
