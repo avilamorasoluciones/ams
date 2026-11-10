@@ -3,7 +3,7 @@ const CACHE_PREFIX = "ams-games-";
 const APP_SHELL = [
   "./",
   "./index.html",
-  "../ams-shared.css?v=20261109-9",
+  "../ams-shared.css?v=20261109-10",
   "../ams-shared.js?v=20261109-6",
   "./apuesta.html",
   "./impostor.html",
