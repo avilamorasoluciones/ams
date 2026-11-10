@@ -438,7 +438,7 @@
     "author":{"@type":"Organization","name":"Avila Mora Soluciones","url":"https://avilamorasoluciones.com/"}
   }
   </script>
-  <link rel="stylesheet" href="../ams-shared.css?v=20261109-12">
+  <link rel="stylesheet" href="../ams-shared.css?v=20261109-8">
 </head>
 <body>
   <div class="ayukcal-entry-loader" id="ayukcalEntryLoader" role="status" aria-label="Cargando AyuKcal">
@@ -1032,7 +1032,7 @@
   // PWA AyuKcal: actualiza el Service Worker sin interferir con Supabase ni con los datos de la app.
   if ("serviceWorker" in navigator && (location.protocol === "https:" || location.hostname === "localhost" || location.hostname === "127.0.0.1")) {
     window.addEventListener("load", () => {
-      navigator.serviceWorker.register("./sw.js?v=10", { scope: "./", updateViaCache: "none" }).catch(() => {});
+      navigator.serviceWorker.register("./sw.js?v=7", { scope: "./", updateViaCache: "none" }).catch(() => {});
     }, { once: true });
   }
 </script>
@@ -2496,6 +2496,6 @@ bindUISounds();
   }).observe(document.documentElement,{childList:true,subtree:true});
 })();
 </script>
-  <script src="../ams-shared.js?v=20261109-9" defer></script>
+  <script src="../ams-shared.js?v=20261109-3" defer></script>
 </body>
 </html>
