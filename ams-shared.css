@@ -36,3 +36,56 @@ body.ams-shared[data-ams-app=ayukcal] .nav-btn.active{border-color:rgba(118,87,2
 body.ams-shared[data-ams-app=herramientas] .container{max-width:1240px}
 body.ams-shared[data-ams-app=herramientas] .row{min-width:0}
 body.ams-shared[data-ams-app=herramientas] .card,body.ams-shared[data-ams-app=herramientas] .tool-card{overflow-wrap:anywhere}
+
+/* ===== Integración de navegación: una sola identidad, menús internos funcionales ===== */
+body.ams-shared .ams-shared-bar{position:sticky;top:0;z-index:11000}
+body.ams-shared[data-ams-app=juegos] .topbar,
+body.ams-shared[data-ams-app=ayukcal] header,
+body.ams-shared[data-ams-app=herramientas] .navbar{position:relative!important;top:auto!important;z-index:20!important}
+body.ams-shared[data-ams-app=juegos] .topbar .brand-link,
+body.ams-shared[data-ams-app=juegos] .topbar .theme-switch-btn{display:none!important}
+body.ams-shared[data-ams-app=juegos] .topbar-inner{max-width:var(--content-wide,1120px);justify-content:flex-end;padding-top:8px;padding-bottom:8px}
+body.ams-shared[data-ams-app=juegos] .topbar-actions{margin-left:auto}
+body.ams-shared[data-ams-app=juegos] .site-nav{border-top:1px solid var(--ams-line)}
+body.ams-shared[data-ams-app=ayukcal] header .header-left>.brand,
+body.ams-shared[data-ams-app=ayukcal] header #themeBtn{display:none!important}
+body.ams-shared[data-ams-app=ayukcal] header .header-content{height:auto;min-height:54px;justify-content:center;flex-wrap:wrap;padding-top:7px;padding-bottom:7px}
+body.ams-shared[data-ams-app=ayukcal] header .header-left{display:none!important}
+body.ams-shared[data-ams-app=ayukcal] header .nav-menu{flex:1 1 auto;justify-content:center;min-width:0}
+body.ams-shared[data-ams-app=ayukcal] header .header-actions{margin-left:auto;flex:0 0 auto}
+body.ams-shared[data-ams-app=herramientas] .navbar .navbar-brand,
+body.ams-shared[data-ams-app=herramientas] .navbar .ams-theme-switch{display:none!important}
+body.ams-shared[data-ams-app=herramientas] .navbar>.container{justify-content:flex-end;min-height:48px}
+body.ams-shared[data-ams-app=herramientas] .navbar-toggler{margin-left:auto}
+@media(max-width:640px){
+ body.ams-shared[data-ams-app=ayukcal] header .header-content{gap:6px}
+ body.ams-shared[data-ams-app=ayukcal] header .nav-menu{width:100%;flex-wrap:nowrap;overflow-x:auto;justify-content:flex-start;scrollbar-width:none}
+ body.ams-shared[data-ams-app=ayukcal] header .nav-menu::-webkit-scrollbar{display:none}
+ body.ams-shared[data-ams-app=ayukcal] header .header-actions{position:absolute;right:10px;top:8px}
+ body.ams-shared[data-ams-app=ayukcal] header .nav-menu{padding-right:88px}
+}
+/* ===== Tokens AMS por aplicación ===== */
+body.ams-shared[data-ams-app=juegos]{
+ --primary:var(--ams-violet);--accent:var(--ams-cyan);--danger:var(--ams-magenta);
+ --gradA:var(--ams-violet);--gradB:var(--ams-magenta);
+}
+body.ams-shared[data-ams-app=ayukcal]{
+ --primary:var(--ams-violet);--accent:var(--ams-cyan);--secondary:var(--ams-magenta);
+}
+body.ams-shared[data-ams-app=ayukcal] .ayukcal-entry-loader{
+ background:radial-gradient(circle at 50% 42%,rgba(118,87,255,.12),transparent 28%),radial-gradient(circle at 50% 50%,rgba(237,76,166,.08),transparent 48%),var(--bg)!important
+}
+body.ams-shared[data-ams-app=ayukcal] .ayukcal-loader-glow{background:radial-gradient(circle,rgba(118,87,255,.22),transparent 70%)!important}
+body.ams-shared[data-ams-app=ayukcal] .ayukcal-loader-ring{border-top-color:var(--ams-violet)!important;border-right-color:var(--ams-cyan)!important}
+body.ams-shared[data-ams-app=ayukcal] .nav-btn.active,
+body.ams-shared[data-ams-app=ayukcal] .btn.primary,
+body.ams-shared[data-ams-app=ayukcal] .btn-primary{border-color:rgba(118,87,255,.5)!important}
+body.ams-shared[data-ams-app=ayukcal] .nav-btn.active{color:var(--ams-violet)!important}
+body.ams-shared[data-ams-app=ayukcal] .btn.primary,
+body.ams-shared[data-ams-app=ayukcal] .btn-primary{background:linear-gradient(110deg,var(--ams-violet),var(--ams-magenta))!important;color:#fff!important}
+body.ams-shared[data-ams-app=herramientas]{--cyan:var(--ams-cyan);--purple:var(--ams-violet);--magenta:var(--ams-magenta)}
+body.ams-shared[data-ams-app=herramientas] .navbar{background:rgba(8,11,24,.94)!important;border-bottom-color:var(--ams-line)!important}
+body.ams-shared[data-ams-app=herramientas] .text-gradient{background-image:linear-gradient(90deg,var(--ams-violet),var(--ams-magenta),var(--ams-cyan))!important}
+body.ams-shared[data-ams-app=herramientas] .ams-theme-switch{display:none!important}
+html[data-theme=light] body.ams-shared[data-ams-app=ayukcal] .nav-btn.active{color:#6541d9!important}
+body.ams-shared[data-ams-app=herramientas].light-theme .navbar{background:rgba(248,250,252,.96)!important}
