@@ -392,8 +392,6 @@ body.ams-shared[data-ams-app="herramientas"].light-theme .navbar {
 }
 
 body.ams-shared[data-ams-app="herramientas"] .brand-logo img {
-  width: 38px;
-  height: 38px;
   object-fit: contain;
   border-radius: 11px;
   box-shadow: 0 8px 22px rgba(99, 102, 241, .22);
