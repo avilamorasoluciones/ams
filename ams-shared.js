@@ -12,11 +12,16 @@ var brandName=document.createElement('span');brandName.textContent='Avila Mora S
 var links=document.createElement('div');links.className='ams-shared-links';
 [['Inicio',root],['Juegos',root+'juegos/'],['AyuKcal',root+'ayukcal/'],['Herramientas',root+'herramientas/']].forEach(function(item){var a=document.createElement('a');a.href=item[1];a.textContent=item[0];if(item[0].toLowerCase()===app)a.setAttribute('aria-current','page');links.appendChild(a);});
 var theme=document.createElement('button');theme.type='button';theme.className='ams-shared-theme';theme.setAttribute('aria-label','Cambiar tema claro u oscuro');theme.title='Cambiar tema claro u oscuro';theme.textContent='◐';
+function syncTheme(){var light=body.classList.contains('light-theme')||document.documentElement.getAttribute('data-theme')==='light';theme.textContent=light?'☾':'☼';theme.setAttribute('aria-label',light?'Cambiar a tema oscuro':'Cambiar a tema claro');theme.title=light?'Cambiar a tema oscuro':'Cambiar a tema claro';}
 theme.addEventListener('click',function(){
  if(app==='juegos'){var b=document.querySelector('[data-theme-toggle]');if(b)b.click();return;}
  if(app==='ayukcal'){if(typeof window.toggleTheme==='function')window.toggleTheme();return;}
  var light=body.classList.contains('light-theme');
  var b=document.getElementById(light?'themeDarkBtn':'themeLightBtn');if(b)b.click();
+ syncTheme();
 });
+new MutationObserver(syncTheme).observe(body,{attributes:true,attributeFilter:['class','data-theme']});
+new MutationObserver(syncTheme).observe(document.documentElement,{attributes:true,attributeFilter:['data-theme']});
+document.addEventListener('DOMContentLoaded',syncTheme,{once:true});syncTheme();
 links.appendChild(theme);bar.appendChild(brand);bar.appendChild(links);body.insertBefore(bar,body.firstChild);
 })();
