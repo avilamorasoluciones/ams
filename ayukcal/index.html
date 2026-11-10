@@ -30,7 +30,7 @@
 <title>AyuKcal | Registro de alimentación, peso y hábitos</title>
   
   <meta name="description" content="AyuKcal es una app web para registrar alimentación, calorías, agua, actividad, ayuno y peso desde un mismo lugar." />
-<meta name="theme-color" content="#080b18" id="themeColorMeta" />
+<meta name="theme-color" content="#0f1714" id="themeColorMeta" />
   <link rel="icon" href="assets/ayukcal-avocado.svg" type="image/svg+xml" />
   <link rel="apple-touch-icon" href="assets/ayukcal-avocado.svg" />
   <link rel="manifest" href="manifest.webmanifest?v=8" />
@@ -99,39 +99,39 @@
     }
 
     /* =========================================
-       VARIABLES Y TEMAS · IDENTIDAD AMS
+       VARIABLES Y TEMAS (AGUACATE) 🥑
        ========================================= */
     :root {
       --ui-scale: .9;
       --ui-font-scale: .9;
       --ui-space-scale: .9;
-      --bg: #f5f6fc; 
+      --bg: #f4f9f5; 
       --surface: #ffffff; 
-      --text: #172033; 
-      --muted: #64748b; 
-      --border: rgba(15,23,42,.13);
-      --primary: #6541d9; 
-      --primary-hover: #4c32ad;
-      --accent: #0e9fb2; 
+      --text: #1c2b23; 
+      --muted: #6b8576; 
+      --border: #d4e3db;
+      --primary: #2d6a4f; 
+      --primary-hover: #1b4332;
+      --accent: #10b981; 
       --danger: #ef4444;
       --warning: #f59e0b;
       --danger-bg: #fee2e2;
       --water: #3b82f6;
       --water-bg: #dbeafe;
       --water-fill: #93c5fd;
-      --shadow: 0 10px 40px rgba(15, 23, 42, 0.08); 
+      --shadow: 0 10px 40px rgba(45, 106, 79, 0.08); 
       --radius: 24px;
     }
 
     [data-theme="dark"] {
-      --bg: #080b18; 
-      --surface: #11172a; 
-      --text: #f8fafc; 
-      --muted: #aab6cb; 
-      --border: rgba(148,163,184,.19);
-      --primary: #9b7cff; 
-      --primary-hover: #b09aff;
-      --accent: #25c9dc; 
+      --bg: #0f1714; 
+      --surface: #18241e; 
+      --text: #ecfdf5; 
+      --muted: #8ea89a; 
+      --border: #23382e;
+      --primary: #4ade80; 
+      --primary-hover: #22c55e;
+      --accent: #a3e635; 
       --danger: #f87171; 
       --danger-bg: rgba(239, 68, 68, 0.15);
       --water: #60a5fa;
@@ -438,7 +438,6 @@
     "author":{"@type":"Organization","name":"Avila Mora Soluciones","url":"https://avilamorasoluciones.com/"}
   }
   </script>
-  <link rel="stylesheet" href="../ams-shared.css?v=20261109-8">
 </head>
 <body>
   <div class="ayukcal-entry-loader" id="ayukcalEntryLoader" role="status" aria-label="Cargando AyuKcal">
@@ -1411,7 +1410,7 @@ function toggleTheme() {
   const newTheme = currentTheme === "dark" ? "light" : "dark";
   html.setAttribute("data-theme", newTheme); document.documentElement.style.colorScheme = newTheme === "light" ? "light" : "dark"; 
   $("themeBtn").textContent = newTheme === "dark" ? "🌙" : "☀️";
-  $("themeColorMeta").setAttribute("content", newTheme === "dark" ? "#080b18" : "#f5f6fc");
+  $("themeColorMeta").setAttribute("content", newTheme === "dark" ? "#0f1714" : "#f4f9f5");
   localStorage.setItem("ayukcal_theme", newTheme); const s=state(); s.settings=s.settings||{}; s.settings.theme=newTheme; save(s); draw();
 }
 
@@ -1419,7 +1418,7 @@ function initTheme() {
   const savedTheme = state().settings?.theme || localStorage.getItem("ayukcal_theme") || "dark"; 
   document.documentElement.setAttribute("data-theme", savedTheme); document.documentElement.style.colorScheme = savedTheme === "light" ? "light" : "dark";
   $("themeBtn").textContent = savedTheme === "dark" ? "🌙" : "☀️"; 
-  $("themeColorMeta").setAttribute("content", savedTheme === "dark" ? "#080b18" : "#f5f6fc");
+  $("themeColorMeta").setAttribute("content", savedTheme === "dark" ? "#0f1714" : "#f4f9f5");
 }
 
 function setDate(val) { if(!val) return; viewDate = val; refresh(); }
@@ -2496,6 +2495,5 @@ bindUISounds();
   }).observe(document.documentElement,{childList:true,subtree:true});
 })();
 </script>
-  <script src="../ams-shared.js?v=20261109-3" defer></script>
 </body>
 </html>
