@@ -7,14 +7,14 @@
   --text: #f8fafc;
   --muted: #94a3b8;
 
-  --primary: #7657ff;
-  --accent: #25c9dc;
-  --danger: #ed4ca6;
+  --primary: #7c3aed;
+  --accent: #22d3ee;
+  --danger: #ff3d9a;
   --warning: #ffcc00;
   --success: #22c55e;
 
-  --gradA: rgba(118, 87, 255, 1);
-  --gradB: rgba(237, 76, 166, 0.92);
+  --gradA: rgba(124, 58, 237, 1);
+  --gradB: rgba(255, 61, 154, 0.92);
 
   --shadow: 0 14px 40px rgba(0, 0, 0, 0.45);
   --shadow-soft: 0 10px 28px rgba(0, 0, 0, 0.18);
