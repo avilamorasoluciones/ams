@@ -782,7 +782,7 @@
     }
     body.light-theme .tool-filter.active b{background:rgba(255,255,255,.18);color:#fff}
 </style>
-  <link rel="stylesheet" href="../ams-shared.css?v=20261109-12">
+  <link rel="stylesheet" href="../ams-shared.css?v=20261109-8">
 </head>
 <body class="d-flex flex-column min-vh-100">
     <div class="ams-loader active ams-entry-loader" id="ams-loader" aria-hidden="false" role="status" aria-live="polite">
@@ -2208,7 +2208,7 @@
         // PWA: registro del Service Worker para caché básica.
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
-                navigator.serviceWorker.register('./sw.js?v=22').catch(err => console.warn('AMS PWA:', err));
+                navigator.serviceWorker.register('./sw.js?v=19').catch(err => console.warn('AMS PWA:', err));
             });
         }
 
@@ -2557,6 +2557,6 @@
   }).observe(document.documentElement,{childList:true,subtree:true});
 })();
 </script>
-  <script src="../ams-shared.js?v=20261109-9" defer></script>
+  <script src="../ams-shared.js?v=20261109-3" defer></script>
 </body>
 </html>
