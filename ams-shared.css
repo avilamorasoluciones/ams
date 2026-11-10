@@ -6,7 +6,7 @@ body.ams-shared{font-family:Inter,Montserrat,system-ui,-apple-system,sans-serif!
 .ams-shared-brand img{width:32px;height:32px;object-fit:contain;border-radius:10px}
 .ams-shared-brand span{background:linear-gradient(100deg,#a78bfa,#f472b6 60%,#67e8f9);background-clip:text;-webkit-background-clip:text;color:transparent}
 .ams-shared-links{display:flex;align-items:center;justify-content:flex-end;gap:6px;flex-wrap:wrap}
-.ams-shared-links a,.ams-shared-theme{display:inline-flex;align-items:center;justify-content:center;min-height:34px;padding:7px 11px;border:1px solid rgba(148,163,184,.2);border-radius:11px;background:rgba(255,255,255,.045);color:#dbe4f5!important;text-decoration:none!important;font:700 .76rem/1.1 inherit;transition:background .18s,border-color .18s,transform .18s}
+.ams-shared-links a,.ams-shared-theme{display:inline-flex;align-items:center;justify-content:center;min-height:34px;padding:7px 11px;border:1px solid rgba(148,163,184,.2);border-radius:11px;background:rgba(255,255,255,.045);color:#dbe4f5!important;text-decoration:none!important;font-family:inherit;font-weight:700;font-size:.76rem;line-height:1.1;transition:background .18s,border-color .18s,transform .18s}
 .ams-shared-links a:hover,.ams-shared-theme:hover{background:rgba(118,87,255,.17);border-color:rgba(155,124,255,.55);transform:translateY(-1px)}
 .ams-shared-links a[aria-current=page]{background:linear-gradient(110deg,rgba(118,87,255,.24),rgba(237,76,166,.13));border-color:rgba(155,124,255,.55);color:#fff!important}
 .ams-shared-theme{cursor:pointer;min-width:36px;font-size:1rem}
