@@ -1,7 +1,7 @@
 (function(){
 'use strict';
 var body=document.body;if(!body)return;
-var path=location.pathname,app=path.indexOf('/juegos')===0?'juegos':path.indexOf('/ayukcal')===0?'ayukcal':'herramientas';
+var path=location.pathname,app=path.indexOf('/juegos/')!==-1?'juegos':path.indexOf('/ayukcal/')!==-1?'ayukcal':'herramientas';
 body.classList.add('ams-shared');body.setAttribute('data-ams-app',app);
 var bar=document.createElement('div');bar.className='ams-shared-bar';bar.setAttribute('role','navigation');bar.setAttribute('aria-label','Navegación Avila Mora Soluciones');
 var brand=document.createElement('a');brand.className='ams-shared-brand';brand.href='../';brand.innerHTML='<img src="../img/AMS.webp?v=1" alt="" width="32" height="32"><span>Avila Mora Soluciones</span>';
