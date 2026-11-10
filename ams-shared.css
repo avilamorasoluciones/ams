@@ -128,3 +128,57 @@ html[data-theme=light] body.ams-shared[data-ams-app=ayukcal] .kpi{
 body.ams-shared[data-ams-app=herramientas] .text-purple-ams,
 body.ams-shared[data-ams-app=herramientas] .icon-box.purple{color:var(--ams-violet)!important}
 body.ams-shared[data-ams-app=herramientas] .icon-box.purple{box-shadow:0 0 10px rgba(118,87,255,.22)!important}
+
+/* ===== Marco visual común: fondos, subnavegación y pie ===== */
+body.ams-shared:not(.light-theme):not([data-theme=light]){
+ background:
+  radial-gradient(1050px 560px at 10% 5%,rgba(118,87,255,.15),transparent 58%),
+  radial-gradient(900px 520px at 90% 8%,rgba(237,76,166,.10),transparent 58%),
+  radial-gradient(900px 560px at 52% 100%,rgba(37,201,220,.075),transparent 62%),
+  linear-gradient(180deg,#080b18,#0b1020 62%,#080b18)!important;
+}
+body.ams-shared.light-theme,
+html[data-theme=light] body.ams-shared,
+body.ams-shared[data-theme=light]{
+ background:
+  radial-gradient(1000px 560px at 8% 5%,rgba(118,87,255,.055),transparent 58%),
+  radial-gradient(900px 520px at 92% 8%,rgba(237,76,166,.04),transparent 58%),
+  linear-gradient(180deg,#f8fafc,#eef2f8 65%,#f8fafc)!important;
+}
+body.ams-shared[data-ams-app=juegos] .topbar,
+body.ams-shared[data-ams-app=ayukcal] header,
+body.ams-shared[data-ams-app=herramientas] .navbar{
+ background:rgba(17,23,42,.78)!important;
+ border-bottom:1px solid var(--ams-line)!important;
+ box-shadow:0 8px 28px rgba(0,0,0,.10)
+}
+body.ams-shared.light-theme[data-ams-app=juegos] .topbar,
+body.ams-shared.light-theme[data-ams-app=ayukcal] header,
+body.ams-shared.light-theme[data-ams-app=herramientas] .navbar,
+html[data-theme=light] body.ams-shared[data-ams-app=ayukcal] header{
+ background:rgba(255,255,255,.88)!important;
+ border-bottom:1px solid rgba(15,23,42,.10)!important;
+ box-shadow:0 8px 28px rgba(15,23,42,.045)
+}
+body.ams-shared #globalFooter,
+body.ams-shared .footer,
+body.ams-shared .footer-ams{
+ margin-top:auto!important;padding:24px 16px!important;
+ background:rgba(13,19,37,.88)!important;
+ border-top:1px solid var(--ams-line)!important;
+ color:#aab6cb!important;text-align:center
+}
+body.ams-shared #globalFooter a,
+body.ams-shared .footer a,
+body.ams-shared .footer-ams a{color:#b9a7ff!important;text-decoration:none}
+body.ams-shared.light-theme #globalFooter,
+body.ams-shared.light-theme .footer,
+body.ams-shared.light-theme .footer-ams,
+html[data-theme=light] body.ams-shared .footer{
+ background:rgba(238,242,248,.94)!important;
+ border-top-color:rgba(15,23,42,.11)!important;color:#64748b!important
+}
+body.ams-shared.light-theme #globalFooter a,
+body.ams-shared.light-theme .footer a,
+body.ams-shared.light-theme .footer-ams a,
+html[data-theme=light] body.ams-shared .footer a{color:#6541d9!important}
