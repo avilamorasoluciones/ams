@@ -124,3 +124,7 @@ html[data-theme=light] body.ams-shared[data-ams-app=ayukcal] .panel,
 html[data-theme=light] body.ams-shared[data-ams-app=ayukcal] .kpi{
  border-color:rgba(15,23,42,.12)
 }
+
+body.ams-shared[data-ams-app=herramientas] .text-purple-ams,
+body.ams-shared[data-ams-app=herramientas] .icon-box.purple{color:var(--ams-violet)!important}
+body.ams-shared[data-ams-app=herramientas] .icon-box.purple{box-shadow:0 0 10px rgba(118,87,255,.22)!important}
