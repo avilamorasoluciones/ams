@@ -1,1013 +1,932 @@
 /* ==========================================================================
-   AMS Unified Application Experience
-   Shared shell and component language for Juegos, AyuKcal and Herramientas.
-   Visual reference: MedYa, POS Comercio and RestoYa.
+   AMS visual language for the existing PWAs.
+   Based on the root site's css/variables.css, css/layout.css and
+   css/themes.css. This file is intentionally visual-only:
+   no elements are created, hidden, moved, reordered or resized.
    ========================================================================== */
-:root{
-  --ams-primary:#7058ee;
-  --ams-primary-2:#9460ed;
-  --ams-secondary:#d94ac7;
-  --ams-tertiary:#20b9c4;
-  --ams-ink:#100d1e;
-  --ams-ink-2:#171329;
-  --ams-panel:#1b1730;
-  --ams-panel-2:#211b37;
-  --ams-line:rgba(177,158,226,.18);
-  --ams-line-strong:rgba(177,158,226,.28);
-  --ams-text:#f3efff;
-  --ams-muted:#a69dbd;
-  --ams-sidebar-width:272px;
-  --ams-sidebar-collapsed:82px;
-  --ams-radius:15px;
-  --ams-shadow:0 16px 42px rgba(4,3,12,.24);
-  --ams-gradient:linear-gradient(105deg,#6656ef 0%,#9451e8 52%,#d744c5 100%);
-}
-*{box-sizing:border-box}
-body.ams-shared{
-  --primary:var(--ams-primary);
-  --secondary:var(--ams-secondary);
-  --tertiary:var(--ams-tertiary);
-  --gradient:var(--ams-gradient);
-  --glass:rgba(255,255,255,.035);
-  --glass-border:var(--ams-line);
-  --dark:var(--ams-ink);
-  --dark-2:#0d0a18;
-  --light:var(--ams-text);
-  --muted:var(--ams-muted);
-  --muted-2:#c7bfdc;
-  position:relative;
-  display:flex;
-  flex-direction:column;
-  min-height:100vh;
-  min-height:100dvh;
-  width:100%;
-  max-width:100%;
-  padding-left:var(--ams-sidebar-width);
-  margin:0;
-  overflow-x:clip;
-  color:var(--ams-text)!important;
+
+body.ams-shared {
+  --primary: #6366f1;
+  --secondary: #ec4899;
+  --tertiary: #10b981;
+  --gold: #f59e0b;
+  --dark: #0f172a;
+  --dark-2: #070b18;
+  --light: #f8fafc;
+  --muted: #94a3b8;
+  --muted-2: #cbd5e1;
+  --gradient: linear-gradient(135deg, #6366f1, #ec4899);
+  --glass: rgba(255, 255, 255, .04);
+  --glass-border: rgba(255, 255, 255, .12);
+  --shadow: 0 20px 50px rgba(0, 0, 0, .35);
+  --shadow-soft: 0 12px 30px rgba(0, 0, 0, .22);
+  --radius: 26px;
+  --radius-lg: 34px;
+  color: var(--light);
+  font-family: "Montserrat", system-ui, -apple-system, "Segoe UI", sans-serif;
   background:
-    radial-gradient(1000px 560px at 82% 13%,rgba(125,69,184,.13),transparent 60%),
-    radial-gradient(880px 520px at 46% 92%,rgba(94,56,156,.075),transparent 64%),
-    linear-gradient(135deg,#100d1e 0%,#100d20 52%,#100d1c 100%)!important;
-  font-family:Inter,Montserrat,"Segoe UI",system-ui,sans-serif!important;
-  line-height:1.55;
-  isolation:isolate;
+    radial-gradient(1200px 600px at 12% 8%, rgba(99, 102, 241, .20), transparent 55%),
+    radial-gradient(900px 500px at 82% 12%, rgba(236, 72, 153, .16), transparent 55%),
+    radial-gradient(1000px 600px at 60% 92%, rgba(16, 185, 129, .10), transparent 60%),
+    linear-gradient(180deg, var(--dark), var(--dark-2));
+  transition: background .3s ease, color .3s ease;
 }
-body.ams-shared::before{
-  content:"";
-  position:fixed;
-  inset:0;
-  z-index:-1;
-  pointer-events:none;
+
+body.ams-shared :is(button, input, select, textarea) {
+  font-family: inherit;
+}
+
+body.ams-shared :is(button, a, input, select, textarea, [tabindex]):focus-visible {
+  outline: 3px solid rgba(99, 102, 241, .72);
+  outline-offset: 3px;
+}
+
+body.ams-shared :is(h1, h2, h3, h4, h5, h6) {
+  font-family: "Montserrat", system-ui, -apple-system, "Segoe UI", sans-serif;
+  letter-spacing: -.035em;
+}
+
+body.ams-shared :is(.muted, .text-muted, .text-secondary) {
+  color: var(--muted);
+}
+
+/* --------------------------------------------------------------------------
+   AyuKcal — preserve its header, bottom/section navigation, content flow,
+   panels, dialogs and footer. Only restyle their existing surfaces.
+   -------------------------------------------------------------------------- */
+body.ams-shared[data-ams-app="ayukcal"] {
+  --bg: #0f172a;
+  --surface: rgba(17, 23, 42, .94);
+  --text: #f8fafc;
+  --muted: #94a3b8;
+  --border: rgba(255, 255, 255, .12);
+  --primary: #6366f1;
+  --primary-hover: #818cf8;
+  --primary-contrast: #fff;
+  --accent: #ec4899;
+  --focus-ring: #818cf8;
+  --shadow: 0 20px 50px rgba(0, 0, 0, .30);
+  --radius: 26px;
+  --water: #38bdf8;
+  --water-bg: rgba(56, 189, 248, .14);
+  --water-fill: rgba(56, 189, 248, .34);
   background:
-    radial-gradient(1px 1px at 18% 22%,rgba(255,255,255,.18),transparent 2px),
-    radial-gradient(1px 1px at 72% 36%,rgba(255,255,255,.12),transparent 2px),
-    radial-gradient(1px 1px at 44% 82%,rgba(255,255,255,.10),transparent 2px);
-  opacity:.3;
+    radial-gradient(1200px 600px at 12% 8%, rgba(99, 102, 241, .18), transparent 55%),
+    radial-gradient(900px 500px at 82% 12%, rgba(236, 72, 153, .13), transparent 55%),
+    radial-gradient(1000px 600px at 60% 92%, rgba(16, 185, 129, .08), transparent 60%),
+    linear-gradient(180deg, #0f172a, #070b18);
+  color: #f8fafc;
 }
-html[data-theme="light"] body.ams-shared,
-body.ams-shared.light-theme,
-body.ams-shared[data-theme="light"]{
-  --ams-ink:#f2f3f9;
-  --ams-ink-2:#f8f8fc;
-  --ams-panel:#fff;
-  --ams-panel-2:#f7f6fc;
-  --ams-line:rgba(42,31,78,.12);
-  --ams-line-strong:rgba(76,57,132,.20);
-  --ams-text:#28233b;
-  --ams-muted:#77718d;
-  --ams-shadow:0 14px 34px rgba(46,34,88,.075);
-  --light:#28233b;
-  --muted:#77718d;
-  --muted-2:#69637d;
-  color:var(--ams-text)!important;
+
+html[data-theme="light"] body.ams-shared[data-ams-app="ayukcal"] {
+  --bg: #f1f5f9;
+  --surface: rgba(255, 255, 255, .94);
+  --text: #1e293b;
+  --muted: #64748b;
+  --border: rgba(15, 23, 42, .12);
+  --primary: #4f46e5;
+  --primary-hover: #4338ca;
+  --primary-contrast: #fff;
+  --accent: #db2777;
+  --focus-ring: #6366f1;
+  --shadow: 0 14px 35px rgba(15, 23, 42, .08);
+  --water: #2563eb;
+  --water-bg: rgba(37, 99, 235, .10);
+  --water-fill: rgba(37, 99, 235, .25);
+  color: #1e293b;
   background:
-    radial-gradient(1000px 560px at 82% 13%,rgba(125,69,184,.075),transparent 60%),
-    linear-gradient(135deg,#f5f4fa 0%,#f0eff7 55%,#f7f6fb 100%)!important;
-}
-body.ams-shared[data-ams-app="ayukcal"]{
-  --primary:var(--ams-primary);
-  --secondary:var(--ams-secondary);
-  --accent:var(--ams-tertiary);
-}
-body.ams-shared[data-ams-app="herramientas"]{
-  --cyan:var(--ams-tertiary);
-  --purple:var(--ams-primary);
-  --magenta:var(--ams-secondary);
-  --bg-deep:var(--ams-ink);
-  --bg-card:var(--ams-panel);
-  --text-main:var(--ams-text);
-  --text-muted:var(--ams-muted);
-  --border-glass:var(--ams-line);
-  --border-hover:var(--ams-line-strong);
-}
-body.ams-shared[data-ams-app="herramientas"].light-theme,
-html[data-theme="light"] body.ams-shared[data-ams-app="herramientas"]{
-  --bg-deep:#f2f3f9;
-  --bg-card:#fff;
-  --text-main:#28233b;
-  --text-muted:#77718d;
-  --border-glass:rgba(42,31,78,.12);
-  --border-hover:rgba(101,75,202,.28);
-  --cyan:#159da9;
-  --purple:#6249d0;
-  --magenta:#c63d9b;
-}
-body.ams-shared :is(a,button,input,select,textarea,[tabindex]):focus-visible{
-  outline:3px solid rgba(32,185,196,.72)!important;
-  outline-offset:3px;
-}
-body.ams-shared :is(img,video,canvas,svg,iframe){max-width:100%}
-body.ams-shared :is(button,input,select,textarea){font-family:inherit}
-
-/* The former application headers remain available to legacy event handlers. */
-body.ams-shared .ams-original-header,
-body.ams-shared .ams-original-footer{display:none!important}
-body.ams-shared .ams-main-content{
-  display:block;
-  flex:1 0 auto;
-  width:100%;
-  min-width:0;
-  max-width:1600px;
-  margin:0 auto;
-  padding:18px 28px 30px;
-  position:relative;
-  z-index:1;
-}
-body.ams-shared .ams-main-content > .container,
-body.ams-shared .ams-main-content .view.container{
-  max-width:1440px;
-}
-body.ams-shared[data-ams-app="juegos"] .ams-main-content{
-  padding-top:18px;
-}
-body.ams-shared[data-ams-app="juegos"] #mainContent .wrap{
-  max-width:1240px;
-  margin-inline:auto;
+    radial-gradient(1200px 600px at 12% 8%, rgba(99, 102, 241, .07), transparent 55%),
+    radial-gradient(900px 500px at 82% 12%, rgba(236, 72, 153, .06), transparent 55%),
+    linear-gradient(180deg, #f8fafc, #e2e8f0);
 }
 
-/* Shared left navigation: the same geometry and hierarchy as the three AMS systems. */
-body.ams-shared .ams-nav{
-  position:fixed;
-  inset:0 auto 0 0;
-  z-index:210;
-  width:var(--ams-sidebar-width);
-  height:100vh;
-  height:100dvh;
-  padding:calc(16px + env(safe-area-inset-top,0px)) 13px calc(14px + env(safe-area-inset-bottom,0px));
-  background:rgba(19,15,35,.97);
-  border-right:1px solid rgba(177,158,226,.15);
-  box-shadow:8px 0 32px rgba(3,2,10,.12);
-  backdrop-filter:blur(20px);
-  -webkit-backdrop-filter:blur(20px);
-  overflow:hidden;
-  transform:translateX(0);
-  visibility:visible;
-  transition:width .22s ease,transform .24s ease,visibility .24s ease;
-}
-body.ams-shared .ams-nav::before{
-  content:"";
-  position:absolute;
-  inset:0 auto 0 0;
-  width:4px;
-  background:linear-gradient(180deg,#7058ee 0%,#9b50e8 48%,#d94ac7 100%);
-  pointer-events:none;
-}
-body.ams-shared.light-theme .ams-nav,
-html[data-theme="light"] body.ams-shared .ams-nav{
-  background:rgba(250,249,253,.98);
-  border-right-color:rgba(76,57,132,.14);
-  box-shadow:6px 0 28px rgba(52,37,100,.045);
-}
-body.ams-shared .ams-nav-inner{
-  height:100%;
-  display:flex;
-  flex-direction:column;
-  align-items:stretch;
-  gap:0;
-}
-body.ams-shared .ams-brand{
-  display:flex;
-  align-items:center;
-  gap:12px;
-  min-height:62px;
-  padding:4px 7px 17px;
-  margin:0 0 15px;
-  border:0;
-  border-bottom:1px solid var(--ams-line);
-  border-radius:0;
-  background:none;
-  color:inherit;
-  text-decoration:none;
-  overflow:hidden;
-}
-body.ams-shared .ams-brand-symbol{
-  width:44px;
-  height:44px;
-  flex:0 0 44px;
-  display:inline-grid;
-  place-items:center;
-  border:1px solid rgba(255,255,255,.24);
-  border-radius:15px;
-  background:var(--ams-gradient);
-  color:#fff;
-  font-size:.78rem;
-  font-weight:950;
-  letter-spacing:-.05em;
-  box-shadow:0 9px 24px rgba(126,78,220,.27);
-}
-body.ams-shared .ams-brand-copy{display:flex;flex-direction:column;gap:4px;min-width:0}
-body.ams-shared .ams-brand-text{
-  display:block;
-  max-width:186px;
-  overflow:hidden;
-  text-overflow:ellipsis;
-  white-space:nowrap;
-  color:#c28aff;
-  background:var(--ams-gradient);
-  background-clip:text;
-  -webkit-background-clip:text;
-  -webkit-text-fill-color:transparent;
-  font-size:1.05rem;
-  line-height:1.15;
-  font-weight:950;
-  letter-spacing:-.045em;
-}
-body.ams-shared .ams-brand-sub{
-  display:block;
-  margin:0;
-  color:#d8a5fb;
-  font-size:.58rem;
-  font-weight:900;
-  letter-spacing:.105em;
-  text-transform:uppercase;
-}
-body.ams-shared.light-theme .ams-brand-sub,
-html[data-theme="light"] body.ams-shared .ams-brand-sub{color:#8952c8}
-body.ams-shared .ams-nav-links{
-  display:flex;
-  flex:1 1 auto;
-  flex-direction:column;
-  align-items:stretch;
-  gap:12px;
-  margin:0;
-  padding:2px 0 8px;
-  overflow-x:hidden;
-  overflow-y:auto;
-  scrollbar-width:thin;
-  scrollbar-color:rgba(148,163,184,.25) transparent;
-}
-body.ams-shared .ams-nav-group{display:flex;flex-direction:column;gap:3px}
-body.ams-shared .ams-nav-group-title{
-  padding:6px 11px 4px;
-  color:#9a91b4;
-  font-size:.61rem;
-  font-weight:850;
-  letter-spacing:.12em;
-  line-height:1.4;
-  text-transform:uppercase;
-}
-body.ams-shared .ams-nav-link{
-  width:100%;
-  min-height:43px;
-  display:flex;
-  align-items:center;
-  justify-content:flex-start;
-  gap:11px;
-  padding:9px 11px;
-  border:1px solid transparent;
-  border-radius:11px;
-  background:transparent;
-  color:#c5bddf;
-  font-size:.82rem;
-  font-weight:700;
-  line-height:1.3;
-  text-align:left;
-  text-decoration:none;
-  white-space:normal;
-  cursor:pointer;
-  transition:background .18s ease,color .18s ease,border-color .18s ease,transform .18s ease,box-shadow .18s ease;
-}
-body.ams-shared .ams-nav-link:hover{
-  background:rgba(123,91,228,.10);
-  border-color:rgba(123,91,228,.12);
-  color:#fff;
-  transform:translateX(2px);
-}
-body.ams-shared .ams-nav-link.active{
-  color:#fff;
-  background:var(--ams-gradient);
-  border-color:transparent;
-  box-shadow:0 7px 18px rgba(126,78,220,.24);
-  font-weight:850;
-}
-body.ams-shared .ams-nav-icon{
-  width:19px;
-  flex:0 0 19px;
-  display:inline-grid;
-  place-items:center;
-  color:#a18add;
-  font-size:1rem;
-  line-height:1;
-}
-body.ams-shared .ams-nav-icon-source{
-  width:19px;
-  flex:0 0 19px;
-  color:#a18add;
-  font-size:.96rem;
-  text-align:center;
-}
-body.ams-shared .ams-nav-game-icon{
-  width:22px;
-  height:22px;
-  flex:0 0 22px;
-  object-fit:contain;
-}
-body.ams-shared .ams-nav-link.active :is(.ams-nav-icon,.ams-nav-icon-source){color:#fff}
-body.ams-shared .ams-nav-footnote{
-  margin-top:auto;
-  padding:14px 10px 2px;
-  border-top:1px solid var(--ams-line);
-  display:flex;
-  align-items:center;
-  gap:8px;
-  color:var(--ams-muted);
-  font-size:.68rem;
-  font-weight:650;
-}
-body.ams-shared .ams-nav-footnote-dot{
-  width:7px;
-  height:7px;
-  flex:0 0 7px;
-  border-radius:50%;
-  background:#20b58d;
-  box-shadow:0 0 0 4px rgba(32,181,141,.10);
-}
-body.ams-shared.light-theme .ams-nav-link,
-html[data-theme="light"] body.ams-shared .ams-nav-link{color:#55516e}
-body.ams-shared.light-theme .ams-nav-link:hover,
-html[data-theme="light"] body.ams-shared .ams-nav-link:hover{background:rgba(123,91,228,.075);color:#292344}
-body.ams-shared.light-theme .ams-nav-link.active,
-html[data-theme="light"] body.ams-shared .ams-nav-link.active{color:#fff}
-
-/* Shared topbar. It is part of the document flow to avoid covering app content. */
-body.ams-shared .ams-topbar{
-  position:sticky;
-  top:0;
-  z-index:150;
-  width:100%;
-  min-height:76px;
-  margin:0;
-  padding:13px 28px;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:18px;
-  border:0;
-  border-bottom:1px solid var(--ams-line);
-  border-radius:0;
-  background:rgba(21,17,37,.90);
-  color:var(--ams-text);
-  box-shadow:0 8px 28px rgba(0,0,0,.10);
-  backdrop-filter:blur(18px);
-  -webkit-backdrop-filter:blur(18px);
-}
-body.ams-shared .ams-topbar::before{
-  content:"";
-  position:absolute;
-  inset:0 0 auto;
-  height:3px;
-  background:linear-gradient(90deg,#7058ee 0%,#9650e8 52%,#d94ac7 100%);
-  pointer-events:none;
-}
-body.ams-shared.light-theme .ams-topbar,
-html[data-theme="light"] body.ams-shared .ams-topbar{
-  background:rgba(250,249,253,.94);
-  color:#28233b;
-  border-bottom-color:rgba(76,57,132,.13);
-  box-shadow:0 8px 28px rgba(15,23,42,.045);
-}
-body.ams-shared .ams-topbar-main,
-body.ams-shared .ams-topbar-actions{
-  display:flex;
-  align-items:center;
-  gap:13px;
-  min-width:0;
-}
-body.ams-shared .ams-page-heading{min-width:0}
-body.ams-shared .ams-topbar-eyebrow{
-  margin:0 0 2px;
-  color:#c6a6e5;
-  font-size:.66rem;
-  font-weight:850;
-  text-transform:uppercase;
-  letter-spacing:.11em;
-}
-body.ams-shared.light-theme .ams-topbar-eyebrow,
-html[data-theme="light"] body.ams-shared .ams-topbar-eyebrow{color:#8876aa}
-body.ams-shared #ams-page-title{
-  margin:0;
-  color:var(--ams-text);
-  font-size:1.12rem;
-  line-height:1.25;
-  font-weight:850;
-  letter-spacing:-.025em;
-}
-body.ams-shared .ams-topbar-actions{flex:0 0 auto;gap:9px}
-body.ams-shared .ams-icon-btn{
-  width:40px;
-  height:40px;
-  flex:0 0 40px;
-  display:inline-flex;
-  align-items:center;
-  justify-content:center;
-  border:1px solid var(--ams-line-strong);
-  border-radius:12px;
-  background:linear-gradient(145deg,rgba(255,255,255,.08),rgba(255,255,255,.025));
-  color:var(--ams-text);
-  font-family:inherit;font-size:1.08rem;font-weight:700;line-height:1;
-  cursor:pointer;
-  transition:background .18s ease,border-color .18s ease,transform .18s ease,box-shadow .18s ease;
-}
-body.ams-shared .ams-icon-btn:hover{
-  background:rgba(126,89,224,.18);
-  border-color:rgba(168,139,255,.48);
-  transform:translateY(-1px);
-  box-shadow:0 6px 18px rgba(80,55,150,.16);
-}
-body.ams-shared.light-theme .ams-icon-btn,
-html[data-theme="light"] body.ams-shared .ams-icon-btn{
-  background:linear-gradient(145deg,#fff,#f3f1fa);
-  color:#554879;
-  border-color:rgba(76,57,132,.18);
-}
-body.ams-shared .ams-sidebar-toggle{border-radius:12px}
-body.ams-shared .ams-hamburger,
-body.ams-shared .ams-hamburger::before,
-body.ams-shared .ams-hamburger::after{
-  display:block;
-  width:16px;
-  height:2px;
-  border-radius:3px;
-  background:currentColor;
-  content:"";
-  position:relative;
-}
-body.ams-shared .ams-hamburger::before{position:absolute;top:-5px}
-body.ams-shared .ams-hamburger::after{position:absolute;top:5px}
-body.ams-shared .ams-demo-pill{
-  display:inline-flex;
-  align-items:center;
-  justify-content:center;
-  min-height:30px;
-  padding:6px 10px;
-  border-radius:999px;
-  border:1px solid rgba(217,119,6,.38);
-  background:rgba(245,158,11,.10);
-  color:#f2bb5b;
-  font-size:.63rem;
-  font-weight:900;
-  letter-spacing:.06em;
-  white-space:nowrap;
-}
-body.ams-shared.light-theme .ams-demo-pill,
-html[data-theme="light"] body.ams-shared .ams-demo-pill{
-  color:#a45a0b;
-  border-color:rgba(217,119,6,.30);
-  background:rgba(245,158,11,.08);
-}
-body.ams-shared .ams-user-chip{
-  display:inline-flex;
-  align-items:center;
-  gap:8px;
-  max-width:190px;
-  min-height:38px;
-  padding:8px 12px;
-  border:1px solid var(--ams-line);
-  border-radius:12px;
-  background:rgba(255,255,255,.035);
-  color:var(--ams-text);
-  font-size:.75rem;
-  font-weight:750;
-}
-body.ams-shared .ams-user-chip > span:last-child{
-  overflow:hidden;
-  text-overflow:ellipsis;
-  white-space:nowrap;
-}
-body.ams-shared .ams-user-dot{color:#a28aff;font-size:.72rem}
-
-/* Collapsed desktop sidebar and mobile drawer behavior. */
-body.ams-shared.ams-sidebar-collapsed{--ams-sidebar-width:var(--ams-sidebar-collapsed)}
-body.ams-shared.ams-sidebar-collapsed .ams-brand{justify-content:center;padding-inline:0}
-body.ams-shared.ams-sidebar-collapsed .ams-brand-copy,
-body.ams-shared.ams-sidebar-collapsed .ams-nav-group-title,
-body.ams-shared.ams-sidebar-collapsed .ams-nav-link > span,
-body.ams-shared.ams-sidebar-collapsed .ams-nav-footnote > span:last-child{display:none}
-body.ams-shared.ams-sidebar-collapsed .ams-nav-link{justify-content:center;padding-inline:0}
-body.ams-shared.ams-sidebar-collapsed .ams-nav-footnote{justify-content:center;padding-inline:0}
-body.ams-shared .ams-nav-overlay{display:none}
-@media(max-width:900px){
-  body.ams-shared{--ams-sidebar-width:0px}
-  body.ams-shared .ams-nav{
-    width:min(292px,86vw);
-    transform:translateX(-105%);
-    visibility:hidden;
-    box-shadow:18px 0 55px rgba(0,0,0,.25);
-  }
-  body.ams-shared.ams-sidebar-open .ams-nav{transform:translateX(0);visibility:visible}
-  body.ams-shared.ams-sidebar-open .ams-nav-overlay{
-    display:block;
-    position:fixed;
-    inset:0;
-    z-index:200;
-    border:0;
-    border-radius:0;
-    padding:0;
-    background:rgba(2,6,23,.62);
-    cursor:default;
-  }
-  body.ams-shared .ams-main-content{width:100%;padding:14px 14px 26px}
-  body.ams-shared .ams-topbar{min-height:68px;padding:11px 14px;gap:10px}
-  body.ams-shared .ams-topbar-main{gap:10px}
-  body.ams-shared .ams-topbar-actions{gap:7px}
-  body.ams-shared .ams-user-chip{max-width:125px;padding:7px 9px}
-  body.ams-shared .ams-demo-pill{padding:5px 7px;font-size:.59rem}
-  body.ams-shared.ams-sidebar-collapsed{--ams-sidebar-width:0px}
-}
-@media(max-width:560px){
-  body.ams-shared .ams-topbar{align-items:center}
-  body.ams-shared .ams-topbar-eyebrow{font-size:.57rem;letter-spacing:.075em}
-  body.ams-shared #ams-page-title{font-size:.98rem}
-  body.ams-shared .ams-topbar-actions{gap:5px}
-  body.ams-shared .ams-user-chip{max-width:38px;min-width:36px;padding:7px;justify-content:center}
-  body.ams-shared .ams-user-chip > span:last-child{display:none}
-  body.ams-shared .ams-topbar-actions .ams-icon-btn{width:36px;height:36px;flex-basis:36px}
-  body.ams-shared .ams-demo-pill{min-height:27px;padding:4px 6px;font-size:.55rem}
-  body.ams-shared .ams-main-content{padding:12px 11px 22px}
-}
-@media(max-width:380px){
-  body.ams-shared .ams-topbar-main{gap:7px}
-  body.ams-shared .ams-topbar-eyebrow{max-width:155px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-  body.ams-shared .ams-demo-pill{display:none}
-}
-@media(prefers-reduced-motion:reduce){
-  body.ams-shared .ams-nav,
-  body.ams-shared .ams-main-content,
-  body.ams-shared .ams-footer,
-  body.ams-shared *,
-  body.ams-shared *::before,
-  body.ams-shared *::after{
-    scroll-behavior:auto!important;
-    animation-duration:.01ms!important;
-    animation-iteration-count:1!important;
-    transition-duration:.01ms!important;
-  }
+body.ams-shared[data-ams-app="ayukcal"] header {
+  background: rgba(15, 23, 42, .90);
+  border-bottom: 1px solid rgba(255, 255, 255, .10);
+  box-shadow: 0 12px 35px rgba(0, 0, 0, .18);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
 }
 
-/* Shared content surfaces, matching the three AMS products. */
-body.ams-shared .ams-main-content :is(.panel,.card,.box,.tool-card,.game-selector,.game-slide,.special-event-card,.desktop-games-note,.workspace-container,.file-card,.result-box,.modal-content,.modal-card,.modal-box,.modal-panel){
-  border-color:var(--ams-line)!important;
-  border-radius:var(--ams-radius)!important;
-  box-shadow:0 9px 26px rgba(3,2,12,.10);
-}
-body.ams-shared:not(.light-theme):not([data-theme="light"]) .ams-main-content :is(.panel,.card,.box,.tool-card,.game-selector,.game-slide,.special-event-card,.desktop-games-note,.workspace-container,.file-card,.result-box,.modal-content,.modal-card,.modal-box,.modal-panel){
-  background-color:rgba(26,21,45,.94);
-}
-html[data-theme="light"] body.ams-shared .ams-main-content :is(.panel,.card,.box,.tool-card,.game-selector,.game-slide,.special-event-card,.desktop-games-note,.workspace-container,.file-card,.result-box,.modal-content,.modal-card,.modal-box,.modal-panel),
-body.ams-shared.light-theme .ams-main-content :is(.panel,.card,.box,.tool-card,.game-selector,.game-slide,.special-event-card,.desktop-games-note,.workspace-container,.file-card,.result-box,.modal-content,.modal-card,.modal-box,.modal-panel){
-  background-color:rgba(255,255,255,.94);
-  box-shadow:0 9px 26px rgba(46,34,88,.055);
-}
-body.ams-shared .ams-main-content :is(.panel,.card,.box,.tool-card,.game-selector,.game-slide,.special-event-card,.desktop-games-note,.file-card){
-  transition:border-color .2s ease,box-shadow .2s ease,transform .2s ease,background .2s ease;
-}
-body.ams-shared .ams-main-content :is(.panel,.card,.tool-card,.game-slide):hover{
-  border-color:var(--ams-line-strong)!important;
-}
-body.ams-shared .ams-main-content h1,
-body.ams-shared .ams-main-content h2,
-body.ams-shared .ams-main-content h3,
-body.ams-shared .ams-main-content h4{
-  color:var(--ams-text);
-  letter-spacing:-.025em;
-}
-body.ams-shared .ams-main-content :is(p,.muted,.text-muted,.small){color:var(--ams-muted)}
-body.ams-shared .ams-main-content .text-gradient{
-  background-image:var(--ams-gradient)!important;
-  background-clip:text;
-  -webkit-background-clip:text;
-  -webkit-text-fill-color:transparent;
+html[data-theme="light"] body.ams-shared[data-ams-app="ayukcal"] header {
+  background: rgba(248, 250, 252, .92);
+  border-bottom-color: rgba(15, 23, 42, .10);
+  box-shadow: 0 10px 30px rgba(15, 23, 42, .06);
 }
 
-/* Buttons: neutral actions are glass; primary actions share the AMS gradient. */
-body.ams-shared .ams-main-content :is(.btn,.button,.hero-action,.tool-filter,.resize-preset,.icon-btn,.theme-toggle){
-  border-radius:11px;
-  font-family:inherit;
-  font-weight:750;
-  transition:background .18s ease,border-color .18s ease,box-shadow .18s ease,transform .18s ease,color .18s ease;
-}
-body.ams-shared .ams-main-content :is(.btn:not(.primary):not(.btn-primary):not(.btn-ams),.button:not(.primary),.hero-action,.tool-filter,.resize-preset){
-  border:1px solid var(--ams-line-strong);
-  background:linear-gradient(145deg,rgba(255,255,255,.075),rgba(255,255,255,.025));
-  color:var(--ams-text);
-}
-body.ams-shared.light-theme .ams-main-content :is(.btn:not(.primary):not(.btn-primary):not(.btn-ams),.button:not(.primary),.hero-action,.tool-filter,.resize-preset),
-html[data-theme="light"] body.ams-shared .ams-main-content :is(.btn:not(.primary):not(.btn-primary):not(.btn-ams),.button:not(.primary),.hero-action,.tool-filter,.resize-preset){
-  border-color:rgba(76,57,132,.18);
-  background:linear-gradient(145deg,#fff,#f4f2fa);
-  color:#39314f;
-}
-body.ams-shared .ams-main-content :is(.btn.primary,.btn-primary,.btn-ams,.button-primary,.primary-button,.special-event-button){
-  border:1px solid transparent!important;
-  background:var(--ams-gradient)!important;
-  color:#fff!important;
-  box-shadow:0 8px 20px rgba(112,88,238,.22);
-}
-body.ams-shared .ams-main-content :is(.btn,.btn-primary,.button,.hero-action,.tool-filter,.resize-preset):hover{
-  transform:translateY(-1px);
-  border-color:rgba(164,136,255,.42);
-  box-shadow:0 8px 22px rgba(80,55,150,.15);
-}
-body.ams-shared .ams-main-content :is(button:disabled,.btn:disabled){opacity:.55;cursor:not-allowed;transform:none}
-
-/* Inputs and drop areas. */
-body.ams-shared .ams-main-content :is(input:not([type="checkbox"]):not([type="radio"]):not([type="range"]),select,textarea,.form-control,.form-select){
-  max-width:100%;
-  border:1px solid var(--ams-line-strong)!important;
-  border-radius:10px!important;
-  background:rgba(10,8,22,.50)!important;
-  color:var(--ams-text)!important;
-  box-shadow:none;
-}
-body.ams-shared .ams-main-content :is(input,select,textarea,.form-control,.form-select)::placeholder{
-  color:#9289a9!important;
-  opacity:1;
-}
-body.ams-shared .ams-main-content :is(input,select,textarea,.form-control,.form-select):focus{
-  border-color:#8c70f4!important;
-  box-shadow:0 0 0 .2rem rgba(112,88,238,.17)!important;
-  outline:0;
-}
-body.ams-shared.light-theme .ams-main-content :is(input:not([type="checkbox"]):not([type="radio"]):not([type="range"]),select,textarea,.form-control,.form-select),
-html[data-theme="light"] body.ams-shared .ams-main-content :is(input:not([type="checkbox"]):not([type="radio"]):not([type="range"]),select,textarea,.form-control,.form-select){
-  background:#fff!important;
-  color:#29233c!important;
-  border-color:rgba(76,57,132,.20)!important;
-}
-body.ams-shared .ams-main-content :is(.drop-zone,.workspace-container){
-  background:rgba(16,12,30,.55)!important;
-  border:1px dashed var(--ams-line-strong)!important;
-}
-body.ams-shared.light-theme .ams-main-content :is(.drop-zone,.workspace-container),
-html[data-theme="light"] body.ams-shared .ams-main-content :is(.drop-zone,.workspace-container){
-  background:rgba(246,245,251,.9)!important;
+body.ams-shared[data-ams-app="ayukcal"] .brand {
+  color: var(--text);
+  text-decoration: none;
 }
 
-/* Tool filters, game controls and section navigation. */
-body.ams-shared .ams-main-content :is(.tool-filter.active,.resize-preset.active,.nav-btn.active){
-  color:#fff!important;
-  border-color:transparent!important;
-  background:var(--ams-gradient)!important;
-  box-shadow:0 7px 18px rgba(126,78,220,.20);
-}
-body.ams-shared .ams-main-content .nav-btn:not(.active){
-  color:var(--ams-text);
-  background:rgba(255,255,255,.035);
-  border:1px solid var(--ams-line);
-}
-body.ams-shared .ams-main-content .nav-btn:not(.active):hover{
-  background:rgba(124,91,220,.12);
-  border-color:var(--ams-line-strong);
-}
-body.ams-shared .ams-main-content .badge-core,
-body.ams-shared .ams-main-content .badge,
-body.ams-shared .ams-main-content .section-kicker{
-  color:#c5a1f3;
-}
-body.ams-shared .ams-main-content .badge-core{
-  border:1px solid rgba(154,112,232,.24);
-  border-radius:999px;
-  background:rgba(126,83,208,.12);
-}
-body.ams-shared .ams-main-content .section-header,
-body.ams-shared .ams-main-content .hero-section{
-  color:var(--ams-text);
+body.ams-shared[data-ams-app="ayukcal"] .brand b {
+  background: linear-gradient(105deg, #818cf8, #ec4899 72%, #f472b6);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
 }
 
-/* Modals and overlays across native, custom and Bootstrap dialogs. */
-body.ams-shared .ams-main-content :is(.modal-content,.modal-card,.modal-box,.modal-panel){
-  border:1px solid var(--ams-line-strong)!important;
-  background:linear-gradient(150deg,#211a37,#171329)!important;
-  color:var(--ams-text)!important;
-  box-shadow:0 24px 80px rgba(0,0,0,.38)!important;
-}
-body.ams-shared .ams-main-content :is(.modal-header,.modal-footer){
-  border-color:var(--ams-line)!important;
-}
-body.ams-shared .ams-main-content :is(.modal-title,.modal-card h2,.modal-content h2,.modal-content h3){
-  color:var(--ams-text)!important;
-}
-body.ams-shared .ams-main-content .modal-backdrop,
-body.ams-shared .ams-main-content .modal-overlay{
-  background:rgba(5,3,14,.72)!important;
-  backdrop-filter:blur(7px);
-}
-body.ams-shared.light-theme .ams-main-content :is(.modal-content,.modal-card,.modal-box,.modal-panel),
-html[data-theme="light"] body.ams-shared .ams-main-content :is(.modal-content,.modal-card,.modal-box,.modal-panel){
-  background:linear-gradient(150deg,#fff,#f5f3fb)!important;
-  color:#29233c!important;
-  box-shadow:0 24px 70px rgba(46,34,88,.18)!important;
-}
-body.ams-shared.light-theme .ams-main-content :is(.modal-title,.modal-card h2,.modal-content h2,.modal-content h3),
-html[data-theme="light"] body.ams-shared .ams-main-content :is(.modal-title,.modal-card h2,.modal-content h2,.modal-content h3){color:#29233c!important}
-
-/* Product-specific token alignment; app data and functionality stay separate. */
-body.ams-shared[data-ams-app="ayukcal"]{
-  --bg:#100d1e;
-  --surface:#1b1730;
-  --text:#f3efff;
-  --muted:#a69dbd;
-  --border:var(--ams-line);
-  --accent:var(--ams-tertiary);
-}
-body.ams-shared[data-ams-app="ayukcal"].light-theme,
-html[data-theme="light"] body.ams-shared[data-ams-app="ayukcal"]{
-  --bg:#f2f3f9;
-  --surface:#fff;
-  --text:#28233b;
-  --muted:#77718d;
-  --border:var(--ams-line);
-  --accent:#159da9;
-}
-body.ams-shared[data-ams-app="ayukcal"] .ayukcal-entry-loader,
-body.ams-shared[data-ams-app="ayukcal"] .ayukcal-loader-art{
-  background-color:var(--ams-ink)!important;
-}
-body.ams-shared[data-ams-app="ayukcal"] .footer,
-body.ams-shared[data-ams-app="herramientas"] .footer-ams,
-body.ams-shared[data-ams-app="juegos"] #globalFooter{display:none!important}
-body.ams-shared[data-ams-app="herramientas"] .navbar{display:none!important}
-body.ams-shared[data-ams-app="herramientas"] .offcanvas{
-  background:var(--ams-panel)!important;
-  color:var(--ams-text)!important;
-  border-color:var(--ams-line)!important;
-}
-body.ams-shared[data-ams-app="herramientas"] .menu-link{
-  color:var(--ams-text)!important;
-  border-color:transparent;
-}
-body.ams-shared[data-ams-app="herramientas"] .menu-link:hover{
-  background:rgba(112,88,238,.13)!important;
-  border-color:var(--ams-line)!important;
-}
-body.ams-shared[data-ams-app="herramientas"] .text-gradient{
-  background-image:var(--ams-gradient)!important;
+body.ams-shared[data-ams-app="ayukcal"] .user-badge {
+  background: rgba(99, 102, 241, .18);
+  border: 1px solid rgba(129, 140, 248, .28);
+  color: #c7d2fe;
 }
 
-/* Same AMS footer in every application and every game page. */
-body.ams-shared .ams-footer{
-  flex:0 0 auto;
-  width:100%;
-  margin:0;
-  padding:14px 20px;
-  border:0;
-  border-top:1px solid var(--ams-line);
-  border-radius:0;
-  background:rgba(15,12,28,.94);
-  color:var(--ams-muted);
-  text-align:center;
-  box-shadow:none;
-}
-body.ams-shared .ams-footer-inner{
-  width:100%;
-  max-width:1600px;
-  min-height:58px;
-  margin:0 auto;
-  display:grid;
-  grid-template-columns:minmax(230px,1fr) minmax(250px,1fr) auto;
-  align-items:center;
-  gap:18px;
-}
-body.ams-shared .ams-footer-brand{
-  display:flex;
-  align-items:center;
-  justify-content:flex-start;
-  gap:11px;
-  min-width:0;
-  text-align:left;
-}
-body.ams-shared .ams-footer-mark{
-  width:36px;
-  height:36px;
-  flex:0 0 36px;
-  display:grid;
-  place-items:center;
-  border-radius:11px;
-  background:var(--ams-gradient);
-  color:#fff;
-  font-size:.62rem;
-  font-weight:950;
-  letter-spacing:-.06em;
-  box-shadow:0 7px 18px rgba(126,78,220,.20);
-}
-body.ams-shared .ams-footer-brand-copy{display:flex;flex-direction:column;gap:2px;min-width:0}
-body.ams-shared .ams-footer-brand-copy strong{
-  color:#a88aff;
-  font-size:.83rem;
-  line-height:1.2;
-  font-weight:900;
-}
-body.ams-shared .ams-footer-brand-copy small{
-  color:var(--ams-muted);
-  font-size:.62rem;
-  line-height:1.3;
-}
-body.ams-shared .ams-footer-tagline{
-  margin:0;
-  color:var(--ams-muted);
-  font-size:.72rem;
-  font-weight:750;
-  text-align:center;
-}
-body.ams-shared .ams-footer-copy{
-  color:var(--ams-muted);
-  font-size:.65rem;
-  font-weight:650;
-  white-space:nowrap;
-}
-body.ams-shared.light-theme .ams-footer,
-html[data-theme="light"] body.ams-shared .ams-footer{
-  background:rgba(245,244,250,.96);
-  border-top-color:rgba(76,57,132,.13);
-}
-body.ams-shared.light-theme .ams-footer-brand-copy strong,
-html[data-theme="light"] body.ams-shared .ams-footer-brand-copy strong{color:#7750ca}
-@media(max-width:900px){
-  body.ams-shared .ams-footer-inner{
-    grid-template-columns:1fr;
-    justify-items:center;
-    gap:8px;
-    text-align:center;
-  }
-  body.ams-shared .ams-footer-brand{justify-content:center;text-align:center}
-  body.ams-shared .ams-footer-tagline{font-size:.68rem}
-}
-@media(max-width:560px){
-  body.ams-shared .ams-footer{padding:13px 12px}
-  body.ams-shared .ams-footer-brand-copy small{font-size:.59rem}
+body.ams-shared[data-ams-app="ayukcal"] .nav-btn {
+  border: 1px solid transparent;
+  transition: color .2s ease, background .2s ease, border-color .2s ease, box-shadow .2s ease;
 }
 
-/* Give common interaction states a single visual rhythm without replacing
-   game-specific or health-specific illustrations, meters, charts or media. */
-body.ams-shared .ams-main-content :is(.panel,.card,.box,.tool-card,.game-selector,.desktop-games-note,.special-event-card){
-  animation:amsPanelEnter .34s cubic-bezier(.2,.8,.2,1) both;
-}
-body.ams-shared .ams-main-content :is(.panel,.card,.box,.tool-card,.game-selector,.desktop-games-note,.special-event-card):nth-child(2){animation-delay:.025s}
-body.ams-shared .ams-main-content :is(.panel,.card,.box,.tool-card,.game-selector,.desktop-games-note,.special-event-card):nth-child(3){animation-delay:.05s}
-@keyframes amsPanelEnter{
-  from{opacity:.0;transform:translateY(7px)}
-  to{opacity:1;transform:translateY(0)}
-}
-@media(prefers-reduced-motion:reduce){
-  body.ams-shared .ams-main-content :is(.panel,.card,.box,.tool-card,.game-selector,.desktop-games-note,.special-event-card){animation:none}
+body.ams-shared[data-ams-app="ayukcal"] .nav-btn:hover {
+  background: rgba(255, 255, 255, .06);
+  color: #fff;
 }
 
-
-/* Modal shell normalization also covers AyuKcal overlays mounted beside <main>
-   and the compact custom dialogs used by the games. */
-body.ams-shared :is(.modal-overlay,.tool-overlay){
-  background:rgba(5,3,14,.74)!important;
-  backdrop-filter:blur(7px);
-  -webkit-backdrop-filter:blur(7px);
-}
-body.ams-shared :is(.modal-overlay,.tool-overlay) > :is(.modal,.tool-modal-card,.modal-card,.modal-content){
-  border:1px solid var(--ams-line-strong)!important;
-  border-radius:17px!important;
-  background:linear-gradient(150deg,#211a37 0%,#171329 100%)!important;
-  color:var(--ams-text)!important;
-  box-shadow:0 24px 80px rgba(0,0,0,.42)!important;
-}
-body.ams-shared :is(.modal-overlay,.tool-overlay) :is(h1,h2,h3,h4,label,.modal-title){
-  color:var(--ams-text);
-}
-body.ams-shared :is(.modal-overlay,.tool-overlay) :is(p,.muted,.text-muted,small){
-  color:var(--ams-muted);
-}
-body.ams-shared :is(.modal-overlay,.tool-overlay) .modal-close{
-  border:1px solid var(--ams-line)!important;
-  border-radius:10px!important;
-  background:rgba(255,255,255,.055)!important;
-  color:var(--ams-text)!important;
-  transition:background .18s ease,transform .18s ease;
-}
-body.ams-shared :is(.modal-overlay,.tool-overlay) .modal-close:hover{
-  background:rgba(217,74,199,.16)!important;
-  transform:rotate(3deg);
-}
-body.ams-shared.light-theme :is(.modal-overlay,.tool-overlay),
-html[data-theme="light"] body.ams-shared :is(.modal-overlay,.tool-overlay){
-  background:rgba(31,23,55,.42)!important;
-}
-body.ams-shared.light-theme :is(.modal-overlay,.tool-overlay) > :is(.modal,.tool-modal-card,.modal-card,.modal-content),
-html[data-theme="light"] body.ams-shared :is(.modal-overlay,.tool-overlay) > :is(.modal,.tool-modal-card,.modal-card,.modal-content){
-  border-color:rgba(76,57,132,.18)!important;
-  background:linear-gradient(150deg,#fff 0%,#f5f3fb 100%)!important;
-  color:#29233c!important;
-  box-shadow:0 24px 70px rgba(46,34,88,.18)!important;
-}
-body.ams-shared.light-theme :is(.modal-overlay,.tool-overlay) :is(h1,h2,h3,h4,label,.modal-title),
-html[data-theme="light"] body.ams-shared :is(.modal-overlay,.tool-overlay) :is(h1,h2,h3,h4,label,.modal-title){color:#29233c}
-body.ams-shared.light-theme :is(.modal-overlay,.tool-overlay) :is(p,.muted,.text-muted,small),
-html[data-theme="light"] body.ams-shared :is(.modal-overlay,.tool-overlay) :is(p,.muted,.text-muted,small){color:#77718d}
-body.ams-shared #ams-toast{
-  border:1px solid var(--ams-line-strong);
-  border-radius:12px;
-  background:rgba(27,23,48,.96);
-  color:var(--ams-text);
-  box-shadow:var(--ams-shadow);
-  backdrop-filter:blur(12px);
-}
-body.ams-shared.light-theme #ams-toast,
-html[data-theme="light"] body.ams-shared #ams-toast{
-  background:rgba(255,255,255,.97);
-  color:#29233c;
+body.ams-shared[data-ams-app="ayukcal"] .nav-btn.active {
+  background: var(--gradient);
+  border-color: transparent;
+  color: #fff;
+  box-shadow: 0 8px 22px rgba(99, 102, 241, .24);
 }
 
+html[data-theme="light"] body.ams-shared[data-ams-app="ayukcal"] .nav-btn:hover {
+  background: rgba(99, 102, 241, .07);
+  color: #4338ca;
+}
 
-/* Shared card family used by secondary states, summaries and game screens. */
-body.ams-shared .ams-main-content :is(.panel-soft,.smart-card,.summary-card,.kpi,.pass-box,.reveal-box,.impostor-secret-card,.forbidden-box,.card-word,.pdf-organizer-workspace,.pdf-page-grid,.result-box){
-  border:1px solid var(--ams-line)!important;
-  border-radius:14px!important;
-  background:rgba(26,21,45,.82);
-  color:var(--ams-text);
-  box-shadow:0 8px 22px rgba(3,2,12,.09);
+html[data-theme="light"] body.ams-shared[data-ams-app="ayukcal"] .nav-btn.active {
+  color: #fff;
 }
-body.ams-shared.light-theme .ams-main-content :is(.panel-soft,.smart-card,.summary-card,.kpi,.pass-box,.reveal-box,.impostor-secret-card,.forbidden-box,.card-word,.pdf-organizer-workspace,.pdf-page-grid,.result-box),
-html[data-theme="light"] body.ams-shared .ams-main-content :is(.panel-soft,.smart-card,.summary-card,.kpi,.pass-box,.reveal-box,.impostor-secret-card,.forbidden-box,.card-word,.pdf-organizer-workspace,.pdf-page-grid,.result-box){
-  background:rgba(255,255,255,.92);
-  color:#29233c;
-  box-shadow:0 8px 22px rgba(46,34,88,.045);
+
+body.ams-shared[data-ams-app="ayukcal"] .theme-toggle {
+  background: rgba(255, 255, 255, .055);
+  color: #f8fafc;
+  border: 1px solid rgba(255, 255, 255, .13);
+  border-radius: 14px;
+  box-shadow: 0 8px 22px rgba(0, 0, 0, .14);
 }
-body.ams-shared .ams-main-content :is(.smart-card,.tool-card,.hero-action,.special-event-card,.game-selector,.game-slide,.panel-soft){
-  position:relative;
+
+body.ams-shared[data-ams-app="ayukcal"] .theme-toggle:hover {
+  background: rgba(99, 102, 241, .18);
+  border-color: rgba(129, 140, 248, .48);
+  transform: translateY(-1px);
 }
-body.ams-shared .ams-main-content :is(.btn.primary,.btn-primary,.btn-ams,.button-primary,.primary-button,.special-event-button){
-  position:relative;
-  isolation:isolate;
-  overflow:hidden;
+
+html[data-theme="light"] body.ams-shared[data-ams-app="ayukcal"] .theme-toggle {
+  background: #fff;
+  color: #334155;
+  border-color: rgba(15, 23, 42, .12);
+  box-shadow: 0 6px 18px rgba(15, 23, 42, .06);
 }
-body.ams-shared .ams-main-content :is(.btn.primary,.btn-primary,.btn-ams,.button-primary,.primary-button,.special-event-button)::after{
-  content:"";
-  position:absolute;
-  inset:0;
-  z-index:-1;
-  transform:translateX(-130%);
-  background:linear-gradient(90deg,transparent,rgba(255,255,255,.18),transparent);
-  animation:amsButtonSheen 4.2s ease-in-out infinite;
-  pointer-events:none;
+
+body.ams-shared[data-ams-app="ayukcal"] :is(.panel, .smart-card, .summary-card, .kpi, .row) {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  transition: background .25s ease, border-color .25s ease, box-shadow .25s ease;
 }
-@keyframes amsButtonSheen{
-  0%,52%{transform:translateX(-130%)}
-  100%{transform:translateX(130%)}
+
+body.ams-shared[data-ams-app="ayukcal"] .panel {
+  background: linear-gradient(180deg, rgba(255, 255, 255, .055), rgba(255, 255, 255, .025));
 }
-body.ams-shared .ams-brand-symbol{
-  animation:amsBrandGlow 3.2s ease-in-out infinite;
+
+body.ams-shared[data-ams-app="ayukcal"] .kpi,
+body.ams-shared[data-ams-app="ayukcal"] .summary-card,
+body.ams-shared[data-ams-app="ayukcal"] .smart-card {
+  background: rgba(255, 255, 255, .045);
 }
-@keyframes amsBrandGlow{
-  0%,100%{box-shadow:0 9px 24px rgba(126,78,220,.22)}
-  50%{box-shadow:0 11px 30px rgba(217,74,199,.32)}
+
+html[data-theme="light"] body.ams-shared[data-ams-app="ayukcal"] :is(.panel, .smart-card, .summary-card, .kpi, .row) {
+  background: rgba(255, 255, 255, .94);
+  border-color: rgba(15, 23, 42, .11);
+  box-shadow: 0 12px 32px rgba(15, 23, 42, .06);
 }
-body.ams-shared :is(.modal-overlay,.tool-overlay) > :is(.modal,.tool-modal-card,.modal-card,.modal-content){
-  animation:amsDialogEnter .22s cubic-bezier(.2,.8,.2,1) both;
+
+body.ams-shared[data-ams-app="ayukcal"] :is(h1, h2, h3, h4) {
+  color: var(--text);
 }
-@keyframes amsDialogEnter{
-  from{opacity:0;transform:translateY(8px) scale(.99)}
-  to{opacity:1;transform:translateY(0) scale(1)}
+
+body.ams-shared[data-ams-app="ayukcal"] h1 span {
+  color: var(--tertiary);
 }
-body.ams-shared .ams-main-content table{
-  width:100%;
-  border-collapse:collapse;
-  color:var(--ams-text);
+
+body.ams-shared[data-ams-app="ayukcal"] .btn {
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: rgba(255, 255, 255, .055);
+  color: var(--text);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, .10);
 }
-body.ams-shared .ams-main-content :is(th,td){
-  border-bottom:1px solid var(--ams-line);
-  padding:10px 12px;
+
+body.ams-shared[data-ams-app="ayukcal"] .btn.primary {
+  border-color: transparent;
+  background: var(--gradient);
+  color: #fff;
+  box-shadow: 0 12px 28px rgba(99, 102, 241, .25);
 }
-body.ams-shared .ams-main-content th{
-  color:var(--ams-muted);
-  font-size:.72rem;
-  font-weight:850;
-  letter-spacing:.06em;
-  text-transform:uppercase;
+
+body.ams-shared[data-ams-app="ayukcal"] .btn.primary:hover {
+  background: linear-gradient(135deg, #4f46e5, #db2777);
+  color: #fff;
+  transform: translateY(-2px);
 }
-body.ams-shared .ams-main-content tbody tr:hover{
-  background:rgba(255,255,255,.025);
+
+body.ams-shared[data-ams-app="ayukcal"] .btn.danger {
+  border-color: rgba(239, 68, 68, .22);
+  background: rgba(239, 68, 68, .12);
+  color: #f87171;
 }
-@media(prefers-reduced-motion:reduce){
-  body.ams-shared .ams-brand-symbol,
-  body.ams-shared .ams-main-content :is(.btn.primary,.btn-primary,.btn-ams,.button-primary,.primary-button,.special-event-button)::after{
-    animation:none!important;
+
+body.ams-shared[data-ams-app="ayukcal"] :is(.input, input:not([type="checkbox"]):not([type="radio"]), select, textarea) {
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: rgba(7, 11, 24, .58);
+  color: var(--text);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .025);
+}
+
+html[data-theme="light"] body.ams-shared[data-ams-app="ayukcal"] :is(.input, input:not([type="checkbox"]):not([type="radio"]), select, textarea) {
+  background: #fff;
+  color: #1e293b;
+  border-color: rgba(15, 23, 42, .14);
+}
+
+body.ams-shared[data-ams-app="ayukcal"] :is(.input, input, select, textarea):focus {
+  border-color: #818cf8;
+  box-shadow: 0 0 0 4px rgba(99, 102, 241, .13);
+}
+
+body.ams-shared[data-ams-app="ayukcal"] :is(input, textarea)::placeholder {
+  color: var(--muted);
+  opacity: 1;
+}
+
+body.ams-shared[data-ams-app="ayukcal"] .badge {
+  border: 1px solid rgba(99, 102, 241, .25);
+  border-radius: 999px;
+  background: rgba(99, 102, 241, .12);
+  color: #c7d2fe;
+}
+
+html[data-theme="light"] body.ams-shared[data-ams-app="ayukcal"] .badge {
+  color: #4338ca;
+  background: rgba(99, 102, 241, .08);
+}
+
+body.ams-shared[data-ams-app="ayukcal"] .modal-overlay {
+  background: rgba(3, 6, 15, .78);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+
+body.ams-shared[data-ams-app="ayukcal"] .modal {
+  background: linear-gradient(155deg, #17213a, #0f172a);
+  border: 1px solid rgba(255, 255, 255, .14);
+  border-radius: 26px;
+  color: #f8fafc;
+  box-shadow: 0 28px 80px rgba(0, 0, 0, .42);
+}
+
+body.ams-shared[data-ams-app="ayukcal"] .modal :is(h1, h2, h3, label) {
+  color: #f8fafc;
+}
+
+body.ams-shared[data-ams-app="ayukcal"] .modal-close {
+  background: rgba(255, 255, 255, .07);
+  border-color: rgba(255, 255, 255, .12);
+  color: #e2e8f0;
+}
+
+html[data-theme="light"] body.ams-shared[data-ams-app="ayukcal"] .modal {
+  background: linear-gradient(155deg, #fff, #f1f5f9);
+  border-color: rgba(15, 23, 42, .12);
+  color: #1e293b;
+  box-shadow: 0 24px 70px rgba(15, 23, 42, .20);
+}
+
+html[data-theme="light"] body.ams-shared[data-ams-app="ayukcal"] .modal :is(h1, h2, h3, label) {
+  color: #1e293b;
+}
+
+body.ams-shared[data-ams-app="ayukcal"] .footer {
+  background: #050811;
+  border-top: 1px solid rgba(255, 255, 255, .10);
+  color: #cbd5e1;
+}
+
+html[data-theme="light"] body.ams-shared[data-ams-app="ayukcal"] .footer {
+  background: #e2e8f0;
+  border-top-color: rgba(15, 23, 42, .08);
+  color: #64748b;
+}
+
+body.ams-shared[data-ams-app="ayukcal"] .footer a {
+  color: #a5b4fc;
+}
+
+html[data-theme="light"] body.ams-shared[data-ams-app="ayukcal"] .footer a {
+  color: #4338ca;
+}
+
+/* --------------------------------------------------------------------------
+   Herramientas — same layout, Bootstrap grid, cards, menu and file workspace.
+   Keep every card/tool in its original position and preserve all controls.
+   -------------------------------------------------------------------------- */
+body.ams-shared[data-ams-app="herramientas"] {
+  --bg-deep: #0f172a;
+  --bg-card: rgba(17, 23, 42, .94);
+  --text-main: #f8fafc;
+  --text-muted: #94a3b8;
+  --cyan: #10b981;
+  --cyan-glow: rgba(16, 185, 129, .22);
+  --purple: #6366f1;
+  --purple-glow: rgba(99, 102, 241, .24);
+  --magenta: #ec4899;
+  --green: #10b981;
+  --border-glass: rgba(255, 255, 255, .12);
+  --border-hover: rgba(129, 140, 248, .48);
+  --ams-gradient: linear-gradient(135deg, #6366f1, #ec4899);
+  --ams-gradient-tech: linear-gradient(135deg, #10b981, #6366f1 52%, #ec4899);
+  background:
+    radial-gradient(1200px 600px at 12% 8%, rgba(99, 102, 241, .20), transparent 55%),
+    radial-gradient(900px 500px at 82% 12%, rgba(236, 72, 153, .16), transparent 55%),
+    radial-gradient(1000px 600px at 60% 92%, rgba(16, 185, 129, .10), transparent 60%),
+    linear-gradient(180deg, #0f172a, #070b18);
+  color: #f8fafc;
+  font-family: "Montserrat", system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+
+body.ams-shared[data-ams-app="herramientas"].light-theme {
+  --bg-deep: #f1f5f9;
+  --bg-card: rgba(255, 255, 255, .96);
+  --text-main: #1e293b;
+  --text-muted: #64748b;
+  --cyan: #059669;
+  --cyan-glow: rgba(5, 150, 105, .14);
+  --purple: #4f46e5;
+  --purple-glow: rgba(79, 70, 229, .14);
+  --magenta: #db2777;
+  --green: #059669;
+  --border-glass: rgba(15, 23, 42, .12);
+  --border-hover: rgba(79, 70, 229, .34);
+  color: #1e293b;
+  background:
+    radial-gradient(1200px 600px at 12% 8%, rgba(99, 102, 241, .07), transparent 55%),
+    radial-gradient(900px 500px at 82% 12%, rgba(236, 72, 153, .06), transparent 55%),
+    linear-gradient(180deg, #f8fafc, #e2e8f0);
+}
+
+body.ams-shared[data-ams-app="herramientas"] .navbar {
+  background: rgba(15, 23, 42, .90);
+  border-bottom: 1px solid rgba(255, 255, 255, .10);
+  box-shadow: 0 12px 35px rgba(0, 0, 0, .18);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+
+body.ams-shared[data-ams-app="herramientas"].light-theme .navbar {
+  background: rgba(248, 250, 252, .92);
+  border-bottom-color: rgba(15, 23, 42, .10);
+  box-shadow: 0 10px 30px rgba(15, 23, 42, .06);
+}
+
+body.ams-shared[data-ams-app="herramientas"] .brand-logo img {
+  width: 38px;
+  height: 38px;
+  object-fit: contain;
+  border-radius: 11px;
+  box-shadow: 0 8px 22px rgba(99, 102, 241, .22);
+}
+
+body.ams-shared[data-ams-app="herramientas"] .brand-text-main {
+  background: linear-gradient(105deg, #818cf8, #ec4899 72%, #f472b6);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+  font-weight: 900;
+}
+
+body.ams-shared[data-ams-app="herramientas"] .brand-text-sub {
+  color: #94a3b8;
+}
+
+body.ams-shared[data-ams-app="herramientas"] .ams-theme-switch {
+  border: 1px solid rgba(255, 255, 255, .12);
+  border-radius: 14px;
+  background: rgba(255, 255, 255, .045);
+}
+
+body.ams-shared[data-ams-app="herramientas"] .ams-theme-btn {
+  border-radius: 10px;
+  color: #cbd5e1;
+  transition: background .2s ease, color .2s ease, box-shadow .2s ease;
+}
+
+body.ams-shared[data-ams-app="herramientas"] .ams-theme-btn.active {
+  color: #fff;
+  background: var(--ams-gradient);
+  box-shadow: 0 7px 18px rgba(99, 102, 241, .22);
+}
+
+body.ams-shared[data-ams-app="herramientas"].light-theme .ams-theme-switch {
+  border-color: rgba(15, 23, 42, .10);
+  background: rgba(15, 23, 42, .035);
+}
+
+body.ams-shared[data-ams-app="herramientas"].light-theme .ams-theme-btn {
+  color: #64748b;
+}
+
+body.ams-shared[data-ams-app="herramientas"].light-theme .ams-theme-btn.active {
+  color: #fff;
+}
+
+body.ams-shared[data-ams-app="herramientas"] .navbar-toggler {
+  border-radius: 12px;
+  background: rgba(255, 255, 255, .055);
+  border: 1px solid rgba(255, 255, 255, .12) !important;
+}
+
+body.ams-shared[data-ams-app="herramientas"].light-theme .navbar-toggler {
+  background: rgba(15, 23, 42, .045);
+  border-color: rgba(15, 23, 42, .12) !important;
+}
+
+body.ams-shared[data-ams-app="herramientas"] .offcanvas {
+  background: #11172a !important;
+  color: #f8fafc !important;
+  border-left: 1px solid rgba(255, 255, 255, .12);
+}
+
+body.ams-shared[data-ams-app="herramientas"].light-theme .offcanvas {
+  background: #f8fafc !important;
+  color: #1e293b !important;
+  border-left-color: rgba(15, 23, 42, .10);
+}
+
+body.ams-shared[data-ams-app="herramientas"] .menu-link {
+  background: rgba(255, 255, 255, .035);
+  border: 1px solid transparent;
+  border-radius: 12px;
+  color: #e2e8f0;
+  transition: background .2s ease, border-color .2s ease, transform .2s ease;
+}
+
+body.ams-shared[data-ams-app="herramientas"] .menu-link:hover {
+  background: rgba(99, 102, 241, .14);
+  border-color: rgba(129, 140, 248, .30);
+  color: #fff;
+  transform: translateX(2px);
+}
+
+body.ams-shared[data-ams-app="herramientas"].light-theme .menu-link {
+  background: rgba(15, 23, 42, .025);
+  border-color: rgba(15, 23, 42, .07);
+  color: #334155;
+}
+
+body.ams-shared[data-ams-app="herramientas"].light-theme .menu-link:hover {
+  background: #fff;
+  border-color: rgba(99, 102, 241, .25);
+  color: #111827;
+}
+
+body.ams-shared[data-ams-app="herramientas"] .hero-section h1 {
+  color: #f8fafc;
+  font-weight: 900;
+  letter-spacing: -.045em;
+}
+
+body.ams-shared[data-ams-app="herramientas"].light-theme .hero-section h1 {
+  color: #1e293b;
+}
+
+body.ams-shared[data-ams-app="herramientas"] .text-gradient {
+  background: var(--ams-gradient-tech);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 0 0 30px rgba(99, 102, 241, .13);
+}
+
+body.ams-shared[data-ams-app="herramientas"] .badge-core {
+  background: rgba(99, 102, 241, .11);
+  color: #c7d2fe;
+  border: 1px solid rgba(99, 102, 241, .30);
+  box-shadow: 0 8px 30px rgba(99, 102, 241, .08);
+}
+
+body.ams-shared[data-ams-app="herramientas"].light-theme .badge-core {
+  background: rgba(99, 102, 241, .08);
+  color: #4338ca;
+  border-color: rgba(99, 102, 241, .22);
+}
+
+body.ams-shared[data-ams-app="herramientas"] .tool-card {
+  background: linear-gradient(180deg, rgba(17, 23, 42, .94), rgba(7, 11, 24, .96));
+  border: 1px solid rgba(255, 255, 255, .10);
+  border-radius: 26px;
+  box-shadow: 0 16px 45px rgba(0, 0, 0, .20);
+  transition: transform .25s ease, border-color .25s ease, box-shadow .25s ease, background .25s ease;
+}
+
+body.ams-shared[data-ams-app="herramientas"] .tool-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(99, 102, 241, .44);
+  box-shadow: 0 22px 55px rgba(0, 0, 0, .24), 0 0 28px rgba(99, 102, 241, .07);
+}
+
+body.ams-shared[data-ams-app="herramientas"].light-theme .tool-card {
+  background: linear-gradient(180deg, rgba(255, 255, 255, .98), rgba(248, 250, 252, .98));
+  border-color: rgba(15, 23, 42, .09);
+  box-shadow: 0 14px 35px rgba(15, 23, 42, .07);
+}
+
+body.ams-shared[data-ams-app="herramientas"].light-theme .tool-card:hover {
+  border-color: rgba(99, 102, 241, .38);
+  box-shadow: 0 20px 45px rgba(15, 23, 42, .11);
+}
+
+body.ams-shared[data-ams-app="herramientas"] .icon-box {
+  border-radius: 14px;
+  background: linear-gradient(145deg, rgba(99, 102, 241, .16), rgba(236, 72, 153, .10));
+  border: 1px solid rgba(255, 255, 255, .11);
+}
+
+body.ams-shared[data-ams-app="herramientas"].light-theme .icon-box {
+  background: linear-gradient(145deg, rgba(99, 102, 241, .08), rgba(236, 72, 153, .06));
+  border-color: rgba(15, 23, 42, .08);
+}
+
+body.ams-shared[data-ams-app="herramientas"] .tool-filter {
+  border-radius: 999px;
+  border-color: rgba(255, 255, 255, .12);
+  background: rgba(15, 23, 42, .72);
+  color: #cbd5e1;
+}
+
+body.ams-shared[data-ams-app="herramientas"] .tool-filter:hover {
+  border-color: rgba(99, 102, 241, .42);
+  color: #f8fafc;
+}
+
+body.ams-shared[data-ams-app="herramientas"] .tool-filter.active {
+  color: #fff;
+  background: var(--gradient);
+  border-color: transparent;
+  box-shadow: 0 10px 24px rgba(99, 102, 241, .20);
+}
+
+body.ams-shared[data-ams-app="herramientas"].light-theme .tool-filter {
+  background: rgba(255, 255, 255, .92);
+  border-color: rgba(15, 23, 42, .10);
+  color: #475569;
+  box-shadow: 0 6px 18px rgba(15, 23, 42, .05);
+}
+
+body.ams-shared[data-ams-app="herramientas"].light-theme .tool-filter.active {
+  color: #fff;
+}
+
+body.ams-shared[data-ams-app="herramientas"] .drop-zone {
+  border-radius: 16px;
+  border-color: rgba(255, 255, 255, .18);
+  background: rgba(7, 11, 24, .48);
+  transition: background .2s ease, border-color .2s ease, box-shadow .2s ease;
+}
+
+body.ams-shared[data-ams-app="herramientas"] .drop-zone:hover,
+body.ams-shared[data-ams-app="herramientas"] .drop-zone.dragover {
+  border-color: #818cf8;
+  background: rgba(99, 102, 241, .075);
+  box-shadow: 0 0 0 4px rgba(99, 102, 241, .08);
+}
+
+body.ams-shared[data-ams-app="herramientas"].light-theme .drop-zone {
+  background: rgba(15, 23, 42, .025);
+  border-color: rgba(15, 23, 42, .13);
+}
+
+body.ams-shared[data-ams-app="herramientas"] :is(.workspace-container, .file-card, .result-box, .resize-preview-wrap) {
+  border-radius: 14px;
+  border-color: rgba(255, 255, 255, .12);
+  background: rgba(255, 255, 255, .035);
+}
+
+body.ams-shared[data-ams-app="herramientas"].light-theme :is(.workspace-container, .file-card, .result-box, .resize-preview-wrap) {
+  border-color: rgba(15, 23, 42, .10);
+  background: rgba(15, 23, 42, .025);
+}
+
+body.ams-shared[data-ams-app="herramientas"] .btn-ams {
+  background: var(--gradient);
+  color: #fff !important;
+  border: 0;
+  border-radius: 999px;
+  box-shadow: 0 10px 24px rgba(99, 102, 241, .20);
+  text-transform: none;
+  letter-spacing: 0;
+  font-weight: 900;
+}
+
+body.ams-shared[data-ams-app="herramientas"] .btn-ams:hover {
+  filter: brightness(1.08);
+  transform: translateY(-1px);
+}
+
+body.ams-shared[data-ams-app="herramientas"] :is(.form-control, .form-select, textarea.form-control) {
+  border-radius: 12px;
+  border-color: rgba(148, 163, 184, .25);
+  background-color: rgba(7, 11, 24, .58);
+  color: #f8fafc;
+  box-shadow: none;
+}
+
+body.ams-shared[data-ams-app="herramientas"] :is(.form-control, .form-select, textarea.form-control):focus {
+  border-color: #818cf8;
+  box-shadow: 0 0 0 .2rem rgba(99, 102, 241, .16);
+}
+
+body.ams-shared[data-ams-app="herramientas"].light-theme :is(.form-control, .form-select, textarea.form-control) {
+  background: #fff;
+  color: #1e293b;
+  border-color: rgba(15, 23, 42, .13);
+}
+
+body.ams-shared[data-ams-app="herramientas"] .footer-ams {
+  background: rgba(5, 8, 17, .94);
+  border-top: 1px solid rgba(255, 255, 255, .10);
+  color: #94a3b8;
+}
+
+body.ams-shared[data-ams-app="herramientas"] .footer-copy {
+  background: rgba(2, 4, 8, .72);
+  border-top-color: rgba(255, 255, 255, .055);
+}
+
+body.ams-shared[data-ams-app="herramientas"] .footer-copy strong {
+  color: #c7d2fe;
+}
+
+body.ams-shared[data-ams-app="herramientas"].light-theme .footer-ams {
+  background: #e2e8f0;
+  border-top-color: rgba(15, 23, 42, .10);
+  color: #64748b;
+}
+
+body.ams-shared[data-ams-app="herramientas"].light-theme .footer-copy {
+  background: rgba(241, 245, 249, .90);
+  border-top-color: rgba(15, 23, 42, .08);
+}
+
+body.ams-shared[data-ams-app="herramientas"].light-theme .footer-copy strong {
+  color: #4338ca;
+}
+
+/* --------------------------------------------------------------------------
+   Juegos — preserve its original topbar, game nav, cards, modals, controls,
+   immersion behavior and all per-game appearance modes.
+   -------------------------------------------------------------------------- */
+body.ams-shared[data-ams-app="juegos"]:not([class*="appearance-"]) {
+  --bg: #0f172a;
+  --card: rgba(17, 23, 42, .94);
+  --card2: rgba(7, 11, 24, .96);
+  --border: rgba(255, 255, 255, .12);
+  --border-light: rgba(148, 163, 184, .22);
+  --text: #f8fafc;
+  --muted: #94a3b8;
+  --primary: #6366f1;
+  --accent: #10b981;
+  --danger: #ec4899;
+  --warning: #f59e0b;
+  --success: #10b981;
+  --gradA: #6366f1;
+  --gradB: #ec4899;
+  --shadow: 0 20px 50px rgba(0, 0, 0, .35);
+  --shadow-soft: 0 12px 30px rgba(0, 0, 0, .22);
+  --radius: 26px;
+  --radius-sm: 14px;
+  --radius-xs: 10px;
+  --topbar-bg: rgba(15, 23, 42, .88);
+  --input-bg: rgba(7, 11, 24, .58);
+  --btn-bg: rgba(255, 255, 255, .055);
+  --ghost-bg: rgba(255, 255, 255, .04);
+  --player-bg: rgba(255, 255, 255, .045);
+  --footer-bg: rgba(5, 8, 17, .94);
+  --overlay-bg: rgba(3, 6, 15, .82);
+  background:
+    radial-gradient(1200px 600px at 12% 8%, rgba(99, 102, 241, .20), transparent 55%),
+    radial-gradient(900px 500px at 82% 12%, rgba(236, 72, 153, .16), transparent 55%),
+    radial-gradient(1000px 600px at 60% 92%, rgba(16, 185, 129, .10), transparent 60%),
+    linear-gradient(180deg, #0f172a, #070b18);
+  color: #f8fafc;
+  font-family: "Montserrat", system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+
+body.ams-shared[data-ams-app="juegos"].light-theme {
+  --bg: #f1f5f9;
+  --card: rgba(255, 255, 255, .96);
+  --card2: #e2e8f0;
+  --border: rgba(15, 23, 42, .12);
+  --border-light: rgba(15, 23, 42, .12);
+  --text: #1e293b;
+  --muted: #64748b;
+  --shadow: 0 14px 40px rgba(15, 23, 42, .08);
+  --shadow-soft: 0 10px 28px rgba(15, 23, 42, .06);
+  --topbar-bg: rgba(248, 250, 252, .90);
+  --input-bg: #fff;
+  --btn-bg: #fff;
+  --ghost-bg: #f8fafc;
+  --player-bg: #f8fafc;
+  --footer-bg: #e2e8f0;
+  --overlay-bg: rgba(15, 23, 42, .45);
+  background:
+    radial-gradient(1200px 600px at 12% 8%, rgba(99, 102, 241, .07), transparent 55%),
+    radial-gradient(900px 500px at 82% 12%, rgba(236, 72, 153, .06), transparent 55%),
+    linear-gradient(180deg, #f8fafc, #e2e8f0);
+  color: #1e293b;
+}
+
+body.ams-shared[data-ams-app="juegos"] .topbar {
+  background: var(--topbar-bg);
+  border-bottom-color: var(--border);
+  box-shadow: 0 12px 35px rgba(0, 0, 0, .12);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+
+body.ams-shared[data-ams-app="juegos"] .brand .logo {
+  background: linear-gradient(135deg, #6366f1, #ec4899);
+  box-shadow: 0 10px 22px rgba(99, 102, 241, .22);
+}
+
+body.ams-shared[data-ams-app="juegos"] .brand .txt .name {
+  color: var(--text);
+  font-weight: 900;
+}
+
+body.ams-shared[data-ams-app="juegos"] .brand .txt small {
+  color: var(--muted);
+}
+
+body.ams-shared[data-ams-app="juegos"] .icon-btn {
+  background: rgba(255, 255, 255, .045);
+  border-color: var(--border);
+  color: var(--text);
+  border-radius: 14px;
+  box-shadow: var(--shadow-soft);
+}
+
+body.ams-shared[data-ams-app="juegos"] .icon-btn:hover {
+  border-color: rgba(99, 102, 241, .52);
+  background: rgba(99, 102, 241, .12);
+}
+
+body.ams-shared[data-ams-app="juegos"].light-theme .icon-btn {
+  background: rgba(255, 255, 255, .92);
+  color: #1e293b;
+}
+
+body.ams-shared[data-ams-app="juegos"] .site-nav {
+  background: rgba(15, 23, 42, .94);
+  border-top-color: var(--border);
+  backdrop-filter: blur(16px);
+}
+
+body.ams-shared[data-ams-app="juegos"].light-theme .site-nav {
+  background: rgba(248, 250, 252, .94);
+}
+
+body.ams-shared[data-ams-app="juegos"] .nav-item {
+  background: var(--player-bg);
+  border-color: var(--border-light);
+  border-radius: 14px;
+  color: var(--text);
+  transition: transform .2s ease, border-color .2s ease, background .2s ease, box-shadow .2s ease;
+}
+
+body.ams-shared[data-ams-app="juegos"] .nav-item:hover {
+  border-color: rgba(99, 102, 241, .48);
+  box-shadow: 0 8px 22px rgba(99, 102, 241, .10);
+}
+
+body.ams-shared[data-ams-app="juegos"] .box {
+  background: linear-gradient(180deg, var(--card), var(--card2));
+  border-color: var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+
+body.ams-shared[data-ams-app="juegos"] .box.shell {
+  background: transparent;
+  border-color: transparent;
+  box-shadow: none;
+}
+
+body.ams-shared[data-ams-app="juegos"] .panel-soft {
+  background: var(--player-bg);
+  border-color: var(--border-light);
+  border-radius: 18px;
+}
+
+body.ams-shared[data-ams-app="juegos"] .game-title {
+  color: var(--text);
+  text-shadow: none;
+  letter-spacing: -.04em;
+}
+
+body.ams-shared[data-ams-app="juegos"] .section-heading,
+body.ams-shared[data-ams-app="juegos"] .pass-name,
+body.ams-shared[data-ams-app="juegos"] .current-player-line {
+  color: var(--primary);
+}
+
+body.ams-shared[data-ams-app="juegos"] .badge {
+  border-color: rgba(99, 102, 241, .32);
+  background: rgba(99, 102, 241, .12);
+  color: #c7d2fe;
+  border-radius: 999px;
+}
+
+body.ams-shared[data-ams-app="juegos"].light-theme .badge {
+  color: #4338ca;
+  background: rgba(99, 102, 241, .08);
+  border-color: rgba(99, 102, 241, .22);
+}
+
+body.ams-shared[data-ams-app="juegos"] .btn {
+  border-radius: 999px;
+  border-color: var(--border-light);
+  background: var(--btn-bg);
+  color: var(--text);
+  transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease, background .2s ease;
+}
+
+body.ams-shared[data-ams-app="juegos"] .btn.primary {
+  border-color: transparent;
+  background: linear-gradient(135deg, var(--gradA), var(--gradB));
+  color: #fff;
+  box-shadow: 0 12px 28px rgba(99, 102, 241, .26);
+}
+
+body.ams-shared[data-ams-app="juegos"] .btn.primary:hover {
+  filter: brightness(1.08);
+  transform: translateY(-2px);
+  color: #fff;
+}
+
+body.ams-shared[data-ams-app="juegos"] :is(input, select, textarea) {
+  border-color: var(--border-light);
+  border-radius: 14px;
+  background: var(--input-bg);
+  color: var(--text);
+}
+
+body.ams-shared[data-ams-app="juegos"] :is(input, select, textarea):focus {
+  border-color: #818cf8;
+  box-shadow: 0 0 0 4px rgba(99, 102, 241, .12);
+}
+
+body.ams-shared[data-ams-app="juegos"] :is(.tool-overlay, .modal-overlay) {
+  background: var(--overlay-bg);
+  backdrop-filter: blur(16px) saturate(120%);
+  -webkit-backdrop-filter: blur(16px) saturate(120%);
+}
+
+body.ams-shared[data-ams-app="juegos"] :is(.tool-modal-card, .appearance-modal-card) {
+  border-color: var(--border-light);
+  border-radius: 26px;
+  box-shadow: 0 24px 80px rgba(0, 0, 0, .42);
+}
+
+body.ams-shared[data-ams-app="juegos"] footer {
+  background: var(--footer-bg);
+  border-top: 1px solid var(--border);
+  color: var(--muted);
+}
+
+/* Shared motion and accessibility; these do not change any component position. */
+body.ams-shared :is(.btn, .btn-primary, .btn-ams, .tool-card, .nav-btn, .nav-item, .icon-btn, .theme-toggle) {
+  transition-timing-function: cubic-bezier(.2, .8, .2, 1);
+}
+
+body.ams-shared :is(.btn, .btn-primary, .btn-ams):hover {
+  transform: translateY(-2px);
+}
+
+body.ams-shared :is(.btn, .btn-primary, .btn-ams):active {
+  transform: translateY(0);
+}
+
+body.ams-shared :is(.panel, .card, .tool-card, .box, .kpi, .smart-card) {
+  transition-property: background, border-color, box-shadow, transform;
+  transition-duration: .25s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body.ams-shared :is(.btn, .btn-primary, .btn-ams, .tool-card, .nav-btn, .nav-item, .icon-btn, .theme-toggle) {
+    transition-duration: .01ms;
   }
 }
