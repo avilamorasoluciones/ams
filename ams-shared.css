@@ -89,3 +89,38 @@ body.ams-shared[data-ams-app=herramientas] .text-gradient{background-image:linea
 body.ams-shared[data-ams-app=herramientas] .ams-theme-switch{display:none!important}
 html[data-theme=light] body.ams-shared[data-ams-app=ayukcal] .nav-btn.active{color:#6541d9!important}
 body.ams-shared[data-ams-app=herramientas].light-theme .navbar{background:rgba(248,250,252,.96)!important}
+
+/* ===== Normalización completa de superficies y tipografía por tema ===== */
+html[data-theme=dark] body.ams-shared[data-ams-app=ayukcal]{
+ --bg:#080b18;--surface:#11172a;--text:#f8fafc;--muted:#aab6cb;
+ --border:rgba(148,163,184,.19);--primary:var(--ams-violet);--primary-hover:#9b7cff;
+ --accent:var(--ams-cyan);--shadow:0 14px 40px rgba(0,0,0,.28);
+}
+html[data-theme=light] body.ams-shared[data-ams-app=ayukcal]{
+ --bg:#f5f6fc;--surface:#ffffff;--text:#172033;--muted:#64748b;
+ --border:rgba(15,23,42,.13);--primary:#6541d9;--primary-hover:#4c32ad;
+ --accent:#0e9fb2;--shadow:0 12px 32px rgba(15,23,42,.07);
+}
+body.ams-shared[data-ams-app=herramientas]{
+ --bg-deep:#080b18;--bg-card:#11172a;--text-main:#f8fafc;--text-muted:#aab6cb;
+ --border-glass:rgba(148,163,184,.19);--border-hover:rgba(155,124,255,.48);
+ --cyan:var(--ams-cyan);--purple:var(--ams-violet);--magenta:var(--ams-magenta);
+}
+body.ams-shared[data-ams-app=herramientas].light-theme{
+ --bg-deep:#f5f6fc;--bg-card:#ffffff;--text-main:#172033;--text-muted:#64748b;
+ --border-glass:rgba(15,23,42,.13);--border-hover:rgba(101,65,217,.35);
+ --cyan:#0e9fb2;--purple:#6541d9;--magenta:#c93685;
+}
+body.ams-shared[data-ams-app=herramientas] .btn-ams,
+body.ams-shared[data-ams-app=herramientas] .btn-primary{
+ background:linear-gradient(110deg,var(--ams-violet),var(--ams-magenta))!important;
+ border-color:transparent!important;color:#fff!important;
+}
+body.ams-shared[data-ams-app=herramientas] .form-control:focus,
+body.ams-shared[data-ams-app=herramientas] .form-select:focus{
+ border-color:var(--ams-violet)!important;box-shadow:0 0 0 .2rem rgba(118,87,255,.16)!important
+}
+html[data-theme=light] body.ams-shared[data-ams-app=ayukcal] .panel,
+html[data-theme=light] body.ams-shared[data-ams-app=ayukcal] .kpi{
+ border-color:rgba(15,23,42,.12)
+}
