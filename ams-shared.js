@@ -148,7 +148,7 @@
         id: game.id,
         label: game.label,
         href: root + 'juegos/' + game.href,
-        iconSrc: root + 'juegos/' + game.icon,
+        iconSrc: game.id === 'apuesta' ? '' : root + 'juegos/' + game.icon,
         active: current === game.id
       });
     });
@@ -365,7 +365,7 @@
       return cleanText(selected && selected.querySelector('span')) || 'Inicio';
     }
     if (app === 'juegos') {
-      var gameHeading = document.querySelector('.game-title, #menu-title, #game-selector-title, main h1');
+      var gameHeading = document.querySelector('.game-title, main h1');
       return cleanText(gameHeading) || (activeGameId() ? 'Juego' : 'Catálogo de juegos');
     }
     var firstHeading = document.querySelector('main h1');
