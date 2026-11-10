@@ -934,3 +934,80 @@ html[data-theme="light"] body.ams-shared #ams-toast{
   background:rgba(255,255,255,.97);
   color:#29233c;
 }
+
+
+/* Shared card family used by secondary states, summaries and game screens. */
+body.ams-shared .ams-main-content :is(.panel-soft,.smart-card,.summary-card,.kpi,.pass-box,.reveal-box,.impostor-secret-card,.forbidden-box,.card-word,.pdf-organizer-workspace,.pdf-page-grid,.result-box){
+  border:1px solid var(--ams-line)!important;
+  border-radius:14px!important;
+  background:rgba(26,21,45,.82);
+  color:var(--ams-text);
+  box-shadow:0 8px 22px rgba(3,2,12,.09);
+}
+body.ams-shared.light-theme .ams-main-content :is(.panel-soft,.smart-card,.summary-card,.kpi,.pass-box,.reveal-box,.impostor-secret-card,.forbidden-box,.card-word,.pdf-organizer-workspace,.pdf-page-grid,.result-box),
+html[data-theme="light"] body.ams-shared .ams-main-content :is(.panel-soft,.smart-card,.summary-card,.kpi,.pass-box,.reveal-box,.impostor-secret-card,.forbidden-box,.card-word,.pdf-organizer-workspace,.pdf-page-grid,.result-box){
+  background:rgba(255,255,255,.92);
+  color:#29233c;
+  box-shadow:0 8px 22px rgba(46,34,88,.045);
+}
+body.ams-shared .ams-main-content :is(.smart-card,.tool-card,.hero-action,.special-event-card,.game-selector,.game-slide,.panel-soft){
+  position:relative;
+}
+body.ams-shared .ams-main-content :is(.btn.primary,.btn-primary,.btn-ams,.button-primary,.primary-button,.special-event-button){
+  position:relative;
+  isolation:isolate;
+  overflow:hidden;
+}
+body.ams-shared .ams-main-content :is(.btn.primary,.btn-primary,.btn-ams,.button-primary,.primary-button,.special-event-button)::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  z-index:-1;
+  transform:translateX(-130%);
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.18),transparent);
+  animation:amsButtonSheen 4.2s ease-in-out infinite;
+  pointer-events:none;
+}
+@keyframes amsButtonSheen{
+  0%,52%{transform:translateX(-130%)}
+  100%{transform:translateX(130%)}
+}
+body.ams-shared .ams-brand-symbol{
+  animation:amsBrandGlow 3.2s ease-in-out infinite;
+}
+@keyframes amsBrandGlow{
+  0%,100%{box-shadow:0 9px 24px rgba(126,78,220,.22)}
+  50%{box-shadow:0 11px 30px rgba(217,74,199,.32)}
+}
+body.ams-shared :is(.modal-overlay,.tool-overlay) > :is(.modal,.tool-modal-card,.modal-card,.modal-content){
+  animation:amsDialogEnter .22s cubic-bezier(.2,.8,.2,1) both;
+}
+@keyframes amsDialogEnter{
+  from{opacity:0;transform:translateY(8px) scale(.99)}
+  to{opacity:1;transform:translateY(0) scale(1)}
+}
+body.ams-shared .ams-main-content table{
+  width:100%;
+  border-collapse:collapse;
+  color:var(--ams-text);
+}
+body.ams-shared .ams-main-content :is(th,td){
+  border-bottom:1px solid var(--ams-line);
+  padding:10px 12px;
+}
+body.ams-shared .ams-main-content th{
+  color:var(--ams-muted);
+  font-size:.72rem;
+  font-weight:850;
+  letter-spacing:.06em;
+  text-transform:uppercase;
+}
+body.ams-shared .ams-main-content tbody tr:hover{
+  background:rgba(255,255,255,.025);
+}
+@media(prefers-reduced-motion:reduce){
+  body.ams-shared .ams-brand-symbol,
+  body.ams-shared .ams-main-content :is(.btn.primary,.btn-primary,.btn-ams,.button-primary,.primary-button,.special-event-button)::after{
+    animation:none!important;
+  }
+}
