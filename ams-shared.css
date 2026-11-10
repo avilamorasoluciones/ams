@@ -426,7 +426,7 @@ body.ams-shared .ams-icon-btn{
   border-radius:12px;
   background:linear-gradient(145deg,rgba(255,255,255,.08),rgba(255,255,255,.025));
   color:var(--ams-text);
-  font:700 1.08rem/1 inherit;
+  font-family:inherit;font-size:1.08rem;font-weight:700;line-height:1;
   cursor:pointer;
   transition:background .18s ease,border-color .18s ease,transform .18s ease,box-shadow .18s ease;
 }
@@ -872,4 +872,65 @@ body.ams-shared .ams-main-content :is(.panel,.card,.box,.tool-card,.game-selecto
 }
 @media(prefers-reduced-motion:reduce){
   body.ams-shared .ams-main-content :is(.panel,.card,.box,.tool-card,.game-selector,.desktop-games-note,.special-event-card){animation:none}
+}
+
+
+/* Modal shell normalization also covers AyuKcal overlays mounted beside <main>
+   and the compact custom dialogs used by the games. */
+body.ams-shared :is(.modal-overlay,.tool-overlay){
+  background:rgba(5,3,14,.74)!important;
+  backdrop-filter:blur(7px);
+  -webkit-backdrop-filter:blur(7px);
+}
+body.ams-shared :is(.modal-overlay,.tool-overlay) > :is(.modal,.tool-modal-card,.modal-card,.modal-content){
+  border:1px solid var(--ams-line-strong)!important;
+  border-radius:17px!important;
+  background:linear-gradient(150deg,#211a37 0%,#171329 100%)!important;
+  color:var(--ams-text)!important;
+  box-shadow:0 24px 80px rgba(0,0,0,.42)!important;
+}
+body.ams-shared :is(.modal-overlay,.tool-overlay) :is(h1,h2,h3,h4,label,.modal-title){
+  color:var(--ams-text);
+}
+body.ams-shared :is(.modal-overlay,.tool-overlay) :is(p,.muted,.text-muted,small){
+  color:var(--ams-muted);
+}
+body.ams-shared :is(.modal-overlay,.tool-overlay) .modal-close{
+  border:1px solid var(--ams-line)!important;
+  border-radius:10px!important;
+  background:rgba(255,255,255,.055)!important;
+  color:var(--ams-text)!important;
+  transition:background .18s ease,transform .18s ease;
+}
+body.ams-shared :is(.modal-overlay,.tool-overlay) .modal-close:hover{
+  background:rgba(217,74,199,.16)!important;
+  transform:rotate(3deg);
+}
+body.ams-shared.light-theme :is(.modal-overlay,.tool-overlay),
+html[data-theme="light"] body.ams-shared :is(.modal-overlay,.tool-overlay){
+  background:rgba(31,23,55,.42)!important;
+}
+body.ams-shared.light-theme :is(.modal-overlay,.tool-overlay) > :is(.modal,.tool-modal-card,.modal-card,.modal-content),
+html[data-theme="light"] body.ams-shared :is(.modal-overlay,.tool-overlay) > :is(.modal,.tool-modal-card,.modal-card,.modal-content){
+  border-color:rgba(76,57,132,.18)!important;
+  background:linear-gradient(150deg,#fff 0%,#f5f3fb 100%)!important;
+  color:#29233c!important;
+  box-shadow:0 24px 70px rgba(46,34,88,.18)!important;
+}
+body.ams-shared.light-theme :is(.modal-overlay,.tool-overlay) :is(h1,h2,h3,h4,label,.modal-title),
+html[data-theme="light"] body.ams-shared :is(.modal-overlay,.tool-overlay) :is(h1,h2,h3,h4,label,.modal-title){color:#29233c}
+body.ams-shared.light-theme :is(.modal-overlay,.tool-overlay) :is(p,.muted,.text-muted,small),
+html[data-theme="light"] body.ams-shared :is(.modal-overlay,.tool-overlay) :is(p,.muted,.text-muted,small){color:#77718d}
+body.ams-shared #ams-toast{
+  border:1px solid var(--ams-line-strong);
+  border-radius:12px;
+  background:rgba(27,23,48,.96);
+  color:var(--ams-text);
+  box-shadow:var(--ams-shadow);
+  backdrop-filter:blur(12px);
+}
+body.ams-shared.light-theme #ams-toast,
+html[data-theme="light"] body.ams-shared #ams-toast{
+  background:rgba(255,255,255,.97);
+  color:#29233c;
 }
