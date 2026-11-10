@@ -4,7 +4,7 @@ const CACHE_PREFIX = 'ams-tools-';
 const APP_SHELL = [
   './',
   './index.html',
-  '../ams-shared.css?v=20261109-9',
+  '../ams-shared.css?v=20261109-10',
   '../ams-shared.js?v=20261109-6',
   './manifest.webmanifest?v=18',
   './icon-192.svg?v=18',
