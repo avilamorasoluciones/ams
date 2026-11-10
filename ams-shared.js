@@ -169,7 +169,7 @@
   sidebar.setAttribute('aria-label', 'Navegación principal de ' + META.brand);
   var sidebarInner = make('div', 'ams-nav-inner');
   var brand = make('a', 'ams-brand');
-  brand.href = app === 'juegos' ? root + 'juegos/' : app === 'ayukcal' ? root + 'ayukcal/' : root + 'herramientas/';
+  brand.href = root;
   brand.setAttribute('aria-label', META.brand + ' · ' + META.subtitle);
   var brandSymbol = make('span', 'ams-brand-symbol');
   brandSymbol.setAttribute('aria-hidden', 'true');
@@ -247,6 +247,19 @@
   themeButton.title = 'Cambiar tema';
   themeButton.setAttribute('aria-label', 'Cambiar tema');
   actions.appendChild(themeButton);
+  if (app === 'ayukcal') {
+    var accountAction = make('button', 'ams-icon-btn ams-account-action', '☁');
+    accountAction.type = 'button';
+    accountAction.id = 'ams-account-action';
+    accountAction.title = 'Cuenta y sincronización';
+    accountAction.setAttribute('aria-label', 'Abrir cuenta y sincronización');
+    accountAction.addEventListener('click', function () {
+      var originalAccount = document.getElementById('accountBtn');
+      if (originalAccount) originalAccount.click();
+      else if (typeof window.openAccountModal === 'function') window.openAccountModal();
+    });
+    actions.appendChild(accountAction);
+  }
   var userBadge = app === 'ayukcal' ? document.getElementById('userBadge') : null;
   var userName = cleanText(userBadge) || 'Público';
   var userChip = make('span', 'ams-user-chip');
